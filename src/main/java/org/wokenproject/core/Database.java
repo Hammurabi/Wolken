@@ -23,7 +23,7 @@ public class Database {
     ;
 
     public Database(FileService location) throws IOException {
-        db      = Iq80DBFactory.factory.open(location.file(), new Options());
+        database= Iq80DBFactory.factory.open(location.file(), new Options());
         mutex   = new ReentrantLock();
     }
 
@@ -42,7 +42,22 @@ public class Database {
         } finally {
             mutex.unlock();
         }
+    }
 
-        return new LookupResult<>(null, false);
+    public boolean getOutputExists(byte[] txid, int index)
+    {
+        mutex.lock();
+        try {
+            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApart(index)));
+            byte data[] = database.get(id);
+            if (data == null)
+            {
+                return false;
+            }
+
+            return true;
+        } finally {
+            mutex.unlock();
+        }
     }
 }
