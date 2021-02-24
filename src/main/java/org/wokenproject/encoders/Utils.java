@@ -1,0 +1,160 @@
+package org.wokenproject.encoders;
+
+import java.util.Set;
+
+public class Utils {
+    public static final byte[] concatenate(byte[]...arrays)
+    {
+        int size = 0;
+        for(byte[] array : arrays)
+            size += array.length;
+
+        byte concatenated[] = new byte[size];
+
+        int index = 0;
+
+        for(byte[] array : arrays)
+        {
+            System.arraycopy(array, 0, concatenated, index, array.length);
+
+            index += array.length;
+        }
+
+        return concatenated;
+    }
+
+    public static short makeShort(byte b1, byte b0) {
+        return (short) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
+    }
+
+    public static int makeInt(byte b3, byte b2, byte b1, byte b0) {
+        return (((b3       ) << 24) |
+                ((b2 & 0xff) << 16) |
+                ((b1 & 0xff) <<  8) |
+                ((b0 & 0xff)      ));
+    }
+
+    public static long makeLong(byte b7, byte b6, byte b5, byte b4,
+                                byte b3, byte b2, byte b1, byte b0)
+    {
+        return ((((long)b7       ) << 56) |
+                (((long)b6 & 0xff) << 48) |
+                (((long)b5 & 0xff) << 40) |
+                (((long)b4 & 0xff) << 32) |
+                (((long)b3 & 0xff) << 24) |
+                (((long)b2 & 0xff) << 16) |
+                (((long)b1 & 0xff) <<  8) |
+                (((long)b0 & 0xff)      ));
+    }
+
+    public static byte[] trim(byte[] bytes, int i, int i1) {
+        byte new_bytes[]    = new byte[i1 - i];
+
+        int free            = 0;
+
+        for(int index = i; index < i1; index ++)
+            new_bytes[free ++] = bytes[index];
+        return new_bytes;
+    }
+
+    public static boolean equals(byte[] trim, byte[] trim1) {
+        if(trim.length != trim1.length) return false;
+
+        for(int i = 0; i < trim1.length; i ++)
+            if(trim[i] != trim1[i]) return false;
+
+        return true;
+    }
+
+    public static byte[] int24(int i)
+    {
+        return new byte[] {
+                (byte) ((i >> 16) & 0xFF),
+                (byte) ((i >>  8) & 0xFF),
+                (byte) ((i) & 0xFF)};
+    }
+
+    public static byte[] appendIntegerToBytes(byte data[], int integer)
+    {
+        return concatenate(data, new byte[] {
+                (byte) ((integer >> 24) & 0xFF),
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer) & 0xFF)});
+    }
+
+    public static long getTimeHours(int numHours, short mins, short seconds)
+    {
+        return (numHours * (3600) + (mins * 60) + seconds) * 1000L;
+    }
+
+    public static long getTimeHours(int numHours)
+    {
+        return numHours * 3600_000L;
+    }
+
+    public static long getTimeMinutes(int numMinutes)
+    {
+        return numMinutes * 60_000L;
+    }
+
+    public static byte[] reverseBytes(byte[] bytes) {
+        byte[] buf = new byte[bytes.length];
+        for (int i = 0; i < bytes.length; i++)
+            buf[i] = bytes[bytes.length - 1 - i];
+        return buf;
+    }
+
+    public static byte[] takeApartShort(short integer) {
+        return new byte[] {
+                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
+
+    public static byte[] takeApartChar(char integer) {
+        return new byte[] {
+                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
+
+    public static byte[] takeApart(int integer) {
+        return new byte[] {
+                (byte) ((integer >> 24) & 0xFF),
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
+
+    public static byte[] appendLongToBytes(byte[] data, long integer) {
+        return concatenate(data, new byte[] {
+                (byte) ((integer >> 56) & 0xFF),
+                (byte) ((integer >> 48) & 0xFF),
+                (byte) ((integer >> 40) & 0xFF),
+                (byte) ((integer >> 32) & 0xFF),
+                (byte) ((integer >> 24) & 0xFF),
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer) & 0xFF)});
+    }
+
+    public static byte[] takeApartLong(long integer)
+    {
+        return new byte[] {
+                (byte) ((integer >> 56) & 0xFF),
+                (byte) ((integer >> 48) & 0xFF),
+                (byte) ((integer >> 40) & 0xFF),
+                (byte) ((integer >> 32) & 0xFF),
+                (byte) ((integer >> 24) & 0xFF),
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
+
+    public static byte[] fromSet(Set<byte[]> hashes) {
+        byte bytes[] = new byte[0];
+
+        for (byte [] data : hashes) bytes = concatenate(bytes, data);
+
+        return bytes;
+    }
+}
