@@ -31,6 +31,14 @@ public class Database {
     {
         mutex.lock();
         try {
+            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApart(index)));
+            byte data[] = database.get(id);
+            if (data == null)
+            {
+                return new LookupResult<>(null, false);
+            }
+
+            return new LookupResult<>(new Output(data), true);
         } finally {
             mutex.unlock();
         }
