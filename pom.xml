@@ -39,7 +39,6 @@
             <version>1.59</version>
         </dependency>
         <dependency>
-        <dependency>
             <!-- https://mvnrepository.com/artifact/org.json/json -->
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
