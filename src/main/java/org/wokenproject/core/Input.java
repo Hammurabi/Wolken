@@ -1,5 +1,7 @@
 package org.wokenproject.core;
 
+import org.wokenproject.exceptions.WolkenException;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class Input {
         return Context.getInstance().getDatabase().getOutputExists(previousTXID, (char) index);
     }
 
-    public Output getOutput() {
+    public Output getOutput() throws WolkenException {
         return Context.getInstance().getDatabase().findOutput(previousTXID, (char) index).getResult();
     }
 
