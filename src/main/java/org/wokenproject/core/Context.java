@@ -5,10 +5,17 @@ import org.wokenproject.exceptions.WolkenException;
 public class Context {
     private static Context instance;
 
-    private NetworkParameters networkParameters;
+    private Database            database;
+    private NetworkParameters   networkParameters;
 
     public Context() throws WolkenException {
-        this.networkParameters = new NetworkParameters(false);
+        this.database           = new Database();
+        this.networkParameters  = new NetworkParameters(false);
+    }
+
+    public Database getDatabase()
+    {
+        return database;
     }
 
     public NetworkParameters getNetworkParameters()
