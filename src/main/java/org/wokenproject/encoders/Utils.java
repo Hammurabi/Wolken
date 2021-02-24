@@ -49,6 +49,25 @@ public class Utils {
                 (((long)b0 & 0xff)      ));
     }
 
+    public static int makeInt24(byte[] trim) {
+        return makeInt((byte) 0, trim[0], trim[1], trim[2]);
+    }
+
+    public static int makeInt(byte[] trim) {
+        return makeInt(trim[0], trim[1], trim[2], trim[3]);
+    }
+
+    public static long makeLong(byte[] trim) {
+        if (trim.length < 8) {
+            trim = concatenate(new byte[8 - trim.length], trim);
+        }
+        return makeLong(trim[0], trim[1], trim[2], trim[3], trim[4], trim[5], trim[6], trim[7]);
+    }
+
+    public static long makeLongUnsafe(byte[] trim) {
+        return makeLong(trim[0], trim[1], trim[2], trim[3], trim[4], trim[5], trim[6], trim[7]);
+    }
+
     public static byte[] trim(byte[] bytes, int i, int i1) {
         byte new_bytes[]    = new byte[i1 - i];
 
