@@ -17,5 +17,8 @@ public class Database {
         mutex   = new Mutex();
     }
 
-    public LookupResult<Output>
+    public LookupResult<Output> findOutput(byte[] txid, int index)
+    {
+        return new LookupResult<>(null, false);
+    }
 }
