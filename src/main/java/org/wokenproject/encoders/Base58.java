@@ -1,5 +1,7 @@
 package org.wokenproject.encoders;
 
+import java.util.Arrays;
+
 public class Base58 {
     private static final char[] ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
             .toCharArray();
@@ -88,5 +90,50 @@ public class Base58 {
 
         byte[] output = copyOfRange(temp, j, temp.length);
         return new String(output);
+    }
+
+    public static byte[] decode(String input) {
+        if (input.length() == 0) {
+            return new byte[0];
+        }
+
+        byte[] input58 = new byte[input.length()];
+        for (int i = 0; i < input.length(); ++i) {
+            char c = input.charAt(i);
+
+            int digit58 = -1;
+            if (c >= 0 && c < 128) {
+                digit58 = INDEXES[c];
+            }
+            if (digit58 < 0) {
+                throw new RuntimeException("Not a Base58 input: " + input);
+            }
+
+            input58[i] = (byte) digit58;
+        }
+
+        int zeroCount = 0;
+        while (zeroCount < input58.length && input58[zeroCount] == 0) {
+            ++zeroCount;
+        }
+
+        byte[] temp = new byte[input.length()];
+        int j = temp.length;
+
+        int startAt = zeroCount;
+        while (startAt < input58.length) {
+            byte mod = divmod256(input58, startAt);
+            if (input58[startAt] == 0) {
+                ++startAt;
+            }
+
+            temp[--j] = mod;
+        }
+
+        while (j < temp.length && temp[j] == 0) {
+            ++j;
+        }
+
+        return copyOfRange(temp, j - zeroCount, temp.length);
     }
 }
