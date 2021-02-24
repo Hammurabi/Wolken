@@ -4,21 +4,28 @@ import org.iq80.leveldb.DB;
 import org.wokenproject.utils.FileService;
 import org.iq80.leveldb.Options;
 import org.iq80.leveldb.impl.Iq80DBFactory;
-import sun.awt.Mutex;
 
 import java.io.IOException;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Database {
-    private DB      db;
-    private Mutex   mutex;
+    private DB              db;
+    private ReentrantLock   mutex;
 
     public Database(FileService location) throws IOException {
         db      = Iq80DBFactory.factory.open(location.file(), new Options());
-        mutex   = new Mutex();
+        mutex   = new ReentrantLock();
     }
 
     public LookupResult<Output> findOutput(byte[] txid, int index)
     {
+        mutex.lock();
+        try {
+
+        } finally {
+            mutex.unlock();
+        }
+
         return new LookupResult<>(null, false);
     }
 }
