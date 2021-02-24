@@ -17,4 +17,11 @@ public class Base58 {
             INDEXES[ALPHABET[i]] = i;
         }
     }
+
+    private static byte[] copyOfRange(byte[] source, int from, int to) {
+        byte[] range = new byte[to - from];
+        System.arraycopy(source, from, range, 0, range.length);
+
+        return range;
+    }
 }
