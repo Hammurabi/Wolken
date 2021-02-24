@@ -1,6 +1,7 @@
 package org.wokenproject.core;
 
 import org.iq80.leveldb.DB;
+import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.utils.FileService;
 import org.iq80.leveldb.Options;
 import org.iq80.leveldb.impl.Iq80DBFactory;
@@ -27,8 +28,7 @@ public class Database {
         mutex   = new ReentrantLock();
     }
 
-    public LookupResult<Output> findOutput(byte[] txid, char index)
-    {
+    public LookupResult<Output> findOutput(byte[] txid, char index) throws WolkenException {
         mutex.lock();
         try {
             byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApartChar(index)));
