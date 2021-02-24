@@ -88,4 +88,14 @@ public class Database {
             mutex.unlock();
         }
     }
+
+    public BlockHeader findBlockHeaderByHeight(long height) {
+        LookupResult<byte[]> blockHash = findBlockHashFromHeight(height);
+        if (blockHash.exists())
+        {
+            
+        }
+
+        return null;
+    }
 }
