@@ -24,4 +24,18 @@ public class Base58 {
 
         return range;
     }
+
+    private static byte divmod58(byte[] number, int startAt) {
+        int remainder = 0;
+        for (int i = startAt; i < number.length; i++) {
+            int digit256 = (int) number[i] & 0xFF;
+            int temp = remainder * BASE_256 + digit256;
+
+            number[i] = (byte) (temp / BASE_58);
+
+            remainder = temp % BASE_58;
+        }
+
+        return (byte) remainder;
+    }
 }
