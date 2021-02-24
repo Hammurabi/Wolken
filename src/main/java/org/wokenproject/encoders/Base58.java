@@ -5,4 +5,6 @@ public class Base58 {
             .toCharArray();
     private static final int BASE_58 = ALPHABET.length;
     private static final int BASE_256 = 256;
+
+    private static final int[] INDEXES = new int[128];
 }
