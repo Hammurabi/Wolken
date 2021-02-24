@@ -28,6 +28,17 @@ public class Database {
         mutex   = new ReentrantLock();
     }
 
+    public void storeBlockHashFromHeight(long height, byte hash[])
+    {
+        mutex.lock();
+        try {
+            byte id[]   = Utils.concatenate(BlockLookupFromHeight, Utils.takeApartLong(height));
+            database.put(id, hash);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
     public LookupResult<byte[]> findBlockHashFromHeight(long height)
     {
         mutex.lock();
