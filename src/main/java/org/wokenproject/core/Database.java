@@ -27,11 +27,11 @@ public class Database {
         mutex   = new ReentrantLock();
     }
 
-    public LookupResult<Output> findOutput(byte[] txid, int index)
+    public LookupResult<Output> findOutput(byte[] txid, char index)
     {
         mutex.lock();
         try {
-            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApart(index)));
+            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApartChar(index)));
             byte data[] = database.get(id);
             if (data == null)
             {
@@ -44,18 +44,14 @@ public class Database {
         }
     }
 
-    public boolean getOutputExists(byte[] txid, int index)
+    public boolean getOutputExists(byte[] txid, char index)
     {
         mutex.lock();
         try {
-            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApart(index)));
+            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApartChar(index)));
             byte data[] = database.get(id);
-            if (data == null)
-            {
-                return false;
-            }
 
-            return true;
+            return data != null;
         } finally {
             mutex.unlock();
         }
