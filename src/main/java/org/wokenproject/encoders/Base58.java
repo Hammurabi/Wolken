@@ -136,4 +136,12 @@ public class Base58 {
 
         return copyOfRange(temp, j - zeroCount, temp.length);
     }
+
+    public static boolean isEncoded(String hash) {
+        for (int i = 0; i < hash.length(); i ++) {
+            if (Arrays.binarySearch(ALPHABET, hash.charAt(i)) < 0)
+                return false;
+        }
+        return true;
+    }
 }
