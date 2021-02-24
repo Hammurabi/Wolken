@@ -7,7 +7,6 @@ import org.bouncycastle.crypto.macs.HMac;
 import org.bouncycastle.crypto.params.KeyParameter;
 
 public class HashUtil {
-
     public static byte[] sha256(byte data[])
     {
         try
