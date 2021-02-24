@@ -1,6 +1,7 @@
 package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.utils.Utils;
 
 import java.nio.ByteBuffer;
 
@@ -40,5 +41,9 @@ public class Output {
     public byte[] getData()
     {
         return data;
+    }
+
+    public byte[] asByteArray() {
+        return Utils.concatenate(Utils.takeApartLong(value), Utils.takeApart(data.length), data);
     }
 }
