@@ -38,4 +38,41 @@ public class Base58 {
 
         return (byte) remainder;
     }
+
+    public static String encode(byte[] input) {
+        if (input.length == 0) {
+            return "";
+        }
+
+        input = copyOfRange(input, 0, input.length);
+
+        int zeroCount = 0;
+        while (zeroCount < input.length && input[zeroCount] == 0) {
+            ++zeroCount;
+        }
+
+        byte[] temp = new byte[input.length * 2];
+        int j = temp.length;
+
+        int startAt = zeroCount;
+        while (startAt < input.length) {
+            byte mod = divmod58(input, startAt);
+            if (input[startAt] == 0) {
+                ++startAt;
+            }
+
+            temp[--j] = (byte) ALPHABET[mod];
+        }
+
+        while (j < temp.length && temp[j] == ALPHABET[0]) {
+            ++j;
+        }
+
+        while (--zeroCount >= 0) {
+            temp[--j] = (byte) ALPHABET[0];
+        }
+
+        byte[] output = copyOfRange(temp, j, temp.length);
+        return new String(output);
+    }
 }
