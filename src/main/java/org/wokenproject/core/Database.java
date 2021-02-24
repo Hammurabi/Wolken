@@ -52,6 +52,18 @@ public class Database {
         }
     }
 
+    public void storeOutput(byte[] txid, char index, Output output) throws WolkenException {
+        mutex.lock();
+        try {
+            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApartChar(index)));
+            byte data[] = database.get(id);
+
+            database.put(id, output.asByteArray());
+        } finally {
+            mutex.unlock();
+        }
+    }
+
     public LookupResult<Output> findOutput(byte[] txid, char index) throws WolkenException {
         mutex.lock();
         try {
