@@ -13,6 +13,7 @@ public class Database {
     private ReentrantLock   mutex;
 
     private final static byte[]
+    ChainWork               = {'c', 'w'},
     BlockLookupFromHeight   = {'b', 'h'},
     BlockLookup             = {'b'}
     ;
