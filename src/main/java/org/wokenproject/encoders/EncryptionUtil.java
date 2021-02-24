@@ -6,6 +6,7 @@ import org.bouncycastle.crypto.engines.RSAEngine;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.util.PrivateKeyFactory;
 import org.bouncycastle.crypto.util.PublicKeyFactory;
+import org.wokenproject.utils.Tuple;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
