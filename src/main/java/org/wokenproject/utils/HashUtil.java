@@ -1,4 +1,4 @@
-package org.wokenproject.encoders;
+package org.wokenproject.utils;
 
 import java.security.MessageDigest;
 
