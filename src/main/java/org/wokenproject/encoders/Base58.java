@@ -39,6 +39,20 @@ public class Base58 {
         return (byte) remainder;
     }
 
+    private static byte divmod256(byte[] number58, int startAt) {
+        int remainder = 0;
+        for (int i = startAt; i < number58.length; i++) {
+            int digit58 = (int) number58[i] & 0xFF;
+            int temp = remainder * BASE_58 + digit58;
+
+            number58[i] = (byte) (temp / BASE_256);
+
+            remainder = temp % BASE_256;
+        }
+
+        return (byte) remainder;
+    }
+
     public static String encode(byte[] input) {
         if (input.length == 0) {
             return "";
