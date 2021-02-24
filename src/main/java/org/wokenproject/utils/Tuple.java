@@ -1,4 +1,4 @@
-package org.wokenproject.encoders;
+package org.wokenproject.utils;
 
 public class Tuple<A, B> {
     private final A a;
