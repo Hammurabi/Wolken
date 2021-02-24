@@ -28,17 +28,26 @@ public class Database {
         mutex   = new ReentrantLock();
     }
 
+    public LookupResult<byte[]> findBlockHashFromHeight(long height)
+    {
+        mutex.lock();
+        try {
+            byte id[]   = Utils.concatenate(BlockLookupFromHeight, Utils.takeApartLong(height));
+            byte data[] = database.get(id);
+
+            return new LookupResult<>(data, data != null);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
     public LookupResult<Output> findOutput(byte[] txid, char index) throws WolkenException {
         mutex.lock();
         try {
             byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApartChar(index)));
             byte data[] = database.get(id);
-            if (data == null)
-            {
-                return new LookupResult<>(null, false);
-            }
 
-            return new LookupResult<>(new Output(data), true);
+            return new LookupResult<>(new Output(data), data != null);
         } finally {
             mutex.unlock();
         }
