@@ -12,6 +12,10 @@ public class Database {
     private DB              db;
     private ReentrantLock   mutex;
 
+    private final static byte[]
+    BlockLookup             = {'b'}
+    ;
+
     public Database(FileService location) throws IOException {
         db      = Iq80DBFactory.factory.open(location.file(), new Options());
         mutex   = new ReentrantLock();
