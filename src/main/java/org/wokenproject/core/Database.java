@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Database {
-    private DB              db;
+    private DB              database;
     private ReentrantLock   mutex;
 
     private final static byte[]
@@ -31,7 +31,6 @@ public class Database {
     {
         mutex.lock();
         try {
-
         } finally {
             mutex.unlock();
         }
