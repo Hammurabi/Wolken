@@ -1,5 +1,7 @@
 package org.wokenproject.encoders;
 
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Set;
 
 public class Utils {
@@ -156,5 +158,52 @@ public class Utils {
         for (byte [] data : hashes) bytes = concatenate(bytes, data);
 
         return bytes;
+    }
+
+    public static byte[] takeApart(char[] password) {
+        ByteBuffer buffer = ByteBuffer.allocate(password.length * 2);
+        for (char chr : password) buffer.putChar(chr);
+        buffer.flip();
+
+        return buffer.array();
+    }public static byte[] fillArray(byte[] chars, byte c) {
+        Arrays.fill(chars, c);
+        return chars;
+    }
+
+    public static char[] fillArray(char[] chars, char c) {
+        Arrays.fill(chars, c);
+        return chars;
+    }
+
+    public static char[] makeChars(byte[] trim) {
+        ByteBuffer charBuffer = ByteBuffer.allocate(trim.length);
+        charBuffer.put(trim);
+        charBuffer.flip();
+        char chars[] = new char[trim.length / 2];
+        for (int i = 0; i < chars.length; i ++) {
+            chars[i] = charBuffer.getChar();
+        }
+        return chars;
+    }
+
+    public static boolean empty(byte[] data) {
+        for (byte b : data) {
+            if (b != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static byte[] decodeString(String encoded) {
+        if (Base58.isEncoded(encoded)) {
+            return Base58.decode(encoded);
+        } else if (Base16.isEncoded(encoded)) {
+            return Base16.decode(encoded);
+        }
+
+        return null;
     }
 }
