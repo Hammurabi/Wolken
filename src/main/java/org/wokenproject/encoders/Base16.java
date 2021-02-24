@@ -45,4 +45,14 @@ public class Base16 {
 
         return r;
     }
+
+    public static boolean isEncoded(String hash) {
+        hash = hash.toUpperCase();
+        for (int i = 0; i < hash.length(); i ++) {
+            if (Arrays.binarySearch(HEX, hash.charAt(i)) < 0)
+                return false;
+        }
+
+        return true;
+    }
 }
