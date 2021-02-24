@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Base16 {
     private final static char[] HEX = new char[]{
             '0', '1', '2', '3', '4', '5', '6', '7',
-            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+            '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     /**
      * Convert bytes to a base16 string.
@@ -25,7 +25,7 @@ public class Base16 {
      */
     public static byte[] decode(String s)
     {
-        s = s.toUpperCase();
+        s = s.toLowerCase();
         int len = s.length();
         byte[] r = new byte[len / 2];
         for (int i = 0; i < r.length; i++)
