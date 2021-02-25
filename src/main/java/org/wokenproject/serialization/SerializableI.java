@@ -1,6 +1,7 @@
 package org.wokenproject.serialization;
 
 import org.wokenproject.core.Context;
+import org.wokenproject.exceptions.InvalidSerialNumberException;
 
 import java.io.*;
 
@@ -24,7 +25,7 @@ public abstract class SerializableI {
         return outputStream.toByteArray();
     }
 
-    public <Type extends SerializableI> Type makeCopy() throws IOException {
+    public <Type extends SerializableI> Type makeCopy() throws IOException, InvalidSerialNumberException {
         byte array[] = asByteArray();
         BufferedInputStream inputStream = new BufferedInputStream(new ByteArrayInputStream(array));
         Type t = Context.getInstance().getSerialFactory().fromStream(inputStream);
