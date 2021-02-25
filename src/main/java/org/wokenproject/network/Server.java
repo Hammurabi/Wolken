@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Iterator;
 import java.util.Set;
 
 public class Server implements Runnable {
@@ -82,10 +83,11 @@ public class Server implements Runnable {
     }
 
     private void runMaintenanceChecks() {
-        for (Node node : connectedNodes)
-        {
-            if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors())
-            {
+        Iterator<Node> nodeIterator = connectedNodes.iterator();
+        while (nodeIterator.hasNext()) {
+            Node node = nodeIterator.next();
+            if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors()) {
+
             }
         }
     }
