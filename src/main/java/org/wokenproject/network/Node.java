@@ -143,4 +143,9 @@ public class Node {
     public InetAddress getInetAddress() {
         return socket.getInetAddress();
     }
+
+    public MessageCache getMessageCache()
+    {
+        return messageCache;
+    }
 }
