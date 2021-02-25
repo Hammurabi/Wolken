@@ -3,6 +3,8 @@ package org.wokenproject.core;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 
 public abstract class TransactionI {
+    public static int UniqueIdentifierLength = 32;
+
     public static final class Flags
     {
         public static final int
