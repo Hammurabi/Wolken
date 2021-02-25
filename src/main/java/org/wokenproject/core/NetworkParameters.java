@@ -147,7 +147,7 @@ public class NetworkParameters {
         return isTestNet ? 5112 : 5110;
     }
 
-    public int getMessageSpamThreshold() {
-        return 4;
+    public double getMessageSpamThreshold() {
+        return Math.PI;
     }
 }
