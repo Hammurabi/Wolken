@@ -73,6 +73,15 @@ public class Server implements Runnable {
                 runMaintenanceChecks();
                 lastCheck = currentTime;
             }
+
+            for (Node node : connectedNodes)
+            {
+                try {
+                    Message message = node.listen();
+                } catch (IOException e) {
+                    
+                }
+            }
         }
     }
 
