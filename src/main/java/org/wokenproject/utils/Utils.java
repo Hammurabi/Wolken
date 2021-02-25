@@ -3,6 +3,8 @@ package org.wokenproject.utils;
 import org.wokenproject.encoders.Base16;
 import org.wokenproject.encoders.Base58;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Set;
@@ -231,5 +233,12 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static void writeInt(int integer, BufferedOutputStream stream) throws IOException {
+        stream.write((byte) ((integer >> 24) & 0xFF));
+        stream.write((byte) ((integer >> 16) & 0xFF));
+        stream.write((byte) ((integer >> 8) & 0xFF));
+        stream.write((byte) ((integer) & 0xFF));
     }
 }
