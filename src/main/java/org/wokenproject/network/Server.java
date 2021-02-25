@@ -104,7 +104,11 @@ public class Server implements Runnable {
             }
 
             if (isSpammy) {
-                Context.getInstance().getIpAddressList().getAddress(node.getInetAddress()).setSpamAverage(node.getSpamAverage());
+                NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
+                if (address != null)
+                {
+                    address.setSpamAverage(node.getSpamAverage());
+                }
             }
 
             if (shouldDisconnect) {
@@ -114,6 +118,21 @@ public class Server implements Runnable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+
+            if (!shouldDisconnect && !isSpammy)
+            {
+                if (node.getMessageCache().inboundCacheSize() > Context.getInstance().getNetworkParameters().getMaxCacheSize())
+                {
+                    NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
+                    if (address != null)
+                    {
+                        address.setSpamAverage(node.getSpamAverage());
+                    }
+                    node.getMessageCache().clearInboundCache();
+                }
+
+                node.getMessageCache().clearOutboundCache();
             }
         }
     }
