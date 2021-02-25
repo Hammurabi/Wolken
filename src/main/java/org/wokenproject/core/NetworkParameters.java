@@ -134,4 +134,12 @@ public class NetworkParameters {
     public int getMaxNetworkErrors() {
         return 25;
     }
+
+    public int getMaxAllowedInboundConnections() {
+        return 125;
+    }
+
+    public int getMaxAllowedOutboundConnections() {
+        return 8;
+    }
 }
