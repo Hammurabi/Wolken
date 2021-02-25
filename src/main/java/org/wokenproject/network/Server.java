@@ -79,6 +79,11 @@ public class Server implements Runnable {
             {
                 Message message = node.listen();
             }
+
+            for (Node node : connectedNodes)
+            {
+                node.send();
+            }
         }
     }
 
