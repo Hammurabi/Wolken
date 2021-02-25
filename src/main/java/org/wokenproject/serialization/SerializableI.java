@@ -20,7 +20,7 @@ public abstract class SerializableI {
         return outputStream.toByteArray();
     }
 
-    public <Type extends SerializableI> Type makeCopy() throws IOException, InvalidSerialNumberException {
+    public <Type extends SerializableI> Type makeCopy() throws IOException, WolkenException {
         byte array[] = asByteArray();
         BufferedInputStream inputStream = new BufferedInputStream(new ByteArrayInputStream(array));
         Type t = Context.getInstance().getSerialFactory().fromStream(inputStream);
