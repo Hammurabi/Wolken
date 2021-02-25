@@ -82,7 +82,7 @@ public class Server implements Runnable {
 
             for (Node node : connectedNodes)
             {
-                node.send();
+                node.flush();
             }
         }
     }
