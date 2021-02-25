@@ -3,6 +3,9 @@ package org.wokenproject.network;
 import org.wokenproject.utils.HashUtil;
 import org.wokenproject.utils.Utils;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+
 public class Message {
     private int     version;
     private int     flags;
@@ -17,6 +20,15 @@ public class Message {
         this.contentType    = type;
         this.instanceCount  = count;
         this.content        = content;
+    }
+
+    public void writeToStream(BufferedOutputStream stream) throws IOException {
+        Utils.writeInt(version, stream);
+        Utils.writeInt(flags, stream);
+        Utils.writeInt(contentType, stream);
+        Utils.writeInt(instanceCount, stream);
+        Utils.writeInt(content.length, stream);
+        stream.write(content);
     }
 
     public byte[] getMessageBytes()
