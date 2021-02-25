@@ -150,4 +150,8 @@ public class NetworkParameters {
     public double getMessageSpamThreshold() {
         return Math.PI;
     }
+
+    public int getMaxCacheSize() {
+        return 18_796_99;
+    }
 }
