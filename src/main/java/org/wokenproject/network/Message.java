@@ -7,6 +7,14 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 
 public class Message {
+    public static final class Flags
+    {
+        public static final int
+        NONE = 0,
+        NOTIFY = 1,
+        REQUEST = 2,
+        RESPONSE = 3;
+    }
     public final static int MAGIC = 1;
     private int     version;
     private int     flags;
