@@ -11,14 +11,18 @@ public class MessageCache {
         receivedMessages = new HashMap<>();
     }
 
-    public void cacheReceivedMessage(Message message) {
+    public int cacheReceivedMessage(Message message) {
         byte messageId[] = message.getUniqueMessageIdentifier();
 
         if (receivedMessages.containsKey(messageId)) {
+            int timesReceived = receivedMessages.get(messageId);
             receivedMessages.put(messageId, receivedMessages.get(messageId) + 1);
+            return timesReceived;
         } else {
             receivedMessages.put(messageId, 1);
         }
+
+        return 0;
     }
 
     private int numTimesReceived(Message message) {
