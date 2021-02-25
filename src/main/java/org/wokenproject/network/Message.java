@@ -19,17 +19,13 @@ public abstract class Message extends SerializableI {
 
     private int     version;
     private int     flags;
-    private int     contentType;
     private int     instanceCount;
-    private byte    content[];
 
-    public Message(int version, int flags, int type, int count, byte content[])
+    public Message(int version, int flags, int count)
     {
         this.version        = version;
         this.flags          = flags;
-        this.contentType    = type;
         this.instanceCount  = count;
-        this.content        = content;
     }
 
     public abstract void executePayload(Server server, Node node);
@@ -37,10 +33,7 @@ public abstract class Message extends SerializableI {
     public void writeHeader(BufferedOutputStream stream) throws IOException {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
-        Utils.writeInt(contentType, stream);
         Utils.writeInt(instanceCount, stream);
-        Utils.writeInt(content.length, stream);
-        stream.write(content);
         stream.flush();
     }
 
@@ -49,19 +42,9 @@ public abstract class Message extends SerializableI {
         return HashUtil.hash160(Utils.concatenate(
                 Utils.takeApart(version),
                 Utils.takeApart(flags),
-                Utils.takeApart(contentType),
-                Utils.takeApart(instanceCount),
-                Utils.takeApart(content.length),
-                content
+                Utils.takeApart(instanceCount)
         ));
     }
 
-    public byte[] getUniqueMessageIdentifier()
-    {
-        return HashUtil.hash160(Utils.concatenate(
-                Utils.takeApart(contentType),
-                Utils.takeApart(instanceCount),
-                content
-        ));
-    }
+    public abstract byte[] getUniqueMessageIdentifier();
 }
