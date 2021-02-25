@@ -35,6 +35,17 @@ public class TransactionList extends Message {
         }
     }
 
+    public static Set<byte[]> convert(Collection<TransactionI> transactions)
+    {
+        Set<byte[]> result = new HashSet<>();
+        for (TransactionI transaction : transactions)
+        {
+            result.add(transaction.getTransactionID());
+        }
+
+        return result;
+    }
+
     @Override
     public void executePayload(Server server, Node node) {
     }
@@ -48,8 +59,8 @@ public class TransactionList extends Message {
     }
 
     @Override
-    public <Type extends SerializableI> Type newInstance(Object... object) {
-        return new TransactionList<T>();
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return (Type) new TransactionList(0, new HashSet<>());
     }
 
     @Override
