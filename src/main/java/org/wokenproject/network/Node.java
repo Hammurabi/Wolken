@@ -5,6 +5,7 @@ import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -19,7 +20,8 @@ public class Node {
     private MessageCache    messageCache;
     private int             errors;
 
-    private BufferedInputStream inputStream;
+    private BufferedInputStream     inputStream;
+    private BufferedOutputStream    outputStream;
 
     public Node(String ip, int port) throws IOException {
         this(new Socket(ip, port));
@@ -32,6 +34,7 @@ public class Node {
         this.messageCache   = new MessageCache();
         this.errors         = 0;
         this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
+        this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
     }
 
     public void sendMessage(Message message) {
@@ -74,5 +77,9 @@ public class Node {
         }
 
         return new Message(version, flags, type, count, content);
+    }
+
+    public void send()
+    {
     }
 }
