@@ -1,7 +1,6 @@
 package org.wokenproject.network;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class MessageCache {
@@ -13,7 +12,7 @@ public class MessageCache {
     }
 
     public void cacheReceivedMessage(Message message) {
-        byte messageId[] = message.contentHash();
+        byte messageId[] = message.getUniqueMessageIdentifier();
 
         if (receivedMessages.containsKey(messageId)) {
             receivedMessages.put(messageId, receivedMessages.get(messageId) + 1);
@@ -23,7 +22,7 @@ public class MessageCache {
     }
 
     private int numTimesReceived(Message message) {
-        byte messageId[] = message.contentHash();
+        byte messageId[] = message.getUniqueMessageIdentifier();
 
         if (receivedMessages.containsKey(messageId)) {
             return receivedMessages.get(messageId);
@@ -33,7 +32,7 @@ public class MessageCache {
     }
 
     public boolean shouldSend(Message message) {
-        byte messageId[] = message.contentHash();
+        byte messageId[] = message.getUniqueMessageIdentifier();
         int timesSent = 0;
 
         if (sentMessages.containsKey(messageId)) {
