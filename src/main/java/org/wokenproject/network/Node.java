@@ -85,7 +85,7 @@ public class Node {
         try{
             while (!messages.isEmpty()) {
                 Message message = messages.poll();
-                outputStream.write(message.getMessageBytes());
+                message.writeToStream(outputStream);
             }
         } catch (IOException e) {
             e.printStackTrace();
