@@ -1,6 +1,7 @@
 package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.network.Message;
 import org.wokenproject.network.NetAddress;
 import org.wokenproject.serialization.SerializationFactory;
 import org.wokenproject.utils.FileService;
