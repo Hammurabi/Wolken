@@ -4,6 +4,7 @@ import org.wokenproject.network.NetAddress;
 import org.wokenproject.utils.FileService;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,5 +52,9 @@ public class IpAddressList {
         stream.writeObject(addresses);
         stream.flush();
         stream.close();
+    }
+
+    public NetAddress getAddress(InetAddress inetAddress) {
+        return null;
     }
 }
