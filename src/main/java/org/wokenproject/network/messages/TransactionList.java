@@ -50,6 +50,13 @@ public class TransactionList extends Message {
     @Override
     public void executePayload(Server server, Node node) {
         Set<byte[]> newTransactions = Context.getInstance().getTransactionPool().getNonDuplicateTransactions(list);
+
+        if (newTransactions.isEmpty())
+        {
+            return;
+        }
+
+        node.sendMessage(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions));
     }
 
     @Override
