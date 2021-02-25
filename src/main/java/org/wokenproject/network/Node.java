@@ -1,6 +1,7 @@
 package org.wokenproject.network;
 
 import org.wokenproject.core.Context;
+import org.wokenproject.exceptions.InvalidSerialNumberException;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -71,34 +72,36 @@ public class Node {
             // a loop that hangs the entire thread might be dangerous.
             //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
             byte magicBytes[]    = new byte[4];
+            inputStream.read(magicBytes);
             // this is unused as of this version
             // but it is needed.
             int magic            = Utils.makeInt(magicBytes);
 
-            byte messageHeader[] = new byte[20];
+//            byte messageHeader[] = new byte[20];
+//
+//            int read = inputStream.read(messageHeader);
+//            if (read != messageHeader.length) {
+//                errors++;
+//                return null;
+//            }
+//
+//            int version = Utils.makeInt(messageHeader);
+//            int flags   = Utils.makeInt(messageHeader, 4);
+//            int type    = Utils.makeInt(messageHeader, 8);
+//            int count   = Utils.makeInt(messageHeader, 12);
+//            int length  = Utils.makeInt(messageHeader, 16);
+//
+//            byte content[] = new byte[length];
+//
+//            read = inputStream.read(content); // while (read < content.length) { read += stream.read(content, read, content.length - read); }
+//            if (read != content.length) {
+//                errors++;
+//                return null;
+//            }
 
-            int read = inputStream.read(messageHeader);
-            if (read != messageHeader.length) {
-                errors++;
-                return null;
-            }
-
-            int version = Utils.makeInt(messageHeader);
-            int flags   = Utils.makeInt(messageHeader, 4);
-            int type    = Utils.makeInt(messageHeader, 8);
-            int count   = Utils.makeInt(messageHeader, 12);
-            int length  = Utils.makeInt(messageHeader, 16);
-
-            byte content[] = new byte[length];
-
-            read = inputStream.read(content); // while (read < content.length) { read += stream.read(content, read, content.length - read); }
-            if (read != content.length) {
-                errors++;
-                return null;
-            }
-
-            return checkSpam(new Message(version, flags, type, count, content));
-        } catch (IOException e) {
+            Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
+            return checkSpam(message);
+        } catch (IOException | InvalidSerialNumberException e) {
             errors ++;
             return null;
         }
@@ -120,7 +123,8 @@ public class Node {
         try{
             while (!messages.isEmpty()) {
                 Message message = messages.poll();
-                message.writeToStream(outputStream);
+                message.write(outputStream);
+                outputStream.flush();
             }
         } catch (IOException e) {
             e.printStackTrace();
