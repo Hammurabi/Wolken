@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class MessageCache {
     private Map<byte[], Integer> receivedMessages;
+    private Map<byte[], Integer> sentMessages;
 
     public MessageCache() {
         receivedMessages = new HashMap<>();
@@ -32,7 +33,17 @@ public class MessageCache {
     }
 
     public boolean shouldSend(Message message) {
-        return false;
+        byte messageId[] = message.contentHash();
+        int timesSent = 0;
+
+        if (sentMessages.containsKey(messageId)) {
+            timesSent = sentMessages.get(messageId);
+            sentMessages.put(messageId, timesSent + 1);
+        } else {
+            sentMessages.put(messageId, 1);
+        }
+
+        return timesSent < 4;
     }
 
     public double getAverageSpam() {
