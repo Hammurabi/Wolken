@@ -15,6 +15,7 @@ public class Message {
         REQUEST = 2,
         RESPONSE = 3;
     }
+
     public final static int MAGIC = 1;
     private int     version;
     private int     flags;
