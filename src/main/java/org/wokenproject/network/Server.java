@@ -12,10 +12,10 @@ public class Server {
     private ServerSocket    socket;
     private Set<Node>       connectedNodes;
 
-    public Server()
-    {
+    public Server() throws IOException {
+        socket = new ServerSocket(Context.getInstance().getNetworkParameters().getPort());
+        connectToNodes(Context.getInstance().getIpAddressList().getAddresses());
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
-        connectToNodes(Context.getInstance().getIpAddressList());
     }
 
     public boolean connectToNodes(Set<NetAddress> addresses)
