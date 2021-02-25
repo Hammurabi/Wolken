@@ -15,6 +15,7 @@ public class Server {
     public Server()
     {
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
+        connectToNodes(Context.getInstance().getIpAddressList());
     }
 
     public boolean connectToNodes(Set<NetAddress> addresses)
