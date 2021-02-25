@@ -17,16 +17,21 @@ public class Node {
     private MessageCache    messageCache;
     private int             errors;
 
+    private byte            messageHeader[];
+    private byte            buffer[];
+
     public Node(String ip, int port) throws IOException {
         this(new Socket(ip, port));
     }
 
     public Node(Socket socket) {
-        this.socket = socket;
-        this.mutex  = new ReentrantLock();
-        this.messages = new ConcurrentLinkedQueue<>();
-        this.messageCache = new MessageCache();
-        this.errors = 0;
+        this.socket         = socket;
+        this.mutex          = new ReentrantLock();
+        this.messages       = new ConcurrentLinkedQueue<>();
+        this.messageCache   = new MessageCache();
+        this.errors         = 0;
+        this.messageHeader  = new byte[16];
+        this.buffer         = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
     }
 
     public void sendMessage(Message message) {
@@ -36,7 +41,15 @@ public class Node {
         }
     }
 
-    private void listenToSocket() throws IOException {
+    private Message listen() throws IOException {
         InputStream stream = socket.getInputStream();
+
+        // a loop that hangs the entire thread might be dangerous.
+        //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
+        int read = stream.read(messageHeader);
+        if (read != messageHeader.length)
+        {
+            return null;
+        }
     }
 }
