@@ -1,5 +1,6 @@
 package org.wokenproject.network.messages;
 
+import org.wokenproject.core.Context;
 import org.wokenproject.core.TransactionI;
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.network.Message;
@@ -48,6 +49,7 @@ public class TransactionList extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
+        Set<byte[]> newTransactions = Context.getInstance().getTransactionPool().getNonDuplicateTransactions(list);
     }
 
     @Override
