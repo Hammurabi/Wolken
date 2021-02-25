@@ -16,8 +16,8 @@ public class Context {
     private NetworkParameters   networkParameters;
     private ExecutorService     threadPool;
     private AtomicBoolean       isRunning;
+    private IpAddressList       ipAddressList;
     private FileService         fileService;
-
 
     public Context(FileService service, boolean testNet) throws WolkenException, IOException {
         this.database           = new Database(service.newFile("db"));
