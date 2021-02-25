@@ -10,6 +10,7 @@ public class Node {
     private Socket          socket;
     private ReentrantLock   mutex;
     private Queue<Message>  messages;
+    private MessageCache    messageCache;
 
     public Node(String ip, int port) throws IOException {
         this(new Socket(ip, port));
@@ -19,6 +20,7 @@ public class Node {
         this.socket = socket;
         this.mutex  = new ReentrantLock();
         this.messages = new ConcurrentLinkedQueue<>();
+        this.messageCache = new MessageCache();
     }
 
     public void sendMessage(Message message) {
