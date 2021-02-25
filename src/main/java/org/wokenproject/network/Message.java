@@ -29,6 +29,7 @@ public class Message {
         Utils.writeInt(instanceCount, stream);
         Utils.writeInt(content.length, stream);
         stream.write(content);
+        stream.flush();
     }
 
     public byte[] getMessageBytes()
