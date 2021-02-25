@@ -19,9 +19,9 @@ public class Context {
     private FileService         fileService;
 
 
-    public Context(FileService service) throws WolkenException, IOException {
+    public Context(FileService service, boolean testNet) throws WolkenException, IOException {
         this.database           = new Database(service.newFile("db"));
-        this.networkParameters  = new NetworkParameters(false);
+        this.networkParameters  = new NetworkParameters(testNet);
         this.threadPool         = Executors.newFixedThreadPool(3);
         this.isRunning          = new AtomicBoolean(true);
         this.fileService        = service;
