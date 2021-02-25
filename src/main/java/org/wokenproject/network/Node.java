@@ -35,9 +35,14 @@ public class Node {
     }
 
     public void sendMessage(Message message) {
-        if (messageCache.shouldSend(message))
-        {
-            messages.add(message);
+        mutex.lock();
+        try{
+            if (messageCache.shouldSend(message))
+            {
+                messages.add(message);
+            }
+        } finally {
+            mutex.unlock();
         }
     }
 
