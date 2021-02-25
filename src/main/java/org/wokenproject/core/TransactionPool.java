@@ -35,4 +35,19 @@ public class TransactionPool {
 
         return result;
     }
+
+    public TransactionI getTransaction(byte[] txid) {
+        if (txids.contains(txid))
+        {
+            for (TransactionI transaction : transactions)
+            {
+                if (Utils.equals(transaction.getTransactionID(), txid))
+                {
+                    return transaction;
+                }
+            }
+        }
+
+        return null;
+    }
 }
