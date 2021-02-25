@@ -112,7 +112,7 @@ public class Node {
         return errors;
     }
 
-    public double getSpamCount() {
+    public double getSpamAverage() {
         return messageCache.getAverageSpam();
     }
 
