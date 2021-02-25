@@ -1,6 +1,7 @@
 package org.wokenproject.serialization;
 
 import org.wokenproject.exceptions.InvalidSerialNumberException;
+import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -28,14 +29,14 @@ public class SerializationFactory {
         magicReferences.put(magic, serializableInstance);
     }
 
-    public <Type extends SerializableI> Type fromStream(BufferedInputStream stream) throws IOException, InvalidSerialNumberException {
+    public <Type extends SerializableI> Type fromStream(BufferedInputStream stream) throws IOException, WolkenException {
         byte magicBytes[] = new byte[4];
         stream.read(magicBytes);
 
         return fromStream(Utils.makeInt(magicBytes), stream);
     }
 
-    public <Type extends SerializableI> Type fromStream(int magic, BufferedInputStream stream) throws IOException, InvalidSerialNumberException {
+    public <Type extends SerializableI> Type fromStream(int magic, BufferedInputStream stream) throws IOException, WolkenException {
         SerializableI serializable  = magicReferences.get(validateMagicNumber(magic));
 
         Type result                 = serializable.newInstance();
