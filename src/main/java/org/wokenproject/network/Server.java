@@ -13,7 +13,7 @@ public class Server {
 
     public Server()
     {
-        Context.getInstance().getThreadPool().execute(()->{listenForIncomingConnections();});
+        Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
     }
 
     private void listenForIncomingConnections()
