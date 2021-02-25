@@ -82,5 +82,11 @@ public class Server implements Runnable {
     }
 
     private void runMaintenanceChecks() {
+        for (Node node : connectedNodes)
+        {
+            if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors())
+            {
+            }
+        }
     }
 }
