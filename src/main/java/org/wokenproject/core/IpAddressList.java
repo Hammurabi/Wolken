@@ -30,8 +30,14 @@ public class IpAddressList {
         }
     }
 
+    public void addAddress(NetAddress address)
+    {
+        addresses.add(address);
+    }
+
     public void removeAddress(NetAddress address)
     {
+        addresses.remove(address);
     }
 
     public Set<NetAddress> getAddresses()
