@@ -77,7 +77,7 @@ public class Server implements Runnable {
 
             for (Node node : connectedNodes)
             {
-                Message message = node.listen();
+                Message message = node.listenForMessage();
             }
 
             for (Node node : connectedNodes)
