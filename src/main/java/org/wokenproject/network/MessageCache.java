@@ -13,6 +13,16 @@ public class MessageCache {
 
     public void setReceivedMessage(Message message)
     {
+        byte messageId[] = message.contentHash();
+
+        if (messageMap.containsKey(messageId))
+        {
+            messageMap.put(messageId, messageMap.get(messageId) + 1);
+        }
+        else
+        {
+            messageMap.put(messageId, 1);
+        }
     }
 
     private int numTimesReceived(Message message)
