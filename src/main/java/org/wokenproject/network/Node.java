@@ -74,11 +74,15 @@ public class Node {
                 return null;
             }
 
-            return new Message(version, flags, type, count, content);
+            return checkSpam(new Message(version, flags, type, count, content));
         } catch (IOException e) {
             errors ++;
             return null;
         }
+    }
+
+    private Message checkSpam(Message message) {
+        return message;
     }
 
     public void send()
