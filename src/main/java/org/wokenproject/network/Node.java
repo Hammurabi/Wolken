@@ -1,6 +1,9 @@
 package org.wokenproject.network;
 
+import org.wokenproject.core.Context;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -11,6 +14,7 @@ public class Node {
     private ReentrantLock   mutex;
     private Queue<Message>  messages;
     private MessageCache    messageCache;
+    private int             errors;
 
     public Node(String ip, int port) throws IOException {
         this(new Socket(ip, port));
@@ -21,9 +25,25 @@ public class Node {
         this.mutex  = new ReentrantLock();
         this.messages = new ConcurrentLinkedQueue<>();
         this.messageCache = new MessageCache();
+        this.errors = 0;
     }
 
     public void sendMessage(Message message) {
-        messages.add(message);
+        if (messageCache.shouldSend(message))
+        {
+            messages.add(message);
+        }
+    }
+
+    private void listenToSocket()
+    {
+        try {
+            InputStream stream = socket.getInputStream();
+        } catch (IOException e) {
+            if (errors ++ >= Context.getInstance().getNetworkParameters().getMaxNetworkErrors())
+            {
+
+            }
+        }
     }
 }
