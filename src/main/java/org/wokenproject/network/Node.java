@@ -21,7 +21,7 @@ public class Node {
         this.messages = new ConcurrentLinkedQueue<>();
     }
 
-    void sendMessage(Message message) {
+    public void sendMessage(Message message) {
         messages.add(message);
     }
 }
