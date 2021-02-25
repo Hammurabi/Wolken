@@ -13,13 +13,13 @@ public class Server {
 
     public Server()
     {
-        Context.getInstance().getThreadPool()
+        Context.getInstance().getThreadPool().execute(()->{listenForIncomingConnections();});
     }
 
     private void listenForIncomingConnections()
     {
         Socket incoming = null;
-        while (true)
+        while (Context.getInstance().isRunning())
         {
             try {
                 incoming = socket.accept();
