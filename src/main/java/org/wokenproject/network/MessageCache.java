@@ -1,11 +1,11 @@
 package org.wokenproject.network;
 
 public class MessageCache {
-    public void setReceivedMessage(byte[] hash)
+    public void setReceivedMessage(Message message)
     {
     }
 
-    private int numTimesReceived(byte[] hash)
+    private int numTimesReceived(Message message)
     {
         return 0;
     }
