@@ -1,14 +1,10 @@
 package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
-import org.wokenproject.network.Message;
-import org.wokenproject.network.NetAddress;
 import org.wokenproject.serialization.SerializationFactory;
 import org.wokenproject.utils.FileService;
 
 import java.io.IOException;
-import java.util.Set;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -22,6 +18,7 @@ public class Context {
     private AtomicBoolean           isRunning;
     private IpAddressList           ipAddressList;
     private SerializationFactory    serializationFactory;
+    private TransactionPool         transactionPool;
     private FileService             fileService;
 
     public Context(FileService service, boolean testNet) throws WolkenException, IOException {
@@ -31,6 +28,7 @@ public class Context {
         this.isRunning              = new AtomicBoolean(true);
         this.ipAddressList          = new IpAddressList(service.newFile("iplist"));
         this.serializationFactory   = new SerializationFactory();
+        this.transactionPool        = new TransactionPool();
         this.fileService            = service;
     }
 
@@ -73,5 +71,9 @@ public class Context {
 
     public SerializationFactory getSerialFactory() {
         return serializationFactory;
+    }
+
+    public TransactionPool getTransactionPool() {
+        return transactionPool;
     }
 }
