@@ -142,4 +142,8 @@ public class NetworkParameters {
     public int getMaxAllowedOutboundConnections() {
         return 8;
     }
+
+    public int getPort() {
+        return isTestNet ? 5112 : 5110;
+    }
 }
