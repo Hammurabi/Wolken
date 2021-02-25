@@ -8,10 +8,7 @@ import java.io.*;
 public abstract class SerializableI {
     public abstract void write(OutputStream stream);
     public abstract void read(InputStream stream);
-
-    public abstract <Type extends SerializableI> Type executePayload(int funcPtr, Object... args);
-
-
+    
     public byte[] asByteArray() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         write(outputStream);
