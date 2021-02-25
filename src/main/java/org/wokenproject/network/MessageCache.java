@@ -55,4 +55,30 @@ public class MessageCache {
 
         return (numTimes / receivedMessages.size()) - 1.0;
     }
+
+    public void clearOutboundCache()
+    {
+        sentMessages.clear();
+    }
+
+    public void clearInboundCache()
+    {
+        receivedMessages.clear();
+    }
+
+    /*
+        Return an estimate of the memory consumption of the inbound cache.
+     */
+    public int inboundCacheSize()
+    {
+        return receivedMessages.size() * 40;
+    }
+
+    /*
+        Return an estimate of the memory consumption of the outbound cache.
+     */
+    public int outboundCacheSize()
+    {
+        return sentMessages.size() * 40;
+    }
 }
