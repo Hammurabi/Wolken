@@ -15,15 +15,13 @@ public class Node {
         this(new Socket(ip, port));
     }
 
-    public Node(Socket socket)
-    {
-        this.socket     = socket;
-        this.mutex      = new ReentrantLock();
-        this.messages   = new ConcurrentLinkedQueue<>();
+    public Node(Socket socket) {
+        this.socket = socket;
+        this.mutex  = new ReentrantLock();
+        this.messages = new ConcurrentLinkedQueue<>();
     }
 
-    void sendMessage(Message message)
-    {
+    void sendMessage(Message message) {
         messages.add(message);
-    }z
+    }
 }
