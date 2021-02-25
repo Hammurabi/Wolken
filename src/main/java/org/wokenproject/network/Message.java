@@ -1,12 +1,13 @@
 package org.wokenproject.network;
 
+import org.wokenproject.serialization.SerializableI;
 import org.wokenproject.utils.HashUtil;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
-public abstract class Message {
+public abstract class Message extends SerializableI {
     public static final class Flags
     {
         public static final int
@@ -16,7 +17,6 @@ public abstract class Message {
         RESPONSE = 3;
     }
 
-    public final static int MAGIC = 1;
     private int     version;
     private int     flags;
     private int     contentType;
@@ -34,8 +34,7 @@ public abstract class Message {
 
     public abstract void executePayload(Server server, Node node);
 
-    public void writeToStream(BufferedOutputStream stream) throws IOException {
-        Utils.writeInt(MAGIC, stream);
+    public void writeHeader(BufferedOutputStream stream) throws IOException {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
         Utils.writeInt(contentType, stream);
