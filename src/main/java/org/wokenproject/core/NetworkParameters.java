@@ -154,4 +154,8 @@ public class NetworkParameters {
     public int getMaxCacheSize() {
         return 18_796_99;
     }
+
+    public int getVersion() {
+        return 1;
+    }
 }
