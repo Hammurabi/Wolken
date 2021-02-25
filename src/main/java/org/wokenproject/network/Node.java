@@ -21,4 +21,9 @@ public class Node {
         this.mutex      = new ReentrantLock();
         this.messages   = new ConcurrentLinkedQueue<>();
     }
+
+    void sendMessage(Message message)
+    {
+        messages.add(message);
+    }
 }
