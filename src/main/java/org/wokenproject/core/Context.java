@@ -4,17 +4,23 @@ import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.utils.FileService;
 
 import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Context {
     private static Context instance;
 
     private Database            database;
     private NetworkParameters   networkParameters;
+    private ExecutorService     threadPool;
     private FileService         fileService;
+
 
     public Context(FileService service) throws WolkenException, IOException {
         this.database           = new Database(service.newFile("db"));
         this.networkParameters  = new NetworkParameters(false);
+        this.threadPool         = Executors.newFixedThreadPool(3);
         this.fileService        = service;
     }
 
@@ -31,5 +37,9 @@ public class Context {
     public static Context getInstance()
     {
         return instance;
+    }
+
+    public ExecutorService getThreadPool() {
+        return threadPool;
     }
 }
