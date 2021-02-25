@@ -50,13 +50,11 @@ public class Node {
     }
 
     private Message listen() throws IOException {
-        InputStream stream = socket.getInputStream();
-
         // a loop that hangs the entire thread might be dangerous.
         //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
         byte messageHeader[] = new byte[20];
 
-        int read = stream.read(messageHeader);
+        int read = inputStream.read(messageHeader);
         if (read != messageHeader.length)
         {
             errors ++;
@@ -71,7 +69,7 @@ public class Node {
 
         byte content[] = new byte[length];
 
-        read = stream.read(content); // while (read < content.length) { read += stream.read(content, read, content.length - read); }
+        read = inputStream.read(content); // while (read < content.length) { read += stream.read(content, read, content.length - read); }
         if (read != content.length)
         {
             errors ++;
