@@ -1,4 +1,6 @@
-package org.wokenproject.network;
+package org.wokenproject.serialization;
+
+import org.wokenproject.serialization.SerializableI;
 
 import java.util.HashMap;
 import java.util.Map;
