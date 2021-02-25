@@ -1,6 +1,7 @@
 package org.wokenproject.network;
 
 import org.wokenproject.core.Context;
+import org.wokenproject.exceptions.WolkenException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,15 +36,7 @@ public class Node {
         }
     }
 
-    private void listenToSocket()
-    {
-        try {
-            InputStream stream = socket.getInputStream();
-        } catch (IOException e) {
-            if (errors ++ >= Context.getInstance().getNetworkParameters().getMaxNetworkErrors())
-            {
-
-            }
-        }
+    private void listenToSocket() throws IOException {
+        InputStream stream = socket.getInputStream();
     }
 }
