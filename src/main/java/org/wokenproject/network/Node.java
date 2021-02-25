@@ -70,6 +70,11 @@ public class Node {
         try {
             // a loop that hangs the entire thread might be dangerous.
             //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
+            byte magicBytes[]    = new byte[4];
+            // this is unused as of this version
+            // but it is needed.
+            int magic            = Utils.makeInt(magicBytes);
+
             byte messageHeader[] = new byte[20];
 
             int read = inputStream.read(messageHeader);
