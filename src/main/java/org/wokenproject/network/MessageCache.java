@@ -11,7 +11,7 @@ public class MessageCache {
         receivedMessages = new HashMap<>();
     }
 
-    public void setReceivedMessage(Message message) {
+    public void cacheReceivedMessage(Message message) {
         byte messageId[] = message.contentHash();
 
         if (receivedMessages.containsKey(messageId)) {
