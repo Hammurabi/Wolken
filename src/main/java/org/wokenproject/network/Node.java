@@ -98,4 +98,8 @@ public class Node {
     public void close() throws IOException {
         socket.close();
     }
+
+    public int getTotalErrorCount() {
+        return errors;
+    }
 }
