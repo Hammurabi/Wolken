@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Set;
 
-public class Server {
+public class Server implements Runnable {
     private ServerSocket    socket;
     private Set<Node>       connectedNodes;
 
@@ -56,6 +56,21 @@ public class Server {
                     incoming.close();
                 }
             } catch (IOException e) {
+            }
+        }
+    }
+
+    @Override
+    public void run() {
+        // we don't need to start checks right away
+        long lastCheck = System.currentTimeMillis();
+        while (Context.getInstance().isRunning())
+        {
+            long currentTime = System.currentTimeMillis();
+
+            if (currentTime - lastCheck >= 30_000)
+            {
+                lastCheck = currentTime;
             }
         }
     }
