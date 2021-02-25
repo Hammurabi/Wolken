@@ -76,11 +76,7 @@ public class Server implements Runnable {
 
             for (Node node : connectedNodes)
             {
-                try {
-                    Message message = node.listen();
-                } catch (IOException e) {
-                    
-                }
+                Message message = node.listen();
             }
         }
     }
