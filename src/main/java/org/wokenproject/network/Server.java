@@ -87,7 +87,12 @@ public class Server implements Runnable {
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
             if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors()) {
-
+                nodeIterator.remove();
+                try {
+                    node.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
