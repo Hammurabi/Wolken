@@ -2,6 +2,7 @@ package org.wokenproject.network;
 
 import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.InvalidSerialNumberException;
+import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -101,7 +102,7 @@ public class Node {
 
             Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
             return checkSpam(message);
-        } catch (IOException | InvalidSerialNumberException e) {
+        } catch (IOException | WolkenException e) {
             errors ++;
             return null;
         }
