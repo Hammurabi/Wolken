@@ -77,9 +77,6 @@ public class Server implements Runnable {
             for (Node node : connectedNodes)
             {
                 Message message = node.listen();
-                if (message != null)
-                {
-                }
             }
         }
     }
