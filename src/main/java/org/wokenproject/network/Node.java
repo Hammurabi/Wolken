@@ -6,6 +6,7 @@ import org.wokenproject.utils.Utils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -106,7 +107,11 @@ public class Node {
         return errors;
     }
 
-    public int getSpamCount() {
+    public double getSpamCount() {
         return 0;
+    }
+
+    public InetAddress getInetAddress() {
+        return socket.getInetAddress();
     }
 }
