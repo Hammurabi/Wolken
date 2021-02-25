@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MessageCache {
-    private Map<byte[], Message> messageMap;
+    private Map<byte[], Integer> messageMap;
 
     public MessageCache()
     {
