@@ -62,10 +62,10 @@ public class Node {
         }
 
         int version = Utils.makeInt(messageHeader);
-        int flags   = Utils.makeInt(messageHeader);
-        int type    = Utils.makeInt(messageHeader);
-        int count   = Utils.makeInt(messageHeader);
-        int length  = Utils.makeInt(messageHeader);
+        int flags   = Utils.makeInt(messageHeader, 4);
+        int type    = Utils.makeInt(messageHeader, 8);
+        int count   = Utils.makeInt(messageHeader, 12);
+        int length  = Utils.makeInt(messageHeader, 16);
 
         byte content[] = new byte[length];
 
@@ -81,5 +81,16 @@ public class Node {
 
     public void send()
     {
+        mutex.lock();
+        try{
+            while (!messages.isEmpty()) {
+                Message message = messages.poll();
+                outputStream.write(message.getMessageBytes());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            mutex.unlock();
+        }
     }
 }
