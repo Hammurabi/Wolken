@@ -70,8 +70,12 @@ public class Server implements Runnable {
 
             if (currentTime - lastCheck >= 30_000)
             {
+                runMaintenanceChecks();
                 lastCheck = currentTime;
             }
         }
+    }
+
+    private void runMaintenanceChecks() {
     }
 }
