@@ -8,7 +8,7 @@ import java.io.*;
 public abstract class SerializableI {
     public abstract void write(OutputStream stream);
     public abstract void read(InputStream stream);
-    
+
     public byte[] asByteArray() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         write(outputStream);
