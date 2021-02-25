@@ -60,6 +60,10 @@ public class Utils {
         return makeInt(trim[0], trim[1], trim[2], trim[3]);
     }
 
+    public static int makeInt(byte[] trim, int off) {
+        return makeInt(trim[off], trim[off + 1], trim[off + 2], trim[off + 3]);
+    }
+
     public static long makeLong(byte[] trim) {
         if (trim.length < 8) {
             trim = concatenate(new byte[8 - trim.length], trim);
