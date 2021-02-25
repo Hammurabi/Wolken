@@ -8,6 +8,8 @@ import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Database {
@@ -96,5 +98,19 @@ public class Database {
         }
 
         return null;
+    }
+
+    public Set<byte[]> getNonDuplicateTransactions(Set<byte[]> list) {
+        Set<byte[]> result = new HashSet<>();
+        for (byte[] txid : list)
+        {
+            byte id[]   = Utils.concatenate(TransactionFromHash, Utils.concatenate(txid));
+            if (database.get(id) == null)
+            {
+                result.add(txid);
+            }
+        }
+
+        return result;
     }
 }
