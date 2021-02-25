@@ -7,10 +7,10 @@ import java.util.Objects;
 public class NetAddress implements Serializable {
     private static final long serialVersionUID = 3738771433856794716L;
     private final InetAddress   address;
-    private final short         port;
+    private final int           port;
     private double              spamAverage;
 
-    public NetAddress(InetAddress address, short port)
+    public NetAddress(InetAddress address, int port)
     {
         this.address    = address;
         this.port       = port;
@@ -27,7 +27,7 @@ public class NetAddress implements Serializable {
         return address;
     }
 
-    public short getPort()
+    public int getPort()
     {
         return port;
     }
