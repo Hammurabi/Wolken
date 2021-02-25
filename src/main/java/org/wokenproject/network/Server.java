@@ -16,6 +16,10 @@ public class Server {
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
     }
 
+    public void connectToNodes()
+    {
+    }
+
     private void listenForIncomingConnections()
     {
         Socket incoming = null;
