@@ -21,7 +21,9 @@ public class SerializationFactory {
      */
     public void registerClass(Class<?> classType, SerializableI serializableInstance)
     {
-
+        int magic = 1 + classMagicReferences.size();
+        classMagicReferences.put(classType, magic);
+        magicReferences.put(magic, serializableInstance);
     }
 
     public <Type extends SerializableI> Type fromStream(BufferedInputStream stream)
