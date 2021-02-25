@@ -7,6 +7,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 
 public class Message {
+    public final static int MAGIC = 1;
     private int     version;
     private int     flags;
     private int     contentType;
@@ -23,6 +24,7 @@ public class Message {
     }
 
     public void writeToStream(BufferedOutputStream stream) throws IOException {
+        Utils.writeInt(MAGIC, stream);
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
         Utils.writeInt(contentType, stream);
