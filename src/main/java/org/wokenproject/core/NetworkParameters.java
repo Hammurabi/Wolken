@@ -130,4 +130,8 @@ public class NetworkParameters {
     public long getHandshakeTimeout() {
         return 2_500;
     }
+
+    public int getMaxNetworkErrors() {
+        return 25;
+    }
 }
