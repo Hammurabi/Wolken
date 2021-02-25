@@ -1,6 +1,6 @@
 package org.wokenproject.serialization;
 
-import org.wokenproject.serialization.SerializableI;
+import org.wokenproject.exceptions.InvalidSerialNumberException;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -37,5 +37,14 @@ public class SerializationFactory {
         result.read(stream);
 
         return result;
+    }
+
+    private int validateMagicNumber(int magic) throws InvalidSerialNumberException {
+        if (magicReferences.containsKey(magic))
+        {
+            return magic;
+        }
+
+        throw new InvalidSerialNumberException("'" + magic + "' is an invalid serial number.");
     }
 }
