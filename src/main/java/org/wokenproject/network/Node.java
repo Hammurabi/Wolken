@@ -1,13 +1,11 @@
 package org.wokenproject.network;
 
 import org.wokenproject.core.Context;
-import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -92,5 +90,9 @@ public class Node {
         } finally {
             mutex.unlock();
         }
+    }
+
+    public void close() throws IOException {
+        socket.close();
     }
 }
