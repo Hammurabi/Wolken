@@ -146,4 +146,8 @@ public class NetworkParameters {
     public int getPort() {
         return isTestNet ? 5112 : 5110;
     }
+
+    public int getMessageSpamThreshold() {
+        return 4;
+    }
 }
