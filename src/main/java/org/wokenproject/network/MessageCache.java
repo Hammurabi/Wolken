@@ -1,6 +1,7 @@
 package org.wokenproject.network;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class MessageCache {
@@ -21,6 +22,12 @@ public class MessageCache {
     }
 
     private int numTimesReceived(Message message) {
+        byte messageId[] = message.contentHash();
+
+        if (receivedMessages.containsKey(messageId)) {
+            return receivedMessages.get(messageId);
+        }
+
         return 0;
     }
 
@@ -29,6 +36,12 @@ public class MessageCache {
     }
 
     public double getAverageSpam() {
-        return 0;
+        double numTimes = 0;
+        for (Integer integer : receivedMessages.values())
+        {
+            numTimes += integer.doubleValue();
+        }
+
+        return (numTimes / receivedMessages.size()) - 1.0;
     }
 }
