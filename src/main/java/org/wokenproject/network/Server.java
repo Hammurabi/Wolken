@@ -77,7 +77,11 @@ public class Server implements Runnable {
 
             for (Node node : connectedNodes)
             {
-                Message message = node.listenForMessage();
+                CachedMessage message = node.listenForMessage();
+                if (!message.isSpam())
+                {
+                    message.getMessage().executePayload(this, node);
+                }
             }
 
             for (Node node : connectedNodes)
