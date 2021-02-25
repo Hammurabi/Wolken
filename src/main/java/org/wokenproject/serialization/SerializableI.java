@@ -25,4 +25,6 @@ public abstract class SerializableI {
 
         return t;
     }
+
+    public abstract <Type extends SerializableI> Type newInstance(Object ...object);
 }
