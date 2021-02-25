@@ -1,9 +1,11 @@
 package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.network.NetAddress;
 import org.wokenproject.utils.FileService;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,7 +26,18 @@ public class Context {
         this.networkParameters  = new NetworkParameters(testNet);
         this.threadPool         = Executors.newFixedThreadPool(3);
         this.isRunning          = new AtomicBoolean(true);
+        this.ipAddressList      = new IpAddressList(service.newFile("iplist"));
         this.fileService        = service;
+    }
+
+    public void shutDown()
+    {
+        isRunning.set(false);
+        try {
+            ipAddressList.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Database getDatabase()
@@ -48,5 +61,9 @@ public class Context {
 
     public boolean isRunning() {
         return isRunning.get();
+    }
+
+    public IpAddressList getIpAddressList() {
+        return ipAddressList;
     }
 }
