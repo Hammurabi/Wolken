@@ -23,4 +23,6 @@ public abstract class TransactionI {
     public abstract byte[] getPayload();
     public abstract TransactionI getCloneForSignature();
     public abstract TransactionI getClone();
+
+    public abstract byte[] getTransactionID();
 }
