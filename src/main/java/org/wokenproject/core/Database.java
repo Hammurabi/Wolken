@@ -24,7 +24,7 @@ public class Database {
     ;
 
     public Database(FileService location) throws IOException {
-        database= Iq80DBFactory.factory.open(location.file(), new Options());
+        database= Iq80DBFactory.factory.open(location.newFile("leveldb").file(), new Options());
         mutex   = new ReentrantLock();
     }
 
