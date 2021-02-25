@@ -2,6 +2,7 @@ package org.wokenproject.serialization;
 
 import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.InvalidSerialNumberException;
+import org.wokenproject.utils.HashUtil;
 
 import java.io.*;
 
@@ -28,4 +29,8 @@ public abstract class SerializableI {
     }
 
     public abstract <Type extends SerializableI> Type newInstance(Object ...object);
+
+    public byte[] checksum() throws IOException {
+        return HashUtil.hash160(asByteArray());
+    }
 }
