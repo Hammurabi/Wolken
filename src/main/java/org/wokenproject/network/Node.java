@@ -82,6 +82,7 @@ public class Node {
     }
 
     private Message checkSpam(Message message) {
+        messageCache.setReceivedMessage(message);
         return message;
     }
 
