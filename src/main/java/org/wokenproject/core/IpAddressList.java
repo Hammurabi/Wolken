@@ -30,6 +30,10 @@ public class IpAddressList {
         }
     }
 
+    public void removeAddress(NetAddress address)
+    {
+    }
+
     public Set<NetAddress> getAddresses()
     {
         return addresses;
