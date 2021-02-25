@@ -47,7 +47,7 @@ public class Node {
         }
     }
 
-    private Message listen() throws IOException {
+    public Message listen() throws IOException {
         // a loop that hangs the entire thread might be dangerous.
         //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
         byte messageHeader[] = new byte[20];
