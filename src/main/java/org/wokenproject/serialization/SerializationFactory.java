@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SerializationFactory {
-    private Map<Class, Integer>         classMagicReferences;
+    private Map<Class<?>, Integer>      classMagicReferences;
     private Map<Integer, SerializableI> magicReferences;
 
     public SerializationFactory()
