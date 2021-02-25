@@ -1,5 +1,6 @@
 package org.wokenproject.network.messages;
 
+import org.wokenproject.core.Context;
 import org.wokenproject.core.TransactionI;
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.network.Message;
@@ -25,6 +26,11 @@ public class RequestTransactions extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
+        Set<TransactionI> transactions = new LinkedHashSet<>();
+        for (byte[] txid : this.transactions)
+        {
+            TransactionI transaction = Context.getInstance().getTransactionPool().getTransaction(txid);
+        }
     }
 
     @Override
