@@ -59,6 +59,7 @@ public class Node {
         int read = stream.read(messageHeader);
         if (read != messageHeader.length)
         {
+            errors ++;
             return null;
         }
 
@@ -73,6 +74,7 @@ public class Node {
         read = stream.read(content); // while (read < content.length) { read += stream.read(content, read, content.length - read); }
         if (read != content.length)
         {
+            errors ++;
             return null;
         }
 
