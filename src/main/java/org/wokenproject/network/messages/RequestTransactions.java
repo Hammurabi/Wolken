@@ -1,5 +1,6 @@
 package org.wokenproject.network.messages;
 
+import org.wokenproject.core.TransactionI;
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.network.Message;
 import org.wokenproject.network.Node;
@@ -9,16 +10,21 @@ import org.wokenproject.serialization.SerializableI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class RequestTransactions extends Message {
-    public RequestTransactions(int version, Set<byte[]> transactions) {
-        super(version, Flags.NOTIFY, transactions.size());
+    private Set<byte[]> transactions;
+
+    public RequestTransactions(int version, Collection<byte[]> transactions) {
+        super(version, Flags.REQUEST, transactions.size());
+        this.transactions = new LinkedHashSet<>(transactions);
     }
 
     @Override
     public void executePayload(Server server, Node node) {
-
     }
 
     @Override
