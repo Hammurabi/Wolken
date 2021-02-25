@@ -3,7 +3,6 @@ package org.wokenproject.network;
 import org.wokenproject.core.Context;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Iterator;
@@ -94,13 +93,13 @@ public class Server implements Runnable {
                 shouldDisconnect = true;
             }
 
-            if (node.getSpamCount() > Context.getInstance().getNetworkParameters().getMessageSpamThreshold()) {
+            if (node.getSpamAverage() > Context.getInstance().getNetworkParameters().getMessageSpamThreshold()) {
                 shouldDisconnect = true;
                 isSpammy = true;
             }
 
             if (isSpammy) {
-                Context.getInstance().getIpAddressList().getAddress(node.getInetAddress()).setSpamAverage(node.getSpamCount());
+                Context.getInstance().getIpAddressList().getAddress(node.getInetAddress()).setSpamAverage(node.getSpamAverage());
             }
 
             if (shouldDisconnect) {
