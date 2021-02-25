@@ -9,17 +9,6 @@ public abstract class SerializableI {
     public abstract void write(OutputStream stream);
     public abstract void read(InputStream stream);
 
-    public boolean hasPayload()
-    {
-        return getPayloadMetadata() != null;
-    }
-
-    public abstract Metadata getPayloadMetadata();
-
-    public <Type extends SerializableI> Type executePayload() {
-        return executePayload(0);
-    }
-
     public abstract <Type extends SerializableI> Type executePayload(int funcPtr, Object... args);
 
 
