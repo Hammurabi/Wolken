@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Iterator;
+import java.util.Queue;
 import java.util.Set;
 
 public class Server implements Runnable {
@@ -19,7 +20,7 @@ public class Server implements Runnable {
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
     }
 
-    public boolean connectToNodes(Set<NetAddress> addresses)
+    public boolean connectToNodes(Queue<NetAddress> addresses)
     {
         int connections = 0;
 
@@ -86,7 +87,23 @@ public class Server implements Runnable {
         Iterator<Node> nodeIterator = connectedNodes.iterator();
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
+            boolean shouldDisconnect = false;
+            boolean isSpammy = false;
+
             if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors()) {
+                shouldDisconnect = true;
+            }
+
+            if (node.getSpamCount() > Context.getInstance().getNetworkParameters().getMessageSpamThreshold()) {
+                shouldDisconnect = true;
+                isSpammy = true;
+            }
+
+            if (isSpammy) {
+                Context.getInstance().getIpAddressList().getAddress(node.getInetAddress()).setSpamAverage(node.getSpamCount());
+            }
+
+            if (shouldDisconnect) {
                 nodeIterator.remove();
                 try {
                     node.close();
