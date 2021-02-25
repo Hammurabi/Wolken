@@ -6,13 +6,20 @@ import java.util.Objects;
 
 public class NetAddress implements Serializable {
     private static final long serialVersionUID = 3738771433856794716L;
-    private final InetAddress address;
-    private final short       port;
+    private final InetAddress   address;
+    private final short         port;
+    private double              spamAverage;
 
     public NetAddress(InetAddress address, short port)
     {
         this.address    = address;
         this.port       = port;
+    }
+
+    public void setSpamAverage(double spamAverage)
+    {
+        // slowly dilute old values
+        this.spamAverage = (this.spamAverage + spamAverage) / 2.;
     }
 
     public InetAddress getAddress()
@@ -23,6 +30,11 @@ public class NetAddress implements Serializable {
     public short getPort()
     {
         return port;
+    }
+
+    public double getSpamAverage()
+    {
+        return spamAverage;
     }
 
     @Override
