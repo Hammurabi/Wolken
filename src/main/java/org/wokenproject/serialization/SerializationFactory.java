@@ -28,11 +28,11 @@ public class SerializationFactory {
         magicReferences.put(magic, serializableInstance);
     }
 
-    public <Type extends SerializableI> Type fromStream(BufferedInputStream stream) throws IOException {
+    public <Type extends SerializableI> Type fromStream(BufferedInputStream stream) throws IOException, InvalidSerialNumberException {
         byte magicBytes[] = new byte[4];
         stream.read(magicBytes);
 
-        SerializableI serializable  = magicReferences.get(Utils.makeInt(magicBytes));
+        SerializableI serializable  = magicReferences.get(validateMagicNumber(Utils.makeInt(magicBytes)));
         Type result                 = serializable.newInstance();
         result.read(stream);
 
