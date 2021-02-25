@@ -2,6 +2,7 @@ package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.network.NetAddress;
+import org.wokenproject.serialization.SerializationFactory;
 import org.wokenproject.utils.FileService;
 
 import java.io.IOException;
@@ -14,20 +15,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Context {
     private static Context instance;
 
-    private Database            database;
-    private NetworkParameters   networkParameters;
-    private ExecutorService     threadPool;
-    private AtomicBoolean       isRunning;
-    private IpAddressList       ipAddressList;
-    private FileService         fileService;
+    private Database                database;
+    private NetworkParameters       networkParameters;
+    private ExecutorService         threadPool;
+    private AtomicBoolean           isRunning;
+    private IpAddressList           ipAddressList;
+    private SerializationFactory    serializationFactory;
+    private FileService             fileService;
 
     public Context(FileService service, boolean testNet) throws WolkenException, IOException {
-        this.database           = new Database(service.newFile("db"));
-        this.networkParameters  = new NetworkParameters(testNet);
-        this.threadPool         = Executors.newFixedThreadPool(3);
-        this.isRunning          = new AtomicBoolean(true);
-        this.ipAddressList      = new IpAddressList(service.newFile("iplist"));
-        this.fileService        = service;
+        this.database               = new Database(service.newFile("db"));
+        this.networkParameters      = new NetworkParameters(testNet);
+        this.threadPool             = Executors.newFixedThreadPool(3);
+        this.isRunning              = new AtomicBoolean(true);
+        this.ipAddressList          = new IpAddressList(service.newFile("iplist"));
+        this.serializationFactory   = new SerializationFactory();
+        this.fileService            = service;
     }
 
     public void shutDown()
