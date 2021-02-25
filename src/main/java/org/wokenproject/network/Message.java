@@ -19,6 +19,18 @@ public class Message {
         this.content        = content;
     }
 
+    public byte[] getMessageBytes()
+    {
+        return HashUtil.hash160(Utils.concatenate(
+                Utils.takeApart(version),
+                Utils.takeApart(flags),
+                Utils.takeApart(contentType),
+                Utils.takeApart(instanceCount),
+                Utils.takeApart(content.length),
+                content
+        ));
+    }
+
     public byte[] contentHash()
     {
         return HashUtil.hash160(Utils.concatenate(
