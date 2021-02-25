@@ -113,7 +113,7 @@ public class Node {
     }
 
     public double getSpamCount() {
-        return 0;
+        return messageCache.getAverageSpam();
     }
 
     public InetAddress getInetAddress() {
