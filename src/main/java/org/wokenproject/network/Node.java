@@ -86,7 +86,7 @@ public class Node {
         return message;
     }
 
-    public void send()
+    public void flush()
     {
         mutex.lock();
         try{
