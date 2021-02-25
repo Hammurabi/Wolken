@@ -36,6 +36,9 @@ public class Node {
         this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
     }
 
+    /*
+        Sends a message only if it was not sent before.
+     */
     public void sendMessage(Message message) {
         mutex.lock();
         try{
@@ -48,7 +51,22 @@ public class Node {
         }
     }
 
-    public Message listen() {
+    /*
+        Forcefully sends a message even if it was sent before.
+     */
+    public void forceSendMessage(Message message) {
+        mutex.lock();
+        try{
+            messages.add(message);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    /*
+        Listens for any incoming messages.
+     */
+    public Message listenForMessage() {
         try {
             // a loop that hangs the entire thread might be dangerous.
             //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
@@ -81,11 +99,17 @@ public class Node {
         }
     }
 
+    /*
+        Caches the message and keeps track of how many times it was received.
+     */
     private Message checkSpam(Message message) {
         messageCache.cacheReceivedMessage(message);
         return message;
     }
 
+    /*
+        Send all queued messages.
+     */
     public void flush()
     {
         mutex.lock();
