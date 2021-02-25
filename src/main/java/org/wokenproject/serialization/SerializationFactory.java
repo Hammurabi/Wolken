@@ -32,7 +32,12 @@ public class SerializationFactory {
         byte magicBytes[] = new byte[4];
         stream.read(magicBytes);
 
-        SerializableI serializable  = magicReferences.get(validateMagicNumber(Utils.makeInt(magicBytes)));
+        return fromStream(Utils.makeInt(magicBytes), stream);
+    }
+
+    public <Type extends SerializableI> Type fromStream(int magic, BufferedInputStream stream) throws IOException, InvalidSerialNumberException {
+        SerializableI serializable  = magicReferences.get(validateMagicNumber(magic));
+
         Type result                 = serializable.newInstance();
         result.read(stream);
 
