@@ -105,4 +105,8 @@ public class Node {
     public int getTotalErrorCount() {
         return errors;
     }
+
+    public int getSpamCount() {
+        return 0;
+    }
 }
