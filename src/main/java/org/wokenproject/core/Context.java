@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Context {
     private static Context instance;
@@ -14,6 +15,7 @@ public class Context {
     private Database            database;
     private NetworkParameters   networkParameters;
     private ExecutorService     threadPool;
+    private AtomicBoolean       isRunning;
     private FileService         fileService;
 
 
@@ -21,6 +23,7 @@ public class Context {
         this.database           = new Database(service.newFile("db"));
         this.networkParameters  = new NetworkParameters(false);
         this.threadPool         = Executors.newFixedThreadPool(3);
+        this.isRunning          = new AtomicBoolean(true);
         this.fileService        = service;
     }
 
@@ -41,5 +44,9 @@ public class Context {
 
     public ExecutorService getThreadPool() {
         return threadPool;
+    }
+
+    public boolean isRunning() {
+        return isRunning.get();
     }
 }
