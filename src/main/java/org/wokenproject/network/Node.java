@@ -25,5 +25,5 @@ public class Node {
     void sendMessage(Message message)
     {
         messages.add(message);
-    }
+    }z
 }
