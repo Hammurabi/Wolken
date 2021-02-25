@@ -16,7 +16,7 @@ public class Server {
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
     }
 
-    public void connectToNodes()
+    public boolean connectToNodes()
     {
     }
 
