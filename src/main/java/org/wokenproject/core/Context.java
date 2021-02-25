@@ -69,4 +69,8 @@ public class Context {
     public IpAddressList getIpAddressList() {
         return ipAddressList;
     }
+
+    public SerializationFactory getSerialFactory() {
+        return serializationFactory;
+    }
 }
