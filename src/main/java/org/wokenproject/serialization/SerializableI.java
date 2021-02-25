@@ -6,8 +6,8 @@ import org.wokenproject.exceptions.InvalidSerialNumberException;
 import java.io.*;
 
 public abstract class SerializableI {
-    public abstract void write(OutputStream stream);
-    public abstract void read(InputStream stream);
+    public abstract void write(OutputStream stream) throws IOException;
+    public abstract void read(InputStream stream) throws IOException;
 
     public byte[] asByteArray() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
