@@ -44,7 +44,7 @@ public class Message {
         ));
     }
 
-    public byte[] contentHash()
+    public byte[] getUniqueMessageIdentifier()
     {
         return HashUtil.hash160(Utils.concatenate(
                 Utils.takeApart(contentType),
