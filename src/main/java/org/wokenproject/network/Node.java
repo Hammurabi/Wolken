@@ -66,7 +66,7 @@ public class Node {
     /*
         Listens for any incoming messages.
      */
-    public Message listenForMessage() {
+    public CachedMessage listenForMessage() {
         try {
             // a loop that hangs the entire thread might be dangerous.
             //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
@@ -107,9 +107,8 @@ public class Node {
     /*
         Caches the message and keeps track of how many times it was received.
      */
-    private Message checkSpam(Message message) {
-        messageCache.cacheReceivedMessage(message);
-        return message;
+    private CachedMessage checkSpam(Message message) {
+        return new CachedMessage(message, messageCache.cacheReceivedMessage(message) >= Context.getInstance().getNetworkParameters().getMessageSpamThreshold());
     }
 
     /*
