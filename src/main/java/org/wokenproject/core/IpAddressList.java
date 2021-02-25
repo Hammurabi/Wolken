@@ -5,12 +5,11 @@ import org.wokenproject.utils.FileService;
 
 import java.io.*;
 import java.net.InetAddress;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class IpAddressList {
-    private Set<NetAddress> addresses;
-    private FileService     service;
+    private Map<String, NetAddress> addresses;
+    private FileService             service;
 
     public IpAddressList(FileService service)
     {
@@ -18,7 +17,7 @@ public class IpAddressList {
         {
             try {
                 ObjectInputStream stream = new ObjectInputStream(new FileInputStream(service.file()));
-                this.addresses = (Set<NetAddress>) stream.readObject();
+                this.addresses = (Map<String, NetAddress>) stream.readObject();
                 stream.close();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -26,7 +25,7 @@ public class IpAddressList {
         }
         else
         {
-            this.addresses  = new HashSet<>();
+            this.addresses  = new HashMap<>();
         }
 
         this.service = service;
@@ -34,7 +33,7 @@ public class IpAddressList {
 
     public void addAddress(NetAddress address)
     {
-        addresses.add(address);
+        addresses.put(address.getAddress().toString(), address);
     }
 
     public void removeAddress(NetAddress address)
@@ -42,9 +41,9 @@ public class IpAddressList {
         addresses.remove(address);
     }
 
-    public Set<NetAddress> getAddresses()
+    public Queue<NetAddress> getAddresses()
     {
-        return addresses;
+        return new PriorityQueue(addresses.values());
     }
 
     public void save() throws IOException {
@@ -55,6 +54,6 @@ public class IpAddressList {
     }
 
     public NetAddress getAddress(InetAddress inetAddress) {
-        return null;
+        return addresses.get(inetAddress.toString());
     }
 }
