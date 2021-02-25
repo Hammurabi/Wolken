@@ -3,6 +3,7 @@ package org.wokenproject.network;
 import org.wokenproject.core.Context;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Set;
@@ -16,8 +17,26 @@ public class Server {
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
     }
 
-    public boolean connectToNodes()
+    public boolean connectToNodes(Set<NetAddress> addresses)
     {
+        int connections = 0;
+
+        for (NetAddress address : addresses)
+        {
+            try {
+                Socket socket = new Socket(address.getAddress(), address.getPort());
+                connectedNodes.add(new Node(socket));
+
+                if (++ connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections())
+                {
+                    return true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
 
     private void listenForIncomingConnections()
