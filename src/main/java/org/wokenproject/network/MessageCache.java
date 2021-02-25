@@ -4,34 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MessageCache {
-    private Map<byte[], Integer> messageMap;
+    private Map<byte[], Integer> receivedMessages;
 
-    public MessageCache()
-    {
-        messageMap = new HashMap<>();
+    public MessageCache() {
+        receivedMessages = new HashMap<>();
     }
 
-    public void setReceivedMessage(Message message)
-    {
+    public void setReceivedMessage(Message message) {
         byte messageId[] = message.contentHash();
 
-        if (messageMap.containsKey(messageId))
-        {
-            messageMap.put(messageId, messageMap.get(messageId) + 1);
-        }
-        else
-        {
-            messageMap.put(messageId, 1);
+        if (receivedMessages.containsKey(messageId)) {
+            receivedMessages.put(messageId, receivedMessages.get(messageId) + 1);
+        } else {
+            receivedMessages.put(messageId, 1);
         }
     }
 
-    private int numTimesReceived(Message message)
-    {
+    private int numTimesReceived(Message message) {
         return 0;
     }
 
-    public boolean shouldSend(Message message)
-    {
+    public boolean shouldSend(Message message) {
         return false;
     }
 
