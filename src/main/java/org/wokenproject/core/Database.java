@@ -93,7 +93,6 @@ public class Database {
         LookupResult<byte[]> blockHash = findBlockHashFromHeight(height);
         if (blockHash.exists())
         {
-            
         }
 
         return null;
