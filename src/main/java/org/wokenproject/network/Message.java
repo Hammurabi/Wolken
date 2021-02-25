@@ -6,7 +6,7 @@ import org.wokenproject.utils.Utils;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
-public class Message {
+public abstract class Message {
     public static final class Flags
     {
         public static final int
@@ -31,6 +31,8 @@ public class Message {
         this.instanceCount  = count;
         this.content        = content;
     }
+
+    public abstract void executePayload(Server server, Node node);
 
     public void writeToStream(BufferedOutputStream stream) throws IOException {
         Utils.writeInt(MAGIC, stream);
