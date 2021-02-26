@@ -40,7 +40,7 @@ public class VersionInformation extends SerializableI {
         Utils.writeLong(timestamp, stream);
         sender.write(stream);
         receiver.write(stream);
-        Utils.writeInt(blockHeight);
+        Utils.writeInt(blockHeight, stream);
     }
 
     @Override
