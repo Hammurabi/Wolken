@@ -14,6 +14,10 @@ import java.net.UnknownHostException;
 public class VersionMessage extends Message {
     private VersionInformation versionInformation;
 
+    public VersionMessage() throws UnknownHostException {
+        this(0, new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0), new NetAddress(InetAddress.getLocalHost(), 0), 0 ));
+    }
+
     public VersionMessage(int version, VersionInformation versionInformation) {
         super(version, Flags.Notify);
         this.versionInformation = versionInformation;
@@ -37,7 +41,7 @@ public class VersionMessage extends Message {
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         try {
-            return (Type) new VersionMessage(0, new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0), new NetAddress(InetAddress.getLocalHost(), 0), 0 ));
+            return (Type) new VersionMessage();
         } catch (UnknownHostException e) {
             throw new WolkenException(e);
         }
