@@ -68,12 +68,22 @@ public class Block extends SerializableI {
         Utils.writeInt(transactions.size(), stream);
         for (TransactionI transaction : transactions)
         {
-            transaction.write(stream);
+            // use serialize here to write transaction serial id
+            transaction.serialize(stream);
         }
     }
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        header.read(stream);
+        byte buffer[] = new byte[4];
+        stream.read(buffer);
+        int length = Utils.makeInt(buffer);
+
+        for (int i = 0; i < length; i ++)
+        {
+            transactions.add(Context.getInstance().getSerialFactory().fromStream(stream));
+        }
     }
 
     @Override
