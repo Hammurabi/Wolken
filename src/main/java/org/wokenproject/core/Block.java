@@ -1,8 +1,17 @@
 package org.wokenproject.core;
 
-public class Block {
+import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.serialization.SerializableI;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Set;
+
+public class Block extends SerializableI {
     public static int UniqueIdentifierLength = 32;
-    private BlockHeader header;
+    private BlockHeader         header;
+    private Set<TransactionI>   transactions;
 
     public final int countLength() {
         return getBytes().length;
@@ -50,5 +59,23 @@ public class Block {
 
     public final BlockHeader getBlockHeader() {
         return header;
+    }
+
+    @Override
+    public void write(OutputStream stream) throws IOException, WolkenException {
+    }
+
+    @Override
+    public void read(InputStream stream) throws IOException, WolkenException {
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return null;
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(Block.class);
     }
 }
