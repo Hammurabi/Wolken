@@ -51,7 +51,6 @@ public class Inv extends Message {
                 throw new WolkenException("provided hash is null.");
             }
 
-
             if (uid.length != requiredLength)
             {
                 throw new WolkenException("provided hash is incompatible.");
