@@ -1,14 +1,19 @@
 package org.wokenproject.core;
 
+import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.serialization.SerializableI;
 import org.wokenproject.utils.Utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import static org.wokenproject.utils.HashUtil.sha256d;
 import static org.wokenproject.utils.Utils.concatenate;
 
-public class BlockHeader {
+public class BlockHeader extends SerializableI {
     private final int   version;
     private final int   height;
     private final long  timestamp;
@@ -134,5 +139,25 @@ public class BlockHeader {
 
     public BlockHeader clone() {
         return new BlockHeader(version, height, timestamp, Arrays.copyOf(previousHash, 32), Arrays.copyOf(merkleRoot, 32), Arrays.copyOf(chainWorkHash, 32), Arrays.copyOf(bits, 4), nonce);
+    }
+
+    @Override
+    public void write(OutputStream stream) throws IOException, WolkenException {
+
+    }
+
+    @Override
+    public void read(InputStream stream) throws IOException, WolkenException {
+
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return null;
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return 0;
     }
 }
