@@ -43,6 +43,10 @@ public class BlockHeader extends SerializableI {
         this.nonce = buffer.getInt();
     }
 
+    public BlockHeader() {
+        this(0, 0, 0, new byte[32], new byte[32], new byte[32], new byte[4], 0);
+    }
+
     public BlockHeader(int version, int height, long timestamp, byte[] previousHash, byte[] merkleRoot, byte[] chainWorkHash, byte[] bits, int nonce) {
         this.version = version;
         this.height = height;
@@ -153,7 +157,7 @@ public class BlockHeader extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        return new BlockHeader();
     }
 
     @Override
