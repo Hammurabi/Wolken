@@ -7,6 +7,7 @@ import org.wokenproject.network.Message;
 import org.wokenproject.network.Node;
 import org.wokenproject.network.Server;
 import org.wokenproject.serialization.SerializableI;
+import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,26 +46,28 @@ public class RequestTransactions extends Message {
     }
 
     @Override
-    public byte[] getContents() {
-        ByteBuffer buffer = ByteBuffer.allocate(4 + transactions.size());
-        buffer.putInt(transactions.size());
+    public void writeContents(OutputStream stream) throws IOException {
+        Utils.writeInt(transactions.size(), stream);
         for (byte[] txid : transactions)
         {
-            buffer.put(txid);
+            stream.write(txid);
         }
-
-        buffer.flip();
-
-        return buffer.array();
     }
 
     @Override
-    public void write(OutputStream stream) throws IOException {
-        writeHeader(stream);
-    }
+    public void readContents(InputStream stream) throws IOException {
+        byte buffer[] = new byte[4];
+        stream.read(buffer);
 
-    @Override
-    public void read(InputStream stream) throws IOException {
+        int length = Utils.makeInt(buffer);
+
+        for (int i = 0; i < length; i ++)
+        {
+            byte txid[] = new byte[TransactionI.UniqueIdentifierLength];
+            stream.read(txid);
+
+            transactions.add(txid);
+        }
     }
 
     @Override
