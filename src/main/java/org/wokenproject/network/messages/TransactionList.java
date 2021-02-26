@@ -1,5 +1,6 @@
 package org.wokenproject.network.messages;
 
+import org.wokenproject.core.Context;
 import org.wokenproject.core.TransactionI;
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.network.Message;
@@ -42,5 +43,10 @@ public class TransactionList extends Message {
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return (Type) new TransactionList(getVersion(), transactions);
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(TransactionList.class);
     }
 }
