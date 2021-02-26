@@ -14,11 +14,13 @@ public class Block extends BlockHeader {
     public static int UniqueIdentifierLength = 32;
     private Set<TransactionI>   transactions;
 
-    public Block() {}
+    public Block() {
+        this(new byte[32], 0);
+    }
 
-    public Block(byte previousHash[], byte targetBits[])
+    public Block(byte previousHash[], int bits)
     {
-        super(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], targetBits, 0);
+        super(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], bits, 0);
     }
 
     public final int countLength() {
