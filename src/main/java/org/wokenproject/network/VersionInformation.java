@@ -9,6 +9,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class VersionInformation extends SerializableI {
+    private int version;
+    private long services;
+    private long timestamp;
+    private NetAddress sender;
+    private NetAddress receiver;
     /**
      * @param version       client version
      * @param services      bitfield of services provided by this client
