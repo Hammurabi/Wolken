@@ -6,15 +6,16 @@ import org.wokenproject.utils.Utils;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public abstract class Message extends SerializableI {
     public static final class Flags
     {
         public static final int
-        NONE = 0,
-        NOTIFY = 1,
-        REQUEST = 2,
-        RESPONSE = 3;
+            None = 0,
+            Notify = 1,
+            Request = 2,
+            Response = 3;
     }
 
     private int     version;
@@ -28,29 +29,28 @@ public abstract class Message extends SerializableI {
 
     public abstract void executePayload(Server server, Node node);
 
-    public void writeHeader(BufferedOutputStream stream) throws IOException {
+    public void writeHeader(OutputStream stream) throws IOException {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
         stream.flush();
     }
 
-    public byte[] getMessageBytes()
+    public byte[] getUniqueMessageIdentifier()
     {
         return HashUtil.hash160(Utils.concatenate(
                 Utils.takeApart(version),
-                Utils.takeApart(flags)
+                Utils.takeApart(flags),
+                getContents()
         ));
     }
-
-    public abstract byte[] getUniqueMessageIdentifier();
 
     public int getVersion()
     {
         return version;
     }
-
     public int getFlags()
     {
         return flags;
     }
+    public abstract byte[] getContents();
 }
