@@ -1,7 +1,6 @@
 package org.wokenproject.network;
 
 import org.wokenproject.core.Context;
-import org.wokenproject.network.messages.VerackMessage;
 import org.wokenproject.network.messages.VersionMessage;
 
 import java.io.IOException;
