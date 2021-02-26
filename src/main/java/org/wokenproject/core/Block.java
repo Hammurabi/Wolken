@@ -11,8 +11,12 @@ import java.util.Set;
 
 public class Block extends SerializableI {
     public static int UniqueIdentifierLength = 32;
-    private BlockHeader         header;
     private Set<TransactionI>   transactions;
+
+    public Block() {}
+
+    public Block(Block parent) {
+    }
 
     public final int countLength() {
         return getBytes().length;
@@ -88,7 +92,7 @@ public class Block extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        return (Type) new Block();
     }
 
     @Override
