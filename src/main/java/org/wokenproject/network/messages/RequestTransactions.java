@@ -41,6 +41,7 @@ public class RequestTransactions extends Message {
             }
         }
 
+        node.sendMessage(new TransactionList(Context.getInstance().getNetworkParameters().getVersion(), transactions));
     }
 
     @Override
