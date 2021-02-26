@@ -8,6 +8,8 @@ import org.wokenproject.serialization.SerializableI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class VersionMessage extends Message {
     private VersionInformation versionInformation;
@@ -32,7 +34,11 @@ public class VersionMessage extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        try {
+            return (Type) new VersionMessage(0, new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0), new NetAddress(InetAddress.getLocalHost(), 0), 0 ));
+        } catch (UnknownHostException e) {
+            throw new WolkenException(e);
+        }
     }
 
     @Override
