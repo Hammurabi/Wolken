@@ -7,6 +7,7 @@ import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,14 +31,14 @@ public class SerializationFactory {
         magicReferences.put(magic, serializableInstance);
     }
 
-    public <Type extends SerializableI> Type fromStream(BufferedInputStream stream) throws IOException, WolkenException {
+    public <Type extends SerializableI> Type fromStream(InputStream stream) throws IOException, WolkenException {
         byte magicBytes[] = new byte[4];
         stream.read(magicBytes);
 
         return fromStream(Utils.makeInt(magicBytes), stream);
     }
 
-    public <Type extends SerializableI> Type fromStream(int magic, BufferedInputStream stream) throws IOException, WolkenException {
+    public <Type extends SerializableI> Type fromStream(int magic, InputStream stream) throws IOException, WolkenException {
         SerializableI serializable  = magicReferences.get(validateMagicNumber(magic));
 
         Type result                 = serializable.newInstance();
