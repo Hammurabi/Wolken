@@ -1,10 +1,12 @@
 package org.wokenproject.network;
 
+import org.wokenproject.serialization.SerializableI;
+
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.Objects;
 
-public class NetAddress implements Serializable {
+public class NetAddress extends SerializableI implements Serializable {
     private static final long serialVersionUID = 3738771433856794716L;
     private final InetAddress   address;
     private final int           port;
