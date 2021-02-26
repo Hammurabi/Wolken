@@ -31,8 +31,21 @@ public abstract class SerializableI {
         }
     }
 
+    public byte[] asSerializedArray() {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            serialize(outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     public <Type extends SerializableI> Type makeCopy() throws IOException, WolkenException {
-        byte array[] = asByteArray();
+        byte array[] = asSerializedArray();
         BufferedInputStream inputStream = new BufferedInputStream(new ByteArrayInputStream(array));
         Type t = Context.getInstance().getSerialFactory().fromStream(inputStream);
         inputStream.close();
