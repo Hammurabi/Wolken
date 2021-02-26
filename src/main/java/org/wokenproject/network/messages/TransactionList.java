@@ -7,6 +7,7 @@ import org.wokenproject.network.Message;
 import org.wokenproject.network.Node;
 import org.wokenproject.network.Server;
 import org.wokenproject.serialization.SerializableI;
+import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,10 +30,23 @@ public class TransactionList extends Message {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException {
+        Utils.writeInt(transactions.size(), stream);
+        for (TransactionI transaction : transactions)
+        {
+            transaction.write(stream);
+        }
     }
 
     @Override
     public void readContents(InputStream stream) throws IOException {
+        byte buffer[] = new byte[4];
+        stream.read(buffer);
+        int length = Utils.makeInt(buffer);
+
+        for (int i = 0; i < length; i ++)
+        {
+            TransactionI transaction = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(TransactionI.class), stream);
+        }
     }
 
     @Override
