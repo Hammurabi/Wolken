@@ -66,7 +66,7 @@ public abstract class Message extends SerializableI {
         return flags;
     }
 
-    public abstract void writeContents(OutputStream stream) throws IOException;
+    public abstract void writeContents(OutputStream stream) throws IOException, WolkenException;
 
-    public abstract void readContents(InputStream stream) throws IOException;
+    public abstract void readContents(InputStream stream) throws IOException, WolkenException;
 }
