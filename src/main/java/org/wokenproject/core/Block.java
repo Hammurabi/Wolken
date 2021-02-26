@@ -2,6 +2,7 @@ package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.serialization.SerializableI;
+import org.wokenproject.utils.ChainMath;
 import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ public class Block extends BlockHeader {
     public Block() {}
 
     public Block(Block parent) {
+        super(Context.getInstance().getNetworkParameters().getVersion(), System.currentTimeMillis(), parent.getParentHash(), new byte[32], ChainMath.calculateNewTarget(parent), 0);
     }
 
     public final int countLength() {
@@ -58,5 +60,9 @@ public class Block extends BlockHeader {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(Block.class);
+    }
+
+    public long getHeight() {
+        return 0;
     }
 }
