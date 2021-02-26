@@ -1,5 +1,6 @@
 package org.wokenproject.network;
 
+import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.serialization.SerializableI;
 import org.wokenproject.utils.HashUtil;
 import org.wokenproject.utils.Utils;
@@ -42,7 +43,7 @@ public abstract class Message extends SerializableI {
     }
 
     @Override
-    public void write(OutputStream stream) throws IOException {
+    public void write(OutputStream stream) throws IOException, WolkenException {
         writeHeader(stream);
         writeContents(stream);
     }
