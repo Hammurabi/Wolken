@@ -2,13 +2,14 @@ package org.wokenproject.network;
 
 import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.WolkenException;
-import org.wokenproject.network.messages.VersionMessage;
 import org.wokenproject.serialization.SerializableI;
 import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class VersionInformation extends SerializableI {
     private int version;
@@ -62,7 +63,11 @@ public class VersionInformation extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        try {
+            return (Type) new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0), new NetAddress(InetAddress.getLocalHost(), 0), 0 );
+        } catch (UnknownHostException e) {
+            throw new WolkenException(e);
+        }
     }
 
     @Override
