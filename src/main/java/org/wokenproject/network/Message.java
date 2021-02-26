@@ -5,6 +5,7 @@ import org.wokenproject.utils.HashUtil;
 import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public abstract class Message extends SerializableI {
@@ -32,6 +33,14 @@ public abstract class Message extends SerializableI {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
         stream.flush();
+    }
+
+    public void readHeader(InputStream stream) throws IOException {
+        byte buffer[] = new byte[4];
+        stream.read(buffer);
+        version = Utils.makeInt(buffer);
+        stream.read(buffer);
+        flags = Utils.makeInt(buffer);
     }
 
     public byte[] getUniqueMessageIdentifier()
