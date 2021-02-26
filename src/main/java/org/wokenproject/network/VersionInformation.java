@@ -14,6 +14,7 @@ public class VersionInformation extends SerializableI {
     private long timestamp;
     private NetAddress sender;
     private NetAddress receiver;
+    private int blockHeight;
     /**
      * @param version       client version
      * @param services      bitfield of services provided by this client
@@ -29,10 +30,17 @@ public class VersionInformation extends SerializableI {
         this.timestamp = timestamp;
         this.sender = sender;
         this.receiver = receiver;
+        this.blockHeight = blockHeight;
     }
 
     @Override
     public void write(OutputStream stream) throws IOException {
+        Utils.writeInt(version, stream);
+        Utils.writeLong(services, stream);
+        Utils.writeLong(timestamp, stream);
+        sender.write(stream);
+        receiver.write(stream);
+        Utils.writeInt(blockHeight);
     }
 
     @Override
