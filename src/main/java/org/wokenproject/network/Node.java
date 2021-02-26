@@ -2,7 +2,6 @@ package org.wokenproject.network;
 
 import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.WolkenException;
-import org.wokenproject.network.messages.VersionMessage;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -80,7 +79,7 @@ public class Node {
             inputStream.read(magicBytes);
             // this is unused as of this version
             // but it is needed.
-            int magic            = Utils.makeInt(magicBytes);
+            int magic       = Utils.makeInt(magicBytes);
             Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
             return checkSpam(message);
         } catch (IOException | WolkenException e) {
