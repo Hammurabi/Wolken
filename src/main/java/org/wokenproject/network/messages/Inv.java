@@ -1,5 +1,6 @@
 package org.wokenproject.network.messages;
 
+import org.wokenproject.core.Block;
 import org.wokenproject.core.Context;
 import org.wokenproject.core.TransactionI;
 import org.wokenproject.exceptions.WolkenException;
@@ -38,9 +39,20 @@ public class Inv extends Message {
                 throw new WolkenException("provided hash is null.");
             }
 
-            if (uid.length != TransactionI.UniqueIdentifierLength)
+            switch (type)
             {
-                throw new WolkenException("provided hash is incompatible.");
+                case Type.Block:
+                    if (uid.length != Block.UniqueIdentifierLength)
+                    {
+                        throw new WolkenException("provided hash is incompatible.");
+                    }
+                    break;
+                case Type.Transaction:
+                    if (uid.length != TransactionI.UniqueIdentifierLength)
+                    {
+                        throw new WolkenException("provided hash is incompatible.");
+                    }
+                    break;
             }
         }
     }
