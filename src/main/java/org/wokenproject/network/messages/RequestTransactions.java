@@ -44,7 +44,7 @@ public class RequestTransactions extends Message {
     }
 
     @Override
-    public byte[] getUniqueMessageIdentifier() {
+    public byte[] getContents() {
         return new byte[0];
     }
 
