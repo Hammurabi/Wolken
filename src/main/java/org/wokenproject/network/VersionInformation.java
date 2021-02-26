@@ -14,7 +14,7 @@ import java.net.UnknownHostException;
 public class VersionInformation extends SerializableI {
     public static final class Flags{
         public static final long
-            NODE_NETWORK = 0b00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000001
+            AllServices = 0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111L
         ;
     }
 
