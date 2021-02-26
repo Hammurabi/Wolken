@@ -158,4 +158,8 @@ public class NetworkParameters {
     public int getVersion() {
         return 1;
     }
+
+    public boolean isVersionCompatible(int a, int b) {
+        return a == b;
+    }
 }
