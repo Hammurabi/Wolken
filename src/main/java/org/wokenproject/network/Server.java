@@ -11,12 +11,20 @@ import java.util.*;
 public class Server implements Runnable {
     private ServerSocket    socket;
     private Set<Node>       connectedNodes;
+    private NetAddress      netAddress;
 
     public Server() throws IOException {
         socket = new ServerSocket(Context.getInstance().getNetworkParameters().getPort());
         connectedNodes = Collections.synchronizedSet(new LinkedHashSet<>());
         connectToNodes(Context.getInstance().getIpAddressList().getAddresses());
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
+
+        netAddress = Context.getInstance().getIpAddressList().getAddress(socket.getInetAddress());
+        if (netAddress == null)
+        {
+            netAddress = new NetAddress(socket.getInetAddress(), socket.getLocalPort(), Context.getInstance().getNetworkParameters().getServices());
+            Context.getInstance().getIpAddressList().addAddress(netAddress);
+        }
     }
 
     public boolean connectToNodes(Queue<NetAddress> addresses)
@@ -168,6 +176,6 @@ public class Server implements Runnable {
     }
 
     public NetAddress getNetAddress() {
-        return new NetAddress(socket.getInetAddress(), socket.getLocalPort());
+        return netAddress;
     }
 }
