@@ -24,7 +24,7 @@ public class Node {
     private BufferedInputStream     inputStream;
     private BufferedOutputStream    outputStream;
 
-    private VersionMessage          versionMessage;
+    private VersionInformation      versionMessage;
 
     public Node(String ip, int port) throws IOException {
         this(new Socket(ip, port));
@@ -137,12 +137,26 @@ public class Node {
         return messageCache;
     }
 
-    public void setVersionInfo(VersionMessage versionMessage) {
+    public void setVersionInfo(VersionInformation versionMessage) {
         this.versionMessage = versionMessage;
     }
 
     public boolean hasPerformedHandshake()
     {
         return versionMessage != null;
+    }
+
+    public NetAddress getNetAddress() {
+        NetAddress address = Context.getInstance().getIpAddressList().getAddress(getInetAddress());
+        if (address == null)
+        {
+            return new NetAddress(getInetAddress(), getPort());
+        }
+
+        return address;
+    }
+
+    private int getPort() {
+        return socket.getPort();
     }
 }
