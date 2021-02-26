@@ -34,7 +34,7 @@ public class Context {
         this.networkParameters      = new NetworkParameters(testNet);
         this.threadPool             = Executors.newFixedThreadPool(3);
         this.isRunning              = new AtomicBoolean(true);
-        this.ipAddressList          = new IpAddressList(service.newFile("iplist"));
+        this.ipAddressList          = new IpAddressList(service.newFile("peers"));
         this.serializationFactory   = new SerializationFactory();
         this.transactionPool        = new TransactionPool();
         this.fileService            = service;
