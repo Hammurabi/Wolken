@@ -33,4 +33,6 @@ public abstract class SerializableI {
     public byte[] checksum() throws IOException {
         return HashUtil.hash160(asByteArray());
     }
+
+    public abstract int getSerialNumber();
 }
