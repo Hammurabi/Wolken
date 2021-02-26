@@ -11,11 +11,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class TransactionList extends Message {
+    private Set<TransactionI> transactions;
+
     public TransactionList(int version, Collection<TransactionI> transactions) {
-        super(version, Flags.RESPONSE, transactions.size());
+        super(version, Flags.RESPONSE);
+        this.transactions = new LinkedHashSet<>(transactions);
     }
 
     @Override
@@ -37,6 +41,6 @@ public class TransactionList extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        return (Type) new TransactionList(getVersion(), transactions);
     }
 }
