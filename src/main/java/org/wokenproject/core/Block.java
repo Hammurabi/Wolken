@@ -11,7 +11,7 @@ public class Block {
         return header.getVersion();
     }
 
-    public final long getHeight() {
+    public final int getHeight() {
         return header.getHeight();
     }
 
