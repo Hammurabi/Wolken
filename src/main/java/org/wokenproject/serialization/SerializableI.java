@@ -16,7 +16,6 @@ public abstract class SerializableI {
     }
 
     public abstract void write(OutputStream stream) throws IOException;
-
     public abstract void read(InputStream stream) throws IOException;
 
     public byte[] asByteArray() {
