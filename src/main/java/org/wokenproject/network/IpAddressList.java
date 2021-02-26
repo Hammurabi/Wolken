@@ -8,7 +8,7 @@ import java.net.InetAddress;
 import java.util.*;
 
 public class IpAddressList {
-    private Map<String, NetAddress> addresses;
+    private Map<byte[], NetAddress> addresses;
     private FileService             service;
 
     public IpAddressList(FileService service)
@@ -17,7 +17,7 @@ public class IpAddressList {
         {
             try {
                 ObjectInputStream stream = new ObjectInputStream(new FileInputStream(service.file()));
-                this.addresses = (Map<String, NetAddress>) stream.readObject();
+                this.addresses = (Map<byte[], NetAddress>) stream.readObject();
                 stream.close();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -33,7 +33,7 @@ public class IpAddressList {
 
     public void addAddress(NetAddress address)
     {
-        addresses.put(address.getAddress().toString(), address);
+        addresses.put(address.getAddress().getAddress(), address);
     }
 
     public void removeAddress(NetAddress address)
@@ -54,6 +54,6 @@ public class IpAddressList {
     }
 
     public NetAddress getAddress(InetAddress inetAddress) {
-        return addresses.get(inetAddress.toString());
+        return addresses.get(inetAddress.getAddress());
     }
 }
