@@ -152,4 +152,8 @@ public class Server implements Runnable {
             }
         }
     }
+
+    public NetAddress getNetAddress() {
+        return new NetAddress(socket.getInetAddress(), socket.getLocalPort());
+    }
 }
