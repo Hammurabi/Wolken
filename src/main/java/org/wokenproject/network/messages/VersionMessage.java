@@ -25,12 +25,12 @@ public class VersionMessage extends Message {
     }
 
     @Override
-    public void writeContents(OutputStream stream) throws IOException {
+    public void writeContents(OutputStream stream) throws IOException, WolkenException {
         versionInformation.write(stream);
     }
 
     @Override
-    public void readContents(InputStream stream) throws IOException {
+    public void readContents(InputStream stream) throws IOException, WolkenException {
         versionInformation.read(stream);
     }
 
