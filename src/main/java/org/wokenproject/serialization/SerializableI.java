@@ -1,7 +1,6 @@
 package org.wokenproject.serialization;
 
 import org.wokenproject.core.Context;
-import org.wokenproject.exceptions.InvalidSerialNumberException;
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.utils.HashUtil;
 
