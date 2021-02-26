@@ -28,11 +28,6 @@ public class TransactionList extends Message {
     }
 
     @Override
-    public byte[] getContents() {
-        return new byte[0];
-    }
-
-    @Override
     public void write(OutputStream stream) throws IOException {
     }
 
