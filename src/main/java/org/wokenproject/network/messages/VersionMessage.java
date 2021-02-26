@@ -39,4 +39,9 @@ public class VersionMessage extends Message {
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(VersionMessage.class);
     }
+
+    public VersionInformation getVersionInformation()
+    {
+        return versionInformation;
+    }
 }
