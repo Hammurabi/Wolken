@@ -26,7 +26,7 @@ public abstract class SerializableI {
             outputStream.close();
 
             return outputStream.toByteArray();
-        } catch (IOException e) {
+        } catch (IOException | WolkenException e) {
             return null;
         }
     }
