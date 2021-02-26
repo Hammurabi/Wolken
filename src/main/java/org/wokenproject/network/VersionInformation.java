@@ -12,6 +12,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class VersionInformation extends SerializableI {
+    public static final class Flags{
+        public static final long
+            NODE_NETWORK = 0b00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000001
+        ;
+    }
+
     private int version;
     private long services;
     private long timestamp;
