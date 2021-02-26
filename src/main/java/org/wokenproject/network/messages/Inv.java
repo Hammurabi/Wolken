@@ -98,7 +98,7 @@ public class Inv extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new Inv(getVersion(), new LinkedHashSet<>());
+        return (Type) new Inv(getVersion(), 0, new LinkedHashSet<>());
     }
 
     @Override
