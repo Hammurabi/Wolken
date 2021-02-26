@@ -1,5 +1,6 @@
 package org.wokenproject.network.messages;
 
+import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.network.Message;
 import org.wokenproject.network.NetAddress;
@@ -38,6 +39,6 @@ public class VersionMessage extends Message {
 
     @Override
     public int getSerialNumber() {
-        return 0;
+        return Context.getInstance().getSerialFactory().getSerialNumber(VersionMessage.class);
     }
 }
