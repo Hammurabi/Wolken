@@ -45,7 +45,12 @@ public class TransactionList extends Message {
 
         for (int i = 0; i < length; i ++)
         {
-            TransactionI transaction = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(TransactionI.class), stream);
+            try {
+                TransactionI transaction = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(TransactionI.class), stream);
+                transactions.add(transaction);
+            } catch (WolkenException e) {
+                throw new IOException(e);
+            }
         }
     }
 
