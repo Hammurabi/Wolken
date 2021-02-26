@@ -18,7 +18,7 @@ public class TransactionList extends Message {
     private Set<TransactionI> transactions;
 
     public TransactionList(int version, Collection<TransactionI> transactions) {
-        super(version, Flags.RESPONSE);
+        super(version, Flags.Response);
         this.transactions = new LinkedHashSet<>(transactions);
     }
 
