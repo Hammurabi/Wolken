@@ -40,6 +40,7 @@ public class RequestTransactions extends Message {
                 transactions.add(transaction);
             }
         }
+
     }
 
     @Override
