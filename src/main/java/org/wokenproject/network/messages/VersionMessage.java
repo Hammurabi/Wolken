@@ -26,10 +26,12 @@ public class VersionMessage extends Message {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException {
+        versionInformation.write(stream);
     }
 
     @Override
     public void readContents(InputStream stream) throws IOException {
+        versionInformation.read(stream);
     }
 
     @Override
