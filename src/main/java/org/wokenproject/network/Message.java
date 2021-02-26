@@ -47,7 +47,11 @@ public abstract class Message extends SerializableI {
         writeContents(stream);
     }
 
-    public abstract void read(InputStream stream) throws IOException;
+    @Override
+    public void read(InputStream stream) throws IOException {
+        readHeader(stream);
+        readContents(stream);
+    }
 
     public byte[] getUniqueMessageIdentifier() {
         return HashUtil.hash160(asByteArray());
