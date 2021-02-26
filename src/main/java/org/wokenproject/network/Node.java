@@ -158,11 +158,11 @@ public class Node {
         return address;
     }
 
-    private int getPort() {
+    public int getPort() {
         return socket.getPort();
     }
 
-    private long timeSinceConnected()
+    public long timeSinceConnected()
     {
         return System.currentTimeMillis() - firstConnected;
     }
