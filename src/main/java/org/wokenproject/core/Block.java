@@ -28,7 +28,7 @@ public class Block extends BlockHeader {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
-        header.write(stream);
+        super.write(stream);
         Utils.writeInt(transactions.size(), stream);
         for (TransactionI transaction : transactions)
         {
@@ -39,7 +39,7 @@ public class Block extends BlockHeader {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
-        header.read(stream);
+        super.read(stream);
         byte buffer[] = new byte[4];
         stream.read(buffer);
         int length = Utils.makeInt(buffer);
