@@ -19,13 +19,17 @@ public abstract class SerializableI {
 
     public abstract void read(InputStream stream) throws IOException;
 
-    public byte[] asByteArray() throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        write(outputStream);
-        outputStream.flush();
-        outputStream.close();
+    public byte[] asByteArray() {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            write(outputStream);
+            outputStream.flush();
+            outputStream.close();
 
-        return outputStream.toByteArray();
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public <Type extends SerializableI> Type makeCopy() throws IOException, WolkenException {
