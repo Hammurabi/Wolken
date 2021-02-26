@@ -140,4 +140,16 @@ public class Server implements Runnable {
             }
         }
     }
+
+    public void shutdown() {
+        Iterator<Node> nodeIterator = connectedNodes.iterator();
+        while (nodeIterator.hasNext()) {
+            Node node = nodeIterator.next();
+            try {
+                node.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
