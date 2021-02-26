@@ -11,6 +11,7 @@ import org.wokenproject.serialization.SerializableI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,7 +46,16 @@ public class RequestTransactions extends Message {
 
     @Override
     public byte[] getContents() {
-        return new byte[0];
+        ByteBuffer buffer = ByteBuffer.allocate(4 + transactions.size());
+        buffer.putInt(transactions.size());
+        for (byte[] txid : transactions)
+        {
+            buffer.put(txid);
+        }
+
+        buffer.flip();
+
+        return buffer.array();
     }
 
     @Override
@@ -59,5 +69,10 @@ public class RequestTransactions extends Message {
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return (Type) new RequestTransactions(getVersion(), transactions);
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(RequestTransactions.class);
     }
 }
