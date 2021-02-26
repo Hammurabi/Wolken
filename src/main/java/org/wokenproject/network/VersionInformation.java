@@ -1,6 +1,8 @@
 package org.wokenproject.network;
 
+import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.network.messages.VersionMessage;
 import org.wokenproject.serialization.SerializableI;
 import org.wokenproject.utils.Utils;
 
@@ -54,6 +56,6 @@ public class VersionInformation extends SerializableI {
 
     @Override
     public int getSerialNumber() {
-        return 0;
+        return Context.getInstance().getSerialFactory().getSerialNumber(VersionInformation.class);
     }
 }
