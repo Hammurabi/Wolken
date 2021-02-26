@@ -62,7 +62,7 @@ public class Block extends BlockHeader {
         return Context.getInstance().getSerialFactory().getSerialNumber(Block.class);
     }
 
-    public long getHeight() {
+    public int getHeight() {
         return 0;
     }
 }
