@@ -28,13 +28,13 @@ public abstract class Message extends SerializableI {
 
     public abstract void executePayload(Server server, Node node);
 
-    public void writeHeader(OutputStream stream) throws IOException {
+    public void writeHeader(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
         stream.flush();
     }
 
-    public void readHeader(InputStream stream) throws IOException {
+    public void readHeader(InputStream stream) throws IOException, WolkenException {
         byte buffer[] = new byte[4];
         stream.read(buffer);
         version = Utils.makeInt(buffer);
