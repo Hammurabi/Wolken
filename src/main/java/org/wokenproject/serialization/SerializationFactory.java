@@ -2,11 +2,8 @@ package org.wokenproject.serialization;
 
 import org.wokenproject.exceptions.InvalidSerialNumberException;
 import org.wokenproject.exceptions.WolkenException;
-import org.wokenproject.network.VersionInformation;
-import org.wokenproject.network.messages.TransactionList;
 import org.wokenproject.utils.Utils;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
