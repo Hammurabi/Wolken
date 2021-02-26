@@ -8,6 +8,7 @@ import org.wokenproject.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
 import java.util.Set;
 
 public class Block extends BlockHeader {
@@ -15,10 +16,10 @@ public class Block extends BlockHeader {
     private Set<TransactionI>   transactions;
 
     public Block() {
-        this(new byte[32], 0);
+        this(0, new byte[32], 0);
     }
 
-    public Block(byte previousHash[], int bits)
+    public Block(int height, byte previousHash[], int bits)
     {
         super(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], bits, 0);
     }
@@ -67,10 +68,22 @@ public class Block extends BlockHeader {
 
     public TransactionI getCoinbase()
     {
-        return transactions.iterator().next();
+        Iterator<TransactionI> transactions = this.transactions.iterator();
+        if (transactions.hasNext())
+        {
+            return transactions.next();
+        }
+
+        return null;
     }
 
     public int getHeight() {
-        return Utils.makeInt(getCoinbase().getInputs()[0].getData());
+        TransactionI coinbase = getCoinbase();
+        if (coinbase != null)
+        {
+            return Utils.makeInt(coinbase.getInputs()[0].getData());
+        }
+
+        return -1;
     }
 }
