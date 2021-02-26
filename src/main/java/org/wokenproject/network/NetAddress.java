@@ -3,6 +3,7 @@ package org.wokenproject.network;
 import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.serialization.SerializableI;
+import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,6 +61,10 @@ public class NetAddress extends SerializableI implements Serializable {
 
     @Override
     public void write(OutputStream stream) throws IOException {
+        byte bytes[] = address.getAddress();
+        stream.write(bytes.length);
+        stream.write(bytes);
+        Utils.writeUnsignedInt16(port, stream);
     }
 
     @Override
