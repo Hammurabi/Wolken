@@ -20,7 +20,7 @@ public class RequestTransactions extends Message {
     private Set<byte[]> transactions;
 
     public RequestTransactions(int version, Collection<byte[]> transactions) {
-        super(version, Flags.REQUEST, transactions.size());
+        super(version, Flags.REQUEST);
         this.transactions = new LinkedHashSet<>(transactions);
     }
 
@@ -59,6 +59,6 @@ public class RequestTransactions extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        return (Type) new RequestTransactions(getVersion(), transactions);
     }
 }
