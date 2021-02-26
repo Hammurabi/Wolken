@@ -4,9 +4,11 @@ import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.network.IpAddressList;
 import org.wokenproject.network.NetAddress;
 import org.wokenproject.network.Server;
+import org.wokenproject.network.VersionInformation;
 import org.wokenproject.network.messages.RequestTransactions;
 import org.wokenproject.network.messages.TransactionInv;
 import org.wokenproject.network.messages.TransactionList;
+import org.wokenproject.network.messages.VersionMessage;
 import org.wokenproject.serialization.SerializationFactory;
 import org.wokenproject.utils.FileService;
 import sun.jvm.hotspot.debugger.Address;
@@ -42,6 +44,8 @@ public class Context {
         this.fileService            = service;
 
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0));
+        serializationFactory.registerClass(NetAddress.class, new VersionMessage());
+        serializationFactory.registerClass(NetAddress.class, new VersionInformation());
         serializationFactory.registerClass(TransactionInv.class, new TransactionInv(0, new LinkedHashSet<>()));
         serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>()));
         serializationFactory.registerClass(RequestTransactions.class, new RequestTransactions(0, new LinkedHashSet<>()));
