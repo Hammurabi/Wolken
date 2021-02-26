@@ -113,4 +113,8 @@ public class Database {
 
         return result;
     }
+
+    public TransactionI getTransaction(byte[] txid) {
+        return null;
+    }
 }
