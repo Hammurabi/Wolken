@@ -3,6 +3,7 @@ package org.wokenproject.network;
 import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.InvalidSerialNumberException;
 import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.network.messages.VersionMessage;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -23,6 +24,8 @@ public class Node {
 
     private BufferedInputStream     inputStream;
     private BufferedOutputStream    outputStream;
+
+    private VersionMessage          versionMessage;
 
     public Node(String ip, int port) throws IOException {
         this(new Socket(ip, port));
@@ -133,5 +136,14 @@ public class Node {
     public MessageCache getMessageCache()
     {
         return messageCache;
+    }
+
+    public void setVersionInfo(VersionMessage versionMessage) {
+        this.versionMessage = versionMessage;
+    }
+
+    public boolean hasPerformedHandshake()
+    {
+        return versionMessage != null;
     }
 }
