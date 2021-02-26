@@ -141,6 +141,7 @@ public class Node {
 
     public void setVersionInfo(VersionInformation versionMessage) {
         this.versionMessage = versionMessage;
+        getNetAddress().setServices(versionMessage.getServices());
     }
 
     public boolean hasPerformedHandshake()
@@ -152,7 +153,14 @@ public class Node {
         NetAddress address = Context.getInstance().getIpAddressList().getAddress(getInetAddress());
         if (address == null)
         {
-            return new NetAddress(getInetAddress(), getPort());
+            long services = 0;
+            if (versionMessage != null)
+            {
+                services = versionMessage.getServices();
+            }
+
+            address = new NetAddress(getInetAddress(), getPort(), services);
+            Context.getInstance().getIpAddressList().addAddress(address);
         }
 
         return address;
