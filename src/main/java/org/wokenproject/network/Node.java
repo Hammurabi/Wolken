@@ -161,4 +161,9 @@ public class Node {
     private int getPort() {
         return socket.getPort();
     }
+
+    private long timeSinceConnected()
+    {
+        return System.currentTimeMillis() - firstConnected;
+    }
 }
