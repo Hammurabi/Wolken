@@ -1,6 +1,7 @@
 package org.wokenproject.core;
 
 public class Block {
+    public static int UniqueIdentifierLength = 32;
     private BlockHeader header;
 
     public final int countLength() {
