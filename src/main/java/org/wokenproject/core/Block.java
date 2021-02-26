@@ -63,6 +63,7 @@ public class Block extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        header.write(stream);
     }
 
     @Override
