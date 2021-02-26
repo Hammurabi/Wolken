@@ -49,7 +49,7 @@ public abstract class Message extends SerializableI {
     }
 
     @Override
-    public void read(InputStream stream) throws IOException {
+    public void read(InputStream stream) throws IOException, WolkenException {
         readHeader(stream);
         readContents(stream);
     }
