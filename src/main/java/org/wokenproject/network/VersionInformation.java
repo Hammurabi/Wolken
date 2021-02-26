@@ -24,6 +24,11 @@ public class VersionInformation extends SerializableI {
      */
     public VersionInformation(int version, long services, long timestamp, NetAddress sender, NetAddress receiver, int blockHeight)
     {
+        this.version = version;
+        this.services = services;
+        this.timestamp = timestamp;
+        this.sender = sender;
+        this.receiver = receiver;
     }
 
     @Override
