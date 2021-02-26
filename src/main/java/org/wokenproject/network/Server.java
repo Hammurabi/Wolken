@@ -98,6 +98,11 @@ public class Server implements Runnable {
             boolean shouldDisconnect = false;
             boolean isSpammy = false;
 
+            if (node.timeSinceConnected() >= 30_000 && !node.hasPerformedHandshake())
+            {
+                shouldDisconnect = true;
+            }
+
             if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors()) {
                 shouldDisconnect = true;
             }
