@@ -19,13 +19,11 @@ public abstract class Message extends SerializableI {
 
     private int     version;
     private int     flags;
-    private int     instanceCount;
 
-    public Message(int version, int flags, int count)
+    public Message(int version, int flags)
     {
         this.version        = version;
         this.flags          = flags;
-        this.instanceCount  = count;
     }
 
     public abstract void executePayload(Server server, Node node);
@@ -33,7 +31,6 @@ public abstract class Message extends SerializableI {
     public void writeHeader(BufferedOutputStream stream) throws IOException {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
-        Utils.writeInt(instanceCount, stream);
         stream.flush();
     }
 
@@ -41,10 +38,19 @@ public abstract class Message extends SerializableI {
     {
         return HashUtil.hash160(Utils.concatenate(
                 Utils.takeApart(version),
-                Utils.takeApart(flags),
-                Utils.takeApart(instanceCount)
+                Utils.takeApart(flags)
         ));
     }
 
     public abstract byte[] getUniqueMessageIdentifier();
+
+    public int getVersion()
+    {
+        return version;
+    }
+
+    public int getFlags()
+    {
+        return flags;
+    }
 }
