@@ -3,11 +3,18 @@ package org.wokenproject.serialization;
 import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.utils.HashUtil;
+import org.wokenproject.utils.Utils;
 
 import java.io.*;
 
 public abstract class SerializableI {
+    public void serialize(OutputStream stream) throws IOException {
+        Utils.writeInt(getSerialNumber(), stream);
+        write(stream);
+    }
+
     public abstract void write(OutputStream stream) throws IOException;
+
     public abstract void read(InputStream stream) throws IOException;
 
     public byte[] asByteArray() throws IOException {
@@ -28,7 +35,7 @@ public abstract class SerializableI {
         return t;
     }
 
-    public abstract <Type extends SerializableI> Type newInstance(Object ...object) throws WolkenException;
+    public abstract <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException;
 
     public byte[] checksum() throws IOException {
         return HashUtil.hash160(asByteArray());
