@@ -10,7 +10,7 @@ import static org.wokenproject.utils.Utils.concatenate;
 
 public class BlockHeader {
     private final int   version;
-    private final long  height;
+    private final int   height;
     private final long  timestamp;
     private final byte  previousHash[];
     private final byte  merkleRoot[];
@@ -18,14 +18,14 @@ public class BlockHeader {
     private final byte  bits[];
     private int         nonce;
 
-    public static final int SIZE = 4 + 8 + 8 + 32 + 32 + 32 + 4 + 4;
+    public static final int SIZE = 4 + 4 + 8 + 32 + 32 + 32 + 4 + 4;
     public static final int SIZE_WITHOUT_NONCE = 4 + 8 + 8 + 32 + 32 + 32 + 4;
 
     public BlockHeader(byte bytes[]) {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
 
         this.version = buffer.getInt();
-        this.height = buffer.getLong();
+        this.height = buffer.getInt();
         this.timestamp = buffer.getLong();
         this.previousHash = new byte[32];
         this.merkleRoot = new byte[32];
@@ -38,7 +38,7 @@ public class BlockHeader {
         this.nonce = buffer.getInt();
     }
 
-    public BlockHeader(int version, long height, long timestamp, byte[] previousHash, byte[] merkleRoot, byte[] chainWorkHash, byte[] bits, int nonce) {
+    public BlockHeader(int version, int height, long timestamp, byte[] previousHash, byte[] merkleRoot, byte[] chainWorkHash, byte[] bits, int nonce) {
         this.version = version;
         this.height = height;
         this.timestamp = timestamp;
@@ -59,7 +59,7 @@ public class BlockHeader {
         return version;
     }
 
-    public long getHeight()
+    public int getHeight()
     {
         return height;
     }
