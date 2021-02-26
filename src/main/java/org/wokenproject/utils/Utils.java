@@ -253,4 +253,9 @@ public class Utils {
         stream.write((byte) ((integer >>  8) & 0xFF));
         stream.write((byte) ((integer) & 0xFF));
     }
+
+    public static void writeUnsignedInt16(int integer, OutputStream stream) throws IOException {
+        stream.write((byte) ((integer >> 8) & 0xFF));
+        stream.write((byte) ((integer) & 0xFF));
+    }
 }
