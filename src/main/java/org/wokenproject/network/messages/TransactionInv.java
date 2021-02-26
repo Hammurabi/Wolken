@@ -19,7 +19,7 @@ public class TransactionInv extends Message {
     private Set<byte[]> list;
 
     public TransactionInv(int version, Collection<byte[]> list) throws WolkenException {
-        super(version, Flags.NOTIFY, list.size());
+        super(version, Flags.Notify);
         this.list = new HashSet<>(list);
         for (byte[] uid : this.list)
         {
