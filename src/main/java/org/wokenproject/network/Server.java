@@ -1,6 +1,8 @@
 package org.wokenproject.network;
 
 import org.wokenproject.core.Context;
+import org.wokenproject.network.messages.VerackMessage;
+import org.wokenproject.network.messages.VersionMessage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -80,6 +82,12 @@ public class Server implements Runnable {
                 CachedMessage message = node.listenForMessage();
                 if (!message.isSpam())
                 {
+                    if (!node.hasPerformedHandshake() && !message.isHandshake())
+                    {
+                        // ignore message
+                        continue;
+                    }
+
                     message.getMessage().executePayload(this, node);
                 }
             }
@@ -98,7 +106,7 @@ public class Server implements Runnable {
             boolean shouldDisconnect = false;
             boolean isSpammy = false;
 
-            if (node.timeSinceConnected() >= 30_000 && !node.hasPerformedHandshake())
+            if (node.timeSinceConnected() >= Context.getInstance().getNetworkParameters().getHandshakeTimeout() && !node.hasPerformedHandshake())
             {
                 shouldDisconnect = true;
             }
