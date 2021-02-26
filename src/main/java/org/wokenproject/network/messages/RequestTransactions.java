@@ -60,6 +60,7 @@ public class RequestTransactions extends Message {
 
     @Override
     public void write(OutputStream stream) throws IOException {
+        writeHeader(stream);
     }
 
     @Override
