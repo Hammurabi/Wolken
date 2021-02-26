@@ -2,10 +2,7 @@ package org.wokenproject.network.messages;
 
 import org.wokenproject.core.Context;
 import org.wokenproject.exceptions.WolkenException;
-import org.wokenproject.network.Message;
-import org.wokenproject.network.NetAddress;
-import org.wokenproject.network.Node;
-import org.wokenproject.network.Server;
+import org.wokenproject.network.*;
 import org.wokenproject.serialization.SerializableI;
 
 import java.io.IOException;
@@ -13,8 +10,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class VersionMessage extends Message {
-    public VersionMessage(int version, long services, long timestamp, NetAddress sender, NetAddress receiver, int blockHeight) {
+    private VersionInformation versionInformation;
+
+    public VersionMessage(int version, VersionInformation versionInformation) {
         super(version, Flags.Notify);
+        this.versionInformation = versionInformation;
     }
 
     @Override
@@ -24,12 +24,10 @@ public class VersionMessage extends Message {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException {
-
     }
 
     @Override
     public void readContents(InputStream stream) throws IOException {
-
     }
 
     @Override
