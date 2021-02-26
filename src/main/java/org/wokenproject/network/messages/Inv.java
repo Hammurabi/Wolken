@@ -8,6 +8,7 @@ import org.wokenproject.network.Message;
 import org.wokenproject.network.Node;
 import org.wokenproject.network.Server;
 import org.wokenproject.serialization.SerializableI;
+import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,6 +91,13 @@ public class Inv extends Message {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException {
+        Utils.writeInt(type, stream);
+        Utils.writeInt(list.size(), stream);
+
+        for (byte[] id : list)
+        {
+            stream.write(id);
+        }
     }
 
     @Override
