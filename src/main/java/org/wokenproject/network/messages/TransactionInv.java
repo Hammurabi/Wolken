@@ -77,4 +77,9 @@ public class TransactionInv extends Message {
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return (Type) new TransactionInv(getVersion(), new LinkedHashSet<>());
     }
+
+    @Override
+    public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(TransactionInv.class);
+    }
 }
