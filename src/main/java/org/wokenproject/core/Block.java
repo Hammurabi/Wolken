@@ -16,8 +16,9 @@ public class Block extends BlockHeader {
 
     public Block() {}
 
-    public Block(Block parent) {
-        super(Context.getInstance().getNetworkParameters().getVersion(), System.currentTimeMillis(), parent.getParentHash(), new byte[32], ChainMath.calculateNewTarget(parent), 0);
+    public Block(byte previousHash[], byte targetBits[])
+    {
+        super(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], targetBits, 0);
     }
 
     public final int countLength() {
