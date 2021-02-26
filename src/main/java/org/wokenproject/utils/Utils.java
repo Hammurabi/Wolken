@@ -258,4 +258,8 @@ public class Utils {
         stream.write((byte) ((integer >> 8) & 0xFF));
         stream.write((byte) ((integer) & 0xFF));
     }
+
+    public static int timestampInSeconds() {
+        return (int) (System.currentTimeMillis() / 1000) - 1048035600;
+    }
 }
