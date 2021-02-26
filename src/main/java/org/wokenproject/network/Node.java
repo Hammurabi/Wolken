@@ -107,7 +107,7 @@ public class Node {
                 message.write(outputStream);
                 outputStream.flush();
             }
-        } catch (IOException e) {
+        } catch (IOException | WolkenException e) {
             e.printStackTrace();
         } finally {
             mutex.unlock();
