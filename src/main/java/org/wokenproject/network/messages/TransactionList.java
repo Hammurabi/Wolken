@@ -28,11 +28,11 @@ public class TransactionList extends Message {
     }
 
     @Override
-    public void write(OutputStream stream) throws IOException {
+    public void writeContents(OutputStream stream) throws IOException {
     }
 
     @Override
-    public void read(InputStream stream) throws IOException {
+    public void readContents(InputStream stream) throws IOException {
     }
 
     @Override
