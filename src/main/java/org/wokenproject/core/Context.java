@@ -1,6 +1,7 @@
 package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.network.IpAddressList;
 import org.wokenproject.network.messages.RequestTransactions;
 import org.wokenproject.network.messages.TransactionInv;
 import org.wokenproject.network.messages.TransactionList;
@@ -20,7 +21,7 @@ public class Context {
     private NetworkParameters       networkParameters;
     private ExecutorService         threadPool;
     private AtomicBoolean           isRunning;
-    private IpAddressList           ipAddressList;
+    private IpAddressList ipAddressList;
     private SerializationFactory    serializationFactory;
     private TransactionPool         transactionPool;
     private FileService             fileService;
