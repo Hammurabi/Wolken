@@ -17,14 +17,14 @@ public class BlockHeader extends SerializableI {
     private long        timestamp;
     private byte        previousHash[];
     private byte        merkleRoot[];
-    private byte        bits[];
+    private int         bits;
     private int         nonce;
 
     public BlockHeader() {
-        this(0, 0, new byte[32], new byte[32], new byte[4], 0);
+        this(0, 0, new byte[32], new byte[32], 0, 0);
     }
 
-    public BlockHeader(int version, long timestamp, byte[] previousHash, byte[] merkleRoot, byte[] bits, int nonce) {
+    public BlockHeader(int version, long timestamp, byte[] previousHash, byte[] merkleRoot, int bits, int nonce) {
         this.version = version;
         this.timestamp = timestamp;
         this.previousHash = previousHash;
@@ -62,7 +62,7 @@ public class BlockHeader extends SerializableI {
         return nonce;
     }
 
-    public byte[] getBits() {
+    public int getBits() {
         return bits;
     }
 
@@ -76,7 +76,7 @@ public class BlockHeader extends SerializableI {
                 Utils.takeApartLong(timestamp),
                 previousHash,
                 merkleRoot,
-                bits
+                Utils.takeApart(bits)
         );
     }
 
@@ -85,7 +85,7 @@ public class BlockHeader extends SerializableI {
     }
 
     public BlockHeader clone() {
-        return new BlockHeader(version, timestamp, Arrays.copyOf(previousHash, 32), Arrays.copyOf(merkleRoot, 32), Arrays.copyOf(bits, 4), nonce);
+        return new BlockHeader(version, timestamp, Arrays.copyOf(previousHash, 32), Arrays.copyOf(merkleRoot, 32), bits, nonce);
     }
 
     @Override
