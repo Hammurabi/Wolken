@@ -2,6 +2,7 @@ package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.serialization.SerializableI;
+import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +65,11 @@ public class Block extends SerializableI {
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         header.write(stream);
-        //testing
+        Utils.writeInt(transactions.size(), stream);
+        for (TransactionI transaction : transactions)
+        {
+            transaction.write(stream);
+        }
     }
 
     @Override
