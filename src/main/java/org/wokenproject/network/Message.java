@@ -36,11 +36,7 @@ public abstract class Message extends SerializableI {
 
     public byte[] getUniqueMessageIdentifier()
     {
-        return HashUtil.hash160(Utils.concatenate(
-                Utils.takeApart(version),
-                Utils.takeApart(flags),
-                getContents()
-        ));
+        return HashUtil.hash160(asByteArray());
     }
 
     public int getVersion()
