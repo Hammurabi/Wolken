@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class TransactionInv extends Message {
@@ -20,7 +21,7 @@ public class TransactionInv extends Message {
 
     public TransactionInv(int version, Collection<byte[]> list) throws WolkenException {
         super(version, Flags.Notify);
-        this.list = new HashSet<>(list);
+        this.list = new LinkedHashSet<>(list);
         for (byte[] uid : this.list)
         {
             if (uid == null)
@@ -60,6 +61,11 @@ public class TransactionInv extends Message {
     }
 
     @Override
+    public byte[] getContents() {
+        return new byte[0];
+    }
+
+    @Override
     public void write(OutputStream stream) throws IOException {
     }
 
@@ -69,11 +75,6 @@ public class TransactionInv extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new TransactionInv(getVersion(), new HashSet<>());
-    }
-
-    @Override
-    public byte[] getUniqueMessageIdentifier() {
-        return new byte[0];
+        return (Type) new TransactionInv(getVersion(), new LinkedHashSet<>());
     }
 }
