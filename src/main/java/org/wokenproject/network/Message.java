@@ -17,11 +17,11 @@ public abstract class Message extends SerializableI {
                 None = 0,
                 Notify = 1,
                 Request = 2,
-                Response = 3;
+                Response = 4;
     }
 
-    private int version;
-    private int flags;
+    private int     version;
+    private int     flags;
 
     public Message(int version, int flags) {
         this.version = version;
