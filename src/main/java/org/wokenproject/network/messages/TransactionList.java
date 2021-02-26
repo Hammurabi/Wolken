@@ -29,7 +29,7 @@ public class TransactionList extends Message {
     }
 
     @Override
-    public void writeContents(OutputStream stream) throws IOException {
+    public void writeContents(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(transactions.size(), stream);
         for (TransactionI transaction : transactions)
         {
@@ -38,7 +38,7 @@ public class TransactionList extends Message {
     }
 
     @Override
-    public void readContents(InputStream stream) throws IOException {
+    public void readContents(InputStream stream) throws IOException, WolkenException {
         byte buffer[] = new byte[4];
         stream.read(buffer);
         int length = Utils.makeInt(buffer);
