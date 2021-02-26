@@ -1,9 +1,15 @@
 package org.wokenproject.network;
 
+import org.wokenproject.core.Context;
+import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.serialization.SerializableI;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Objects;
 
 public class NetAddress extends SerializableI implements Serializable {
@@ -50,5 +56,26 @@ public class NetAddress extends SerializableI implements Serializable {
     @Override
     public int hashCode() {
         return address.toString().hashCode();
+    }
+
+    @Override
+    public void write(OutputStream stream) throws IOException {
+    }
+
+    @Override
+    public void read(InputStream stream) throws IOException {
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        try {
+            return (Type) new NetAddress(InetAddress.getLocalHost(), port);
+        } catch (UnknownHostException e) {
+            throw new WolkenException(e);
+        }
+    }
+
+    @Override
+    public int getSerialNumber() {
     }
 }
