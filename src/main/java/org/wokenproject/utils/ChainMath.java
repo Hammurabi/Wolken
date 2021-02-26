@@ -146,7 +146,7 @@ public class ChainMath {
     private static byte[] generateTargetBits(Block parent, BlockHeader first) throws WolkenException {
         //calculate the target time for 1800 blocks.
         long timePerDiffChange  = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
-        long averageNetworkTime = parent.getTimestamp() - first.getTimeStamp();
+        long averageNetworkTime = parent.getTimestamp() - first.getTimestamp();
 
         return generateTargetBits(averageNetworkTime, timePerDiffChange, parent.getBits());
     }
