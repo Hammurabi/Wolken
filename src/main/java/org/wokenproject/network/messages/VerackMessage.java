@@ -28,7 +28,7 @@ public class VerackMessage extends Message {
     public void executePayload(Server server, Node node) {
         node.setVersionInfo(versionInformation);
 
-        node.sendMessage(new RequestInv());
+        node.sendMessage(new RequestInv(Context.getInstance().getNetworkParameters().getVersion()));
     }
 
     @Override
