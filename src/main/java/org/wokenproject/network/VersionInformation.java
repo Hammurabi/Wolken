@@ -18,6 +18,10 @@ public class VersionInformation extends SerializableI {
     private NetAddress sender;
     private NetAddress receiver;
     private int blockHeight;
+
+    public VersionInformation() throws UnknownHostException {
+        this(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0), new NetAddress(InetAddress.getLocalHost(), 0), 0 );
+    }
     /**
      * @param version       client version
      * @param services      bitfield of services provided by this client
@@ -64,7 +68,7 @@ public class VersionInformation extends SerializableI {
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         try {
-            return (Type) new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0), new NetAddress(InetAddress.getLocalHost(), 0), 0 );
+            return (Type) new VersionInformation();
         } catch (UnknownHostException e) {
             throw new WolkenException(e);
         }
