@@ -90,10 +90,27 @@ public class BlockHeader extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        Utils.writeInt(version, stream);
+        Utils.writeLong(timestamp, stream);
+        stream.write(previousHash);
+        stream.write(merkleRoot);
+        stream.write(bits);
+        Utils.writeInt(nonce, stream);
     }
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        byte buffer[] = new byte[8];
+        stream.read(buffer, 0, 4);
+        version = Utils.makeInt(buffer);
+        stream.read(buffer, 0, 8);
+        timestamp = Utils.makeLong(buffer);
+
+        stream.read(previousHash);
+        stream.read(merkleRoot);
+
+        stream.read(buffer, 0, 4);
+        nonce = Utils.makeInt(buffer);
     }
 
     @Override
