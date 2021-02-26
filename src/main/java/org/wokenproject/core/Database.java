@@ -8,6 +8,8 @@ import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Database {
@@ -24,7 +26,7 @@ public class Database {
     ;
 
     public Database(FileService location) throws IOException {
-        database= Iq80DBFactory.factory.open(location.file(), new Options());
+        database= Iq80DBFactory.factory.open(location.newFile("leveldb").file(), new Options());
         mutex   = new ReentrantLock();
     }
 
@@ -93,9 +95,26 @@ public class Database {
         LookupResult<byte[]> blockHash = findBlockHashFromHeight(height);
         if (blockHash.exists())
         {
-            
         }
 
+        return null;
+    }
+
+    public Set<byte[]> getNonDuplicateTransactions(Set<byte[]> list) {
+        Set<byte[]> result = new HashSet<>();
+        for (byte[] txid : list)
+        {
+            byte id[]   = Utils.concatenate(TransactionFromHash, Utils.concatenate(txid));
+            if (database.get(id) == null)
+            {
+                result.add(txid);
+            }
+        }
+
+        return result;
+    }
+
+    public TransactionI getTransaction(byte[] txid) {
         return null;
     }
 }

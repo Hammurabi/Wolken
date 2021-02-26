@@ -3,6 +3,9 @@ package org.wokenproject.utils;
 import org.wokenproject.encoders.Base16;
 import org.wokenproject.encoders.Base58;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Set;
@@ -58,6 +61,10 @@ public class Utils {
 
     public static int makeInt(byte[] trim) {
         return makeInt(trim[0], trim[1], trim[2], trim[3]);
+    }
+
+    public static int makeInt(byte[] trim, int off) {
+        return makeInt(trim[off], trim[off + 1], trim[off + 2], trim[off + 3]);
     }
 
     public static long makeLong(byte[] trim) {
@@ -227,5 +234,28 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static void writeInt(int integer, OutputStream stream) throws IOException {
+        stream.write((byte) ((integer >> 24) & 0xFF));
+        stream.write((byte) ((integer >> 16) & 0xFF));
+        stream.write((byte) ((integer >> 8) & 0xFF));
+        stream.write((byte) ((integer) & 0xFF));
+    }
+
+    public static void writeLong(long integer, OutputStream stream) throws IOException {
+        stream.write((byte) ((integer >> 56) & 0xFF));
+        stream.write((byte) ((integer >> 48) & 0xFF));
+        stream.write((byte) ((integer >> 40) & 0xFF));
+        stream.write((byte) ((integer >> 32) & 0xFF));
+        stream.write((byte) ((integer >> 24) & 0xFF));
+        stream.write((byte) ((integer >> 16) & 0xFF));
+        stream.write((byte) ((integer >>  8) & 0xFF));
+        stream.write((byte) ((integer) & 0xFF));
+    }
+
+    public static void writeUnsignedInt16(int integer, OutputStream stream) throws IOException {
+        stream.write((byte) ((integer >> 8) & 0xFF));
+        stream.write((byte) ((integer) & 0xFF));
     }
 }

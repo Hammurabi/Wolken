@@ -3,6 +3,7 @@ package org.wokenproject.core;
 import org.json.JSONObject;
 import org.wokenproject.encoders.Base16;
 import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.network.VersionInformation;
 import org.wokenproject.utils.ChainMath;
 
 import java.math.BigInteger;
@@ -115,12 +116,8 @@ public class NetworkParameters {
         return 16384;
     }
 
-    public int getMaxBytesReceive() {
-        return 4_000_000;
-    }
-
-    public int getMaxBytesSend() {
-        return getMaxBytesReceive();
+    public int getMaxMessageContentSize() {
+        return 8_000_000;
     }
 
     public int getMaxCacheReuse() {
@@ -129,5 +126,41 @@ public class NetworkParameters {
 
     public long getHandshakeTimeout() {
         return 2_500;
+    }
+
+    public int getMaxNetworkErrors() {
+        return 25;
+    }
+
+    public int getMaxAllowedInboundConnections() {
+        return 125;
+    }
+
+    public int getMaxAllowedOutboundConnections() {
+        return 8;
+    }
+
+    public int getPort() {
+        return isTestNet ? 5112 : 5110;
+    }
+
+    public double getMessageSpamThreshold() {
+        return Math.PI;
+    }
+
+    public int getMaxCacheSize() {
+        return 18_796_99;
+    }
+
+    public int getVersion() {
+        return 1;
+    }
+
+    public boolean isVersionCompatible(int a, int b) {
+        return a == b;
+    }
+
+    public long getServices() {
+        return VersionInformation.Flags.AllServices;
     }
 }
