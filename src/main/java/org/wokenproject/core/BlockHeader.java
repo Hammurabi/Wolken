@@ -158,6 +158,6 @@ public class BlockHeader extends SerializableI {
 
     @Override
     public int getSerialNumber() {
-        return 0;
+        return Context.getInstance().getSerialFactory().getSerialNumber(BlockHeader.class);
     }
 }
