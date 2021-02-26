@@ -78,4 +78,34 @@ public class VersionInformation extends SerializableI {
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(VersionInformation.class);
     }
+
+    public int getVersion()
+    {
+        return version;
+    }
+
+    public long getServices()
+    {
+        return services;
+    }
+
+    public long getTimestamp()
+    {
+        return timestamp;
+    }
+
+    public NetAddress getSender()
+    {
+        return sender;
+    }
+
+    public NetAddress getReceiver()
+    {
+        return receiver;
+    }
+
+    public int getBlockHeight()
+    {
+        return blockHeight;
+    }
 }
