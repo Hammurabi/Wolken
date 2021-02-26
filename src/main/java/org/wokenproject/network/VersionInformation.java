@@ -50,10 +50,13 @@ public class VersionInformation extends SerializableI {
         byte buffer[] = new byte[8];
         stream.read(buffer, 0, 4);
         this.version = Utils.makeInt(buffer);
+        stream.read(buffer);
         this.services = Utils.makeLong(buffer);
+        stream.read(buffer);
         this.timestamp = Utils.makeLong(buffer);
         sender = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class), stream);
         receiver = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class), stream);
+        stream.read(buffer, 0, 4);
         this.blockHeight = Utils.makeInt(buffer);
     }
 
