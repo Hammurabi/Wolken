@@ -3,6 +3,7 @@ package org.wokenproject.core;
 import org.json.JSONObject;
 import org.wokenproject.encoders.Base16;
 import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.network.VersionInformation;
 import org.wokenproject.utils.ChainMath;
 
 import java.math.BigInteger;
@@ -161,5 +162,9 @@ public class NetworkParameters {
 
     public boolean isVersionCompatible(int a, int b) {
         return a == b;
+    }
+
+    public long getServices() {
+        return VersionInformation.Flags.AllServices;
     }
 }
