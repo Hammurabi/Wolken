@@ -90,7 +90,7 @@ public class Inv extends Message {
     }
 
     @Override
-    public void writeContents(OutputStream stream) throws IOException {
+    public void writeContents(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(type, stream);
         Utils.writeInt(list.size(), stream);
 
@@ -101,7 +101,32 @@ public class Inv extends Message {
     }
 
     @Override
-    public void readContents(InputStream stream) throws IOException {
+    public void readContents(InputStream stream) throws IOException, WolkenException {
+        byte buffer[] = new byte[4];
+        stream.read(buffer);
+        type = Utils.makeInt(buffer);
+        stream.read(buffer);
+        int length = Utils.makeInt(buffer);
+
+        int requiredLength = 0;
+
+        switch (type)
+        {
+            case Type.Block:
+                requiredLength = Block.UniqueIdentifierLength;
+                break;
+            case Type.Transaction:
+                requiredLength = TransactionI.UniqueIdentifierLength;
+                break;
+        }
+
+        byte id[] = new byte[requiredLength];
+
+        for (int i = 0; i < length; i ++)
+        {
+            stream.read(id);
+            list.add(id);
+        }
     }
 
     @Override
