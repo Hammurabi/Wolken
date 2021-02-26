@@ -1,7 +1,5 @@
 package org.wokenproject.core;
 
-import org.wokenproject.utils.Utils;
-
 import java.util.*;
 
 public class TransactionPool {
