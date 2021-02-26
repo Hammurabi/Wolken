@@ -19,6 +19,7 @@ public class Node {
     private ReentrantLock   mutex;
     private Queue<Message>  messages;
     private MessageCache    messageCache;
+    private long            firstConnected;
     private int             errors;
 
     private BufferedInputStream     inputStream;
@@ -38,6 +39,7 @@ public class Node {
         this.errors         = 0;
         this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
         this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
+        this.firstConnected = System.currentTimeMillis();
     }
 
     /*
