@@ -26,7 +26,7 @@ public class VersionInformation extends SerializableI {
     private int blockHeight;
 
     public VersionInformation() throws UnknownHostException {
-        this(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0), new NetAddress(InetAddress.getLocalHost(), 0), 0 );
+        this(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0, 0), new NetAddress(InetAddress.getLocalHost(), 0, 0), 0 );
     }
     /**
      * @param version       client version
