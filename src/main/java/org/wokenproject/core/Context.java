@@ -11,7 +11,6 @@ import org.wokenproject.network.messages.TransactionList;
 import org.wokenproject.network.messages.VersionMessage;
 import org.wokenproject.serialization.SerializationFactory;
 import org.wokenproject.utils.FileService;
-import sun.jvm.hotspot.debugger.Address;
 
 import java.io.IOException;
 import java.net.InetAddress;
