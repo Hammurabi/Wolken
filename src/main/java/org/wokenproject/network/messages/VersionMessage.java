@@ -25,13 +25,20 @@ public class VersionMessage extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        node.setVersionInfo(this);
+        node.setVersionInfo(versionInformation);
 
         if (!Context.getInstance().getNetworkParameters().isVersionCompatible(versionInformation.getVersion(), Context.getInstance().getNetworkParameters().getVersion())) {
             // send bye message.
         } else {
             // send verack
-            node.sendMessage(new VerackMessage());
+            node.sendMessage(new VerackMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(
+                    Context.getInstance().getNetworkParameters().getVersion(),
+                    0,
+                    System.currentTimeMillis(),
+                    node.getNetAddress(),
+                    server.getNetAddress(),
+                    0
+            )));
         }
     }
 
