@@ -1,8 +1,9 @@
 package org.wokenproject.core;
 
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.wokenproject.serialization.SerializableI;
 
-public abstract class TransactionI {
+public abstract class TransactionI extends SerializableI {
     public static int UniqueIdentifierLength = 32;
 
     public static final class Flags
