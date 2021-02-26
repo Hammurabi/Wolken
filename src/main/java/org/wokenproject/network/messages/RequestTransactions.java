@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -20,7 +19,7 @@ public class RequestTransactions extends Message {
     private Set<byte[]> transactions;
 
     public RequestTransactions(int version, Collection<byte[]> transactions) {
-        super(version, Flags.REQUEST);
+        super(version, Flags.Request);
         this.transactions = new LinkedHashSet<>(transactions);
     }
 
