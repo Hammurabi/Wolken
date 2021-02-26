@@ -10,7 +10,9 @@ import java.io.*;
 public abstract class SerializableI {
     public void serialize(OutputStream stream) throws IOException {
         Utils.writeInt(getSerialNumber(), stream);
-        write(stream);
+        byte content[] = asByteArray();
+        Utils.writeInt(content.length, stream);
+        stream.write(content);
     }
 
     public abstract void write(OutputStream stream) throws IOException;
