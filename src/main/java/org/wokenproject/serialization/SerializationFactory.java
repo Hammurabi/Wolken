@@ -2,6 +2,7 @@ package org.wokenproject.serialization;
 
 import org.wokenproject.exceptions.InvalidSerialNumberException;
 import org.wokenproject.exceptions.WolkenException;
+import org.wokenproject.network.messages.TransactionList;
 import org.wokenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -52,5 +53,9 @@ public class SerializationFactory {
         }
 
         throw new InvalidSerialNumberException("'" + magic + "' is an invalid serial number.");
+    }
+
+    public int getSerialNumber(Class<?> classType) {
+        return classMagicReferences.get(classType);
     }
 }
