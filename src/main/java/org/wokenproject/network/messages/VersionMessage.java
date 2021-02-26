@@ -15,7 +15,7 @@ public class VersionMessage extends Message {
     private VersionInformation versionInformation;
 
     public VersionMessage() throws UnknownHostException {
-        this(0, new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0), new NetAddress(InetAddress.getLocalHost(), 0), 0 ));
+        this(0, new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0, 0), new NetAddress(InetAddress.getLocalHost(), 0, 0), 0 ));
     }
 
     public VersionMessage(int version, VersionInformation versionInformation) {
@@ -33,10 +33,10 @@ public class VersionMessage extends Message {
             // send verack
             node.sendMessage(new VerackMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(
                     Context.getInstance().getNetworkParameters().getVersion(),
-                    0,
+                    Context.getInstance().getNetworkParameters().getServices(),
                     System.currentTimeMillis(),
-                    node.getNetAddress(),
                     server.getNetAddress(),
+                    node.getNetAddress(),
                     0
             )));
         }
