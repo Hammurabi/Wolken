@@ -116,12 +116,8 @@ public class NetworkParameters {
         return 16384;
     }
 
-    public int getMaxBytesReceive() {
-        return 4_000_000;
-    }
-
-    public int getMaxBytesSend() {
-        return getMaxBytesReceive();
+    public int getMaxMessageContentSize() {
+        return 8_000_000;
     }
 
     public int getMaxCacheReuse() {
