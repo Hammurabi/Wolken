@@ -127,11 +127,11 @@ public class ChainMath {
     }
 
     public static byte[] calculateNewTarget(Block parent) throws WolkenException {
-        long currentBlockHeight = parent.getHeight();
+        int currentBlockHeight = parent.getHeight();
         if (shouldRecalcNextWork(currentBlockHeight)) {
             BlockHeader header = null;
 
-            int previousBlockHeight = currentBlockHeight - (Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
+            int previousBlockHeight = currentBlockHeight - Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
 
             if (previousBlockHeight >= 0) {
                 header = Context.getInstance().getDatabase().findBlockHeaderByHeight(previousBlockHeight);
