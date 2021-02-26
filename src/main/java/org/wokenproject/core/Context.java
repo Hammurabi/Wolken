@@ -2,6 +2,7 @@ package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.network.IpAddressList;
+import org.wokenproject.network.Server;
 import org.wokenproject.network.messages.RequestTransactions;
 import org.wokenproject.network.messages.TransactionInv;
 import org.wokenproject.network.messages.TransactionList;
@@ -24,6 +25,7 @@ public class Context {
     private IpAddressList ipAddressList;
     private SerializationFactory    serializationFactory;
     private TransactionPool         transactionPool;
+    private Server                  server;
     private FileService             fileService;
 
     public Context(FileService service, boolean testNet) throws WolkenException, IOException {
@@ -39,11 +41,14 @@ public class Context {
         serializationFactory.registerClass(TransactionInv.class, new TransactionInv(0, new LinkedHashSet<>()));
         serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>()));
         serializationFactory.registerClass(RequestTransactions.class, new RequestTransactions(0, new LinkedHashSet<>()));
+
+        this.server                 = new Server();
     }
 
     public void shutDown()
     {
         isRunning.set(false);
+        server.shutdown();
         try {
             ipAddressList.save();
         } catch (IOException e) {
