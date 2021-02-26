@@ -19,7 +19,7 @@ public class Block extends BlockHeader {
     }
 
     public final int countLength() {
-        return getBytes().length;
+        return asByteArray().length;
     }
 
     public final BlockHeader getBlockHeader() {
