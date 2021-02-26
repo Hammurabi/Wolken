@@ -65,7 +65,12 @@ public class Block extends BlockHeader {
         return Context.getInstance().getSerialFactory().getSerialNumber(Block.class);
     }
 
+    public TransactionI getCoinbase()
+    {
+        return transactions.iterator().next();
+    }
+
     public int getHeight() {
-        return 0;
+        return Utils.makeInt(getCoinbase().getInputs()[0].getData());
     }
 }
