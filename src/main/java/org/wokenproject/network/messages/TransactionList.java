@@ -10,10 +10,11 @@ import org.wokenproject.serialization.SerializableI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Set;
 
 public class TransactionList extends Message {
-    public TransactionList(int version, Set<TransactionI> transactions) {
+    public TransactionList(int version, Collection<TransactionI> transactions) {
         super(version, Flags.RESPONSE, transactions.size());
     }
 
