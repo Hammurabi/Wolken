@@ -15,9 +15,9 @@ import java.util.Objects;
 
 public class NetAddress extends SerializableI implements Serializable {
     private static final long serialVersionUID = 3738771433856794716L;
-    private final InetAddress   address;
-    private final int           port;
-    private double              spamAverage;
+    private InetAddress address;
+    private int         port;
+    private double      spamAverage;
 
     public NetAddress(InetAddress address, int port)
     {
@@ -69,6 +69,11 @@ public class NetAddress extends SerializableI implements Serializable {
 
     @Override
     public void read(InputStream stream) throws IOException {
+        int length = stream.read();
+        byte bytes[] = new byte[length];
+        stream.read(bytes);
+        address = InetAddress.getByAddress(bytes);
+        port    = Utils.makeInt((byte) 0, (byte) 0, (byte) stream.read(), (byte) stream.read());
     }
 
     @Override
