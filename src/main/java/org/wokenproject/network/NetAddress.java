@@ -56,7 +56,7 @@ public class NetAddress extends SerializableI implements Serializable {
 
     @Override
     public int hashCode() {
-        return address.toString().hashCode();
+        return address.getAddress().hashCode();
     }
 
     @Override
