@@ -7,9 +7,7 @@ import org.wokenproject.network.messages.VersionMessage;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Iterator;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class Server implements Runnable {
     private ServerSocket    socket;
@@ -17,6 +15,7 @@ public class Server implements Runnable {
 
     public Server() throws IOException {
         socket = new ServerSocket(Context.getInstance().getNetworkParameters().getPort());
+        connectedNodes = Collections.synchronizedSet(new LinkedHashSet<>());
         connectToNodes(Context.getInstance().getIpAddressList().getAddresses());
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
     }
@@ -29,7 +28,10 @@ public class Server implements Runnable {
         {
             try {
                 Socket socket = new Socket(address.getAddress(), address.getPort());
-                connectedNodes.add(new Node(socket));
+                Node node = new Node(socket);
+                connectedNodes.add(node);
+
+                node.sendMessage(new VersionMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(Context.getInstance().getNetworkParameters().getVersion(), VersionInformation.Flags.AllServices, System.currentTimeMillis(), getNetAddress(), address, 0)));
 
                 if (++ connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections())
                 {
