@@ -17,12 +17,14 @@ public class NetAddress extends SerializableI implements Serializable {
     private static final long serialVersionUID = 3738771433856794716L;
     private InetAddress address;
     private int         port;
+    private long        services;
     private double      spamAverage;
 
-    public NetAddress(InetAddress address, int port)
+    public NetAddress(InetAddress address, int port, long services)
     {
         this.address    = address;
         this.port       = port;
+        this.services   = services;
     }
 
     public void setSpamAverage(double spamAverage)
@@ -46,6 +48,11 @@ public class NetAddress extends SerializableI implements Serializable {
         return spamAverage;
     }
 
+    public long getServices()
+    {
+        return services;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,6 +72,7 @@ public class NetAddress extends SerializableI implements Serializable {
         stream.write(bytes.length);
         stream.write(bytes);
         Utils.writeUnsignedInt16(port, stream);
+        Utils.writeLong(services, stream);
     }
 
     @Override
@@ -74,12 +82,14 @@ public class NetAddress extends SerializableI implements Serializable {
         stream.read(bytes);
         address = InetAddress.getByAddress(bytes);
         port    = Utils.makeInt((byte) 0, (byte) 0, (byte) stream.read(), (byte) stream.read());
+        stream.read(bytes, 0, 8);
+        services= Utils.makeLong(bytes);
     }
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         try {
-            return (Type) new NetAddress(InetAddress.getLocalHost(), port);
+            return (Type) new NetAddress(InetAddress.getLocalHost(), port, 0);
         } catch (UnknownHostException e) {
             throw new WolkenException(e);
         }
@@ -88,5 +98,9 @@ public class NetAddress extends SerializableI implements Serializable {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class);
+    }
+
+    public void setServices(long services) {
+        this.services = services;
     }
 }
