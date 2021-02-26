@@ -39,6 +39,9 @@ public class Context {
         this.transactionPool        = new TransactionPool();
         this.fileService            = service;
 
+        serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
+        serializationFactory.registerClass(Block.class, new Block());
+
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
         serializationFactory.registerClass(VersionMessage.class, new VersionMessage());
         serializationFactory.registerClass(VersionInformation.class, new VersionInformation());
