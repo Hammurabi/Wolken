@@ -1,7 +1,6 @@
 package org.wokenproject.network;
 
 import org.wokenproject.core.Context;
-import org.wokenproject.exceptions.InvalidSerialNumberException;
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.network.messages.VersionMessage;
 import org.wokenproject.utils.Utils;
