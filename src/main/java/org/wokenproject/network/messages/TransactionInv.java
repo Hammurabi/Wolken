@@ -69,7 +69,7 @@ public class TransactionInv extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new TransactionInv(0, new HashSet<>());
+        return (Type) new TransactionInv(getVersion(), new HashSet<>());
     }
 
     @Override
