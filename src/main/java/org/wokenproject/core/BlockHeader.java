@@ -19,7 +19,6 @@ public class BlockHeader extends SerializableI {
     private final long  timestamp;
     private final byte  previousHash[];
     private final byte  merkleRoot[];
-    private final byte  chainWorkHash[];
     private final byte  bits[];
     private int         nonce;
 
@@ -34,12 +33,10 @@ public class BlockHeader extends SerializableI {
         this.timestamp = buffer.getLong();
         this.previousHash = new byte[32];
         this.merkleRoot = new byte[32];
-        this.chainWorkHash = new byte[32];
         this.bits = new byte[4];
 
         buffer.get(previousHash);
         buffer.get(merkleRoot);
-        buffer.get(chainWorkHash);
         this.nonce = buffer.getInt();
     }
 
@@ -53,7 +50,6 @@ public class BlockHeader extends SerializableI {
         this.timestamp = timestamp;
         this.previousHash = previousHash;
         this.merkleRoot = merkleRoot;
-        this.chainWorkHash = chainWorkHash;
         this.bits = bits;
         this.nonce = nonce;
     }
@@ -81,11 +77,6 @@ public class BlockHeader extends SerializableI {
     public byte[] getParentHash()
     {
         return previousHash;
-    }
-
-    public byte[] getChainWork()
-    {
-        return chainWorkHash;
     }
 
     public byte[] getMerkleRoot()
@@ -132,7 +123,6 @@ public class BlockHeader extends SerializableI {
                 },
                 previousHash,
                 merkleRoot,
-                chainWorkHash,
                 bits
         );
     }
@@ -157,7 +147,7 @@ public class BlockHeader extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return new BlockHeader();
+        return (Type) new BlockHeader();
     }
 
     @Override
