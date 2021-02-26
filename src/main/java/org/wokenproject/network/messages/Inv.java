@@ -71,15 +71,21 @@ public class Inv extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        Set<byte[]> newTransactions = Context.getInstance().getTransactionPool().getNonDuplicateTransactions(list);
-        newTransactions = Context.getInstance().getDatabase().getNonDuplicateTransactions(newTransactions);
-
-        if (newTransactions.isEmpty())
+        if (type == Type.Block)
         {
-            return;
         }
+        else if (type == Type.Transaction)
+        {
+            Set<byte[]> newTransactions = Context.getInstance().getTransactionPool().getNonDuplicateTransactions(list);
+            newTransactions = Context.getInstance().getDatabase().getNonDuplicateTransactions(newTransactions);
 
-        node.sendMessage(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions));
+            if (newTransactions.isEmpty())
+            {
+                return;
+            }
+
+            node.sendMessage(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions));
+        }
     }
 
     @Override
