@@ -77,5 +77,6 @@ public class NetAddress extends SerializableI implements Serializable {
 
     @Override
     public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class);
     }
 }
