@@ -77,29 +77,6 @@ public class Node {
             // this is unused as of this version
             // but it is needed.
             int magic            = Utils.makeInt(magicBytes);
-
-//            byte messageHeader[] = new byte[20];
-//
-//            int read = inputStream.read(messageHeader);
-//            if (read != messageHeader.length) {
-//                errors++;
-//                return null;
-//            }
-//
-//            int version = Utils.makeInt(messageHeader);
-//            int flags   = Utils.makeInt(messageHeader, 4);
-//            int type    = Utils.makeInt(messageHeader, 8);
-//            int count   = Utils.makeInt(messageHeader, 12);
-//            int length  = Utils.makeInt(messageHeader, 16);
-//
-//            byte content[] = new byte[length];
-//
-//            read = inputStream.read(content); // while (read < content.length) { read += stream.read(content, read, content.length - read); }
-//            if (read != content.length) {
-//                errors++;
-//                return null;
-//            }
-
             Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
             return checkSpam(message);
         } catch (IOException | WolkenException e) {
