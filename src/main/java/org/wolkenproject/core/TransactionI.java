@@ -4,6 +4,8 @@ import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 
+import java.io.IOException;
+
 public abstract class TransactionI extends SerializableI {
     public static int UniqueIdentifierLength = 32;
 
@@ -24,8 +26,8 @@ public abstract class TransactionI extends SerializableI {
     public abstract Output[] getOutputs();
     public abstract TransactionI signWithKey(BCECPrivateKey currentPrivateKey);
     public abstract byte[] getPayload();
-    public abstract TransactionI getCloneForSignature();
-    public abstract TransactionI getClone();
+    public abstract TransactionI getCloneForSignature() throws IOException, WolkenException;
+    public abstract TransactionI getClone() throws IOException, WolkenException;
 
     public abstract byte[] getTransactionID();
 }
