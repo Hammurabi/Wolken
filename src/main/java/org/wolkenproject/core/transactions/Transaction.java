@@ -7,6 +7,7 @@ import org.wolkenproject.core.Output;
 import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.HashUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -104,18 +105,18 @@ public class Transaction extends TransactionI {
     }
 
     @Override
-    public TransactionI getCloneForSignature() {
-        return null;
+    public TransactionI getCloneForSignature() throws IOException, WolkenException {
+        return makeCopy();
     }
 
     @Override
-    public TransactionI getClone() {
-        return null;
+    public TransactionI getClone() throws IOException, WolkenException {
+        return makeCopy();
     }
 
     @Override
     public byte[] getTransactionID() {
-        return new byte[0];
+        return HashUtil.sha256d(asByteArray());
     }
 
     @Override
