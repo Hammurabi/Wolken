@@ -2,6 +2,7 @@ package org.wokenproject.core;
 
 import org.wokenproject.exceptions.WolkenException;
 import org.wokenproject.serialization.SerializableI;
+import org.wokenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +42,9 @@ public class BlockIndex extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        block.write(stream);
+        byte chainWork[] = this.chainWork.toByteArray();
+        stream.write(Utils.pad(32 - chainWork.length, 0, chainWork));
     }
 
     @Override
