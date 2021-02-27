@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class Block extends BlockHeader {
+    private static BigInteger LargestHash = BigInteger.ONE.shiftLeft(256);
     public static int UniqueIdentifierLength = 32;
     private Set<TransactionI>   transactions;
 
@@ -89,6 +90,6 @@ public class Block extends BlockHeader {
     }
 
     public BigInteger getWork() {
-        return null;
+        return LargestHash.divide(ChainMath.targetIntegerFromBits(getBits()).add(BigInteger.ONE));
     }
 }
