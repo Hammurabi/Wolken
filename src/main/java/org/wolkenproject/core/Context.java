@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.IpAddressList;
 import org.wolkenproject.network.NetAddress;
@@ -42,6 +43,9 @@ public class Context {
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
         serializationFactory.registerClass(Block.class, new Block());
         serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
+
+        serializationFactory.registerClass(Transaction.class, new Transaction(0, 0, 0, new Input[0], new Output[0]));
+        serializationFactory.registerClass(Input.class, new Input(new byte[32], 0, new byte[1]));
 
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
         serializationFactory.registerClass(VersionMessage.class, new VersionMessage());
