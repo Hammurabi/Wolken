@@ -8,6 +8,7 @@ import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.HashUtil;
+import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,7 +122,15 @@ public class Transaction extends TransactionI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
-
+        Utils.writeInt(version, stream);
+        Utils.writeInt(flags, stream);
+        Utils.writeInt(locktime, stream);
+        Utils.writeUnsignedInt16(inputs.length, stream);
+        Utils.writeUnsignedInt16(outputs.length, stream);
+        for (Input input : inputs)
+        {
+            input.write(stream);
+        }
     }
 
     @Override
