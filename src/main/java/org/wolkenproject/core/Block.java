@@ -1,9 +1,9 @@
-package org.wokenproject.core;
+package org.wolkenproject.core;
 
-import org.wokenproject.exceptions.WolkenException;
-import org.wokenproject.serialization.SerializableI;
-import org.wokenproject.utils.ChainMath;
-import org.wokenproject.utils.Utils;
+import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.ChainMath;
+import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
