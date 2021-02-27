@@ -81,6 +81,10 @@ public class ChainMath {
         return target;
     }
 
+    public static BigInteger targetIntegerFromBits(int bits) throws WolkenException {
+        return targetIntegerFromBits(Utils.takeApart(bits));
+    }
+
     public static BigInteger targetIntegerFromBits(byte bits[]) throws WolkenException {
         int length      = Byte.toUnsignedInt(bits[0]);
         if (length > 32)
