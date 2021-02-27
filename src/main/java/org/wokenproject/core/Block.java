@@ -8,6 +8,7 @@ import org.wokenproject.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -85,5 +86,9 @@ public class Block extends BlockHeader {
         }
 
         return -1;
+    }
+
+    public BigInteger getWork() {
+        return null;
     }
 }
