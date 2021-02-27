@@ -3,34 +3,29 @@ package org.wokenproject.core;
 import java.math.BigInteger;
 
 public class BlockIndex {
-    private Block       block;
-    private BigInteger  chainWork;
-    private int         height;
+    private Block block;
+    private BigInteger chainWork;
+    private int height;
 
-    public BlockIndex(Block block, BigInteger chainWork, int height)
-    {
-        this.block      = block;
-        this.chainWork  = chainWork;
-        this.height     = height;
+    public BlockIndex(Block block, BigInteger chainWork, int height) {
+        this.block = block;
+        this.chainWork = chainWork;
+        this.height = height;
     }
 
-    public Block getBlock()
-    {
+    public Block getBlock() {
         return block;
     }
 
-    public BigInteger getChainWork()
-    {
+    public BigInteger getChainWork() {
         return chainWork;
     }
 
-    public int getHeight()
-    {
+    public int getHeight() {
         return height;
     }
 
-    public Block generateNextBlock()
-    {
-        return new BlockIndex();
+    public BlockIndex generateNextBlock() {
+        return new BlockIndex(new Block(), chainWork.add(block.getWork()), height + 1);
     }
 }
