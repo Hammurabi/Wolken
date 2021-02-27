@@ -130,7 +130,7 @@ public class ChainMath {
         return (height + 1) % Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0;
     }
 
-    public static byte[] calculateNewTarget(Block parent) throws WolkenException {
+    public static int calculateNewTarget(Block parent) throws WolkenException {
         int currentBlockHeight = parent.getHeight();
         if (shouldRecalcNextWork(currentBlockHeight)) {
             BlockHeader header = null;
@@ -147,7 +147,7 @@ public class ChainMath {
         return parent.getBits();
     }
 
-    private static byte[] generateTargetBits(Block parent, BlockHeader first) throws WolkenException {
+    private static int generateTargetBits(Block parent, BlockHeader first) throws WolkenException {
         //calculate the target time for 1800 blocks.
         long timePerDiffChange  = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
         long averageNetworkTime = parent.getTimestamp() - first.getTimestamp();
@@ -156,7 +156,7 @@ public class ChainMath {
     }
 
 
-    private static byte[] generateTargetBits(long actualTimespan, long timeRequired, byte prevTarget[]) throws WolkenException {
+    private static int generateTargetBits(long actualTimespan, long timeRequired, int prevTarget) throws WolkenException {
         BigInteger target = targetIntegerFromBits(prevTarget);
 
         if (actualTimespan < (timeRequired / 4)) {
@@ -176,7 +176,7 @@ public class ChainMath {
         return getCompact(target);
     }
 
-    protected static final byte[] getCompact(BigInteger integer)
+    protected static final int getCompact(BigInteger integer)
     {
         byte bytes[]            = integer.toByteArray();
         byte bits[]             = new byte[4];
@@ -189,6 +189,6 @@ public class ChainMath {
         if(bytes.length > 2)
             bits[3]             = bytes[2];
 
-        return bits;
+        return Utils.makeInt(bits);
     }
 }
