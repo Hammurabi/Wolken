@@ -262,4 +262,12 @@ public class Utils {
     public static int timestampInSeconds() {
         return (int) (System.currentTimeMillis() / 1000) - 1048035600;
     }
+
+    public static byte[] pad(int padCount, byte[] bytes) {
+        return concatenate(new byte[padCount, bytes);
+    }
+
+    public static byte[] pad(int padCount, int padValue, byte[] bytes) {
+        return concatenate(fillArray(new byte[padCount], (byte) padValue), bytes);
+    }
 }
