@@ -44,12 +44,20 @@ public class BlockIndex extends SerializableI {
     public void write(OutputStream stream) throws IOException, WolkenException {
         block.write(stream);
         byte chainWork[] = this.chainWork.toByteArray();
-        stream.write(Utils.pad(32 - chainWork.length, 0, chainWork));
+        stream.write(chainWork.length);
+        stream.write(chainWork);
         Utils.writeInt(height, stream);
     }
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        block.read(stream);
+        byte length = (byte) stream.read();
+        byte chainWork[] = new byte[length];
+        stream.read(chainWork);
+        this.chainWork = new BigInteger(chainWork);
+        stream.read(chainWork, 0, 4);
+        height = Utils.makeInt(chainWork);
     }
 
     @Override
