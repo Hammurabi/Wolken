@@ -263,7 +263,7 @@ public class Utils {
     }
 
     public static byte[] pad(int padCount, byte[] bytes) {
-        return concatenate(new byte[padCount, bytes);
+        return concatenate(new byte[padCount], bytes);
     }
 
     public static byte[] pad(int padCount, int padValue, byte[] bytes) {
