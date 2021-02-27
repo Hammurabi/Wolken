@@ -45,6 +45,7 @@ public class BlockIndex extends SerializableI {
         block.write(stream);
         byte chainWork[] = this.chainWork.toByteArray();
         stream.write(Utils.pad(32 - chainWork.length, 0, chainWork));
+        Utils.writeInt(height, stream);
     }
 
     @Override
