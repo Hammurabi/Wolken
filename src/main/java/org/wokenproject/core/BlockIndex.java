@@ -1,5 +1,7 @@
 package org.wokenproject.core;
 
+import org.wokenproject.exceptions.WolkenException;
+
 import java.math.BigInteger;
 
 public class BlockIndex {
@@ -25,7 +27,7 @@ public class BlockIndex {
         return height;
     }
 
-    public BlockIndex generateNextBlock() {
+    public BlockIndex generateNextBlock() throws WolkenException {
         return new BlockIndex(new Block(), chainWork.add(block.getWork()), height + 1);
     }
 }
