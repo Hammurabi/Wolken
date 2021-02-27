@@ -1,12 +1,12 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.Utils;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 
-public class Input {
+public class Input extends SerializableI {
     private byte    previousTXID[];
     private int     index;
     private byte    payload[];
@@ -15,14 +15,6 @@ public class Input {
         this.previousTXID   = previousTXID;
         this.index          = index;
         this.payload        = payload;
-    }
-
-    public Input(DataInputStream stream) throws IOException {
-        previousTXID = new byte[32];
-        stream.read(previousTXID);
-        index = (int) stream.readChar();
-        payload = new byte[stream.readInt()];
-        stream.read(payload);
     }
 
     public byte[] getChainLink() {
@@ -49,10 +41,32 @@ public class Input {
         this.payload = data;
     }
 
-    public void write(DataOutputStream stream) throws IOException {
+    public void write(OutputStream stream) throws IOException {
         stream.write(previousTXID);
-        stream.writeChar(index);
-        stream.writeInt(payload.length);
+        Utils.writeUnsignedInt16(index, stream);
+        Utils.writeUnsignedInt16(payload.length, stream);
         stream.write(payload);
+    }
+
+    @Override
+    public void read(InputStream stream) throws IOException, WolkenException {
+        stream.read(previousTXID);
+        byte buffer[] = new byte[2];
+        stream.read(buffer);
+        index = Utils.makeInt((byte) 0, (byte) 0, buffer[0], buffer[1]);
+        stream.read(buffer);
+        int length = Utils.makeInt((byte) 0, (byte) 0, buffer[0], buffer[1]);
+        payload = new byte[length];
+        stream.read(payload);
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return (Type) new Input(new byte[TransactionI.UniqueIdentifierLength], 0, new byte[0]);
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(Input.class);
     }
 }
