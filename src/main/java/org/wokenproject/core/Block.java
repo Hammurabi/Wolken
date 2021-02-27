@@ -89,7 +89,7 @@ public class Block extends BlockHeader {
         return -1;
     }
 
-    public BigInteger getWork() {
+    public BigInteger getWork() throws WolkenException {
         return LargestHash.divide(ChainMath.targetIntegerFromBits(getBits()).add(BigInteger.ONE));
     }
 }
