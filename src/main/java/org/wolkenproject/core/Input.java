@@ -62,7 +62,7 @@ public class Input extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new Input(new byte[TransactionI.UniqueIdentifierLength], 0, new byte[0]);
+        return (Type) new Input(new byte[TransactionI.UniqueIdentifierLength], 0, new byte[1]);
     }
 
     @Override
