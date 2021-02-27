@@ -41,6 +41,7 @@ public class Context {
 
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
         serializationFactory.registerClass(Block.class, new Block());
+        serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
 
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
         serializationFactory.registerClass(VersionMessage.class, new VersionMessage());
