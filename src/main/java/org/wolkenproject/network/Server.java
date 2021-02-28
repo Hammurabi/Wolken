@@ -170,6 +170,8 @@ public class Server implements Runnable {
     }
 
     public void shutdown() {
+        Logger.alert("closing connections.");
+
         Iterator<Node> nodeIterator = connectedNodes.iterator();
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
@@ -179,6 +181,7 @@ public class Server implements Runnable {
                 e.printStackTrace();
             }
         }
+        Logger.alert("closed connections.");
     }
 
     public NetAddress getNetAddress() {
