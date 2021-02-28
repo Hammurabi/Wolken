@@ -59,6 +59,7 @@ public class Server implements Runnable {
 
     private void listenForIncomingConnections()
     {
+        Logger.alert("listening for inbound connections.");
         Socket incoming = null;
         while (Context.getInstance().isRunning())
         {
