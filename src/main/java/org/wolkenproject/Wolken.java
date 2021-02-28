@@ -46,6 +46,7 @@ public class Wolken {
                 return;
             }
         }
+
         Context context = new Context(mainDirectory, isTestNet);
     }
 }
