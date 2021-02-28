@@ -13,6 +13,7 @@ public class Wolken {
 
         Options options = new Options();
         options.addOption("dir", true, "set the main directory for wolken, otherwise uses the execution directory.");
+        options.addOption("enable_testnet", true, "set the testnet to enabled/disabled.");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse( options, args);
