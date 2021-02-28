@@ -33,6 +33,7 @@ public class Server implements Runnable {
 
     public boolean connectToNodes(Queue<NetAddress> addresses)
     {
+        Logger.alert("establishing outbound connections.");
         int connections = 0;
 
         for (NetAddress address : addresses)
