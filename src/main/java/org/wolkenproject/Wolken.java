@@ -32,7 +32,24 @@ public class Wolken {
             }
         }
 
-        boolean     isTestNet       =;
+        boolean     isTestNet       = false;
+        if (cmd.hasOption("enable_testnet"))
+        {
+            String value = cmd.getOptionValue("enable_testnet").toLowerCase();
+            if (value.equals("true"))
+            {
+                isTestNet           = true;
+            }
+            else if (value.equals("false"))
+            {
+                isTestNet            = false;
+            }
+            else
+            {
+                Logger.faterr("provided argument '-enable_testnet " + cmd.getOptionValue("enable_testnet") + "' is invalid.");
+                return;
+            }
+        }
         Context context = new Context(mainDirectory, isTestNet);
     }
 }
