@@ -12,6 +12,8 @@ public class Wolken {
         CryptoLib.initialize();
 
         Options options = new Options();
+        options.addOption("dir", true, "set the main directory for wolken, otherwise uses the execution directory.");
+
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse( options, args);
 
