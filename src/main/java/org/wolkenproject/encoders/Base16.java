@@ -33,12 +33,12 @@ public class Base16 {
             int digit1 = s.charAt(i * 2), digit2 = s.charAt(i * 2 + 1);
             if (digit1 >= '0' && digit1 <= '9')
                 digit1 -= '0';
-            else if (digit1 >= 'A' && digit1 <= 'F')
-                digit1 -= 'A' - 10;
+            else if (digit1 >= 'a' && digit1 <= 'f')
+                digit1 -= 'a' - 10;
             if (digit2 >= '0' && digit2 <= '9')
                 digit2 -= '0';
-            else if (digit2 >= 'A' && digit2 <= 'F')
-                digit2 -= 'A' - 10;
+            else if (digit2 >= 'a' && digit2 <= 'f')
+                digit2 -= 'a' - 10;
 
             r[i] = (byte) ((digit1 << 4) + digit2);
         }
