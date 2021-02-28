@@ -2,6 +2,7 @@ package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
 import org.wolkenproject.network.messages.VersionMessage;
+import org.wolkenproject.utils.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,6 +26,8 @@ public class Server implements Runnable {
             netAddress = new NetAddress(socket.getInetAddress(), socket.getLocalPort(), Context.getInstance().getNetworkParameters().getServices());
             Context.getInstance().getIpAddressList().addAddress(netAddress);
         }
+
+        Logger.alert("opened port '" + Context.getInstance().getNetworkParameters().getPort() + "' on " + netAddress.getAddress().toString());
     }
 
     public boolean connectToNodes(Queue<NetAddress> addresses)
