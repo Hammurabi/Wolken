@@ -8,7 +8,8 @@ public class MessageCache {
     private Map<byte[], Integer> sentMessages;
 
     public MessageCache() {
-        receivedMessages = new HashMap<>();
+        receivedMessages    = new HashMap<>();
+        sentMessages        = new HashMap<>();
     }
 
     public int cacheReceivedMessage(Message message) {
