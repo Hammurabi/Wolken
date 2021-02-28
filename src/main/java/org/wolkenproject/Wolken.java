@@ -47,6 +47,12 @@ public class Wolken {
             }
         }
 
+        mainDirectory = mainDirectory.newFile("wolken");
+        if (!mainDirectory.exists())
+        {
+            mainDirectory.makeDirectory();
+        }
+
         Context context = new Context(mainDirectory, isTestNet);
     }
 }
