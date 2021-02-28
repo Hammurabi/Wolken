@@ -36,6 +36,7 @@ public class Wolken {
         boolean isTestNet = false;
         if (cmd.hasOption("enable_testnet")) {
             String value = cmd.getOptionValue("enable_testnet").toLowerCase();
+            // we could parse into a boolean here
             if (value.equals("true")) {
                 isTestNet = true;
             } else if (value.equals("false")) {
