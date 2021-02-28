@@ -16,8 +16,6 @@ public class Server implements Runnable {
 
     public Server() throws IOException {
         socket = new ServerSocket(Context.getInstance().getNetworkParameters().getPort());
-        connectedNodes = Collections.synchronizedSet(new LinkedHashSet<>());
-        connectToNodes(Context.getInstance().getIpAddressList().getAddresses());
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
 
         netAddress = Context.getInstance().getIpAddressList().getAddress(socket.getInetAddress());
@@ -28,6 +26,9 @@ public class Server implements Runnable {
         }
 
         Logger.alert("opened port '" + Context.getInstance().getNetworkParameters().getPort() + "' on " + netAddress.getAddress().toString());
+
+        connectedNodes = Collections.synchronizedSet(new LinkedHashSet<>());
+        connectToNodes(Context.getInstance().getIpAddressList().getAddresses());
     }
 
     public boolean connectToNodes(Queue<NetAddress> addresses)
