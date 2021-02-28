@@ -20,7 +20,15 @@ public class FileService {
     }
 
     public static FileService appDir() {
-        return new FileService(System.getProperty("user.home")).newFile("Applications");
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win"))
+        {
+            return new FileService(System.getProperty("user.home")).newFile("AppData").newFile("Roaming");
+        }
+        else {
+            return new FileService(System.getProperty("user.home")).newFile("Applications");
+        }
     }
 
     public long length() {
