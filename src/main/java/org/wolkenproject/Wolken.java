@@ -4,12 +4,15 @@ import org.apache.commons.cli.*;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.CryptoLib;
+import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Logger;
 
+import java.io.IOException;
+
 public class Wolken {
-    public static void main(String args[]) throws ParseException {
+    public static void main(String args[]) throws ParseException, WolkenException, IOException {
         CryptoLib.initialize();
 
         Options options = new Options();
