@@ -20,14 +20,12 @@ public class Wolken {
         options.addOption("enable_testnet", true, "set the testnet to enabled/disabled.");
 
         CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = parser.parse( options, args);
+        CommandLine cmd = parser.parse(options, args);
 
-        FileService mainDirectory   = FileService.appDir();
-        if (cmd.hasOption("dir"))
-        {
+        FileService mainDirectory = FileService.appDir();
+        if (cmd.hasOption("dir")) {
             FileService dir = new FileService(cmd.getOptionValue("dir"));
-            if (dir.exists())
-            {
+            if (dir.exists()) {
                 mainDirectory = dir;
             } else {
                 Logger.faterr("provided directory '" + cmd.getOptionValue("dir") + "' does not exist.");
@@ -35,20 +33,14 @@ public class Wolken {
             }
         }
 
-        boolean     isTestNet       = false;
-        if (cmd.hasOption("enable_testnet"))
-        {
+        boolean isTestNet = false;
+        if (cmd.hasOption("enable_testnet")) {
             String value = cmd.getOptionValue("enable_testnet").toLowerCase();
-            if (value.equals("true"))
-            {
-                isTestNet           = true;
-            }
-            else if (value.equals("false"))
-            {
-                isTestNet            = false;
-            }
-            else
-            {
+            if (value.equals("true")) {
+                isTestNet = true;
+            } else if (value.equals("false")) {
+                isTestNet = false;
+            } else {
                 Logger.faterr("provided argument '-enable_testnet " + cmd.getOptionValue("enable_testnet") + "' is invalid.");
                 return;
             }
