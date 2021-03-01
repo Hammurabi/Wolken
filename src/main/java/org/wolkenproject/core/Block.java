@@ -18,10 +18,10 @@ public class Block extends BlockHeader {
     private Set<TransactionI>   transactions;
 
     public Block() {
-        this(0, new byte[32], 0);
+        this(new byte[32], 0);
     }
 
-    public Block(int height, byte previousHash[], int bits)
+    public Block(byte previousHash[], int bits)
     {
         super(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], bits, 0);
     }
@@ -94,5 +94,8 @@ public class Block extends BlockHeader {
 
     public BigInteger getWork() throws WolkenException {
         return LargestHash.divide(ChainMath.targetIntegerFromBits(getBits()).add(BigInteger.ONE));
+    }
+
+    public void addTransaction(TransactionI transaction) {
     }
 }
