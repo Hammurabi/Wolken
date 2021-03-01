@@ -1,10 +1,12 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.exceptions.WolkenException;
+
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
-    private Block           tip;
+    private BlockIndex      tip;
     private byte[]          chainWork;
     private Queue<Block>    orphanedBlocks;
 
