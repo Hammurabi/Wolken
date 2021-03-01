@@ -21,16 +21,6 @@ public class Transaction extends TransactionI {
     private Input inputs[];
     private Output outputs[];
 
-    public Transaction(int flags, Input[] inputs, Output[] outputs)
-    {
-        this(Context.getInstance().getNetworkParameters().getVersion(), flags, inputs, outputs);
-    }
-
-    public Transaction(int version, int flags, Input[] inputs, Output[] outputs)
-    {
-        this(version, flags, 0, inputs, outputs);
-    }
-
     public Transaction(int version, int flags, int locktime, Input[] inputs, Output[] outputs)
     {
         this.version = version;
@@ -140,7 +130,6 @@ public class Transaction extends TransactionI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
-
     }
 
     @Override
