@@ -47,6 +47,11 @@ public abstract class TransactionI extends SerializableI {
                 // locktime calculated as timestamp
                 TimestampLockTime = 2
         ;
+
+        public static boolean hasLocktime(int flags)
+        {
+            return (flags & RelativeLockTime) == RelativeLockTime || (flags & TimestampLockTime) == TimestampLockTime;
+        }
     }
 
     public abstract int getVersion();
