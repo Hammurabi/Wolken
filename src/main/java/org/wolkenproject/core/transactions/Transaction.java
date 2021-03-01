@@ -152,6 +152,9 @@ public class Transaction extends TransactionI {
         for (int i = 0; i < numInputs; i ++) {
             inputs[i]   = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(Input.class), stream);
         }
+        for (int i = 0; i < numOutputs; i ++) {
+            outputs[i]  = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(Output.class), stream);
+        }
     }
 
     @Override
