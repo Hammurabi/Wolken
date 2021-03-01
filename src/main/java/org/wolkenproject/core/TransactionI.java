@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.wolkenproject.core.script.Script;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -14,7 +15,22 @@ public abstract class TransactionI extends SerializableI {
     public static TransactionI newCoinbase(int blockHeight, String s, long reward, Address addresses[]) {
         Input inputs[] = { new Input(new byte[UniqueIdentifierLength], 0, Utils.concatenate(Utils.takeApart(blockHeight), s.getBytes())) };
         Output outputs[] = new Output[addresses.length];
-        TransactionI transaction = new Transaction(0, 0, inputs, outputs);
+
+        long rewardPerAddress   = reward / addresses.length;
+        long change             = reward - (addresses.length * rewardPerAddress);
+
+        for (int i = 0; i < addresses.length; i ++)
+        {
+            long outputValue = rewardPerAddress;
+            if (i == 0)
+            {
+                outputValue += change;
+            }
+
+            outputs[i] = new Output(outputValue, Script.newP2PKH(addresses[i]));
+        }
+
+        return new Transaction(0, 0, Context.getInstance().getNetworkParameters().getCoinbaseLockTime(), inputs, outputs);
     }
 
     public static final class Flags
