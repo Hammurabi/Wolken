@@ -22,7 +22,8 @@ public class BlockChain implements Runnable {
     }
 
     public BlockIndex makeGenesisBlock() throws WolkenException {
-        Block genesis = new Block(0, new byte[Block.UniqueIdentifierLength], 0);
+        Block genesis = new Block(new byte[Block.UniqueIdentifierLength], 0);
+        genesis.addTransaction(TransactionI.newCoinbase(0, "", Context.getInstance().getNetworkParameters().getMaxReward(), Context.getInstance().getPayList()));
         return new BlockIndex(genesis, BigInteger.ZERO, 0);
     }
 
