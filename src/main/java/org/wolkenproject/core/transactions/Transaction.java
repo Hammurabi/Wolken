@@ -150,6 +150,10 @@ public class Transaction extends TransactionI {
         int numOutputs  = Utils.makeInt((byte) 0, (byte) 0, buffer[0], buffer[1]);
         this.inputs     = new Input[numInputs];
         this.outputs    = new Output[numOutputs];
+        for (int i = 0; i < numInputs; i ++)
+        {
+            inputs[i]   = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(Input.class), stream);
+        }
     }
 
     @Override
