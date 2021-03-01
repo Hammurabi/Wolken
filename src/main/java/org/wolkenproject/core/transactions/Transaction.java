@@ -119,7 +119,10 @@ public class Transaction extends TransactionI {
     public void write(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
-        Utils.writeInt(locktime, stream);
+        if (Flags.hasLocktime(flags))
+        {
+            Utils.writeInt(locktime, stream);
+        }
         Utils.writeUnsignedInt16(inputs.length, stream);
         Utils.writeUnsignedInt16(outputs.length, stream);
         for (Input input : inputs)
