@@ -13,7 +13,8 @@ public abstract class TransactionI extends SerializableI {
 
     public static TransactionI newCoinbase(int blockHeight, String s, long reward, Address addresses[]) {
         Input inputs[] = { new Input(new byte[UniqueIdentifierLength], 0, Utils.concatenate(Utils.takeApart(blockHeight), s.getBytes())) };
-        TransactionI transaction = new Transaction();
+        Output outputs[] = new Output[addresses.length];
+        TransactionI transaction = new Transaction(0, 0, inputs, outputs);
     }
 
     public static final class Flags
