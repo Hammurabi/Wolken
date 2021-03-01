@@ -47,7 +47,7 @@ public class Wolken {
             }
         }
 
-        mainDirectory = mainDirectory.newFile("wolken");
+        mainDirectory = mainDirectory.newFile("Wolken");
         if (!mainDirectory.exists())
         {
             mainDirectory.makeDirectory();
