@@ -145,6 +145,8 @@ public class Transaction extends TransactionI {
         int numInputs   = Utils.makeInt((byte) 0, (byte) 0, buffer[0], buffer[1]);
         stream.read(buffer, 0, 2);
         int numOutputs  = Utils.makeInt((byte) 0, (byte) 0, buffer[0], buffer[1]);
+        this.inputs     = new Input[numInputs];
+        this.outputs    = new Output[numOutputs];
     }
 
     @Override
