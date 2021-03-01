@@ -47,6 +47,7 @@ public class Context {
 
         serializationFactory.registerClass(Transaction.class, new Transaction(0, 0, 0, new Input[0], new Output[0]));
         serializationFactory.registerClass(Input.class, new Input(new byte[32], 0, new byte[1]));
+        serializationFactory.registerClass(Output.class, new Output(0, new byte[1]));
 
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
         serializationFactory.registerClass(VersionMessage.class, new VersionMessage());
