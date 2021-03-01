@@ -30,6 +30,9 @@ public class Block extends BlockHeader {
         return asByteArray().length;
     }
 
+    /*
+        returns a new block header
+     */
     public final BlockHeader getBlockHeader() {
         return new BlockHeader(getVersion(), getTimestamp(), getParentHash(), getMerkleRoot(), getBits(), getNonce());
     }
