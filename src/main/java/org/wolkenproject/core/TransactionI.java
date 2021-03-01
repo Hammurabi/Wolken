@@ -30,7 +30,7 @@ public abstract class TransactionI extends SerializableI {
             outputs[i] = new Output(outputValue, Script.newP2PKH(addresses[i]));
         }
 
-        return new Transaction(0, 0, Context.getInstance().getNetworkParameters().getCoinbaseLockTime(), inputs, outputs);
+        return new Transaction(0, Context.getInstance().getNetworkParameters().getCoinbaseLockTime(), inputs, outputs);
     }
 
     public static final class Flags
