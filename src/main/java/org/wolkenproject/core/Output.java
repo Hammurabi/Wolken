@@ -56,6 +56,10 @@ public class Output extends SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        byte buffer[]   = new byte[8];
+        stream.read(buffer);
+        this.value      = Utils.makeLong(buffer);
+        this.data       = new byte[Utils.makeInt((byte) 0, (byte) 0, buffer[0], buffer[1])];
     }
 
     public byte[] asByteArray() {
