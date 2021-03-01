@@ -131,6 +131,20 @@ public class Transaction extends TransactionI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        byte buffer[] = new byte[4];
+        stream.read(buffer);
+        this.version    = Utils.makeInt(buffer);
+        stream.read(buffer);
+        this.flags      = Utils.makeInt(buffer);
+        if (Flags.hasLocktime(flags))
+        {
+            stream.read(buffer);
+            this.locktime = Utils.makeInt(buffer);
+        }
+        stream.read(buffer, 0, 2);
+        int numInputs   = Utils.makeInt((byte) 0, (byte) 0, buffer[0], buffer[1]);
+        stream.read(buffer, 0, 2);
+        int numOutputs  = Utils.makeInt((byte) 0, (byte) 0, buffer[0], buffer[1]);
     }
 
     @Override
