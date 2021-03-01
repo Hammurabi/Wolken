@@ -1,8 +1,10 @@
 package org.wolkenproject.core;
 
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 
@@ -10,7 +12,8 @@ public abstract class TransactionI extends SerializableI {
     public static int UniqueIdentifierLength = 32;
 
     public static TransactionI newCoinbase(int blockHeight, String s, long reward, Address addresses[]) {
-        TransactionI transaction;
+        Input inputs[] = { new Input(new byte[UniqueIdentifierLength], 0, Utils.concatenate(Utils.takeApart(blockHeight), s.getBytes())) };
+        TransactionI transaction = new Transaction();
     }
 
     public static final class Flags
