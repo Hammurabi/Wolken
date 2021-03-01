@@ -5,6 +5,7 @@ import org.wolkenproject.network.messages.VersionMessage;
 import org.wolkenproject.utils.Logger;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -18,7 +19,7 @@ public class Server implements Runnable {
         socket = new ServerSocket(Context.getInstance().getNetworkParameters().getPort());
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
 
-        netAddress = Context.getInstance().getIpAddressList().getAddress(socket.getInetAddress());
+        netAddress = Context.getInstance().getIpAddressList().getAddress(InetAddress.getLocalHost());
         if (netAddress == null)
         {
             netAddress = new NetAddress(socket.getInetAddress(), socket.getLocalPort(), Context.getInstance().getNetworkParameters().getServices());
@@ -61,10 +62,12 @@ public class Server implements Runnable {
     {
         Logger.alert("listening for inbound connections.");
         Socket incoming = null;
+
         while (Context.getInstance().isRunning())
         {
             try {
                 incoming = socket.accept();
+
                 if (connectedNodes.size() < (Context.getInstance().getNetworkParameters().getMaxAllowedInboundConnections() + Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections()))
                 {
                     connectedNodes.add(new Node(incoming));
