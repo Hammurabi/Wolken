@@ -28,9 +28,10 @@ public class Context {
     private SerializationFactory    serializationFactory;
     private TransactionPool         transactionPool;
     private Server                  server;
+    private Address                 payList[];
     private FileService             fileService;
 
-    public Context(FileService service, boolean testNet) throws WolkenException, IOException {
+    public Context(FileService service, boolean testNet, Address[] payList) throws WolkenException, IOException {
         Context.instance            = this;
         this.database               = new Database(service.newFile("db"));
         this.networkParameters      = new NetworkParameters(testNet);
@@ -39,6 +40,7 @@ public class Context {
         this.ipAddressList          = new IpAddressList(service.newFile("peers"));
         this.serializationFactory   = new SerializationFactory();
         this.transactionPool        = new TransactionPool();
+        this.payList                = payList;
         this.fileService            = service;
 
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
@@ -104,5 +106,9 @@ public class Context {
 
     public TransactionPool getTransactionPool() {
         return transactionPool;
+    }
+
+    public Address[] getPayList() {
+        return payList;
     }
 }
