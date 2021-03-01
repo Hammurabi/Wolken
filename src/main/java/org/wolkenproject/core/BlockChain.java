@@ -19,4 +19,14 @@ public class BlockChain implements Runnable {
     @Override
     public void run() {
     }
+
+    public BlockIndex makeBlock() throws WolkenException {
+        lock.lock();
+        try {
+            return tip.generateNextBlock();
+        }
+        finally {
+            lock.unlock();
+        }
+    }
 }
