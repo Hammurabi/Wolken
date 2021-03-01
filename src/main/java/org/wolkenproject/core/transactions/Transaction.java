@@ -21,6 +21,11 @@ public class Transaction extends TransactionI {
     private Input inputs[];
     private Output outputs[];
 
+    public Transaction(int flags, Input[] inputs, Output[] outputs)
+    {
+        this(Context.getInstance().getNetworkParameters().getVersion(), flags, inputs, outputs);
+    }
+
     public Transaction(int version, int flags, Input[] inputs, Output[] outputs)
     {
         this(version, flags, 0, inputs, outputs);
