@@ -59,6 +59,7 @@ public class Output extends SerializableI {
         byte buffer[]   = new byte[8];
         stream.read(buffer);
         this.value      = Utils.makeLong(buffer);
+        stream.read(buffer, 0, 2);
         this.data       = new byte[Utils.makeInt((byte) 0, (byte) 0, buffer[0], buffer[1])];
     }
 
