@@ -9,6 +9,10 @@ import java.io.IOException;
 public abstract class TransactionI extends SerializableI {
     public static int UniqueIdentifierLength = 32;
 
+    public static TransactionI newCoinbase(int blockHeight, String s, long reward, Address addresses[]) {
+        TransactionI transaction;
+    }
+
     public static final class Flags
     {
         public static final int
