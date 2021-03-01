@@ -8,6 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -130,7 +131,7 @@ public class Node {
     }
 
     public InetAddress getInetAddress() {
-        return socket.getInetAddress();
+        return ((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress();
     }
 
     public MessageCache getMessageCache()
