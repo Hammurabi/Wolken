@@ -1,11 +1,12 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
 
 import java.nio.ByteBuffer;
 
-public class Output {
+public class Output extends SerializableI {
     private long value;
     private byte data[];
 
