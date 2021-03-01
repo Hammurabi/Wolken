@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
 
+import java.math.BigInteger;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,6 +19,11 @@ public class BlockChain implements Runnable {
 
     @Override
     public void run() {
+    }
+
+    public BlockIndex makeGenesisBlock() throws WolkenException {
+        Block genesis = new Block(0, new byte[Block.UniqueIdentifierLength], 0);
+        return new BlockIndex(genesis, BigInteger.ZERO, 0);
     }
 
     public BlockIndex makeBlock() throws WolkenException {
