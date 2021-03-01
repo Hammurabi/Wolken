@@ -4,6 +4,9 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 public class Output extends SerializableI {
@@ -44,7 +47,28 @@ public class Output extends SerializableI {
         return data;
     }
 
+    @Override
+    public void write(OutputStream stream) throws IOException, WolkenException {
+        Utils.writeLong(value, stream);
+        Utils.writeUnsignedInt16(data.length, stream);
+        stream.write(data);
+    }
+
+    @Override
+    public void read(InputStream stream) throws IOException, WolkenException {
+    }
+
     public byte[] asByteArray() {
         return Utils.concatenate(Utils.takeApartLong(value), Utils.takeApart(data.length), data);
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return null;
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(Output.class);
     }
 }
