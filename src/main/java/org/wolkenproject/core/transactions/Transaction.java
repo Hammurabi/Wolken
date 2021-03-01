@@ -127,6 +127,9 @@ public class Transaction extends TransactionI {
         for (Input input : inputs) {
             input.write(stream);
         }
+        for (Output output : outputs) {
+            output.write(stream);
+        }
     }
 
     @Override
