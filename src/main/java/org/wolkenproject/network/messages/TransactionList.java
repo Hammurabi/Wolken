@@ -18,18 +18,15 @@ import java.util.Set;
 
 public class TransactionList extends ResponseMessage {
     private Set<TransactionI>   transactions;
-    private byte                requester[];
 
     public TransactionList(int version, Collection<TransactionI> transactions, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
         this.transactions   = new LinkedHashSet<>(transactions);
-        this.requester      = uniqueMessageIdentifier;
     }
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(transactions.size(), stream);
-        stream.write(requester);
         for (TransactionI transaction : transactions)
         {
             transaction.write(stream);
@@ -40,7 +37,6 @@ public class TransactionList extends ResponseMessage {
     public void readContents(InputStream stream) throws IOException, WolkenException {
         byte buffer[] = new byte[4];
         stream.read(buffer);
-        stream.read(requester);
         int length = Utils.makeInt(buffer);
 
         for (int i = 0; i < length; i ++)
