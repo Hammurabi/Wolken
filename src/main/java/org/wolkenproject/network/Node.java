@@ -10,17 +10,21 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Node {
-    private Socket          socket;
-    private ReentrantLock   mutex;
-    private Queue<Message>  messages;
-    private MessageCache    messageCache;
-    private long            firstConnected;
-    private int             errors;
+    private Socket                  socket;
+    private ReentrantLock           mutex;
+    private Queue<Message>          messages;
+    private Map<byte[], Message>    respones;
+    private MessageCache            messageCache;
+    private long                    firstConnected;
+    private int                     errors;
 
     private BufferedInputStream     inputStream;
     private BufferedOutputStream    outputStream;
@@ -40,13 +44,14 @@ public class Node {
         this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
         this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
         this.firstConnected = System.currentTimeMillis();
+        this.respones       = Collections.synchronizedMap(new HashMap<>());
     }
 
     public Message getResponse(Message message, long timeOut) {
-        mutex.lock();
         boolean shouldWait = false;
         byte id[] = message.getUniqueMessageIdentifier();
 
+        mutex.lock();
         try{
             if (messageCache.shouldSend(message))
             {
@@ -68,6 +73,15 @@ public class Node {
         }
 
         return response;
+    }
+
+    private boolean hasResponse(byte[] uniqueMessageIdentifier) {
+        mutex.lock();
+        try{
+            return respones.containsKey(uniqueMessageIdentifier);
+        } finally {
+            mutex.unlock();
+        }
     }
 
     /*
