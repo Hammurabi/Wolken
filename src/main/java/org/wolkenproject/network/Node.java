@@ -2,6 +2,7 @@ package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Node {
@@ -47,7 +49,7 @@ public class Node {
         this.respones       = Collections.synchronizedMap(new HashMap<>());
     }
 
-    public Message getResponse(Message message, long timeOut) {
+    public Message getResponse(Message message, long timeOut) throws WolkenTimeoutException {
         boolean shouldWait = false;
         byte id[] = message.getUniqueMessageIdentifier();
 
@@ -70,6 +72,8 @@ public class Node {
                     return getResponse(id);
                 }
             }
+
+            throw new WolkenTimeoutException("timed out while waiting for response");
         }
 
         return null;
