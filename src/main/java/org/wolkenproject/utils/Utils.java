@@ -77,12 +77,12 @@ public class Utils {
         return makeLong(trim[0], trim[1], trim[2], trim[3], trim[4], trim[5], trim[6], trim[7]);
     }
 
-    public static byte[] trim(byte[] bytes, int i, int i1) {
-        byte new_bytes[]    = new byte[i1 - i];
+    public static byte[] trim(byte[] bytes, int offset, int length) {
+        byte new_bytes[]    = new byte[length];
 
         int free            = 0;
 
-        for(int index = i; index < i1; index ++)
+        for(int index = offset; index < (offset + length); index ++)
             new_bytes[free ++] = bytes[index];
         return new_bytes;
     }
