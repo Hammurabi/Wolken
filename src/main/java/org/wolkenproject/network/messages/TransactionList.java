@@ -27,10 +27,6 @@ public class TransactionList extends ResponseMessage {
     }
 
     @Override
-    public void executePayload(Server server, Node node) {
-    }
-
-    @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(transactions.size(), stream);
         stream.write(requester);
