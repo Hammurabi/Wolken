@@ -49,7 +49,16 @@ public class Node {
         this.respones       = Collections.synchronizedMap(new HashMap<>());
     }
 
-    public void sendResponse(Message message) {
+    public void receiveResponse(Message message) {
+        mutex.lock();
+        try{
+            if (messageCache.shouldSend(message))
+            {
+                messages.add(message);
+            }
+        } finally {
+            mutex.unlock();
+        }
     }
 
     public Message getResponse(Message message, long timeOut) throws WolkenTimeoutException {
