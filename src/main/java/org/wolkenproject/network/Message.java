@@ -40,15 +40,18 @@ public abstract class Message extends SerializableI {
     public void writeHeader(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
+//        Utils.writeLong(nonce, stream);
         stream.flush();
     }
 
     public void readHeader(InputStream stream) throws IOException, WolkenException {
-        byte buffer[] = new byte[4];
-        stream.read(buffer);
+        byte buffer[] = new byte[8];
+        stream.read(buffer, 0, 4);
         version = Utils.makeInt(buffer);
-        stream.read(buffer);
+        stream.read(buffer, 0, 4);
         flags = Utils.makeInt(buffer);
+//        stream.read(buffer);
+//        nonce = Utils.makeLong(buffer);
     }
 
     @Override
@@ -88,9 +91,9 @@ public abstract class Message extends SerializableI {
         return flags;
     }
 
-    public long getNonce() {
-        return nonce;
-    }
+//    public long getNonce() {
+//        return nonce;
+//    }
 
     public abstract void writeContents(OutputStream stream) throws IOException, WolkenException;
 
