@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
@@ -37,7 +38,10 @@ public class BlockIndex extends SerializableI {
     }
 
     public BlockIndex generateNextBlock() throws WolkenException {
-        return new BlockIndex(new Block(), chainWork.add(block.getWork()), height + 1);
+        int bits                = ChainMath.calculateNewTarget(block);
+        BlockIndex blockIndex   = new BlockIndex(new Block(block.getHashCode(), bits), chainWork.add(block.getWork()), height + 1);
+
+        return blockIndex;
     }
 
     @Override
