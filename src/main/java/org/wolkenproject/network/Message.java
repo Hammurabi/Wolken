@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.SecureRandom;
 
 public abstract class Message extends SerializableI {
     public static final class Flags {
@@ -22,10 +23,16 @@ public abstract class Message extends SerializableI {
 
     private int     version;
     private int     flags;
+    private long    nonce;
 
     public Message(int version, int flags) {
-        this.version = version;
-        this.flags = flags;
+        this(version, flags, new SecureRandom().nextLong());
+    }
+
+    public Message(int version, int flags, long nonce) {
+        this.version    = version;
+        this.flags      = flags;
+        this.nonce      = nonce;
     }
 
     public abstract void executePayload(Server server, Node node);
@@ -79,6 +86,10 @@ public abstract class Message extends SerializableI {
 
     public int getFlags() {
         return flags;
+    }
+
+    public long getNonce() {
+        return nonce;
     }
 
     public abstract void writeContents(OutputStream stream) throws IOException, WolkenException;
