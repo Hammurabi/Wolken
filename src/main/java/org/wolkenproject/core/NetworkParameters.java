@@ -95,12 +95,20 @@ public class NetworkParameters {
         return 1___________00_000_000_000L;
     }
 
+    public byte getGenericMainnetAddressPrefix() {
+        return 53;
+    }
+
+    public byte getGenericTestnetAddressPrefix() {
+        return 43;
+    }
+
     public byte getGenericAddressPrefix() {
         if (isTestNet) {
-            return 43;
+            getGenericTestnetAddressPrefix();
         }
 
-        return 53;
+        return getGenericMainnetAddressPrefix();
     }
 
     public byte getContractAddressPrefix() {
