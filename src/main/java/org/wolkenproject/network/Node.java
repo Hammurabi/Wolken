@@ -62,17 +62,17 @@ public class Node {
             mutex.unlock();
         }
 
-        Message response = null;
         if (shouldWait) {
             long lastCheck = System.currentTimeMillis();
 
             while (System.currentTimeMillis() - lastCheck < timeOut) {
-                if (hasResponse(message.getUniqueMessageIdentifier())) {
+                if (hasResponse(id)) {
+                    return getResponse(id);
                 }
             }
         }
 
-        return response;
+        return null;
     }
 
     private boolean hasResponse(byte[] uniqueMessageIdentifier) {
