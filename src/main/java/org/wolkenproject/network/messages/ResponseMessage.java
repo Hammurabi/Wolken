@@ -30,6 +30,12 @@ public abstract class ResponseMessage extends Message {
     }
 
     @Override
+    public void readHeader(InputStream stream) throws IOException, WolkenException {
+        super.readHeader(stream);
+        stream.read(requester);
+    }
+
+    @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return null;
     }
