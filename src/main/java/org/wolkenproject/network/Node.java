@@ -84,6 +84,15 @@ public class Node {
         }
     }
 
+    private Message getResponse(byte[] uniqueMessageIdentifier) {
+        mutex.lock();
+        try{
+            return respones.get(uniqueMessageIdentifier);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
     /*
         Sends a message only if it was not sent before.
      */
