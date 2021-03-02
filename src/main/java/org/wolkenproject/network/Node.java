@@ -49,6 +49,9 @@ public class Node {
         this.respones       = Collections.synchronizedMap(new HashMap<>());
     }
 
+    public void sendResponse(Message message) {
+    }
+
     public Message getResponse(Message message, long timeOut) throws WolkenTimeoutException {
         boolean shouldWait = false;
         byte id[] = message.getUniqueMessageIdentifier();
