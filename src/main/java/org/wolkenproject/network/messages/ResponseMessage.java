@@ -24,11 +24,9 @@ public abstract class ResponseMessage extends Message {
     }
 
     @Override
-    public void writeContents(OutputStream stream) throws IOException, WolkenException {
-    }
-
-    @Override
-    public void readContents(InputStream stream) throws IOException, WolkenException {
+    public void writeHeader(OutputStream stream) throws IOException, WolkenException {
+        super.writeHeader(stream);
+        stream.write(requester);
     }
 
     @Override
