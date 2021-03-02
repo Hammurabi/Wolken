@@ -63,10 +63,15 @@ public class Wolken {
             String addresses[] = value.split(",");
             address = new Address[addresses.length];
 
+            int i = 0;
             for (String b58 : addresses) {
-                if (!Address.isValidAddress(Base58.decode(b58))) {
+                byte bytes[] = Base58.decode(b58);
+
+                if (!Address.isValidAddress(bytes)) {
                     throw new WolkenException("invalid address '" + b58 + "' provided.");
                 }
+
+                address[i ++] = new Address(bytes);
             }
         }
 
