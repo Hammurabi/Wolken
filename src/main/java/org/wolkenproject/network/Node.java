@@ -42,6 +42,34 @@ public class Node {
         this.firstConnected = System.currentTimeMillis();
     }
 
+    public Message getResponse(Message message, long timeOut) {
+        mutex.lock();
+        boolean shouldWait = false;
+        byte id[] = message.getUniqueMessageIdentifier();
+
+        try{
+            if (messageCache.shouldSend(message))
+            {
+                messages.add(message);
+                shouldWait = true;
+            }
+        } finally {
+            mutex.unlock();
+        }
+
+        Message response = null;
+        if (shouldWait) {
+            long lastCheck = System.currentTimeMillis();
+
+            while (System.currentTimeMillis() - lastCheck < timeOut) {
+                if (hasResponse(message.getUniqueMessageIdentifier())) {
+                }
+            }
+        }
+
+        return response;
+    }
+
     /*
         Sends a message only if it was not sent before.
      */
