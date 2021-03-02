@@ -16,12 +16,12 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class TransactionList extends Message {
+public class TransactionList extends ResponseMessage {
     private Set<TransactionI>   transactions;
     private byte                requester[];
 
     public TransactionList(int version, Collection<TransactionI> transactions, byte[] uniqueMessageIdentifier) {
-        super(version, Flags.Response);
+        super(version, uniqueMessageIdentifier);
         this.transactions   = new LinkedHashSet<>(transactions);
         this.requester      = uniqueMessageIdentifier;
     }
