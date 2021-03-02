@@ -17,15 +17,22 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class TransactionList extends Message {
-    private Set<TransactionI> transactions;
+    private Set<TransactionI>   transactions;
+    private byte                requester[];
 
     public TransactionList(int version, Collection<TransactionI> transactions) {
+        this(version, transactions, null);
+    }
+
+    public TransactionList(int version, Collection<TransactionI> transactions, byte[] uniqueMessageIdentifier) {
         super(version, Flags.Response);
-        this.transactions = new LinkedHashSet<>(transactions);
+        this.transactions   = new LinkedHashSet<>(transactions);
+        this.requester      = uniqueMessageIdentifier;
     }
 
     @Override
     public void executePayload(Server server, Node node) {
+        node.receiveResponse(this, requester);
     }
 
     @Override
@@ -56,7 +63,7 @@ public class TransactionList extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new TransactionList(getVersion(), transactions);
+        return (Type) new TransactionList(getVersion(), transactions, getUniqueMessageIdentifier());
     }
 
     @Override
