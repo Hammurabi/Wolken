@@ -2,10 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.network.IpAddressList;
-import org.wolkenproject.network.NetAddress;
-import org.wolkenproject.network.Server;
-import org.wolkenproject.network.VersionInformation;
+import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
@@ -56,7 +53,7 @@ public class Context {
         serializationFactory.registerClass(VersionInformation.class, new VersionInformation());
         serializationFactory.registerClass(RequestInv.class, new RequestInv(0));
         serializationFactory.registerClass(Inv.class, new Inv(0, 0, new LinkedHashSet<>()));
-        serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>()));
+        serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(RequestTransactions.class, new RequestTransactions(0, new LinkedHashSet<>()));
 
         this.server                 = new Server();
