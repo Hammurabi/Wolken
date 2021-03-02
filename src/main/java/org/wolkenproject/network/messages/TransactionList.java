@@ -28,7 +28,6 @@ public class TransactionList extends ResponseMessage {
 
     @Override
     public void executePayload(Server server, Node node) {
-        node.receiveResponse(this, requester);
     }
 
     @Override
