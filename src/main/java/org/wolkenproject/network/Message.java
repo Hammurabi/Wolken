@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.security.SecureRandom;
 
 public abstract class Message extends SerializableI {
+    public static final int UniqueIdentifierLength = 20;
     public static final class Flags {
         public static final int
                 None = 0,
