@@ -49,13 +49,10 @@ public class Node {
         this.respones       = Collections.synchronizedMap(new HashMap<>());
     }
 
-    public void receiveResponse(Message message) {
+    public void receiveResponse(Message message, byte origin[]) {
         mutex.lock();
         try{
-            if (messageCache.shouldSend(message))
-            {
-                messages.add(message);
-            }
+            respones.put(origin, message);
         } finally {
             mutex.unlock();
         }
@@ -105,6 +102,7 @@ public class Node {
         try{
             return respones.get(uniqueMessageIdentifier);
         } finally {
+            respones.remove(uniqueMessageIdentifier);
             mutex.unlock();
         }
     }
