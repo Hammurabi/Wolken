@@ -116,6 +116,6 @@ public class Context {
     }
 
     public BlockChain getBlockChain() {
-        return chai;
+        return blockChain;
     }
 }
