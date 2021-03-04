@@ -45,4 +45,9 @@ public abstract class ResponseMessage extends Message {
     protected byte[] getRequester() {
         return requester;
     }
+
+    @Override
+    public ResponseMetadata getResponseMetadata() {
+        return null;
+    }
 }
