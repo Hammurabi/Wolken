@@ -93,6 +93,8 @@ public class RequestBlocks extends Message {
                 return false;
             }
 
+            Collection<BlockIndex> blocks = msg.getPayload();
+
             return ;
         };
     }
