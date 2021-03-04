@@ -40,6 +40,11 @@ public class VerackMessage extends Message {
     }
 
     @Override
+    public <Type> Type getPayload() {
+        return (Type) versionInformation;
+    }
+
+    @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return null;
     }
