@@ -233,14 +233,20 @@ public class Server implements Runnable {
         return broadcastRequest(request, Context.getInstance().getNetworkParameters().getMessageTimeout());
     }
 
-    public Message broadcastRequest(Message request, long timeOut) {
+    public Message broadcastRequest(Message request, boolean fullResponse, long timeOut) {
         Set<Node> connectedNodes = getConnectedNodes();
         for (Node node : connectedNodes) {
             try {
                 Message response = node.getResponse(request, timeOut);
                 if (response != null) {
-                    if (response.containsResponse()) {
-                        return response;
+                    if (fullResponse) {
+                        if (response.containsFullResponse()) {
+                            return response;
+                        }
+                    } else {
+                        if (response.containsResponse()) {
+                            return response;
+                        }
                     }
                 }
             } catch (WolkenTimeoutException e) {
