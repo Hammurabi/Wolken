@@ -3,5 +3,8 @@ package org.wolkenproject.network;
 import org.wolkenproject.network.messages.ResponseMessage;
 
 public interface ResponseMetadata {
-    boolean isResponseValid(Message responseMessage);
+    public static final class ValidationBits {
+    }
+
+    int isResponseValid(Message responseMessage);
 }
