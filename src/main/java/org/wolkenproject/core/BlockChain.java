@@ -56,27 +56,25 @@ public class BlockChain implements Runnable {
                     setBlockIndex(tip.getHeight(), tip);
 
                     Logger.alert("downloading blocks{"+block.getHeight()+"}");
-                    while (block != null) {
-                        if (block.getHeight() > 0) {
-                            // request the parent of this block
-                            BlockIndex parent = requestBlock(block.getBlock().getParentHash());
+                    while (block.getHeight() > 0) {
+                        // request the parent of this block
+                        BlockIndex parent = requestBlock(block.getBlock().getParentHash());
 
-                            // delete the downloaded chain if we cannot find the block
-                            if (parent == null) {
-                                Logger.alert("requested block{"+Base16.encode(block.getBlock().getParentHash())+"} not found.");
-                                Logger.alert("erasing{"+(getTip().getHeight() - block.getHeight())+"} blocks");
-                                
-                                for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
-                                    Context.getInstance().getDatabase().deleteBlock(i);
-                                }
+                        // delete the downloaded chain if we cannot find the block
+                        if (parent == null) {
+                            Logger.alert("requested block{"+Base16.encode(block.getBlock().getParentHash())+"} not found.");
+                            Logger.alert("erasing{"+(getTip().getHeight() - block.getHeight())+"} blocks");
 
-                                tip = null;
-                                break;
+                            for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
+                                Context.getInstance().getDatabase().deleteBlock(i);
                             }
 
-                            block = parent;
-                            setBlockIndex(block.getHeight(), block);
+                            tip = null;
+                            break;
                         }
+
+                        block = parent;
+                        setBlockIndex(block.getHeight(), block);
                     }
 
                     Logger.alert("chain downloaded successfully");
