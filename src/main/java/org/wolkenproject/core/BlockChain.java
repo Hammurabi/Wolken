@@ -117,6 +117,10 @@ public class BlockChain implements Runnable {
 
         // calculate the maximum blocks allowed in the queue.
         int maximumBlocks = MaximumBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+
+        // remove any blocks that are too far back in the queue.
+        if (orphanedBlocks.size() > maximumBlocks) {
+        }
     }
 
     public BlockIndex makeGenesisBlock() throws WolkenException {
