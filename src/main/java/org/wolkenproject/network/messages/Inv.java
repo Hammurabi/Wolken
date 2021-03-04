@@ -6,6 +6,7 @@ import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Tuple;
@@ -132,6 +133,11 @@ public class Inv extends Message {
     @Override
     public <Type> Type getPayload() {
         return (Type) new Tuple(list, type);
+    }
+
+    @Override
+    public ResponseMetadata getResponseMetadata() {
+        return null;
     }
 
     @Override
