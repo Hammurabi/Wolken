@@ -49,6 +49,7 @@ public class BlockChain implements Runnable {
     private void rollback(BlockIndex block) {
         BlockIndex currentBlock = tip;
         deleteBlockIndex(currentBlock, true);
+
         while (currentBlock.getHeight() != block.getHeight()) {
             currentBlock = currentBlock.previousBlock();
             deleteBlockIndex(currentBlock, true);
