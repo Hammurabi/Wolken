@@ -122,7 +122,8 @@ public class Node implements Runnable {
                 return null;
             }
 
-            int flags = metadata.isResponseValid(response);
+            int flags = metadata.getResponseFlag(response);
+
             // check that the response is appropriate
             if ((flags & ResponseMetadata.ValidationBits.InvalidType) == ResponseMetadata.ValidationBits.InvalidType) {
                 errors ++;
