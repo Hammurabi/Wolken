@@ -26,6 +26,9 @@ public class BlockChain implements Runnable {
             while (!blockPool.isEmpty()) {
                 BlockIndex block = blockPool.poll();
                 if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
+                    // switch to this chain if it's valid
+                    if (block.validate()) {
+                    }
                 }
             }
         } finally {
