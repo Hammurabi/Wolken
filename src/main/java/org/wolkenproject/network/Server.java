@@ -46,7 +46,7 @@ public class Server implements Runnable {
         for (NetAddress address : addresses)
         {
             try {
-                Socket socket = new Socket(address.getAddress(), address.getPort());
+                SocketChannel socket = SocketChannel.open();
                 Node node = new Node(socket);
                 connectedNodes.add(node);
 
