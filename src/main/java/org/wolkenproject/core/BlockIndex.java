@@ -150,7 +150,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     @Override
     public String toString() {
         try {
-            return "BlockIndex{" +
+            return "{" +
                     "block=" + Base16.encode(block.getHashCode()) +
                     ", chainWork=" + getChainWork() +
                     ", height=" + height +
