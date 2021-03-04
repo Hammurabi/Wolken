@@ -114,19 +114,19 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
             int compare = getChainWork().compareTo(other.getChainWork());
 
             if (compare > 0) {
-                return 1;
+                return -1;
             }
 
             if (compare < 0) {
-                return -1;
-            }
-
-            if (getSequenceId() < other.getSequenceId()) {
                 return 1;
             }
 
-            if (getSequenceId() > other.getSequenceId()) {
+            if (getSequenceId() < other.getSequenceId()) {
                 return -1;
+            }
+
+            if (getSequenceId() > other.getSequenceId()) {
+                return 1;
             }
 
             if (getBlock().getTransactionCount() > other.getBlock().getTransactionCount()) {
