@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MessageCache {
-    private Map<byte[], Integer> receivedMessages;
-    private Map<byte[], Integer> sentMessages;
+    private Map<byte[], Integer>    receivedMessages;
+    private Map<byte[], Integer>    sentMessages;
+    private double                  spamAverage;
 
     public MessageCache() {
         receivedMessages    = new HashMap<>();
         sentMessages        = new HashMap<>();
+        spamAverage         = 0;
     }
 
     public int cacheReceivedMessage(Message message) {
@@ -57,7 +59,7 @@ public class MessageCache {
             numTimes += integer.doubleValue();
         }
 
-        return (numTimes / receivedMessages.size()) - 1.0;
+        return ((numTimes / receivedMessages.size()) - 1.0) + spamAverage;
     }
 
     public void clearOutboundCache()
@@ -84,5 +86,9 @@ public class MessageCache {
     public int outboundCacheSize()
     {
         return sentMessages.size() * 40;
+    }
+
+    public void increaseSpamAverage(double spam) {
+        spamAverage += spam;
     }
 }
