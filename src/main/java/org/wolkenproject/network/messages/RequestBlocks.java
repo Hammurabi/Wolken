@@ -108,13 +108,13 @@ public class RequestBlocks extends Message {
                 response |= ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
-            if (checked == this.blocks.size()) {
-                response |= ResponseMetadata.ValidationBits.FullResponse;
-            }
-
             if (checked != this.blocks.size()) {
                 response |= ResponseMetadata.ValidationBits.PartialResponse;
                 response |= ResponseMetadata.ValidationBits.InvalidResponse;
+            }
+
+            if (checked == this.blocks.size() && response != 0) {
+                response |= ResponseMetadata.ValidationBits.EntireResponse;
             }
 
             return response;
