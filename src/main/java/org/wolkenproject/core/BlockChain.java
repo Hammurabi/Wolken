@@ -84,6 +84,7 @@ public class BlockChain implements Runnable {
     }
 
     private void replaceBlockIndex(int height, BlockIndex block) {
+        BlockIndex previousIndex = Context.getInstance().getDatabase().findBlock(height);
         Context.getInstance().getDatabase().setBlockIndex(height, block);
     }
 
