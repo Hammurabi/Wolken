@@ -243,11 +243,12 @@ public class Server implements Runnable {
             try {
                 Message response = node.getResponse(request, timeOut);
                 if (response != null) {
-                    if (fullResponse) {
-                        if (response.containsFullResponse()) {
+                    if (response.containsFullResponse()) {
                             return response;
-                        }
                     } else {
+                        if (fullResponse) {
+                            continue;
+                        }
                         if (response.containsResponse()) {
                             return response;
                         }
