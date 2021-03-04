@@ -68,7 +68,17 @@ public class SolidStateCollection<T extends SerializableI> {
 
             @Override
             public T next() {
-                return null;
+                int index = this.index ++;
+
+                if ((index + 1) % maxItemsInRam == 0) {
+                    try {
+                        chunk = loadChunk(index / maxItemsInRam);
+                    } catch (IOException | WolkenException e) {
+                        return null;
+                    }
+                }
+
+                return chunk[index % maxItemsInRam];
             }
         };
     }
