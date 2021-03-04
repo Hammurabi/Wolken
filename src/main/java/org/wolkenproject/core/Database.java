@@ -168,4 +168,8 @@ public class Database {
             mutex.unlock();
         }
     }
+
+    public BlockIndex findTip() {
+        return null;
+    }
 }
