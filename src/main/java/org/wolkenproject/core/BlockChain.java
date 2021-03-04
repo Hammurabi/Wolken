@@ -139,21 +139,19 @@ public class BlockChain implements Runnable {
     }
 
     private void addOrphan(BlockIndex block) {
-        int maximumBlocks = 0;
-
         lock.lock();
         try {
             orphanedBlocks.add(block);
 
             // calculate the maximum blocks allowed in the queue.
-            maximumBlocks = MaximumBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int maximumBlocks = MaximumBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+
+            // remove any blocks that are too far back in the queue.
+            if (orphanedBlocks.size() > maximumBlocks) {
+                trimOrphans(orphanedBlocks.size() - maximumBlocks);
+            }
         } finally {
             lock.unlock();
-        }
-
-        // remove any blocks that are too far back in the queue.
-        if (orphanedBlocks.size() > maximumBlocks) {
-            trimOrphans(orphanedBlocks.size() - maximumBlocks);
         }
     }
 
