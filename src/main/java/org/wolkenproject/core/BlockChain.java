@@ -54,11 +54,17 @@ public class BlockChain implements Runnable {
                     Logger.alert("settings new tip" + block);
                     tip = block;
 
-                    Logger.alert("downloading previous chain{size:"+block.getHeight()+"}");
+                    Logger.alert("downloading blocks{"+block.getHeight()+"}");
                     while (block != null) {
                         if (block.getHeight() > 0) {
                             // request the parent of this block
                             BlockIndex parent = requestBlock(block.getBlock().getParentHash());
+
+                            if (parent == null) {
+                                Logger.alert("requested block{"+Base16.encode(block.getBlock().getParentHash())+"} not found.");
+                                for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
+                                }
+                            }
                         }
                     }
                     Logger.alert("chain downloaded successfully");
