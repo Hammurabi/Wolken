@@ -1,0 +1,12 @@
+package org.wolkenproject.utils;
+
+public class Logger {
+    public static void faterr(String msg)
+    {
+        System.err.println(msg);
+    }
+
+    public static void alert(String msg) {
+        System.out.println(msg);
+    }
+}
