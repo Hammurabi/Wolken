@@ -237,11 +237,14 @@ public class Node implements Runnable {
 
                 byte msg[] = outputStream.toByteArray();
                 int offset = 0;
+
                 while (offset < msg.length) {
                     buffer.clear();
-                    buffer.put(msg, offset, buffer.capacity());
+                    buffer.put(msg, offset, Context.getInstance().getNetworkParameters().getBufferSize());
                     buffer.flip();
-                    offset += socket.write(buffer);
+                    while (buffer.hasRemaining()) {
+                        offset += socket.write(buffer);
+                    }
                 }
             }
         } catch (IOException | WolkenException e) {
