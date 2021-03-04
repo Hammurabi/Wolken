@@ -23,9 +23,10 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public BlockIndex(Block block, BigInteger chainWork, int height) {
-        this.block = block;
-        this.chainWork = chainWork;
-        this.height = height;
+        this.block      = block;
+        this.hash       = block.getHashCode();
+        this.chainWork  = chainWork;
+        this.height     = height;
         this.sequenceId = 0;
     }
 
