@@ -46,6 +46,7 @@ public class Node implements Runnable {
     public Node(SocketChannel socket) throws IOException {
         this.socket         = socket;
         this.mutex          = new ReentrantLock();
+        this.messageQueue   = new ConcurrentLinkedQueue<>();
         this.messages       = new ConcurrentLinkedQueue<>();
         this.messageCache   = new MessageCache();
         this.errors         = 0;
