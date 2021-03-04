@@ -7,6 +7,7 @@ import org.wolkenproject.utils.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -148,9 +149,32 @@ public class Node implements Runnable {
                 return null;
             }
 
+            int read = socket.read(buffer);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
+
+            long timestamp = System.currentTimeMillis();
+            long totalBytes= 0;
+            int totalCycles= 0;
+            // block until EOF is reached
+            while (read != -1) {
+                buffer.get(data);
+                stream.write(data);
+                totalBytes += read;
+                long currentCheck = lastCheck + read;
+
+                // timeout
+                if (System.currentTimeMillis() - timestamp > Context.getInstance().getNetworkParameters().getMessageTimeout()) {
+                    if (currentCheck > lastCheck) {
+                    }
+                    return null;
+                }
+            }
+
             // a loop that hangs the entire thread might be dangerous.
             //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
             byte magicBytes[]    = new byte[4];
+
             inputStream.read(magicBytes);
             // this is unused as of this version
             // but it is needed.
