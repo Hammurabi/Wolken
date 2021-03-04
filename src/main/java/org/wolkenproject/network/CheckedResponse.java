@@ -16,4 +16,8 @@ public class CheckedResponse {
     public int getFlags() {
         return flags;
     }
+
+    public boolean noErrors() {
+        return flags == 0;
+    }
 }
