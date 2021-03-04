@@ -191,6 +191,6 @@ public class Server implements Runnable {
         return netAddress;
     }
 
-    public void broadcastRequest(Message request) {
+    public Message broadcastRequest(Message request) {
     }
 }
