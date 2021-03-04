@@ -83,7 +83,8 @@ public class BlockChain implements Runnable {
         return false;
     }
 
-    private void replaceBlockIndex(int height, BlockIndex parent) {
+    private void replaceBlockIndex(int height, BlockIndex block) {
+        Context.getInstance().getDatabase().setBlockIndex(height, block);
     }
 
     private BlockIndex requestBlock(byte hash[]) {
