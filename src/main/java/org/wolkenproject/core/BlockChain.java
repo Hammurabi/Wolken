@@ -26,7 +26,7 @@ public class BlockChain implements Runnable {
             BlockIndex block = nextOrphan();
 
             if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
-                // switch to this chain if it's valid
+                // switch to this chain
                 if (block.validate()) {
                     if (block.getHeight() == tip.getHeight()) {
                         // if both blocks share the same height, then orphan the current tip.
