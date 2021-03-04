@@ -1,8 +1,7 @@
 package org.wolkenproject;
 
 import org.apache.commons.cli.*;
-import org.wolkenproject.core.Address;
-import org.wolkenproject.core.Context;
+import org.wolkenproject.core.*;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.encoders.CryptoLib;
 import org.wolkenproject.exceptions.WolkenException;
