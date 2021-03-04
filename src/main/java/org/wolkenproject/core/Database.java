@@ -136,6 +136,6 @@ public class Database {
         return null;
     }
 
-    public void deleteBlock(int height) {
+    public void deleteBlock(byte[] height) {
     }
 }
