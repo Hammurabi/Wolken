@@ -54,21 +54,6 @@ public class BlockList extends ResponseMessage {
     }
 
     @Override
-    public boolean containsResponse() {
-        return !blocks.isEmpty();
-    }
-
-    @Override
-    public boolean containsFullResponse() {
-        return fullResponse;
-    }
-
-    @Override
-    public int getResponseType() {
-        return 0;
-    }
-
-    @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return (Type) new BlockList(getVersion(), blocks, getUniqueMessageIdentifier());
     }
