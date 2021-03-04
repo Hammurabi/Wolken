@@ -117,4 +117,7 @@ public class Database {
     public TransactionI getTransaction(byte[] txid) {
         return null;
     }
+
+    public void setTip(BlockIndex block) {
+    }
 }
