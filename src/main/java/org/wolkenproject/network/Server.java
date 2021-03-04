@@ -74,13 +74,15 @@ public class Server implements Runnable {
             try {
                 incoming = socket.accept();
 
-                if (connectedNodes.size() < (Context.getInstance().getNetworkParameters().getMaxAllowedInboundConnections() + Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections()))
-                {
-                    connectedNodes.add(new Node(incoming));
-                }
-                else
-                {
-                    incoming.close();
+                if (incoming != null) {
+                    if (connectedNodes.size() < (Context.getInstance().getNetworkParameters().getMaxAllowedInboundConnections() + Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections()))
+                    {
+                        connectedNodes.add(new Node(incoming));
+                    }
+                    else
+                    {
+                        incoming.close();
+                    }
                 }
             } catch (IOException e) {
             }
