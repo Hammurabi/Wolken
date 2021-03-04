@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.iq80.leveldb.DB;
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
 import org.iq80.leveldb.Options;
@@ -14,6 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Database {
     private DB              database;
+    private FileService     location;
     private ReentrantLock   mutex;
 
     private final static byte[]
@@ -22,7 +24,8 @@ public class Database {
     BlockIndex              = Utils.takeApartShort((short) 3);
 
     public Database(FileService location) throws IOException {
-        database= Iq80DBFactory.factory.open(location.newFile("leveldb").file(), new Options());
+        database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
+        this.location = location;
         mutex   = new ReentrantLock();
     }
 
@@ -73,7 +76,7 @@ public class Database {
     }
 
     public boolean checkBlockExists(byte[] hash) {
-        return false;
+        return location.newFile(".chain").newFile(Base16.encode(hash)).exists();
     }
 
     public BlockIndex findBlock(byte[] hash) {
