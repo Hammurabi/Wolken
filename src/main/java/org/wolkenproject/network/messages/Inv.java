@@ -83,6 +83,8 @@ public class Inv extends Message {
                     requestBlocks.add(hash);
                 }
             }
+
+            node.sendMessage(new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), requestBlocks));
         }
         else if (type == Type.Transaction)
         {
