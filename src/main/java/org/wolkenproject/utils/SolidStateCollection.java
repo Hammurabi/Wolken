@@ -48,10 +48,10 @@ public class SolidStateCollection<T extends SerializableI> {
         Iterator<T> iterator = list.iterator();
 
         for (int i = 0; i < maxItemsInRam; i ++) {
-            iterator.next().write(outputStream);
+            iterator.next().serialize(outputStream);
             iterator.remove();
         }
-        
+
         outputStream.flush();
         outputStream.close();
     }
