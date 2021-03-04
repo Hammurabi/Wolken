@@ -107,9 +107,9 @@ public class RequestBlocks extends Message {
                 response |= ResponseMetadata.ValidationBits.SpamfulResponse;
             }
 
-            if (checked == this.blocks.size()) {
-                response |= ResponseMetadata.ValidationBits.FullResponse;
-            }
+//            if (checked == this.blocks.size()) {
+//                response |= ResponseMetadata.ValidationBits.EntireResponse;
+//            }
 
             if (checked != this.blocks.size()) {
                 response |= ResponseMetadata.ValidationBits.PartialResponse;
