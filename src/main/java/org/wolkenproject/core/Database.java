@@ -135,4 +135,7 @@ public class Database {
     public BlockIndex findBlock(int height) {
         return null;
     }
+
+    public void deleteBlock(int height) {
+    }
 }
