@@ -85,7 +85,10 @@ public class BlockChain implements Runnable {
         return false;
     }
 
-    private void updateIndices(BlockIndex startingIndex) {
+    private void updateIndices(BlockIndex index) {
+        while (index != null) {
+            index.recalculateChainWork();
+        }
     }
 
     private void replaceBlockIndex(int height, BlockIndex block) {
