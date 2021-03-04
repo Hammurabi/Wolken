@@ -16,7 +16,6 @@ import java.util.Set;
 
 public class BlockList extends ResponseMessage {
     private Collection<BlockIndex>      blocks;
-    private boolean                     fullResponse;
 
     public BlockList(int version, Collection<BlockIndex> blocks, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
