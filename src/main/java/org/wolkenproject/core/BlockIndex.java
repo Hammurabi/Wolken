@@ -80,4 +80,12 @@ public class BlockIndex extends SerializableI {
 
     public void recalculateChainWork() {
     }
+
+    public boolean hasNext() {
+        return false;
+    }
+
+    public BlockIndex next() {
+        return null;
+    }
 }
