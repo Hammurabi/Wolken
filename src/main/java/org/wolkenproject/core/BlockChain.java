@@ -125,6 +125,9 @@ public class BlockChain implements Runnable {
     }
 
     private void trimOrphans(int count) {
+        for (int i = 0; i < count; i ++) {
+            orphanedBlocks.remove(orphanedBlocks.size() - 1);
+        }
     }
 
     public BlockIndex makeGenesisBlock() throws WolkenException {
