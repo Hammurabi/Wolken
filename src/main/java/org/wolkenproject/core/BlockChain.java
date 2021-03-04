@@ -21,6 +21,13 @@ public class BlockChain implements Runnable {
 
     @Override
     public void run() {
+        lock.lock();
+        try {
+            while (!blockPool.isEmpty()) {
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 
     public BlockIndex makeGenesisBlock() throws WolkenException {
