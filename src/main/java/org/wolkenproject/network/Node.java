@@ -118,6 +118,7 @@ public class Node implements Runnable {
 
             // check that the response is appropriate
             if (response.getSerialNumber() != magic) {
+                errors ++;
                 return null;
             }
 
