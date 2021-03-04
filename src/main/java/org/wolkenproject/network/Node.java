@@ -193,13 +193,20 @@ public class Node implements Runnable {
         Listens for any incoming messages.
      */
     public CachedMessage listenForMessage() {
+        mutex.lock();
         try {
+            if (messageQueue.isEmpty()) {
+                return null;
+            }
+            
             int magic = Utils.makeInt(magicBytes);
             Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
             return checkSpam(message);
         } catch (IOException | WolkenException e) {
             errors++;
             return null;
+        } finally {
+            mutex.unlock();
         }
     }
 
