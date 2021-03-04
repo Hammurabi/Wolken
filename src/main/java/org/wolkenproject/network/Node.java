@@ -140,6 +140,9 @@ public class Node implements Runnable {
         }
     }
 
+    public void read() {
+    }
+
     /*
         Listens for any incoming messages.
      */
@@ -166,6 +169,7 @@ public class Node implements Runnable {
 
                     if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
                         errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                        return null;
                     }
                 }
 
