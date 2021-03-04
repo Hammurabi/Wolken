@@ -24,4 +24,8 @@ public class CheckedResponse {
     public boolean containsFullResponse() {
         return flags == 0 || (flags & ResponseMetadata.ValidationBits.EntireResponse) == ResponseMetadata.ValidationBits.EntireResponse;
     }
+
+    public boolean containsPartialResponse() {
+        return (flags & ResponseMetadata.ValidationBits.PartialResponse) == ResponseMetadata.ValidationBits.PartialResponse;
+    }
 }
