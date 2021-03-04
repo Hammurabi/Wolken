@@ -69,6 +69,11 @@ public class BlockChain implements Runnable {
     }
 
     private void setNext(BlockIndex block) {
+        byte previousHash[] = block.getBlock().getParentHash();
+        if (Utils.equals(previousHash, tip.getBlock().getHashCode())) {
+            setTip(block);
+            return;
+        }
     }
 
     private void replaceTip(BlockIndex block) {
