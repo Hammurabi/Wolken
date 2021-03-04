@@ -20,7 +20,8 @@ public class Server implements Runnable {
     public Server() throws IOException {
         socket = ServerSocketChannel.open();
         socket.bind(new InetSocketAddress(Context.getInstance().getNetworkParameters().getPort()));
-        
+
+        socket.configureBlocking(false);
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
 
         netAddress = Context.getInstance().getIpAddressList().getAddress(InetAddress.getLocalHost());
