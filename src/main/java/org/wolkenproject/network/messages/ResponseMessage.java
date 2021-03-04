@@ -41,11 +41,6 @@ public abstract class ResponseMessage extends Message {
         return null;
     }
 
-    @Override
-    public int getSerialNumber() {
-        return Context.getInstance().getSerialFactory().getSerialNumber(ResponseMessage.class);
-    }
-
     protected byte[] getRequester() {
         return requester;
     }
