@@ -25,26 +25,30 @@ public class BlockChain implements Runnable {
         while (Context.getInstance().isRunning()) {
             BlockIndex block = nextOrphan();
 
-            if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
-                // switch to this chain
-                if (block.getHeight() == tip.getHeight()) {
-                    // if both blocks share the same height, then orphan the current tip.
-                    replaceTip(block);
-                } else if (block.getHeight() == (tip.getHeight() + 1)) {
-                    // if block is next in line then set as next block.
-                    setNext(block);
-                } else if (block.getHeight() > tip.getHeight()) {
-                    // if block next but with some blocks missing then we fill the gap.
-                    setNextGapped(block);
-                } else if (block.getHeight() < tip.getHeight()) {
-                    // if block is earlier then we must roll back the chain.
-                    rollback(block);
+            try {
+                if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
+                    // switch to this chain
+                    if (block.getHeight() == tip.getHeight()) {
+                        // if both blocks share the same height, then orphan the current tip.
+                        replaceTip(block);
+                    } else if (block.getHeight() == (tip.getHeight() + 1)) {
+                        // if block is next in line then set as next block.
+                        setNext(block);
+                    } else if (block.getHeight() > tip.getHeight()) {
+                        // if block next but with some blocks missing then we fill the gap.
+                        setNextGapped(block);
+                    } else if (block.getHeight() < tip.getHeight()) {
+                        // if block is earlier then we must roll back the chain.
+                        rollback(block);
+                    }
                 }
+            } catch (WolkenException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    private void rollback(BlockIndex block) {
+    private void rollback(BlockIndex block) throws WolkenException {
         BlockIndex currentBlock = tip;
 
         while (currentBlock.getHeight() != block.getHeight()) {
@@ -56,7 +60,7 @@ public class BlockChain implements Runnable {
         replaceTip(block);
     }
 
-    private void setNextGapped(BlockIndex block) {
+    private void setNextGapped(BlockIndex block) throws WolkenException {
         setTip(block);
         rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
     }
@@ -79,7 +83,7 @@ public class BlockChain implements Runnable {
         }
     }
 
-    private void setNext(BlockIndex block) {
+    private void setNext(BlockIndex block) throws WolkenException {
         byte previousHash[] = block.getBlock().getParentHash();
 
         if (Utils.equals(previousHash, tip.getBlock().getHashCode())) {
@@ -90,7 +94,7 @@ public class BlockChain implements Runnable {
         rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
     }
 
-    private void replaceTip(BlockIndex block) {
+    private void replaceTip(BlockIndex block) throws WolkenException {
         addOrphan(tip);
 
         byte previousHash[] = tip.getBlock().getParentHash();
@@ -102,7 +106,7 @@ public class BlockChain implements Runnable {
         rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
     }
 
-    private boolean rollbackIntoExistingParent(byte[] parentHash, int height) {
+    private boolean rollbackIntoExistingParent(byte[] parentHash, int height) throws WolkenException {
         // check that the block exists
         if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
             return true;
@@ -126,7 +130,7 @@ public class BlockChain implements Runnable {
         return false;
     }
 
-    private void updateIndices(BlockIndex index) {
+    private void updateIndices(BlockIndex index) throws WolkenException {
         while (true) {
             index.recalculateChainWork();
 
