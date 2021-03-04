@@ -111,6 +111,11 @@ public class Node implements Runnable {
             Message response    = respones.get(uniqueMessageIdentifier);
             int magic           = responeTypes.get(uniqueMessageIdentifier);
 
+            // return without any issues
+            if (response.getSerialNumber() != Context.getInstance().getSerialFactory().getSerialNumber(FailedToRespondMessage.class)) {
+                return null;
+            }
+
             // check that the response is appropriate
             if (response.getSerialNumber() != magic) {
                 return null;
