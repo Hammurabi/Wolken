@@ -118,7 +118,7 @@ public class Node implements Runnable {
             }
 
             // may return without any issues
-            if (response.getSerialNumber() != Context.getInstance().getSerialFactory().getSerialNumber(FailedToRespondMessage.class)) {
+            if (response.getSerialNumber() == Context.getInstance().getSerialFactory().getSerialNumber(FailedToRespondMessage.class)) {
                 return null;
             }
 
