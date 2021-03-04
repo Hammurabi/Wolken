@@ -48,13 +48,10 @@ public class BlockChain implements Runnable {
 
     private void rollback(BlockIndex block) {
         BlockIndex currentBlock = tip;
-        replaceTip(currentBlock.previousBlock());
-        deleteBlockIndex(currentBlock, true);
 
         while (currentBlock.getHeight() != block.getHeight()) {
-            currentBlock = currentBlock.previousBlock();
-            replaceTip(currentBlock.previousBlock());
             deleteBlockIndex(currentBlock, true);
+            currentBlock = currentBlock.previousBlock();
         }
 
         setTip(currentBlock.previousBlock());
@@ -183,7 +180,7 @@ public class BlockChain implements Runnable {
     private void setTip(BlockIndex block) {
         tip = block;
         Context.getInstance().getDatabase().setTip(block);
-        setBlockIndex(block.getHeight(), block);
+        replaceBlockIndex(block.getHeight(), block);
     }
 
     public void suggestBlock(BlockIndex block) {
