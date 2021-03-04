@@ -123,7 +123,7 @@ public class Node implements Runnable {
             }
 
             // check that the response is appropriate
-            if (metadata.isResponseValid(response)) {
+            if (!metadata.isResponseValid(response)) {
                 errors ++;
                 return null;
             }
