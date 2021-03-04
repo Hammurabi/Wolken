@@ -143,73 +143,49 @@ public class Node implements Runnable {
         }
     }
 
-    public void read() {
-        try {
-            if (!socket.finishConnect()) {
-                return;
-            }
+    public void read() throws IOException {
+        if (!socket.finishConnect()) {
+            return;
+        }
 
-            if (stream == null) {
-                stream = new ByteArrayOutputStream();
-            }
+        if (stream == null) {
+            stream = new ByteArrayOutputStream();
+        }
 
-            byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
+        byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
 
-            int read = socket.read(buffer);
-            long timestamp = System.currentTimeMillis();
+        int read = socket.read(buffer);
+        long timestamp = System.currentTimeMillis();
 
-            if (read == -1) {
-                stream.flush();
-                stream.close();
+        if (read == -1) {
+            stream.flush();
+            stream.close();
 
-                // queue the message for processing.
-                finish(stream);
-            }
+            // queue the message for processing.
+            finish(stream);
+        } else {
+            // check message header
+            if (stream.size() >= 12) {
+                byte header[] = stream.toByteArray();
+                int length = Utils.makeInt(header, 8);
 
-            // block until EOF is reached
-            while ((read = ) != -1) {
-                // check message header
-                if (stream.size() >= 12) {
-                    byte header[]   = stream.toByteArray();
-                    int length      = Utils.makeInt(header, 8);
-
-                    if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
-                        errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
-                        stream = null;
-                        close();
-                        return;
-                    }
-                }
-
-                buffer.get(data, 0, read);
-                stream.write(data, 0, read);
-                buffer.clear();
-
-                // timeout
-                if (System.currentTimeMillis() - timestamp > Context.getInstance().getNetworkParameters().getMessageTimeout()) {
+                if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
+                    errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                    stream = null;
+                    close();
                     return;
                 }
             }
 
-            // a loop that hangs the entire thread might be dangerous.
-            //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
-            byte magicBytes[]    = new byte[4];
-
-            inputStream.read(magicBytes);
-            // this is unused as of this version
-            // but it is needed.
-            int magic       = Utils.makeInt(magicBytes);
-            Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
-            return checkSpam(message);
-        } catch (IOException | WolkenException e) {
-            errors ++;
-            return null;
+            buffer.get(data, 0, read);
+            stream.write(data, 0, read);
+            buffer.clear();
         }
     }
 
     private void finish(ByteArrayOutputStream stream) {
         if (stream.size() > 0) {
-            messageQueue.add(stream);
+            messageQueue.add(stream.toByteArray());
         }
     }
 
