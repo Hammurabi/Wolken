@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.nio.channels.SocketChannel;
 import java.util.Collections;
 import java.util.HashMap;
@@ -199,6 +200,12 @@ public class Node implements Runnable {
         try {
             return ((InetSocketAddress) socket.getRemoteAddress()).getAddress();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            return InetAddress.getByName("localhost");
+        } catch (UnknownHostException e) {
             e.printStackTrace();
         }
 
