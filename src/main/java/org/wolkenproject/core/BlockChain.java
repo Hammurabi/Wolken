@@ -29,7 +29,8 @@ public class BlockChain implements Runnable {
 
     @Override
     public void run() {
-        long lastBroadcast = System.currentTimeMillis();
+        long lastBroadcast  = System.currentTimeMillis();
+        byte lastHash[]     = null;
 
         while (Context.getInstance().isRunning()) {
             BlockIndex block = nextOrphan();
@@ -55,13 +56,20 @@ public class BlockChain implements Runnable {
                 e.printStackTrace();
             }
 
-            Set<byte[]> hashCodes = new LinkedHashSet<>();
-            hashCodes.add(getTip().getHash());
+            byte tipHash[] = getTip().getHash();
 
-            try {
-                Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
-            } catch (WolkenException e) {
-                e.printStackTrace();
+            // everytime the tip hash changes, broadcast it to connected nodes.
+            if (lastHash != null && !Utils.equals(tipHash, lastHash)) {
+                Set<byte[]> hashCodes = new LinkedHashSet<>();
+                hashCodes.add(tipHash);
+                lastHash = tipHash;
+
+                try {
+                    Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
+                    lastBroadcast = System.currentTimeMillis();
+                } catch (WolkenException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
