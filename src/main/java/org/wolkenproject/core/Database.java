@@ -163,6 +163,12 @@ public class Database {
     }
 
     public BlockIndex findTip() {
+        byte tip[] = get(ChainTip);
+
+        if (tip != null) {
+            return findBlock(Utils.trim(tip, 0, 32));
+        }
+
         return null;
     }
 }
