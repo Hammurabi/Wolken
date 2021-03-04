@@ -53,6 +53,7 @@ public class BlockChain implements Runnable {
                 if (getTip() == null) {
                     Logger.alert("settings new tip" + block);
                     tip = block;
+                    setBlockIndex(tip.getHeight(), tip);
 
                     Logger.alert("downloading blocks{"+block.getHeight()+"}");
                     while (block != null) {
@@ -70,6 +71,9 @@ public class BlockChain implements Runnable {
                                 tip = null;
                                 break;
                             }
+
+                            block = parent;
+                            setBlockIndex(block.getHeight(), block);
                         }
                     }
 
