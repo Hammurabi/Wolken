@@ -238,4 +238,14 @@ public class BlockChain implements Runnable {
             lock.unlock();
         }
     }
+
+    public BlockIndex getTip() {
+        lock.lock();
+        try {
+            return tip;
+        }
+        finally {
+            lock.unlock();
+        }
+    }
 }
