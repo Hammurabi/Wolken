@@ -57,6 +57,8 @@ public class BlockChain implements Runnable {
             setTip(block);
             return;
         }
+
+        Context.getInstance().getServer()
     }
 
     private void setTip(BlockIndex block) {
