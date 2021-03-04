@@ -220,7 +220,7 @@ public class Server implements Runnable {
                 e.printStackTrace();
             }
         }
-        
+
         Logger.alert("closed connections.");
     }
 
@@ -233,6 +233,10 @@ public class Server implements Runnable {
     }
 
     public Message broadcastRequest(Message request, long timeOut) {
+        Set<Node> connectedNodes = getConnectedNodes();
+        for (Node node : connectedNodes) {
+            Message response = node.getResponse(request, timeOut);
+        }
 
         return null;
     }
