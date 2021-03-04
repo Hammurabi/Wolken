@@ -140,43 +140,55 @@ public class Node implements Runnable {
         }
     }
 
-    public void read() throws IOException {
-        if (!socket.finishConnect()) {
-            return;
-        }
+    public void read() {
+        mutex.lock();
 
-        if (stream == null) {
-            stream = new ByteArrayOutputStream();
-        }
-
-        byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
-
-        int read = socket.read(buffer);
-        long timestamp = System.currentTimeMillis();
-
-        if (read == -1) {
-            stream.flush();
-            stream.close();
-
-            // queue the message for processing.
-            finish(stream);
-        } else {
-            // check message header
-            if (stream.size() >= 12) {
-                byte header[] = stream.toByteArray();
-                int length = Utils.makeInt(header, 8);
-
-                if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
-                    errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
-                    stream = null;
-                    close();
-                    return;
-                }
+        try {
+            if (!socket.finishConnect()) {
+                return;
             }
 
-            buffer.get(data, 0, read);
-            stream.write(data, 0, read);
-            buffer.clear();
+            if (stream == null) {
+                stream = new ByteArrayOutputStream();
+            }
+
+            byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
+
+            int read = socket.read(buffer);
+            long timestamp = System.currentTimeMillis();
+
+            if (read == -1) {
+                stream.flush();
+                stream.close();
+
+                // queue the message for processing.
+                finish(stream);
+            } else {
+                // check message header
+                if (stream.size() >= 12) {
+                    byte header[] = stream.toByteArray();
+                    int length = Utils.makeInt(header, 8);
+
+                    if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
+                        errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                        stream = null;
+                        close();
+                        return;
+                    }
+                }
+
+                buffer.get(data, 0, read);
+                stream.write(data, 0, read);
+                buffer.clear();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            errors ++;
+            if (stream != null) {
+                stream = null;
+            }
+        } finally {
+            mutex.unlock();
         }
     }
 
