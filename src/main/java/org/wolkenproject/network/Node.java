@@ -252,10 +252,7 @@ public class Node implements Runnable {
     }
 
     public void close() throws IOException {
-        outputStream.flush();
         socket.close();
-        inputStream.close();
-        outputStream.close();
     }
 
     public int getTotalErrorCount() {
