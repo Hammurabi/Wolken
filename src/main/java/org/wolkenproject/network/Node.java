@@ -159,6 +159,9 @@ public class Node implements Runnable {
             if (read == -1) {
                 stream.flush();
                 stream.close();
+
+                // queue the message for processing.
+                finish(stream);
             }
 
             // block until EOF is reached
