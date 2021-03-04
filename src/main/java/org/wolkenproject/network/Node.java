@@ -31,6 +31,7 @@ public class Node implements Runnable {
     private long                    firstConnected;
     private int                     errors;
     private ByteBuffer              buffer;
+    private ByteArrayOutputStream   stream;
 
 //    private BufferedInputStream     inputStream;
 //    private BufferedOutputStream    outputStream;
@@ -141,6 +142,60 @@ public class Node implements Runnable {
     }
 
     public void read() {
+        try {
+            if (!socket.finishConnect()) {
+                return;
+            }
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
+
+            int read = 0;
+            long timestamp = System.currentTimeMillis();
+            long totalBytes= 0;
+            int totalCycles= 0;
+
+            // block until EOF is reached
+            while ((read = socket.read(buffer)) != -1) {
+                // check message header
+                if (totalBytes >= 12) {
+                    byte header[]   = stream.toByteArray();
+                    int length      = Utils.makeInt(header, 8);
+
+                    if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
+                        errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                        return null;
+                    }
+                }
+
+                buffer.get(data, 0, read);
+                stream.write(data, 0, read);
+                buffer.clear();
+                totalBytes += read;
+                totalCycles ++;
+
+                double averageBytes = (double) totalBytes / totalCycles;
+
+                // timeout
+                if (System.currentTimeMillis() - timestamp > Context.getInstance().getNetworkParameters().getMessageTimeout()) {
+                    return null;
+                }
+            }
+
+            // a loop that hangs the entire thread might be dangerous.
+            //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
+            byte magicBytes[]    = new byte[4];
+
+            inputStream.read(magicBytes);
+            // this is unused as of this version
+            // but it is needed.
+            int magic       = Utils.makeInt(magicBytes);
+            Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
+            return checkSpam(message);
+        } catch (IOException | WolkenException e) {
+            errors ++;
+            return null;
+        }
     }
 
     /*
