@@ -28,6 +28,8 @@ public class BlockChain implements Runnable {
                 if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
                     // switch to this chain if it's valid
                     if (block.validate()) {
+                        if (block.getHeight() == tip.getHeight()) {
+                        }
                     }
                 }
             }
