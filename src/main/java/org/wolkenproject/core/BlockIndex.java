@@ -14,6 +14,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     private Block       block;
     private BigInteger  chainWork;
     private int         height;
+    private long        sequenceId;
 
     public BlockIndex() {
         this(new Block(), BigInteger.ZERO, 0);
@@ -23,6 +24,11 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         this.block = block;
         this.chainWork = chainWork;
         this.height = height;
+        this.sequenceId = 0;
+    }
+
+    public void setSequenceId(long sequenceId) {
+        this.sequenceId = sequenceId;
     }
 
     public Block getBlock() {
@@ -136,5 +142,9 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         }
 
         return 0;
+    }
+
+    private long getSequenceId() {
+        return sequenceId;
     }
 }
