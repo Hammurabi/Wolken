@@ -242,10 +242,10 @@ public class Server implements Runnable {
 
         for (Node node : connectedNodes) {
             try {
-                Message response = node.getResponse(request, timeOut);
+                CheckedResponse response = node.getResponse(request, timeOut);
                 if (response != null) {
-                    if (response.containsFullResponse()) {
-                        return response;
+                    if (response.noErrors()) {
+                        return response.getMessage();
                     } else {
                         if (fullResponse) {
                             continue;
