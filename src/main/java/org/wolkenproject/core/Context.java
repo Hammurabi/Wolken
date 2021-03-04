@@ -26,6 +26,7 @@ public class Context {
     private TransactionPool         transactionPool;
     private Server                  server;
     private Address                 payList[];
+    private BlockChain              blockChain;
     private FileService             fileService;
 
     public Context(FileService service, boolean testNet, Address[] payList) throws WolkenException, IOException {
@@ -57,6 +58,7 @@ public class Context {
         serializationFactory.registerClass(RequestTransactions.class, new RequestTransactions(0, new LinkedHashSet<>()));
 
         this.server                 = new Server();
+        this.blockChain             = new BlockChain();
     }
 
     public void shutDown()
@@ -111,5 +113,9 @@ public class Context {
 
     public Server getServer() {
         return server;
+    }
+
+    public BlockChain getBlockChain() {
+        return chai;
     }
 }
