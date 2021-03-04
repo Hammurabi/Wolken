@@ -4,6 +4,7 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 
@@ -44,4 +45,6 @@ public abstract class ResponseMessage extends Message {
     protected byte[] getRequester() {
         return requester;
     }
+
+    public abstract ResponseMetadata getResponseMetadata();
 }
