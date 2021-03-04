@@ -59,6 +59,10 @@ public class BlockChain implements Runnable {
         }
     }
 
+    private void setTip(BlockIndex block) {
+        tip = block;
+    }
+
     private void addOrphan(BlockIndex block) {
         orphanedBlocks.add(block);
     }
