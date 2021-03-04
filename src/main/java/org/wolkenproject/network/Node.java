@@ -149,25 +149,32 @@ public class Node implements Runnable {
                 return null;
             }
 
-            int read = socket.read(buffer);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
 
+            int read = 0;
             long timestamp = System.currentTimeMillis();
             long totalBytes= 0;
             int totalCycles= 0;
+
             // block until EOF is reached
-            while (read != -1) {
-                buffer.get(data);
-                stream.write(data);
+            while ((read = socket.read(buffer)) != -1) {
+                // check message header
+                if (totalBytes >= 12) {
+                    byte header[]   = stream.toByteArray();
+                    int length      = Utils.makeInt(header, 8);
+                }
+
+                buffer.get(data, 0, read);
+                stream.write(data, 0, read);
+                buffer.clear();
                 totalBytes += read;
                 totalCycles ++;
-                long currentCheck = lastCheck + read;
+
+                double averageBytes = (double) totalBytes / totalCycles;
 
                 // timeout
                 if (System.currentTimeMillis() - timestamp > Context.getInstance().getNetworkParameters().getMessageTimeout()) {
-                    if (currentCheck > lastCheck) {
-                    }
                     return null;
                 }
             }
