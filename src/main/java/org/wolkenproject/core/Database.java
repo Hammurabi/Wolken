@@ -19,7 +19,7 @@ public class Database {
     private final static byte[]
     UnspentTransactionOutput= Utils.takeApartShort((short) 1),
     TransactionFromHash     = Utils.takeApartShort((short) 2),
-    ChainTipHash            = Utils.takeApartShort((short) 3),
+    ChainTip                = Utils.takeApartShort((short) 3),
     ChainWork               = Utils.takeApartShort((short) 4),
     BlockLookupFromHeight   = Utils.takeApartShort((short) 5),
     BlockLookup             = Utils.takeApartShort((short) 6)
@@ -115,10 +115,19 @@ public class Database {
     }
 
     public TransactionI getTransaction(byte[] txid) {
-        return null;
+        return Context.getInstance().getSerialFactory().fromBytes();
     }
 
     public void setTip(BlockIndex block) {
+        mutex.lock();
+        try {
+            byte id[]   = Utils.concatenate(ChainTip, Utils.concatenate(block.getBlock().getHashCode(), Utils.takeApart(block.getHeight())));
+            byte data[] = database.get(id);
+
+            return data != null;
+        } finally {
+            mutex.unlock();
+        }
     }
 
     public boolean checkBlockExists(byte[] hash) {
