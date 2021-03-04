@@ -20,17 +20,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Node implements Runnable {
-    private SocketChannel           socket;
-    private ReentrantLock           mutex;
-    private Queue<Message>          messages;
-    private Queue<byte[]>           messageQueue;
-    private Map<byte[], Integer> expectedResponse;
-    private Map<byte[], Message>    respones;
-    private MessageCache            messageCache;
-    private long                    firstConnected;
-    private int                     errors;
-    private ByteBuffer              buffer;
-    private ByteArrayOutputStream   stream;
+    private SocketChannel                   socket;
+    private ReentrantLock                   mutex;
+    private Queue<Message>                  messages;
+    private Queue<byte[]>                   messageQueue;
+    private Map<byte[], ResponseMetadata>   expectedResponse;
+    private Map<byte[], Message>            respones;
+    private MessageCache                    messageCache;
+    private long                            firstConnected;
+    private int                             errors;
+    private ByteBuffer                      buffer;
+    private ByteArrayOutputStream           stream;
 
 //    private BufferedInputStream     inputStream;
 //    private BufferedOutputStream    outputStream;
