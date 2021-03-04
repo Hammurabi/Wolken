@@ -10,6 +10,7 @@ import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
@@ -98,6 +99,17 @@ public class Database {
 
     public void setBlockIndex(int height, BlockIndex block) {
         put(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)), block.getBlock().getHashCode());
+        mutex.lock();
+        try {
+            OutputStream outputStream = location.newFile(".chain").newFile(Base16.encode(block.getBlock().getHashCode())).openFileOutputStream();
+            block.write(outputStream);
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException | WolkenException e) {
+            e.printStackTrace();
+        } finally {
+            mutex.unlock();
+        }
     }
 
     public BlockIndex findBlock(int height) {
