@@ -81,6 +81,12 @@ public class Database {
         return location.newFile(".chain").newFile(Base16.encode(hash)).exists();
     }
 
+    public boolean checkBlockExists(int height) {
+        byte hash[] = get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
+
+        return hash != null;
+    }
+
     public BlockIndex findBlock(byte[] hash) {
         mutex.lock();
         try {
