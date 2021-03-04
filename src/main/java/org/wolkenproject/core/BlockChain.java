@@ -35,6 +35,7 @@ public class BlockChain implements Runnable {
                         } else if (block.getHeight() > tip.getHeight()) {
                             setNextGapped(block);
                         } else if (block.getHeight() < tip.getHeight()) {
+                            rollback(block);
                         }
                     }
                 }
