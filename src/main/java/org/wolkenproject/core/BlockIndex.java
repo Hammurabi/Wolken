@@ -69,6 +69,8 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         this.chainWork = new BigInteger(chainWork);
         stream.read(chainWork, 0, 4);
         height = Utils.makeInt(chainWork);
+
+        hash = block.getHashCode();
     }
 
     @Override
