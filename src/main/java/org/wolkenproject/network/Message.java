@@ -1,5 +1,6 @@
 package org.wolkenproject.network;
 
+import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -11,9 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.SecureRandom;
+import java.util.Collection;
 
 public abstract class Message extends SerializableI {
     public static final int UniqueIdentifierLength = 20;
+
     public static final class Flags {
         public static final int
                 None = 0,
@@ -97,6 +100,7 @@ public abstract class Message extends SerializableI {
 //    }
 
     public abstract void writeContents(OutputStream stream) throws IOException, WolkenException;
-
     public abstract void readContents(InputStream stream) throws IOException, WolkenException;
+
+    public abstract <Type> Type getPayload();
 }
