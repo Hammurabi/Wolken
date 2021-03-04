@@ -196,7 +196,13 @@ public class Node implements Runnable {
     }
 
     public InetAddress getInetAddress() {
-        return ((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress();
+        try {
+            return ((InetSocketAddress) socket.getRemoteAddress()).getAddress();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public MessageCache getMessageCache()
