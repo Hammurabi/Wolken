@@ -161,6 +161,7 @@ public class Node implements Runnable {
                 buffer.get(data);
                 stream.write(data);
                 totalBytes += read;
+                totalCycles ++;
                 long currentCheck = lastCheck + read;
 
                 // timeout
