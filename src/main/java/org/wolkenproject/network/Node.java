@@ -109,16 +109,21 @@ public class Node implements Runnable {
     private Message getResponse(byte[] uniqueMessageIdentifier) {
         mutex.lock();
         try{
-            Message response    = respones.get(uniqueMessageIdentifier);
-            int magic           = expectedResponse.get(uniqueMessageIdentifier);
+            Message response            = respones.get(uniqueMessageIdentifier);
+            ResponseMetadata metadata   = expectedResponse.get(uniqueMessageIdentifier);
 
-            // return without any issues
+            // internal error, we may return null
+            if (response == null) {
+                return null;
+            }
+
+            // may return without any issues
             if (response.getSerialNumber() != Context.getInstance().getSerialFactory().getSerialNumber(FailedToRespondMessage.class)) {
                 return null;
             }
 
             // check that the response is appropriate
-            if (response.getSerialNumber() != magic) {
+            if (metadata.isResponseValid(response)) {
                 errors ++;
                 return null;
             }
