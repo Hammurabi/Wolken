@@ -15,7 +15,6 @@ public class BlockChain implements Runnable {
     private BlockIndex          tip;
     private byte[]              chainWork;
     // contains random blocks sent from peers.
-    private Queue<BlockIndex>   blockPool;
     private Queue<BlockIndex>   orphanedBlocks;
     private static final int    MaximumBlockQueueSize = 1_000_000_000;
 
@@ -29,8 +28,8 @@ public class BlockChain implements Runnable {
     public void run() {
         lock.lock();
         try {
-            while (!blockPool.isEmpty()) {
-                BlockIndex block = blockPool.poll();
+            while (!orphanedBlocks.isEmpty()) {
+                BlockIndex block = orphanedBlocks.poll();
                 if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
                     // switch to this chain if it's valid
                     if (block.validate()) {
