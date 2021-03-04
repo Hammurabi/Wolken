@@ -48,8 +48,10 @@ public class BlockChain implements Runnable {
 
     private void rollback(BlockIndex block) {
         for (int i = tip.getHeight(); i > block.getHeight(); i --) {
-            replaceBlockIndex();
+            deleteBlockIndex(i);
         }
+
+        replaceTip(block);
     }
 
     private void setNextGapped(BlockIndex block) {
@@ -145,6 +147,11 @@ public class BlockChain implements Runnable {
     }
 
     private void deleteBlockIndex(int height) {
+        BlockIndex previousIndex = Context.getInstance().getDatabase().findBlock(height);
+        if (previousIndex != null) {
+            addOrphan(previousIndex);
+        }
+        
         Context.getInstance().getDatabase().deleteBlock(height);
     }
 
