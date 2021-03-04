@@ -49,6 +49,6 @@ public class FailedToRespondMessage extends ResponseMessage {
 
     @Override
     public int getResponseType() {
-        return -1;
+        return 0;
     }
 }
