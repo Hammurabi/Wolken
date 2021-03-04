@@ -149,57 +149,62 @@ public class Server implements Runnable {
     }
 
     private void runMaintenanceChecks() {
-        Iterator<Node> nodeIterator = getConnectedNodes().iterator();
-        while (nodeIterator.hasNext()) {
-            Node node = nodeIterator.next();
-            boolean shouldDisconnect = false;
-            boolean isSpammy = false;
+        mutex.lock();
+        try {
+            Iterator<Node> nodeIterator = connectedNodes.iterator();
+            while (nodeIterator.hasNext()) {
+                Node node = nodeIterator.next();
+                boolean shouldDisconnect = false;
+                boolean isSpammy = false;
 
-            if (node.timeSinceConnected() >= Context.getInstance().getNetworkParameters().getHandshakeTimeout() && !node.hasPerformedHandshake())
-            {
-                shouldDisconnect = true;
-            }
-
-            if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors()) {
-                shouldDisconnect = true;
-            }
-
-            if (node.getSpamAverage() > Context.getInstance().getNetworkParameters().getMessageSpamThreshold()) {
-                shouldDisconnect = true;
-                isSpammy = true;
-            }
-
-            if (isSpammy) {
-                NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
-                if (address != null)
+                if (node.timeSinceConnected() >= Context.getInstance().getNetworkParameters().getHandshakeTimeout() && !node.hasPerformedHandshake())
                 {
-                    address.setSpamAverage(node.getSpamAverage());
+                    shouldDisconnect = true;
                 }
-            }
 
-            if (shouldDisconnect) {
-                nodeIterator.remove();
-                try {
-                    node.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors()) {
+                    shouldDisconnect = true;
                 }
-            }
 
-            if (!shouldDisconnect && !isSpammy)
-            {
-                if (node.getMessageCache().inboundCacheSize() > Context.getInstance().getNetworkParameters().getMaxCacheSize())
-                {
+                if (node.getSpamAverage() > Context.getInstance().getNetworkParameters().getMessageSpamThreshold()) {
+                    shouldDisconnect = true;
+                    isSpammy = true;
+                }
+
+                if (isSpammy) {
                     NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
                     if (address != null)
                     {
                         address.setSpamAverage(node.getSpamAverage());
                     }
-                    node.getMessageCache().clearInboundCache();
                 }
 
-                node.getMessageCache().clearOutboundCache();
+                if (shouldDisconnect) {
+                    nodeIterator.remove();
+                    try {
+                        node.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (!shouldDisconnect && !isSpammy)
+                {
+                    if (node.getMessageCache().inboundCacheSize() > Context.getInstance().getNetworkParameters().getMaxCacheSize())
+                    {
+                        NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
+                        if (address != null)
+                        {
+                            address.setSpamAverage(node.getSpamAverage());
+                        }
+                        node.getMessageCache().clearInboundCache();
+                    }
+
+                    node.getMessageCache().clearOutboundCache();
+                }
             }
+        } finally {
+            mutex.unlock();
         }
     }
 
