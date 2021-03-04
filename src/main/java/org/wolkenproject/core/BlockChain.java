@@ -115,6 +115,7 @@ public class BlockChain implements Runnable {
     private void addOrphan(BlockIndex block) {
         orphanedBlocks.add(block);
 
+        // calculate the maximum blocks allowed in the queue.
         int maximumBlocks = MaximumBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
     }
 
