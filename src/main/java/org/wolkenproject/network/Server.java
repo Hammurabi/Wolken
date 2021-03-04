@@ -230,7 +230,7 @@ public class Server implements Runnable {
     }
 
     public Message broadcastRequest(Message request) {
-        return broadcastRequest(request, Context.getInstance().getNetworkParameters().getMessageTimeout());
+        return broadcastRequest(request, true);
     }
 
     public Message broadcastRequest(Message request, boolean fullResponse, long timeOut) {
