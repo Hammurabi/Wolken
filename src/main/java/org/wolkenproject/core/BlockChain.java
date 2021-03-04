@@ -60,6 +60,7 @@ public class BlockChain implements Runnable {
                             // request the parent of this block
                             BlockIndex parent = requestBlock(block.getBlock().getParentHash());
 
+                            // delete the downloaded chain if we cannot find the block
                             if (parent == null) {
                                 Logger.alert("requested block{"+Base16.encode(block.getBlock().getParentHash())+"} not found.");
                                 for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
