@@ -17,6 +17,7 @@ public class BlockChain implements Runnable {
     // contains random blocks sent from peers.
     private Queue<BlockIndex>   blockPool;
     private Queue<BlockIndex>   orphanedBlocks;
+    private static final int    MaximumBlockQueueSize = 1_000_000_000;
 
     private ReentrantLock   lock;
 
