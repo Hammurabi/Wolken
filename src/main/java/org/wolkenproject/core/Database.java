@@ -20,9 +20,7 @@ public class Database {
     UnspentTransactionOutput= Utils.takeApartShort((short) 1),
     TransactionFromHash     = Utils.takeApartShort((short) 2),
     ChainTip                = Utils.takeApartShort((short) 3),
-    ChainWork               = Utils.takeApartShort((short) 4),
-    BlockLookupFromHeight   = Utils.takeApartShort((short) 5),
-    BlockLookup             = Utils.takeApartShort((short) 6)
+    BlockIndex              = Utils.takeApartShort((short) 4),
     ;
 
     public Database(FileService location) throws IOException {
