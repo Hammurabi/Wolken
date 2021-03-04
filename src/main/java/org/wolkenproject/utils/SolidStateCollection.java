@@ -33,7 +33,7 @@ public class SolidStateCollection<T extends SerializableI> {
 //        return loadItemExclusively(index);
 //    }
 
-    public void add(T element) {
+    public void add(T element) throws FileNotFoundException {
         list.add(element);
         size ++;
 
@@ -45,7 +45,8 @@ public class SolidStateCollection<T extends SerializableI> {
     private void unload() throws FileNotFoundException {
         int chunkIndex = size / maxItemsInRam;
         OutputStream outputStream = new FileOutputStream(service.newFile("cnk_" + chunkIndex).file());
-
+        outputStream.flush();
+        outputStream.close();
     }
 
     Iterator<T> getIterator() throws IOException, WolkenException {
