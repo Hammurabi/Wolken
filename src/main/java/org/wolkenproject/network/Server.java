@@ -47,6 +47,8 @@ public class Server implements Runnable {
         {
             try {
                 SocketChannel socket = SocketChannel.open();
+                socket.bind(new InetSocketAddress(address.getAddress(), address.getPort()));
+                
                 Node node = new Node(socket);
                 connectedNodes.add(node);
 
