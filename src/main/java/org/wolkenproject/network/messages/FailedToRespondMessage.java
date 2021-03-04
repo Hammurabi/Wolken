@@ -1,6 +1,7 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +23,7 @@ public class FailedToRespondMessage extends ResponseMessage {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
+        Utils.writeLong(reasonFlags, stream);
     }
 
     @Override
