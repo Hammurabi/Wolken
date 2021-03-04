@@ -7,6 +7,7 @@ import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
@@ -81,6 +82,19 @@ public class RequestBlocks extends Message {
     @Override
     public <Type> Type getPayload() {
         return (Type) blocks;
+    }
+
+    @Override
+    public ResponseMetadata getResponseMetadata() {
+        return (msg)->{
+            boolean isCorrectType = msg instanceof BlockList;
+
+            if (!isCorrectType) {
+                return false;
+            }
+
+            return ;
+        };
     }
 
     @Override
