@@ -15,7 +15,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class BlockList extends ResponseMessage {
-    private Collection<BlockIndex>   blocks;
+    private Collection<BlockIndex>      blocks;
+    private boolean                     fullResponse;
 
     public BlockList(int version, Collection<BlockIndex> blocks, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
@@ -51,6 +52,21 @@ public class BlockList extends ResponseMessage {
     @Override
     public <Type> Type getPayload() {
         return (Type) blocks;
+    }
+
+    @Override
+    public boolean containsResponse() {
+        return !blocks.isEmpty();
+    }
+
+    @Override
+    public boolean containsFullResponse() {
+        return fullResponse;
+    }
+
+    @Override
+    public int getResponseType() {
+        return 0;
     }
 
     @Override
