@@ -105,33 +105,46 @@ public class Database {
         if (hash == null) {
             return null;
         }
+        
         return findBlock(hash);
     }
 
     public void deleteBlock(int height) {
         byte key[]  = Utils.concatenate(Database.BlockIndex, Utils.takeApart(height));
         byte hash[] = get(key);
-        
+
         if (checkBlockExists(hash)) {
             location.newFile(".chain").newFile(Base16.encode(hash)).delete();
         }
 
-        remove(key);
+        if (hash != null) {
+            remove(key);
+        }
+
     }
 
     public byte[] get(byte[] k) {
         mutex.lock();
         try {
-            return get(k);
+            return database.get(k);
         } finally {
             mutex.unlock();
         }
     }
 
-    public byte[] put(byte[] k, byte[] v) {
+    public void put(byte[] k, byte[] v) {
         mutex.lock();
         try {
-            return put(k, v);
+            database.put(k, v);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public void remove(byte[] k) {
+        mutex.lock();
+        try {
+            database.delete(k);
         } finally {
             mutex.unlock();
         }
