@@ -47,6 +47,9 @@ public class BlockChain implements Runnable {
     }
 
     private void rollback(BlockIndex block) {
+        for (int i = tip.getHeight(); i > block.getHeight(); i --) {
+            replaceBlockIndex();
+        }
     }
 
     private void setNextGapped(BlockIndex block) {
