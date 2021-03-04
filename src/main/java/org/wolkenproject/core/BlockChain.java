@@ -26,8 +26,9 @@ public class BlockChain implements Runnable {
 
     @Override
     public void run() {
-        while (!orphanedBlocks.isEmpty()) {
-            BlockIndex block = orphanedBlocks.poll();
+        while (hasOrphans()) {
+            BlockIndex block = nextOrphan();
+            
             if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
                 // switch to this chain if it's valid
                 if (block.validate()) {
