@@ -34,6 +34,11 @@ public class RequestInv extends Message {
     }
 
     @Override
+    public <Type> Type getPayload() {
+        return null;
+    }
+
+    @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return (Type) new RequestInv(0);
     }
