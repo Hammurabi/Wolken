@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.channels.SocketChannel;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Node implements Runnable {
-    private Socket                  socket;
+    private SocketChannel           socket;
     private ReentrantLock           mutex;
     private Queue<Message>          messages;
     private Map<byte[], Message>    respones;
@@ -27,23 +28,23 @@ public class Node implements Runnable {
     private long                    firstConnected;
     private int                     errors;
 
-    private BufferedInputStream     inputStream;
-    private BufferedOutputStream    outputStream;
+//    private BufferedInputStream     inputStream;
+//    private BufferedOutputStream    outputStream;
 
     private VersionInformation      versionMessage;
 
-    public Node(String ip, int port) throws IOException {
-        this(new Socket(ip, port));
-    }
+//    public Node(String ip, int port) throws IOException {
+//        this(new Socket(ip, port));
+//    }
 
-    public Node(Socket socket) throws IOException {
+    public Node(SocketChannel socket) throws IOException {
         this.socket         = socket;
         this.mutex          = new ReentrantLock();
         this.messages       = new ConcurrentLinkedQueue<>();
         this.messageCache   = new MessageCache();
         this.errors         = 0;
-        this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
-        this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
+//        this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
+//        this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
         this.firstConnected = System.currentTimeMillis();
         this.respones       = Collections.synchronizedMap(new HashMap<>());
     }
@@ -231,11 +232,23 @@ public class Node implements Runnable {
     }
 
     public int getPort() {
-        return socket.getPort();
+        try {
+            return  ((InetSocketAddress) socket.getRemoteAddress()).getPort();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 
     public long timeSinceConnected()
     {
         return System.currentTimeMillis() - firstConnected;
+    }
+
+    @Override
+    public void run() {
+        while (Context.getInstance().isRunning()) {
+        }
     }
 }
