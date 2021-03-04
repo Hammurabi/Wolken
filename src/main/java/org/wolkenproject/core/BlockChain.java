@@ -29,12 +29,16 @@ public class BlockChain implements Runnable {
                     // switch to this chain if it's valid
                     if (block.validate()) {
                         if (block.getHeight() == tip.getHeight()) {
+                            // if both blocks share the same height, then orphan the current tip.
                             replaceTip(block);
                         } else if (block.getHeight() == (tip.getHeight() + 1)) {
+                            // if block is next in line then set as next block.
                             setNext(block);
                         } else if (block.getHeight() > tip.getHeight()) {
+                            // if block next but with some blocks missing then we fill the gap.
                             setNextGapped(block);
                         } else if (block.getHeight() < tip.getHeight()) {
+                            // if block is earlier then we must roll back the chain.
                             rollback(block);
                         }
                     }
