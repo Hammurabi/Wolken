@@ -15,7 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class BlockList extends ResponseMessage {
-    private Set<BlockIndex>   blocks;
+    private Collection<BlockIndex>   blocks;
 
     public BlockList(int version, Collection<BlockIndex> blocks, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
@@ -46,6 +46,11 @@ public class BlockList extends ResponseMessage {
                 throw new IOException(e);
             }
         }
+    }
+
+    @Override
+    public <Type> Type getPayload() {
+        return (Type) blocks;
     }
 
     @Override
