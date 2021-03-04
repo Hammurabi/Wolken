@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class BlockChain implements Runnable {
     private BlockIndex          tip;
     private byte[]              chainWork;
+    // contains random blocks sent from peers.
     private Queue<BlockIndex>   blockPool;
     private Queue<BlockIndex>   orphanedBlocks;
 
