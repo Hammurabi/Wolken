@@ -9,7 +9,8 @@ public interface ResponseMetadata {
             PartialResponse = 1,
             EntireResponse  = 2,
             InvalidResponse = 4,
-            SpamfulResponse = 8;
+            SpamfulResponse = 8,
+            InvalidType     = 16;
         ;
     }
 
