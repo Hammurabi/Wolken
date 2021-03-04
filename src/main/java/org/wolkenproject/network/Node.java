@@ -3,6 +3,7 @@ package org.wolkenproject.network;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
+import org.wolkenproject.network.messages.FailedToRespondMessage;
 import org.wolkenproject.utils.Utils;
 
 import java.io.*;
