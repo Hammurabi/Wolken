@@ -58,7 +58,7 @@ public class BlockChain implements Runnable {
                     while (block != null) {
                         if (block.getHeight() > 0) {
                             // request the parent of this block
-                            Block parent = requestBlock(block.getBlock().getParentHash());
+                            BlockIndex parent = requestBlock(block.getBlock().getParentHash());
                         }
                     }
                     Logger.alert("chain downloaded successfully");
