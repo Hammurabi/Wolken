@@ -130,6 +130,13 @@ public class Node implements Runnable {
                 return null;
             }
 
+            // check that the response is appropriate
+            if ((flags & ResponseMetadata.ValidationBits.SpamfulResponse) == ResponseMetadata.ValidationBits.SpamfulResponse) {
+                errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                messageCache.increaseSpamAverage(Context.getInstance().getNetworkParameters().getMessageSpamThreshold());
+                return null;
+            }
+
             return new CheckedResponse(response, flags);
         } finally {
             respones.remove(uniqueMessageIdentifier);
