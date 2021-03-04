@@ -51,6 +51,7 @@ public class SolidStateCollection<T extends SerializableI> {
             iterator.next().write(outputStream);
             iterator.remove();
         }
+        
         outputStream.flush();
         outputStream.close();
     }
