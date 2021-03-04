@@ -133,28 +133,28 @@ public class ChainMath {
 
     public static int calculateNewTarget(BlockIndex block) throws WolkenException {
         int currentBlockHeight = block.getHeight();
-        
+
         if (shouldRecalcNextWork(currentBlockHeight)) {
-            BlockIndex header = null;
+            BlockIndex first = null;
 
             int previousBlockHeight = currentBlockHeight - Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
 
             if (previousBlockHeight >= 0) {
-                header = Context.getInstance().getDatabase().findBlock(previousBlockHeight);
+                first = Context.getInstance().getDatabase().findBlock(previousBlockHeight);
             }
 
-            return generateTargetBits(block, header);
+            return generateTargetBits(block, first);
         }
 
-        return parent.getBlock().getBits();
+        return block.getBlock().getBits();
     }
 
-    private static int generateTargetBits(BlockIndex parent, BlockHeader first) throws WolkenException {
+    private static int generateTargetBits(BlockIndex latest, BlockIndex earliest) throws WolkenException {
         //calculate the target time for 1800 blocks.
         long timePerDiffChange  = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
-        long averageNetworkTime = parent.getBlock().getTimestamp() - first.getTimestamp();
+        long averageNetworkTime = latest.getBlock().getTimestamp() - earliest.getBlock().getTimestamp();
 
-        return generateTargetBits(averageNetworkTime, timePerDiffChange, parent.getBlock().getBits());
+        return generateTargetBits(averageNetworkTime, timePerDiffChange, latest.getBlock().getBits());
     }
 
 
