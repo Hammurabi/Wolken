@@ -18,38 +18,12 @@ public class Database {
 
     private final static byte[]
     UnspentTransactionOutput= Utils.takeApartShort((short) 1),
-    TransactionFromHash     = Utils.takeApartShort((short) 2),
-    ChainTip                = Utils.takeApartShort((short) 3),
-    BlockIndex              = Utils.takeApartShort((short) 4),
-    ;
+    ChainTip                = Utils.takeApartShort((short) 2),
+    BlockIndex              = Utils.takeApartShort((short) 3);
 
     public Database(FileService location) throws IOException {
         database= Iq80DBFactory.factory.open(location.newFile("leveldb").file(), new Options());
         mutex   = new ReentrantLock();
-    }
-
-    public void storeBlockHashFromHeight(long height, byte hash[])
-    {
-        mutex.lock();
-        try {
-            byte id[]   = Utils.concatenate(BlockLookupFromHeight, Utils.takeApartLong(height));
-            database.put(id, hash);
-        } finally {
-            mutex.unlock();
-        }
-    }
-
-    public LookupResult<byte[]> findBlockHashFromHeight(long height)
-    {
-        mutex.lock();
-        try {
-            byte id[]   = Utils.concatenate(BlockLookupFromHeight, Utils.takeApartLong(height));
-            byte data[] = database.get(id);
-
-            return new LookupResult<>(data, data != null);
-        } finally {
-            mutex.unlock();
-        }
     }
 
     public void storeOutput(byte[] txid, char index, Output output) throws WolkenException {
@@ -87,20 +61,6 @@ public class Database {
         } finally {
             mutex.unlock();
         }
-    }
-
-    public Set<byte[]> getNonDuplicateTransactions(Set<byte[]> list) {
-        Set<byte[]> result = new HashSet<>();
-        for (byte[] txid : list)
-        {
-            byte id[]   = Utils.concatenate(TransactionFromHash, Utils.concatenate(txid));
-            if (database.get(id) == null)
-            {
-                result.add(txid);
-            }
-        }
-
-        return result;
     }
 
     public void setTip(BlockIndex block) {
