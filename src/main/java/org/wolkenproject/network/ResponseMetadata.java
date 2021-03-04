@@ -1,4 +1,7 @@
 package org.wolkenproject.network;
 
-public class ResponseMetadata {
+import org.wolkenproject.network.messages.ResponseMessage;
+
+public interface ResponseMetadata {
+    boolean isResponseValid(ResponseMessage responseMessage);
 }
