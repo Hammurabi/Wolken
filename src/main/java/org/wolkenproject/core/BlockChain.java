@@ -64,6 +64,7 @@ public class BlockChain implements Runnable {
                             // delete the downloaded chain if we cannot find the block
                             if (parent == null) {
                                 Logger.alert("requested block{"+Base16.encode(block.getBlock().getParentHash())+"} not found.");
+                                Logger.alert("erasing{"+(getTip().getHeight() - block.getHeight())+"} blocks");
                                 for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
                                     Context.getInstance().getDatabase().deleteBlock(i);
                                 }
