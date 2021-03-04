@@ -140,8 +140,6 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         } catch (WolkenException e) {
             return 0;
         }
-
-        return 0;
     }
 
     private long getSequenceId() {
