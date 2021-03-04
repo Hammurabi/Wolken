@@ -194,13 +194,14 @@ public class Node implements Runnable {
      */
     public CachedMessage listenForMessage() {
         try {
-            int magic       = Utils.makeInt(magicBytes);
+            int magic = Utils.makeInt(magicBytes);
             Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
             return checkSpam(message);
         } catch (IOException | WolkenException e) {
-            errors ++;
+            errors++;
             return null;
         }
+    }
 
     /*
         Caches the message and keeps track of how many times it was received.
