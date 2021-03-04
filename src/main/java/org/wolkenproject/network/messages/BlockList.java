@@ -1,5 +1,6 @@
 package org.wolkenproject.network.messages;
 
+import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
@@ -14,19 +15,19 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class BlockList extends ResponseMessage {
-    private Set<TransactionI>   transactions;
+    private Set<BlockIndex>   blocks;
 
-    public BlockList(int version, Collection<TransactionI> transactions, byte[] uniqueMessageIdentifier) {
+    public BlockList(int version, Collection<BlockIndex> blocks, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
-        this.transactions   = new LinkedHashSet<>(transactions);
+        this.blocks   = new LinkedHashSet<>(blocks);
     }
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
-        Utils.writeInt(transactions.size(), stream);
-        for (TransactionI transaction : transactions)
+        Utils.writeInt(blocks.size(), stream);
+        for (BlockIndex block : blocks)
         {
-            transaction.write(stream);
+            block.write(stream);
         }
     }
 
@@ -39,8 +40,8 @@ public class BlockList extends ResponseMessage {
         for (int i = 0; i < length; i ++)
         {
             try {
-                TransactionI transaction = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(TransactionI.class), stream);
-                transactions.add(transaction);
+                BlockIndex block = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(BlockIndex.class), stream);
+                blocks.add(block);
             } catch (WolkenException e) {
                 throw new IOException(e);
             }
@@ -49,7 +50,7 @@ public class BlockList extends ResponseMessage {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new BlockList(getVersion(), transactions, getUniqueMessageIdentifier());
+        return (Type) new BlockList(getVersion(), blocks, getUniqueMessageIdentifier());
     }
 
     @Override
