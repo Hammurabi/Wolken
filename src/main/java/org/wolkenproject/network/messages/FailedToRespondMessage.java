@@ -1,5 +1,6 @@
 package org.wolkenproject.network.messages;
 
+import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.Utils;
 
@@ -50,5 +51,10 @@ public class FailedToRespondMessage extends ResponseMessage {
     @Override
     public int getResponseType() {
         return 0;
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(FailedToRespondMessage.class);
     }
 }
