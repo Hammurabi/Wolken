@@ -106,7 +106,8 @@ public class Node implements Runnable {
     private Message getResponse(byte[] uniqueMessageIdentifier) {
         mutex.lock();
         try{
-            return respones.get(uniqueMessageIdentifier);
+            Message response = respones.get(uniqueMessageIdentifier);
+            return response;
         } finally {
             respones.remove(uniqueMessageIdentifier);
             mutex.unlock();
