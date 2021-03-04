@@ -20,10 +20,6 @@ public class BlockChain implements Runnable {
 
     private ReentrantLock   lock;
 
-    public final void consensus()
-    {
-    }
-
     @Override
     public void run() {
         while (hasOrphans()) {
