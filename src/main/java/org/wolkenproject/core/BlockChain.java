@@ -29,6 +29,7 @@ public class BlockChain implements Runnable {
                     // switch to this chain if it's valid
                     if (block.validate()) {
                         if (block.getHeight() == tip.getHeight()) {
+                            replaceTip(block);
                         } else if (block.getHeight() == (tip.getHeight() + 1)) {
                         } else if (block.getHeight() > tip.getHeight()) {
                         } else if (block.getHeight() < tip.getHeight()) {
