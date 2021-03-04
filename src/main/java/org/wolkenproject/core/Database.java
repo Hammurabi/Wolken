@@ -108,7 +108,10 @@ public class Database {
         return findBlock(hash);
     }
 
-    public void deleteBlock(byte[] hash) {
+    public void deleteBlock(int hash) {
+        if (checkBlockExists(hash)) {
+
+        }
     }
 
     public byte[] get(byte[] k) {
