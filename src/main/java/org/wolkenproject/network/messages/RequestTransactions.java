@@ -70,6 +70,11 @@ public class RequestTransactions extends Message {
     }
 
     @Override
+    public <Type> Type getPayload() {
+        return (Type) transactions;
+    }
+
+    @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return (Type) new RequestTransactions(getVersion(), transactions);
     }
