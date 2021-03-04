@@ -28,6 +28,8 @@ public class FailedToRespondMessage extends ResponseMessage {
 
     @Override
     public void readContents(InputStream stream) throws IOException, WolkenException {
+        byte buffer[] = new byte[8];
+        reasonFlags = Utils.makeLong(buffer);
     }
 
     @Override
