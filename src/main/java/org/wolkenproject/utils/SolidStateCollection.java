@@ -38,13 +38,19 @@ public class SolidStateCollection<T extends SerializableI> {
 
     public void add(T element) {
         list.add(element);
+        size ++;
 
         if (list.size() > maxItemsInRam) {
             unload();
         }
     }
 
-    Iterator<T> getIterator() throws FileNotFoundException {
+    private void unload() {
+        int chunkIndex = size / maxItemsInRam;
+
+    }
+
+    Iterator<T> getIterator() throws IOException, WolkenException {
         return new Iterator<T>() {
             int index = 0;
             T[] chunk = loadChunk(0);
