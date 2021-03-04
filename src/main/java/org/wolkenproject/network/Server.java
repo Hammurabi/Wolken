@@ -233,6 +233,10 @@ public class Server implements Runnable {
         return broadcastRequest(request, true);
     }
 
+    public Message broadcastRequest(Message request, boolean fullResponse) {
+        return broadcastRequest(request, fullResponse, Context.getInstance().getNetworkParameters().getMessageTimeout());
+    }
+
     public Message broadcastRequest(Message request, boolean fullResponse, long timeOut) {
         Set<Node> connectedNodes = getConnectedNodes();
         for (Node node : connectedNodes) {
