@@ -26,6 +26,17 @@ public class RequestBlocks extends Message {
         this.blocks = new LinkedHashSet<>(blocks);
     }
 
+    public RequestBlocks(int version, byte[] hash) {
+        this(version, toSet(hash));
+    }
+
+    private static Set<byte[]> toSet(byte[] hash) {
+        Set<byte[]> set = new LinkedHashSet<>();
+        set.add(hash);
+
+        return set;
+    }
+
     @Override
     public void executePayload(Server server, Node node) {
         Set<BlockIndex> blocks = new LinkedHashSet<>();
