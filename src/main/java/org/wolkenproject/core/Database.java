@@ -108,10 +108,15 @@ public class Database {
         return findBlock(hash);
     }
 
-    public void deleteBlock(int hash) {
+    public void deleteBlock(int height) {
+        byte key[]  = Utils.concatenate(Database.BlockIndex, Utils.takeApart(height));
+        byte hash[] = get(key);
+        
         if (checkBlockExists(hash)) {
-
+            location.newFile(".chain").newFile(Base16.encode(hash)).delete();
         }
+
+        remove(key);
     }
 
     public byte[] get(byte[] k) {
