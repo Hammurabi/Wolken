@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 
-public class BlockIndex extends SerializableI {
+public class BlockIndex extends SerializableI implements Comparable<BlockIndex> {
     private Block       block;
     private BigInteger  chainWork;
     private int         height;
@@ -99,5 +99,10 @@ public class BlockIndex extends SerializableI {
 
     public BlockIndex previousBlock() {
         return Context.getInstance().getDatabase().findBlock(getHeight() - 1);
+    }
+
+    @Override
+    public int compareTo(BlockIndex blockIndex) {
+        return 0;
     }
 }
