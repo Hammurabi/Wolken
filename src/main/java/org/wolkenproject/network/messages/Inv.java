@@ -8,6 +8,7 @@ import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.Tuple;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
@@ -127,6 +128,11 @@ public class Inv extends Message {
             stream.read(id);
             list.add(id);
         }
+    }
+
+    @Override
+    public <Type> Type getPayload() {
+        return (Type) new Tuple(list, type);
     }
 
     @Override
