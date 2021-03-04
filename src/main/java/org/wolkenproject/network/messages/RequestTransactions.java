@@ -30,10 +30,6 @@ public class RequestTransactions extends Message {
         for (byte[] txid : this.transactions)
         {
             TransactionI transaction = Context.getInstance().getTransactionPool().getTransaction(txid);
-            if (transaction == null)
-            {
-                transaction = Context.getInstance().getDatabase().getTransaction(txid);
-            }
 
             if (transaction != null)
             {
