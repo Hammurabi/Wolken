@@ -51,6 +51,7 @@ public class RequestBlocks extends Message {
             }
         }
 
+        // send the blocks
         node.sendMessage(new BlockList(Context.getInstance().getNetworkParameters().getVersion(), blocks, getUniqueMessageIdentifier()));
     }
 
