@@ -84,12 +84,10 @@ public class Database {
         mutex.lock();
         try {
             InputStream inputStream = location.newFile(".chain").newFile(Base16.encode(hash)).openFileInputStream();
-            Block block = Context.getInstance().getSerialFactory().fromStream(Block.class, inputStream);
+            BlockIndex block = Context.getInstance().getSerialFactory().fromStream(BlockIndex.class, inputStream);
             inputStream.close();
 
-            BlockIndex nullIndex = findNullIndex(block.getHeight());
-
-            return new BlockIndex(block, chainWork, height);
+            return block;
         } catch (IOException | WolkenException e) {
             e.printStackTrace();
             return null;
@@ -102,9 +100,28 @@ public class Database {
     }
 
     public BlockIndex findBlock(int height) {
-        return null;
+        mutex.lock();
+        try {
+            byte hash[] = database.get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
+            if (hash == null) {
+                return null;
+            }
+            return findBlock(hash);
+        } finally {
+            mutex.unlock();
+        }
     }
 
-    public void deleteBlock(byte[] height) {
+    public void deleteBlock(byte[] hash) {
+        mutex.lock();
+        try {
+            byte hash[] = database.get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
+            if (hash == null) {
+                return null;
+            }
+            return findBlock(hash);
+        } finally {
+            mutex.unlock();
+        }
     }
 }
