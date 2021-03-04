@@ -143,7 +143,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         }
     }
 
-    private long getSequenceId() {
+    public long getSequenceId() {
         return sequenceId;
     }
 
