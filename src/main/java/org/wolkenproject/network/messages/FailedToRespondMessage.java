@@ -39,21 +39,6 @@ public class FailedToRespondMessage extends ResponseMessage {
     }
 
     @Override
-    public boolean containsResponse() {
-        return true;
-    }
-
-    @Override
-    public boolean containsFullResponse() {
-        return false;
-    }
-
-    @Override
-    public int getResponseType() {
-        return 0;
-    }
-
-    @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(FailedToRespondMessage.class);
     }
