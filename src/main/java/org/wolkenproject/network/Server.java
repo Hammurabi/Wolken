@@ -239,6 +239,7 @@ public class Server implements Runnable {
 
     public Message broadcastRequest(Message request, boolean fullResponse, long timeOut) {
         Set<Node> connectedNodes = getConnectedNodes();
+
         for (Node node : connectedNodes) {
             try {
                 Message response = node.getResponse(request, timeOut);
