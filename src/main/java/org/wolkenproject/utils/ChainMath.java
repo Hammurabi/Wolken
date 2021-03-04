@@ -2,6 +2,7 @@ package org.wolkenproject.utils;
 
 import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockHeader;
+import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
@@ -130,29 +131,30 @@ public class ChainMath {
         return (height + 1) % Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0;
     }
 
-    public static int calculateNewTarget(Block parent) throws WolkenException {
-        int currentBlockHeight = parent.getHeight();
+    public static int calculateNewTarget(BlockIndex block) throws WolkenException {
+        int currentBlockHeight = block.getHeight();
+        
         if (shouldRecalcNextWork(currentBlockHeight)) {
-            BlockHeader header = null;
+            BlockIndex header = null;
 
             int previousBlockHeight = currentBlockHeight - Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
 
             if (previousBlockHeight >= 0) {
-                header = Context.getInstance().getDatabase().findBlockHeaderByHeight(previousBlockHeight);
+                header = Context.getInstance().getDatabase().findBlock(previousBlockHeight);
             }
 
-            return generateTargetBits(parent, header);
+            return generateTargetBits(block, header);
         }
 
-        return parent.getBits();
+        return parent.getBlock().getBits();
     }
 
-    private static int generateTargetBits(Block parent, BlockHeader first) throws WolkenException {
+    private static int generateTargetBits(BlockIndex parent, BlockHeader first) throws WolkenException {
         //calculate the target time for 1800 blocks.
         long timePerDiffChange  = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
-        long averageNetworkTime = parent.getTimestamp() - first.getTimestamp();
+        long averageNetworkTime = parent.getBlock().getTimestamp() - first.getTimestamp();
 
-        return generateTargetBits(averageNetworkTime, timePerDiffChange, parent.getBits());
+        return generateTargetBits(averageNetworkTime, timePerDiffChange, parent.getBlock().getBits());
     }
 
 
