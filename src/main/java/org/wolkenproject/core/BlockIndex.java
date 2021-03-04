@@ -160,4 +160,8 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
             return "";
         }
     }
+
+    public byte[] getHash() {
+        return new byte[0];
+    }
 }
