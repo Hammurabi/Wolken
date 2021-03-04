@@ -52,7 +52,7 @@ public abstract class Message extends SerializableI {
         byte buffer[] = new byte[8];
         stream.read(buffer, 0, 4);
         version = Utils.makeInt(buffer);
-        stream.read(buffer, 0, 4);
+        stream.read(buffer, 4, 4);
         flags = Utils.makeInt(buffer);
 //        stream.read(buffer);
 //        nonce = Utils.makeLong(buffer);
