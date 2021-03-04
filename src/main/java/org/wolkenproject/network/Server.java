@@ -192,5 +192,6 @@ public class Server implements Runnable {
     }
 
     public Message broadcastRequest(Message request) {
+        return null;
     }
 }
