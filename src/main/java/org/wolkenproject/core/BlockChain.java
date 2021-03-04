@@ -67,9 +67,11 @@ public class BlockChain implements Runnable {
         if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
             return;
         }
+    }
 
-        Message message = new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), parentHash);
-        Context.getInstance().getServer().broadcastRequest(message);
+    private BlockIndex requestBlock(byte hash[]) {
+        Message message = new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), hash);
+        return Context.getInstance().getServer().broadcastRequest(message);
     }
 
     private void setTip(BlockIndex block) {
