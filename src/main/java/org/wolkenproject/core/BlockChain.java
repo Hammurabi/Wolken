@@ -22,7 +22,7 @@ public class BlockChain implements Runnable {
 
     @Override
     public void run() {
-        while (hasOrphans()) {
+        while (Context.getInstance().isRunning()) {
             BlockIndex block = nextOrphan();
 
             if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
