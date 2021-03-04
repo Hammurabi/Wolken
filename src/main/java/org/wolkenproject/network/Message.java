@@ -105,4 +105,6 @@ public abstract class Message extends SerializableI {
     public abstract void readContents(InputStream stream) throws IOException, WolkenException;
 
     public abstract <Type> Type getPayload();
+    public abstract boolean containsResponse();
+    public abstract boolean containsFullResponse();
 }
