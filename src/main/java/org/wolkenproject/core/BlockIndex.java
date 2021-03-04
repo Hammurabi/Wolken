@@ -91,6 +91,9 @@ public class BlockIndex extends SerializableI {
         return Context.getInstance().getDatabase().checkBlockExists(getHeight() + 1);
     }
 
+    public boolean hasPrev() {
+    }
+
     public BlockIndex next() {
         return Context.getInstance().getDatabase().findBlock(getHeight() + 1);
     }
