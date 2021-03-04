@@ -123,7 +123,7 @@ public class Database {
     public byte[] put(byte[] k, byte[] v) {
         mutex.lock();
         try {
-            return get(k);
+            return put(k, v);
         } finally {
             mutex.unlock();
         }
