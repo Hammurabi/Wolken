@@ -70,10 +70,13 @@ public class BlockChain implements Runnable {
 
     private void setNext(BlockIndex block) {
         byte previousHash[] = block.getBlock().getParentHash();
+
         if (Utils.equals(previousHash, tip.getBlock().getHashCode())) {
             setTip(block);
             return;
         }
+
+        rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
     }
 
     private void replaceTip(BlockIndex block) {
@@ -102,6 +105,8 @@ public class BlockChain implements Runnable {
                 updateIndices(parent);
                 return true;
             }
+
+            parent = requestBlock(parent.getBlock().getParentHash());
         }
 
         return false;
