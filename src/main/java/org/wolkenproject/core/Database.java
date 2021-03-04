@@ -67,7 +67,7 @@ public class Database {
     }
 
     public void setTip(BlockIndex block) {
-        put(ChainTip, Utils.concatenate(Utils.concatenate(block.getBlock().getHashCode(), Utils.takeApart(block.getHeight()))));
+        put(ChainTip, Utils.concatenate(Utils.concatenate(block.getHash(), Utils.takeApart(block.getHeight()))));
     }
 
     public boolean checkBlockExists(byte[] hash) {
@@ -97,10 +97,10 @@ public class Database {
     }
 
     public void setBlockIndex(int height, BlockIndex block) {
-        put(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)), block.getBlock().getHashCode());
+        put(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)), block.getHash());
         mutex.lock();
         try {
-            OutputStream outputStream = location.newFile(".chain").newFile(Base16.encode(block.getBlock().getHashCode())).openFileOutputStream();
+            OutputStream outputStream = location.newFile(".chain").newFile(Base16.encode(block.getHash())).openFileOutputStream();
             block.write(outputStream);
             outputStream.flush();
             outputStream.close();
