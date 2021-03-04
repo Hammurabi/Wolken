@@ -111,17 +111,4 @@ public class Database {
             mutex.unlock();
         }
     }
-
-    public void deleteBlock(byte[] hash) {
-        mutex.lock();
-        try {
-            byte hash[] = database.get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
-            if (hash == null) {
-                return null;
-            }
-            return findBlock(hash);
-        } finally {
-            mutex.unlock();
-        }
-    }
 }
