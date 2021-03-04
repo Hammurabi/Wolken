@@ -100,13 +100,40 @@ public class Database {
     }
 
     public BlockIndex findBlock(int height) {
+        byte hash[] = database.get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
+
         mutex.lock();
         try {
-            byte hash[] = database.get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
             if (hash == null) {
                 return null;
             }
             return findBlock(hash);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public void deleteBlock(byte[] hash) {
+        mutex.lock();
+        try {
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public byte[] get(byte[] k) {
+        mutex.lock();
+        try {
+            return get(k);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public byte[] put(byte[] k, byte[] v) {
+        mutex.lock();
+        try {
+            return get(k);
         } finally {
             mutex.unlock();
         }
