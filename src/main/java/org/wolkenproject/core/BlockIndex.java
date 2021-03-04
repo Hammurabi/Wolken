@@ -29,8 +29,8 @@ public class BlockIndex extends SerializableI {
         return block;
     }
 
-    public BigInteger getChainWork() {
-        return chainWork;
+    public BigInteger getChainWork() throws WolkenException {
+        return chainWork.add(block.getWork());
     }
 
     public int getHeight() {
@@ -39,7 +39,7 @@ public class BlockIndex extends SerializableI {
 
     public BlockIndex generateNextBlock() throws WolkenException {
         int bits                = ChainMath.calculateNewTarget(this);
-        BlockIndex blockIndex   = new BlockIndex(new Block(block.getHashCode(), bits), chainWork.add(block.getWork()), height + 1);
+        BlockIndex blockIndex   = new BlockIndex(new Block(block.getHashCode(), bits), getChainWork(), height + 1);
 
         return blockIndex;
     }
@@ -74,11 +74,17 @@ public class BlockIndex extends SerializableI {
         return Context.getInstance().getSerialFactory().getSerialNumber(BlockIndex.class);
     }
 
-    public boolean validate() {
-        return false;
-    }
+    public void recalculateChainWork() throws WolkenException {
+        BlockIndex previous = previousBlock();
+        if (previous != null) {
+            this.chainWork  = previous.getChainWork();
+        } else {
+            this.chainWork  = BigInteger.ZERO;
+        }
 
-    public void recalculateChainWork() {
+        if (hasNext()) {
+            next().recalculateChainWork();
+        }
     }
 
     public boolean hasNext() {
