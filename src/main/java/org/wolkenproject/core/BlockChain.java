@@ -77,8 +77,12 @@ public class BlockChain implements Runnable {
 
         if (response != null && response instanceof BlockList) {
             Collection<BlockIndex> blocks = response.getPayload();
-            return ;
+            if (!blocks.isEmpty()) {
+                blocks.iterator().next();
+            }
         }
+
+        return null;
     }
 
     private void setTip(BlockIndex block) {
