@@ -220,6 +220,7 @@ public class Server implements Runnable {
                 e.printStackTrace();
             }
         }
+        
         Logger.alert("closed connections.");
     }
 
