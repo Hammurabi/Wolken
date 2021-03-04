@@ -96,6 +96,7 @@ public class Inv extends Message {
                 return;
             }
 
+            // request the transactions
             node.sendMessage(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions));
         }
     }
