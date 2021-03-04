@@ -53,6 +53,7 @@ public class BlockChain implements Runnable {
 
         while (currentBlock.getHeight() != block.getHeight()) {
             currentBlock = currentBlock.previousBlock();
+            replaceTip(currentBlock.previousBlock());
             deleteBlockIndex(currentBlock, true);
         }
 
