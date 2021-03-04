@@ -7,9 +7,10 @@ import java.util.Queue;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
-    private BlockIndex      tip;
-    private byte[]          chainWork;
-    private Queue<Block>    orphanedBlocks;
+    private BlockIndex          tip;
+    private byte[]              chainWork;
+    private Queue<BlockIndex>   blockPool;
+    private Queue<BlockIndex>   orphanedBlocks;
 
     private ReentrantLock   lock;
 
