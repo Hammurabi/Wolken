@@ -36,6 +36,11 @@ public class BlockChain implements Runnable {
             BlockIndex block = nextOrphan();
 
             try {
+                if (tip == null) {
+
+                    continue;
+                }
+
                 if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
                     // switch to this chain
                     if (block.getHeight() == tip.getHeight()) {
