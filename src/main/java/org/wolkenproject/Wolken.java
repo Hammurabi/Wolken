@@ -19,6 +19,7 @@ public class Wolken {
         options.addOption("dir", true, "set the main directory for wolken, otherwise uses the default application directory of the system.");
         options.addOption("enable_testnet", true, "set the testnet to enabled/disabled.");
         options.addOption("enable_mining", true, "set the node to a mining node.");
+        options.addOption("force_connect", true, "force a connection to an ip:port.");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
