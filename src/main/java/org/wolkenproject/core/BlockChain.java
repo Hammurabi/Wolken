@@ -101,12 +101,15 @@ public class BlockChain implements Runnable {
         BlockIndex parent = requestBlock(parentHash);
         while (parent != null) {
             replaceBlockIndex(height, parent);
+            height      --;
+            parentHash  = parent.getBlock().getParentHash();
+
             if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
                 updateIndices(parent);
                 return true;
             }
 
-            parent = requestBlock(parent.getBlock().getParentHash());
+            parent = requestBlock(parentHash);
         }
 
         return false;
