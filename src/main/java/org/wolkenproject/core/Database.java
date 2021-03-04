@@ -128,4 +128,7 @@ public class Database {
     public BlockIndex findBlock(byte[] hash) {
         return null;
     }
+
+    public void setBlockIndex(int height, BlockIndex block) {
+    }
 }
