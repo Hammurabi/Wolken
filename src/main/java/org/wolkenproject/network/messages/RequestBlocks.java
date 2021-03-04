@@ -1,6 +1,7 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.Block;
+import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
@@ -27,22 +28,18 @@ public class RequestBlocks extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        Set<Block> blocks = new LinkedHashSet<>();
+        Set<BlockIndex> blocks = new LinkedHashSet<>();
         for (byte[] hash : this.blocks)
         {
-            Block block = Context.getInstance().getDatabase().findBlock(hash);
-            if (transaction == null)
-            {
-                transaction = Context.getInstance().getDatabase().getTransaction(txid);
-            }
+            BlockIndex block = Context.getInstance().getDatabase().findBlock(hash);
 
-            if (transaction != null)
+            if (block != null)
             {
-                transactions.add(transaction);
+                blocks.add(block);
             }
         }
 
-        node.sendMessage(new TransactionList(Context.getInstance().getNetworkParameters().getVersion(), transactions, getUniqueMessageIdentifier()));
+        node.sendMessage(new BlockList(Context.getInstance().getNetworkParameters().getVersion(), blocks, getUniqueMessageIdentifier()));
     }
 
     @Override
