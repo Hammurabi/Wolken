@@ -30,6 +30,7 @@ public class BlockChain implements Runnable {
                     if (block.validate()) {
                         if (block.getHeight() == tip.getHeight()) {
                         } else if (block.getHeight() == (tip.getHeight() + 1)) {
+                        } else if (block.getHeight() > tip.getHeight()) {
                         }
                     }
                 }
