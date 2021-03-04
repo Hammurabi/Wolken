@@ -55,11 +55,6 @@ public class BlockList extends ResponseMessage {
     }
 
     @Override
-    public ResponseMetadata getResponseMetadata() {
-        return null;
-    }
-
-    @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return (Type) new BlockList(getVersion(), blocks, getUniqueMessageIdentifier());
     }
