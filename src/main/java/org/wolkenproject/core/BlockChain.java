@@ -65,10 +65,21 @@ public class BlockChain implements Runnable {
         rollbackIntoExistingParent(block.getBlock().getParentHash());
     }
 
-    private void rollbackIntoExistingParent(byte[] parentHash) {
+    private boolean rollbackIntoExistingParent(byte[] parentHash) {
+        // check that the block exists
         if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
-            return;
+            return true;
         }
+
+        // we must request it in case it doesn't
+        BlockIndex parent = requestBlock(parentHash);
+        while (parent != null) {
+            if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private BlockIndex requestBlock(byte hash[]) {
