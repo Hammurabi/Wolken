@@ -144,6 +144,10 @@ public class BlockChain implements Runnable {
         Context.getInstance().getDatabase().setBlockIndex(height, block);
     }
 
+    private void deleteBlockIndex(int height) {
+        Context.getInstance().getDatabase().deleteBlock(height);
+    }
+
     private BlockIndex requestBlock(byte hash[]) {
         Message request = new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), hash);
         Message response= Context.getInstance().getServer().broadcastRequest(request);
