@@ -79,7 +79,6 @@ public class Inv extends Message {
         else if (type == Type.Transaction)
         {
             Set<byte[]> newTransactions = Context.getInstance().getTransactionPool().getNonDuplicateTransactions(list);
-            newTransactions = Context.getInstance().getDatabase().getNonDuplicateTransactions(newTransactions);
 
             if (newTransactions.isEmpty())
             {
