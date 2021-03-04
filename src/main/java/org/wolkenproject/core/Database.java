@@ -11,8 +11,6 @@ import org.wolkenproject.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Database {
@@ -69,12 +67,7 @@ public class Database {
     }
 
     public void setTip(BlockIndex block) {
-        mutex.lock();
-        try {
-            database.put(ChainTip, Utils.concatenate(Utils.concatenate(block.getBlock().getHashCode(), Utils.takeApart(block.getHeight()))));
-        } finally {
-            mutex.unlock();
-        }
+        put(ChainTip, Utils.concatenate(Utils.concatenate(block.getBlock().getHashCode(), Utils.takeApart(block.getHeight()))));
     }
 
     public boolean checkBlockExists(byte[] hash) {
