@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class Node implements Runnable {
     private MessageCache            messageCache;
     private long                    firstConnected;
     private int                     errors;
+    private ByteBuffer              buffer;
 
 //    private BufferedInputStream     inputStream;
 //    private BufferedOutputStream    outputStream;
@@ -48,6 +50,7 @@ public class Node implements Runnable {
 //        this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
         this.firstConnected = System.currentTimeMillis();
         this.respones       = Collections.synchronizedMap(new HashMap<>());
+        this.socket.configureBlocking(false);
     }
 
     public void receiveResponse(Message message, byte origin[]) {
