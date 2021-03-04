@@ -97,6 +97,7 @@ public class Database {
     }
 
     public void setBlockIndex(int height, BlockIndex block) {
+        put(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)), block.getBlock().getHashCode());
     }
 
     public BlockIndex findBlock(int height) {
@@ -105,7 +106,7 @@ public class Database {
         if (hash == null) {
             return null;
         }
-        
+
         return findBlock(hash);
     }
 
