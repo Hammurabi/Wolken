@@ -2,6 +2,7 @@ package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
+import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.VersionMessage;
 import org.wolkenproject.utils.Logger;
 
@@ -263,5 +264,13 @@ public class Server implements Runnable {
 
     public Set<Node> getConnectedNodes() {
         return new LinkedHashSet<>(connectedNodes);
+    }
+
+    public void broadcast(Message message) {
+        Set<Node> connectedNodes = getConnectedNodes();
+
+        for (Node node : connectedNodes) {
+            node.sendMessage(message);
+        }
     }
 }
