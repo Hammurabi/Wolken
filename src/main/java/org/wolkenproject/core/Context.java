@@ -108,4 +108,8 @@ public class Context {
     public Address[] getPayList() {
         return payList;
     }
+
+    public Server getServer() {
+        return server;
+    }
 }
