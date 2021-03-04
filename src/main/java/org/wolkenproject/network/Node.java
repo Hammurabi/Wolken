@@ -24,6 +24,7 @@ public class Node implements Runnable {
     private ReentrantLock           mutex;
     private Queue<Message>          messages;
     private Queue<byte[]>           messageQueue;
+    private Map<byte[], Integer>    responeTypes;
     private Map<byte[], Message>    respones;
     private MessageCache            messageCache;
     private long                    firstConnected;
@@ -53,6 +54,7 @@ public class Node implements Runnable {
         this.respones       = Collections.synchronizedMap(new HashMap<>());
         this.socket.configureBlocking(false);
         this.buffer         = ByteBuffer.allocate(Context.getInstance().getNetworkParameters().getBufferSize());
+        this.responeTypes   = new HashMap<>();
     }
 
     public void receiveResponse(Message message, byte origin[]) {
@@ -106,10 +108,17 @@ public class Node implements Runnable {
     private Message getResponse(byte[] uniqueMessageIdentifier) {
         mutex.lock();
         try{
-            Message response = respones.get(uniqueMessageIdentifier);
+            Message response    = respones.get(uniqueMessageIdentifier);
+            int magic           = responeTypes.get(uniqueMessageIdentifier);
+
+            if (response.getSerialNumber() != magic) {
+                return null;
+            }
+
             return response;
         } finally {
             respones.remove(uniqueMessageIdentifier);
+            responeTypes.remove(uniqueMessageIdentifier);
             mutex.unlock();
         }
     }
