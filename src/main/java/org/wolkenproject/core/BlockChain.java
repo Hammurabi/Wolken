@@ -258,4 +258,25 @@ public class BlockChain implements Runnable {
             lock.unlock();
         }
     }
+
+    public boolean contains(byte[] hash) {
+        Queue<BlockIndex> orphaned = getOrphanedBlocks();
+        for (BlockIndex block : orphaned) {
+            if (Utils.equals(block.getHash(), hash)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Queue<BlockIndex> getOrphanedBlocks() {
+        lock.lock();
+        try {
+            return new PriorityQueue<>(orphanedBlocks);
+        }
+        finally {
+            lock.unlock();
+        }
+    }
 }
