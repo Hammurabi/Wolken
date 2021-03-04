@@ -155,13 +155,11 @@ public class Node implements Runnable {
 
             int read = 0;
             long timestamp = System.currentTimeMillis();
-            long totalBytes= 0;
-            int totalCycles= 0;
 
             // block until EOF is reached
             while ((read = socket.read(buffer)) != -1) {
                 // check message header
-                if (totalBytes >= 12) {
+                if (stream.size() >= 12) {
                     byte header[]   = stream.toByteArray();
                     int length      = Utils.makeInt(header, 8);
 
