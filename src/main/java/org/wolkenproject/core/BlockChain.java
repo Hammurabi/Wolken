@@ -77,6 +77,7 @@ public class BlockChain implements Runnable {
         while (parent != null) {
             replaceBlockIndex(height, parent);
             if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
+                updateIndices(parent);
                 return true;
             }
         }
