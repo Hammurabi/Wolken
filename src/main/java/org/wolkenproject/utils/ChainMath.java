@@ -135,15 +135,15 @@ public class ChainMath {
         int currentBlockHeight = block.getHeight();
 
         if (shouldRecalcNextWork(currentBlockHeight)) {
-            BlockIndex first = null;
+            BlockIndex earliest = null;
 
             int previousBlockHeight = currentBlockHeight - Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
 
             if (previousBlockHeight >= 0) {
-                first = Context.getInstance().getDatabase().findBlock(previousBlockHeight);
+                earliest = Context.getInstance().getDatabase().findBlock(previousBlockHeight);
             }
 
-            return generateTargetBits(block, first);
+            return generateTargetBits(block, earliest);
         }
 
         return block.getBlock().getBits();
