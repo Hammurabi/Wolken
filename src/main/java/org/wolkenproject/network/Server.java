@@ -190,4 +190,7 @@ public class Server implements Runnable {
     public NetAddress getNetAddress() {
         return netAddress;
     }
+
+    public void broadcastRequest(Message request) {
+    }
 }
