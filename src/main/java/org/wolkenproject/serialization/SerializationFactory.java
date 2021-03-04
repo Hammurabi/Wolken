@@ -29,6 +29,10 @@ public class SerializationFactory {
         magicReferences.put(magic, serializableInstance);
     }
 
+    public <Type extends SerializableI> Type fromStream(Class<?> classType, InputStream stream) throws IOException, WolkenException {
+        return fromStream(getSerialNumber(classType), stream);
+    }
+
     public <Type extends SerializableI> Type fromStream(InputStream stream) throws IOException, WolkenException {
         byte magicBytes[] = new byte[4];
         stream.read(magicBytes);
