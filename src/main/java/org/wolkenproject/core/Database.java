@@ -115,7 +115,6 @@ public class Database {
     }
 
     public TransactionI getTransaction(byte[] txid) {
-        return Context.getInstance().getSerialFactory().fromBytes();
     }
 
     public void setTip(BlockIndex block) {
