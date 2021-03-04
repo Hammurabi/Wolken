@@ -51,7 +51,7 @@ public class BlockChain implements Runnable {
 
             try {
                 if (getTip() == null) {
-                    Logger.alert("no chain tip found{using '"+ Base16.encode(block.getHash()) +"' as new tip}");
+                    Logger.alert("settings new tip" + block);
                     tip = block;
                     continue;
                 }
