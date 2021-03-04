@@ -51,6 +51,11 @@ public class TransactionList extends ResponseMessage {
     }
 
     @Override
+    public <Type> Type getPayload() {
+        return (Type) transactions;
+    }
+
+    @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return (Type) new TransactionList(getVersion(), transactions, getUniqueMessageIdentifier());
     }
