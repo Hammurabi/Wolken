@@ -33,7 +33,7 @@ public class SolidStateCollection<T extends SerializableI> {
 //        return loadItemExclusively(index);
 //    }
 
-    public void add(T element) throws FileNotFoundException {
+    public void add(T element) throws IOException {
         list.add(element);
         size ++;
 
