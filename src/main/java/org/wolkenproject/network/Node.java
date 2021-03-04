@@ -5,10 +5,7 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.utils.Utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -204,8 +201,10 @@ public class Node implements Runnable {
                 return null;
             }
 
-            int magic = Utils.makeInt(magicBytes);
-            Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
+            byte msg[] = messageQueue.poll();
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(msg);
+            Message message = Context.getInstance().getSerialFactory().fromStream(inputStream);
+            inputStream.close();
             return checkSpam(message);
         } catch (IOException | WolkenException e) {
             errors++;
