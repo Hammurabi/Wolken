@@ -121,10 +121,7 @@ public class Database {
     public void setTip(BlockIndex block) {
         mutex.lock();
         try {
-            byte id[]   = Utils.concatenate(ChainTip, Utils.concatenate(block.getBlock().getHashCode(), Utils.takeApart(block.getHeight())));
-            byte data[] = database.get(id);
-
-            return data != null;
+            database.put(ChainTip, Utils.concatenate(Utils.concatenate(block.getBlock().getHashCode(), Utils.takeApart(block.getHeight()))));
         } finally {
             mutex.unlock();
         }
