@@ -65,11 +65,13 @@ public class BlockChain implements Runnable {
                                 for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
                                     Context.getInstance().getDatabase().deleteBlock(i);
                                 }
-                                
+
                                 tip = null;
+                                break;
                             }
                         }
                     }
+
                     Logger.alert("chain downloaded successfully");
                     continue;
                 }
