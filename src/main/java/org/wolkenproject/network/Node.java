@@ -147,7 +147,10 @@ public class Node implements Runnable {
                 return;
             }
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            if (stream == null) {
+                stream = new ByteArrayOutputStream();
+            }
+
             byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
 
             int read = 0;
