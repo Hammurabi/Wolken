@@ -127,12 +127,9 @@ public class BlockChain implements Runnable {
     }
 
     private void updateIndices(BlockIndex index) {
-        while (index != null) {
+        while (index.hasNext()) {
             index.recalculateChainWork();
-            
-            if (index.hasNext()) {
-                index = index.next();
-            }
+            index = index.next();
         }
     }
 
