@@ -9,7 +9,6 @@ import org.wolkenproject.utils.Utils;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -25,7 +24,7 @@ public class Node implements Runnable {
     private ReentrantLock           mutex;
     private Queue<Message>          messages;
     private Queue<byte[]>           messageQueue;
-    private Map<byte[], Integer>    responeTypes;
+    private Map<byte[], Integer> expectedResponse;
     private Map<byte[], Message>    respones;
     private MessageCache            messageCache;
     private long                    firstConnected;
@@ -55,7 +54,7 @@ public class Node implements Runnable {
         this.respones       = Collections.synchronizedMap(new HashMap<>());
         this.socket.configureBlocking(false);
         this.buffer         = ByteBuffer.allocate(Context.getInstance().getNetworkParameters().getBufferSize());
-        this.responeTypes   = new HashMap<>();
+        this.expectedResponse = new HashMap<>();
     }
 
     public void receiveResponse(Message message, byte origin[]) {
@@ -76,7 +75,7 @@ public class Node implements Runnable {
             if (messageCache.shouldSend(message))
             {
                 messages.add(message);
-                responeTypes.put(id, message.getResponseType());
+                expectedResponse.put(id, message.getResponseType());
                 shouldWait = true;
             }
         } finally {
@@ -111,7 +110,7 @@ public class Node implements Runnable {
         mutex.lock();
         try{
             Message response    = respones.get(uniqueMessageIdentifier);
-            int magic           = responeTypes.get(uniqueMessageIdentifier);
+            int magic           = expectedResponse.get(uniqueMessageIdentifier);
 
             // return without any issues
             if (response.getSerialNumber() != Context.getInstance().getSerialFactory().getSerialNumber(FailedToRespondMessage.class)) {
@@ -127,7 +126,7 @@ public class Node implements Runnable {
             return response;
         } finally {
             respones.remove(uniqueMessageIdentifier);
-            responeTypes.remove(uniqueMessageIdentifier);
+            expectedResponse.remove(uniqueMessageIdentifier);
             mutex.unlock();
         }
     }
