@@ -38,7 +38,10 @@ public class BlockChain implements Runnable {
         Logger.alert("attempting to reload chain from last checkpoint.");
         lock.lock();
         try {
-
+            tip = Context.getInstance().getDatabase().findTip();
+            if (tip != null) {
+                Logger.alert("loaded checkpoint successfully" + tip);
+            }
         } finally {
             lock.unlock();
         }
