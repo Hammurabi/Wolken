@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
 import java.util.Queue;
@@ -51,6 +52,11 @@ public class BlockChain implements Runnable {
 
     private void replaceTip(BlockIndex block) {
         addOrphan(tip);
+        byte previousHash[] = tip.getBlock().getParentHash();
+        if (Utils.equals(block.getBlock().getParentHash(), previousHash)) {
+            setTip(block);
+            return;
+        }
     }
 
     private void addOrphan(BlockIndex block) {
