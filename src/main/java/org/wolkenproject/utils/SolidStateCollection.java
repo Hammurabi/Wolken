@@ -42,7 +42,7 @@ public class SolidStateCollection<T extends SerializableI> {
         }
     }
 
-    private void unload() throws FileNotFoundException {
+    private void unload() throws IOException {
         int chunkIndex = size / maxItemsInRam;
         OutputStream outputStream = new FileOutputStream(service.newFile("cnk_" + chunkIndex).file());
         outputStream.flush();
