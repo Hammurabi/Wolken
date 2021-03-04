@@ -105,14 +105,16 @@ public class RequestBlocks extends Message {
 
             if (blocks.size() > this.blocks.size()) {
                 response |= ResponseMetadata.ValidationBits.SpamfulResponse;
+                response |= ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
-//            if (checked == this.blocks.size()) {
-//                response |= ResponseMetadata.ValidationBits.EntireResponse;
-//            }
+            if (checked == this.blocks.size()) {
+                response |= ResponseMetadata.ValidationBits.FullResponse;
+            }
 
             if (checked != this.blocks.size()) {
                 response |= ResponseMetadata.ValidationBits.PartialResponse;
+                response |= ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
             return response;
