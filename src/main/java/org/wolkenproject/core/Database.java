@@ -89,15 +89,6 @@ public class Database {
         }
     }
 
-    public BlockHeader findBlockHeaderByHeight(long height) {
-        LookupResult<byte[]> blockHash = findBlockHashFromHeight(height);
-        if (blockHash.exists())
-        {
-        }
-
-        return null;
-    }
-
     public Set<byte[]> getNonDuplicateTransactions(Set<byte[]> list) {
         Set<byte[]> result = new HashSet<>();
         for (byte[] txid : list)
