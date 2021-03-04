@@ -12,15 +12,18 @@ import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Server implements Runnable {
     private ServerSocketChannel socket;
     private Set<Node>           connectedNodes;
     private NetAddress          netAddress;
+    private ReentrantLock       mutex;
 
     public Server() throws IOException {
-        socket = ServerSocketChannel.open();
+        socket  = ServerSocketChannel.open();
         socket.bind(new InetSocketAddress(Context.getInstance().getNetworkParameters().getPort()));
+        mutex   = new ReentrantLock();
 
         socket.configureBlocking(false);
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
@@ -213,6 +216,7 @@ public class Server implements Runnable {
     }
 
     public Message broadcastRequest(Message request, long timeOut) {
+
         return null;
     }
 
