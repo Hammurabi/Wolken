@@ -58,6 +58,15 @@ public class BlockChain implements Runnable {
         }
     }
 
+    private BlockIndex nextOrphan() {
+        lock.lock();
+        try {
+            return orphanedBlocks.poll();
+        } finally {
+            lock.unlock();
+        }
+    }
+
     private void setNext(BlockIndex block) {
 
     }
