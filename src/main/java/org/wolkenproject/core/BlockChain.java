@@ -53,6 +53,10 @@ public class BlockChain implements Runnable {
         addOrphan(tip);
     }
 
+    private void addOrphan(BlockIndex block) {
+        orphanedBlocks.add(block);
+    }
+
     public BlockIndex makeGenesisBlock() throws WolkenException {
         Block genesis = new Block(new byte[Block.UniqueIdentifierLength], 0);
         genesis.addTransaction(TransactionI.newCoinbase(0, "", Context.getInstance().getNetworkParameters().getMaxReward(), Context.getInstance().getPayList()));
