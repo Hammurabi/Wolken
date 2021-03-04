@@ -105,18 +105,25 @@ public class Server implements Runnable {
                 lastCheck = currentTime;
             }
 
+            for (Node node : connectedNodes) {
+                node.read();
+            }
+
             for (Node node : connectedNodes)
             {
                 CachedMessage message = node.listenForMessage();
-                if (!message.isSpam())
-                {
-                    if (!node.hasPerformedHandshake() && !message.isHandshake())
-                    {
-                        // ignore message
-                        continue;
-                    }
 
-                    message.getMessage().executePayload(this, node);
+                if (message != null) {
+                    if (!message.isSpam())
+                    {
+                        if (!node.hasPerformedHandshake() && !message.isHandshake())
+                        {
+                            // ignore message
+                            continue;
+                        }
+
+                        message.getMessage().executePayload(this, node);
+                    }
                 }
             }
 
