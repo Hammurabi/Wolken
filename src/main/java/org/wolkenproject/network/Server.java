@@ -6,6 +6,7 @@ import org.wolkenproject.utils.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
@@ -17,7 +18,9 @@ public class Server implements Runnable {
     private NetAddress          netAddress;
 
     public Server() throws IOException {
-        socket = new ServerSocket(Context.getInstance().getNetworkParameters().getPort());
+        socket = ServerSocketChannel.open();
+        socket.bind(new InetSocketAddress(Context.getInstance().getNetworkParameters().getPort()));
+        
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
 
         netAddress = Context.getInstance().getIpAddressList().getAddress(InetAddress.getLocalHost());
