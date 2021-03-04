@@ -215,4 +215,8 @@ public class Server implements Runnable {
     public Message broadcastRequest(Message request, long timeOut) {
         return null;
     }
+
+    public Set<Node> getConnectedNodes() {
+        return new LinkedHashSet<>(connectedNodes);
+    }
 }
