@@ -246,6 +246,8 @@ public class Server implements Runnable {
                 if (response != null) {
                     if (response.noErrors()) {
                         return response.getMessage();
+                    } else if (fullResponse && response.containsFullResponse()) {
+                        return response.getMessage();
                     } else {
                         if (fullResponse) {
                             continue;
