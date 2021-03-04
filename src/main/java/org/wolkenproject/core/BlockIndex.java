@@ -77,4 +77,7 @@ public class BlockIndex extends SerializableI {
     public boolean validate() {
         return false;
     }
+
+    public void recalculateChainWork() {
+    }
 }
