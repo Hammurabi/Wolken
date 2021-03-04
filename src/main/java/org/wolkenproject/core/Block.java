@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Block extends BlockHeader {
@@ -24,6 +25,7 @@ public class Block extends BlockHeader {
     public Block(byte previousHash[], int bits)
     {
         super(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], bits, 0);
+        transactions = new LinkedHashSet<>();
     }
 
     public final int countLength() {
