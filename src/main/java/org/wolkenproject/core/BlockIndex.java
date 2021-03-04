@@ -88,4 +88,8 @@ public class BlockIndex extends SerializableI {
     public BlockIndex next() {
         return null;
     }
+
+    public BlockIndex previousBlock() {
+        return null;
+    }
 }
