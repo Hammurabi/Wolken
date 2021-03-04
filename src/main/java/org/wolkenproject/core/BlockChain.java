@@ -46,6 +46,9 @@ public class BlockChain implements Runnable {
         }
     }
 
+    private void rollback(BlockIndex block) {
+    }
+
     private void setNextGapped(BlockIndex block) {
         setTip(block);
         rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
