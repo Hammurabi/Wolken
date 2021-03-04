@@ -40,6 +40,7 @@ public class RequestTransactions extends Message {
             }
         }
 
+        // send the transactions
         node.sendMessage(new TransactionList(Context.getInstance().getNetworkParameters().getVersion(), transactions, getUniqueMessageIdentifier()));
     }
 
