@@ -14,9 +14,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public class BlockChain implements Runnable {
     private BlockIndex          tip;
     private byte[]              chainWork;
-    // contains random blocks sent from peers.
+    // contains blocks sent from peers and orphaned chains.
     private Queue<BlockIndex>   orphanedBlocks;
-    private static final int    MaximumBlockQueueSize = 1_000_000_000;
+    private static final int    MaximumBlockQueueSize = 1_250_000_000;
 
     private ReentrantLock   lock;
 
