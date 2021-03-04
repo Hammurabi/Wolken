@@ -124,4 +124,8 @@ public class Database {
     public boolean checkBlockExists(byte[] hash) {
         return false;
     }
+
+    public BlockIndex findBlock(byte[] hash) {
+        return null;
+    }
 }
