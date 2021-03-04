@@ -131,4 +131,8 @@ public class Database {
 
     public void setBlockIndex(int height, BlockIndex block) {
     }
+
+    public BlockIndex findBlock(int height) {
+        return null;
+    }
 }
