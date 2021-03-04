@@ -120,6 +120,7 @@ public class BlockChain implements Runnable {
 
         // remove any blocks that are too far back in the queue.
         if (orphanedBlocks.size() > maximumBlocks) {
+            trimOrphans(orphanedBlocks.size() - maximumBlocks);
         }
     }
 
