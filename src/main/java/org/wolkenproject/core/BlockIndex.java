@@ -165,6 +165,8 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         }
     }
 
+    // always use this method when available
+    // getBlock().getHashCode() is too expensive
     public byte[] getHash() {
         return hash;
     }
