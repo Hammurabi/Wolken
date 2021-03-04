@@ -9,6 +9,7 @@ import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
@@ -80,7 +81,16 @@ public class Database {
     }
 
     public BlockIndex findBlock(byte[] hash) {
-        return null;
+        mutex.lock();
+        try {
+            InputStream inputStream = location.newFile(".chain").newFile(Base16.encode(hash)).openFileInputStream();
+            Block block = Context.getInstance().getSerialFactory().fromStream(Block.class, inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            mutex.unlock();
+        }
     }
 
     public void setBlockIndex(int height, BlockIndex block) {
