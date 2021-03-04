@@ -53,7 +53,12 @@ public class Server implements Runnable {
                 socket.bind(new InetSocketAddress(address.getAddress(), address.getPort()));
 
                 Node node = new Node(socket);
-                connectedNodes.add(node);
+                mutex.lock();
+                try {
+                    connectedNodes.add(node);
+                } finally {
+                    mutex.unlock();
+                }
 
                 node.sendMessage(new VersionMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(Context.getInstance().getNetworkParameters().getVersion(), VersionInformation.Flags.AllServices, System.currentTimeMillis(), getNetAddress(), address, 0)));
 
@@ -82,7 +87,12 @@ public class Server implements Runnable {
                 if (incoming != null) {
                     if (connectedNodes.size() < (Context.getInstance().getNetworkParameters().getMaxAllowedInboundConnections() + Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections()))
                     {
-                        connectedNodes.add(new Node(incoming));
+                        mutex.lock();
+                        try {
+                            connectedNodes.add(new Node(incoming));
+                        } finally {
+                            mutex.unlock();
+                        }
                     }
                     else
                     {
@@ -101,6 +111,7 @@ public class Server implements Runnable {
         while (Context.getInstance().isRunning())
         {
             long currentTime = System.currentTimeMillis();
+            Set<Node> connectedNodes = getConnectedNodes();
 
             if (currentTime - lastCheck >= 30_000)
             {
