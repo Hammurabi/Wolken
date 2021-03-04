@@ -114,9 +114,6 @@ public class Database {
         return result;
     }
 
-    public TransactionI getTransaction(byte[] txid) {
-    }
-
     public void setTip(BlockIndex block) {
         mutex.lock();
         try {
