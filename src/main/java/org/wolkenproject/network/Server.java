@@ -149,7 +149,7 @@ public class Server implements Runnable {
     }
 
     private void runMaintenanceChecks() {
-        Iterator<Node> nodeIterator = connectedNodes.iterator();
+        Iterator<Node> nodeIterator = getConnectedNodes().iterator();
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
             boolean shouldDisconnect = false;
