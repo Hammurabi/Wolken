@@ -13,6 +13,7 @@ import java.math.BigInteger;
 
 public class BlockIndex extends SerializableI implements Comparable<BlockIndex> {
     private Block       block;
+    private byte        hash[];
     private BigInteger  chainWork;
     private int         height;
     private long        sequenceId;
@@ -162,6 +163,6 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public byte[] getHash() {
-        return new byte[0];
+        return hash;
     }
 }
