@@ -57,9 +57,6 @@ public class BlockChain implements Runnable {
         replaceTip(block);
     }
 
-    private void deleteBlockIndex(BlockIndex currentBlock) {
-    }
-
     private void setNextGapped(BlockIndex block) {
         setTip(block);
         rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
@@ -152,13 +149,16 @@ public class BlockChain implements Runnable {
         Context.getInstance().getDatabase().setBlockIndex(height, block);
     }
 
-    private void deleteBlockIndex(int height) {
-        BlockIndex previousIndex = Context.getInstance().getDatabase().findBlock(height);
-        if (previousIndex != null) {
-            addOrphan(previousIndex);
-        }
+    private void deleteBlockIndex(int height, boolean orphan) {
+        BlockIndex block = Context.getInstance().getDatabase().findBlock(height);
+        deleteBlockIndex(block, orphan);
+    }
 
-        Context.getInstance().getDatabase().deleteBlock(height);
+    private void deleteBlockIndex(BlockIndex block, boolean orphan) {
+        if (orphan) {
+            addOrphan(block);
+        }
+        Context.getInstance().getDatabase().deleteBlock(block.getBlock().getHashCode());
     }
 
     private BlockIndex requestBlock(byte hash[]) {
