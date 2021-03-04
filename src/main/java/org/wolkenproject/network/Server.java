@@ -167,7 +167,7 @@ public class Server implements Runnable {
                     shouldDisconnect = true;
                 }
 
-                if (node.getSpamAverage() > Context.getInstance().getNetworkParameters().getMessageSpamThreshold()) {
+                if (node.getSpamAverage() >= Context.getInstance().getNetworkParameters().getMessageSpamThreshold()) {
                     shouldDisconnect = true;
                     isSpammy = true;
                 }
