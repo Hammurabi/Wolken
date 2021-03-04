@@ -25,7 +25,7 @@ public class BlockChain implements Runnable {
         try {
             while (!blockPool.isEmpty()) {
                 BlockIndex block = blockPool.poll();
-                if (block.getHeight() == tip.getHeight()) {
+                if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
                 }
             }
         } finally {
