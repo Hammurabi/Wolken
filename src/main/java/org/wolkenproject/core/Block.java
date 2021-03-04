@@ -98,4 +98,8 @@ public class Block extends BlockHeader {
 
     public void addTransaction(TransactionI transaction) {
     }
+
+    public int getTransactionCount() {
+        return transactions.size();
+    }
 }
