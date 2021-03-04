@@ -2,10 +2,7 @@ package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.network.Message;
-import org.wolkenproject.network.Node;
-import org.wolkenproject.network.Server;
-import org.wolkenproject.network.VersionInformation;
+import org.wolkenproject.network.*;
 import org.wolkenproject.serialization.SerializableI;
 
 import java.io.IOException;
@@ -42,6 +39,11 @@ public class VerackMessage extends Message {
     @Override
     public <Type> Type getPayload() {
         return (Type) versionInformation;
+    }
+
+    @Override
+    public ResponseMetadata getResponseMetadata() {
+        return null;
     }
 
     @Override
