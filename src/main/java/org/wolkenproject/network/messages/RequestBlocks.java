@@ -104,18 +104,18 @@ public class RequestBlocks extends Message {
             }
 
             if (blocks.size() > this.blocks.size()) {
-                return ResponseMetadata.ValidationBits.SpamfulResponse;
+                response |= ResponseMetadata.ValidationBits.SpamfulResponse;
             }
 
             if (checked == this.blocks.size()) {
-                return ResponseMetadata.ValidationBits.FullResponse;
+                response |= ResponseMetadata.ValidationBits.FullResponse;
             }
 
             if (checked != this.blocks.size()) {
-                return ResponseMetadata.ValidationBits.PartialResponse;
+                response |= ResponseMetadata.ValidationBits.PartialResponse;
             }
 
-            return ;
+            return response;
         };
     }
 
