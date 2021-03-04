@@ -75,6 +75,7 @@ public class Node implements Runnable {
             if (messageCache.shouldSend(message))
             {
                 messages.add(message);
+                responeTypes.put(id, message.getResponseType());
                 shouldWait = true;
             }
         } finally {
