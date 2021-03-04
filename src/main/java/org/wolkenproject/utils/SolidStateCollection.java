@@ -45,6 +45,12 @@ public class SolidStateCollection<T extends SerializableI> {
     private void unload() throws IOException {
         int chunkIndex = size / maxItemsInRam;
         OutputStream outputStream = new FileOutputStream(service.newFile("cnk_" + chunkIndex).file());
+        Iterator<T> iterator = list.iterator();
+
+        for (int i = 0; i < maxItemsInRam; i ++) {
+            iterator.next().write(outputStream);
+            iterator.remove();
+        }
         outputStream.flush();
         outputStream.close();
     }
