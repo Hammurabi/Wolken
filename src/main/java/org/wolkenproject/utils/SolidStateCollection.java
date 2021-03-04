@@ -1,9 +1,12 @@
 package org.wolkenproject.utils;
 
+import org.wolkenproject.core.Context;
+import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -58,8 +61,14 @@ public class SolidStateCollection<T extends SerializableI> {
         };
     }
 
-    private T[] loadChunk(int index) throws FileNotFoundException {
+    private T[] loadChunk(int index) throws IOException, WolkenException {
         InputStream inputStream = new FileInputStream(service.newFile("cnk_" + index).file());
+        T[] chunk = (T[]) new Object[maxItemsInRam];
+        for (int i = 0; i < chunk.length; i ++) {
+            chunk[i] = Context.getInstance().getSerialFactory().fromStream(inputStream);
+        }
 
+        inputStream.close();
+        return chunk;
     }
 }
