@@ -85,7 +85,12 @@ public class Database {
         try {
             InputStream inputStream = location.newFile(".chain").newFile(Base16.encode(hash)).openFileInputStream();
             Block block = Context.getInstance().getSerialFactory().fromStream(Block.class, inputStream);
-        } catch (IOException e) {
+            inputStream.close();
+
+            BlockIndex nullIndex = findNullIndex(block.getHeight());
+
+            return new BlockIndex(block, chainWork, height);
+        } catch (IOException | WolkenException e) {
             e.printStackTrace();
             return null;
         } finally {
