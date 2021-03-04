@@ -8,12 +8,13 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.channels.ServerSocketChannel;
 import java.util.*;
 
 public class Server implements Runnable {
-    private ServerSocket    socket;
-    private Set<Node>       connectedNodes;
-    private NetAddress      netAddress;
+    private ServerSocketChannel socket;
+    private Set<Node>           connectedNodes;
+    private NetAddress          netAddress;
 
     public Server() throws IOException {
         socket = new ServerSocket(Context.getInstance().getNetworkParameters().getPort());
