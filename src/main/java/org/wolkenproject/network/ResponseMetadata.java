@@ -14,5 +14,5 @@ public interface ResponseMetadata {
         ;
     }
 
-    int getResponseFlag(Message responseMessage);
+    int getResponseBits(Message responseMessage);
 }
