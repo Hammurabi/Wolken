@@ -34,11 +34,20 @@ public class BlockChain implements Runnable {
         long lastBroadcast  = System.currentTimeMillis();
         byte lastHash[]     = null;
 
+
+        Logger.alert("attempting to reload previous chain.");
+        lock.lock();
+        try {
+
+        } finally {
+            lock.unlock();
+        }
+
         while (Context.getInstance().isRunning()) {
             BlockIndex block = nextOrphan();
 
             try {
-                if (tip == null) {
+                if (getTip() == null) {
                     Logger.alert("no chain tip found{using '"+ Base16.encode(block.getHash()) +"' as new tip}");
                     tip = block;
                     continue;
