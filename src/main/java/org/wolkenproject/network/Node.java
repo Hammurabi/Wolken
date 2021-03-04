@@ -51,6 +51,7 @@ public class Node implements Runnable {
         this.firstConnected = System.currentTimeMillis();
         this.respones       = Collections.synchronizedMap(new HashMap<>());
         this.socket.configureBlocking(false);
+        this.buffer         = ByteBuffer.allocate(Context.getInstance().getNetworkParameters().getBufferSize());
     }
 
     public void receiveResponse(Message message, byte origin[]) {
