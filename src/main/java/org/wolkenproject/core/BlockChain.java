@@ -77,7 +77,7 @@ public class BlockChain implements Runnable {
 
         if (response != null && response instanceof BlockList) {
             Collection<BlockIndex> blocks = response.getPayload();
-            if (!blocks.isEmpty()) {
+            if (blocks != null && !blocks.isEmpty()) {
                 blocks.iterator().next();
             }
         }
