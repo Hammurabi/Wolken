@@ -76,6 +76,13 @@ public class Inv extends Message {
     public void executePayload(Server server, Node node) {
         if (type == Type.Block)
         {
+            Set<byte[]> requestBlocks = new LinkedHashSet<>();
+
+            for (byte[] hash : list) {
+                if (!Context.getInstance().getDatabase().checkBlockExists(hash) && !Context.getInstance().getBlockChain().contains(hash)) {
+                    requestBlocks.add(hash);
+                }
+            }
         }
         else if (type == Type.Transaction)
         {
