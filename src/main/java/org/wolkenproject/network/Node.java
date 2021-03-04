@@ -163,6 +163,10 @@ public class Node implements Runnable {
                 if (totalBytes >= 12) {
                     byte header[]   = stream.toByteArray();
                     int length      = Utils.makeInt(header, 8);
+
+                    if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
+                        errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                    }
                 }
 
                 buffer.get(data, 0, read);
