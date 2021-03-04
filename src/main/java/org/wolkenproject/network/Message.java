@@ -65,8 +65,10 @@ public abstract class Message extends SerializableI {
         writeContents(byteArrayOutputStream);
         byteArrayOutputStream.flush();
         byteArrayOutputStream.close();
+
         byte bytes[] = byteArrayOutputStream.toByteArray();
         Utils.writeInt(bytes.length, stream);
+
         stream.write(bytes);
     }
 
