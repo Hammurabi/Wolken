@@ -98,7 +98,7 @@ public class RequestBlocks extends Message {
 
             int checked = 0;
             for (BlockIndex block : blocks) {
-                if (this.blocks.contains(block.getBlock().getHashCode())) {
+                if (this.blocks.contains(block.getHash())) {
                     checked ++;
                 }
             }
