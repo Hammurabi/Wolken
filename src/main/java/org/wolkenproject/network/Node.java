@@ -184,8 +184,13 @@ public class Node implements Runnable {
     }
 
     private void finish(ByteArrayOutputStream stream) {
-        if (stream.size() > 0) {
-            messageQueue.add(stream.toByteArray());
+        mutex.lock();
+        try {
+            if (stream.size() > 0) {
+                messageQueue.add(stream.toByteArray());
+            }
+        } finally {
+            mutex.unlock();
         }
     }
 
@@ -198,7 +203,7 @@ public class Node implements Runnable {
             if (messageQueue.isEmpty()) {
                 return null;
             }
-            
+
             int magic = Utils.makeInt(magicBytes);
             Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
             return checkSpam(message);
