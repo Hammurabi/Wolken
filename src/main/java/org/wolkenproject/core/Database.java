@@ -120,4 +120,8 @@ public class Database {
 
     public void setTip(BlockIndex block) {
     }
+
+    public boolean checkBlockExists(byte[] hash) {
+        return false;
+    }
 }
