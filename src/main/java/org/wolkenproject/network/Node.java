@@ -181,13 +181,8 @@ public class Node implements Runnable {
     }
 
     private void finish(ByteArrayOutputStream stream) {
-        mutex.lock();
-        try {
-            if (stream.size() > 0) {
-                messageQueue.add(stream.toByteArray());
-            }
-        } finally {
-            mutex.unlock();
+        if (stream.size() > 0) {
+            messageQueue.add(stream.toByteArray());
         }
     }
 
