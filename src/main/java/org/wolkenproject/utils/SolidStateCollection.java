@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SolidStateCollection<T extends SerializableI> {
-    private List<T> list;
+    private List<T>     list;
     private int         maxItemsInRam;
     private int         size;
     private FileService service;
@@ -34,7 +34,11 @@ public class SolidStateCollection<T extends SerializableI> {
 //    }
 
     public void add(T element) {
+        list.add(element);
 
+        if (list.size() > maxItemsInRam) {
+            unload();
+        }
     }
 
     Iterator<T> getIterator() throws FileNotFoundException {
