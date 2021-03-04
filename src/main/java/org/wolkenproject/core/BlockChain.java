@@ -8,6 +8,7 @@ import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -19,6 +20,13 @@ public class BlockChain implements Runnable {
     private static final int    MaximumBlockQueueSize = 1_250_000_000;
 
     private ReentrantLock   lock;
+
+    public BlockChain() {
+        orphanedBlocks  = new PriorityQueue<>();
+        lock            = new ReentrantLock();
+
+        tip             = Context.getInstance().getDatabase().findTip();
+    }
 
     @Override
     public void run() {
