@@ -10,6 +10,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.*;
 
 public class Server implements Runnable {
@@ -66,7 +67,7 @@ public class Server implements Runnable {
     private void listenForIncomingConnections()
     {
         Logger.alert("listening for inbound connections.");
-        Socket incoming = null;
+        SocketChannel incoming = null;
 
         while (Context.getInstance().isRunning())
         {
