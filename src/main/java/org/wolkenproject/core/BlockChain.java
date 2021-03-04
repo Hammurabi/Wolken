@@ -57,6 +57,7 @@ public class BlockChain implements Runnable {
 
     private void replaceTip(BlockIndex block) {
         addOrphan(tip);
+
         byte previousHash[] = tip.getBlock().getParentHash();
         if (Utils.equals(block.getBlock().getParentHash(), previousHash)) {
             setTip(block);
@@ -113,6 +114,8 @@ public class BlockChain implements Runnable {
 
     private void addOrphan(BlockIndex block) {
         orphanedBlocks.add(block);
+
+        int maximumBlocks = MaximumBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
     }
 
     public BlockIndex makeGenesisBlock() throws WolkenException {
