@@ -73,4 +73,8 @@ public class BlockIndex extends SerializableI {
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(BlockIndex.class);
     }
+
+    public boolean validate() {
+        return false;
+    }
 }
