@@ -79,6 +79,11 @@ public class RequestBlocks extends Message {
     }
 
     @Override
+    public <Type> Type getPayload() {
+        return (Type) blocks;
+    }
+
+    @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return (Type) new RequestBlocks(getVersion(), blocks);
     }
