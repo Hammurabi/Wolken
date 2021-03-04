@@ -1,9 +1,11 @@
 package org.wolkenproject.network.messages;
 
+import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 
@@ -19,6 +21,7 @@ public class RequestInv extends Message {
     @Override
     public void executePayload(Server server, Node node) {
         try {
+            BlockIndex blockIndex = Context.getInstance().getBlockChain().getTip();
             node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, null));
         } catch (WolkenException e) {
             e.printStackTrace();
@@ -35,6 +38,11 @@ public class RequestInv extends Message {
 
     @Override
     public <Type> Type getPayload() {
+        return null;
+    }
+
+    @Override
+    public ResponseMetadata getResponseMetadata() {
         return null;
     }
 
