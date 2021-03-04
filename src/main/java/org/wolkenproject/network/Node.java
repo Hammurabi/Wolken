@@ -26,6 +26,7 @@ public class Node implements Runnable {
     private SocketChannel           socket;
     private ReentrantLock           mutex;
     private Queue<Message>          messages;
+    private Queue<byte[]>           messageQueue;
     private Map<byte[], Message>    respones;
     private MessageCache            messageCache;
     private long                    firstConnected;
