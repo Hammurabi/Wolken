@@ -144,6 +144,10 @@ public class Node implements Runnable {
      */
     public CachedMessage listenForMessage() {
         try {
+            if (!socket.finishConnect()) {
+                return null;
+            }
+
             // a loop that hangs the entire thread might be dangerous.
             //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
             byte magicBytes[]    = new byte[4];
