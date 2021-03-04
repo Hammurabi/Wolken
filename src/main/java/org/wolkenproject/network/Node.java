@@ -205,6 +205,12 @@ public class Node implements Runnable {
         }
     }
 
+    private void finish(ByteArrayOutputStream stream) {
+        if (stream.size() > 0) {
+            messageQueue.add(stream);
+        }
+    }
+
     /*
         Listens for any incoming messages.
      */
