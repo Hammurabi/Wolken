@@ -58,7 +58,11 @@ public class BlockChain implements Runnable {
             Set<byte[]> hashCodes = new LinkedHashSet<>();
             hashCodes.add(getTip().getBlock().getHashCode());
 
-            Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
+            try {
+                Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
+            } catch (WolkenException e) {
+                e.printStackTrace();
+            }
         }
     }
 
