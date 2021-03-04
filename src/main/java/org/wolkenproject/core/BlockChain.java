@@ -56,7 +56,7 @@ public class BlockChain implements Runnable {
             }
 
             Set<byte[]> hashCodes = new LinkedHashSet<>();
-            hashCodes.add(getTip().getBlock().getHashCode());
+            hashCodes.add(getTip().getHash());
 
             try {
                 Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
@@ -104,7 +104,7 @@ public class BlockChain implements Runnable {
     private void setNext(BlockIndex block) throws WolkenException {
         byte previousHash[] = block.getBlock().getParentHash();
 
-        if (Utils.equals(previousHash, tip.getBlock().getHashCode())) {
+        if (Utils.equals(previousHash, tip.getHash())) {
             setTip(block);
             return;
         }
