@@ -1,6 +1,7 @@
 package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
+import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.VersionMessage;
 import org.wolkenproject.utils.Logger;
 
@@ -235,7 +236,15 @@ public class Server implements Runnable {
     public Message broadcastRequest(Message request, long timeOut) {
         Set<Node> connectedNodes = getConnectedNodes();
         for (Node node : connectedNodes) {
-            Message response = node.getResponse(request, timeOut);
+            try {
+                Message response = node.getResponse(request, timeOut);
+                if (response != null) {
+                    if (response.getPayload() != null) {
+                        return response;
+                    }
+                }
+            } catch (WolkenTimeoutException e) {
+            }
         }
 
         return null;
