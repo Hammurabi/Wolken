@@ -74,12 +74,16 @@ public class BlockChain implements Runnable {
         // we must request it in case it doesn't
         BlockIndex parent = requestBlock(parentHash);
         while (parent != null) {
+            replaceBlockIndex(height, parent);
             if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private void replaceBlockIndex(int height, BlockIndex parent) {
     }
 
     private BlockIndex requestBlock(byte hash[]) {
