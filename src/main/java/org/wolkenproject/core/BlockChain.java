@@ -1,6 +1,8 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.network.Message;
+import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
@@ -58,7 +60,16 @@ public class BlockChain implements Runnable {
             return;
         }
 
-        Context.getInstance().getServer()
+        rollbackIntoExistingParent(block.getBlock().getParentHash());
+    }
+
+    private void rollbackIntoExistingParent(byte[] parentHash) {
+        if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
+            return;
+        }
+
+        Message message = new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), parentHash);
+        Context.getInstance().getServer().waitForResponse();
     }
 
     private void setTip(BlockIndex block) {
