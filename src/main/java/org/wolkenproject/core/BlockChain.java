@@ -3,13 +3,12 @@ package org.wolkenproject.core;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.BlockList;
+import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
@@ -30,6 +29,8 @@ public class BlockChain implements Runnable {
 
     @Override
     public void run() {
+        long lastBroadcast = System.currentTimeMillis();
+
         while (Context.getInstance().isRunning()) {
             BlockIndex block = nextOrphan();
 
@@ -53,6 +54,11 @@ public class BlockChain implements Runnable {
             } catch (WolkenException e) {
                 e.printStackTrace();
             }
+
+            Set<byte[]> hashCodes = new LinkedHashSet<>();
+            hashCodes.add(getTip().getBlock().getHashCode());
+
+            Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
         }
     }
 
