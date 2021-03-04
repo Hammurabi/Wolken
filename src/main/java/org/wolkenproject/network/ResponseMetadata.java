@@ -14,5 +14,5 @@ public interface ResponseMetadata {
         ;
     }
 
-    int isResponseValid(Message responseMessage);
+    int getResponseFlag(Message responseMessage);
 }
