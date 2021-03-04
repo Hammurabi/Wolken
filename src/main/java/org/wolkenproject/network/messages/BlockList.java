@@ -4,6 +4,7 @@ import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
 
@@ -51,6 +52,11 @@ public class BlockList extends ResponseMessage {
     @Override
     public <Type> Type getPayload() {
         return (Type) blocks;
+    }
+
+    @Override
+    public ResponseMetadata getResponseMetadata() {
+        return null;
     }
 
     @Override
