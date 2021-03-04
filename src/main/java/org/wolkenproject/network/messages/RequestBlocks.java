@@ -90,11 +90,30 @@ public class RequestBlocks extends Message {
             boolean isCorrectType = msg instanceof BlockList;
 
             if (!isCorrectType) {
-                return false;
+                return ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
+            int response = 0;
             Collection<BlockIndex> blocks = msg.getPayload();
-            for ()
+
+            int checked = 0;
+            for (BlockIndex block : blocks) {
+                if (this.blocks.contains(block.getBlock().getHashCode())) {
+                    checked ++;
+                }
+            }
+
+            if (blocks.size() > this.blocks.size()) {
+                return ResponseMetadata.ValidationBits.SpamfulResponse;
+            }
+
+            if (checked == this.blocks.size()) {
+                return ResponseMetadata.ValidationBits.FullResponse;
+            }
+
+            if (checked != this.blocks.size()) {
+                return ResponseMetadata.ValidationBits.PartialResponse;
+            }
 
             return ;
         };
