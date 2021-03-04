@@ -66,7 +66,7 @@ public class Node implements Runnable {
         }
     }
 
-    public Message getResponse(Message message, long timeOut) throws WolkenTimeoutException {
+    public CheckedResponse getResponse(Message message, long timeOut) throws WolkenTimeoutException {
         boolean shouldWait = false;
         byte id[] = message.getUniqueMessageIdentifier();
 
@@ -106,7 +106,7 @@ public class Node implements Runnable {
         }
     }
 
-    private Message getResponse(byte[] uniqueMessageIdentifier) {
+    private CheckedResponse getResponse(byte[] uniqueMessageIdentifier) {
         mutex.lock();
         try{
             Message response            = respones.get(uniqueMessageIdentifier);
@@ -122,13 +122,14 @@ public class Node implements Runnable {
                 return null;
             }
 
+            int flags = metadata.isResponseValid(response);
             // check that the response is appropriate
-            if (!metadata.isResponseValid(response)) {
+            if ((flags & ResponseMetadata.ValidationBits.InvalidType) == ResponseMetadata.ValidationBits.InvalidType) {
                 errors ++;
                 return null;
             }
 
-            return response;
+            return new CheckedResponse(response, flags);
         } finally {
             respones.remove(uniqueMessageIdentifier);
             expectedResponse.remove(uniqueMessageIdentifier);
