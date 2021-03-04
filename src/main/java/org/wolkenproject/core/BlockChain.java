@@ -104,7 +104,7 @@ public class BlockChain implements Runnable {
             height      --;
             parentHash  = parent.getBlock().getParentHash();
 
-            if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
+            if (Context.getInstance().getDatabase().checkBlockExists(parentHash) || height == -1) {
                 updateIndices(parent);
                 return true;
             }
