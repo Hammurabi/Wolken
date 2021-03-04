@@ -161,7 +161,7 @@ public class BlockChain implements Runnable {
             addOrphan(block);
         }
 
-        Context.getInstance().getDatabase().deleteBlock(block.getBlock().getHashCode());
+        Context.getInstance().getDatabase().deleteBlock(block.getHeight());
     }
 
     private BlockIndex requestBlock(byte hash[]) {
