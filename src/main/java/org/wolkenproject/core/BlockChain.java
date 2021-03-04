@@ -53,6 +53,15 @@ public class BlockChain implements Runnable {
                 if (getTip() == null) {
                     Logger.alert("settings new tip" + block);
                     tip = block;
+
+                    Logger.alert("downloading previous chain{size:"+block.getHeight()+"}");
+                    while (block != null) {
+                        if (block.getHeight() > 0) {
+                            // request the parent of this block
+                            Block parent = requestBlock(block.getBlock().getParentHash());
+                        }
+                    }
+                    Logger.alert("chain downloaded successfully");
                     continue;
                 }
 
