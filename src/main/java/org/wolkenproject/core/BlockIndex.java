@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.ChainMath;
@@ -144,5 +145,19 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
 
     private long getSequenceId() {
         return sequenceId;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return "BlockIndex{" +
+                    "block=" + Base16.encode(block.getHashCode()) +
+                    ", chainWork=" + getChainWork() +
+                    ", height=" + height +
+                    ", sequenceId=" + sequenceId +
+                    '}';
+        } catch (WolkenException e) {
+            return "";
+        }
     }
 }
