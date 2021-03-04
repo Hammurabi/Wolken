@@ -28,7 +28,7 @@ public class Server implements Runnable {
         netAddress = Context.getInstance().getIpAddressList().getAddress(InetAddress.getLocalHost());
         if (netAddress == null)
         {
-            netAddress = new NetAddress(socket.getInetAddress(), socket.getLocalPort(), Context.getInstance().getNetworkParameters().getServices());
+            netAddress = new NetAddress(InetAddress.getLocalHost(), Context.getInstance().getNetworkParameters().getPort(), Context.getInstance().getNetworkParameters().getServices());
             Context.getInstance().getIpAddressList().addAddress(netAddress);
         }
 
@@ -48,7 +48,7 @@ public class Server implements Runnable {
             try {
                 SocketChannel socket = SocketChannel.open();
                 socket.bind(new InetSocketAddress(address.getAddress(), address.getPort()));
-                
+
                 Node node = new Node(socket);
                 connectedNodes.add(node);
 
