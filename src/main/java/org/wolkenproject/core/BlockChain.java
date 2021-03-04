@@ -28,7 +28,7 @@ public class BlockChain implements Runnable {
     public void run() {
         while (hasOrphans()) {
             BlockIndex block = nextOrphan();
-            
+
             if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
                 // switch to this chain if it's valid
                 if (block.validate()) {
@@ -69,7 +69,6 @@ public class BlockChain implements Runnable {
     }
 
     private void setNext(BlockIndex block) {
-
     }
 
     private void replaceTip(BlockIndex block) {
@@ -140,10 +139,17 @@ public class BlockChain implements Runnable {
     }
 
     private void addOrphan(BlockIndex block) {
-        orphanedBlocks.add(block);
+        int maximumBlocks = 0;
 
-        // calculate the maximum blocks allowed in the queue.
-        int maximumBlocks = MaximumBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+        lock.lock();
+        try {
+            orphanedBlocks.add(block);
+
+            // calculate the maximum blocks allowed in the queue.
+            maximumBlocks = MaximumBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+        } finally {
+            lock.unlock();
+        }
 
         // remove any blocks that are too far back in the queue.
         if (orphanedBlocks.size() > maximumBlocks) {
