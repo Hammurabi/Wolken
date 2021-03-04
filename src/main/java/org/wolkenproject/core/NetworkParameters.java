@@ -39,7 +39,7 @@ public class NetworkParameters {
     }
 
     public int getMaxBlockSize() {
-        return 200_000;
+        return 250_000;
     }
 
     public int getAverageBlockTime() {
