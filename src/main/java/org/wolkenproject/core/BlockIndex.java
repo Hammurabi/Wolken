@@ -39,9 +39,7 @@ public class BlockIndex extends SerializableI {
 
     public BlockIndex generateNextBlock() throws WolkenException {
         int bits                = ChainMath.calculateNewTarget(this);
-        BlockIndex blockIndex   = new BlockIndex(new Block(block.getHashCode(), bits), getChainWork(), height + 1);
-
-        return blockIndex;
+        return new BlockIndex(new Block(block.getHashCode(), bits), getChainWork(), height + 1);
     }
 
     @Override
