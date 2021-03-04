@@ -229,9 +229,20 @@ public class Node implements Runnable {
         mutex.lock();
         try{
             while (!messages.isEmpty()) {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 Message message = messages.poll();
                 message.write(outputStream);
                 outputStream.flush();
+                outputStream.close();
+
+                byte msg[] = outputStream.toByteArray();
+                int offset = 0;
+                while (offset < msg.length) {
+                    buffer.clear();
+                    buffer.put(msg, offset, buffer.capacity());
+                    buffer.flip();
+                    offset += socket.write(buffer);
+                }
             }
         } catch (IOException | WolkenException e) {
             e.printStackTrace();
