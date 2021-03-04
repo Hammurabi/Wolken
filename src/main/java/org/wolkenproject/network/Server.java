@@ -244,7 +244,7 @@ public class Server implements Runnable {
                 Message response = node.getResponse(request, timeOut);
                 if (response != null) {
                     if (response.containsFullResponse()) {
-                            return response;
+                        return response;
                     } else {
                         if (fullResponse) {
                             continue;
