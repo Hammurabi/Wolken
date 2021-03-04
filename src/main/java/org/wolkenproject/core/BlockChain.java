@@ -35,7 +35,7 @@ public class BlockChain implements Runnable {
         byte lastHash[]     = null;
 
 
-        Logger.alert("attempting to reload previous chain.");
+        Logger.alert("attempting to reload chain from last checkpoint.");
         lock.lock();
         try {
 
