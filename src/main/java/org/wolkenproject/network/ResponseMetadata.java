@@ -7,7 +7,8 @@ public interface ResponseMetadata {
         public static final int
             FullResponse    = 0,
             PartialResponse = 1,
-            InvalidResponse = 2;
+            InvalidResponse = 2,
+            SpamfulResponse = 4;
         ;
     }
 
