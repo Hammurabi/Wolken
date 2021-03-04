@@ -2,10 +2,12 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
+import org.wolkenproject.network.messages.BlockList;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -70,8 +72,13 @@ public class BlockChain implements Runnable {
     }
 
     private BlockIndex requestBlock(byte hash[]) {
-        Message message = new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), hash);
-        return Context.getInstance().getServer().broadcastRequest(message);
+        Message request = new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), hash);
+        Message response= Context.getInstance().getServer().broadcastRequest(request);
+
+        if (response != null && response instanceof BlockList) {
+            Collection<BlockIndex> blocks = response.getPayload();
+            return ;
+        }
     }
 
     private void setTip(BlockIndex block) {
