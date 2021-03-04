@@ -138,6 +138,10 @@ public class BlockChain implements Runnable {
         Context.getInstance().getDatabase().setTip(block);
     }
 
+    public void suggestBlock(BlockIndex block) {
+        addOrphan(block);
+    }
+
     private void addOrphan(BlockIndex block) {
         lock.lock();
         try {
