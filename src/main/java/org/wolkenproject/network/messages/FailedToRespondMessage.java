@@ -34,12 +34,12 @@ public class FailedToRespondMessage extends ResponseMessage {
 
     @Override
     public <Type> Type getPayload() {
-        return null;
+        return (Type) (Long) reasonFlags;
     }
 
     @Override
     public boolean containsResponse() {
-        return false;
+        return true;
     }
 
     @Override
@@ -49,6 +49,6 @@ public class FailedToRespondMessage extends ResponseMessage {
 
     @Override
     public int getResponseType() {
-        return 0;
+        return -1;
     }
 }
