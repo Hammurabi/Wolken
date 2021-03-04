@@ -11,9 +11,9 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 
 public class BlockIndex extends SerializableI {
-    private Block block;
-    private BigInteger chainWork;
-    private int height;
+    private Block       block;
+    private BigInteger  chainWork;
+    private int         height;
 
     public BlockIndex() {
         this(new Block(), BigInteger.ZERO, 0);
