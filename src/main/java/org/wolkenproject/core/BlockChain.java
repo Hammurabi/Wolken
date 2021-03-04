@@ -61,6 +61,7 @@ public class BlockChain implements Runnable {
 
     private void setTip(BlockIndex block) {
         tip = block;
+        Context.getInstance().getDatabase().setTip(block);
     }
 
     private void addOrphan(BlockIndex block) {
