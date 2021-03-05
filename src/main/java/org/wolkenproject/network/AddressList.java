@@ -10,13 +10,18 @@ import java.io.OutputStream;
 import java.util.Set;
 
 public class AddressList extends Message {
+    private Set<NetAddress> addresses;
+
     public AddressList(int version, Set<NetAddress> list) {
         super(version, Flags.Notify);
+        this.addresses = list;
     }
 
     @Override
     public void executePayload(Server server, Node node) {
         node.incrementReceivedAddresses();
+
+        Context.getInstance().getIpAddressList().add(addresses);
     }
 
     @Override
