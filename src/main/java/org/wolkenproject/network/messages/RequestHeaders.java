@@ -85,7 +85,7 @@ public class RequestHeaders extends Message {
             boolean isCorrectType = msg instanceof HeaderList;
 
             if (!isCorrectType) {
-                return ResponseMetadata.ValidationBits.InvalidResponse;
+                return ResponseMetadata.ValidationBits.InvalidResponse | ResponseMetadata.ValidationBits.SpamfulResponse;
             }
 
             int response = 0;
