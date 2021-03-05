@@ -90,7 +90,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
 
     @Override
     public T remove() {
-        return null;
+        return poll();
     }
 
     @Override
