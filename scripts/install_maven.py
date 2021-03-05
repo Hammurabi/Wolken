@@ -21,4 +21,4 @@ import zipfile
 print("unzipping package 'maven' to '" + os.path.join(tools, "maven") + "'")
 with zipfile.ZipFile(maven, 'r') as zip:
     zip.extractall(os.path.join(tools, 'maven'))
-print("unzipped package 'maven' to '" + tools + "'")
+print("unzipped package 'maven' to '" + tools + "'"
