@@ -275,7 +275,7 @@ public class BlockChain implements Runnable {
 
             // remove any blocks that are too far back in the queue.
             if (orphanedBlocks.size() - maximumBlocks > Threshold) {
-                trimOrphans(orphanedBlocks.size() - maximumBlocks);
+                trimOrphans(maximumBlocks);
             }
         } finally {
             lock.unlock();
@@ -283,9 +283,7 @@ public class BlockChain implements Runnable {
     }
 
     private void trimOrphans(int count) {
-        for (int i = 0; i < count; i ++) {
-            orphanedBlocks.removeTails(orphanedBlocks.size() - count);
-        }
+        orphanedBlocks.removeTails(orphanedBlocks.size() - count);
     }
 
     public BlockIndex makeGenesisBlock() throws WolkenException {
