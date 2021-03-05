@@ -26,4 +26,18 @@ public class BitFields {
 
         return this;
     }
+
+    public BitFields addCond(int length, BitCondition condition, String name) {
+        conditionalBits += length;
+        fields.add(new Tuple<>(totalBits, name));
+
+        return this;
+    }
+
+    public static class BitField {
+    }
+
+    private static interface BitCondition {
+        public boolean get(int index, BitField previous, BitField next, BitFields self);
+    }
 }
