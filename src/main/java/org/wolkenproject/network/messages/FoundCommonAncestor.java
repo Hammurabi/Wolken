@@ -22,6 +22,10 @@ public class FoundCommonAncestor extends ResponseMessage {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
+        stream.write(commonAncestor != null ? 1 : 0);
+        if (commonAncestor != null) {
+            stream.write(commonAncestor);
+        }
     }
 
     @Override
