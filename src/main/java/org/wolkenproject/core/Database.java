@@ -192,4 +192,13 @@ public class Database {
             mutex.unlock();
         }
     }
+
+    public BlockHeader findBlockHeader(int height) {
+        byte hash[] = findBlockHash(height);
+        if (hash != null) {
+            return findBlockHeader(hash);
+        }
+
+        return null;
+    }
 }
