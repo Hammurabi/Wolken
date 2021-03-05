@@ -24,6 +24,10 @@ public class RequestCommonAncestorChain extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
+        // a list of headers starting at the common ancestor (or empty).
+        Set<BlockHeader>    headers;
+
+
     }
 
     @Override
@@ -36,7 +40,7 @@ public class RequestCommonAncestorChain extends Message {
 
     @Override
     public <Type> Type getPayload() {
-        return (Type) headers;
+        return (Type) ancestors;
     }
 
     @Override
