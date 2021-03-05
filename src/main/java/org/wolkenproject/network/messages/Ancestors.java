@@ -30,4 +30,14 @@ public class Ancestors {
             current -= jump;
         }
     }
+
+    public byte[] findCommon() {
+        for (byte[] hash : hashes) {
+            if (Context.getInstance().getDatabase().checkBlockExists(hash)) {
+                return hash;
+            }
+        }
+
+        return null;
+    }
 }
