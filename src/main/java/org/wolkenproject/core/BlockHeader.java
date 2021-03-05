@@ -13,12 +13,12 @@ import static org.wolkenproject.utils.HashUtil.sha256d;
 import static org.wolkenproject.utils.Utils.concatenate;
 
 public class BlockHeader extends SerializableI {
-    private int         version;
-    private int         timestamp;
-    private byte        previousHash[];
-    private byte        merkleRoot[];
-    private int         bits;
-    private int         nonce;
+    private int version;
+    private int timestamp;
+    private byte previousHash[];
+    private byte merkleRoot[];
+    private int bits;
+    private int nonce;
 
     public BlockHeader() {
         this(0, 0, new byte[32], new byte[32], 0, 0);
@@ -33,28 +33,23 @@ public class BlockHeader extends SerializableI {
         this.nonce = nonce;
     }
 
-    public void setNonce(int nonce)
-    {
+    public void setNonce(int nonce) {
         this.nonce = nonce;
     }
 
-    public int getVersion()
-    {
+    public int getVersion() {
         return version;
     }
 
-    public int getTimestamp()
-    {
+    public int getTimestamp() {
         return timestamp;
     }
 
-    public byte[] getParentHash()
-    {
+    public byte[] getParentHash() {
         return previousHash;
     }
 
-    public byte[] getMerkleRoot()
-    {
+    public byte[] getMerkleRoot() {
         return merkleRoot;
     }
 
