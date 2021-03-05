@@ -7,7 +7,7 @@ import org.wolkenproject.serialization.SerializableI;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class Ancestors implements SerializableI {
+public class Ancestors extends SerializableI {
     private Set<byte[]> hashes;
 
     public Ancestors() {
