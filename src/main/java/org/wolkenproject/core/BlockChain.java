@@ -142,8 +142,47 @@ public class BlockChain implements Runnable {
     }
 
     private void setNextGapped(BlockIndex block) throws WolkenException {
-        setTip(block);
-        rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
+        // request block headers
+        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block.getHash(), 1024));
+        BlockHeader commonAncestor = null;
+
+        if (response != null) {
+            Collection<BlockHeader> headers = response.getPayload();
+
+            while (headers != null) {
+                Iterator<BlockHeader> iterator = headers.iterator();
+
+                BlockHeader header = iterator.next();
+                if (isCommonAncestor(header)) {
+                    commonAncestor = header;
+                }
+
+                // loop headers to find a common ancestor
+                while (iterator.hasNext()) {
+                    header = iterator.next();
+
+                    if (isCommonAncestor(header)) {
+                        commonAncestor = header;
+                    }
+                }
+
+                // find older ancestor
+                if (commonAncestor == null) {
+                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), header.getHashCode(), 4096));
+
+                    if (response != null) {
+                        headers = response.getPayload();
+                    }
+                }
+            }
+        }
+
+        if (commonAncestor != null) {
+            setTip(block);
+            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
+        } else {
+            addOrphan(block);
+        }
     }
 
     private boolean hasOrphans() {
