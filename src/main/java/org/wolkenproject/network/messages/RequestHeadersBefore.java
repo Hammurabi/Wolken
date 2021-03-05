@@ -21,10 +21,14 @@ public class RequestHeadersBefore extends Message {
     private byte        hash[];
     private int         count;
 
-    public RequestHeadersBefore(int version, byte hash[], int count) {
+    // not serialized
+    private BlockHeader checkAgainst;
+
+    public RequestHeadersBefore(int version, byte hash[], int count, BlockHeader checkAgainst) {
         super(version, Flags.Request);
         this.hash   = hash;
         this.count  = count;
+        this.checkAgainst = checkAgainst;
     }
 
     private static Set<byte[]> toSet(byte[] hash) {
@@ -125,7 +129,7 @@ public class RequestHeadersBefore extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new RequestHeadersBefore(getVersion(), new byte[Block.UniqueIdentifierLength], 0);
+        return (Type) new RequestHeadersBefore(getVersion(), new byte[Block.UniqueIdentifierLength], 0, new BlockHeader());
     }
 
     @Override
