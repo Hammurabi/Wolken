@@ -104,7 +104,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
 
     @Override
     public T peek() {
-        return null;
+        return queue.peek().element;
     }
 
     private static class DefaultComparator<T extends SerializableI & Comparable<T>> implements Comparator<Entry<T>> {
