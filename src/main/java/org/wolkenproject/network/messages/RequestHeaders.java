@@ -49,7 +49,7 @@ public class RequestHeaders extends Message {
             }
         }
 
-        // send the blocks
+        // send the headers
         node.sendMessage(new HeaderList(Context.getInstance().getNetworkParameters().getVersion(), headers, getUniqueMessageIdentifier()));
     }
 
