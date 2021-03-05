@@ -27,7 +27,10 @@ public class RequestCommonAncestorChain extends Message {
         // a list of headers starting at the common ancestor (or empty).
         Set<BlockHeader>    headers;
 
+        byte commonAncestor[] = ancestors.findCommon();
 
+        if (commonAncestor != null) {
+        }
     }
 
     @Override
