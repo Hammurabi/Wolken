@@ -57,7 +57,7 @@ public class BlockChain implements Runnable {
                 lastBroadcast = System.currentTimeMillis();
             }
 
-            BlockIndex block = nextOrphan();
+            BlockIndex block = nextFromPool();
 
             try {
                 if (getTip() == null) {
@@ -158,6 +158,15 @@ public class BlockChain implements Runnable {
         lock.lock();
         try {
             return orphanedBlocks.poll();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private BlockIndex nextFromPool() {
+        lock.lock();
+        try {
+            return blockPool.poll();
         } finally {
             lock.unlock();
         }
