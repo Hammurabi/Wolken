@@ -107,14 +107,14 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return null;
     }
 
-    private static class DefaultComparator<T extends Comparable<T> & SerializableI> implements Comparator<Entry<T>> {
+    private static class DefaultComparator<T extends SerializableI & Comparable<T>> implements Comparator<Entry<T>> {
         @Override
         public int compare(Entry<T> a, Entry<T> b) {
             return a.compareTo(b);
         }
     }
 
-    private static class Entry<T extends Comparable<T> & SerializableI> implements Comparable<Entry<T>> {
+    private static class Entry<T extends SerializableI & Comparable<T>> implements Comparable<Entry<T>> {
         private T       element;
         private byte[]  hash;
 
