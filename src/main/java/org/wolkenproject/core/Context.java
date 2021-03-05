@@ -95,6 +95,13 @@ public class Context {
                                                     .addField(1, "bool")
                                                     .addField(3, "item1")
                                                     , "load 1 or 2 items from registers and push them to stack [4:item0][1:bool][3:item1]", null);
+        virtualMachine.addOp("call", new BitFields()
+                                                    .addField(4, "type")
+                                                    , "call a function [2:type][2:length].", null);
+        virtualMachine.addOp("jump", new BitFields()
+                                                    .addField(16, "location")
+                                                    , "call a function [2:type][2:length].", null);
+
         virtualMachine.addOp("call", true, 1, 0, "call a function [2:type][2:length].", null);
         virtualMachine.addOp("jump", true, 2, 0, "jump to a different location in the code", null);
 
