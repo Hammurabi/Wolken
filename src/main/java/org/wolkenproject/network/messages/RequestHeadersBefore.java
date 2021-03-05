@@ -94,31 +94,21 @@ public class RequestHeadersBefore extends Message {
             boolean isCorrectType = msg instanceof HeaderList;
 
             if (!isCorrectType) {
-                return ResponseMetadata.ValidationBits.InvalidResponse;
+                return ResponseMetadata.ValidationBits.InvalidResponse | ResponseMetadata.ValidationBits.SpamfulResponse;
             }
 
-            int response = 0;
+            int response    = 0;
             Collection<BlockHeader> headers = msg.getPayload();
+            int trueCount   = block.getHeight() - Math.max(0, block.getHeight() - count);
 
-            int checked = 0;
-            for (BlockHeader header : headers) {
-                if (this.headers.contains(header.getHashCode())) {
-                    checked ++;
-                }
-            }
-
-            if (headers.size() > this.headers.size()) {
-                response |= ResponseMetadata.ValidationBits.SpamfulResponse;
-                response |= ResponseMetadata.ValidationBits.InvalidResponse;
-            }
-
-            if (checked != this.headers.size()) {
+            if (headers.size() != trueCount) {
                 response |= ResponseMetadata.ValidationBits.PartialResponse;
                 response |= ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
-            if (checked == this.headers.size() && response != 0) {
-                response |= ResponseMetadata.ValidationBits.EntireResponse;
+            if (headers.size() > trueCount) {
+                response |= ResponseMetadata.ValidationBits.SpamfulResponse;
+                response |= ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
             return response;
@@ -127,7 +117,11 @@ public class RequestHeadersBefore extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new RequestHeadersBefore(getVersion(), headers);
+        try {
+            return (Type) new RequestHeadersBefore(getVersion(), block.makeCopy(), 0);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     @Override
