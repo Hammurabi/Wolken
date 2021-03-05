@@ -3,6 +3,15 @@ import os
 cwd = os.getcwd()
 print(cwd)
 
+# define helper functions
+def findFile(dir, n):
+    for subdir, dirs, files in os.walk(dir):
+        for file in files:
+            print(os.path.join(subdir, file))
+            if n in file:
+                return os.path.join(subdir, file)
+    return dir
+
 # set the global variables
 tools   = os.path.join(cwd, "tools")
 if not os.path.exists(tools):
@@ -23,4 +32,4 @@ with zipfile.ZipFile(maven, 'r') as zip:
     zip.extractall(os.path.join(tools, 'maven'))
 print("unzipped package 'maven' to '" + tools + "'")
 file    = findFile(tools, maven)
-print("renaming file '" + file + "' to '" os.path.join(tools, 'maven') + "'")
+print("renaming file '" + file + "' to '" + os.path.join(tools, 'maven') + "'")
