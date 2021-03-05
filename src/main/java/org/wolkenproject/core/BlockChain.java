@@ -187,9 +187,14 @@ public class BlockChain implements Runnable {
     }
 
     private void replaceTip(BlockIndex block) throws WolkenException {
-        addOrphan(tip);
+        // find common ancestors
+        Ancestors ancestors = new Ancestors();
+        ancestors.fill(getTip());
 
-        byte previousHash[] = tip.getBlock().getParentHash();
+        // stale the current tip
+        addStale(getTip());
+
+        byte previousHash[] = getTip().getBlock().getParentHash();
         if (Utils.equals(block.getBlock().getParentHash(), previousHash)) {
             setTip(block);
             return;
