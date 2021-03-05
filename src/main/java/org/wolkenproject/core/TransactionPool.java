@@ -12,6 +12,7 @@ public class TransactionPool {
 
     public TransactionPool() {
         transactions    = new PriorityHashQueue<>();
+        mutex           = new ReentrantLock();
     }
 
     public boolean contains(byte[] txid) {
