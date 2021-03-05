@@ -131,7 +131,7 @@ public class BlockChain implements Runnable {
 
     public BlockHeader findCommonAncestor(BlockIndex block) {
         // request block headers
-        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block.getHash(), 1024));
+        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block.getHash(), 1024, block.getBlock()));
         BlockHeader commonAncestor = null;
 
         if (response != null) {
@@ -156,7 +156,7 @@ public class BlockChain implements Runnable {
 
                 // find older ancestor
                 if (commonAncestor == null) {
-                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), header.getHashCode(), 4096));
+                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
 
                     if (response != null) {
                         headers = response.getPayload();
