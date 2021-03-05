@@ -35,6 +35,9 @@ public class BitFields {
     }
 
     public static class BitField {
+        public int getValue() {
+            return 0;
+        }
     }
 
     private static interface BitCondition {
