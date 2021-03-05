@@ -8,14 +8,16 @@ import java.util.*;
 public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implements Queue<T> {
     private Map<byte[], Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
+    private Class<T>                tClass;
 
-    public PriorityHashQueue() {
-        this(new DefaultComparator<>());
+    public PriorityHashQueue(Class<T> tClass) {
+        this(new DefaultComparator<>(), tClass);
     }
 
-    public PriorityHashQueue(Comparator<Entry<T>> comparator) {
+    public PriorityHashQueue(Comparator<Entry<T>> comparator, Class<T> tClass) {
         queue       = new PriorityQueue<Entry<T>>(comparator);
         entryMap    = new HashMap<>();
+        this.tClass = tClass;
     }
 
     @Override
