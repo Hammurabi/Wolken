@@ -35,3 +35,7 @@ echo.
 echo error^: java not installed
 echo please install the latest version from https://www.java.com/en/download/
 pause
+
+:installMavenTask
+python scripts/install_maven.py
+goto buildTask
