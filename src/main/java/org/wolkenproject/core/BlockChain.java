@@ -16,7 +16,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
     private BlockIndex                      tip;
-    private byte[]                          chainWork;
     // contains blocks sent from peers and orphaned chains.
     private PriorityHashQueue<BlockIndex>   orphanedBlocks;
     private static final int                MaximumBlockQueueSize = 1_250_000_000;
@@ -35,7 +34,6 @@ public class BlockChain implements Runnable {
         long lastBroadcast  = System.currentTimeMillis();
         byte lastHash[]     = null;
 
-
         Logger.alert("attempting to reload chain from last checkpoint.");
         lock.lock();
         try {
@@ -48,6 +46,11 @@ public class BlockChain implements Runnable {
         }
 
         while (Context.getInstance().isRunning()) {
+            if (System.currentTimeMillis() - lastBroadcast > (5 * 60_000L)) {
+                int blocksToSend = 16384;
+                lastBroadcast = System.currentTimeMillis();
+            }
+
             BlockIndex block = nextOrphan();
 
             try {
@@ -112,7 +115,6 @@ public class BlockChain implements Runnable {
 
                 try {
                     Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
-                    lastBroadcast = System.currentTimeMillis();
                 } catch (WolkenException e) {
                     e.printStackTrace();
                 }
