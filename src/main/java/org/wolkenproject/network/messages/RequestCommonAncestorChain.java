@@ -18,17 +18,14 @@ public class RequestCommonAncestorChain extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-
     }
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
-
     }
 
     @Override
     public void readContents(InputStream stream) throws IOException, WolkenException {
-
     }
 
     @Override
@@ -43,7 +40,7 @@ public class RequestCommonAncestorChain extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        return (Type) new RequestCommonAncestorChain(0, new Ancestors());
     }
 
     @Override
