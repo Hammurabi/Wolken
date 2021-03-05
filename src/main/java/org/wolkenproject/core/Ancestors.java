@@ -21,17 +21,33 @@ public class Ancestors extends SerializableI {
         int latest      = tip.getHeight() - 1;
         int earliest    = Math.max(0, latest - 16384);
         int total       = latest - earliest;
+        int mid         = total / 2;
+        int mid_up      = mid + (total / 4);
+        int mid_bt      = mid - (total / 4);
 
-        int jump        = Math.max(1, total / 128);
+        byte hash[] = Context.getInstance().getDatabase().findBlockHash(latest);
+        if (hash != null) {
+            hashes.add(hash);
+        }
 
-        int current     = latest;
-        while (current > earliest) {
-            byte hash[] = Context.getInstance().getDatabase().findBlockHash(current);
-            if (hash != null) {
-                hashes.add(hash);
-            }
+        hash = Context.getInstance().getDatabase().findBlockHash(mid_up);
+        if (hash != null) {
+            hashes.add(hash);
+        }
 
-            current -= jump;
+        hash = Context.getInstance().getDatabase().findBlockHash(mid);
+        if (hash != null) {
+            hashes.add(hash);
+        }
+
+        hash = Context.getInstance().getDatabase().findBlockHash(mid_bt);
+        if (hash != null) {
+            hashes.add(hash);
+        }
+
+        hash = Context.getInstance().getDatabase().findBlockHash(earliest);
+        if (hash != null) {
+            hashes.add(hash);
         }
     }
 
