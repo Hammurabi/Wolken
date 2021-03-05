@@ -31,11 +31,8 @@ public class Node implements Runnable {
     private int                             errors;
     private ByteBuffer                      buffer;
     private ByteArrayOutputStream           stream;
-
-//    private BufferedInputStream     inputStream;
-//    private BufferedOutputStream    outputStream;
-
-    private VersionInformation      versionMessage;
+    private int                             receivedAddresses;
+    private VersionInformation              versionMessage;
 
 //    public Node(String ip, int port) throws IOException {
 //        this(new Socket(ip, port));
@@ -371,6 +368,14 @@ public class Node implements Runnable {
     @Override
     public void run() {
         while (Context.getInstance().isRunning()) {
+        }
+    }
+
+    public void incrementReceivedAddresses() {
+        receivedAddresses ++;
+
+        if (receivedAddresses > 1024) {
+            errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
         }
     }
 }
