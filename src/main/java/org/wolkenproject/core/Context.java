@@ -99,14 +99,14 @@ public class Context {
                                                     .addField(4, "arg")
                                                     .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "id")
                                                     .addCond(16, (idx, prev, next, self)->{ return prev.getValue() == 2; }, "id")
-                                                    , "call a function [4:type].", null);
+                                                    , "call a function [4:arg].", null);
         virtualMachine.addOp("jump", new BitFields()
                                                     .addField(1, "get/set")
                                                     .addField(15, "id")
                                                     , "set or get (and jump) a jump location.", null);
 
-        virtualMachine.addOp("push", true, 0, 0, "push x amount of bytes into the stack", null);
-        virtualMachine.addOp("pop", false, 0, 0, "pop item from the stack", null);
+//        virtualMachine.addOp("push", true, 0, 0, "push x amount of bytes into the stack", null);
+//        virtualMachine.addOp("pop", false, 0, 0, "pop item from the stack", null);
     }
 
     public void shutDown()
