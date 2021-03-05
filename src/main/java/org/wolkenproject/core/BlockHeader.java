@@ -14,7 +14,7 @@ import static org.wolkenproject.utils.Utils.concatenate;
 
 public class BlockHeader extends SerializableI {
     private int         version;
-    private long        timestamp;
+    private int         timestamp;
     private byte        previousHash[];
     private byte        merkleRoot[];
     private int         bits;
@@ -24,7 +24,7 @@ public class BlockHeader extends SerializableI {
         this(0, 0, new byte[32], new byte[32], 0, 0);
     }
 
-    public BlockHeader(int version, long timestamp, byte[] previousHash, byte[] merkleRoot, int bits, int nonce) {
+    public BlockHeader(int version, int timestamp, byte[] previousHash, byte[] merkleRoot, int bits, int nonce) {
         this.version = version;
         this.timestamp = timestamp;
         this.previousHash = previousHash;
@@ -91,7 +91,7 @@ public class BlockHeader extends SerializableI {
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(version, stream);
-        Utils.writeLong(timestamp, stream);
+        Utils.writeInt(timestamp, stream);
         stream.write(previousHash);
         stream.write(merkleRoot);
         stream.write(bits);
@@ -100,11 +100,11 @@ public class BlockHeader extends SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
-        byte buffer[] = new byte[8];
+        byte buffer[] = new byte[4];
         stream.read(buffer, 0, 4);
         version = Utils.makeInt(buffer);
-        stream.read(buffer, 0, 8);
-        timestamp = Utils.makeLong(buffer);
+        stream.read(buffer, 0, 4);
+        timestamp = Utils.makeInt(buffer);
 
         stream.read(previousHash);
         stream.read(merkleRoot);
