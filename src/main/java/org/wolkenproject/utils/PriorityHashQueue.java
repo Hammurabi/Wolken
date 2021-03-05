@@ -6,7 +6,7 @@ public class PriorityHashQueue<T> implements Queue<T> {
     private Map<byte[], Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
 
-    private static class Entry<T> implements Comparator<Entry<T>> {
+    private static class Entry<T> implements Comparable<Entry<T>> {
         private T element;
     }
 }
