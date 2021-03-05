@@ -88,7 +88,7 @@ public class RequestBlocks extends Message {
             boolean isCorrectType = msg instanceof BlockList;
 
             if (!isCorrectType) {
-                return ResponseMetadata.ValidationBits.InvalidResponse;
+                return ResponseMetadata.ValidationBits.InvalidResponse | ResponseMetadata.ValidationBits.SpamfulResponse;
             }
 
             int response = 0;
