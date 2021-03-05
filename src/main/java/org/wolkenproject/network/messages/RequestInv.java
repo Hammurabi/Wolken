@@ -15,14 +15,14 @@ import java.io.OutputStream;
 
 public class RequestInv extends Message {
     public RequestInv(int version) {
-        super(version, Flags.Request);
+        super(version, Flags.Notify);
     }
 
     @Override
     public void executePayload(Server server, Node node) {
         try {
-            BlockIndex blockIndex = Context.getInstance().getBlockChain().getTip();
-            node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, null));
+            node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, Context.getInstance().getBlockChain().getInv()));
+            node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Transaction, Context.getInstance().getTransactionPool().getInv()));
         } catch (WolkenException e) {
             e.printStackTrace();
         }
