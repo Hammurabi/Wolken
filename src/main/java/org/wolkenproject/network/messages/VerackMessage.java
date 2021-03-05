@@ -19,21 +19,25 @@ public class VerackMessage extends Message {
 
     public VerackMessage(int version, VersionInformation versionInformation) {
         super(version, Flags.Notify);
+        this.versionInformation = versionInformation;
     }
 
     @Override
     public void executePayload(Server server, Node node) {
         node.setVersionInfo(versionInformation);
+        Context.getInstance().getIpAddressList().send(node);
 
         node.sendMessage(new RequestInv(Context.getInstance().getNetworkParameters().getVersion()));
     }
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
+        versionInformation.write(stream);
     }
 
     @Override
     public void readContents(InputStream stream) throws IOException, WolkenException {
+        versionInformation.read(stream);
     }
 
     @Override
