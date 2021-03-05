@@ -53,14 +53,17 @@ public class RequestHeadersBefore extends Message {
             return;
         }
 
+        while (headers.size() < count) {
+            header                  = Context.getInstance().getDatabase().findBlockHeader(header.getParentHash());
 
-
-        for (byte[] hash : this.headers) {
-            BlockHeader header  = Context.getInstance().getDatabase().findBlockHeader(hash);
-
+            // database internal error
+            // this should not happen
             if (header != null) {
-                headers.add(header);
+                node.sendMessage(new FailedToRespondMessage(Context.getInstance().getNetworkParameters().getVersion(), FailedToRespondMessage.ReasonFlags.CouldNotFindRequestedData, getUniqueMessageIdentifier()));
+                return;
             }
+
+            headers.add(header);
         }
 
         // send the headers
