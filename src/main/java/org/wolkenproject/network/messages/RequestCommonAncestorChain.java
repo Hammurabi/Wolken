@@ -1,5 +1,6 @@
 package org.wolkenproject.network.messages;
 
+import org.wolkenproject.core.BlockHeader;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
@@ -11,8 +12,12 @@ import org.wolkenproject.serialization.SerializableI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Set;
 
 public class RequestCommonAncestorChain extends Message {
+    // a list of headers starting at the common ancestor (or empty).
+    private Set<BlockHeader> headers;
+
     public RequestCommonAncestorChain(int version, Ancestors ancestors) {
         super(version, Flags.Request);
     }
