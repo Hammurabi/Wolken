@@ -7,8 +7,7 @@ print(cwd)
 def findFile(dir, n):
     for entry in os.scandir(dir):
         if entry.is_dir() and n in entry.name:
-            print(os.path.join(subdir, file))
-            return os.path.join(subdir, file)
+            return os.path.join(dir, entry.name)
     return dir
 
 # set the global variables
@@ -30,5 +29,5 @@ print("unzipping package 'maven' to '" + os.path.join(tools, "maven") + "'")
 with zipfile.ZipFile(maven, 'r') as zip:
     zip.extractall(os.path.join(tools, 'maven'))
 print("unzipped package 'maven' to '" + tools + "'")
-file    = findFile(tools, maven)
+file    = findFile(tools, 'maven')
 print("renaming file '" + file + "' to '" + os.path.join(tools, 'maven') + "'")
