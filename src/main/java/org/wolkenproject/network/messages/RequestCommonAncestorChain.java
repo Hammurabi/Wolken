@@ -12,9 +12,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class RequestCommonAncestorChain extends Message {
+    public RequestCommonAncestorChain(int version) {
+        super(version, Flags.Request);
+    }
+
     @Override
     public void executePayload(Server server, Node node) {
-        
+
     }
 
     @Override
