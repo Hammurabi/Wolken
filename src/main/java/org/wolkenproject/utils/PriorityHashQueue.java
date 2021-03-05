@@ -112,7 +112,7 @@ public class PriorityHashQueue<T extends Comparable<T> & Hashable> implements Qu
         }
     }
 
-    private static class Entry<T extends Comparable<T>> implements Comparable<Entry<T>> {
+    private static class Entry<T extends Comparable<T> & Hashable> implements Comparable<Entry<T>> {
         private T element;
 
         @Override
