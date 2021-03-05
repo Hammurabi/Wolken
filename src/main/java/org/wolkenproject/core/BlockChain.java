@@ -190,7 +190,7 @@ public class BlockChain implements Runnable {
 
     private void replaceTip(BlockIndex block) throws WolkenException {
         // request block headers
-        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block, 4096));
+        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block.getHash(), 1024));
         BlockHeader commonAncestor = null;
 
         if (response != null) {
@@ -215,7 +215,11 @@ public class BlockChain implements Runnable {
 
                 // find older ancestor
                 if (commonAncestor == null) {
-                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block, 1024));
+                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), header.getHashCode(), 4096));
+
+                    if (response != null) {
+                        headers = response.getPayload();
+                    }
                 }
             }
         }
