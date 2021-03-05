@@ -44,10 +44,6 @@ public class RequestHeaders extends Message {
         for (byte[] hash : this.headers) {
             BlockHeader header  = Context.getInstance().getDatabase().findBlockHeader(hash);
 
-            if (header == null) {
-                header          = Context.getInstance().getBlockChain().getBlockHeader(hash);
-            }
-
             if (header != null) {
                 headers.add(header);
             }
