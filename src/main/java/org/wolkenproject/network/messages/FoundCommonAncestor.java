@@ -30,11 +30,17 @@ public class FoundCommonAncestor extends ResponseMessage {
 
     @Override
     public void readContents(InputStream stream) throws IOException, WolkenException {
+        int bool = stream.read();
+        if (bool == 1) {
+            stream.read(commonAncestor);
+        } else {
+            commonAncestor = null;
+        }
     }
 
     @Override
     public <Type> Type getPayload() {
-        return null;
+        return (Type) commonAncestor;
     }
 
     @Override
