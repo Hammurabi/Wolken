@@ -51,11 +51,21 @@ public class Context {
 
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
         serializationFactory.registerClass(VersionMessage.class, new VersionMessage());
+        serializationFactory.registerClass(VerackMessage.class, new VerackMessage());
         serializationFactory.registerClass(VersionInformation.class, new VersionInformation());
-        serializationFactory.registerClass(RequestInv.class, new RequestInv(0));
+
+        serializationFactory.registerClass(BlockList.class, new BlockList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
+        serializationFactory.registerClass(FailedToRespondMessage.class, new FailedToRespondMessage(0, 0, new byte[Message.UniqueIdentifierLength]));
+        serializationFactory.registerClass(FoundCommonAncestor.class, new FoundCommonAncestor(new byte[Block.UniqueIdentifierLength], new byte[Message.UniqueIdentifierLength]));
+        serializationFactory.registerClass(HeaderList.class, new HeaderList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(Inv.class, new Inv(0, 0, new LinkedHashSet<>()));
-        serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
+        serializationFactory.registerClass(RequestBlocks.class, new RequestBlocks(0, new LinkedHashSet<>()));
+        serializationFactory.registerClass(RequestCommonAncestorChain.class, new RequestCommonAncestorChain(0, new Ancestors(new byte[Block.UniqueIdentifierLength])));
+        serializationFactory.registerClass(RequestHeaders.class, new RequestHeaders(0, new LinkedHashSet<>()));
+        serializationFactory.registerClass(RequestHeadersBefore.class, new RequestHeadersBefore(0, new BlockIndex(), 0));
+        serializationFactory.registerClass(RequestInv.class, new RequestInv(0));
         serializationFactory.registerClass(RequestTransactions.class, new RequestTransactions(0, new LinkedHashSet<>()));
+        serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
 
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
