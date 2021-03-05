@@ -30,10 +30,12 @@ public class RequestCommonAncestorChain extends Message {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
+        ancestors.write(stream);
     }
 
     @Override
     public void readContents(InputStream stream) throws IOException, WolkenException {
+        ancestors.read(stream);
     }
 
     @Override
