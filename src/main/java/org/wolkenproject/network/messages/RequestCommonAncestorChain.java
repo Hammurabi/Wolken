@@ -31,7 +31,7 @@ public class RequestCommonAncestorChain extends Message {
         byte commonAncestor[] = ancestors.findCommon();
 
         if (commonAncestor != null) {
-            node.sendMessage(new FoundCommonAncestor());
+            node.sendMessage(new FoundCommonAncestor(commonAncestor, getUniqueMessageIdentifier()));
         }
     }
 
