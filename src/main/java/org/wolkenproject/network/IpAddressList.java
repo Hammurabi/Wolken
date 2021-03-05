@@ -1,5 +1,6 @@
 package org.wolkenproject.network;
 
+import org.wolkenproject.core.Context;
 import org.wolkenproject.utils.FileService;
 
 import java.io.*;
@@ -44,7 +45,7 @@ public class IpAddressList {
                 }
             }
 
-            node.sendMessage(new AddressList(list));
+            node.sendMessage(new AddressList(Context.getInstance().getNetworkParameters().getVersion(), list));
         }
     }
 
@@ -72,5 +73,11 @@ public class IpAddressList {
 
     public NetAddress getAddress(InetAddress inetAddress) {
         return addresses.get(inetAddress.getAddress());
+    }
+
+    public void add(Set<NetAddress> addresses) {
+        for (NetAddress address : addresses) {
+            addAddress(address);
+        }
     }
 }
