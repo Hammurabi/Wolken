@@ -18,14 +18,13 @@ public class HeaderList extends ResponseMessage {
 
     public HeaderList(int version, Collection<BlockHeader> headers, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
-        this.headers   = new LinkedHashSet<>(headers);
+        this.headers = new LinkedHashSet<>(headers);
     }
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(headers.size(), stream);
-        for (BlockHeader block : headers)
-        {
+        for (BlockHeader block : headers) {
             block.write(stream);
         }
     }
@@ -36,8 +35,7 @@ public class HeaderList extends ResponseMessage {
         stream.read(buffer);
         int length = Utils.makeInt(buffer);
 
-        for (int i = 0; i < length; i ++)
-        {
+        for (int i = 0; i < length; i++) {
             try {
                 BlockHeader header = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(BlockHeader.class), stream);
                 headers.add(header);
