@@ -14,6 +14,8 @@ if errorlevel 1 goto errorNoJava
 echo java is installed
 
 python scripts/install_maven.py
+
+/tools/maven/bin/mvn.cmd --version
 pause
 
 :: Reaching here means Python is installed.
