@@ -174,6 +174,15 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         queue = newQueue;
     }
 
+    public void fillHashes(Collection<byte[]> collection, int count) {
+        for (Entry<T> entry : queue) {
+            collection.add(entry.hash);
+            if (collection.size() == count) {
+                return;
+            }
+        }
+    }
+
     private static class DefaultComparator<T extends SerializableI & Comparable<T>> implements Comparator<Entry<T>> {
         @Override
         public int compare(Entry<T> a, Entry<T> b) {
