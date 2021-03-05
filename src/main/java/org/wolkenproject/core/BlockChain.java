@@ -331,4 +331,14 @@ public class BlockChain implements Runnable {
             lock.unlock();
         }
     }
+
+    public BlockIndex getBlock(byte[] hash) {
+        lock.lock();
+        try {
+            return orphanedBlocks.getByHash(hash);
+        }
+        finally {
+            lock.unlock();
+        }
+    }
 }
