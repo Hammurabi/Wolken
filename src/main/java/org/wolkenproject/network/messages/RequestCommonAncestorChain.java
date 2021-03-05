@@ -25,14 +25,7 @@ public class RequestCommonAncestorChain extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        // a list of headers starting at the common ancestor (or empty).
-        Set<BlockHeader>    headers;
-
-        byte commonAncestor[] = ancestors.findCommon();
-
-        if (commonAncestor != null) {
-            node.sendMessage(new FoundCommonAncestor(commonAncestor, getUniqueMessageIdentifier()));
-        }
+        node.sendMessage(new FoundCommonAncestor(ancestors.findCommon(), getUniqueMessageIdentifier()));
     }
 
     @Override
