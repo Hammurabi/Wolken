@@ -2,7 +2,7 @@ package org.wolkenproject.utils;
 
 import java.util.*;
 
-public class PriorityHashQueue<T extends Comparable<T>> implements Queue<T> {
+public class PriorityHashQueue<T extends Comparable<T> & Hashable> implements Queue<T> {
     private Map<byte[], Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
 
@@ -27,7 +27,7 @@ public class PriorityHashQueue<T extends Comparable<T>> implements Queue<T> {
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        return entryMap.containsKey();
     }
 
     @Override
