@@ -35,6 +35,8 @@ public class IpAddressList {
 
     public void send(Node node) {
         Queue<byte[]> addresses = new PriorityBlockingQueue<>(this.addresses.keySet());
+        int sent = 0;
+
         while (!addresses.isEmpty()) {
             Set<NetAddress> list    = new LinkedHashSet<>();
             for (int i = 0; i < 1024; i ++) {
@@ -46,6 +48,9 @@ public class IpAddressList {
             }
 
             node.sendMessage(new AddressList(Context.getInstance().getNetworkParameters().getVersion(), list));
+            if (++ sent == 1024) {
+                return;
+            }
         }
     }
 
