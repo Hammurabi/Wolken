@@ -23,8 +23,8 @@ public class HeaderList extends ResponseMessage {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
-        Utils.writeInt(blocks.size(), stream);
-        for (BlockIndex block : blocks)
+        Utils.writeInt(headers.size(), stream);
+        for (BlockHeader block : headers)
         {
             block.write(stream);
         }
@@ -39,8 +39,8 @@ public class HeaderList extends ResponseMessage {
         for (int i = 0; i < length; i ++)
         {
             try {
-                BlockIndex block = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(BlockIndex.class), stream);
-                blocks.add(block);
+                BlockHeader header = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(BlockHeader.class), stream);
+                headers.add(header);
             } catch (WolkenException e) {
                 throw new IOException(e);
             }
@@ -49,12 +49,12 @@ public class HeaderList extends ResponseMessage {
 
     @Override
     public <Type> Type getPayload() {
-        return (Type) blocks;
+        return (Type) headers;
     }
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new HeaderList(getVersion(), blocks, getUniqueMessageIdentifier());
+        return (Type) new HeaderList(getVersion(), headers, getUniqueMessageIdentifier());
     }
 
     @Override
