@@ -43,10 +43,6 @@ public class RequestBlocks extends Message {
         for (byte[] hash : this.blocks) {
             BlockIndex block    = Context.getInstance().getDatabase().findBlock(hash);
 
-            if (block == null) {
-                block           = Context.getInstance().getBlockChain().getBlock(hash);
-            }
-
             if (block != null) {
                 blocks.add(block);
             }
