@@ -18,7 +18,7 @@ public class TransactionPool {
     public boolean contains(byte[] txid) {
         mutex.lock();
         try {
-            return transactions.contains(txid);
+            return transactions.containsKey(txid);
         } finally {
             mutex.unlock();
         }
