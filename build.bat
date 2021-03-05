@@ -5,6 +5,10 @@ rem download python if it does not exist
 python --version 2>NUL
 if errorlevel 1 goto errorNoPython
 echo python is installed
+
+java -version 2>NUL
+if errorlevel 1 goto errorNoJava
+echo java is installed
 pause
 
 :: Reaching here means Python is installed.
@@ -16,9 +20,12 @@ goto:eof
 :errorNoPython
 echo.
 
-echo Error^: Python not installed
+echo Error^: python not installed
 echo please install the latest version from https://www.python.org/downloads/
 
+:errorNoJava
+echo.
 
-
+echo Error^: java not installed
+echo please install the latest version from https://www.java.com/en/download/
 pause
