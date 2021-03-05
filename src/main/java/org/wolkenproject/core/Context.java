@@ -79,7 +79,12 @@ public class Context {
         this.blockChain             = new BlockChain();
 
         virtualMachine.addOp("halt", "halt process and all sub processes", null);
-        virtualMachine.addOp("arithmetic", BitFields., "operations [+ - / * %] [& | ^ << >>] [< > ==] [4:op][4:item][4:item][4:result_item]", null);
+        virtualMachine.addOp("arithmetic", new BitFields()
+                                                    .addField(4, "operation")
+                                                    .addField(4, "item0")
+                                                    .addField(4, "item1")
+                                                    .addField(4, "item2")
+                                                    , "operations [+ - / * %] [& | ^ << >>] [< > ==] [4:op][4:item][4:item][4:result_item]", null);
         virtualMachine.addOp("storei", true, 1, 0, "pop x from stack and store it in register [1:sign][4:register][2:type][1:unused]", null);
         virtualMachine.addOp("loadi", true, 1, 0, "load 1 or 2 items from registers and push them to stack [4:item1][2:type][2:optional]", null);
         virtualMachine.addOp("call", true, 1, 0, "call a function [2:type][2:length].", null);
