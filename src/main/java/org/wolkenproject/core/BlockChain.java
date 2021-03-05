@@ -282,8 +282,8 @@ public class BlockChain implements Runnable {
         }
     }
 
-    private void trimOrphans(int count) {
-        orphanedBlocks.removeTails(orphanedBlocks.size() - count);
+    private void trimOrphans(int newLength) {
+        orphanedBlocks.removeTails(newLength);
     }
 
     public BlockIndex makeGenesisBlock() throws WolkenException {
