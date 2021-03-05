@@ -7,5 +7,6 @@ public class PriorityHashQueue<T> implements Queue<T> {
     private Queue<Entry<T>>         queue;
 
     private static class Entry<T> {
+        private T element;
     }
 }
