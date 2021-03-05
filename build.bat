@@ -13,9 +13,8 @@ java -version 2>NUL
 if errorlevel 1 goto errorNoJava
 echo java is installed
 
-python scripts/install_maven.py
-
-/tools/maven/bin/mvn.cmd --version
+/tools/maven/bin/mvn.cmd --version 2>NUL
+if errorlevel 1 goto installMavenTask
 pause
 
 :: Reaching here means Python is installed.
@@ -27,12 +26,12 @@ goto:eof
 :errorNoPython
 echo.
 
-echo Error^: python not installed
+echo error^: python not installed
 echo please install the latest version from https://www.python.org/downloads/
 
 :errorNoJava
 echo.
 
-echo Error^: java not installed
+echo error^: java not installed
 echo please install the latest version from https://www.java.com/en/download/
 pause
