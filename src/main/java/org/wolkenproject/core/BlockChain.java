@@ -218,6 +218,8 @@ public class BlockChain implements Runnable {
 
         if (commonAncestor != null) {
             rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
+        } else {
+            addOrphan(block);
         }
     }
 
@@ -272,6 +274,8 @@ public class BlockChain implements Runnable {
             }
 
             rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
+        } else {
+            addOrphan(block);
         }
     }
 
@@ -318,7 +322,7 @@ public class BlockChain implements Runnable {
     private void replaceBlockIndex(int height, BlockIndex block) {
         BlockIndex previousIndex = Context.getInstance().getDatabase().findBlock(height);
         if (previousIndex != null) {
-            addOrphan(previousIndex);
+            addStale(previousIndex);
         }
 
         Context.getInstance().getDatabase().setBlockIndex(height, block);
@@ -331,7 +335,7 @@ public class BlockChain implements Runnable {
 
     private void deleteBlockIndex(BlockIndex block, boolean orphan) {
         if (orphan) {
-            addOrphan(block);
+            addStale(block);
         }
 
         Context.getInstance().getDatabase().deleteBlock(block.getHeight());
