@@ -24,7 +24,7 @@ public class BlockChain implements Runnable {
     private ReentrantLock   lock;
 
     public BlockChain() {
-        orphanedBlocks  = new PriorityQueue<>();
+        orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         lock            = new ReentrantLock();
 
         tip             = Context.getInstance().getDatabase().findTip();
