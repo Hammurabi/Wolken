@@ -16,10 +16,12 @@ import java.util.Set;
 
 public class RequestCommonAncestorChain extends Message {
     // a list of headers starting at the common ancestor (or empty).
-    private Set<BlockHeader> headers;
+    private Set<BlockHeader>    headers;
+    private Ancestors           ancestors;
 
     public RequestCommonAncestorChain(int version, Ancestors ancestors) {
         super(version, Flags.Request);
+        this.ancestors = ancestors;
     }
 
     @Override
