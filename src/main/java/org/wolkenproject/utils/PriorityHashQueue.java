@@ -8,7 +8,7 @@ public class PriorityHashQueue<T extends Comparable<T>> implements Queue<T> {
 
     private static class DefaultComparator<T extends Comparable<T>> implements Comparator<Entry<T>> {
         @Override
-        public int compare(Entry<T> tEntry, Entry<T> t1) {
+        public int compare(Entry<T> a, Entry<T> b) {
             return 0;
         }
     }
