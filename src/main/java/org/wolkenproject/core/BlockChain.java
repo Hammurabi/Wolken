@@ -46,6 +46,9 @@ public class BlockChain implements Runnable {
             tip = Context.getInstance().getDatabase().findTip();
             if (tip != null) {
                 Logger.alert("loaded checkpoint successfully" + tip);
+            } else {
+                tip = makeGenesisBlock();
+                Logger.alert("loaded genesis as checkpoint successfully" + tip);
             }
         } finally {
             lock.unlock();
@@ -168,7 +171,7 @@ public class BlockChain implements Runnable {
         if (commonAncestor != null) {
             Logger.alert("found common ancestor" + block + " for block" + block);
         }
-        
+
         return commonAncestor;
     }
 
@@ -416,9 +419,10 @@ public class BlockChain implements Runnable {
         blockPool.removeTails(newLength);
     }
 
-    public BlockIndex makeGenesisBlock() throws WolkenException {
+    public BlockIndex makeGenesisBlock() {
         Block genesis = new Block(new byte[Block.UniqueIdentifierLength], 0);
         genesis.addTransaction(TransactionI.newCoinbase(0, "", Context.getInstance().getNetworkParameters().getMaxReward(), Context.getInstance().getPayList()));
+        genesis.setNonce(0);
         return new BlockIndex(genesis, BigInteger.ZERO, 0);
     }
 
