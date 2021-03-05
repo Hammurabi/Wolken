@@ -16,7 +16,12 @@ public class TransactionPool {
     }
 
     public boolean contains(byte[] txid) {
-        return transactions.contains(txid);
+        mutex.lock();
+        try {
+            return transactions.contains(txid);
+        } finally {
+            mutex.unlock();
+        }
     }
 
     public Set<byte[]> getNonDuplicateTransactions(Set<byte[]> list) {
