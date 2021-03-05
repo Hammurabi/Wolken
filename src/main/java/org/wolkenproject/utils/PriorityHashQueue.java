@@ -160,6 +160,9 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return entryMap.containsKey(txid);
     }
 
+    public void removeTails(int newLength) {
+    }
+
     private static class DefaultComparator<T extends SerializableI & Comparable<T>> implements Comparator<Entry<T>> {
         @Override
         public int compare(Entry<T> a, Entry<T> b) {
