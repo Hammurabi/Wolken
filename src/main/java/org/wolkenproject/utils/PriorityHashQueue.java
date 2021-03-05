@@ -156,6 +156,10 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return null;
     }
 
+    public boolean containsKey(byte[] txid) {
+        return entryMap.containsKey(txid);
+    }
+
     private static class DefaultComparator<T extends SerializableI & Comparable<T>> implements Comparator<Entry<T>> {
         @Override
         public int compare(Entry<T> a, Entry<T> b) {
