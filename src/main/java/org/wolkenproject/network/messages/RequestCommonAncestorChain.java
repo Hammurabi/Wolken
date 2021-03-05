@@ -1,5 +1,6 @@
 package org.wolkenproject.network.messages;
 
+import org.wolkenproject.core.Ancestors;
 import org.wolkenproject.core.BlockHeader;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
@@ -15,7 +16,7 @@ import java.io.OutputStream;
 import java.util.Set;
 
 public class RequestCommonAncestorChain extends Message {
-    private Ancestors           ancestors;
+    private Ancestors ancestors;
 
     public RequestCommonAncestorChain(int version, Ancestors ancestors) {
         super(version, Flags.Request);
@@ -30,6 +31,7 @@ public class RequestCommonAncestorChain extends Message {
         byte commonAncestor[] = ancestors.findCommon();
 
         if (commonAncestor != null) {
+
         }
     }
 
