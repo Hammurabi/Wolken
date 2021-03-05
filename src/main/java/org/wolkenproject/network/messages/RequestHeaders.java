@@ -24,11 +24,7 @@ public class RequestHeaders extends Message {
 
     public RequestHeaders(int version, Collection<byte[]> headers) {
         super(version, Flags.Request);
-        this.headers = new LinkedHashSet<>(headers);
-    }
-
-    public RequestHeaders(int version, byte[] hash) {
-        this(version, toSet(hash));
+        this.headers    = new LinkedHashSet<>(headers);
     }
 
     private static Set<byte[]> toSet(byte[] hash) {
