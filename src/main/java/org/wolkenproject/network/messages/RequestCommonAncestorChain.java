@@ -36,7 +36,7 @@ public class RequestCommonAncestorChain extends Message {
 
     @Override
     public <Type> Type getPayload() {
-        return null;
+        return (Type) headers;
     }
 
     @Override
