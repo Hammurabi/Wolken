@@ -1,6 +1,7 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.Block;
+import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
@@ -83,7 +84,27 @@ public class Inv extends Message {
             }
 
             // request the blocks
-            node.sendMessage(new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), newBlocks));
+            try {
+                CheckedResponse message = node.getResponse(new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), newBlocks), Context.getInstance().getNetworkParameters().getMessageTimeout());
+                if (message != null) {
+                    if (message.noErrors()) {
+                        Set<BlockIndex> blocks = message.getMessage().getPayload();
+                        Context.getInstance().getBlockChain().suggest(blocks);
+
+                        Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Block, newBlocks);
+                        Set<Node> connected = Context.getInstance().getServer().getConnectedNodes();
+                        connected.remove(node);
+
+                        for (Node n : connected) {
+                            n.sendMessage(inv);
+                        }
+                    }
+                }
+            } catch (WolkenTimeoutException e) {
+                e.printStackTrace();
+            } catch (WolkenException e) {
+                e.printStackTrace();
+            }
         }
         else if (type == Type.Transaction)
         {
