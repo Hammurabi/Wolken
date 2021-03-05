@@ -1,6 +1,7 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.Block;
+import org.wolkenproject.core.BlockHeader;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
@@ -19,11 +20,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class RequestHeaders extends Message {
-    private Set<byte[]> blocks;
+    private Set<byte[]> headers;
 
-    public RequestHeaders(int version, Collection<byte[]> blocks) {
+    public RequestHeaders(int version, Collection<byte[]> headers) {
         super(version, Flags.Request);
-        this.blocks = new LinkedHashSet<>(blocks);
+        this.headers = new LinkedHashSet<>(headers);
     }
 
     public RequestHeaders(int version, byte[] hash) {
@@ -39,29 +40,29 @@ public class RequestHeaders extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        Set<BlockIndex> blocks = new LinkedHashSet<>();
-        for (byte[] hash : this.blocks) {
-            BlockIndex block    = Context.getInstance().getDatabase().findBlock(hash);
+        Set<BlockHeader> headers = new LinkedHashSet<>();
+        for (byte[] hash : this.headers) {
+            BlockHeader header  = Context.getInstance().getDatabase().findBlockHeader(hash);
 
-            if (block == null) {
-                block           = Context.getInstance().getBlockChain().getBlock(hash);
+            if (header == null) {
+                header          = Context.getInstance().getBlockChain().getBlockHeader(hash);
             }
 
-            if (block != null) {
-                blocks.add(block);
+            if (header != null) {
+                headers.add(header);
             }
         }
 
         // send the blocks
-        node.sendMessage(new BlockList(Context.getInstance().getNetworkParameters().getVersion(), blocks, getUniqueMessageIdentifier()));
+        node.sendMessage(new HeaderList(Context.getInstance().getNetworkParameters().getVersion(), headers, getUniqueMessageIdentifier()));
     }
 
     @Override
     public void writeContents(OutputStream stream) throws IOException {
-        Utils.writeInt(blocks.size(), stream);
-        for (byte[] txid : blocks)
+        Utils.writeInt(headers.size(), stream);
+        for (byte[] hash : headers)
         {
-            stream.write(txid);
+            stream.write(hash);
         }
     }
 
@@ -77,45 +78,45 @@ public class RequestHeaders extends Message {
             byte hash[] = new byte[Block.UniqueIdentifierLength];
             stream.read(hash);
 
-            blocks.add(hash);
+            headers.add(hash);
         }
     }
 
     @Override
     public <Type> Type getPayload() {
-        return (Type) blocks;
+        return (Type) headers;
     }
 
     @Override
     public ResponseMetadata getResponseMetadata() {
         return (msg)->{
-            boolean isCorrectType = msg instanceof BlockList;
+            boolean isCorrectType = msg instanceof HeaderList;
 
             if (!isCorrectType) {
                 return ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
             int response = 0;
-            Collection<BlockIndex> blocks = msg.getPayload();
+            Collection<BlockHeader> headers = msg.getPayload();
 
             int checked = 0;
-            for (BlockIndex block : blocks) {
-                if (this.blocks.contains(block.getHash())) {
+            for (BlockHeader header : headers) {
+                if (this.headers.contains(header.getHashCode())) {
                     checked ++;
                 }
             }
 
-            if (blocks.size() > this.blocks.size()) {
+            if (headers.size() > this.headers.size()) {
                 response |= ResponseMetadata.ValidationBits.SpamfulResponse;
                 response |= ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
-            if (checked != this.blocks.size()) {
+            if (checked != this.headers.size()) {
                 response |= ResponseMetadata.ValidationBits.PartialResponse;
                 response |= ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
-            if (checked == this.blocks.size() && response != 0) {
+            if (checked == this.headers.size() && response != 0) {
                 response |= ResponseMetadata.ValidationBits.EntireResponse;
             }
 
@@ -125,7 +126,7 @@ public class RequestHeaders extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new RequestHeaders(getVersion(), blocks);
+        return (Type) new RequestHeaders(getVersion(), headers);
     }
 
     @Override
