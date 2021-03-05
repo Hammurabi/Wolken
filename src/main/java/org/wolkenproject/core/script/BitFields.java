@@ -7,9 +7,13 @@ import java.util.List;
 public class BitFields {
     private List<Tuple<Integer, String>>    fields;
     private int                             totalBits;
+    private int                             conditionalBits;
 
     public int getTotalBits() {
         return totalBits;
+    }
+    public int getConditionalBits() {
+        return conditionalBits;
     }
 
     public int getTotalBytes() {
@@ -17,13 +21,6 @@ public class BitFields {
     }
 
     public BitFields addField(int length, String name) {
-        totalBits += length;
-        fields.add(new Tuple<>(totalBits, name));
-
-        return this;
-    }
-
-    public BitFields addVariableField(int length, int maxLength, String name) {
         totalBits += length;
         fields.add(new Tuple<>(totalBits, name));
 
