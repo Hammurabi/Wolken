@@ -43,6 +43,8 @@ public class IpAddressList {
                     break;
                 }
             }
+
+            node.sendMessage(new AddressList(list));
         }
     }
 
