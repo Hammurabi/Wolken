@@ -11,7 +11,7 @@ public class TransactionPool {
     private static final int            MaximumBlockQueueSize = 1_250_000_000;
 
     public TransactionPool() {
-        transactions = new PriorityHashQueue<>();
+        transactions    = new PriorityHashQueue<>();
     }
 
     public boolean contains(byte[] txid) {
