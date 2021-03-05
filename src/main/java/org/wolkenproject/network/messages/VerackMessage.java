@@ -52,7 +52,11 @@ public class VerackMessage extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        try {
+            return (Type) new VerackMessage(0, new VersionInformation());
+        } catch (UnknownHostException e) {
+            return null;
+        }
     }
 
     @Override
