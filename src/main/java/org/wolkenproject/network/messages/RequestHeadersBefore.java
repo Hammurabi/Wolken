@@ -45,13 +45,20 @@ public class RequestHeadersBefore extends Message {
         Set<BlockHeader> headers    = new LinkedHashSet<>();
 
         // fetch the block header
-        BlockHeader header          = Context.getInstance().getDatabase().findBlockHeader(hash);
+        BlockIndex index            = Context.getInstance().getDatabase().findBlock(hash);
 
         // if it doesn't exist then respond with an error
-        if (header == null) {
+        if (index == null) {
             node.sendMessage(new FailedToRespondMessage(Context.getInstance().getNetworkParameters().getVersion(), FailedToRespondMessage.ReasonFlags.CouldNotFindRequestedData, getUniqueMessageIdentifier()));
             return;
         }
+
+        int latestHeader            = Math.max(0, index.getHeight() - 1);
+        int earliestHeader          = Math.max(0, latestHeader - (count));
+
+        int headerCounter           = latestHeader;
+
+        BlockHeader header          = Context.getInstance().getDatabase().findBlockHeader(headerCounter --);
 
         while (headers.size() < count) {
             header                  = Context.getInstance().getDatabase().findBlockHeader(header.getParentHash());
