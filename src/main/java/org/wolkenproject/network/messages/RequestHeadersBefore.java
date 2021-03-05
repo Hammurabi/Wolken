@@ -42,7 +42,17 @@ public class RequestHeadersBefore extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        Set<BlockHeader> headers = new LinkedHashSet<>();
+        Set<BlockHeader> headers    = new LinkedHashSet<>();
+
+        // fetch the block header
+        BlockHeader header          = Context.getInstance().getDatabase().findBlockHeader(hash);
+
+        // if it doesn't exist, return the error
+        if (header == null) {
+            node.sendMessage(new FailedToRespondMessage(Context.getInstance().getNetworkParameters().getVersion(), FailedToRespondMessage.ReasonFlags.CouldNotFindRequestedData, getUniqueMessageIdentifier()));
+            return;
+        }
+
         for (byte[] hash : this.headers) {
             BlockHeader header  = Context.getInstance().getDatabase().findBlockHeader(hash);
 
