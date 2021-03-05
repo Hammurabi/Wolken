@@ -9,9 +9,10 @@ public class PriorityHashQueue<T extends Comparable<T>> implements Queue<T> {
     public PriorityHashQueue() {
         this(new DefaultComparator<>());
     }
-    
+
     public PriorityHashQueue(Comparator<Entry<T>> comparator) {
         queue = new PriorityQueue<Entry<T>>(comparator);
+        entryMap = new HashMap<>();
     }
 
     private static class DefaultComparator<T extends Comparable<T>> implements Comparator<Entry<T>> {
