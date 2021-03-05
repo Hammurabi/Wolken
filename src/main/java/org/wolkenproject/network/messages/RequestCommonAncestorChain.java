@@ -1,6 +1,7 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.Ancestors;
+import org.wolkenproject.core.Block;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
@@ -50,7 +51,7 @@ public class RequestCommonAncestorChain extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new RequestCommonAncestorChain(0, new Ancestors());
+        return (Type) new RequestCommonAncestorChain(0, new Ancestors(new byte[Block.UniqueIdentifierLength]));
     }
 
     @Override
