@@ -171,4 +171,9 @@ public class Transaction extends TransactionI {
     public int compareTo(TransactionI transactionI) {
         return 0;
     }
+
+    @Override
+    public byte[] checksum() throws IOException {
+        return HashUtil.hash160(getTransactionID());
+    }
 }
