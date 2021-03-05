@@ -32,6 +32,6 @@ public class TransactionPool {
     }
 
     public TransactionI getTransaction(byte[] txid) {
-        return transactions.get(txid);
+        return transactions.getByHash(txid);
     }
 }
