@@ -13,7 +13,7 @@ public class Ancestors {
         hashes = new LinkedHashSet<>();
     }
 
-    void fill(BlockIndex tip) {
+    public void fill(BlockIndex tip) {
         int latest      = tip.getHeight() - 1;
         int earliest    = Math.max(0, latest - 16384);
         int total       = latest - earliest;
