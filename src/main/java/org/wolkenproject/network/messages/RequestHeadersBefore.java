@@ -15,21 +15,15 @@ import org.wolkenproject.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class RequestHeadersBefore extends Message {
-    // not serialized.
-    private BlockIndex  block;
-
     private byte        hash[];
     private int         count;
 
-    public RequestHeadersBefore(int version, BlockIndex block, int count) {
+    public RequestHeadersBefore(int version, byte hash[], int count) {
         super(version, Flags.Request);
-        this.block  = block;
-        this.hash   = block.getHash();
+        this.hash   = hash;
         this.count  = count;
     }
 
@@ -99,16 +93,22 @@ public class RequestHeadersBefore extends Message {
 
             int response    = 0;
             Collection<BlockHeader> headers = msg.getPayload();
-            int trueCount   = block.getHeight() - Math.max(0, block.getHeight() - count);
-
-            if (headers.size() != trueCount) {
-                response |= ResponseMetadata.ValidationBits.PartialResponse;
+            if (headers.size() > count || headers.isEmpty()) {
+                response |= ResponseMetadata.ValidationBits.SpamfulResponse;
                 response |= ResponseMetadata.ValidationBits.InvalidResponse;
             }
 
-            if (headers.size() > trueCount) {
-                response |= ResponseMetadata.ValidationBits.SpamfulResponse;
-                response |= ResponseMetadata.ValidationBits.InvalidResponse;
+            Iterator<BlockHeader> iterator = new ArrayList<>(headers).iterator();
+            if (iterator.hasNext()) {
+                BlockHeader header = iterator.next();
+
+                while (iterator.hasNext()) {
+                    BlockHeader next = iterator.next();
+
+                    if (!Utils.equals(header.getHashCode(), next.getParentHash())) {
+                        return response | ResponseMetadata.ValidationBits.SpamfulResponse | ResponseMetadata.ValidationBits.InvalidResponse;
+                    }
+                }
             }
 
             return response;
@@ -117,11 +117,7 @@ public class RequestHeadersBefore extends Message {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        try {
-            return (Type) new RequestHeadersBefore(getVersion(), block.makeCopy(), 0);
-        } catch (IOException e) {
-            return null;
-        }
+        return (Type) new RequestHeadersBefore(getVersion(), new byte[Block.UniqueIdentifierLength], 0);
     }
 
     @Override
