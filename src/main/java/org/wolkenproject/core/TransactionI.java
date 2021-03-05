@@ -12,8 +12,8 @@ import java.io.IOException;
 public abstract class TransactionI extends SerializableI implements Comparable<TransactionI> {
     public static int UniqueIdentifierLength = 32;
 
-    public static TransactionI newCoinbase(int blockHeight, String s, long reward, Address addresses[]) {
-        Input inputs[] = { new Input(new byte[UniqueIdentifierLength], 0, Utils.concatenate(Utils.takeApart(blockHeight), s.getBytes())) };
+    public static TransactionI newCoinbase(int blockHeight, String msg, long reward, Address addresses[]) {
+        Input inputs[] = { new Input(new byte[UniqueIdentifierLength], 0, Utils.concatenate(Utils.takeApart(blockHeight), msg.getBytes())) };
         Output outputs[] = new Output[addresses.length];
 
         long rewardPerAddress   = reward / addresses.length;
