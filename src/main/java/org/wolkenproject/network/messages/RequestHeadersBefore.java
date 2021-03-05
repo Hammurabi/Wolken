@@ -59,6 +59,8 @@ public class RequestHeadersBefore extends Message {
             }
         }
 
+        headers.add(Context.getInstance().getDatabase().findBlockHeader(hash));
+
         // send the headers
         node.sendMessage(new HeaderList(Context.getInstance().getNetworkParameters().getVersion(), headers, getUniqueMessageIdentifier()));
     }
@@ -93,7 +95,7 @@ public class RequestHeadersBefore extends Message {
 
             int response    = 0;
             Collection<BlockHeader> headers = msg.getPayload();
-            if (headers.size() > count || headers.isEmpty()) {
+            if (headers.size() > (count + 1) || headers.isEmpty()) {
                 response |= ResponseMetadata.ValidationBits.SpamfulResponse;
                 response |= ResponseMetadata.ValidationBits.InvalidResponse;
             }
@@ -107,6 +109,12 @@ public class RequestHeadersBefore extends Message {
 
                     if (!Utils.equals(header.getHashCode(), next.getParentHash())) {
                         return response | ResponseMetadata.ValidationBits.SpamfulResponse | ResponseMetadata.ValidationBits.InvalidResponse;
+                    }
+
+                    if (!iterator.hasNext()) {
+                        if (!Utils.equals(header.getHashCode(), hash)) {
+                            return response | ResponseMetadata.ValidationBits.SpamfulResponse | ResponseMetadata.ValidationBits.InvalidResponse;
+                        }
                     }
                 }
             }
