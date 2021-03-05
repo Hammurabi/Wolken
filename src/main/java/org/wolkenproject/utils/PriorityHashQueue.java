@@ -156,8 +156,8 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return null;
     }
 
-    public boolean containsKey(byte[] txid) {
-        return entryMap.containsKey(txid);
+    public boolean containsKey(byte[] hash) {
+        return entryMap.containsKey(hash);
     }
 
     public void removeTails(int newLength) {
