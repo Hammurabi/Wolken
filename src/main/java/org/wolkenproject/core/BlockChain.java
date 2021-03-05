@@ -59,7 +59,7 @@ public class BlockChain implements Runnable {
                 lastBroadcast = System.currentTimeMillis();
             }
 
-            // pool from suggested block pool
+            // pull from suggested block pool
             BlockIndex block = nextFromPool();
 
             try {
