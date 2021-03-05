@@ -22,4 +22,11 @@ public class BitFields {
 
         return this;
     }
+
+    public BitFields addVariableField(int length, int maxLength, String name) {
+        totalBits += length;
+        fields.add(new Tuple<>(totalBits, name));
+
+        return this;
+    }
 }
