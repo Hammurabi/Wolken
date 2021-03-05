@@ -43,7 +43,7 @@ public class BlockHeader extends SerializableI {
         return version;
     }
 
-    public long getTimestamp()
+    public int getTimestamp()
     {
         return timestamp;
     }
