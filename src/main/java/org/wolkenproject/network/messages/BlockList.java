@@ -16,7 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class BlockList extends ResponseMessage {
-    private Collection<BlockIndex>      blocks;
+    private Set<BlockIndex>      blocks;
 
     public BlockList(int version, Collection<BlockIndex> blocks, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
