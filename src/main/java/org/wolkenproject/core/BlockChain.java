@@ -319,6 +319,24 @@ public class BlockChain implements Runnable {
         }
     }
 
+    public void pool(BlockIndex block) {
+        lock.lock();
+        try {
+            blockPool.add(block);
+
+            // calculate the maximum blocks allowed in the queue.
+            int maximumBlocks   = MaximumPoolBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumPoolBlockQueueSize / 4) / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+
+            // remove any blocks that are too far back in the queue.
+            if (blockPool.size() - maximumBlocks > Threshold) {
+                trimOrphans(maximumBlocks);
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
     private void trimOrphans(int newLength) {
         orphanedBlocks.removeTails(newLength);
     }
