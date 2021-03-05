@@ -105,7 +105,7 @@ public class PriorityHashQueue<T extends Comparable<T> & Hashable> implements Qu
         return null;
     }
 
-    private static class DefaultComparator<T extends Comparable<T>> implements Comparator<Entry<T>> {
+    private static class DefaultComparator<T extends Comparable<T> & Hashable> implements Comparator<Entry<T>> {
         @Override
         public int compare(Entry<T> a, Entry<T> b) {
             return a.compareTo(b);
