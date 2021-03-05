@@ -20,12 +20,16 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class RequestHeadersBefore extends Message {
+    // not serialized.
     private BlockIndex  block;
+
+    private byte        hash[];
     private int         count;
 
     public RequestHeadersBefore(int version, BlockIndex block, int count) {
         super(version, Flags.Request);
         this.block  = block;
+        this.hash   = block.getHash();
         this.count  = count;
     }
 
