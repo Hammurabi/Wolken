@@ -10,7 +10,7 @@ java -version 2>NUL
 if errorlevel 1 goto errorNoJava
 echo java is installed
 
-python scripts/build.py
+python scripts/install_maven.py
 pause
 
 :: Reaching here means Python is installed.
