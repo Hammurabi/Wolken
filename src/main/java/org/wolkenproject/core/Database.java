@@ -171,4 +171,8 @@ public class Database {
 
         return null;
     }
+
+    public byte[] findBlockHash(int height) {
+        return get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
+    }
 }
