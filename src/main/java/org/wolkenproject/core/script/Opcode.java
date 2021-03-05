@@ -18,4 +18,16 @@ public abstract class Opcode extends SerializableI {
     public void setDescription(String desc) {
         this.desc = desc;
     }
+
+    public int getIdentifier() {
+        return identifier;
+    }
+
+    public BitFields getArgs() {
+        return args;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }
