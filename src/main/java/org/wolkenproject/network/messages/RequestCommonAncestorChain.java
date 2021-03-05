@@ -1,7 +1,6 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.Ancestors;
-import org.wolkenproject.core.BlockHeader;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
@@ -13,7 +12,6 @@ import org.wolkenproject.serialization.SerializableI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Set;
 
 public class RequestCommonAncestorChain extends Message {
     private Ancestors ancestors;
