@@ -21,7 +21,8 @@ public class Database {
     private final static byte[]
     UnspentTransactionOutput= Utils.takeApartShort((short) 1),
     ChainTip                = Utils.takeApartShort((short) 2),
-    BlockIndex              = Utils.takeApartShort((short) 3);
+    BlockHeader             = Utils.takeApartShort((short) 3),
+    BlockIndex              = Utils.takeApartShort((short) 4);
 
     public Database(FileService location) throws IOException {
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
@@ -177,5 +178,18 @@ public class Database {
     }
 
     public BlockHeader findBlockHeader(byte[] hash) {
+        mutex.lock();
+        try {
+            InputStream inputStream = location.newFile(".chain").newFile(Base16.encode(hash)).openFileInputStream();
+            BlockHeader header  = Context.getInstance().getSerialFactory().fromStream(BlockHeader.class, inputStream);
+            inputStream.close();
+
+            return header;
+        } catch (IOException | WolkenException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            mutex.unlock();
+        }
     }
 }
