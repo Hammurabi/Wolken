@@ -4,9 +4,6 @@ import org.wolkenproject.core.Block;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
-import org.wolkenproject.network.Node;
-import org.wolkenproject.network.ResponseMetadata;
-import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 
 import java.io.IOException;
