@@ -184,12 +184,40 @@ public class BlockChain implements Runnable {
         rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
     }
 
+    private boolean isCommonAncestor(BlockHeader blockHeader) {
+        return Context.getInstance().getDatabase().checkBlockExists(blockHeader.getHashCode());
+    }
+
     private void replaceTip(BlockIndex block) throws WolkenException {
         // request block headers
-        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block, 1024));
+        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block, 4096));
+        BlockHeader commonAncestor = null;
 
         if (response != null) {
-            Set<>
+            Collection<BlockHeader> headers = response.getPayload();
+
+            while (headers != null) {
+                Iterator<BlockHeader> iterator = headers.iterator();
+
+                BlockHeader header = iterator.next();
+                if (isCommonAncestor(header)) {
+                    commonAncestor = header;
+                }
+
+                // loop headers to find a common ancestor
+                while (iterator.hasNext()) {
+                    header = iterator.next();
+
+                    if (isCommonAncestor(header)) {
+                        commonAncestor = header;
+                    }
+                }
+
+                // find older ancestor
+                if (commonAncestor == null) {
+                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block, 1024));
+                }
+            }
         }
 
         // stale the current tip
