@@ -1,10 +1,12 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.utils.Tuple;
+
 import java.util.List;
 
 public class BitFields {
-    private List<Integer>   fields;
-    private int             totalBits;
+    private List<Tuple<Integer, String>>    fields;
+    private int                             totalBits;
 
     public int getTotalBits() {
         return totalBits;
@@ -14,9 +16,9 @@ public class BitFields {
         return (int) Math.ceil(totalBits / 8.0);
     }
 
-    public BitFields addField(int length) {
+    public BitFields addField(int length, String name) {
         totalBits += length;
-        fields.add(totalBits);
+        fields.add(new Tuple<>(totalBits, name));
 
         return this;
     }
