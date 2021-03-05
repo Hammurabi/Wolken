@@ -1,5 +1,8 @@
 @echo off
 
+rem set the active directory
+cd /D "%~dp0"
+
 rem download python if it does not exist
 :: Check for Python Installation
 python --version 2>NUL
