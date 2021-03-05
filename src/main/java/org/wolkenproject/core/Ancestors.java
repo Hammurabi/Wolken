@@ -19,8 +19,8 @@ public class Ancestors extends SerializableI {
 
     public void fill(BlockIndex tip) {
         int latest      = tip.getHeight() - 1;
-        int earliest    = Math.max(0, latest - 16384);
-        int total       = latest - earliest;
+        int earliest    = 0;
+        int total       = latest;
         int mid         = total / 2;
         int mid_up      = mid + (total / 4);
         int mid_bt      = mid - (total / 4);
