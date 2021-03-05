@@ -165,6 +165,10 @@ public class BlockChain implements Runnable {
             }
         }
 
+        if (commonAncestor != null) {
+            Logger.alert("found common ancestor" + block + " for block" + block);
+        }
+        
         return commonAncestor;
     }
 
