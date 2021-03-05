@@ -1,0 +1,40 @@
+package org.wolkenproject.network.messages;
+
+import org.wolkenproject.core.Context;
+import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.network.Message;
+import org.wolkenproject.network.Node;
+import org.wolkenproject.network.ResponseMetadata;
+import org.wolkenproject.network.Server;
+import org.wolkenproject.serialization.SerializableI;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public class FoundCommonAncestor extends ResponseMessage {
+    private byte commonAncestor[];
+
+    public FoundCommonAncestor(byte commonAncestor[], byte[] uniqueMessageIdentifier) {
+        super(Context.getInstance().getNetworkParameters().getVersion(), uniqueMessageIdentifier);
+        this.commonAncestor = commonAncestor;
+    }
+
+    @Override
+    public void writeContents(OutputStream stream) throws IOException, WolkenException {
+    }
+
+    @Override
+    public void readContents(InputStream stream) throws IOException, WolkenException {
+    }
+
+    @Override
+    public <Type> Type getPayload() {
+        return null;
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(FoundCommonAncestor.class);
+    }
+}
