@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.script.VirtualMachine;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
@@ -27,6 +28,7 @@ public class Context {
     private Server                  server;
     private Address                 payList[];
     private BlockChain              blockChain;
+    private VirtualMachine          virtualMachine;
     private FileService             fileService;
 
     public Context(FileService service, boolean testNet, Address[] payList) throws WolkenException, IOException {
@@ -40,6 +42,7 @@ public class Context {
         this.transactionPool        = new TransactionPool();
         this.payList                = payList;
         this.fileService            = service;
+        this.virtualMachine         = null;
 
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
         serializationFactory.registerClass(Block.class, new Block());
@@ -73,6 +76,16 @@ public class Context {
 
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
+
+        virtualMachine.addOp("halt", false, 0, 0, "halt process and all sub processes", null);
+        virtualMachine.addOp("arithmetic", true, 2, 0, "operations [+ - / * %] [& | ^ << >>] [< > ==] [4:op][4:item][4:item][4:result_item]", null);
+        virtualMachine.addOp("storei", true, 1, 0, "pop x from stack and store it in register [1:sign][4:register][2:type][1:unused]", null);
+        virtualMachine.addOp("loadi", true, 1, 0, "load 1 or 2 items from registers and push them to stack [4:item1][2:type][2:optional]", null);
+        virtualMachine.addOp("call", true, 1, 0, "call a function [2:type][2:length].", null);
+        virtualMachine.addOp("jump", true, 2, 0, "jump to a different location in the code", null);
+
+        virtualMachine.addOp("push", true, 0, 0, "push x amount of bytes into the stack", null);
+        virtualMachine.addOp("pop", false, 0, 0, "pop item from the stack", null);
     }
 
     public void shutDown()
