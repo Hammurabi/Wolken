@@ -181,7 +181,44 @@ public class BlockChain implements Runnable {
             return;
         }
 
-        rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
+        // request block headers
+        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block.getHash(), 1024));
+        BlockHeader commonAncestor = null;
+
+        if (response != null) {
+            Collection<BlockHeader> headers = response.getPayload();
+
+            while (headers != null) {
+                Iterator<BlockHeader> iterator = headers.iterator();
+
+                BlockHeader header = iterator.next();
+                if (isCommonAncestor(header)) {
+                    commonAncestor = header;
+                }
+
+                // loop headers to find a common ancestor
+                while (iterator.hasNext()) {
+                    header = iterator.next();
+
+                    if (isCommonAncestor(header)) {
+                        commonAncestor = header;
+                    }
+                }
+
+                // find older ancestor
+                if (commonAncestor == null) {
+                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), header.getHashCode(), 4096));
+
+                    if (response != null) {
+                        headers = response.getPayload();
+                    }
+                }
+            }
+        }
+
+        if (commonAncestor != null) {
+            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
+        }
     }
 
     private boolean isCommonAncestor(BlockHeader blockHeader) {
@@ -224,16 +261,18 @@ public class BlockChain implements Runnable {
             }
         }
 
-        // stale the current tip
-        addStale(getTip());
+        if (commonAncestor != null) {
+            // stale the current tip
+            addStale(getTip());
 
-        byte previousHash[] = getTip().getBlock().getParentHash();
-        if (Utils.equals(block.getBlock().getParentHash(), previousHash)) {
-            setTip(block);
-            return;
+            byte previousHash[] = getTip().getBlock().getParentHash();
+            if (Utils.equals(block.getBlock().getParentHash(), previousHash)) {
+                setTip(block);
+                return;
+            }
+
+            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
         }
-
-        rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
     }
 
     private boolean rollbackIntoExistingParent(byte[] parentHash, int height) throws WolkenException {
