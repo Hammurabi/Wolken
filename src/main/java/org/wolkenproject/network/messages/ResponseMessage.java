@@ -4,6 +4,7 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 
@@ -41,12 +42,12 @@ public abstract class ResponseMessage extends Message {
         return null;
     }
 
-    @Override
-    public int getSerialNumber() {
-        return Context.getInstance().getSerialFactory().getSerialNumber(ResponseMessage.class);
-    }
-
     protected byte[] getRequester() {
         return requester;
+    }
+
+    @Override
+    public ResponseMetadata getResponseMetadata() {
+        return null;
     }
 }

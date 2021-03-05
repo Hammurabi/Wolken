@@ -135,6 +135,10 @@ public class NetworkParameters {
         return 2_500;
     }
 
+    public long getMessageTimeout() {
+        return 500;
+    }
+
     public int getMaxNetworkErrors() {
         return 25;
     }

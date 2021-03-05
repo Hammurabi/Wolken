@@ -3,14 +3,15 @@ package org.wolkenproject.network;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
+import org.wolkenproject.network.messages.FailedToRespondMessage;
 import org.wolkenproject.utils.Utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,34 +19,42 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Node {
-    private Socket                  socket;
-    private ReentrantLock           mutex;
-    private Queue<Message>          messages;
-    private Map<byte[], Message>    respones;
-    private MessageCache            messageCache;
-    private long                    firstConnected;
-    private int                     errors;
+public class Node implements Runnable {
+    private SocketChannel                   socket;
+    private ReentrantLock                   mutex;
+    private Queue<Message>                  messages;
+    private Queue<byte[]>                   messageQueue;
+    private Map<byte[], ResponseMetadata>   expectedResponse;
+    private Map<byte[], Message>            respones;
+    private MessageCache                    messageCache;
+    private long                            firstConnected;
+    private int                             errors;
+    private ByteBuffer                      buffer;
+    private ByteArrayOutputStream           stream;
 
-    private BufferedInputStream     inputStream;
-    private BufferedOutputStream    outputStream;
+//    private BufferedInputStream     inputStream;
+//    private BufferedOutputStream    outputStream;
 
     private VersionInformation      versionMessage;
 
-    public Node(String ip, int port) throws IOException {
-        this(new Socket(ip, port));
-    }
+//    public Node(String ip, int port) throws IOException {
+//        this(new Socket(ip, port));
+//    }
 
-    public Node(Socket socket) throws IOException {
+    public Node(SocketChannel socket) throws IOException {
         this.socket         = socket;
         this.mutex          = new ReentrantLock();
+        this.messageQueue   = new ConcurrentLinkedQueue<>();
         this.messages       = new ConcurrentLinkedQueue<>();
         this.messageCache   = new MessageCache();
         this.errors         = 0;
-        this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
-        this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
+//        this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
+//        this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
         this.firstConnected = System.currentTimeMillis();
         this.respones       = Collections.synchronizedMap(new HashMap<>());
+        this.socket.configureBlocking(false);
+        this.buffer         = ByteBuffer.allocate(Context.getInstance().getNetworkParameters().getBufferSize());
+        this.expectedResponse = new HashMap<>();
     }
 
     public void receiveResponse(Message message, byte origin[]) {
@@ -57,7 +66,7 @@ public class Node {
         }
     }
 
-    public Message getResponse(Message message, long timeOut) throws WolkenTimeoutException {
+    public CheckedResponse getResponse(Message message, long timeOut) throws WolkenTimeoutException {
         boolean shouldWait = false;
         byte id[] = message.getUniqueMessageIdentifier();
 
@@ -66,6 +75,7 @@ public class Node {
             if (messageCache.shouldSend(message))
             {
                 messages.add(message);
+                expectedResponse.put(id, message.getResponseMetadata());
                 shouldWait = true;
             }
         } finally {
@@ -96,12 +106,41 @@ public class Node {
         }
     }
 
-    private Message getResponse(byte[] uniqueMessageIdentifier) {
+    private CheckedResponse getResponse(byte[] uniqueMessageIdentifier) {
         mutex.lock();
         try{
-            return respones.get(uniqueMessageIdentifier);
+            Message response            = respones.get(uniqueMessageIdentifier);
+            ResponseMetadata metadata   = expectedResponse.get(uniqueMessageIdentifier);
+
+            // internal error, we may return null
+            if (response == null) {
+                return null;
+            }
+
+            // may return without any issues
+            if (response.getSerialNumber() == Context.getInstance().getSerialFactory().getSerialNumber(FailedToRespondMessage.class)) {
+                return null;
+            }
+
+            int flags = metadata.getResponseBits(response);
+
+            // check that the response is appropriate
+            if ((flags & ResponseMetadata.ValidationBits.InvalidType) == ResponseMetadata.ValidationBits.InvalidType) {
+                errors ++;
+                return null;
+            }
+
+            // check that the response is appropriate
+            if ((flags & ResponseMetadata.ValidationBits.SpamfulResponse) == ResponseMetadata.ValidationBits.SpamfulResponse) {
+                errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                messageCache.increaseSpamAverage(Context.getInstance().getNetworkParameters().getMessageSpamThreshold());
+                return null;
+            }
+
+            return new CheckedResponse(response, flags);
         } finally {
             respones.remove(uniqueMessageIdentifier);
+            expectedResponse.remove(uniqueMessageIdentifier);
             mutex.unlock();
         }
     }
@@ -133,23 +172,84 @@ public class Node {
         }
     }
 
+    public void read() {
+        mutex.lock();
+
+        try {
+            if (!socket.finishConnect()) {
+                return;
+            }
+
+            if (stream == null) {
+                stream = new ByteArrayOutputStream();
+            }
+
+            byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
+
+            int read = socket.read(buffer);
+            long timestamp = System.currentTimeMillis();
+
+            if (read == -1) {
+                stream.flush();
+                stream.close();
+
+                // queue the message for processing.
+                finish(stream);
+            } else {
+                // check message header
+                if (stream.size() >= 12) {
+                    byte header[] = stream.toByteArray();
+                    int length = Utils.makeInt(header, 8);
+
+                    if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
+                        errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                        stream = null;
+                        close();
+                        return;
+                    }
+                }
+
+                buffer.get(data, 0, read);
+                stream.write(data, 0, read);
+                buffer.clear();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            errors ++;
+            if (stream != null) {
+                stream = null;
+            }
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    private void finish(ByteArrayOutputStream stream) {
+        if (stream.size() > 0) {
+            messageQueue.add(stream.toByteArray());
+        }
+    }
+
     /*
         Listens for any incoming messages.
      */
     public CachedMessage listenForMessage() {
+        mutex.lock();
         try {
-            // a loop that hangs the entire thread might be dangerous.
-            //         while ((read = stream.read(messageHeader, read, messageHeader.length - read)) != messageHeader.length);
-            byte magicBytes[]    = new byte[4];
-            inputStream.read(magicBytes);
-            // this is unused as of this version
-            // but it is needed.
-            int magic       = Utils.makeInt(magicBytes);
-            Message message = Context.getInstance().getSerialFactory().fromStream(magic, inputStream);
+            if (messageQueue.isEmpty()) {
+                return null;
+            }
+
+            byte msg[] = messageQueue.poll();
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(msg);
+            Message message = Context.getInstance().getSerialFactory().fromStream(inputStream);
+            inputStream.close();
             return checkSpam(message);
         } catch (IOException | WolkenException e) {
-            errors ++;
+            errors++;
             return null;
+        } finally {
+            mutex.unlock();
         }
     }
 
@@ -168,9 +268,23 @@ public class Node {
         mutex.lock();
         try{
             while (!messages.isEmpty()) {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 Message message = messages.poll();
                 message.write(outputStream);
                 outputStream.flush();
+                outputStream.close();
+
+                byte msg[] = outputStream.toByteArray();
+                int offset = 0;
+
+                while (offset < msg.length) {
+                    buffer.clear();
+                    buffer.put(msg, offset, Context.getInstance().getNetworkParameters().getBufferSize());
+                    buffer.flip();
+                    while (buffer.hasRemaining()) {
+                        offset += socket.write(buffer);
+                    }
+                }
             }
         } catch (IOException | WolkenException e) {
             e.printStackTrace();
@@ -180,10 +294,7 @@ public class Node {
     }
 
     public void close() throws IOException {
-        outputStream.flush();
         socket.close();
-        inputStream.close();
-        outputStream.close();
     }
 
     public int getTotalErrorCount() {
@@ -195,7 +306,19 @@ public class Node {
     }
 
     public InetAddress getInetAddress() {
-        return ((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress();
+        try {
+            return ((InetSocketAddress) socket.getRemoteAddress()).getAddress();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            return InetAddress.getByName("localhost");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public MessageCache getMessageCache()
@@ -231,11 +354,23 @@ public class Node {
     }
 
     public int getPort() {
-        return socket.getPort();
+        try {
+            return  ((InetSocketAddress) socket.getRemoteAddress()).getPort();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 
     public long timeSinceConnected()
     {
         return System.currentTimeMillis() - firstConnected;
+    }
+
+    @Override
+    public void run() {
+        while (Context.getInstance().isRunning()) {
+        }
     }
 }

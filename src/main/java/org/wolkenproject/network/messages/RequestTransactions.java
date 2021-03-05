@@ -1,10 +1,13 @@
 package org.wolkenproject.network.messages;
 
+import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.TransactionI;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
@@ -37,6 +40,7 @@ public class RequestTransactions extends Message {
             }
         }
 
+        // send the transactions
         node.sendMessage(new TransactionList(Context.getInstance().getNetworkParameters().getVersion(), transactions, getUniqueMessageIdentifier()));
     }
 
@@ -78,5 +82,42 @@ public class RequestTransactions extends Message {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(RequestTransactions.class);
+    }
+
+    @Override
+    public ResponseMetadata getResponseMetadata() {
+        return (msg)->{
+            boolean isCorrectType = msg instanceof BlockList;
+
+            if (!isCorrectType) {
+                return ResponseMetadata.ValidationBits.InvalidResponse;
+            }
+
+            int response = 0;
+            Collection<TransactionI> transactions = msg.getPayload();
+
+            int checked = 0;
+            for (TransactionI transaction : transactions) {
+                if (this.transactions.contains(transaction.getTransactionID())) {
+                    checked ++;
+                }
+            }
+
+            if (transactions.size() > this.transactions.size()) {
+                response |= ResponseMetadata.ValidationBits.SpamfulResponse;
+                response |= ResponseMetadata.ValidationBits.InvalidResponse;
+            }
+
+            if (checked != this.transactions.size()) {
+                response |= ResponseMetadata.ValidationBits.PartialResponse;
+                response |= ResponseMetadata.ValidationBits.InvalidResponse;
+            }
+
+            if (checked == this.transactions.size() && response != 0) {
+                response |= ResponseMetadata.ValidationBits.EntireResponse;
+            }
+
+            return response;
+        };
     }
 }

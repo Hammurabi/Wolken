@@ -52,7 +52,7 @@ public abstract class Message extends SerializableI {
         byte buffer[] = new byte[8];
         stream.read(buffer, 0, 4);
         version = Utils.makeInt(buffer);
-        stream.read(buffer, 0, 4);
+        stream.read(buffer, 4, 4);
         flags = Utils.makeInt(buffer);
 //        stream.read(buffer);
 //        nonce = Utils.makeLong(buffer);
@@ -65,8 +65,10 @@ public abstract class Message extends SerializableI {
         writeContents(byteArrayOutputStream);
         byteArrayOutputStream.flush();
         byteArrayOutputStream.close();
+
         byte bytes[] = byteArrayOutputStream.toByteArray();
         Utils.writeInt(bytes.length, stream);
+
         stream.write(bytes);
     }
 
@@ -103,4 +105,5 @@ public abstract class Message extends SerializableI {
     public abstract void readContents(InputStream stream) throws IOException, WolkenException;
 
     public abstract <Type> Type getPayload();
+    public abstract ResponseMetadata getResponseMetadata();
 }

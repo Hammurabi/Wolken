@@ -7,6 +7,7 @@ import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
@@ -50,6 +51,7 @@ public class RequestBlocks extends Message {
             }
         }
 
+        // send the blocks
         node.sendMessage(new BlockList(Context.getInstance().getNetworkParameters().getVersion(), blocks, getUniqueMessageIdentifier()));
     }
 
@@ -81,6 +83,43 @@ public class RequestBlocks extends Message {
     @Override
     public <Type> Type getPayload() {
         return (Type) blocks;
+    }
+
+    @Override
+    public ResponseMetadata getResponseMetadata() {
+        return (msg)->{
+            boolean isCorrectType = msg instanceof BlockList;
+
+            if (!isCorrectType) {
+                return ResponseMetadata.ValidationBits.InvalidResponse;
+            }
+
+            int response = 0;
+            Collection<BlockIndex> blocks = msg.getPayload();
+
+            int checked = 0;
+            for (BlockIndex block : blocks) {
+                if (this.blocks.contains(block.getHash())) {
+                    checked ++;
+                }
+            }
+
+            if (blocks.size() > this.blocks.size()) {
+                response |= ResponseMetadata.ValidationBits.SpamfulResponse;
+                response |= ResponseMetadata.ValidationBits.InvalidResponse;
+            }
+
+            if (checked != this.blocks.size()) {
+                response |= ResponseMetadata.ValidationBits.PartialResponse;
+                response |= ResponseMetadata.ValidationBits.InvalidResponse;
+            }
+
+            if (checked == this.blocks.size() && response != 0) {
+                response |= ResponseMetadata.ValidationBits.EntireResponse;
+            }
+
+            return response;
+        };
     }
 
     @Override

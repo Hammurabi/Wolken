@@ -1,15 +1,16 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.BlockList;
+import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.RequestBlocks;
+import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
@@ -30,10 +31,56 @@ public class BlockChain implements Runnable {
 
     @Override
     public void run() {
+        long lastBroadcast  = System.currentTimeMillis();
+        byte lastHash[]     = null;
+
+
+        Logger.alert("attempting to reload chain from last checkpoint.");
+        lock.lock();
+        try {
+            tip = Context.getInstance().getDatabase().findTip();
+            if (tip != null) {
+                Logger.alert("loaded checkpoint successfully" + tip);
+            }
+        } finally {
+            lock.unlock();
+        }
+
         while (Context.getInstance().isRunning()) {
             BlockIndex block = nextOrphan();
 
             try {
+                if (getTip() == null) {
+                    Logger.alert("settings new tip" + block);
+                    tip = block;
+                    setBlockIndex(tip.getHeight(), tip);
+
+                    Logger.alert("downloading blocks{"+block.getHeight()+"}");
+                    while (block.getHeight() > 0) {
+                        // request the parent of this block
+                        BlockIndex parent = requestBlock(block.getBlock().getParentHash());
+
+                        // delete the downloaded chain if we cannot find the block
+                        if (parent == null) {
+                            Logger.alert("requested block{"+Base16.encode(block.getBlock().getParentHash())+"} not found.");
+                            Logger.alert("erasing{"+(getTip().getHeight() - block.getHeight())+"} blocks.");
+
+                            for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
+                                Context.getInstance().getDatabase().deleteBlock(i);
+                            }
+
+                            tip = null;
+                            break;
+                        }
+
+                        block = parent;
+                        setBlockIndex(block.getHeight(), block);
+                    }
+
+                    Logger.alert("downloaded entire chain successfully.");
+                    continue;
+                }
+
                 if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
                     // switch to this chain
                     if (block.getHeight() == tip.getHeight()) {
@@ -52,6 +99,22 @@ public class BlockChain implements Runnable {
                 }
             } catch (WolkenException e) {
                 e.printStackTrace();
+            }
+
+            byte tipHash[] = getTip().getHash();
+
+            // everytime the tip hash changes, broadcast it to connected nodes.
+            if (lastHash != null && !Utils.equals(tipHash, lastHash)) {
+                Set<byte[]> hashCodes = new LinkedHashSet<>();
+                hashCodes.add(tipHash);
+                lastHash = tipHash;
+
+                try {
+                    Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
+                    lastBroadcast = System.currentTimeMillis();
+                } catch (WolkenException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -94,7 +157,7 @@ public class BlockChain implements Runnable {
     private void setNext(BlockIndex block) throws WolkenException {
         byte previousHash[] = block.getBlock().getParentHash();
 
-        if (Utils.equals(previousHash, tip.getBlock().getHashCode())) {
+        if (Utils.equals(previousHash, tip.getHash())) {
             setTip(block);
             return;
         }
@@ -233,6 +296,37 @@ public class BlockChain implements Runnable {
         lock.lock();
         try {
             return tip.generateNextBlock();
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
+    public BlockIndex getTip() {
+        lock.lock();
+        try {
+            return tip;
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
+    public boolean contains(byte[] hash) {
+        Queue<BlockIndex> orphaned = getOrphanedBlocks();
+        for (BlockIndex block : orphaned) {
+            if (Utils.equals(block.getHash(), hash)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Queue<BlockIndex> getOrphanedBlocks() {
+        lock.lock();
+        try {
+            return new PriorityQueue<>(orphanedBlocks);
         }
         finally {
             lock.unlock();

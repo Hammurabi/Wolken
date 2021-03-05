@@ -1,28 +1,39 @@
 package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
+import org.wolkenproject.exceptions.WolkenTimeoutException;
+import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.VersionMessage;
 import org.wolkenproject.utils.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Server implements Runnable {
-    private ServerSocket    socket;
-    private Set<Node>       connectedNodes;
-    private NetAddress      netAddress;
+    private ServerSocketChannel socket;
+    private Set<Node>           connectedNodes;
+    private NetAddress          netAddress;
+    private ReentrantLock       mutex;
 
     public Server() throws IOException {
-        socket = new ServerSocket(Context.getInstance().getNetworkParameters().getPort());
+        socket  = ServerSocketChannel.open();
+        socket.bind(new InetSocketAddress(Context.getInstance().getNetworkParameters().getPort()));
+        mutex   = new ReentrantLock();
+
+        socket.configureBlocking(false);
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
 
         netAddress = Context.getInstance().getIpAddressList().getAddress(InetAddress.getLocalHost());
         if (netAddress == null)
         {
-            netAddress = new NetAddress(socket.getInetAddress(), socket.getLocalPort(), Context.getInstance().getNetworkParameters().getServices());
+            netAddress = new NetAddress(InetAddress.getLocalHost(), Context.getInstance().getNetworkParameters().getPort(), Context.getInstance().getNetworkParameters().getServices());
             Context.getInstance().getIpAddressList().addAddress(netAddress);
         }
 
@@ -40,9 +51,16 @@ public class Server implements Runnable {
         for (NetAddress address : addresses)
         {
             try {
-                Socket socket = new Socket(address.getAddress(), address.getPort());
+                SocketChannel socket = SocketChannel.open();
+                socket.bind(new InetSocketAddress(address.getAddress(), address.getPort()));
+
                 Node node = new Node(socket);
-                connectedNodes.add(node);
+                mutex.lock();
+                try {
+                    connectedNodes.add(node);
+                } finally {
+                    mutex.unlock();
+                }
 
                 node.sendMessage(new VersionMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(Context.getInstance().getNetworkParameters().getVersion(), VersionInformation.Flags.AllServices, System.currentTimeMillis(), getNetAddress(), address, 0)));
 
@@ -61,20 +79,27 @@ public class Server implements Runnable {
     private void listenForIncomingConnections()
     {
         Logger.alert("listening for inbound connections.");
-        Socket incoming = null;
+        SocketChannel incoming = null;
 
         while (Context.getInstance().isRunning())
         {
             try {
                 incoming = socket.accept();
 
-                if (connectedNodes.size() < (Context.getInstance().getNetworkParameters().getMaxAllowedInboundConnections() + Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections()))
-                {
-                    connectedNodes.add(new Node(incoming));
-                }
-                else
-                {
-                    incoming.close();
+                if (incoming != null) {
+                    if (connectedNodes.size() < (Context.getInstance().getNetworkParameters().getMaxAllowedInboundConnections() + Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections()))
+                    {
+                        mutex.lock();
+                        try {
+                            connectedNodes.add(new Node(incoming));
+                        } finally {
+                            mutex.unlock();
+                        }
+                    }
+                    else
+                    {
+                        incoming.close();
+                    }
                 }
             } catch (IOException e) {
             }
@@ -88,6 +113,7 @@ public class Server implements Runnable {
         while (Context.getInstance().isRunning())
         {
             long currentTime = System.currentTimeMillis();
+            Set<Node> connectedNodes = getConnectedNodes();
 
             if (currentTime - lastCheck >= 30_000)
             {
@@ -95,18 +121,25 @@ public class Server implements Runnable {
                 lastCheck = currentTime;
             }
 
+            for (Node node : connectedNodes) {
+                node.read();
+            }
+
             for (Node node : connectedNodes)
             {
                 CachedMessage message = node.listenForMessage();
-                if (!message.isSpam())
-                {
-                    if (!node.hasPerformedHandshake() && !message.isHandshake())
-                    {
-                        // ignore message
-                        continue;
-                    }
 
-                    message.getMessage().executePayload(this, node);
+                if (message != null) {
+                    if (!message.isSpam())
+                    {
+                        if (!node.hasPerformedHandshake() && !message.isHandshake())
+                        {
+                            // ignore message
+                            continue;
+                        }
+
+                        message.getMessage().executePayload(this, node);
+                    }
                 }
             }
 
@@ -118,57 +151,62 @@ public class Server implements Runnable {
     }
 
     private void runMaintenanceChecks() {
-        Iterator<Node> nodeIterator = connectedNodes.iterator();
-        while (nodeIterator.hasNext()) {
-            Node node = nodeIterator.next();
-            boolean shouldDisconnect = false;
-            boolean isSpammy = false;
+        mutex.lock();
+        try {
+            Iterator<Node> nodeIterator = connectedNodes.iterator();
+            while (nodeIterator.hasNext()) {
+                Node node = nodeIterator.next();
+                boolean shouldDisconnect = false;
+                boolean isSpammy = false;
 
-            if (node.timeSinceConnected() >= Context.getInstance().getNetworkParameters().getHandshakeTimeout() && !node.hasPerformedHandshake())
-            {
-                shouldDisconnect = true;
-            }
-
-            if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors()) {
-                shouldDisconnect = true;
-            }
-
-            if (node.getSpamAverage() > Context.getInstance().getNetworkParameters().getMessageSpamThreshold()) {
-                shouldDisconnect = true;
-                isSpammy = true;
-            }
-
-            if (isSpammy) {
-                NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
-                if (address != null)
+                if (node.timeSinceConnected() >= Context.getInstance().getNetworkParameters().getHandshakeTimeout() && !node.hasPerformedHandshake())
                 {
-                    address.setSpamAverage(node.getSpamAverage());
+                    shouldDisconnect = true;
                 }
-            }
 
-            if (shouldDisconnect) {
-                nodeIterator.remove();
-                try {
-                    node.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (node.getTotalErrorCount() > Context.getInstance().getNetworkParameters().getMaxNetworkErrors()) {
+                    shouldDisconnect = true;
                 }
-            }
 
-            if (!shouldDisconnect && !isSpammy)
-            {
-                if (node.getMessageCache().inboundCacheSize() > Context.getInstance().getNetworkParameters().getMaxCacheSize())
-                {
+                if (node.getSpamAverage() >= Context.getInstance().getNetworkParameters().getMessageSpamThreshold()) {
+                    shouldDisconnect = true;
+                    isSpammy = true;
+                }
+
+                if (isSpammy) {
                     NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
                     if (address != null)
                     {
                         address.setSpamAverage(node.getSpamAverage());
                     }
-                    node.getMessageCache().clearInboundCache();
                 }
 
-                node.getMessageCache().clearOutboundCache();
+                if (shouldDisconnect) {
+                    nodeIterator.remove();
+                    try {
+                        node.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (!shouldDisconnect && !isSpammy)
+                {
+                    if (node.getMessageCache().inboundCacheSize() > Context.getInstance().getNetworkParameters().getMaxCacheSize())
+                    {
+                        NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
+                        if (address != null)
+                        {
+                            address.setSpamAverage(node.getSpamAverage());
+                        }
+                        node.getMessageCache().clearInboundCache();
+                    }
+
+                    node.getMessageCache().clearOutboundCache();
+                }
             }
+        } finally {
+            mutex.unlock();
         }
     }
 
@@ -184,6 +222,7 @@ public class Server implements Runnable {
                 e.printStackTrace();
             }
         }
+
         Logger.alert("closed connections.");
     }
 
@@ -192,6 +231,46 @@ public class Server implements Runnable {
     }
 
     public Message broadcastRequest(Message request) {
+        return broadcastRequest(request, true);
+    }
+
+    public Message broadcastRequest(Message request, boolean fullResponse) {
+        return broadcastRequest(request, fullResponse, Context.getInstance().getNetworkParameters().getMessageTimeout());
+    }
+
+    public Message broadcastRequest(Message request, boolean fullResponse, long timeOut) {
+        Set<Node> connectedNodes = getConnectedNodes();
+
+        for (Node node : connectedNodes) {
+            try {
+                CheckedResponse response = node.getResponse(request, timeOut);
+                if (response != null) {
+                    if (response.noErrors()) {
+                        return response.getMessage();
+                    } else if (response.containsPartialResponse()) {
+                        if (fullResponse) {
+                            continue;
+                        }
+
+                        return response.getMessage();
+                    }
+                }
+            } catch (WolkenTimeoutException e) {
+            }
+        }
+
         return null;
+    }
+
+    public Set<Node> getConnectedNodes() {
+        return new LinkedHashSet<>(connectedNodes);
+    }
+
+    public void broadcast(Message message) {
+        Set<Node> connectedNodes = getConnectedNodes();
+
+        for (Node node : connectedNodes) {
+            node.sendMessage(message);
+        }
     }
 }
