@@ -9,7 +9,7 @@ import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 
-public abstract class TransactionI extends SerializableI {
+public abstract class TransactionI extends SerializableI implements Comparable<TransactionI> {
     public static int UniqueIdentifierLength = 32;
 
     public static TransactionI newCoinbase(int blockHeight, String s, long reward, Address addresses[]) {
