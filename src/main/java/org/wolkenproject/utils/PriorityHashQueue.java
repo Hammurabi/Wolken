@@ -161,6 +161,13 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
     }
 
     public void removeTails(int newLength) {
+        Queue<Entry<T>> newQueue = new PriorityQueue<>(new DefaultComparator<>());
+
+        while (!isEmpty() && size() < newLength) {
+            Entry<T> e = queue.poll();
+            newQueue.add(e);
+            entryMap.remove(e.hash);
+        }
     }
 
     private static class DefaultComparator<T extends SerializableI & Comparable<T>> implements Comparator<Entry<T>> {
