@@ -3,9 +3,11 @@ package org.wolkenproject.core;
 import org.wolkenproject.utils.PriorityHashQueue;
 
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TransactionPool {
     private Queue<TransactionI>         transactions;
+    private ReentrantLock               mutex;
     private static final int            MaximumBlockQueueSize = 1_250_000_000;
 
     public TransactionPool() {
