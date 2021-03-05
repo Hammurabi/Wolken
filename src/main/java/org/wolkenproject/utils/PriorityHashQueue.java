@@ -103,7 +103,10 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
 
     @Override
     public T element() {
-        return null;
+        Entry<T> entry = queue.poll();
+        entryMap.remove(entry.hash);
+
+        return entry.element;
     }
 
     @Override
