@@ -130,15 +130,54 @@ public class BlockChain implements Runnable {
     }
 
     private void rollback(BlockIndex block) throws WolkenException {
-        BlockIndex currentBlock = tip;
+        // request block headers
+        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block.getHash(), 1024));
+        BlockHeader commonAncestor = null;
 
-        while (currentBlock.getHeight() != block.getHeight()) {
-            deleteBlockIndex(currentBlock, true);
-            currentBlock = currentBlock.previousBlock();
+        if (response != null) {
+            Collection<BlockHeader> headers = response.getPayload();
+
+            while (headers != null) {
+                Iterator<BlockHeader> iterator = headers.iterator();
+
+                BlockHeader header = iterator.next();
+                if (isCommonAncestor(header)) {
+                    commonAncestor = header;
+                }
+
+                // loop headers to find a common ancestor
+                while (iterator.hasNext()) {
+                    header = iterator.next();
+
+                    if (isCommonAncestor(header)) {
+                        commonAncestor = header;
+                    }
+                }
+
+                // find older ancestor
+                if (commonAncestor == null) {
+                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), header.getHashCode(), 4096));
+
+                    if (response != null) {
+                        headers = response.getPayload();
+                    }
+                }
+            }
         }
 
-        setTip(currentBlock.previousBlock());
-        replaceTip(block);
+        if (commonAncestor != null) {
+            BlockIndex currentBlock = tip;
+
+            while (currentBlock.getHeight() != block.getHeight()) {
+                deleteBlockIndex(currentBlock, true);
+                currentBlock = currentBlock.previousBlock();
+            }
+
+            setTip(currentBlock.previousBlock());
+            replaceTip(block);
+        } else {
+            addOrphan(block);
+        }
     }
 
     private void setNextGapped(BlockIndex block) throws WolkenException {
