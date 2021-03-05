@@ -14,7 +14,6 @@ public class MochaVM extends VirtualMachine {
     public void addOp(String name, BitFields args, String desc, Opcode opcode) {
         opcode.setIdentifier(opcodeSet.size());
         opcode.setArgs(args);
-        opcode.setMaxArgumentLength(maxLenArgs);
         opcode.setDescription(desc);
         opcodeSet.add(opcode);
     }
