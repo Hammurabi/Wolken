@@ -166,4 +166,9 @@ public class Transaction extends TransactionI {
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(Transaction.class);
     }
+
+    @Override
+    public int compareTo(TransactionI transactionI) {
+        return 0;
+    }
 }
