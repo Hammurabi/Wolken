@@ -413,7 +413,7 @@ public class BlockChain implements Runnable {
         try {
             Set<byte[]> hashes = new LinkedHashSet<>();
             BlockIndex index = tip;
-            for (int i = 0; i < 1024; i ++) {
+            for (int i = 0; i < 16_384; i ++) {
                 hashes.add(index.getHash());
                 index = index.previousBlock();
                 if (index == null) {
