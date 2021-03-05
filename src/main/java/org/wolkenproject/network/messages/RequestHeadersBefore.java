@@ -85,7 +85,7 @@ public class RequestHeadersBefore extends Message {
 
     @Override
     public <Type> Type getPayload() {
-        return (Type) headers;
+        return null;
     }
 
     @Override
