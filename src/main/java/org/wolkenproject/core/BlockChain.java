@@ -407,4 +407,8 @@ public class BlockChain implements Runnable {
             lock.unlock();
         }
     }
+
+    public Set<byte[]> getInv() {
+        return null;
+    }
 }
