@@ -47,11 +47,13 @@ public class RequestHeadersBefore extends Message {
         // fetch the block header
         BlockHeader header          = Context.getInstance().getDatabase().findBlockHeader(hash);
 
-        // if it doesn't exist, return the error
+        // if it doesn't exist then respond with an error
         if (header == null) {
             node.sendMessage(new FailedToRespondMessage(Context.getInstance().getNetworkParameters().getVersion(), FailedToRespondMessage.ReasonFlags.CouldNotFindRequestedData, getUniqueMessageIdentifier()));
             return;
         }
+
+
 
         for (byte[] hash : this.headers) {
             BlockHeader header  = Context.getInstance().getDatabase().findBlockHeader(hash);
