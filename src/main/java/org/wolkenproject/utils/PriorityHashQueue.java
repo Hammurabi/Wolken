@@ -30,7 +30,13 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
 
     @Override
     public boolean contains(Object o) {
-        return entryMap.containsKey(((Hashable) o).getHash160());
+        if (o instanceof T) {
+            return entryMap.containsKey(((Hashable) o).getHash160());
+        } else if (o instanceof byte[]) {
+            return entryMap.containsKey(o);
+        }
+
+        return false;
     }
 
     @Override
