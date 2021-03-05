@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class RequestCommonAncestorChain extends Message {
-    public RequestCommonAncestorChain(int version) {
+    public RequestCommonAncestorChain(int version, Ancestors ancestors) {
         super(version, Flags.Request);
     }
 
