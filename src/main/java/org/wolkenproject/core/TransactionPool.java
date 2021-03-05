@@ -16,7 +16,7 @@ public class TransactionPool {
     }
 
     public boolean contains(byte[] txid) {
-        return transactions.containsKey(txid);
+        return transactions.contains(txid);
     }
 
     public Set<byte[]> getNonDuplicateTransactions(Set<byte[]> list) {
