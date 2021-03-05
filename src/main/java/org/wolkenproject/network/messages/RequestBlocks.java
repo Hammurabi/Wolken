@@ -73,10 +73,10 @@ public class RequestBlocks extends Message {
 
         for (int i = 0; i < length; i ++)
         {
-            byte txid[] = new byte[TransactionI.UniqueIdentifierLength];
-            stream.read(txid);
+            byte hash[] = new byte[Block.UniqueIdentifierLength];
+            stream.read(hash);
 
-            blocks.add(txid);
+            blocks.add(hash);
         }
     }
 
