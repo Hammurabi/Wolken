@@ -6,6 +6,7 @@ import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.BlockList;
 import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.RequestBlocks;
+import org.wolkenproject.network.messages.RequestHeaders;
 import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.PriorityHashQueue;
 import org.wolkenproject.utils.Utils;
@@ -187,9 +188,8 @@ public class BlockChain implements Runnable {
     }
 
     private void replaceTip(BlockIndex block) throws WolkenException {
-        // find common ancestors
-        Ancestors ancestors = new Ancestors();
-        ancestors.fill(getTip());
+        // request block headers
+        Message request = new RequestHeaders(block.getHash());
 
         // stale the current tip
         addStale(getTip());
