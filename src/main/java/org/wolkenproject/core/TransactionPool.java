@@ -44,4 +44,16 @@ public class TransactionPool {
             mutex.unlock();
         }
     }
+
+    public Set<byte[]> getInv() {
+        mutex.lock();
+        try {
+            Set<byte[]> txids = new LinkedHashSet<>();
+            transactions.fillHashes(txids, 16_384);
+
+            return txids;
+        } finally {
+            mutex.unlock();
+        }
+    }
 }
