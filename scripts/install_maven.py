@@ -5,11 +5,10 @@ print(cwd)
 
 # define helper functions
 def findFile(dir, n):
-    for subdir, dirs, files in os.walk(dir):
-        for file in files:
+    for entry in os.scandir(dir):
+        if entry.is_dir() and n in entry.name:
             print(os.path.join(subdir, file))
-            if n in file:
-                return os.path.join(subdir, file)
+            return os.path.join(subdir, file)
     return dir
 
 # set the global variables
