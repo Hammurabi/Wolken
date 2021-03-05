@@ -1,5 +1,6 @@
 package org.wolkenproject.network.messages;
 
+import org.wolkenproject.core.Block;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
@@ -41,6 +42,11 @@ public class FoundCommonAncestor extends ResponseMessage {
     @Override
     public <Type> Type getPayload() {
         return (Type) commonAncestor;
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return (Type) new FoundCommonAncestor(new byte[Block.UniqueIdentifierLength], new byte[Message.UniqueIdentifierLength]);
     }
 
     @Override
