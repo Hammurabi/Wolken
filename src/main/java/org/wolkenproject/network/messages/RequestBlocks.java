@@ -41,9 +41,10 @@ public class RequestBlocks extends Message {
     public void executePayload(Server server, Node node) {
         Set<BlockIndex> blocks = new LinkedHashSet<>();
         for (byte[] hash : this.blocks) {
-            BlockIndex block = Context.getInstance().getDatabase().findBlock(hash);
+            BlockIndex block    = Context.getInstance().getDatabase().findBlock(hash);
 
             if (block == null) {
+                block           = Context.getInstance().getBlockChain().getBlock(hash);
             }
 
             if (block != null) {
