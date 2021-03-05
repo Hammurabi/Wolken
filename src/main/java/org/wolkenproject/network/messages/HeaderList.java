@@ -16,9 +16,9 @@ import java.util.LinkedHashSet;
 public class HeaderList extends ResponseMessage {
     private Collection<BlockHeader> headers;
 
-    public HeaderList(int version, Collection<BlockIndex> blocks, byte[] uniqueMessageIdentifier) {
+    public HeaderList(int version, Collection<BlockHeader> headers, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
-        this.blocks   = new LinkedHashSet<>(blocks);
+        this.headers   = new LinkedHashSet<>(headers);
     }
 
     @Override
