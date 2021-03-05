@@ -15,6 +15,8 @@ echo java is installed
 
 /tools/maven/bin/mvn.cmd --version 2>NUL
 if errorlevel 1 goto installMavenTask
+
+goto buildTask
 pause
 
 :: Reaching here means Python is installed.
@@ -39,3 +41,7 @@ pause
 :installMavenTask
 python scripts/install_maven.py
 goto buildTask
+
+:buildTask
+echo starting build
+pause
