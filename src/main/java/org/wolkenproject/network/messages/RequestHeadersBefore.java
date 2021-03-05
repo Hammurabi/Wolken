@@ -71,27 +71,16 @@ public class RequestHeadersBefore extends Message {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException {
-        Utils.writeInt(headers.size(), stream);
-        for (byte[] hash : headers)
-        {
-            stream.write(hash);
-        }
+        stream.write(hash);
+        Utils.writeInt(count, stream);
     }
 
     @Override
     public void readContents(InputStream stream) throws IOException {
+        stream.read(hash);
         byte buffer[] = new byte[4];
         stream.read(buffer);
-
-        int length = Utils.makeInt(buffer);
-
-        for (int i = 0; i < length; i ++)
-        {
-            byte hash[] = new byte[Block.UniqueIdentifierLength];
-            stream.read(hash);
-
-            headers.add(hash);
-        }
+        count = Utils.makeInt(buffer);
     }
 
     @Override
