@@ -27,7 +27,7 @@ public class PriorityHashQueue<T extends Comparable<T> & Hashable> implements Qu
 
     @Override
     public boolean contains(Object o) {
-        return entryMap.containsKey();
+        return entryMap.containsKey(((Hashable) o).getHash160());
     }
 
     @Override
