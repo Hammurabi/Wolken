@@ -7,6 +7,7 @@ import org.wolkenproject.network.messages.BlockList;
 import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.utils.Logger;
+import org.wolkenproject.utils.PriorityHashQueue;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
@@ -14,11 +15,11 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
-    private BlockIndex          tip;
-    private byte[]              chainWork;
+    private BlockIndex                      tip;
+    private byte[]                          chainWork;
     // contains blocks sent from peers and orphaned chains.
-    private Queue<BlockIndex>   orphanedBlocks;
-    private static final int    MaximumBlockQueueSize = 1_250_000_000;
+    private PriorityHashQueue<BlockIndex>   orphanedBlocks;
+    private static final int                MaximumBlockQueueSize = 1_250_000_000;
 
     private ReentrantLock   lock;
 
