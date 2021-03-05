@@ -97,7 +97,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         Entry<T> entry = queue.poll();
         entryMap.remove(entry.hash);
 
-        return ;
+        return entry.element;
     }
 
     @Override
