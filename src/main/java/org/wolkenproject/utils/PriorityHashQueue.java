@@ -9,6 +9,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
     private Map<byte[], Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
     private Class<T>                tClass;
+    private Comparator<Entry<T>>    comparator;
 
     public PriorityHashQueue(Class<T> tClass) {
         this(new DefaultComparator<>(), tClass);
@@ -18,6 +19,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         queue       = new PriorityQueue<Entry<T>>(comparator);
         entryMap    = new HashMap<>();
         this.tClass = tClass;
+        this.comparator = comparator;
     }
 
     @Override
@@ -161,13 +163,15 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
     }
 
     public void removeTails(int newLength) {
-        Queue<Entry<T>> newQueue = new PriorityQueue<>(new DefaultComparator<>());
+        Queue<Entry<T>> newQueue = new PriorityQueue<>(comparator);
 
         while (!isEmpty() && size() < newLength) {
             Entry<T> e = queue.poll();
             newQueue.add(e);
             entryMap.remove(e.hash);
         }
+
+        queue = newQueue;
     }
 
     private static class DefaultComparator<T extends SerializableI & Comparable<T>> implements Comparator<Entry<T>> {
