@@ -59,9 +59,9 @@ public class RequestBlocks extends Message {
     @Override
     public void writeContents(OutputStream stream) throws IOException {
         Utils.writeInt(blocks.size(), stream);
-        for (byte[] txid : blocks)
+        for (byte[] hash : blocks)
         {
-            stream.write(txid);
+            stream.write(hash);
         }
     }
 
