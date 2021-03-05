@@ -1,4 +1,4 @@
 package org.wolkenproject.utils;
 
-public interface Hashable {
+public class Hashable {
 }
