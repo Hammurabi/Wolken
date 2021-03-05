@@ -70,7 +70,17 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        byte checksum[] = null;
+        try {
+            checksum        = ((T) o).checksum();
+        } catch (IOException e) {
+            checksum        = ((T) o).asByteArray();
+        }
+
+        boolean contained   = entryMap.containsKey(checksum);
+        entryMap.remove(checksum);
+
+        return contained;
     }
 
     @Override
