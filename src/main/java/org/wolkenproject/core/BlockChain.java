@@ -495,4 +495,10 @@ public class BlockChain implements Runnable {
             lock.unlock();
         }
     }
+
+    public void suggest(Set<BlockIndex> blocks) {
+        for (BlockIndex block : blocks) {
+            pool(block);
+        }
+    }
 }
