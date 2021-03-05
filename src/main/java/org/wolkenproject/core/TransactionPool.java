@@ -56,4 +56,10 @@ public class TransactionPool {
             mutex.unlock();
         }
     }
+
+    public void add(Set<TransactionI> transactions) {
+        for (TransactionI transaction : transactions) {
+            this.transactions.add(transaction);
+        }
+    }
 }
