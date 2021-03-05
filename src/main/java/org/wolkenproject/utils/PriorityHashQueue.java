@@ -94,7 +94,9 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
 
     @Override
     public T poll() {
-        return null;
+        Entry<T> entry = queue.poll();
+        
+        return ;
     }
 
     @Override
