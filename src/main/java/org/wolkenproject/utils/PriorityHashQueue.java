@@ -2,6 +2,7 @@ package org.wolkenproject.utils;
 
 import org.wolkenproject.serialization.SerializableI;
 
+import java.io.IOException;
 import java.util.*;
 
 public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implements Queue<T> {
@@ -49,7 +50,22 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
 
     @Override
     public boolean add(T t) {
-        return false;
+        Entry<T> entry = new Entry<>();
+        entry.element   = t;
+        try {
+            entry.hash      = t.checksum();
+        } catch (IOException e) {
+            entry.hash      = t.asByteArray();
+        }
+
+        boolean contained   = entryMap.containsKey(entry.hash);
+
+        if (!contained) {
+            queue.add(entry);
+            entryMap.put(entry.hash, entry);
+        }
+
+        return !contained;
     }
 
     @Override
