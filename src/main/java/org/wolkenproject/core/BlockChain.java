@@ -16,8 +16,12 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
     private BlockIndex                      tip;
-    // contains blocks sent from peers and orphaned chains.
+    // contains blocks that have no parents.
     private PriorityHashQueue<BlockIndex>   orphanedBlocks;
+    // contains blocks that were valid pre-fork.
+    private PriorityHashQueue<BlockIndex>   staleBlocks;
+    // contains blocks sent from peers.
+    private PriorityHashQueue<BlockIndex>   blockPool;
     private static final int                MaximumBlockQueueSize = 1_250_000_000;
 
     private ReentrantLock   lock;
