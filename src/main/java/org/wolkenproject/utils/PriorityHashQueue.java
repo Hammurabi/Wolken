@@ -6,6 +6,10 @@ public class PriorityHashQueue<T extends Comparable<T>> implements Queue<T> {
     private Map<byte[], Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
 
+    public PriorityHashQueue() {
+        this(new DefaultComparator<>());
+    }
+    
     public PriorityHashQueue(Comparator<Entry<T>> comparator) {
         queue = new PriorityQueue<Entry<T>>(comparator);
     }
