@@ -6,6 +6,9 @@ public class PriorityHashQueue<T extends Comparable<T>> implements Queue<T> {
     private Map<byte[], Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
 
+    public PriorityHashQueue(Comparator<T> comparator) {
+    }
+
     private static class DefaultComparator<T extends Comparable<T>> implements Comparator<Entry<T>> {
         @Override
         public int compare(Entry<T> a, Entry<T> b) {
