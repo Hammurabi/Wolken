@@ -22,7 +22,7 @@ public class PriorityHashQueue<T extends Comparable<T>> implements Queue<T> {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return queue.isEmpty();
     }
 
     @Override
