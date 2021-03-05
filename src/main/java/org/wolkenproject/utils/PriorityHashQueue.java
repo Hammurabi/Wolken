@@ -8,5 +8,10 @@ public class PriorityHashQueue<T> implements Queue<T> {
 
     private static class Entry<T> implements Comparable<Entry<T>> {
         private T element;
+
+        @Override
+        public int compareTo(Entry<T> b) {
+            return element.compareTo(b);
+        }
     }
 }
