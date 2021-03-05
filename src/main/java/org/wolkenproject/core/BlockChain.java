@@ -186,7 +186,11 @@ public class BlockChain implements Runnable {
 
     private void replaceTip(BlockIndex block) throws WolkenException {
         // request block headers
-        Message request = new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block, 1024);
+        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block, 1024));
+
+        if (response != null) {
+            Set<>
+        }
 
         // stale the current tip
         addStale(getTip());
