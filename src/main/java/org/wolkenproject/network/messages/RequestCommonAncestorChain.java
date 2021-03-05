@@ -41,7 +41,9 @@ public class RequestCommonAncestorChain extends Message {
 
     @Override
     public ResponseMetadata getResponseMetadata() {
-        return null;
+        return (msg)->{
+            return 0;
+        };
     }
 
     @Override
