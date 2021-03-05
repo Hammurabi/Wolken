@@ -3,10 +3,7 @@ package org.wolkenproject.core;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
-import org.wolkenproject.network.messages.BlockList;
-import org.wolkenproject.network.messages.Inv;
-import org.wolkenproject.network.messages.RequestBlocks;
-import org.wolkenproject.network.messages.RequestHeaders;
+import org.wolkenproject.network.messages.*;
 import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.PriorityHashQueue;
 import org.wolkenproject.utils.Utils;
@@ -189,7 +186,7 @@ public class BlockChain implements Runnable {
 
     private void replaceTip(BlockIndex block) throws WolkenException {
         // request block headers
-        Message request = new RequestHeaders(block.getHash());
+        Message request = new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block, 1024);
 
         // stale the current tip
         addStale(getTip());
