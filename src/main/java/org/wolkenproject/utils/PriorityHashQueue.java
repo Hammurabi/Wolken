@@ -79,7 +79,8 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
 
     @Override
     public void clear() {
-
+        entryMap.clear();
+        queue.clear();
     }
 
     @Override
