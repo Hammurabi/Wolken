@@ -56,7 +56,7 @@ public class RequestHeadersBefore extends Message {
         int earliestHeader          = Math.max(0, index.getHeight() - count);
 
         for (int i = earliestHeader; i < index.getHeight(); i ++) {
-            BlockHeader header          = Context.getInstance().getDatabase().findBlockHeader(i);
+            BlockHeader header      = Context.getInstance().getDatabase().findBlockHeader(i);
             // database internal error
             // this should not happen
             if (header == null) {
