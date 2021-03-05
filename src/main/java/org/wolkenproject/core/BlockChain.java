@@ -313,14 +313,13 @@ public class BlockChain implements Runnable {
     }
 
     public boolean contains(byte[] hash) {
-        Queue<BlockIndex> orphaned = getOrphanedBlocks();
-        for (BlockIndex block : orphaned) {
-            if (Utils.equals(block.getHash(), hash)) {
-                return true;
-            }
+        lock.lock();
+        try {
+            return orphanedBlocks.containsKey(hash);
         }
-
-        return false;
+        finally {
+            lock.unlock();
+        }
     }
 
     public Queue<BlockIndex> getOrphanedBlocks() {
