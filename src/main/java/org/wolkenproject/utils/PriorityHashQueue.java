@@ -148,6 +148,14 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return queue.peek().element;
     }
 
+    public T getByHash(byte[] txid) {
+        if (entryMap.containsKey(txid)) {
+            return entryMap.get(txid).element;
+        }
+
+        return null;
+    }
+
     private static class DefaultComparator<T extends SerializableI & Comparable<T>> implements Comparator<Entry<T>> {
         @Override
         public int compare(Entry<T> a, Entry<T> b) {
