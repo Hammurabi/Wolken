@@ -12,9 +12,11 @@ import java.util.Set;
 
 public class Ancestors extends SerializableI {
     private Set<byte[]> hashes;
+    private byte        hash[];
 
-    public Ancestors() {
+    public Ancestors(byte hash[]) {
         hashes = new LinkedHashSet<>();
+        this.hash = hash;
     }
 
     public void fill(BlockIndex tip) {
@@ -63,6 +65,7 @@ public class Ancestors extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        stream.write(hash);
         Utils.writeInt(hashes.size(), stream);
         for (byte hash[] : hashes) {
             stream.write(hash);
@@ -71,6 +74,7 @@ public class Ancestors extends SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        stream.read(hash);
         byte buffer[] = new byte[4];
         stream.read(buffer, 0, 4);
         int length = Utils.makeInt(buffer);
@@ -84,7 +88,7 @@ public class Ancestors extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new Ancestors();
+        return (Type) new Ancestors(new byte[Block.UniqueIdentifierLength]);
     }
 
     @Override
