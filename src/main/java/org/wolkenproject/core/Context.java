@@ -87,11 +87,14 @@ public class Context {
                                                     , "operations [+ - / * %] [& | ^ << >>] [< > ==] [4:op][4:item][4:item][4:result_item]", null);
         virtualMachine.addOp("storei", new BitFields()
                                                     .addField(1, "sign")
-                                                    .addField(1, "empty")
-                                                    .addField(2, "type")
+                                                    .addField(3, "type")
                                                     .addField(4, "register")
-                                                    , "pop x from stack and store it in register [1:sign][4:register][2:type][1:unused]", null);
-        virtualMachine.addOp("loadi", true, 1, 0, "load 1 or 2 items from registers and push them to stack [4:item1][2:type][2:optional]", null);
+                                                    , "pop x from stack and store it in register [1:sign][3:type][4:item]", null);
+        virtualMachine.addOp("loadi", new BitFields()
+                                                    .addField(4, "item0")
+                                                    .addField(1, "bool")
+                                                    .addField(3, "item1")
+                                                    , "load 1 or 2 items from registers and push them to stack [4:item0][1:bool][3:item1]", null);
         virtualMachine.addOp("call", true, 1, 0, "call a function [2:type][2:length].", null);
         virtualMachine.addOp("jump", true, 2, 0, "jump to a different location in the code", null);
 
