@@ -1,9 +1,15 @@
 package org.wolkenproject.network.messages;
 
+import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.Utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -40,5 +46,36 @@ public class Ancestors extends SerializableI {
         }
 
         return null;
+    }
+
+    @Override
+    public void write(OutputStream stream) throws IOException, WolkenException {
+        Utils.writeInt(hashes.size(), stream);
+        for (byte hash[] : hashes) {
+            stream.write(hash);
+        }
+    }
+
+    @Override
+    public void read(InputStream stream) throws IOException, WolkenException {
+        byte buffer[] = new byte[4];
+        stream.read(buffer, 0, 4);
+        int length = Utils.makeInt(buffer);
+
+        for (int i = 0; i < length; i ++) {
+            byte hash[] = new byte[Block.UniqueIdentifierLength];
+            stream.read(hash);
+            hashes.add(hash);
+        }
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return (Type) new Ancestors();
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return Context.getInstance().getSerialFactory().getSerialNumber(Ancestors.class);
     }
 }
