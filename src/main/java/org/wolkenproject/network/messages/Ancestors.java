@@ -2,11 +2,12 @@ package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.serialization.SerializableI;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class Ancestors {
+public class Ancestors implements SerializableI {
     private Set<byte[]> hashes;
 
     public Ancestors() {
