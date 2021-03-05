@@ -96,11 +96,9 @@ public class Context {
                                                     .addField(3, "item1")
                                                     , "load 1 or 2 items from registers and push them to stack [4:item0][1:bool][3:item1]", null);
         virtualMachine.addOp("call", new BitFields()
-                                                    .addField(5, "type")
-                                                    .addCond(3, (idx, prev, next, self)->{ return prev.getValue() == 0 }, "id")
-                                                    .addCond(2, (idx, prev, next, self)->{ return prev.getValue() == 0 }, "id")
-                                                    .addCond(2, (idx, prev, next, self)->{ return prev.getValue() == 0 }, "id")
-                                                    .addCond(2, (idx, prev, next, self)->{ return prev.getValue() == 0 }, "id")
+                                                    .addField(4, "arg")
+                                                    .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "id")
+                                                    .addCond(16, (idx, prev, next, self)->{ return prev.getValue() == 2; }, "id")
                                                     , "call a function [4:type].", null);
         virtualMachine.addOp("jump", new BitFields()
                                                     .addField(1, "get/set")
