@@ -289,8 +289,8 @@ public class BlockChain implements Runnable {
             orphanedBlocks.add(block);
 
             // calculate the maximum blocks allowed in the queue.
-            int maximumBlocks   = MaximumBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
-            int Threshold       = (MaximumBlockQueueSize / 4) / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int maximumBlocks   = MaximumOrphanBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumOrphanBlockQueueSize / 4) / Context.getInstance().getNetworkParameters().getMaxBlockSize();
 
             // remove any blocks that are too far back in the queue.
             if (orphanedBlocks.size() - maximumBlocks > Threshold) {
