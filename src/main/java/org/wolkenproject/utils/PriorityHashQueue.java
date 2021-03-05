@@ -1,12 +1,11 @@
 package org.wolkenproject.utils;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Queue;
+import java.util.*;
+
 public class PriorityHashQueue<T> implements Queue<T> {
-    private Map<byte[], PriorityHashQueue.Entry<T>> entryMap;
-    
+    private Map<byte[], Entry<T>>   entryMap;
+    private Queue<Entry<T>>         queue;
+
     private static class Entry<T> {
     }
 }
