@@ -22,7 +22,9 @@ public class BlockChain implements Runnable {
     private PriorityHashQueue<BlockIndex>   staleBlocks;
     // contains blocks sent from peers.
     private PriorityHashQueue<BlockIndex>   blockPool;
-    private static final int                MaximumBlockQueueSize = 1_250_000_000;
+    private static final int                MaximumOrphanBlockQueueSize = 250_000_000;
+    private static final int                MaximumStaleBlockQueueSize  = 500_000_000;
+    private static final int                MaximumPoolBlockQueueSize   = 1_250_000_000;
 
     private ReentrantLock   lock;
 
