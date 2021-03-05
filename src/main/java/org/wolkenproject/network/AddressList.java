@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.util.Set;
 
 public class AddressList extends Message {
-    public AddressList(Set<NetAddress> list) {
+    public AddressList(int version, Set<NetAddress> list) {
         super(version, Flags.Notify);
     }
 
