@@ -58,6 +58,11 @@ public class VersionMessage extends Message {
     }
 
     @Override
+    public ResponseMetadata getResponseMetadata() {
+        return null;
+    }
+
+    @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         try {
             return (Type) new VersionMessage();
