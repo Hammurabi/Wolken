@@ -32,6 +32,11 @@ public class TransactionPool {
     }
 
     public TransactionI getTransaction(byte[] txid) {
-        return transactions.getByHash(txid);
+        mutex.lock();
+        try {
+            return transactions.getByHash(txid);
+        } finally {
+            mutex.unlock();
+        }
     }
 }
