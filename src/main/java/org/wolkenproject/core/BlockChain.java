@@ -282,10 +282,6 @@ public class BlockChain implements Runnable {
         replaceBlockIndex(block.getHeight(), block);
     }
 
-    public void suggestBlock(BlockIndex block) {
-        addOrphan(block);
-    }
-
     private void addOrphan(BlockIndex block) {
         lock.lock();
         try {
@@ -381,7 +377,7 @@ public class BlockChain implements Runnable {
     public boolean contains(byte[] hash) {
         lock.lock();
         try {
-            return orphanedBlocks.containsKey(hash);
+            return orphanedBlocks.containsKey(hash) || staleBlocks.containsKey(hash) || blockPool.containsKey(hash);
         }
         finally {
             lock.unlock();
