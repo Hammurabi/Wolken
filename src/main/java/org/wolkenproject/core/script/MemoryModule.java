@@ -14,6 +14,10 @@ public class MemoryModule {
         }
     }
 
+    public Register getStack() {
+        return registers[0];
+    }
+
     public Register getRegister(int registerID) {
         return registers[registerID];
     }
