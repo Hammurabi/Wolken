@@ -40,10 +40,12 @@ public class MochaObject extends SerializableI {
     }
 
     public static class Metadata {
+        public Metadata() {
+        }
+        
+        public Metadata(Metadata metadata) {
+        }
         public void write() {}
         public void read()  {}
-        public Metadata clone() {
-            return new Metadata();
-        }
     }
 }
