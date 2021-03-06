@@ -1,4 +1,6 @@
 package org.wolkenproject.core.script;
 
-public class MochaObject {
+import org.wolkenproject.serialization.SerializableI;
+
+public class MochaObject extends SerializableI {
 }
