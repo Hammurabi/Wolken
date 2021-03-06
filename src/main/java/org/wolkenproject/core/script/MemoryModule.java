@@ -38,9 +38,8 @@ public class MemoryModule {
     }
 
     private void memcpy(int dst, int src, int len) throws InvalidMemoryAccess {
-        if ((dst + len) >= memory.length || (src + len) >= memory.length) {
-            throw new InvalidMemoryAccess("memcpy of memory range (" + dst + ", " + src + ", " + len + ") goes out of bounds.");
-        }
+        checkRanges(src, len, "memcpy of memory range (" + dst + ", " + src + ", " + len + ") is invalid.");
+        checkRanges(dst, len, "memcpy of memory range (" + dst + ", " + src + ", " + len + ") is invalid.");
 
         for (int i = 0; i < len; i ++) {
             memory[dst + i] = memory[src + i];
