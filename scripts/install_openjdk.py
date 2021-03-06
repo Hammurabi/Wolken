@@ -15,24 +15,34 @@ tools   = os.path.join(cwd, "tools")
 if not os.path.exists(tools):
     os.makedirs(tools)
 
-# download maven from link
+# download openjdk from link
 import urllib.request
-url     = 'https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip'
-maven   = os.path.join(cwd, "tools", "maven.zip")
-print("downloading maven from '" + url + "'")
-urllib.request.urlretrieve(url, maven)
-print("installing maven to '" + maven + "'")
+url     = ""
+if 'win' in os.name:
+    url = 'https://download.java.net/openjdk/jdk16/ri/openjdk-16+36_windows-x64_bin.zip'
+elif 'mac' in os.name:
+    print("could not download OpenJDK")
+    print("no available options for Mac OS")
+    print("please manually install a JDK")
+    quit()
+else:
+    url = 'https://download.java.net/openjdk/jdk16/ri/openjdk-16+36_linux-x64_bin.tar.gz'
 
-# unzip maven to file 'maven'
+openjdk = os.path.join(cwd, "tools", "jdk.zip")
+print("downloading openjdk from '" + url + "'")
+urllib.request.urlretrieve(url, openjdk)
+print("installing openjdk to '" + openjdk + "'")
+
+# unzip openjdk to file 'openjdk'
 import zipfile
-print("unzipping package 'maven' to '" + os.path.join(tools, "maven") + "'")
-with zipfile.ZipFile(maven, 'r') as zip:
+print("unzipping package 'openjdk' to '" + os.path.join(tools, "openjdk") + "'")
+with zipfile.ZipFile(openjdk, 'r') as zip:
     zip.extractall(tools)
-file    = findFile(tools, 'maven')
-print("unzipped package 'maven' to '" + file + "'")
-print("renaming file '" + file + "' to '" + os.path.join(tools, 'maven') + "'")
-os.rename(file, os.path.join(tools, 'maven'))
-print("renamed file '" + file + "' to '" + os.path.join(tools, 'maven') + "'")
-print("deleting artifact '" + maven + "'")
-os.remove(maven)
-print("deleted artifact '" + maven + "'")
+file    = findFile(tools, 'jdk')
+print("unzipped package 'openjdk' to '" + file + "'")
+print("renaming file '" + file + "' to '" + os.path.join(tools, 'openjdk') + "'")
+os.rename(file, os.path.join(tools, 'openjdk'))
+print("renamed file '" + file + "' to '" + os.path.join(tools, 'openjdk') + "'")
+print("deleting artifact '" + openjdk + "'")
+os.remove(openjdk)
+print("deleted artifact '" + openjdk + "'")
