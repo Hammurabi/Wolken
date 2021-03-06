@@ -22,6 +22,7 @@ public class MemoryModule {
 
     protected static class Register {
         protected static final int RegisterLength = 32;
+        private MemoryModule memoryModule;
         private int pointer;
 
         public byte[] getBytes() {
