@@ -61,8 +61,12 @@ public class MemoryModule {
         }
     }
 
-    private void checkRanges(int offset, int len) {
-        if (offset + len >= memory.length) {
+    private void checkRanges(int offset, int len) throws InvalidMemoryAccess {
+        if (offset < 0) {
+            throw new InvalidMemoryAccess("memory range (" + offset + ", " + len + ") goes out of bounds.");
+        }
+        
+        if (offset + len >= memory.length || offset + len < 0) {
             throw new InvalidMemoryAccess("memory range (" + offset + ", " + len + ") goes out of bounds.");
         }
     }
