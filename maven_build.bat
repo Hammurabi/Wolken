@@ -1,0 +1,1 @@
+%~dp0tools\maven\bin\mvn.cmd clean package
