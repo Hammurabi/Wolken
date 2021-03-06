@@ -13,8 +13,7 @@ java -version 2>NUL
 if errorlevel 1 goto errorNoJava
 echo java is installed
 
-if exist "C:\Program Files\Java\" goto setJavaHomex64 else goto setJavaHomex86
-
+if %JAVA_HOME% == "" goto setJavaHome
 :continue
 setx /m JAVA_HOME "%jdk%"
 echo set java (%arch%) path to %JAVA_HOME%
