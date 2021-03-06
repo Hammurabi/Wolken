@@ -22,5 +22,6 @@ public class MemoryModule {
 
     protected class Register {
         protected static final int RegisterLength = 32;
+        private int pointer;
     }
 }
