@@ -12,6 +12,7 @@ echo python is installed
 java -version 2>NUL
 if errorlevel 1 goto errorNoJava
 echo java is installed
+
 goto setJavaHome
 
 :continue
@@ -20,7 +21,6 @@ goto maven_installed
 
 :maven_installed
 echo maven is installed
-pause
 goto buildTask
 pause
 
@@ -68,15 +68,15 @@ pause
 if exist "C:\Program Files\Java\" goto setJavaHomex64 else goto setJavaHomex86
 
 :doSetJavaHome
-if exist %~dp0tools\openjdk\ goto setToInstalledJDK
+if exist %~dp0tools\openjdk goto setToInstalledJDK
 if "%jdk%"=="" goto noJDK
 set JAVA_HOME=%jdk%
 echo set java (%arch%) path to %JAVA_HOME%
 goto continue
 
 :setToInstalledJDK
-set JAVA_HOME=%~dp0tools\openjdk\
-echo set java (%arch%) path to %JAVA_HOME%
+set JAVA_HOME=%~dp0tools\openjdk
+echo set java (64) path to %JAVA_HOME%
 goto continue
 
 :noJDK 
