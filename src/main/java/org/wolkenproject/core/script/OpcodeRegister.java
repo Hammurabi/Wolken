@@ -13,6 +13,7 @@ public class OpcodeRegister {
     public OpcodeRegister registerOp(String name, BitFields args, String desc, Opcode opcode) {
         opcode.setIdentifier(opcodeList.size());
         opcode.setArgs(args);
+        opcode.setDescription(desc);
         opcodeList.add(opcode);
 
         return this;
