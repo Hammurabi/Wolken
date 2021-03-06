@@ -46,8 +46,8 @@ public class MochaObject extends SerializableI {
         public Metadata(Metadata metadata) {
         }
 
-        public void write() {}
-        
-        public void read()  {}
+        public void write(OutputStream outputStream) {}
+
+        public void read(InputStream inputStream)  {}
     }
 }
