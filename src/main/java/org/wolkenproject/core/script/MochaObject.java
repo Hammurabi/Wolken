@@ -30,7 +30,7 @@ public class MochaObject extends SerializableI {
         return Context.getInstance().getSerialFactory().getSerialNumber(MochaObject.class);
     }
 
-    public static class Metadata implements SerializableI {
+    public static class Metadata extends SerializableI {
         @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
         }
