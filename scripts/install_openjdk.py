@@ -30,7 +30,7 @@ else:
 
 openjdk = os.path.join(cwd, "tools", "jdk.zip")
 print("downloading openjdk from '" + url + "'")
-urllib.request.urlretrieve(url, openjdk)
+# urllib.request.urlretrieve(url, openjdk)
 print("installing openjdk to '" + openjdk + "'")
 
 # unzip openjdk to file 'openjdk'
@@ -38,8 +38,12 @@ import tarfile
 
 print("unzipping package 'openjdk' to '" + os.path.join(tools, "openjdk") + "'")
 
-tar = tarfile.open(openjdk, "r:gz")
-tar.extract('jdk-16', os.path.join(tools, "openjdk"))
+os.makedirs(os.path.join(tools, "openjdk"))
+with tarfile.open(openjdk, "r:gz") as tar:
+    for info in tar.getmembers():
+        if info.name.startswith('jdk-16/'):
+            tar.extract(info.name, os.path.join(os.path.join(tools, "openjdk"), info.name.replace('jdk-16/', '')))
+            print("extracted: " + info.name)
 
 file    = findFile(tools, 'jdk')
 print("unzipped package 'openjdk' to '" + file + "'")
