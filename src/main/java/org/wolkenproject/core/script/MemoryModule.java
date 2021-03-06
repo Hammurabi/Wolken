@@ -37,7 +37,7 @@ public class MemoryModule {
         return bytes;
     }
 
-    private void memcpy(int dst, int src, int len) {
+    private void memcpy(int dst, int src, int len) throws InvalidMemoryAccess {
     }
 
     protected static class Register {
@@ -49,7 +49,7 @@ public class MemoryModule {
             return memoryModule.getBytesAt(pointer, RegisterLength);
         }
 
-        public void set(Register other) {
+        public void set(Register other) throws InvalidMemoryAccess {
             memoryModule.memcpy(pointer, other.pointer, RegisterLength);
         }
 
