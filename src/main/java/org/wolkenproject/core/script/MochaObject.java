@@ -9,12 +9,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class MochaObject extends SerializableI {
+    public static final Metadata DefaultMetadata = new Metadata();
     private Metadata metadata;
 
     public MochaObject() {
     }
 
     public MochaObject(Metadata metadata) {
+        this.metadata = new Metadata();
     }
 
     @Override
