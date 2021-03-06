@@ -1,4 +1,6 @@
 package org.wolkenproject.core.script;
 
-public class MemoryState {
+import org.wolkenproject.serialization.SerializableI;
+
+public abstract class MemoryState extends SerializableI {
 }
