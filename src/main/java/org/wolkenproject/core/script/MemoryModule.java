@@ -47,6 +47,9 @@ public class MemoryModule {
         }
     }
 
+    private void clear(int offset, int len) {
+    }
+
     protected static class Register {
         protected static final int  RegisterLength = 32;
         private MemoryModule        memoryModule;
