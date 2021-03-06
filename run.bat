@@ -3,8 +3,10 @@
 rem set the active directory
 cd /D "%~dp0"
 
+rem window will close after a successful build so no need for a return function
 if not exist %~dp0target\Wolken-Core.jar goto build_first
 
+rem if java is already installed then use Java command
 java -version 2>NUL
 if errorlevel 1 goto setJavaHome
 java -jar "%~dp0target\Wolken-Core.jar"
