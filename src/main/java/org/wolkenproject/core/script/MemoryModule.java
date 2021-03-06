@@ -66,7 +66,7 @@ public class MemoryModule {
             memoryModule.memcpy(pointer, other.pointer, RegisterLength);
         }
 
-        public void reset() {
+        public void reset() throws InvalidMemoryAccess {
             memoryModule.clear(pointer, RegisterLength);
         }
     }
