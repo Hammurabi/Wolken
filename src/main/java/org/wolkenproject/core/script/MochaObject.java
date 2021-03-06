@@ -13,6 +13,7 @@ public class MochaObject extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        metadata.write(stream);
     }
 
     @Override
@@ -29,6 +30,23 @@ public class MochaObject extends SerializableI {
         return Context.getInstance().getSerialFactory().getSerialNumber(MochaObject.class);
     }
 
-    public static class Metadata {
+    public static class Metadata implements SerializableI {
+        @Override
+        public void write(OutputStream stream) throws IOException, WolkenException {
+        }
+
+        @Override
+        public void read(InputStream stream) throws IOException, WolkenException {
+        }
+
+        @Override
+        public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+            return null;
+        }
+
+        @Override
+        public int getSerialNumber() {
+            return 0;
+        }
     }
 }
