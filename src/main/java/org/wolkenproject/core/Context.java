@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.script.BitFields;
+import org.wolkenproject.core.script.MochaObject;
 import org.wolkenproject.core.script.OpcodeRegister;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
@@ -74,6 +75,9 @@ public class Context {
         serializationFactory.registerClass(RequestTransactions.class, new RequestTransactions(0, new LinkedHashSet<>()));
         serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
+
+        serializationFactory.registerClass(MochaObject.class, new MochaObject());
+        serializationFactory.registerClass(MochaObject.Metadata.class, new MochaObject());
 
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
