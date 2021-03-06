@@ -1,9 +1,15 @@
 package org.wolkenproject.core.script;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class OpcodeRegister {
-    private List<Opcode> opcodeList;
+    private Set<Opcode> opcodeList;
+
+    public OpcodeRegister() {
+        opcodeList = new LinkedHashSet<>();
+    }
 
     public void registerOp(String name, String desc, Opcode opcode) {
         registerOp(name, null, desc, opcode);
