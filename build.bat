@@ -13,7 +13,7 @@ java -version 2>NUL
 if errorlevel 1 goto errorNoJava
 echo java is installed
 
-if %JAVA_HOME% == "" goto setJavaHome
+if "%JAVA_HOME%"=="" goto setJavaHome
 
 :continue
 if not exist %~dp0tools\maven\bin\mvn.cmd goto installMavenTask
@@ -25,10 +25,7 @@ pause
 goto buildTask
 pause
 
-:: Reaching here means Python is installed.
-:: Execute stuff...
-
-:: Once done, exit the batch file -- skips executing the errorNoPython section
+pause
 goto:eof
 
 :errorNoPython
@@ -61,6 +58,7 @@ set arch=64
 for /d %%i in ("C:\Program Files\Java\*") do set jdk=%%i
 goto doSetJavaHome
 pause
+
 :setJavaHomex86
 set arch=x86
 for /d %%i in ("C:\Program Files (x86)\Java\*") do set jdk=%%i
@@ -68,8 +66,19 @@ goto doSetJavaHome
 pause
 
 :setJavaHome
+set /P check=JAVA_HOME is not set, this program can set it for you, however it needs to be run with administrator priviliges, continue? (y/n):
+if "%check%"=="n" goto done
 if exist "C:\Program Files\Java\" goto setJavaHomex64 else goto setJavaHomex86
+
 :doSetJavaHome
 setx /m JAVA_HOME "%jdk%"
-echo set java (%arch%) path to %JAVA_HOME%
+if errorlevel 1 goto needAdminPrivs
+else echo set java (%arch%) path to %JAVA_HOME%
 goto continue
+
+:needAdminPrivs
+echo please run the program again with administrator priviliges
+pause
+
+:done
+pause
