@@ -21,14 +21,12 @@ public class MemoryModule {
     }
 
     protected static class Register {
-        protected static final int RegisterLength = 32;
-        private MemoryModule memoryModule;
-        private int pointer;
+        protected static final int  RegisterLength = 32;
+        private MemoryModule        memoryModule;
+        private int                 pointer;
 
         public byte[] getBytes() {
-            byte bytes[] = new byte[RegisterLength];
-
-            return bytes;
+            return memoryModule.getBytesAt(pointer, RegisterLength);
         }
     }
 }
