@@ -13,7 +13,7 @@ public class MochaObject extends SerializableI {
     private Metadata metadata;
 
     public MochaObject() {
-        this(DefaultMetadata);
+        this(new Metadata(DefaultMetadata));
     }
 
     public MochaObject(Metadata metadata) {
