@@ -4,7 +4,7 @@ public abstract class VirtualMachine {
     private OpcodeRegister  opcodeRegister;
     private MemoryModule    memoryModule;
 
-    public abstract MemoryState executeScript(Script script);
+    public abstract void executeScript(Script script);
 
     public OpcodeRegister getOpcodeRegister() {
         return opcodeRegister;
