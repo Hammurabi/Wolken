@@ -28,5 +28,14 @@ public class MemoryModule {
         public byte[] getBytes() {
             return memoryModule.getBytesAt(pointer, RegisterLength);
         }
+
+        public void set(Register other) {
+            memoryModule.memcpy(pointer, other.pointer, RegisterLength);
+            other.reset();
+        }
+
+        public void reset() {
+            memoryModule.clear(pointer, RegisterLength);
+        }
     }
 }
