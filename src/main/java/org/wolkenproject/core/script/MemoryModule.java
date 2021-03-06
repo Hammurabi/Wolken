@@ -48,8 +48,15 @@ public class MemoryModule {
     }
 
     private void clear(int offset, int len) throws InvalidMemoryAccess {
+    }
+
+    private void fill(int offset, int len, int value) throws InvalidMemoryAccess {
         if (offset + len >= memory.length) {
             throw new InvalidMemoryAccess("requested memory range (" + offset + ", " + len + ") goes out of bounds.");
+        }
+
+        for (int i = 0; i < len; i ++) {
+            memory[offset + i] = (byte) value;
         }
     }
 
