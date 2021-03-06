@@ -48,7 +48,6 @@ pause
 
 :buildTask
 echo starting build
-pause
 rem run maven package task
 %~dp0tools\maven\bin\mvn.cmd clean package
 pause
@@ -76,7 +75,8 @@ echo set java (%arch%) path to %JAVA_HOME%
 goto continue
 
 :noJDK 
-pause
+echo no java jdk was detected 
+echo installing OpenJDK
 goto done
 
 :needAdminPrivs
