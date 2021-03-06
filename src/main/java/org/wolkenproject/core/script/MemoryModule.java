@@ -59,7 +59,7 @@ public class MemoryModule {
         }
     }
 
-    private void checkRanges(int offset, int len) throws InvalidMemoryAccess {
+    private void checkRanges(int offset, int len, String msg) throws InvalidMemoryAccess {
         if (offset < 0) {
             throw new InvalidMemoryAccess("memory range (" + offset + ", " + len + ") goes out of bounds.");
         }
