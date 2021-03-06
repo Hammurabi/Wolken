@@ -16,7 +16,4 @@ public class MemoryModule {
     public MemoryState getState() {
         return memoryState;
     }
-
-    protected class Register {
-    }
 }
