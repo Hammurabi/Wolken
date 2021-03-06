@@ -20,13 +20,13 @@ public class MemoryModule {
         return memoryState;
     }
 
-    protected class Register {
+    protected static class Register {
         protected static final int RegisterLength = 32;
         private int pointer;
 
         public byte[] getBytes() {
             byte bytes[] = new byte[RegisterLength];
-            
+
             return bytes;
         }
     }
