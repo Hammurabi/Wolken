@@ -52,7 +52,7 @@ public class MemoryModule {
     }
 
     private void fill(int offset, int len, int value) throws InvalidMemoryAccess {
-        checkRanges(offset, len);
+        checkRanges(offset, len, "fill range ('" + offset + "', '" + len + "') is invalid.");
 
         for (int i = 0; i < len; i ++) {
             memory[offset + i] = (byte) value;
@@ -61,11 +61,11 @@ public class MemoryModule {
 
     private void checkRanges(int offset, int len, String msg) throws InvalidMemoryAccess {
         if (offset < 0) {
-            throw new InvalidMemoryAccess("memory range (" + offset + ", " + len + ") goes out of bounds.");
+            throw new InvalidMemoryAccess(msg);
         }
 
         if (offset + len >= memory.length || offset + len < 0) {
-            throw new InvalidMemoryAccess("memory range (" + offset + ", " + len + ") goes out of bounds.");
+            throw new InvalidMemoryAccess(msg);
         }
     }
 
