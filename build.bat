@@ -17,7 +17,6 @@ if exist "C:\Program Files (x86)\Java\" goto setJavaHomex86
 
 echo java home set
 
-
 if not exist %~dp0tools\maven\bin\mvn.cmd goto installMavenTask
 echo maven is installed
 goto buildTask
