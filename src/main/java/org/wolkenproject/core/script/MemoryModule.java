@@ -48,6 +48,9 @@ public class MemoryModule {
     }
 
     private void clear(int offset, int len) {
+        if (offset + len >= memory.length) {
+            throw new InvalidMemoryAccess("requested memory range (" + offset + ", " + len + ") goes out of bounds.");
+        }
     }
 
     protected static class Register {
