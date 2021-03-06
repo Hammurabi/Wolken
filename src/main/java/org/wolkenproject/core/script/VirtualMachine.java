@@ -2,7 +2,6 @@ package org.wolkenproject.core.script;
 
 public abstract class VirtualMachine {
     private OpcodeRegister  opcodeRegister;
-    private MemoryState     memoryState;
     private MemoryModule    memoryModule;
 
     public abstract MemoryState executeScript(Script script);
