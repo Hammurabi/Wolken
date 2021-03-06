@@ -78,29 +78,29 @@ public class Context {
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
 
-        virtualMachine.addOp("halt", "halt process and all sub processes", null);
-        virtualMachine.addOp("arithmetic", new BitFields()
+        virtualMachine.registerOp("halt", "halt process and all sub processes", null);
+        virtualMachine.registerOp("arithmetic", new BitFields()
                                                     .addField(4, "operation")
                                                     .addField(4, "item0")
                                                     .addField(4, "item1")
                                                     .addField(4, "item2")
                                                     , "operations [+ - / * %] [& | ^ << >>] [< > ==] [4:op][4:item][4:item][4:result_item]", null);
-        virtualMachine.addOp("storei", new BitFields()
+        virtualMachine.registerOp("storei", new BitFields()
                                                     .addField(1, "sign")
                                                     .addField(3, "type")
                                                     .addField(4, "register")
                                                     , "pop x from stack and store it in register [1:sign][3:type][4:item]", null);
-        virtualMachine.addOp("loadi", new BitFields()
+        virtualMachine.registerOp("loadi", new BitFields()
                                                     .addField(4, "item0")
                                                     .addField(1, "bool")
                                                     .addField(3, "item1")
                                                     , "load 1 or 2 items from registers and push them to stack [4:item0][1:bool][3:item1]", null);
-        virtualMachine.addOp("call", new BitFields()
+        virtualMachine.registerOp("call", new BitFields()
                                                     .addField(4, "arg")
                                                     .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "id")
                                                     .addCond(16, (idx, prev, next, self)->{ return prev.getValue() == 2; }, "id")
                                                     , "call a function [4:arg].", null);
-        virtualMachine.addOp("jump", new BitFields()
+        virtualMachine.registerOp("jump", new BitFields()
                                                     .addField(1, "get/set")
                                                     .addField(15, "id")
                                                     , "set or get (and jump) a jump location.", null);
