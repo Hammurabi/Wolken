@@ -10,7 +10,7 @@ public abstract class VirtualMachine {
         return opcodeRegister;
     }
 
-    public void swapMemoryState(MemoryState memoryState) {
+    public void setMemoryState(MemoryState memoryState) {
         this.memoryState = memoryState;
     }
 
