@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 public class MemoryModule {
     private MemoryState memoryState;
+    private byte        memcory[];
     private Register    registers[];
 
     public MemoryModule() {
@@ -36,9 +37,5 @@ public class MemoryModule {
         public void reset() {
             memoryModule.clear(pointer, RegisterLength);
         }
-    }
-
-    private byte[] getBytesAt(int offset, int length) {
-        return new byte[0];
     }
 }
