@@ -25,7 +25,7 @@ public class MemoryModule {
 
     private byte[] getBytesAt(int offset, int length) throws InvalidMemoryAccess {
         if (offset + length >= memory.length) {
-            throw new InvalidMemoryAccess("requested memory range (" + offset + ", " + length + ") is invalid.");
+            throw new InvalidMemoryAccess("requested memory range (" + offset + ", " + length + ") goes out of bounds.");
         }
 
         byte bytes[] = new byte[length];
@@ -38,8 +38,8 @@ public class MemoryModule {
     }
 
     private void memcpy(int dst, int src, int len) throws InvalidMemoryAccess {
-        checkRanges(src, len, "memcpy of memory range (" + dst + ", " + src + ", " + len + ") is invalid.");
-        checkRanges(dst, len, "memcpy of memory range (" + dst + ", " + src + ", " + len + ") is invalid.");
+        checkRanges(src, len, "memcpy of memory range (" + dst + ", " + src + ", " + len + ") goes out of bounds.");
+        checkRanges(dst, len, "memcpy of memory range (" + dst + ", " + src + ", " + len + ") goes out of bounds.");
 
         for (int i = 0; i < len; i ++) {
             memory[dst + i] = memory[src + i];
@@ -51,7 +51,7 @@ public class MemoryModule {
     }
 
     private void fill(int offset, int len, int value) throws InvalidMemoryAccess {
-        checkRanges(offset, len, "fill range ('" + offset + "', '" + len + "') is invalid.");
+        checkRanges(offset, len, "fill range ('" + offset + "', '" + len + "') goes out of bounds.");
 
         for (int i = 0; i < len; i ++) {
             memory[offset + i] = (byte) value;
