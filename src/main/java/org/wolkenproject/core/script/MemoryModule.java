@@ -25,6 +25,9 @@ public class MemoryModule {
         private int pointer;
 
         public byte[] getBytes() {
+            byte bytes[] = new byte[RegisterLength];
+            
+            return bytes;
         }
     }
 }
