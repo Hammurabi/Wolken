@@ -39,8 +39,7 @@ import tarfile
 print("unzipping package 'openjdk' to '" + os.path.join(tools, "openjdk") + "'")
 
 tar = tarfile.open(openjdk, "r:gz")
-tar.extractall()
-tar.close()
+tar.extract('jdk-16', os.path.join(tools, "openjdk"))
 
 file    = findFile(tools, 'jdk')
 print("unzipped package 'openjdk' to '" + file + "'")
