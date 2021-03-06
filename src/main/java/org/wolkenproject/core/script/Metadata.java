@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 
@@ -23,6 +24,6 @@ public class Metadata extends SerializableI {
 
     @Override
     public int getSerialNumber() {
-        return 0;
+        return Context.getInstance().getSerialFactory().getSerialNumber(Metadata.class);
     }
 }
