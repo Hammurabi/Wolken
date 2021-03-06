@@ -28,4 +28,7 @@ public class MochaObject extends SerializableI {
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(MochaObject.class);
     }
+
+    public static class Metadata {
+    }
 }
