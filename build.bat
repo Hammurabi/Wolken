@@ -14,9 +14,8 @@ if errorlevel 1 goto errorNoJava
 echo java is installed
 
 if %JAVA_HOME% == "" goto setJavaHome
+
 :continue
-setx /m JAVA_HOME "%jdk%"
-echo set java (%arch%) path to %JAVA_HOME%
 if not exist %~dp0tools\maven\bin\mvn.cmd goto installMavenTask
 goto maven_installed
 
@@ -59,12 +58,18 @@ pause
 
 :setJavaHomex64
 set arch=64
-
 for /d %%i in ("C:\Program Files\Java\*") do set jdk=%%i
-goto continue
+goto doSetJavaHome
 pause
 :setJavaHomex86
 set arch=x86
 for /d %%i in ("C:\Program Files (x86)\Java\*") do set jdk=%%i
-goto continue
+goto doSetJavaHome
 pause
+
+:setJavaHome
+if exist "C:\Program Files\Java\" goto setJavaHomex64 else goto setJavaHomex86
+:doSetJavaHome
+setx /m JAVA_HOME "%jdk%"
+echo set java (%arch%) path to %JAVA_HOME%
+goto continue
