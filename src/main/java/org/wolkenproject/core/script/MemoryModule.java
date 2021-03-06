@@ -8,6 +8,6 @@ public class MemoryModule {
     }
 
     public MemoryState getState() {
-        return null;
+        return memoryState;
     }
 }
