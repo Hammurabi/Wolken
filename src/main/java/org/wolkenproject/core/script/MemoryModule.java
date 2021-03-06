@@ -48,6 +48,7 @@ public class MemoryModule {
     }
 
     private void clear(int offset, int len) throws InvalidMemoryAccess {
+        fill(offset, len, 0);
     }
 
     private void fill(int offset, int len, int value) throws InvalidMemoryAccess {
