@@ -23,8 +23,11 @@ public class MemoryModule {
 
     private byte[] getBytesAt(int offset, int length) {
         byte bytes[] = new byte[length];
-        for (int i = offset; i < memory.le)
-            return ;
+        for (int i = offset; i < memory.length; i ++) {
+            bytes[i - offset] = memory[i];
+        }
+
+        return bytes;
     }
 
     protected static class Register {
