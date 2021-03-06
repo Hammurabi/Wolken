@@ -9,6 +9,7 @@ public class MemoryModule {
     }
 
     public Register getRegister(int registerID) {
+        return registers[registerID];
     }
 
     public void setState(MemoryState memoryState) {
