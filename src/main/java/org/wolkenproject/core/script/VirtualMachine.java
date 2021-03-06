@@ -7,8 +7,8 @@ public abstract class VirtualMachine {
     public void swapMemoryState(MemoryState memoryState) {
         this.memoryState = memoryState;
     }
-    
-    public MemoryState executeScript(Script script);
+
+    public abstract MemoryState executeScript(Script script);
 
     public OpcodeRegister getOpcodeRegister() {
         return opcodeRegister;
