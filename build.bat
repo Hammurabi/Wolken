@@ -79,7 +79,7 @@ set JAVA_HOME=%~dp0tools\openjdk
 echo set java (64) path to %JAVA_HOME%
 goto continue
 
-:noJDK 
+:noJDK
 echo no java jdk was detected 
 echo installing OpenJDK
 python scripts/install_openjdk.py
