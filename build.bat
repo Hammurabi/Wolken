@@ -52,8 +52,7 @@ pause
 
 :buildTask
 echo starting build
-pause
-%~dp0tools\maven\bin\mvn.cmd clean package
+maven_build.bat
 pause
 
 :setJavaHomex64
