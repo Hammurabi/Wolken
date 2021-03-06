@@ -27,6 +27,7 @@ public class MochaObject extends SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        metadata.read(stream);
     }
 
     @Override
