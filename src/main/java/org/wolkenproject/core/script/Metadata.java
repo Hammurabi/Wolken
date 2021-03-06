@@ -1,4 +1,6 @@
 package org.wolkenproject.core.script;
 
-public class Metadata {
+import org.wolkenproject.serialization.SerializableI;
+
+public class Metadata extends SerializableI {
 }
