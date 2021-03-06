@@ -37,4 +37,8 @@ public class MemoryModule {
             memoryModule.clear(pointer, RegisterLength);
         }
     }
+
+    private byte[] getBytesAt(int offset, int length) {
+        return new byte[0];
+    }
 }
