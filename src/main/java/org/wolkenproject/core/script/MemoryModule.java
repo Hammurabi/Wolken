@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 public class MemoryModule {
     private MemoryState memoryState;
+    private Register    registers[];
 
     public MemoryModule() {
     }
