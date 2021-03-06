@@ -25,7 +25,7 @@ public class MemoryModule {
 
     private byte[] getBytesAt(int offset, int length) throws InvalidMemoryAccess {
         if (offset + length >= memory.length) {
-            throw new InvalidMemoryAccess("requested memory range (" + offset + ", " + length + ") goes out of bounds.");
+            throw new InvalidMemoryAccess("requested memory range (" + offset + ", " + length + ") is invalid.");
         }
 
         byte bytes[] = new byte[length];
