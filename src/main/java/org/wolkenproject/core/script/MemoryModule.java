@@ -30,8 +30,8 @@ public class MemoryModule {
 
         byte bytes[] = new byte[length];
 
-        for (int i = offset; i < memory.length; i ++) {
-            bytes[i - offset] = memory[i];
+        for (int i = 0; i < memory.length; i ++) {
+            bytes[i] = memory[i + offset];
         }
 
         return bytes;
