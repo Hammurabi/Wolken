@@ -12,8 +12,7 @@ echo python is installed
 java -version 2>NUL
 if errorlevel 1 goto errorNoJava
 echo java is installed
-
-if "%JAVA_HOME%"=="" goto setJavaHome
+goto setJavaHome
 
 :continue
 if not exist %~dp0tools\maven\bin\mvn.cmd goto installMavenTask
@@ -49,6 +48,7 @@ pause
 
 :buildTask
 echo starting build
+pause
 rem run maven package task
 %~dp0tools\maven\bin\mvn.cmd clean package
 pause
@@ -66,19 +66,17 @@ goto doSetJavaHome
 pause
 
 :setJavaHome
-set /P check=JAVA_HOME is not set, this program can set it for you, however it needs to be run with administrator priviliges, continue? (y/n):
-if "%check%"=="n" goto done
 if exist "C:\Program Files\Java\" goto setJavaHomex64 else goto setJavaHomex86
 
 :doSetJavaHome
 if "%jdk%"=="" goto noJDK
-setx /m JAVA_HOME "%jdk%"
+set JAVA_HOME=%jdk%
 if errorlevel 1 goto needAdminPrivs
 echo set java (%arch%) path to %JAVA_HOME%
 goto continue
 
-:noJDK
-echo no java jdk was installed, please make sure you have a JDK installed and not a JRE
+:noJDK 
+pause
 goto done
 
 :needAdminPrivs
