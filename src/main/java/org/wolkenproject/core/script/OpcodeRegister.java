@@ -1,7 +1,6 @@
 package org.wolkenproject.core.script;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 public class OpcodeRegister {
