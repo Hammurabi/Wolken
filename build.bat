@@ -74,7 +74,7 @@ if exist "C:\Program Files\Java\" goto setJavaHomex64 else goto setJavaHomex86
 if "%jdk%"=="" goto noJDK
 setx /m JAVA_HOME "%jdk%"
 if errorlevel 1 goto needAdminPrivs
-else echo set java (%arch%) path to %JAVA_HOME%
+echo set java (%arch%) path to %JAVA_HOME%
 goto continue
 
 :noJDK
