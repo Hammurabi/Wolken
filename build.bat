@@ -18,6 +18,9 @@ if exist "C:\Program Files\Java\" goto setJavaHomex64 else goto setJavaHomex86
 :continue
 echo set java (%arch%) path to %JAVA_HOME%
 if not exist %~dp0tools\maven\bin\mvn.cmd goto installMavenTask
+goto maven_installed
+
+:maven_installed
 echo maven is installed
 goto buildTask
 pause
@@ -44,7 +47,7 @@ pause
 
 :installMavenTask
 python scripts/install_maven.py
-goto buildTask
+goto maven_installed
 pause
 
 :buildTask
