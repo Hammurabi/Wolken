@@ -13,8 +13,9 @@ java -version 2>NUL
 if errorlevel 1 goto errorNoJava
 echo java is installed
 
-%~dp0/tools/maven/bin/mvn.cmd --version 2>NUL
-if errorlevel 1 goto installMavenTask
+if not exist %~dp0tools\maven\bin\mvn.cmd goto installMavenTask
+echo maven is installed
+goto buildTask
 pause
 
 :: Reaching here means Python is installed.
@@ -28,6 +29,7 @@ echo.
 
 echo error^: python not installed
 echo please install the latest version from https://www.python.org/downloads/
+pause
 
 :errorNoJava
 echo.
@@ -39,6 +41,7 @@ pause
 :installMavenTask
 python scripts/install_maven.py
 goto buildTask
+pause
 
 :buildTask
 echo starting build
