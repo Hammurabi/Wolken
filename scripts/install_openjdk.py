@@ -30,7 +30,7 @@ else:
 
 openjdk = os.path.join(cwd, "tools", "jdk.zip")
 print("downloading openjdk from '" + url + "'")
-# urllib.request.urlretrieve(url, openjdk)
+urllib.request.urlretrieve(url, openjdk)
 print("installing openjdk to '" + openjdk + "'")
 
 # unzip openjdk to file 'openjdk'
