@@ -85,9 +85,5 @@ echo installing OpenJDK
 python scripts/install_openjdk.py
 goto setToInstalledJDK
 
-:needAdminPrivs
-echo please run the program again with administrator priviliges
-pause
-
 :done
 pause
