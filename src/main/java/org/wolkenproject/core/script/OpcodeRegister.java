@@ -11,6 +11,7 @@ public class OpcodeRegister {
 
     // register an opcode into the vm
     public OpcodeRegister registerOp(String name, BitFields args, String desc, Opcode opcode) {
+        opcode.setIdentifier(opcodeList.size());
         opcodeList.add(opcode);
 
         return this;
