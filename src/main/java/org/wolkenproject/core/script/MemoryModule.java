@@ -21,6 +21,12 @@ public class MemoryModule {
         return memoryState;
     }
 
+    private byte[] getBytesAt(int offset, int length) {
+        byte bytes[] = new byte[length];
+        for (int i = offset; i < )
+            return ;
+    }
+
     protected static class Register {
         protected static final int  RegisterLength = 32;
         private MemoryModule        memoryModule;
