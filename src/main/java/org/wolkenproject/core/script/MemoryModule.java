@@ -1,5 +1,7 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.exceptions.InvalidMemoryAccess;
+
 public class MemoryModule {
     private MemoryState memoryState;
     private byte        memory[];
@@ -21,8 +23,13 @@ public class MemoryModule {
         return memoryState;
     }
 
-    private byte[] getBytesAt(int offset, int length) {
+    private byte[] getBytesAt(int offset, int length) throws InvalidMemoryAccess {
+        if (offset + length >= memory.length) {
+            throw new InvalidMemoryAccess("requested memory range (" + offset + ", " + length + ") goes out of bounds.");
+        }
+
         byte bytes[] = new byte[length];
+
         for (int i = offset; i < memory.length; i ++) {
             bytes[i - offset] = memory[i];
         }
@@ -35,7 +42,7 @@ public class MemoryModule {
         private MemoryModule        memoryModule;
         private int                 pointer;
 
-        public byte[] getBytes() {
+        public byte[] getBytes() throws InvalidMemoryAccess {
             return memoryModule.getBytesAt(pointer, RegisterLength);
         }
 
