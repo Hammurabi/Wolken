@@ -23,14 +23,11 @@ public class MemoryModule {
         return memoryState;
     }
 
-    private byte[] getBytesAt(int offset, int length) throws InvalidMemoryAccess {
-        if (offset + length >= memory.length) {
-            throw new InvalidMemoryAccess("requested memory range (" + offset + ", " + length + ") goes out of bounds.");
-        }
+    private byte[] getBytesAt(int offset, int len) throws InvalidMemoryAccess {
+        checkRanges(offset, len, "requested memory range (" + offset + ", " + len + ") goes out of bounds.");
+        byte bytes[] = new byte[len];
 
-        byte bytes[] = new byte[length];
-
-        for (int i = 0; i < memory.length; i ++) {
+        for (int i = 0; i < len; i ++) {
             bytes[i] = memory[i + offset];
         }
 
