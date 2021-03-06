@@ -9,6 +9,9 @@ public class MemoryModule {
 
     public MemoryModule() {
         this.registers = new Register[16];
+        for (int i = 0; i < registers.length; i ++) {
+            registers[i] = new Register(i * Register.RegisterLength);
+        }
     }
 
     public Register getRegister(int registerID) {
@@ -69,6 +72,10 @@ public class MemoryModule {
         protected static final int  RegisterLength = 32;
         private MemoryModule        memoryModule;
         private int                 pointer;
+
+        public Register(int pointer) {
+            this.pointer = pointer;
+        }
 
         public byte[] getBytes() throws InvalidMemoryAccess {
             return memoryModule.getBytesAt(pointer, RegisterLength);
