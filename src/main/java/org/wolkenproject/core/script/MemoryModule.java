@@ -61,6 +61,9 @@ public class MemoryModule {
         }
     }
 
+    private void checkRanges(int offset, int length) {
+    }
+
     protected static class Register {
         protected static final int  RegisterLength = 32;
         private MemoryModule        memoryModule;
