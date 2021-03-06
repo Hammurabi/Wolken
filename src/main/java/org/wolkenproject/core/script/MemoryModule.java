@@ -2,7 +2,7 @@ package org.wolkenproject.core.script;
 
 public class MemoryModule {
     private MemoryState memoryState;
-    private byte        memcory[];
+    private byte        memory[];
     private Register    registers[];
 
     public MemoryModule() {
@@ -23,7 +23,7 @@ public class MemoryModule {
 
     private byte[] getBytesAt(int offset, int length) {
         byte bytes[] = new byte[length];
-        for (int i = offset; i < )
+        for (int i = offset; i < memory.le)
             return ;
     }
 
