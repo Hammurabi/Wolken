@@ -76,7 +76,8 @@ echo set java (%arch%) path to %JAVA_HOME%
 goto continue
 
 :setToInstalledJDK
-set JAVA_HOME="%~dp0tools\openjdk\"
+set JAVA_HOME=%~dp0tools\openjdk\
+echo set java (%arch%) path to %JAVA_HOME%
 goto continue
 
 :noJDK 
