@@ -19,7 +19,7 @@ public class MochaObject extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        return (Type) new MochaObject();
     }
 
     @Override
