@@ -11,7 +11,7 @@ public abstract class VirtualMachine {
     }
 
     public void swapMemoryState(MemoryState memoryState) {
-        this.memoryState = memoryState;
+        memoryModule.setState(memoryState);
     }
 
     public MemoryState getMemoryState() {
