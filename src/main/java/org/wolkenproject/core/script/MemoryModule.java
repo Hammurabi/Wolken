@@ -5,6 +5,7 @@ public class MemoryModule {
     private Register    registers[];
 
     public MemoryModule() {
+        this.registers = new Register[16];
     }
 
     public Register getRegister(int registerID) {
