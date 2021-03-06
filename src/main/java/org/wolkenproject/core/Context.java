@@ -1,7 +1,7 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.script.BitFields;
-import org.wolkenproject.core.script.VirtualMachine;
+import org.wolkenproject.core.script.OpcodeRegister;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
@@ -29,7 +29,7 @@ public class Context {
     private Server                  server;
     private Address                 payList[];
     private BlockChain              blockChain;
-    private VirtualMachine          virtualMachine;
+    private OpcodeRegister virtualMachine;
     private FileService             fileService;
 
     public Context(FileService service, boolean testNet, Address[] payList) throws WolkenException, IOException {
