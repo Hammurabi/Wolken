@@ -46,7 +46,7 @@ public class MochaObject extends SerializableI {
 
         @Override
         public int getSerialNumber() {
-            return 0;
+            return Context.getInstance().getSerialFactory().getSerialNumber(org.wolkenproject.core.script.Metadata.class);
         }
     }
 }
