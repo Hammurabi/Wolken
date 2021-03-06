@@ -55,13 +55,13 @@ pause
 
 :setJavaHomex64
 set arch=64
-for /d %%i in ("C:\Program Files\Java\*") do set jdk=%%i
+for /d %%i in ("C:\Program Files\Java\jdk*") do set jdk=%%i
 goto doSetJavaHome
 pause
 
 :setJavaHomex86
 set arch=x86
-for /d %%i in ("C:\Program Files (x86)\Java\*") do set jdk=%%i
+for /d %%i in ("C:\Program Files (x86)\Java\jdk*") do set jdk=%%i
 goto doSetJavaHome
 pause
 
@@ -71,6 +71,7 @@ if "%check%"=="n" goto done
 if exist "C:\Program Files\Java\" goto setJavaHomex64 else goto setJavaHomex86
 
 :doSetJavaHome
+if "%jdk%"=="" goto noJDK
 setx /m JAVA_HOME "%jdk%"
 if errorlevel 1 goto needAdminPrivs
 else echo set java (%arch%) path to %JAVA_HOME%
