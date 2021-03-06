@@ -31,7 +31,6 @@ public class MemoryModule {
 
         public void set(Register other) {
             memoryModule.memcpy(pointer, other.pointer, RegisterLength);
-            other.reset();
         }
 
         public void reset() {
