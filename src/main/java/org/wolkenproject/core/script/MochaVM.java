@@ -11,7 +11,7 @@ public class MochaVM extends OpcodeRegister {
     }
 
     @Override
-    public void addOp(String name, BitFields args, String desc, Opcode opcode) {
+    public void registerOp(String name, BitFields args, String desc, Opcode opcode) {
         opcode.setIdentifier(opcodeSet.size());
         opcode.setArgs(args);
         opcode.setDescription(desc);
