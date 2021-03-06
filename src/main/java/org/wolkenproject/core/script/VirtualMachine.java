@@ -15,6 +15,6 @@ public abstract class VirtualMachine {
     }
 
     public MemoryState getMemoryState() {
-        return memoryState;
+        return memoryModule.getState();
     }
 }
