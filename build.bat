@@ -4,7 +4,6 @@ rem set the active directory
 cd /D "%~dp0"
 
 rem download python if it does not exist
-:: Check for Python Installation
 python --version 2>NUL
 if errorlevel 1 goto errorNoPython
 echo python is installed
