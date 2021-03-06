@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class MochaObject extends SerializableI {
+    private Metadata metadata;
+
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
     }
