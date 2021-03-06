@@ -6,11 +6,17 @@ public class MemoryModule {
     public MemoryModule() {
     }
 
+    public Register getRegister(int registerID) {
+    }
+
     public void setState(MemoryState memoryState) {
         this.memoryState = memoryState;
     }
 
     public MemoryState getState() {
         return memoryState;
+    }
+
+    protected class Register {
     }
 }
