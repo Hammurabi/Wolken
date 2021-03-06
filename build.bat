@@ -77,6 +77,10 @@ if errorlevel 1 goto needAdminPrivs
 else echo set java (%arch%) path to %JAVA_HOME%
 goto continue
 
+:noJDK
+echo no java jdk was installed, please make sure you have a JDK installed and not a JRE
+goto done
+
 :needAdminPrivs
 echo please run the program again with administrator priviliges
 pause
