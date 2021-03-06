@@ -34,10 +34,14 @@ urllib.request.urlretrieve(url, openjdk)
 print("installing openjdk to '" + openjdk + "'")
 
 # unzip openjdk to file 'openjdk'
-import zipfile
+import tarfile
+
 print("unzipping package 'openjdk' to '" + os.path.join(tools, "openjdk") + "'")
-with zipfile.ZipFile(openjdk, 'r') as zip:
-    zip.extractall(tools)
+
+tar = tarfile.open(openjdk, "r:gz")
+tar.extractall()
+tar.close()
+
 file    = findFile(tools, 'jdk')
 print("unzipped package 'openjdk' to '" + file + "'")
 print("renaming file '" + file + "' to '" + os.path.join(tools, 'openjdk') + "'")
