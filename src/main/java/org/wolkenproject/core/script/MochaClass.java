@@ -8,8 +8,7 @@ public class MochaClass {
 
     public MochaClass() {
         functions = new ArrayList<>();
-        addFunction("hashCode", (mem)->{ return null; });
-        addFunction("toString", (mem)->{ return null; });
+        addFunction("hashCode", (mem)->{ return new MochaByteArray(mem.popStack().checksum()); });
     }
 
     public void addFunction(String functionName, MochaFunction function) {
