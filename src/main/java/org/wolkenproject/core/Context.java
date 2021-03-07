@@ -119,6 +119,7 @@ public class Context {
         virtualMachine.registerOp("add", "add two top elements of the stack.", null);
         virtualMachine.registerOp("sub", "sub two top elements of the stack.", null);
         virtualMachine.registerOp("mul", "mul two top elements of the stack.", null);
+        virtualMachine.registerOp("div", "mul two top elements of the stack.", null);
 
         virtualMachine.registerOp("store", new BitFields()
                                                     .addField(4, "register")
