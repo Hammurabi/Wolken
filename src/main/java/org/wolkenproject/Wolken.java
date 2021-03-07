@@ -7,7 +7,6 @@ import org.wolkenproject.encoders.CryptoLib;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.Logger;
-
 import java.io.IOException;
 
 public class Wolken {
@@ -74,7 +73,5 @@ public class Wolken {
                 address[i ++] = new Address(bytes);
             }
         }
-
-        Context context = new Context(mainDirectory, isTestNet, address);
     }
 }
