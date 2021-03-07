@@ -1,6 +1,5 @@
 package org.wolkenproject.core.script;
 
-import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.utils.Tuple;
 
 import java.util.HashMap;
@@ -35,5 +34,25 @@ public class MochaClass {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getFunctionCount() {
+        int totalFunctions  = functions.size();
+
+        if (parent != null) {
+            totalFunctions += parent.getFunctionCount();
+        }
+
+        return totalFunctions;
+    }
+
+    public int getMemberCount() {
+        int totalMembers    = functions.size();
+
+        if (parent != null) {
+            totalMembers    += parent.getMemberCount();
+        }
+
+        return totalMembers;
     }
 }
