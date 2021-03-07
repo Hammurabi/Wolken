@@ -35,7 +35,7 @@ public class MochaClass {
     }
 
     private MochaObject newInstance() {
-        return null;
+        return new MochaObject(this);
     }
 
     // call any functions defined in this class by name
