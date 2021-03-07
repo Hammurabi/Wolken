@@ -15,7 +15,7 @@ public class MochaObject {
     }
 
     public MochaObject(VirtualMachine virtualMachine, char metadata) throws UndefClassException {
-        this(virtualMachine, virtualMachine.getClassProvider().getMetadata(metadata));
+        this(virtualMachine, virtualMachine.getClassProvider().getClass(metadata));
     }
 
     public MochaObject(VirtualMachine virtualMachine, Metadata metadata) {
