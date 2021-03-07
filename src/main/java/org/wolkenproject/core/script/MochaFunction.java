@@ -1,4 +1,5 @@
 package org.wolkenproject.core.script;
 
-public class MochaFunction {
+public interface MochaFunction {
+    public MochaObject execute(MemoryModule memoryModule);
 }
