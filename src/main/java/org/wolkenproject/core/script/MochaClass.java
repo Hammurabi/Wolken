@@ -9,6 +9,7 @@ public class MochaClass {
     public MochaClass() {
         functions = new ArrayList<>();
         addFunction("hashCode", (mem)->{ return null; });
+        addFunction("toString", (mem)->{ return null; });
     }
 
     public void addFunction(String functionName, MochaFunction function) {
