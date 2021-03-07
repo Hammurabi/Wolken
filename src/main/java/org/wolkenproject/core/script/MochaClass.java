@@ -20,14 +20,11 @@ public class MochaClass {
     }
 
     // call any functions defined in this class by name
-    public MochaObject call(String function, MemoryModule memoryModule) {
+    public int getFunction(String function) {
         if (functions.containsKey(function)) {
             return functions.get(function).getFirst();
         }
-        return null;
-    }
 
-    public MochaObject call(int functionPtr, MemoryModule memoryModule) {
-        return null;
+        return -1;
     }
 }
