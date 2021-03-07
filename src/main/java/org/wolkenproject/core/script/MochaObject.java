@@ -9,14 +9,14 @@ public class MochaObject {
     private MochaFunction           functions[];
     private MochaObject             children[];
 
-    public MochaObject() {
-        this(new Metadata(DefaultMetadata));
+    public MochaObject(VirtualMachine virtualMachine) {
+        this(virtualMachine, DefaultMetadata);
+    }
+
+    public MochaObject(VirtualMachine virtualMachine, char metadata) {
     }
 
     public MochaObject(VirtualMachine virtualMachine, Metadata metadata) {
-        this.metadata   = new Metadata();
-        this.functions  = new MochaFunction[virtualMachine.getClassMetadata()];
-        this.children   = new MochaObject[metadata.getChildCount()];
     }
 
     public Metadata getMetadata() {
