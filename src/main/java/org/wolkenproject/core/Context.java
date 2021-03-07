@@ -96,6 +96,14 @@ public class Context {
                                                     .addCond(32, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a 32 byte array
                                                     .addCond(0, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a var-sized array
                                                     , "push x amount of bytes to the stack", null);
+
+        virtualMachine.registerOp("push", new BitFields()
+                                                    .addField(2, "arg")
+                                                    .addCond(6, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "id")
+                                                    .addCond(8, (idx, prev, next, self)->{ return prev.getValue() == 1; }, "id")
+                                                    .addCond(12, (idx, prev, next, self)->{ return prev.getValue() == 2; }, "id")
+                                                    .addCond(16, (idx, prev, next, self)->{ return prev.getValue() == 3; }, "id")
+                                                    , "push an array of size x into the stack.", null);
         virtualMachine.registerOp("store", new BitFields()
                                                     .addField(4, "register")
                                                     , "pop x from stack and store it in register", null);
