@@ -72,6 +72,10 @@ public class MemoryModule {
         }
     }
 
+    public MochaObject popStack() {
+        return null;
+    }
+
     protected static class Register {
         protected static final int  RegisterLength = 32;
         private MemoryModule        memoryModule;
