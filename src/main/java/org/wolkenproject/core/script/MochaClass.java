@@ -20,6 +20,10 @@ public class MochaClass {
     }
 
     public void populateFunctions(MochaFunction functions[]) {
+        for (String string : this.functions.keySet()) {
+            Tuple<Integer, MochaFunction> function = this.functions.get(string);
+            functions[function.getFirst()] = function.getSecond();
+        }
     }
 
     public void populateMembers(MochaObject[] members) {
