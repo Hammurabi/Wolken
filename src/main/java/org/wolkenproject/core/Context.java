@@ -81,7 +81,7 @@ public class Context {
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
 
-        virtualMachine.registerOp("halt", "halt process and all sub processes", null);
+        virtualMachine.registerOp("halt", "halt process and all sub processes", (proc)->{ proc.stopProcess(0); });
         virtualMachine.registerOp("push", new BitFields()
                                                     .addField(4, "arg")
                                                     .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a default value
