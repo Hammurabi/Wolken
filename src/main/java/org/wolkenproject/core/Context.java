@@ -104,8 +104,8 @@ public class Context {
                                                     .addCond(12, (idx, prev, next, self)->{ return prev.getValue() == 2; }, "id")
                                                     .addCond(16, (idx, prev, next, self)->{ return prev.getValue() == 3; }, "id")
                                                     , "push an array of size x into the stack.", null);
-        virtualMachine.registerOp("bconst", "push an int of size [32] into the stack.", null);
-        virtualMachine.registerOp("iconst", "push an int of size [32] into the stack.", null);
+        virtualMachine.registerOp("bconst", "push an int of size [  8 ] into the stack.", null);
+        virtualMachine.registerOp("iconst", "push an int of size [ 32 ] into the stack.", null);
         virtualMachine.registerOp("store", new BitFields()
                                                     .addField(4, "register")
                                                     , "pop x from stack and store it in register", null);
