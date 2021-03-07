@@ -173,7 +173,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     @Override
-    public byte[] checksum() throws IOException {
+    public byte[] checksum() {
         return HashUtil.hash160(getHash());
     }
 }
