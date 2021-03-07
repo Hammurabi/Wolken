@@ -45,6 +45,8 @@ public class MochaObject extends SerializableI {
     }
 
     public static class Metadata {
+        private int parentClass;
+
         public Metadata() {
         }
 
