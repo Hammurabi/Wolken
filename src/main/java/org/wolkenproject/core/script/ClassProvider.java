@@ -10,6 +10,8 @@ public class ClassProvider {
 
     public ClassProvider() {
         classMap = new HashMap<>();
+
+        setDefaultMochaClass();
     }
 
     public MochaClass getClass(int metadata) throws UndefClassException {
@@ -22,5 +24,8 @@ public class ClassProvider {
 
     public MochaClass getDefaultMochaClass() throws UndefClassException {
         return getClass(0);
+    }
+
+    private void setDefaultMochaClass() {
     }
 }
