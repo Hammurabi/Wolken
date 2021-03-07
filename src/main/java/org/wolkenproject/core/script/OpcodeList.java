@@ -1,6 +1,8 @@
 package org.wolkenproject.core.script;
 
-public class OpcodeList {
+import org.wolkenproject.serialization.SerializableI;
+
+public class OpcodeList extends SerializableI {
     // this class should be used to store opcodes
     // it will compact them in the most optimal
     // way for storage/network transfers to help
