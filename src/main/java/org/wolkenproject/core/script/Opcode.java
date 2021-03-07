@@ -1,9 +1,14 @@
 package org.wolkenproject.core.script;
 
 public abstract class Opcode {
-    private int identifier;
-    private BitFields args;
-    private String    desc;
+    private int             identifier;
+    private BitFields       args;
+    private String          desc;
+    private OpcodeExecutor  executor;
+
+    public void execute(VirtualProcess virtualProcess) {
+        executor.execute(virtualProcess);
+    }
 
     protected void setIdentifier(int id) {
         this.identifier = id;
@@ -16,8 +21,6 @@ public abstract class Opcode {
     protected void setDescription(String desc) {
         this.desc = desc;
     }
-
-    public abstract void execute(VirtualProcess virtualProcess);
 
     public int getIdentifier() {
         return identifier;
