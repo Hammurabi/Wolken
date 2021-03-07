@@ -40,7 +40,7 @@ public class MochaObject {
         return members[memberId];
     }
 
-    public Metadata getMetadata() {
-        return metadata;
+    public MochaClass getMochaClass() {
+        return mochaClass;
     }
 }
