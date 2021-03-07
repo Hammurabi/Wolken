@@ -6,7 +6,7 @@ import org.wolkenproject.exceptions.UndefFunctionException;
 public class MochaObject {
     public static final char        DefaultMetadata = 0;
 
-    private Metadata                metadata;
+    private MochaClass              mochaClass;
     private MochaFunction           functions[];
     private MochaObject             members[];
 
@@ -19,7 +19,7 @@ public class MochaObject {
     }
 
     public MochaObject(VirtualMachine virtualMachine, MochaClass mochaClass) {
-        this.metadata   = new Metadata();
+        this.mochaClass = mochaClass;
         this.functions  = new MochaFunction[mochaClass.getFunctionCount()];
         this.members    = new MochaObject[mochaClass.getMemberCount()];
     }
