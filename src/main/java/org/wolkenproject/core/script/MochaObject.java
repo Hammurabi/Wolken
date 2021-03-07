@@ -28,10 +28,6 @@ public class MochaObject extends SerializableI {
         return metadata;
     }
 
-    public MochaObject default__hashCode() {
-        return
-    }
-
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         metadata.write(stream);
