@@ -4,14 +4,14 @@ import org.wolkenproject.exceptions.UndefClassException;
 
 import java.util.Map;
 
-public class MetadataProvider {
+public class ClassProvider {
     Map<Character, Metadata> metadataMap;
 
     public Metadata getMetadata(char metadata) throws UndefClassException {
         if (!metadataMap.containsKey(metadata)) {
             throw new UndefClassException("no metadata found for '" + metadata + "'.");
         }
-        
+
         return metadataMap.get(metadata);
     }
 }
