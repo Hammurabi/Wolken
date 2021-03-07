@@ -22,6 +22,9 @@ public class MochaObject {
         this.mochaClass = mochaClass;
         this.functions  = new MochaFunction[mochaClass.getFunctionCount()];
         this.members    = new MochaObject[mochaClass.getMemberCount()];
+
+        mochaClass.populateFunctions(functions);
+        mochaClass.populateMembers(functions);
     }
 
     public MochaFunction getFunction(int functionId) throws UndefFunctionException {
