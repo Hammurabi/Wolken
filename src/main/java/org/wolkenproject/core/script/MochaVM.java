@@ -4,6 +4,7 @@ import java.util.Set;
 
 public class MochaVM extends VirtualMachine {
     @Override
-    public void executeScript(Script script) {
+    public VirtualProcess createProcess(Script script) {
+        return null;
     }
 }
