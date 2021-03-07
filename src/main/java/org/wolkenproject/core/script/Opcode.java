@@ -7,15 +7,15 @@ public abstract class Opcode extends SerializableI {
     private BitFields args;
     private String    desc;
 
-    public void setIdentifier(int id) {
+    protected void setIdentifier(int id) {
         this.identifier = id;
     }
 
-    public void setArgs(BitFields args) {
+    protected void setArgs(BitFields args) {
         this.args = args;
     }
 
-    public void setDescription(String desc) {
+    protected void setDescription(String desc) {
         this.desc = desc;
     }
 
