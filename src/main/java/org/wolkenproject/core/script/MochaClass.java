@@ -28,6 +28,10 @@ public class MochaClass {
     }
 
     public void populateMembers(MochaObject[] members) {
+        for (String string : this.members.keySet()) {
+            Tuple<Integer, MochaClass> member = this.members.get(string);
+            member[member.getFirst()] = member.getSecond().newInstance();
+        }
     }
 
     // call any functions defined in this class by name
