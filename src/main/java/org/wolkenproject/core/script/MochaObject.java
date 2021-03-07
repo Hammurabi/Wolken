@@ -26,6 +26,9 @@ public class MochaObject {
         this.members    = new MochaObject[metadata.getMemberCount()];
     }
 
+    public MochaFunction call(int functionId) {
+    }
+
     public Metadata getMetadata() {
         return metadata;
     }
