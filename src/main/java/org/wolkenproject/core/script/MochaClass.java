@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MochaClass {
-    private Map<String, Tuple<Integer, MochaFunction>> functions;
+    private MochaClass                                  parent;
+    private String                                      name;
+    private Map<String, Tuple<Integer, MochaFunction>>  functions;
 
     public MochaClass() {
         functions = new HashMap<>();
