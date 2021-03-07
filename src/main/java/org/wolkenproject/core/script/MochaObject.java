@@ -26,7 +26,7 @@ public class MochaObject {
         this.members    = new MochaObject[metadata.getMemberCount()];
     }
 
-    public MochaFunction call(int functionId) throws UndefClassException {
+    public MochaFunction getFunction(int functionId) throws UndefClassException {
         if (functionId >= functions.length) {
             throw new UndefClassException("no function '" + functionId + "' found.");
         }
