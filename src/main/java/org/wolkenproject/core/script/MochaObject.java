@@ -3,9 +3,6 @@ package org.wolkenproject.core.script;
 import org.wolkenproject.exceptions.UndefClassException;
 import org.wolkenproject.exceptions.UndefFunctionException;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-
 public class MochaObject {
     public static final char        DefaultMetadata = 0;
 
