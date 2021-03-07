@@ -11,10 +11,6 @@ public class MochaClass {
     private String                                      name;
     private Map<String, Tuple<Integer, MochaFunction>>  functions;
 
-    public MochaClass() {
-        this(null);
-    }
-
     public MochaClass(MochaClass parent) {
         this.parent = parent;
         functions   = new HashMap<>();
