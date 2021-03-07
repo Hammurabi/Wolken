@@ -23,7 +23,7 @@ public class MochaObject {
     public MochaObject(VirtualMachine virtualMachine, Metadata metadata) {
         this.metadata   = new Metadata();
         this.functions  = new MochaFunction[metadata.getFunctionCount()];
-        this.children   = new MochaObject[metadata.getChildCount()];
+        this.children   = new MochaObject[metadata.getMemberCount()];
     }
 
     public Metadata getMetadata() {
