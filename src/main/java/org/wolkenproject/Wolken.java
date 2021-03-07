@@ -55,7 +55,7 @@ public class Wolken {
             mainDirectory.makeDirectory();
         }
 
-        Address address[] = new Address[8];
+        Address address[] = null;
 
         if (cmd.hasOption("enable_mining")) {
             String value = cmd.getOptionValue("enable_mining").toLowerCase();
@@ -75,5 +75,7 @@ public class Wolken {
                 address[i ++] = new Address(bytes);
             }
         }
+
+        Context context = new Context(mainDirectory, isTestNet, address);
     }
 }
