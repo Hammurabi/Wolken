@@ -1,27 +1,26 @@
 package org.wolkenproject.core.script;
 
-import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.UndefClassException;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ClassProvider {
-    Map<Character, Metadata> metadataMap;
+    Map<Integer, MochaClass> classMap;
 
-    public Metadata getMetadata(char metadata) throws UndefClassException {
-        if (!metadataMap.containsKey(metadata)) {
+    public ClassProvider() {
+        classMap = new HashMap<>();
+    }
+
+    public MochaClass getClass(int metadata) throws UndefClassException {
+        if (!classMap.containsKey(metadata)) {
             throw new UndefClassException("no metadata found for '" + metadata + "'.");
         }
 
-        return metadataMap.get(metadata);
+        return classMap.get(metadata);
     }
 
-    public MochaClass getDefaultMochaClass() {
-        MochaClass mochaClass = new MochaClass();
-        mochaClass.setName("MochaObject");
-        mochaClass.addFunction("hashCode", (mem)->{ return new MochaByteArray(mem.popStack().checksum()); });
-        mochaClass.addFunction("toString", (mem)->{ return new MochaString(Base16.encode(mem.popStack().checksum())); });
-
-        return mochaClass;
+    public MochaClass getDefaultMochaClass() throws UndefClassException {
+        return getClass(0);
     }
 }
