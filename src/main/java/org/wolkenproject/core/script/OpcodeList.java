@@ -6,6 +6,6 @@ public class OpcodeList {
     // way for storage/network transfers to help
     // reduce the cost of transactions.
 
-    // this contains SIGN information from const-push operations.
-    private int signBits[];
+    // contains bits from arguments
+    private long argumentBits;
 }
