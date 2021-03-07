@@ -12,6 +12,10 @@ public class MochaClass {
     private Map<String, Tuple<Integer, MochaFunction>>  functions;
 
     public MochaClass() {
+        this(null);
+    }
+
+    public MochaClass(MochaClass parent) {
         functions = new HashMap<>();
         addFunction("hashCode", (mem)->{ return new MochaByteArray(mem.popStack().checksum()); });
         addFunction("toString", (mem)->{ return new MochaString(Base16.encode(mem.popStack().checksum())); });
