@@ -27,15 +27,15 @@ public class MochaClass {
         }
     }
 
-    public void populateMembers(MochaObject[] members) {
+    public void populateMembers(VirtualProcess virtualProcess, MochaObject[] members) {
         for (String string : this.members.keySet()) {
             Tuple<Integer, MochaClass> member = this.members.get(string);
-            members[member.getFirst()] = member.getSecond().newInstance();
+            members[member.getFirst()] = member.getSecond().newInstance(virtualProcess);
         }
     }
 
-    private MochaObject newInstance() {
-        return new MochaObject(this);
+    private MochaObject newInstance(VirtualProcess virtualProcess) {
+        return new MochaObject(virtualProcess, this);
     }
 
     // call any functions defined in this class by name
