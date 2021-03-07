@@ -16,9 +16,8 @@ public class MochaClass {
     }
 
     public MochaClass(MochaClass parent) {
-        functions = new HashMap<>();
-        addFunction("hashCode", (mem)->{ return new MochaByteArray(mem.popStack().checksum()); });
-        addFunction("toString", (mem)->{ return new MochaString(Base16.encode(mem.popStack().checksum())); });
+        this.parent = parent;
+        functions   = new HashMap<>();
     }
 
     public void addFunction(String functionName, MochaFunction function) {
