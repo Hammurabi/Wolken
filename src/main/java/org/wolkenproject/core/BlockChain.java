@@ -3,10 +3,9 @@ package org.wolkenproject.core;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
-import org.wolkenproject.network.messages.BlockList;
-import org.wolkenproject.network.messages.Inv;
-import org.wolkenproject.network.messages.RequestBlocks;
+import org.wolkenproject.network.messages.*;
 import org.wolkenproject.utils.Logger;
+import org.wolkenproject.utils.PriorityHashQueue;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
@@ -14,16 +13,23 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
-    private BlockIndex          tip;
-    private byte[]              chainWork;
-    // contains blocks sent from peers and orphaned chains.
-    private Queue<BlockIndex>   orphanedBlocks;
-    private static final int    MaximumBlockQueueSize = 1_250_000_000;
+    private BlockIndex                      tip;
+    // contains blocks that have no parents.
+    private PriorityHashQueue<BlockIndex>   orphanedBlocks;
+    // contains blocks that were valid pre-fork.
+    private PriorityHashQueue<BlockIndex>   staleBlocks;
+    // contains blocks sent from peers.
+    private PriorityHashQueue<BlockIndex>   blockPool;
+    private static final int                MaximumOrphanBlockQueueSize = 250_000_000;
+    private static final int                MaximumStaleBlockQueueSize  = 500_000_000;
+    private static final int                MaximumPoolBlockQueueSize   = 1_250_000_000;
 
     private ReentrantLock   lock;
 
     public BlockChain() {
-        orphanedBlocks  = new PriorityQueue<>();
+        orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
+        staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
+        blockPool       = new PriorityHashQueue<>(BlockIndex.class);
         lock            = new ReentrantLock();
 
         tip             = Context.getInstance().getDatabase().findTip();
@@ -34,20 +40,28 @@ public class BlockChain implements Runnable {
         long lastBroadcast  = System.currentTimeMillis();
         byte lastHash[]     = null;
 
-
         Logger.alert("attempting to reload chain from last checkpoint.");
         lock.lock();
         try {
             tip = Context.getInstance().getDatabase().findTip();
             if (tip != null) {
                 Logger.alert("loaded checkpoint successfully" + tip);
+            } else {
+                tip = makeGenesisBlock();
+                Logger.alert("loaded genesis as checkpoint successfully" + tip);
             }
         } finally {
             lock.unlock();
         }
 
         while (Context.getInstance().isRunning()) {
-            BlockIndex block = nextOrphan();
+            if (System.currentTimeMillis() - lastBroadcast > (5 * 60_000L)) {
+                int blocksToSend = 16384;
+                lastBroadcast = System.currentTimeMillis();
+            }
+
+            // pull from suggested block pool
+            BlockIndex block = nextFromPool();
 
             try {
                 if (getTip() == null) {
@@ -111,7 +125,6 @@ public class BlockChain implements Runnable {
 
                 try {
                     Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
-                    lastBroadcast = System.currentTimeMillis();
                 } catch (WolkenException e) {
                     e.printStackTrace();
                 }
@@ -119,21 +132,76 @@ public class BlockChain implements Runnable {
         }
     }
 
-    private void rollback(BlockIndex block) throws WolkenException {
-        BlockIndex currentBlock = tip;
+    public BlockHeader findCommonAncestor(BlockIndex block) {
+        // request block headers
+        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block.getHash(), 1024, block.getBlock()));
+        BlockHeader commonAncestor = null;
 
-        while (currentBlock.getHeight() != block.getHeight()) {
-            deleteBlockIndex(currentBlock, true);
-            currentBlock = currentBlock.previousBlock();
+        if (response != null) {
+            Collection<BlockHeader> headers = response.getPayload();
+
+            while (headers != null) {
+                Iterator<BlockHeader> iterator = headers.iterator();
+
+                BlockHeader header = iterator.next();
+                if (isCommonAncestor(header)) {
+                    commonAncestor = header;
+                }
+
+                // loop headers to find a common ancestor
+                while (iterator.hasNext()) {
+                    header = iterator.next();
+
+                    if (isCommonAncestor(header)) {
+                        commonAncestor = header;
+                    }
+                }
+
+                // find older ancestor
+                if (commonAncestor == null) {
+                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
+
+                    if (response != null) {
+                        headers = response.getPayload();
+                    }
+                }
+            }
         }
 
-        setTip(currentBlock.previousBlock());
-        replaceTip(block);
+        if (commonAncestor != null) {
+            Logger.alert("found common ancestor" + block + " for block" + block);
+        }
+
+        return commonAncestor;
+    }
+
+    private void rollback(BlockIndex block) throws WolkenException {
+        BlockHeader commonAncestor = findCommonAncestor(block);
+
+        if (commonAncestor != null) {
+            BlockIndex currentBlock = tip;
+
+            while (currentBlock.getHeight() != block.getHeight()) {
+                deleteBlockIndex(currentBlock, true);
+                currentBlock = currentBlock.previousBlock();
+            }
+
+            setTip(currentBlock.previousBlock());
+            replaceTip(block);
+        } else {
+            addOrphan(block);
+        }
     }
 
     private void setNextGapped(BlockIndex block) throws WolkenException {
-        setTip(block);
-        rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
+        BlockHeader commonAncestor = findCommonAncestor(block);
+
+        if (commonAncestor != null) {
+            setTip(block);
+            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
+        } else {
+            addOrphan(block);
+        }
     }
 
     private boolean hasOrphans() {
@@ -154,6 +222,15 @@ public class BlockChain implements Runnable {
         }
     }
 
+    private BlockIndex nextFromPool() {
+        lock.lock();
+        try {
+            return blockPool.poll();
+        } finally {
+            lock.unlock();
+        }
+    }
+
     private void setNext(BlockIndex block) throws WolkenException {
         byte previousHash[] = block.getBlock().getParentHash();
 
@@ -162,19 +239,36 @@ public class BlockChain implements Runnable {
             return;
         }
 
-        rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
+        BlockHeader commonAncestor = findCommonAncestor(block);
+
+        if (commonAncestor != null) {
+            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
+        } else {
+            addOrphan(block);
+        }
+    }
+
+    private boolean isCommonAncestor(BlockHeader blockHeader) {
+        return Context.getInstance().getDatabase().checkBlockExists(blockHeader.getHashCode());
     }
 
     private void replaceTip(BlockIndex block) throws WolkenException {
-        addOrphan(tip);
+        BlockHeader commonAncestor = findCommonAncestor(block);
 
-        byte previousHash[] = tip.getBlock().getParentHash();
-        if (Utils.equals(block.getBlock().getParentHash(), previousHash)) {
-            setTip(block);
-            return;
+        if (commonAncestor != null) {
+            // stale the current tip
+            addStale(getTip());
+
+            byte previousHash[] = getTip().getBlock().getParentHash();
+            if (Utils.equals(block.getBlock().getParentHash(), previousHash)) {
+                setTip(block);
+                return;
+            }
+
+            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
+        } else {
+            addOrphan(block);
         }
-
-        rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
     }
 
     private boolean rollbackIntoExistingParent(byte[] parentHash, int height) throws WolkenException {
@@ -220,7 +314,7 @@ public class BlockChain implements Runnable {
     private void replaceBlockIndex(int height, BlockIndex block) {
         BlockIndex previousIndex = Context.getInstance().getDatabase().findBlock(height);
         if (previousIndex != null) {
-            addOrphan(previousIndex);
+            addStale(previousIndex);
         }
 
         Context.getInstance().getDatabase().setBlockIndex(height, block);
@@ -233,7 +327,7 @@ public class BlockChain implements Runnable {
 
     private void deleteBlockIndex(BlockIndex block, boolean orphan) {
         if (orphan) {
-            addOrphan(block);
+            addStale(block);
         }
 
         Context.getInstance().getDatabase().deleteBlock(block.getHeight());
@@ -259,36 +353,76 @@ public class BlockChain implements Runnable {
         replaceBlockIndex(block.getHeight(), block);
     }
 
-    public void suggestBlock(BlockIndex block) {
-        addOrphan(block);
-    }
-
     private void addOrphan(BlockIndex block) {
         lock.lock();
         try {
             orphanedBlocks.add(block);
 
             // calculate the maximum blocks allowed in the queue.
-            int maximumBlocks = MaximumBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int maximumBlocks   = MaximumOrphanBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumOrphanBlockQueueSize / 4) / Context.getInstance().getNetworkParameters().getMaxBlockSize();
 
             // remove any blocks that are too far back in the queue.
-            if (orphanedBlocks.size() > maximumBlocks) {
-                trimOrphans(orphanedBlocks.size() - maximumBlocks);
+            if (orphanedBlocks.size() - maximumBlocks > Threshold) {
+                trimOrphans(maximumBlocks);
             }
         } finally {
             lock.unlock();
         }
     }
 
-    private void trimOrphans(int count) {
-        for (int i = 0; i < count; i ++) {
-            orphanedBlocks.remove(orphanedBlocks.size() - 1);
+    private void addStale(BlockIndex block) {
+        lock.lock();
+        try {
+            staleBlocks.add(block);
+
+            // calculate the maximum blocks allowed in the queue.
+            int maximumBlocks   = MaximumStaleBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumStaleBlockQueueSize / 4) / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+
+            // remove any blocks that are too far back in the queue.
+            if (staleBlocks.size() - maximumBlocks > Threshold) {
+                trimStales(maximumBlocks);
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
-    public BlockIndex makeGenesisBlock() throws WolkenException {
+    public void pool(BlockIndex block) {
+        lock.lock();
+        try {
+            blockPool.add(block);
+
+            // calculate the maximum blocks allowed in the queue.
+            int maximumBlocks   = MaximumPoolBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumPoolBlockQueueSize / 4) / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+
+            // remove any blocks that are too far back in the queue.
+            if (blockPool.size() - maximumBlocks > Threshold) {
+                trimPool(maximumBlocks);
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void trimOrphans(int newLength) {
+        orphanedBlocks.removeTails(newLength);
+    }
+
+    private void trimStales(int newLength) {
+        staleBlocks.removeTails(newLength);
+    }
+
+    private void trimPool(int newLength) {
+        blockPool.removeTails(newLength);
+    }
+
+    public BlockIndex makeGenesisBlock() {
         Block genesis = new Block(new byte[Block.UniqueIdentifierLength], 0);
-        genesis.addTransaction(TransactionI.newCoinbase(0, "", Context.getInstance().getNetworkParameters().getMaxReward(), Context.getInstance().getPayList()));
+        genesis.addTransaction(TransactionI.newCoinbase(0, "", Context.getInstance().getNetworkParameters().getMaxReward(), Context.getInstance().getNetworkParameters().getFoundingAddresses()));
+        genesis.setNonce(0);
         return new BlockIndex(genesis, BigInteger.ZERO, 0);
     }
 
@@ -313,14 +447,13 @@ public class BlockChain implements Runnable {
     }
 
     public boolean contains(byte[] hash) {
-        Queue<BlockIndex> orphaned = getOrphanedBlocks();
-        for (BlockIndex block : orphaned) {
-            if (Utils.equals(block.getHash(), hash)) {
-                return true;
-            }
+        lock.lock();
+        try {
+            return orphanedBlocks.containsKey(hash) || staleBlocks.containsKey(hash) || blockPool.containsKey(hash);
         }
-
-        return false;
+        finally {
+            lock.unlock();
+        }
     }
 
     public Queue<BlockIndex> getOrphanedBlocks() {
@@ -330,6 +463,42 @@ public class BlockChain implements Runnable {
         }
         finally {
             lock.unlock();
+        }
+    }
+
+    public BlockIndex getBlock(byte[] hash) {
+        lock.lock();
+        try {
+            return orphanedBlocks.getByHash(hash);
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
+    public Set<byte[]> getInv() {
+        lock.lock();
+        try {
+            Set<byte[]> hashes = new LinkedHashSet<>();
+            BlockIndex index = tip;
+            for (int i = 0; i < 16_384; i ++) {
+                hashes.add(index.getHash());
+                index = index.previousBlock();
+                if (index == null) {
+                    break;
+                }
+            }
+
+            return hashes;
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
+    public void suggest(Set<BlockIndex> blocks) {
+        for (BlockIndex block : blocks) {
+            pool(block);
         }
     }
 }

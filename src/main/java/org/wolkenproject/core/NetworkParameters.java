@@ -174,4 +174,8 @@ public class NetworkParameters {
     public long getServices() {
         return VersionInformation.Flags.AllServices;
     }
+
+    public Address[] getFoundingAddresses() {
+        return new Address[] {};
+    }
 }

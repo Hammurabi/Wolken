@@ -1,7 +1,7 @@
 package org.wolkenproject.exceptions;
 
 public class InvalidSerialNumberException extends WolkenException {
-    private static final long serialVersionUID = 2847962769776745698L;
+    private static final long serialVersionUID = 4000853491597138082L;
 
     public InvalidSerialNumberException(String msg) {
         super(msg);

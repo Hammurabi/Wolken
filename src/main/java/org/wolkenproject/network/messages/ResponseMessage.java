@@ -37,11 +37,6 @@ public abstract class ResponseMessage extends Message {
         stream.read(requester);
     }
 
-    @Override
-    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
-    }
-
     protected byte[] getRequester() {
         return requester;
     }

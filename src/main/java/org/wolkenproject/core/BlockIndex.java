@@ -4,6 +4,7 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.ChainMath;
+import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
@@ -169,5 +170,10 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     // getBlock().getHashCode() is too expensive
     public byte[] getHash() {
         return hash;
+    }
+
+    @Override
+    public byte[] checksum() throws IOException {
+        return HashUtil.hash160(getHash());
     }
 }

@@ -2,6 +2,7 @@ package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
@@ -36,6 +37,11 @@ public class FailedToRespondMessage extends ResponseMessage {
     @Override
     public <Type> Type getPayload() {
         return (Type) (Long) reasonFlags;
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return (Type) new FailedToRespondMessage(0, 0, new byte[UniqueIdentifierLength]);
     }
 
     @Override
