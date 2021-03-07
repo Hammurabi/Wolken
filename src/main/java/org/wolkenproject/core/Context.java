@@ -112,6 +112,10 @@ public class Context {
         virtualMachine.registerOp("fconst", "push a fixed float of size [ 32 ] into the stack.", null);
         virtualMachine.registerOp("dconst", "push a fixed float of size [ 64 ] into the stack.", null);
 
+        virtualMachine.registerOp("aconst", "push an address of size [ 200 ] into the stack.", null);
+        virtualMachine.registerOp("aaconst", "push an array of max length [ 16 ] bits into the stack.", null);
+        virtualMachine.registerOp("aaconst", "push an array of max length [ 32 ] bits into the stack.", null);
+
         virtualMachine.registerOp("store", new BitFields()
                                                     .addField(4, "register")
                                                     , "pop x from stack and store it in register", null);
