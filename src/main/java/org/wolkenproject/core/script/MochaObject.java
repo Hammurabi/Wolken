@@ -1,5 +1,7 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.exceptions.UndefClassException;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -9,12 +11,12 @@ public class MochaObject {
     private MochaFunction           functions[];
     private MochaObject             children[];
 
-    public MochaObject(VirtualMachine virtualMachine) {
+    public MochaObject(VirtualMachine virtualMachine) throws UndefClassException {
         this(virtualMachine, DefaultMetadata);
     }
 
-    public MochaObject(VirtualMachine virtualMachine, char metadata) {
-        this(virtualMachine, virtualMachine.getMetadataProvider().get(metadata));
+    public MochaObject(VirtualMachine virtualMachine, char metadata) throws UndefClassException {
+        this(virtualMachine, virtualMachine.getMetadataProvider().getMetadata(metadata));
     }
 
     public MochaObject(VirtualMachine virtualMachine, Metadata metadata) {
