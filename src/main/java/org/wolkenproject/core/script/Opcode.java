@@ -1,6 +1,6 @@
 package org.wolkenproject.core.script;
 
-public abstract class Opcode {
+public class Opcode {
     private int             identifier;
     private BitFields       args;
     private String          desc;
@@ -32,6 +32,10 @@ public abstract class Opcode {
 
     public String getDesc() {
         return desc;
+    }
+
+    public void setExecutor(OpcodeExecutor executor) {
+        this.executor = executor;
     }
 
 //    @Override
