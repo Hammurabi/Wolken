@@ -10,7 +10,7 @@ public class MochaObject {
 
     private Metadata                metadata;
     private MochaFunction           functions[];
-    private MochaObject             children[];
+    private MochaObject             members[];
 
     public MochaObject(VirtualMachine virtualMachine) throws UndefClassException {
         this(virtualMachine, DefaultMetadata);
@@ -23,7 +23,7 @@ public class MochaObject {
     public MochaObject(VirtualMachine virtualMachine, Metadata metadata) {
         this.metadata   = new Metadata();
         this.functions  = new MochaFunction[metadata.getFunctionCount()];
-        this.children   = new MochaObject[metadata.getMemberCount()];
+        this.members    = new MochaObject[metadata.getMemberCount()];
     }
 
     public Metadata getMetadata() {
