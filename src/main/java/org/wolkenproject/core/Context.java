@@ -1,9 +1,6 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.core.script.BitFields;
-import org.wolkenproject.core.script.MochaObject;
-import org.wolkenproject.core.script.OpcodeRegister;
-import org.wolkenproject.core.script.VirtualProcess;
+import org.wolkenproject.core.script.*;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
@@ -82,7 +79,7 @@ public class Context {
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
 
-        virtualMachine.registerOp("halt", "halt process and all sub processes", null);
+        virtualMachine.registerOp("halt", "halt process and all sub processes", (proc)->{proc.stopProcess(0);});
         virtualMachine.registerOp("push", new BitFields()
                                                     .addField(4, "arg")
                                                     .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a default value
@@ -145,6 +142,8 @@ public class Context {
                                                     .addField(2, "6/14/22")
                                                     , "set or get (and jump) a jump location.", null);
 
+
+        System.out.println(virtualMachine.opCound());
 //        virtualMachine.addOp("push", true, 0, 0, "push x amount of bytes into the stack", null);
 //        virtualMachine.addOp("pop", false, 0, 0, "pop item from the stack", null);
     }
