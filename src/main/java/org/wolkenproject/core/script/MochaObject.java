@@ -30,6 +30,8 @@ public class MochaObject {
         if (functionId >= functions.length) {
             throw new UndefClassException("no function '" + functionId + "' found.");
         }
+
+        return functions[functionId];
     }
 
     public Metadata getMetadata() {
