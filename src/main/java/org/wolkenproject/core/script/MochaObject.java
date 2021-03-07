@@ -20,6 +20,10 @@ public class MochaObject extends SerializableI {
         this.metadata = new Metadata();
     }
 
+    public Metadata getMetadata() {
+        return metadata;
+    }
+
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         metadata.write(stream);
