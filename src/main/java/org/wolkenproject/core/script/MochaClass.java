@@ -19,6 +19,9 @@ public class MochaClass {
         functions.put(functionName, new Tuple<>(functions.size(), function));
     }
 
+    public void populateFunctions(MochaFunction functions[]) {
+    }
+
     // call any functions defined in this class by name
     public int getFunction(String function) {
         if (functions.containsKey(function)) {
