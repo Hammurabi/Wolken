@@ -7,6 +7,7 @@ import java.io.OutputStream;
 
 public class MochaObject {
     public static final char        DefaultMetadata = 0;
+
     private Metadata                metadata;
     private MochaFunction           functions[];
     private MochaObject             children[];
@@ -21,7 +22,7 @@ public class MochaObject {
 
     public MochaObject(VirtualMachine virtualMachine, Metadata metadata) {
         this.metadata   = new Metadata();
-        this.functions  = new MochaFunction[virtualMachine.getClassMetadata()];
+        this.functions  = new MochaFunction[metadata.getFunctionCount()];
         this.children   = new MochaObject[metadata.getChildCount()];
     }
 
