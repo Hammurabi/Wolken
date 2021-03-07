@@ -82,6 +82,19 @@ public class Context {
         this.blockChain             = new BlockChain();
 
         virtualMachine.registerOp("halt", "halt process and all sub processes", null);
+        virtualMachine.registerOp("push", new BitFields()
+                                                    .addField(4, "arg")
+                                                    .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a default value
+                                                    .addCond(1, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a byte
+                                                    .addCond(2, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a short
+                                                    .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // an int
+                                                    .addCond(8, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a long
+                                                    .addCond(8, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a 'fixed' number
+                                                    .addCond(20, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a 20 byte array
+                                                    .addCond(25, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a 25 byte array
+                                                    .addCond(32, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a 32 byte array
+                                                    .addCond(0, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a var-sized array
+                                                    , "push x amount of bytes to the stack", null);
         virtualMachine.registerOp("store", new BitFields()
                                                     .addField(4, "register")
                                                     , "pop x from stack and store it in register", null);
@@ -94,6 +107,10 @@ public class Context {
                                                     .addCond(16, (idx, prev, next, self)->{ return prev.getValue() == 2; }, "id")
                                                     , "call a function [4:arg].", null);
         virtualMachine.registerOp("jump", new BitFields()
+                                                    .addField(1, "get/set")
+                                                    .addField(15, "id")
+                                                    , "set or get (and jump) a jump location.", null);
+        virtualMachine.registerOp("getmember", new BitFields()
                                                     .addField(1, "get/set")
                                                     .addField(15, "id")
                                                     , "set or get (and jump) a jump location.", null);
