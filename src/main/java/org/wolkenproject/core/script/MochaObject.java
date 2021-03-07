@@ -18,10 +18,10 @@ public class MochaObject {
         this(virtualMachine, virtualMachine.getClassProvider().getClass(metadata));
     }
 
-    public MochaObject(VirtualMachine virtualMachine, Metadata metadata) {
+    public MochaObject(VirtualMachine virtualMachine, MochaClass mochaClass) {
         this.metadata   = new Metadata();
-        this.functions  = new MochaFunction[metadata.getFunctionCount()];
-        this.members    = new MochaObject[metadata.getMemberCount()];
+        this.functions  = new MochaFunction[mochaClass.getFunctionCount()];
+        this.members    = new MochaObject[mochaClass.getMemberCount()];
     }
 
     public MochaFunction getFunction(int functionId) throws UndefFunctionException {
