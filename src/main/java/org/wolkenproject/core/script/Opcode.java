@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public abstract class Opcode extends SerializableI {
+public abstract class Opcode {
     private int identifier;
     private BitFields args;
     private String    desc;
@@ -39,21 +39,21 @@ public abstract class Opcode extends SerializableI {
         return desc;
     }
 
-    @Override
-    public void write(OutputStream stream) throws IOException, WolkenException {
-    }
-
-    @Override
-    public void read(InputStream stream) throws IOException, WolkenException {
-    }
-
-    @Override
-    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
-    }
-
-    @Override
-    public int getSerialNumber() {
-        return Context.getInstance().getSerialFactory().getSerialNumber(Opcode.class);
-    }
+//    @Override
+//    public void write(OutputStream stream) throws IOException, WolkenException {
+//    }
+//
+//    @Override
+//    public void read(InputStream stream) throws IOException, WolkenException {
+//    }
+//
+//    @Override
+//    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+//        return null;
+//    }
+//
+//    @Override
+//    public int getSerialNumber() {
+//        return Context.getInstance().getSerialFactory().getSerialNumber(Opcode.class);
+//    }
 }
