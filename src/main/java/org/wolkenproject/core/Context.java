@@ -88,12 +88,10 @@ public class Context {
                                                     .addField(4, "item1")
                                                     .addField(4, "item2")
                                                     , "operations [+ - / * %] [& | ^ << >>] [< > ==] [4:op][4:item][4:item][4:result_item]", null);
-        virtualMachine.registerOp("storei", new BitFields()
-                                                    .addField(1, "sign")
-                                                    .addField(3, "type")
+        virtualMachine.registerOp("store", new BitFields()
                                                     .addField(4, "register")
-                                                    , "pop x from stack and store it in register [1:sign][3:type][4:item]", null);
-        virtualMachine.registerOp("loadi", new BitFields()
+                                                    , "pop x from stack and store it in register", null);
+        virtualMachine.registerOp("load", new BitFields()
                                                     .addField(4, "item0")
                                                     .addField(1, "bool")
                                                     .addField(3, "item1")
