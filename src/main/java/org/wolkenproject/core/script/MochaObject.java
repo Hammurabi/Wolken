@@ -1,6 +1,7 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.exceptions.UndefClassException;
+import org.wolkenproject.exceptions.UndefFunctionException;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,9 +27,9 @@ public class MochaObject {
         this.members    = new MochaObject[metadata.getMemberCount()];
     }
 
-    public MochaFunction getFunction(int functionId) throws UndefClassException {
+    public MochaFunction getFunction(int functionId) throws UndefFunctionException {
         if (functionId >= functions.length) {
-            throw new UndefClassException("no function '" + functionId + "' found.");
+            throw new UndefFunctionException("no function '" + functionId + "' found.");
         }
 
         return functions[functionId];
