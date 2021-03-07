@@ -9,6 +9,7 @@ public class MochaClass {
     private MochaClass                                  parent;
     private String                                      name;
     private Map<String, Tuple<Integer, MochaFunction>>  functions;
+    private Map<String, Tuple<Integer, MochaClass>>     members;
 
     public MochaClass(MochaClass parent) {
         this.parent = parent;
