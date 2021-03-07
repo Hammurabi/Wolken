@@ -34,6 +34,14 @@ public class MochaObject {
         return functions[functionId];
     }
 
+    public MochaObject getMember(int memberId) throws UndefClassException {
+        if (memberId >= members.length) {
+            throw new UndefClassException("no member '" + memberId + "' found.");
+        }
+
+        return members[memberId];
+    }
+
     public Metadata getMetadata() {
         return metadata;
     }
