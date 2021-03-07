@@ -131,13 +131,12 @@ public class Context {
                                                     .addField(1, "get/set")
                                                     .addField(15, "id")
                                                     , "set or get (and jump) a jump location.", null);
+
         virtualMachine.registerOp("getmember", new BitFields()
-                                                    .addField(1, "get/set")
-                                                    .addField(15, "id")
+                                                    .addField(2, "6/14/22")
                                                     , "set or get (and jump) a jump location.", null);
         virtualMachine.registerOp("setmember", new BitFields()
-                                                    .addField(1, "get/set")
-                                                    .addField(15, "id")
+                                                    .addField(2, "6/14/22")
                                                     , "set or get (and jump) a jump location.", null);
 
 //        virtualMachine.addOp("push", true, 0, 0, "push x amount of bytes into the stack", null);
