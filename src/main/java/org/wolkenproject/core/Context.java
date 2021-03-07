@@ -116,6 +116,8 @@ public class Context {
         virtualMachine.registerOp("aaconst", "push an array of max length [ 16 ] bits into the stack.", null);
         virtualMachine.registerOp("aaconstl", "push an array of max length [ 32 ] bits into the stack.", null);
 
+        virtualMachine.registerOp("add", "add two top elements of the stack.", null);
+
         virtualMachine.registerOp("store", new BitFields()
                                                     .addField(4, "register")
                                                     , "pop x from stack and store it in register", null);
