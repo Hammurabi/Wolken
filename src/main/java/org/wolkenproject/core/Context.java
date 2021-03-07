@@ -115,6 +115,10 @@ public class Context {
                                                     .addField(1, "get/set")
                                                     .addField(15, "id")
                                                     , "set or get (and jump) a jump location.", null);
+        virtualMachine.registerOp("setmember", new BitFields()
+                                                    .addField(1, "get/set")
+                                                    .addField(15, "id")
+                                                    , "set or get (and jump) a jump location.", null);
 
 //        virtualMachine.addOp("push", true, 0, 0, "push x amount of bytes into the stack", null);
 //        virtualMachine.addOp("pop", false, 0, 0, "pop item from the stack", null);
