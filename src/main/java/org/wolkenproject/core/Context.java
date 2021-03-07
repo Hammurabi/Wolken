@@ -3,6 +3,7 @@ package org.wolkenproject.core;
 import org.wolkenproject.core.script.BitFields;
 import org.wolkenproject.core.script.MochaObject;
 import org.wolkenproject.core.script.OpcodeRegister;
+import org.wolkenproject.core.script.VirtualProcess;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
