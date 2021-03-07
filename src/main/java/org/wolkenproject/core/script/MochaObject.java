@@ -21,6 +21,7 @@ public class MochaObject extends SerializableI {
     public MochaObject(Metadata metadata) {
         this.metadata   = new Metadata();
         this.functions  = new MochaFunction[metadata.getFunctionCount()];
+        this.children   = new MochaObject[metadata.getChildCount()];
     }
 
     public Metadata getMetadata() {
