@@ -19,7 +19,9 @@ public class ClassProvider {
     public MochaClass getDefaultMochaClass() {
         MochaClass mochaClass = new MochaClass();
         mochaClass.setName("MochaObject");
-        addFunction("hashCode", (mem)->{ return new MochaByteArray(mem.popStack().checksum()); });
-        addFunction("toString", (mem)->{ return new MochaString(Base16.encode(mem.popStack().checksum())); });
+        mochaClass.addFunction("hashCode", (mem)->{ return new MochaByteArray(mem.popStack().checksum()); });
+        mochaClass.addFunction("toString", (mem)->{ return new MochaString(Base16.encode(mem.popStack().checksum())); });
+
+        return mochaClass;
     }
 }
