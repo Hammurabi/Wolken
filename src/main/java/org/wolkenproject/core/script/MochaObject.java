@@ -14,9 +14,13 @@ public class MochaObject {
     }
 
     public MochaObject(VirtualMachine virtualMachine, char metadata) {
+        this(virtualMachine, virtualMachine.getMetadataProvider().get(metadata));
     }
 
     public MochaObject(VirtualMachine virtualMachine, Metadata metadata) {
+        this.metadata   = new Metadata();
+        this.functions  = new MochaFunction[virtualMachine.getClassMetadata()];
+        this.children   = new MochaObject[metadata.getChildCount()];
     }
 
     public Metadata getMetadata() {
