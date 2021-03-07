@@ -62,11 +62,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
     public boolean add(T t) {
         Entry<T> entry = new Entry<>();
         entry.element   = t;
-        try {
-            entry.hash      = t.checksum();
-        } catch (IOException e) {
-            entry.hash      = t.asByteArray();
-        }
+        entry.hash      = t.checksum();
 
         boolean contained   = entryMap.containsKey(entry.hash);
 
@@ -81,11 +77,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
     @Override
     public boolean remove(Object o) {
         byte checksum[] = null;
-        try {
-            checksum        = ((T) o).checksum();
-        } catch (IOException e) {
-            checksum        = ((T) o).asByteArray();
-        }
+        checksum        = ((T) o).checksum();
 
         boolean contained   = entryMap.containsKey(checksum);
         entryMap.remove(checksum);
