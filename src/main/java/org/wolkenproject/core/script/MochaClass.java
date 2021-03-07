@@ -27,6 +27,10 @@ public class MochaClass {
             return functions.get(function).getFirst();
         }
 
+        if (parent != null) {
+            return parent.getFunction(function);
+        }
+
         return -1;
     }
 }
