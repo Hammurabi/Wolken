@@ -9,13 +9,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Metadata extends SerializableI {
+    private int memberCount;
+    private int functionCount;
 
     public int getMemberCount() {
-        return 0;
+        return memberCount;
     }
 
     public int getFunctionCount() {
-        return 0;
+        return functionCount;
     }
 
 
