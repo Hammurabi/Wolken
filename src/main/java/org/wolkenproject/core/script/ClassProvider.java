@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.UndefClassException;
 
 import java.util.Map;
@@ -13,5 +14,12 @@ public class ClassProvider {
         }
 
         return metadataMap.get(metadata);
+    }
+
+    public MochaClass getDefaultMochaClass() {
+        MochaClass mochaClass = new MochaClass();
+        mochaClass.setName("MochaObject");
+        addFunction("hashCode", (mem)->{ return new MochaByteArray(mem.popStack().checksum()); });
+        addFunction("toString", (mem)->{ return new MochaString(Base16.encode(mem.popStack().checksum())); });
     }
 }
