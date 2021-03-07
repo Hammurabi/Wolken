@@ -10,21 +10,21 @@ public class MochaObject {
     private MochaFunction           functions[];
     private MochaObject             members[];
 
-    public MochaObject(VirtualMachine virtualMachine) throws UndefClassException {
-        this(virtualMachine, DefaultMetadata);
+    public MochaObject(VirtualProcess virtualProcess) throws UndefClassException {
+        this(virtualProcess, DefaultMetadata);
     }
 
-    public MochaObject(VirtualMachine virtualMachine, char metadata) throws UndefClassException {
-        this(virtualMachine.getClassProvider().getClass(metadata));
+    public MochaObject(VirtualProcess virtualProcess, int metadata) throws UndefClassException {
+        this(virtualProcess, virtualProcess.getClassProvider().getClass(metadata));
     }
 
-    public MochaObject(MochaClass mochaClass) {
+    public MochaObject(VirtualProcess virtualProcess, MochaClass mochaClass) {
         this.mochaClass = mochaClass;
         this.functions  = new MochaFunction[mochaClass.getFunctionCount()];
         this.members    = new MochaObject[mochaClass.getMemberCount()];
 
         mochaClass.populateFunctions(functions);
-        mochaClass.populateMembers(members);
+        mochaClass.populateMembers(virtualProcess, members);
     }
 
     public MochaFunction getFunction(int functionId) throws UndefFunctionException {
