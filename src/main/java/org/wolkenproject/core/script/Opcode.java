@@ -19,6 +19,9 @@ public abstract class Opcode extends SerializableI {
         this.desc = desc;
     }
 
+    // return false for halt type opcodes.
+    public abstract boolean execute(VirtualProcess virtualProcess);
+
     public int getIdentifier() {
         return identifier;
     }
