@@ -14,7 +14,7 @@ public class OpcodeList extends SerializableI {
     // reduce the cost of transactions.
 
     // contains bits from arguments
-    private long argumentBits;
+    private long argumentBits[];
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
