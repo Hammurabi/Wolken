@@ -2,7 +2,7 @@ package org.wolkenproject.core.script;
 
 public abstract class VirtualMachine {
     private OpcodeRegister      opcodeRegister;
-    private MetadataProvider    metadataProvider;
+    private ClassProvider       metadataProvider;
     private MemoryModule        memoryModule;
 
     public abstract void executeScript(Script script);
@@ -19,7 +19,7 @@ public abstract class VirtualMachine {
         return memoryModule.getState();
     }
 
-    public MetadataProvider getMetadataProvider() {
+    public ClassProvider getClassProvider() {
         return metadataProvider;
     }
 }
