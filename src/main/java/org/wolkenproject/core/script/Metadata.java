@@ -10,6 +10,14 @@ import java.io.OutputStream;
 
 public class Metadata extends SerializableI {
 
+    public int getMemberCount() {
+        return 0;
+    }
+
+    public int getFunctionCount() {
+        return 0;
+    }
+
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
