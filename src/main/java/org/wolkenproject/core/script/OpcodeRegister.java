@@ -23,4 +23,8 @@ public class OpcodeRegister {
 
         return this;
     }
+
+    public int opCound() {
+        return opcodeList.size();
+    }
 }
