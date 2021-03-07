@@ -10,18 +10,25 @@ import java.io.OutputStream;
 
 public class MochaObject extends SerializableI {
     public static final Metadata DefaultMetadata = new Metadata();
-    private Metadata metadata;
+    private Metadata                metadata;
+    private MochaFunction           functions[];
+    private MochaObject             children[];
 
     public MochaObject() {
         this(new Metadata(DefaultMetadata));
     }
 
     public MochaObject(Metadata metadata) {
-        this.metadata = new Metadata();
+        this.metadata   = new Metadata();
+        this.functions  = new MochaFunction[metadata.getFunctionCount()];
     }
 
     public Metadata getMetadata() {
         return metadata;
+    }
+
+    public MochaObject default__hashCode() {
+        return
     }
 
     @Override
