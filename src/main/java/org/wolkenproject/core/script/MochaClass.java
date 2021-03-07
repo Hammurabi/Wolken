@@ -22,6 +22,9 @@ public class MochaClass {
     public void populateFunctions(MochaFunction functions[]) {
     }
 
+    public void populateMembers(MochaObject[] members) {
+    }
+
     // call any functions defined in this class by name
     public int getFunction(String function) {
         if (functions.containsKey(function)) {
