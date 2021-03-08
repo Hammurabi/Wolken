@@ -13,6 +13,8 @@ public class BitFields {
         bitField.name   = name;
         bitField.length = length;
 
+        fields.add(bitField);
+
         return this;
     }
 
