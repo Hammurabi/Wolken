@@ -25,6 +25,7 @@ public class OpcodeList {
         int counter = 0;
         int argCount= 0;
 
+
         while ((counter + argCount) < opcodes.length) {
             int opcodeValue = Byte.toUnsignedInt(opcodes[counter ++]);
             Opcode opcode = register.getOpcode(opcodeValue);
