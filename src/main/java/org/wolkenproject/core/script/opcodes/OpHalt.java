@@ -25,6 +25,6 @@ public class OpHalt extends Opcode {
 
     @Override
     public Opcode makeCopy() {
-        return null;
+        return new OpHalt();
     }
 }
