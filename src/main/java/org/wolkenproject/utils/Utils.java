@@ -274,4 +274,8 @@ public class Utils {
     {
         return (byt >> position) & 1;
     }
+
+    public static int makeByte(byte[] buffer) {
+        return 0;
+    }
 }
