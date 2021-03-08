@@ -22,6 +22,6 @@ public class BitInputStream extends InputStream {
         int byteAddress = location / 8;
         int bitAddress  = location % 8;
 
-        return array[location];
+        return Utils.getBit(array[location], bitAddress);
     }
 }
