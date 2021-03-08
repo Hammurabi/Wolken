@@ -1,16 +1,12 @@
 package org.wolkenproject.core;
 
-import org.bouncycastle.util.Arrays;
 import org.wolkenproject.core.script.*;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
 import org.wolkenproject.serialization.SerializationFactory;
-import org.wolkenproject.utils.BitInputStream;
-import org.wolkenproject.utils.BitOutputStream;
 import org.wolkenproject.utils.FileService;
-import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -160,7 +156,7 @@ public class Context {
                                                     , "set or get (and jump) a jump location.", null);
 
 
-        System.out.println(virtualMachine.opCound());
+        System.out.println(virtualMachine.opCount());
 //        virtualMachine.addOp("push", true, 0, 0, "push x amount of bytes into the stack", null);
 //        virtualMachine.addOp("pop", false, 0, 0, "pop item from the stack", null);
     }
