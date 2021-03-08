@@ -49,6 +49,9 @@ public class BitInputStream extends InputStream {
     }
 
     public byte[] getBitsAsByteArray(int length) throws IOException {
+        byte array[] = new byte[(int) Math.ceil(length / 8.0)];
+        int offset = (array.length * 8) - length;
+        
         return new byte[0];
     }
 }
