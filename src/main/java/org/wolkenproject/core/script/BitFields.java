@@ -31,8 +31,8 @@ public class BitFields {
         private int     length;
         private BitCondition conditions[];
 
-        public int getValue(BitInputStream inputStream) {
-            return 0;
+        public byte[] getValue(BitInputStream inputStream) {
+            return inputStream.getBitsAsByteArray(length);
         }
     }
 
