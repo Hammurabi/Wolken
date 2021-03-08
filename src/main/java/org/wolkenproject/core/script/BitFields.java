@@ -12,6 +12,7 @@ public class BitFields {
         BitField bitField = new BitField();
         bitField.name   = name;
         bitField.length = length;
+        bitField.conditions = conditions;
 
         fields.add(bitField);
 
