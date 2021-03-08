@@ -81,7 +81,7 @@ public class Context {
 
         virtualMachine.registerOp("halt", "halt process and all sub processes", (proc)->{proc.stopProcess(0);});
         virtualMachine.registerOp("push", new BitFields()
-                                                    .addField(2, "arg", (){})
+                                                    .addField(2, "arg", (stream, )->{})
                                                     , "push an array of size x into the stack.", null);
 
         virtualMachine.registerOp("bconst", "push an int of size [  8 ] into the stack.", null);
