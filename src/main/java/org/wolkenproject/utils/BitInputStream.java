@@ -19,6 +19,9 @@ public class BitInputStream extends InputStream {
             return -1;
         }
 
-        return 0;
+        int byteAddress = location / 8;
+        int bitAddress  = location % 8;
+
+        return array[location];
     }
 }
