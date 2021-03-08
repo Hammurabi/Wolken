@@ -8,7 +8,7 @@ import org.wolkenproject.utils.BitOutputStream;
 public class OpPush extends Opcode {
     @Override
     public void execute(VirtualProcess virtualProcess) {
-        
+
     }
 
     @Override
@@ -23,6 +23,6 @@ public class OpPush extends Opcode {
 
     @Override
     public Opcode makeCopy() {
-        return null;
+        return new OpPush();
     }
 }
