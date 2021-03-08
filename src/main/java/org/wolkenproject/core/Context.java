@@ -105,7 +105,7 @@ public class Context {
         virtualMachine.registerOp("bconst", "push an int of size [  8 ] into the stack.", null);
         virtualMachine.registerOp("iconst",  new BitFields()
                                                     .addField(1, "sign")
-                                                    .addField(31, "value")
+                                                    .addField(32, "value")
                                                     , "push an int of size [ 32 ] into the stack.", null);
         virtualMachine.registerOp("lconst", "push an int of size [ 64 ] into the stack.", null);
 
