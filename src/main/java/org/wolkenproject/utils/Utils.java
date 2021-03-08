@@ -275,6 +275,11 @@ public class Utils {
         return (byt >> position) & 1;
     }
 
+    public static int setBit(byte byt, int position)
+    {
+        return byt | 1 << position;
+    }
+
     public static int makeByte(byte[] buffer) {
         return 0;
     }
