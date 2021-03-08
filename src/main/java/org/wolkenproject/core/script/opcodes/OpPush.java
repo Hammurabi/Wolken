@@ -6,8 +6,15 @@ import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
 
 public class OpPush extends Opcode {
+    private byte array[];
+
     public OpPush() {
+        this(new byte[0]);
+    }
+
+    public OpPush(byte array[]) {
         super("push", "push 'x' into the stack", "push [arg] [value]");
+        this.array = array;
     }
 
     @Override
