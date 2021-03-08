@@ -76,6 +76,6 @@ public class MochaClass {
     }
 
     public MochaObject newInstanceNative(VirtualProcess virtualProcess, Object... objects) {
-        return null;
+        return newInstance(virtualProcess);
     }
 }
