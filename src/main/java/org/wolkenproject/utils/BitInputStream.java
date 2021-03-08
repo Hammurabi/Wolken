@@ -65,4 +65,21 @@ public class BitInputStream extends InputStream {
 
         return array;
     }
+
+    public byte[] readBitsAsByteArray(byte array[]) throws IOException {
+        int offset = (array.length * 8) - array.length;
+
+        for (int i = offset; i < array.length * 8; i ++) {
+            int byteAddress = i / 8;
+            int bitAddress  = i % 8;
+            int read = read();
+            if (read < 0) {
+                throw new IOException("not enough bits remaining.");
+            }
+
+            Utils.setBit(array[byteAddress], bitAddress, read);
+        }
+
+        return array;
+    }
 }
