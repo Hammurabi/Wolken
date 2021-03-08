@@ -81,25 +81,7 @@ public class Context {
 
         virtualMachine.registerOp("halt", "halt process and all sub processes", (proc)->{proc.stopProcess(0);});
         virtualMachine.registerOp("push", new BitFields()
-                                                    .addField(4, "arg")
-                                                    .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a default value
-                                                    .addCond(1, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a byte
-                                                    .addCond(2, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a short
-                                                    .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // an int
-                                                    .addCond(8, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a long
-                                                    .addCond(8, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a 'fixed' number
-                                                    .addCond(20, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a 20 byte array
-                                                    .addCond(25, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a 25 byte array
-                                                    .addCond(32, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a 32 byte array
-                                                    .addCond(0, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "type") // a var-sized array
-                                                    , "push x amount of bytes to the stack", null);
-
-        virtualMachine.registerOp("push", new BitFields()
-                                                    .addField(2, "arg")
-                                                    .addCond(6, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "id")
-                                                    .addCond(8, (idx, prev, next, self)->{ return prev.getValue() == 1; }, "id")
-                                                    .addCond(12, (idx, prev, next, self)->{ return prev.getValue() == 2; }, "id")
-                                                    .addCond(16, (idx, prev, next, self)->{ return prev.getValue() == 3; }, "id")
+                                                    .addField(2, "arg", (){})
                                                     , "push an array of size x into the stack.", null);
 
         virtualMachine.registerOp("bconst", "push an int of size [  8 ] into the stack.", null);
