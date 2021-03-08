@@ -43,5 +43,9 @@ public class ClassProvider {
         defaultClass.addFunction("getClassName", (proc)->{ return null; });
 
         registerClass(defaultClass);
+
+        MochaClass arrayClass = new MochaClass(defaultClass);
+        arrayClass.setName("Array");
+        registerClass(arrayClass);
     }
 }
