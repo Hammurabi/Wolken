@@ -37,26 +37,9 @@ public class ClassProvider {
     private void setDefaultMochaClass() {
         MochaClass defaultClass = new MochaClass(null);
         defaultClass.setName("Object");
-        defaultClass.addFunction("hashCode", new MochaFunction() {
-            @Override
-            public MochaObject execute(MemoryModule memoryModule) {
-                return null;
-            }
-        });
-        defaultClass.addFunction("toString", new MochaFunction() {
-            @Override
-            public MochaObject execute(MemoryModule memoryModule) {
-                return null;
-            }
-        });
-        defaultClass.addFunction("getClassName", new MochaFunction() {
-            @Override
-            public MochaObject execute(MemoryModule memoryModule) {
-                return null;
-            }
-        });
-
-        registerClass(defaultClass);
+        defaultClass.addFunction("hashCode", (proc)->{ return null; });
+        defaultClass.addFunction("toString", (proc)->{ return null; });
+        defaultClass.addFunction("getClassName", (proc)->{ return null; });
 
         registerClass(defaultClass);
     }
