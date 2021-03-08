@@ -296,6 +296,6 @@ public class Utils {
     }
 
     public static int makeByte(byte[] buffer) {
-        return setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) 0, 7, buffer[7]), 6, buffer[6]), 5, buffer[5]), 4, buffer[4]), 3, buffer[3]), 2, buffer[2]), 1, buffer[1]), 0, buffer[0]);
+        return Byte.toUnsignedInt((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) 0, 7, buffer[7]), 6, buffer[6]), 5, buffer[5]), 4, buffer[4]), 3, buffer[3]), 2, buffer[2]), 1, buffer[1]), 0, buffer[0]));
     }
 }
