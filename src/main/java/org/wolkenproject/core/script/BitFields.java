@@ -1,6 +1,7 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.utils.BitInputStream;
+import org.wolkenproject.utils.BitOutputStream;
 import org.wolkenproject.utils.Handler;
 
 import java.io.IOException;
@@ -63,11 +64,13 @@ public class BitFields {
             return false;
         }
 
-        public default boolean write(BitInputStream inputStream, Handler<byte[]> value) throws IOException {
+        public default boolean write(BitOutputStream outputStream, Handler<byte[]> value, byte writeValue[]) throws IOException {
             AtomicInteger out = new AtomicInteger(0);
 
             if (get(value, out)) {
                 int length = out.get();
+
+                outputStream.writeBitsFromBytes(writeValue, length);
                 value.set(inputStream.getBitsAsByteArray(length));
 
                 return true;
