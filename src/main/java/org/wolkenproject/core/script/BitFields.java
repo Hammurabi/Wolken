@@ -69,9 +69,7 @@ public class BitFields {
 
             if (get(value, out)) {
                 int length = out.get();
-
                 outputStream.writeBitsFromBytes(writeValue, length);
-                value.set(inputStream.getBitsAsByteArray(length));
 
                 return true;
             }
