@@ -56,11 +56,12 @@ public class BitInputStream extends InputStream {
             int byteAddress = i / 8;
             int bitAddress  = i % 8;
             int read = read();
+
             if (read < 0) {
                 throw new IOException("not enough bits remaining.");
             }
 
-            Utils.setBit(array[byteAddress], bitAddress, read);
+            array[byteAddress] = (byte) Utils.setBit(array[byteAddress], bitAddress, read);
         }
 
         return array;
