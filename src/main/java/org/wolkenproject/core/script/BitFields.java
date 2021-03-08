@@ -33,11 +33,21 @@ public class BitFields {
         private BitCondition conditions[];
 
         public byte[] getValue(BitInputStream inputStream) throws IOException {
-            return inputStream.getBitsAsByteArray(length);
+            byte array[] = inputStream.getBitsAsByteArray(length);
+
+            if (conditions != null) {
+                for (BitCondition condition : conditions) {
+                    if (condition.get(inputStream, array)) {
+                        return array;
+                    }
+                }
+            }
+
+            return array;
         }
     }
 
     public static interface BitCondition {
-        public boolean get(int value);
+        public boolean get(BitInputStream inputStream, byte value[]);
     }
 }
