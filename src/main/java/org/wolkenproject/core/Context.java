@@ -105,15 +105,29 @@ public class Context {
                                                     })
                                                     , "push an array of size x into the stack.", null);
 
-        virtualMachine.registerOp("bconst", "push an int of size [  8 ] into the stack.", null);
         virtualMachine.registerOp("iconst",  new BitFields()
                                                     .addField(1, "sign")
-                                                    .addField(32, "value")
-                                                    , "push an int of size [ 32 ] into the stack.", null);
-        virtualMachine.registerOp("lconst", "push an int of size [ 64 ] into the stack.", null);
+                                                    .addField(2, "length", (a, b)->{
+                                                        switch (a.get()[0]) {
+                                                            case 0:
+                                                                b.set(5);
+                                                                return true;
+                                                            case 1:
+                                                                b.set(16);
+                                                                return true;
+                                                            case 2:
+                                                                b.set(32);
+                                                                return true;
+                                                            case 3:
+                                                                b.set(64);
+                                                                return true;
+                                                            default:
+                                                                return false;
+                                                        }
+                                                    })
+                                                    , "push an int into the stack.", null);
 
         virtualMachine.registerOp("fconst", "push a fixed float of size [ 32 ] into the stack.", null);
-        virtualMachine.registerOp("dconst", "push a fixed float of size [ 64 ] into the stack.", null);
 
         virtualMachine.registerOp("aconst", "push an address of size [ 200 ] into the stack.", null);
         virtualMachine.registerOp("aaconst", "push an array of max length [ 16 ] bits into the stack.", null);
