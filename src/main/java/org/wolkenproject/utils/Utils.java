@@ -270,7 +270,7 @@ public class Utils {
         return concatenate(fillArray(new byte[padCount], (byte) padValue), bytes);
     }
 
-    public static int getBit(byte byt, int position)
+    public static int getBit(int byt, int position)
     {
         return (byt >> position) & 1;
     }
@@ -292,7 +292,7 @@ public class Utils {
 
     public static int setBit(byte byt, int position, int value)
     {
-        return byt ^= (-value ^ byt) & (1 << position);
+        return byt ^= (-(value & 1) ^ byt) & (1 << position);
     }
 
     public static int makeByte(byte[] buffer) {
