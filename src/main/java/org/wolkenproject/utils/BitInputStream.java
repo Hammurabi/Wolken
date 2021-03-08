@@ -35,4 +35,7 @@ public class BitInputStream extends InputStream {
 
         return Utils.makeByte(buffer);
     }
+
+    public boolean hasRemaining() {
+    }
 }
