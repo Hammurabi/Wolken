@@ -21,6 +21,8 @@ public class OpcodeList {
     }
 
     public void read(OpcodeRegister register, byte opcodes[]) {
-        
+    }
+
+    private void read(OpcodeRegister register, byte opcodes[]) {
     }
 }
