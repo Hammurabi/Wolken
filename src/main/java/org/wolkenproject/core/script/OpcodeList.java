@@ -26,8 +26,8 @@ public class OpcodeList {
         int argCount= 0;
 
 
-        while (inputStream.hasRemaining()) {
-            int opcodeValue = Byte.toUnsignedInt(inputStream.readByte());
+        while (inputStream.remainingBytes() > 1) {
+            int opcodeValue = inputStream.readByte();
             Opcode opcode = register.getOpcode(opcodeValue);
             if (opcode == null) {
                 throw new InvalidOpcodeException("invalid opcode '" + opcodeValue + "'.");
