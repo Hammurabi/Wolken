@@ -292,7 +292,7 @@ public class Utils {
 
     public static int setBit(int byt, int position, int value)
     {
-        return byt ^= (-(value & 1) ^ byt) & (1 << position);
+        return byt ^ (-(value & 1) ^ byt) & (1 << position);
     }
 
     public static int makeByte(byte[] buffer) {
