@@ -282,7 +282,12 @@ public class Utils {
 
     public static int clearBit(byte byt, int position)
     {
-        return byt &= ~(1 << position);
+        return byt & ~(1 << position);
+    }
+
+    public static int toggleBit(byte byt, int position)
+    {
+        return byt ^ ~(1 << position);
     }
 
     public static int makeByte(byte[] buffer) {
