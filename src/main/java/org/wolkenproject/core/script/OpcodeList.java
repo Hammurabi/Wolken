@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.exceptions.InvalidOpcodeException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 
@@ -25,6 +26,9 @@ public class OpcodeList {
 
         while (counter < opcodes.length) {
             Opcode opcode = register.getOpcode(opcodes[counter ++]);
+            if (opcode == null) {
+                throw new InvalidOpcodeException();
+            }
         }
     }
 }
