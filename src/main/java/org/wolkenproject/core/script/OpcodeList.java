@@ -3,6 +3,7 @@ package org.wolkenproject.core.script;
 import org.wolkenproject.exceptions.InvalidOpcodeException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.BitInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,22 +15,24 @@ public class OpcodeList {
     // way for storage/network transfers to help
     // reduce the cost of transactions.
 
-    // contains bits from arguments
-    private long    argumentBits[];
     private Opcode  opcodes[];
 
     public OpcodeList() {
     }
 
     public void read(OpcodeRegister register, byte opcodes[]) throws InvalidOpcodeException {
+        BitInputStream inputStream = new BitInputStream(opcodes);
         int counter = 0;
+        int argCount= 0;
 
-        while (counter < opcodes.length) {
+        while ((counter + argCount) < opcodes.length) {
             int opcodeValue = Byte.toUnsignedInt(opcodes[counter ++]);
             Opcode opcode = register.getOpcode(opcodeValue);
             if (opcode == null) {
                 throw new InvalidOpcodeException("invalid opcode '" + opcodeValue + "'.");
             }
+
+            argCount
         }
     }
 }
