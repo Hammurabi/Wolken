@@ -275,27 +275,32 @@ public class Utils {
         return (byt >> position) & 1;
     }
 
-    public static int setBit(byte byt, int position)
+    public static int setBit(int byt, int position)
     {
         return byt | 1 << position;
     }
 
-    public static int clearBit(byte byt, int position)
+    public static int clearBit(int byt, int position)
     {
         return byt & ~(1 << position);
     }
 
-    public static int toggleBit(byte byt, int position)
+    public static int toggleBit(int byt, int position)
     {
         return byt ^ ~(1 << position);
     }
 
-    public static int setBit(byte byt, int position, int value)
+    public static int setBit(int byt, int position, int value)
     {
         return byt ^= (-(value & 1) ^ byt) & (1 << position);
     }
 
     public static int makeByte(byte[] buffer) {
-        return Byte.toUnsignedInt((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) setBit((byte) 0, 7, buffer[7]), 6, buffer[6]), 5, buffer[5]), 4, buffer[4]), 3, buffer[3]), 2, buffer[2]), 1, buffer[1]), 0, buffer[0]));
+        int value = 0;
+        for (int i = 0; i < buffer.length; i ++) {
+            value = setBit(value, i, buffer[i]);
+        }
+
+        return value;
     }
 }
