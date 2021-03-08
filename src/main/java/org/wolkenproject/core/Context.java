@@ -81,7 +81,24 @@ public class Context {
 
         virtualMachine.registerOp("halt", "halt process and all sub processes", (proc)->{proc.stopProcess(0);});
         virtualMachine.registerOp("push", new BitFields()
-                                                    .addField(2, "arg", (stream, )->{})
+                                                    .addField(2, "arg", (s, v)->{
+                                                        switch (s.get()[0]) {
+                                                            case 0:
+                                                                v.set(6);
+                                                                return true;
+                                                            case 1:
+                                                                v.set(12);
+                                                                return true;
+                                                            case 2:
+                                                                v.set(16);
+                                                                return true;
+                                                            case 3:
+                                                                v.set(24);
+                                                                return true;
+                                                            default:
+                                                                return false;
+                                                        }
+                                                    })
                                                     , "push an array of size x into the stack.", null);
 
         virtualMachine.registerOp("bconst", "push an int of size [  8 ] into the stack.", null);
