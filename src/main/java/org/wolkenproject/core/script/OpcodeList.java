@@ -20,14 +20,14 @@ public class OpcodeList {
     public OpcodeList() {
     }
 
-    public void read(OpcodeRegister register, byte opcodes[]) throws InvalidOpcodeException {
+    public void read(OpcodeRegister register, byte opcodes[]) throws InvalidOpcodeException, IOException {
         BitInputStream inputStream = new BitInputStream(opcodes);
         int counter = 0;
         int argCount= 0;
 
 
-        while ((counter + argCount) < opcodes.length) {
-            int opcodeValue = Byte.toUnsignedInt(opcodes[counter ++]);
+        while (inputStream.hasRemaining()) {
+            int opcodeValue = Byte.toUnsignedInt(inputStream.readByte());
             Opcode opcode = register.getOpcode(opcodeValue);
             if (opcode == null) {
                 throw new InvalidOpcodeException("invalid opcode '" + opcodeValue + "'.");
