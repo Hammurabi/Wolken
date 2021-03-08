@@ -12,7 +12,6 @@ public class BitFields {
         BitField bitField = new BitField();
         bitField.name   = name;
         bitField.length = length;
-        fields.add(new Tuple<>(totalBits, name));
 
         return this;
     }
@@ -25,7 +24,7 @@ public class BitFields {
         private String  name;
         private int     length;
         private BitCondition conditions[];
-        
+
         public int getValue(BitInputStream inputStream) {
             return 0;
         }
