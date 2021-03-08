@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 import org.wolkenproject.exceptions.UndefClassException;
 import org.wolkenproject.exceptions.UndefFunctionException;
+import org.wolkenproject.exceptions.UndefMemberException;
 
 public class MochaObject {
     public static final char        DefaultMetadata = 0;
@@ -35,9 +36,9 @@ public class MochaObject {
         return functions[functionId];
     }
 
-    public MochaObject getMember(int memberId) throws UndefClassException {
+    public MochaObject getMember(int memberId) throws UndefMemberException {
         if (memberId >= members.length) {
-            throw new UndefClassException("no member '" + memberId + "' found.");
+            throw new UndefMemberException("no member '" + memberId + "' found.");
         }
 
         return members[memberId];
@@ -45,5 +46,13 @@ public class MochaObject {
 
     public MochaClass getMochaClass() {
         return mochaClass;
+    }
+
+    public void setMember(int memberId, MochaObject object) throws UndefMemberException {
+        if (memberId >= members.length) {
+            throw new UndefMemberException("no member '" + memberId + "' found.");
+        }
+
+        members[memberId] = object;
     }
 }
