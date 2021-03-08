@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.UndefClassException;
 import org.wolkenproject.utils.HashUtil;
 
@@ -65,7 +66,7 @@ public class ClassProvider {
 
         MochaClass arrayClass = new MochaClass(defaultClass);
         arrayClass.setName("Array");
-        arrayClass.addFunction("append", (proc)->{ return null; });
+        arrayClass.addFunction("append", (proc)->{ MochaObject append = proc.getMemoryModule().getStack().pop(); MochaObject self = proc.getMemoryModule().getStack().pop(); if (!append.equals(self)) { append.append(append); } throw new MochaException("cannot append self to array."); });
         arrayClass.addFunction("pop", (proc)->{ return null; });
         arrayClass.addFunction("len", (proc)->{ return null; });
         arrayClass.addFunction("reshape", (proc)->{ return null; });
