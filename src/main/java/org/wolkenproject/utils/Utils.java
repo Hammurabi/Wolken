@@ -269,4 +269,9 @@ public class Utils {
     public static byte[] pad(int padCount, int padValue, byte[] bytes) {
         return concatenate(fillArray(new byte[padCount], (byte) padValue), bytes);
     }
+
+    public static int getBit(byte byt, int position)
+    {
+        return (byt >> position) & 1;
+    }
 }
