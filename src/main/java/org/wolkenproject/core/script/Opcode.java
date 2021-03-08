@@ -1,5 +1,7 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.utils.BitInputStream;
+
 public class Opcode {
     private int             identifier;
     private BitFields       args;
@@ -36,6 +38,10 @@ public class Opcode {
 
     public void setExecutor(OpcodeExecutor executor) {
         this.executor = executor;
+    }
+
+    public OpArgs takeArguments(BitInputStream inputStream) {
+        return args.getArguments(inputStream);
     }
 
 //    @Override
