@@ -15,7 +15,7 @@ public class BitInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         int location = index ++;
-        if ((location * 8) >= array.length) {
+        if (location >= array.length * 8) {
             return -1;
         }
 
@@ -37,5 +37,6 @@ public class BitInputStream extends InputStream {
     }
 
     public boolean hasRemaining() {
+        return index < array.length * 8;
     }
 }
