@@ -14,6 +14,11 @@ public class BitInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
+        int location = index ++;
+        if ((location * 8) >= array.length) {
+            return -1;
+        }
+
         return 0;
     }
 }
