@@ -7,7 +7,7 @@ import org.wolkenproject.utils.BitOutputStream;
 
 public class OpPush extends Opcode {
     public OpPush() {
-        super(name, desc, usage);
+        super("push", "push 'x' into the stack", "push [arg] [value]");
     }
 
     @Override
