@@ -48,6 +48,6 @@ public class BitFields {
     }
 
     public static interface BitCondition {
-        public boolean get(BitInputStream inputStream, byte value[]);
+        public boolean get(BitInputStream inputStream, byte value[]) throws IOException;
     }
 }
