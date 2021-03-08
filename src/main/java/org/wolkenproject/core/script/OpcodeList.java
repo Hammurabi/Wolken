@@ -33,7 +33,7 @@ public class OpcodeList {
                 throw new InvalidOpcodeException("invalid opcode '" + opcodeValue + "'.");
             }
 
-            opcode.takeArguments()
+            opcode.takeArguments(inputStream);
         }
     }
 }
