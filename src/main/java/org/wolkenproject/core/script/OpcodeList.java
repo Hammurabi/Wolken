@@ -24,6 +24,7 @@ public class OpcodeList {
         int counter = 0;
 
         while (counter < opcodes.length) {
+            Opcode opcode = register.getOpcode(opcodes[counter ++]);
         }
     }
 }
