@@ -27,6 +27,12 @@ public class BitOutputStream extends OutputStream {
         }
     }
 
+    public void write(int x, int bits) throws IOException {
+        for (int i = 0; i < bits; i ++) {
+            write(Utils.getBit(x, i));
+        }
+    }
+
     @Override
     public void flush() throws IOException {
         super.flush();
