@@ -37,4 +37,7 @@ public class BitOutputStream extends OutputStream {
         current = 0;
         index = 0;
     }
+
+    public void writeBitsFromBytes(byte[] bytes, int length) {
+    }
 }
