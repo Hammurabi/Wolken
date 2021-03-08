@@ -48,6 +48,20 @@ public class BitFields {
 
             return array.get();
         }
+
+        public void setValue(BitOutputStream outputStream, byte value[], byte totalValue[]) throws IOException {
+            Handler<byte[]> array = new Handler<>(value);
+
+            if (conditions != null) {
+                for (BitCondition condition : conditions) {
+                    if (condition.write(outputStream, array, totalValue)) {
+                        return;
+                    }
+                }
+            }
+
+            outputStream.writeBitsFromBytes(totalValue, totalValue.length * 8);
+        }
     }
 
     public static interface BitCondition {
