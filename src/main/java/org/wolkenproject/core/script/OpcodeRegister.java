@@ -26,6 +26,10 @@ public class OpcodeRegister {
         return this;
     }
 
+    public Opcode getOpcode(int opcode) {
+        return null;
+    }
+
     public int opCound() {
         return opcodeList.size();
     }
