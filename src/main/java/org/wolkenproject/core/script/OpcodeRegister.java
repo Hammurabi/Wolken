@@ -30,7 +30,7 @@ public class OpcodeRegister {
         return null;
     }
 
-    public int opCound() {
+    public int opCount() {
         return opcodeList.size();
     }
 }
