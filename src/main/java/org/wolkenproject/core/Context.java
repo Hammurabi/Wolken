@@ -1,6 +1,8 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.script.*;
+import org.wolkenproject.core.script.opcodes.OpHalt;
+import org.wolkenproject.core.script.opcodes.OpPush;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
@@ -79,27 +81,8 @@ public class Context {
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
 
-        virtualMachine.registerOp("halt", "halt process and all sub processes", (proc)->{proc.stopProcess(0);});
-        virtualMachine.registerOp("push", new BitFields()
-                                                    .addField(2, "arg", (s, v)->{
-                                                        switch (s.get()[0]) {
-                                                            case 0:
-                                                                v.set(6);
-                                                                return true;
-                                                            case 1:
-                                                                v.set(12);
-                                                                return true;
-                                                            case 2:
-                                                                v.set(16);
-                                                                return true;
-                                                            case 3:
-                                                                v.set(24);
-                                                                return true;
-                                                            default:
-                                                                return false;
-                                                        }
-                                                    })
-                                                    , "push an array of size x into the stack.", null);
+        virtualMachine.registerOp(new OpHalt());
+        virtualMachine.registerOp(new OpPush());
 
         virtualMachine.registerOp("iconst",  new BitFields()
                                                     .addField(1, "sign")
