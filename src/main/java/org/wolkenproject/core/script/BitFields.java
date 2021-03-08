@@ -1,6 +1,7 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.utils.BitInputStream;
+import org.wolkenproject.utils.Handler;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,27 +35,27 @@ public class BitFields {
         private BitCondition conditions[];
 
         public byte[] getValue(BitInputStream inputStream) throws IOException {
-            byte array[] = inputStream.getBitsAsByteArray(length);
+            Handler<byte[]> array = new Handler<>(inputStream.getBitsAsByteArray(length));
 
             if (conditions != null) {
                 for (BitCondition condition : conditions) {
-                    if (condition.get(inputStream, array)) {
-                        return array;
+                    if (condition.read(inputStream, array)) {
+                        return array.get();
                     }
                 }
             }
 
-            return array;
+            return array.get();
         }
     }
 
     public static interface BitCondition {
-        public default boolean read(BitInputStream inputStream, byte value[]) throws IOException {
+        public default boolean read(BitInputStream inputStream, Handler<byte[]> value) throws IOException {
             AtomicInteger out = new AtomicInteger(0);
 
             if (get(value, out)) {
                 int length = out.get();
-                inputStream.readBitsAsByteArray(value);
+                value.set(inputStream.getBitsAsByteArray(length));
 
                 return true;
             }
@@ -62,6 +63,6 @@ public class BitFields {
             return false;
         }
 
-        public boolean get(byte value[], AtomicInteger out) throws IOException;
+        public boolean get(Handler<byte[]> value, AtomicInteger out) throws IOException;
     }
 }
