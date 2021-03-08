@@ -23,8 +23,18 @@ public class BitOutputStream extends OutputStream {
         if (offset == 0) {
             stream.write(current);
             current = 0;
+            index = 1;
+            offset = index % 8;
         }
 
         current = (byte) Utils.setBit(current, offset - 1, i);
+    }
+
+    @Override
+    public void flush() throws IOException {
+        super.flush();
+        stream.write(current);
+        current = 0;
+        index = 0;
     }
 }
