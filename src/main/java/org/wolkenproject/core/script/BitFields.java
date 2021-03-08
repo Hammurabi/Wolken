@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 import org.wolkenproject.utils.BitInputStream;
 
+import java.io.IOException;
 import java.util.List;
 
 public class BitFields {
@@ -31,7 +32,7 @@ public class BitFields {
         private int     length;
         private BitCondition conditions[];
 
-        public byte[] getValue(BitInputStream inputStream) {
+        public byte[] getValue(BitInputStream inputStream) throws IOException {
             return inputStream.getBitsAsByteArray(length);
         }
     }
