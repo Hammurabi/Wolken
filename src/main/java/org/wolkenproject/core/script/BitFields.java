@@ -1,7 +1,6 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.utils.BitInputStream;
-import org.wolkenproject.utils.Tuple;
 
 import java.util.List;
 
