@@ -37,6 +37,6 @@ public class BitFields {
     }
 
     public static interface BitCondition {
-        public boolean get(int index, BitField previous, BitField next, BitFields self);
+        public boolean get(int value);
     }
 }
