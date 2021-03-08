@@ -74,4 +74,8 @@ public class MochaClass {
 
         return totalMembers;
     }
+
+    public MochaObject newInstanceNative(VirtualProcess virtualProcess, Object... objects) {
+        return null;
+    }
 }
