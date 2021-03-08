@@ -47,4 +47,8 @@ public class BitOutputStream extends OutputStream {
             write(bit);
         }
     }
+
+    public byte[] toByteArray() {
+        return stream.toByteArray();
+    }
 }
