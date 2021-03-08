@@ -7,6 +7,11 @@ public class BitInputStream extends InputStream {
     private byte    array[];
     private int     index;
 
+    public BitInputStream(byte array[]) {
+        this.array  = array;
+        this.index  = 0;
+    }
+
     @Override
     public int read() throws IOException {
         return 0;
