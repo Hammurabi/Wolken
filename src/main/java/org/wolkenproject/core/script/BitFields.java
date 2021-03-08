@@ -8,7 +8,7 @@ import java.util.List;
 public class BitFields {
     private List<BitField>                  fields;
 
-    public BitFields addField(int length, String name) {
+    public BitFields addField(int length, String name, BitCondition ...conditions) {
         BitField bitField = new BitField();
         bitField.name   = name;
         bitField.length = length;
