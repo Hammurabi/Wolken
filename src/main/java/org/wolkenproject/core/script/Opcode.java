@@ -1,5 +1,7 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.exceptions.UndefClassException;
+import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
 
@@ -15,7 +17,7 @@ public abstract class Opcode {
         this.usage= usage;
     }
 
-    public abstract void execute(VirtualProcess virtualProcess);
+    public abstract void execute(VirtualProcess virtualProcess) throws WolkenException;
     public abstract void write(BitOutputStream outputStream);
     public abstract void read(BitInputStream inputStream);
     public abstract Opcode makeCopy();
