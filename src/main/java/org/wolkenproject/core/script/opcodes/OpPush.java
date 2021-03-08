@@ -19,6 +19,7 @@ public class OpPush extends Opcode {
 
     @Override
     public void execute(VirtualProcess virtualProcess) {
+        virtualProcess.getMemoryModule().getStack().push(new )
     }
 
     @Override
