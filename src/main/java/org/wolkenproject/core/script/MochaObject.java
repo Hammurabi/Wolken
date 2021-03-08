@@ -88,4 +88,12 @@ public class MochaObject {
     public int getLength() {
         return members.length;
     }
+
+    public MochaObject reshape(MochaObject shape) {
+        return null;
+    }
+
+    public MochaObject getShape() {
+        return null;
+    }
 }
