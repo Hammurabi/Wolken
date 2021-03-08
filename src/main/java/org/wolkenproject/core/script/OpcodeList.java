@@ -21,5 +21,9 @@ public class OpcodeList {
     }
 
     public void read(OpcodeRegister register, byte opcodes[]) {
+        int counter = 0;
+
+        while (counter < opcodes.length) {
+        }
     }
 }
