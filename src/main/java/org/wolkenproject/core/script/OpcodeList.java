@@ -14,6 +14,13 @@ public class OpcodeList {
     // reduce the cost of transactions.
 
     // contains bits from arguments
-    private long argumentBits[];
-    private Opcode      opcodes[];
+    private long    argumentBits[];
+    private Opcode  opcodes[];
+
+    public OpcodeList() {
+    }
+
+    public void read(OpcodeRegister register, byte opcodes[]) {
+        
+    }
 }
