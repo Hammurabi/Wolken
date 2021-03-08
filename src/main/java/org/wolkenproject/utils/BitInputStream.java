@@ -47,4 +47,8 @@ public class BitInputStream extends InputStream {
     public int remainingBytes() {
         return remainingBits() / 8;
     }
+
+    public byte[] getBitsAsByteArray(int length) throws IOException {
+        return new byte[0];
+    }
 }
