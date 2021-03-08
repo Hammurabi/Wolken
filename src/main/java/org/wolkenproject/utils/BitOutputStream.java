@@ -10,7 +10,7 @@ public class BitOutputStream extends OutputStream {
     private byte                    current;
     private int                     index;
 
-    public BitOutputStream(byte array[]) {
+    public BitOutputStream() {
         this.stream = new ByteArrayOutputStream();
         this.current = 0;
         this.index  = 1;
