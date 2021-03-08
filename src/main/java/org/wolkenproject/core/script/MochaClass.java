@@ -34,7 +34,7 @@ public class MochaClass {
         }
     }
 
-    private MochaObject newInstance(VirtualProcess virtualProcess) {
+    public MochaObject newInstance(VirtualProcess virtualProcess) {
         return new MochaObject(virtualProcess, this);
     }
 
