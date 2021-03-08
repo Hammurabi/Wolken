@@ -63,6 +63,19 @@ public class BitFields {
             return false;
         }
 
+        public default boolean write(BitInputStream inputStream, Handler<byte[]> value) throws IOException {
+            AtomicInteger out = new AtomicInteger(0);
+
+            if (get(value, out)) {
+                int length = out.get();
+                value.set(inputStream.getBitsAsByteArray(length));
+
+                return true;
+            }
+
+            return false;
+        }
+
         public boolean get(Handler<byte[]> value, AtomicInteger out) throws IOException;
     }
 }
