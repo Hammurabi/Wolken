@@ -4,6 +4,8 @@ import org.wolkenproject.exceptions.UndefClassException;
 import org.wolkenproject.exceptions.UndefFunctionException;
 import org.wolkenproject.exceptions.UndefMemberException;
 
+import java.util.Arrays;
+
 public class MochaObject {
     public static final char        DefaultMetadata = 0;
 
@@ -72,5 +74,18 @@ public class MochaObject {
 
         array[members.length] = object;
         members = array;
+    }
+
+    public void pop() {
+        if (members.length <= 1) {
+            members = new MochaObject[0];
+            return;
+        }
+
+        members = Arrays.copyOf(members, members.length - 1);
+    }
+
+    public int getLength() {
+        return members.length;
     }
 }
