@@ -296,6 +296,6 @@ public class Utils {
     }
 
     public static int makeByte(byte[] buffer) {
-        return 0;
+        return setBit((byte) 0, 0, buffer[0]);
     }
 }
