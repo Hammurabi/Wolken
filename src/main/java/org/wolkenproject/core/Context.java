@@ -103,7 +103,10 @@ public class Context {
                                                     , "push an array of size x into the stack.", null);
 
         virtualMachine.registerOp("bconst", "push an int of size [  8 ] into the stack.", null);
-        virtualMachine.registerOp("iconst", "push an int of size [ 32 ] into the stack.", null);
+        virtualMachine.registerOp("iconst",  new BitFields()
+                                                    .addField(1, "sign")
+                                                    .addField(31, "value")
+                                                    , "push an int of size [ 32 ] into the stack.", null);
         virtualMachine.registerOp("lconst", "push an int of size [ 64 ] into the stack.", null);
 
         virtualMachine.registerOp("fconst", "push a fixed float of size [ 32 ] into the stack.", null);
