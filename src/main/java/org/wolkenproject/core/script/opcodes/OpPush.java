@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script.opcodes;
 
+import org.wolkenproject.core.script.MochaObject;
 import org.wolkenproject.core.script.Opcode;
 import org.wolkenproject.core.script.VirtualProcess;
 import org.wolkenproject.utils.BitInputStream;
@@ -19,7 +20,8 @@ public class OpPush extends Opcode {
 
     @Override
     public void execute(VirtualProcess virtualProcess) {
-        virtualProcess.getMemoryModule().getStack().push(new )
+        MochaObject array = virtualProcess.getClassProvider().getArrayMochaClass().newInstance(virtualProcess);
+        virtualProcess.getMemoryModule().getStack().push(array);
     }
 
     @Override
