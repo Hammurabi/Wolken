@@ -13,21 +13,18 @@ public class BitOutputStream extends OutputStream {
     public BitOutputStream() {
         this.stream = new ByteArrayOutputStream();
         this.current = 0;
-        this.index  = 1;
+        this.index  = 0;
     }
 
     @Override
     public void write(int i) throws IOException {
-        int offset  = index ++ % 8;
+        current = (byte) Utils.setBit(current, index ++, i);
 
-        if (offset == 0) {
+        if (index == 8) {
             stream.write(current);
             current = 0;
-            index = 1;
-            offset = index % 8;
+            index = 0;
         }
-
-        current = (byte) Utils.setBit(current, offset - 1, i);
     }
 
     @Override
