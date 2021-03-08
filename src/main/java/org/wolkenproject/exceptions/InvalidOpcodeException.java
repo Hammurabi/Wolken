@@ -1,6 +1,6 @@
 package org.wolkenproject.exceptions;
 
-public class InvalidOpcodeException extends Exception {
+public class InvalidOpcodeException extends WolkenException {
     public InvalidOpcodeException(String msg) {
         super(msg);
     }
