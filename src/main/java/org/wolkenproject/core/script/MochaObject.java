@@ -65,5 +65,12 @@ public class MochaObject {
     }
 
     public void append(MochaObject object) {
+        MochaObject array[] = new MochaObject[members.length + 1];
+        for (int i = 0; i < members.length; i ++) {
+            array[i] = members[i];
+        }
+
+        array[members.length] = object;
+        members = array;
     }
 }
