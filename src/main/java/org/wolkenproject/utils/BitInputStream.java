@@ -22,7 +22,7 @@ public class BitInputStream extends InputStream {
         int byteAddress = location / 8;
         int bitAddress  = location % 8;
 
-        return Utils.getBit(array[location], bitAddress);
+        return Utils.getBit(array[byteAddress], bitAddress);
     }
 
     public int readByte() throws IOException {
@@ -51,7 +51,18 @@ public class BitInputStream extends InputStream {
     public byte[] getBitsAsByteArray(int length) throws IOException {
         byte array[] = new byte[(int) Math.ceil(length / 8.0)];
         int offset = (array.length * 8) - length;
-        
-        return new byte[0];
+
+        for (int i = offset; i < array.length * 8; i ++) {
+            int byteAddress = i / 8;
+            int bitAddress  = i % 8;
+            int read = read();
+            if (read < 0) {
+                throw new IOException("not enough bits remaining.");
+            }
+
+            Utils.setBit(array[byteAddress], bitAddress, read);
+        }
+
+        return array;
     }
 }
