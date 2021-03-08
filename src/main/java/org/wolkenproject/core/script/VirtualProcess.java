@@ -23,4 +23,8 @@ public class VirtualProcess {
     public MemoryState getMemoryState() {
         return memoryModule.getState();
     }
+
+    public MemoryModule getMemoryModule() {
+        return memoryModule;
+    }
 }
