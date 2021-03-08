@@ -1,12 +1,16 @@
 package org.wolkenproject.core;
 
+import org.bouncycastle.util.Arrays;
 import org.wolkenproject.core.script.*;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
 import org.wolkenproject.serialization.SerializationFactory;
+import org.wolkenproject.utils.BitInputStream;
+import org.wolkenproject.utils.BitOutputStream;
 import org.wolkenproject.utils.FileService;
+import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -129,13 +133,10 @@ public class Context {
                                                     , "load x from register and push it to stack", null);
         virtualMachine.registerOp("call", new BitFields()
                                                     .addField(4, "arg")
-                                                    .addCond(4, (idx, prev, next, self)->{ return prev.getValue() == 0; }, "id")
-                                                    .addCond(16, (idx, prev, next, self)->{ return prev.getValue() == 2; }, "id")
                                                     , "call a function [4:arg].", null);
         virtualMachine.registerOp("jump", new BitFields()
-                                                    .addField(1, "get/set")
-                                                    .addField(15, "id")
-                                                    , "set or get (and jump) a jump location.", null);
+                                                    .addField(16, "position")
+                                                    , "jump to position.", null);
 
         virtualMachine.registerOp("getmember", new BitFields()
                                                     .addField(2, "6/14/22")
