@@ -1,6 +1,6 @@
 package org.wolkenproject.exceptions;
 
-public class UndefClassException extends WolkenException {
+public class UndefClassException extends MochaException {
     public UndefClassException(String msg) {
         super(msg);
     }
