@@ -4,6 +4,7 @@ import org.wolkenproject.utils.BitInputStream;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BitFields {
     private List<BitField>                  fields;
@@ -48,6 +49,19 @@ public class BitFields {
     }
 
     public static interface BitCondition {
-        public boolean get(BitInputStream inputStream, byte value[]) throws IOException;
+        public default boolean read(BitInputStream inputStream, byte value[]) throws IOException {
+            AtomicInteger out = new AtomicInteger(0);
+
+            if (get(value, out)) {
+                int length = out.get();
+                inputStream.readBitsAsByteArray(value);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public boolean get(byte value[], AtomicInteger out) throws IOException;
     }
 }
