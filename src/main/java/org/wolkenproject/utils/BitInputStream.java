@@ -24,4 +24,15 @@ public class BitInputStream extends InputStream {
 
         return Utils.getBit(array[location], bitAddress);
     }
+
+    public int readByte() throws IOException {
+        byte buffer[] = new byte[8];
+
+        int read = read(buffer);
+        if (read < 8) {
+            throw new IOException("not enough bits remaining.");
+        }
+
+        return Utils.makeByte(buffer);
+    }
 }
