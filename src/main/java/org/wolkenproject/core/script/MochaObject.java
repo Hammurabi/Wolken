@@ -55,4 +55,12 @@ public class MochaObject {
 
         members[memberId] = object;
     }
+
+    public byte[] getBytes() {
+        return new byte[0];
+    }
+
+    public byte[] getHash() {
+        return null;
+    }
 }
