@@ -38,6 +38,13 @@ public class BitOutputStream extends OutputStream {
         index = 0;
     }
 
-    public void writeBitsFromBytes(byte[] bytes, int length) {
+    public void writeBitsFromBytes(byte[] bytes, int length) throws IOException {
+        for (int i = 0; i < length; i ++) {
+            int byteAddress = i / 8;
+            int bitAddress  = i % 8;
+
+            int bit = Utils.getBit(bytes[byteAddress], bitAddress);
+            write(bit);
+        }
     }
 }
