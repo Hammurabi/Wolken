@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.Tuple;
 
 import java.util.List;
@@ -32,6 +33,10 @@ public class BitFields {
         fields.add(new Tuple<>(totalBits, name));
 
         return this;
+    }
+
+    public OpArgs getArguments(BitInputStream inputStream) {
+        return null;
     }
 
     public static class BitField {
