@@ -26,6 +26,10 @@ public class ClassProvider {
         return getClass(0);
     }
 
+    public MochaClass getArrayMochaClass() throws UndefClassException {
+        return getClass(1);
+    }
+
     private void setDefaultMochaClass() {
     }
 }
