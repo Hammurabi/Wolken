@@ -25,15 +25,15 @@ public class OpcodeList {
         int counter = 0;
         int argCount= 0;
 
-
         while (inputStream.remainingBytes() > 1) {
             int opcodeValue = inputStream.readByte();
             Opcode opcode = register.getOpcode(opcodeValue);
+
             if (opcode == null) {
                 throw new InvalidOpcodeException("invalid opcode '" + opcodeValue + "'.");
             }
 
-            argCount
+            opcode.takeArguments()
         }
     }
 }
