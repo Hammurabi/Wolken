@@ -25,10 +25,7 @@ public class BitFields {
         private String  name;
         private int     length;
         private BitCondition conditions[];
-        public void setConditions(BitCondition conditions[]) {
-            this.conditions = conditions;
-        }
-
+        
         public int getValue(BitInputStream inputStream) {
             return 0;
         }
