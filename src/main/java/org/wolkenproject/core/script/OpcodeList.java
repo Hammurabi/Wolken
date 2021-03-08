@@ -21,13 +21,14 @@ public class OpcodeList {
     public OpcodeList() {
     }
 
-    public void read(OpcodeRegister register, byte opcodes[]) {
+    public void read(OpcodeRegister register, byte opcodes[]) throws InvalidOpcodeException {
         int counter = 0;
 
         while (counter < opcodes.length) {
-            Opcode opcode = register.getOpcode(opcodes[counter ++]);
+            int opcodeValue = Byte.toUnsignedInt(opcodes[counter ++]);
+            Opcode opcode = register.getOpcode(opcodeValue);
             if (opcode == null) {
-                throw new InvalidOpcodeException();
+                throw new InvalidOpcodeException("invalid opcode '" + opcodeValue + "'.");
             }
         }
     }
