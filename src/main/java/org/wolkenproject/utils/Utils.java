@@ -290,6 +290,11 @@ public class Utils {
         return byt ^ ~(1 << position);
     }
 
+    public static int setBit(byte byt, int position, int value)
+    {
+        return byt ^= (-value ^ byt) & (1 << position);
+    }
+
     public static int makeByte(byte[] buffer) {
         return 0;
     }
