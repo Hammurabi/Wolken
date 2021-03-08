@@ -39,4 +39,12 @@ public class BitInputStream extends InputStream {
     public boolean hasRemaining() {
         return index < array.length * 8;
     }
+
+    public int remainingBits() {
+        return (array.length * 8) - index;
+    }
+
+    public int remainingBytes() {
+        return remainingBits() / 8;
+    }
 }
