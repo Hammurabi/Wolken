@@ -36,6 +36,10 @@ public class ClassProvider {
         return getClass(1);
     }
 
+    private MochaClass getIntegerMochaClass() throws UndefClassException {
+        return getClass(2);
+    }
+
     private void setDefaultMochaClass() {
         MochaClass defaultClass = new MochaClass(null);
         defaultClass.setName("Object");
@@ -67,8 +71,8 @@ public class ClassProvider {
         MochaClass arrayClass = new MochaClass(defaultClass);
         arrayClass.setName("Array");
         arrayClass.addFunction("append", (proc)->{ MochaObject append = proc.getMemoryModule().getStack().pop(); MochaObject self = proc.getMemoryModule().getStack().pop(); if (!append.equals(self)) { append.append(append); } throw new MochaException("cannot append self to array."); });
-        arrayClass.addFunction("pop", (proc)->{ return null; });
-        arrayClass.addFunction("len", (proc)->{ return null; });
+        arrayClass.addFunction("pop", (proc)->{ proc.getMemoryModule().getStack().pop().pop(); return null;});
+        arrayClass.addFunction("len", (proc)->{ return proc.getClassProvider().getIntegerMochaClass().newInstanceNative(proc, proc.getMemoryModule().getStack().pop().getLength()); });
         arrayClass.addFunction("reshape", (proc)->{ return null; });
         arrayClass.addFunction("shape", (proc)->{ return null; });
         registerClass(arrayClass);
