@@ -63,4 +63,7 @@ public class MochaObject {
     public byte[] getHash() {
         return null;
     }
+
+    public void append(MochaObject object) {
+    }
 }
