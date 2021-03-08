@@ -38,7 +38,7 @@ public class ClassProvider {
     private void setDefaultMochaClass() {
         MochaClass defaultClass = new MochaClass(null);
         defaultClass.setName("Object");
-        defaultClass.addFunction("hashCode", (proc)->{ return proc.getClassProvider().getArrayMochaClass().newInstanceNative(proc.getMemoryModule().getStack().pop().getHash()); });
+        defaultClass.addFunction("hashCode", (proc)->{ return proc.getClassProvider().getArrayMochaClass().newInstanceNative(proc, proc.getMemoryModule().getStack().pop().getHash()); });
         defaultClass.addFunction("toString", (proc)->{ return null; });
         defaultClass.addFunction("getClassName", (proc)->{ return null; });
 
