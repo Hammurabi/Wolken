@@ -9,7 +9,7 @@ public class MochaClass {
     private MochaClass                                  parent;
     private String                                      name;
     private Map<String, Tuple<Integer, MochaFunction>>  functions;
-    private Map<String, Tuple<Integer, MochaClass>>     members;
+    private Map<String, Tuple<Integer, Field>>          members;
 
     public MochaClass(MochaClass parent) {
         this.parent = parent;
@@ -18,6 +18,14 @@ public class MochaClass {
 
     public void addFunction(String functionName, MochaFunction function) {
         functions.put(functionName, new Tuple<>(functions.size(), function));
+    }
+
+    public void addMember(String memberName) {
+        addMember(memberName, Field.Visibility.Public);
+    }
+
+    protected void addMember(String memberName, int visibility) {
+        members.put(memberName, new Tuple<>(members.size(), new Field(memberName, visibility)));
     }
 
     public void populateFunctions(MochaFunction functions[]) {
@@ -29,7 +37,7 @@ public class MochaClass {
 
     public void populateMembers(VirtualProcess virtualProcess, MochaObject[] members) {
         for (String string : this.members.keySet()) {
-            Tuple<Integer, MochaClass> member = this.members.get(string);
+            Tuple<Integer, Field> member = this.members.get(string);
             members[member.getFirst()] = member.getSecond().newInstance(virtualProcess);
         }
     }
