@@ -4,6 +4,7 @@ import org.wolkenproject.core.script.MochaObject;
 import org.wolkenproject.core.script.Opcode;
 import org.wolkenproject.core.script.VirtualProcess;
 import org.wolkenproject.core.script.objects.MochaArray;
+import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.UndefClassException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.BitInputStream;
@@ -22,12 +23,13 @@ public class OpPush extends Opcode {
     }
 
     @Override
-    public void execute(VirtualProcess virtualProcess) throws WolkenException {
+    public void execute(VirtualProcess virtualProcess) throws MochaException {
         MochaArray array = new MochaArray(virtualProcess, virtualProcess.getClassProvider().getArrayMochaClass());
         array.setArrayLength(this.array.length);
         for (int i = 0; i < this.array.length; i ++) {
             array.setMember(i, null);
         }
+
         virtualProcess.getMemoryModule().getStack().push(array);
     }
 
