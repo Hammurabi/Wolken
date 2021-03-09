@@ -6,6 +6,8 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
 
+import java.io.IOException;
+
 public abstract class Opcode {
     private String          name;
     private int             identifier;
@@ -19,7 +21,7 @@ public abstract class Opcode {
     }
 
     public abstract void execute(VirtualProcess virtualProcess) throws MochaException;
-    public abstract void write(BitOutputStream outputStream);
+    public abstract void write(BitOutputStream outputStream) throws IOException;
     public abstract void read(BitInputStream inputStream);
     public abstract Opcode makeCopy();
 
