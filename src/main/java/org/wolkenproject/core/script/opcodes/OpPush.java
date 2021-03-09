@@ -97,6 +97,18 @@ public class OpPush extends Opcode {
         for (int i = 0; i < bitLength; i ++) {
             arrayLength     = Utils.setBit(arrayLength, i, inputStream.read());
         }
+
+        array           = new byte[arrayLength];
+
+        for (int i = 0; i < arrayLength; i ++) {
+            int b = 0;
+
+            for (int bit = 0; bit < 8; bit ++) {
+                b = Utils.setBit(b, bit, inputStream.read());
+            }
+
+            array[i]    = (byte) b;
+        }
     }
 
     @Override
