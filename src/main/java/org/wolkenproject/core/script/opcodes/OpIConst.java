@@ -18,7 +18,7 @@ public class OpIConst extends Opcode {
     }
 
     public OpIConst(long integer) {
-        super("push", "push 'x' into the stack", "push [arg] [value]");
+        super("iconst", "push (u)int8(8-64) into the stack", "push [arg] [value]");
         this.integer = integer;
     }
 
