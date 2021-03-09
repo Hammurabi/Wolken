@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.UndefClassException;
 import org.wolkenproject.exceptions.UndefFunctionException;
 import org.wolkenproject.exceptions.UndefMemberException;
@@ -28,6 +29,18 @@ public class MochaObject {
 
         mochaClass.populateFunctions(functions);
         mochaClass.populateMembers(virtualProcess, members);
+    }
+
+    public MochaObject(MochaObject other) {
+        this.mochaClass = other.mochaClass;
+        this.functions  = new MochaFunction[functions.length];
+        this.members    = new MochaObject[members.length];
+        for (int i = 0; i < functions.length; i ++) {
+            functions[i] = other.functions[i];
+        }
+        for (int i = 0; i < members.length; i ++) {
+            members[i] = (other.members[i]);
+        }
     }
 
     public MochaFunction getFunction(int functionId) throws UndefFunctionException {
