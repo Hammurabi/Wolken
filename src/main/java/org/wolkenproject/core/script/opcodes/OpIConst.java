@@ -2,7 +2,7 @@ package org.wolkenproject.core.script.opcodes;
 
 import org.wolkenproject.core.script.Opcode;
 import org.wolkenproject.core.script.VirtualProcess;
-import org.wolkenproject.core.script.objects.MochaArray;
+import org.wolkenproject.core.script.MochaArray;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
