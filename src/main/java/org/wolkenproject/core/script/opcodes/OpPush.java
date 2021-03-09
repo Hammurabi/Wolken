@@ -78,7 +78,25 @@ public class OpPush extends Opcode {
         type            = Utils.setBit(type, 0, inputStream.read());
         type            = Utils.setBit(type, 1, inputStream.read());
 
-        
+        switch (type) {
+            case 0:
+                bitLength   = 4;
+                break;
+            case 1:
+                bitLength   = 7;
+                break;
+            case 2:
+                bitLength   = 10;
+                break;
+            case 3:
+                bitLength   = 12;
+                break;
+        }
+
+        int arrayLength = 0;
+        for (int i = 0; i < bitLength; i ++) {
+            arrayLength     = Utils.setBit(arrayLength, i, inputStream.read());
+        }
     }
 
     @Override
