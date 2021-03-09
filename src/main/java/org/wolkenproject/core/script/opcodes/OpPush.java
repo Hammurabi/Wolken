@@ -113,6 +113,6 @@ public class OpPush extends Opcode {
 
     @Override
     public Opcode makeCopy() {
-        return new OpPush();
+        return new OpPush(array);
     }
 }
