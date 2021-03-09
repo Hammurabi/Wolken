@@ -22,7 +22,7 @@ public abstract class Opcode {
 
     public abstract void execute(VirtualProcess virtualProcess) throws MochaException;
     public abstract void write(BitOutputStream outputStream) throws IOException;
-    public abstract void read(BitInputStream inputStream);
+    public abstract void read(BitInputStream inputStream) throws IOException;
     public abstract Opcode makeCopy();
 
     protected void setIdentifier(int id) {
