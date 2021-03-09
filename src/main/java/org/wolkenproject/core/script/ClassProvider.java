@@ -64,7 +64,9 @@ public class ClassProvider {
         defaultClass.addFunction("pow", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
 
         // (self)
-        defaultClass.addFunction("negate", (proc)->{ return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("negate", (proc)->{ return new MochaObject(proc.getMemoryModule().getStack().pop()); });
+        defaultClass.addFunction("true", (proc)->{ return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("false", (proc)->{ return proc.getMemoryModule().getStack().pop(); });
 
         registerClass(defaultClass);
 
@@ -76,5 +78,28 @@ public class ClassProvider {
         arrayClass.addFunction("reshape", (proc)->{ MochaObject shape = proc.getMemoryModule().getStack().pop(); proc.getMemoryModule().getStack().pop().reshape(shape); return null; });
         arrayClass.addFunction("shape", (proc)->{ return proc.getMemoryModule().getStack().pop().getShape(); });
         registerClass(arrayClass);
+
+        MochaClass abstractNumberClass = new MochaClass(defaultClass);
+        abstractNumberClass.setName("AbstractNumber");
+        abstractNumberClass.addMember("signed");
+        registerClass(abstractNumberClass);
+
+        MochaClass integerClass = new MochaClass(abstractNumberClass);
+        integerClass.setName("SignedInt");
+
+        // (self, other)
+        defaultClass.addFunction("add", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("sub", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("mul", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("div", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("mod", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("shiftL", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("shiftR", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("arithmeticShift", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("and", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("or", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("not", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("xor", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
+        defaultClass.addFunction("pow", (proc)->{ proc.getMemoryModule().getStack().pop(); return proc.getMemoryModule().getStack().pop(); });
     }
 }
