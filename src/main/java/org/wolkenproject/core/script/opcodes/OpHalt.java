@@ -5,6 +5,8 @@ import org.wolkenproject.core.script.VirtualProcess;
 import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
 
+import java.io.IOException;
+
 public class OpHalt extends Opcode {
     public OpHalt() {
         super("halt", "stop the process (and sub-processes).", "halt");
@@ -16,11 +18,11 @@ public class OpHalt extends Opcode {
     }
 
     @Override
-    public void write(BitOutputStream outputStream) {
+    public void write(BitOutputStream outputStream) throws IOException {
     }
 
     @Override
-    public void read(BitInputStream inputStream) {
+    public void read(BitInputStream inputStream) throws IOException {
     }
 
     @Override
