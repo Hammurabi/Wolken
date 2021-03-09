@@ -71,7 +71,11 @@ public class OpPush extends Opcode {
     }
 
     @Override
-    public void read(BitInputStream inputStream) {
+    public void read(BitInputStream inputStream) throws IOException {
+        int type        = 0;
+        int bitLength   = 0;
+
+        type            = Utils.setBit(type, 0, inputStream.read());
     }
 
     @Override
