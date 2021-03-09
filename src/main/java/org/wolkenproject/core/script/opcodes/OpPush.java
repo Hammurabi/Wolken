@@ -76,6 +76,9 @@ public class OpPush extends Opcode {
         int bitLength   = 0;
 
         type            = Utils.setBit(type, 0, inputStream.read());
+        type            = Utils.setBit(type, 1, inputStream.read());
+
+        
     }
 
     @Override
