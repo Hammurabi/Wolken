@@ -36,4 +36,13 @@ public class MochaInt extends MochaObject {
 
         throw new MochaException("cannot perform 'sub' on object of type 'int' and '"+other.getClass().getName()+"' ");
     }
+
+    @Override
+    public MochaObject mul(MochaObject other) throws MochaException {
+        if (other instanceof MochaInt) {
+            return new MochaInt(value.subtract(((MochaInt) other).value));
+        }
+
+        throw new MochaException("cannot perform 'mul' on object of type 'int' and '"+other.getClass().getName()+"' ");
+    }
 }
