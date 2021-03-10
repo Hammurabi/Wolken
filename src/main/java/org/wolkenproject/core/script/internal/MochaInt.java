@@ -49,7 +49,7 @@ public class MochaInt extends MochaObject {
     @Override
     public MochaObject div(MochaObject other, boolean sign) throws MochaException {
         if (other instanceof MochaInt) {
-            return new MochaInt(value.subtract(((MochaInt) other).value));
+            return new MochaInt(value.divide(((MochaInt) other).value));
         }
 
         throw new MochaException("cannot perform 'div' on object of type 'int' and '"+other.getClass().getName()+"' ");
