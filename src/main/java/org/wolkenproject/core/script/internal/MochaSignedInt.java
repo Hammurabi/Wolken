@@ -29,7 +29,7 @@ public class MochaSignedInt extends MochaNumber {
 
     @Override
     public MochaObject sub(MochaObject other) throws MochaException {
-        super.add(other);
+        super.sub(other);
         if (other instanceof MochaNumber) {
             return new MochaNumber(value.subtract(((MochaNumber) other).value));
         }
