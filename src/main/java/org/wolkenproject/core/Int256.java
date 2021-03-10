@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.utils.Utils;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 public class Int256 {
@@ -146,11 +147,27 @@ public class Int256 {
 
                 for (int i = 0; i < data.length; i ++) {
                     int omit = (0xFFFFFFFF << shift) & data[i];
-                    data[i]  = data[i] >> shift;
+                    result[i]= (data[i] >> shift) | carry;
+                    carry = omit << (32 - shift);
                 }
 
                 return new Int256(result, signed);
             }
+        }
+    }
+
+    @Override
+    public String toString() {
+        byte array[] = new byte[0];
+        for (int i  = 0; i < 8; i ++) {
+            array   = Utils.concatenate(array, Utils.takeApart(data[i]));
+        }
+
+        // no ternary
+        if (signed) {
+            return new BigInteger(array).toString();
+        } else {
+            return new BigInteger(1, array).toString();
         }
     }
 }
