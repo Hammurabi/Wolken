@@ -85,7 +85,15 @@ public class MochaObject {
     // add an element to the front
     public MochaObject prepend(MochaObject object) { addMemberToFront(object); return this; }
     // pop the last element
-    public MochaObject pop() { return this; }
+    public MochaObject pop() {
+        if (members.length > 0) {
+            MochaObject last = members[members.length - 1];
+            members = new MochaObject[members.length - 1];
+            return last;
+        }
+
+        return null;
+    }
     // poll the first element
     public MochaObject poll() { return this; }
 }
