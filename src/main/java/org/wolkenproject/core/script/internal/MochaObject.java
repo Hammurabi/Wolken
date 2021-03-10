@@ -10,7 +10,7 @@ public class MochaObject {
     private MochaCallable   callable;
 
     public MochaObject() {
-        this()
+        this((proc)->{ return null; });
     }
 
     public MochaObject(MochaCallable callble) {
