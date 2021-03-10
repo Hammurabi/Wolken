@@ -3,6 +3,8 @@ package org.wolkenproject.core;
 import org.wolkenproject.utils.Utils;
 
 public class Int256 {
+    public static final Int256 Max = new Int256(Utils.fillArray(new byte[32], (byte) 0xFF), false);
+
     public int      data[];
     public boolean  signed;
 
@@ -12,6 +14,24 @@ public class Int256 {
 
     public Int256(long value, boolean signed) {
         this(convertLong(value), signed);
+    }
+
+    public Int256(byte array[], boolean signed) {
+        this(convertArray(array), signed);
+    }
+
+    private static int[] convertArray(byte[] array) {
+        int ints[]  = new int[8];
+        ints[0]     = Utils.makeInt(array);
+        ints[1]     = Utils.makeInt(array, 4);
+        ints[2]     = Utils.makeInt(array, 8);
+        ints[3]     = Utils.makeInt(array, 12);
+        ints[4]     = Utils.makeInt(array, 16);
+        ints[5]     = Utils.makeInt(array, 20);
+        ints[6]     = Utils.makeInt(array, 24);
+        ints[7]     = Utils.makeInt(array, 28);
+
+        return ints;
     }
 
     private static int[] convertLong(long value) {
