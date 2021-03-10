@@ -18,5 +18,16 @@ public class Int256Tests {
                 Assertions.assertEquals(f + s, value);
             }
         }
+        {
+            for (int i = 0; i < 20; i ++) {
+                long f          = (i * 1000) * 1000;
+                long s          = (i * 1000) * 1000 + 1;
+
+                Int256 first    = new Int256(f);
+                Int256 second   = new Int256(s);
+                long value      = first.mul(second).asLong();
+                Assertions.assertEquals(f + s, value);
+            }
+        }
     }
 }
