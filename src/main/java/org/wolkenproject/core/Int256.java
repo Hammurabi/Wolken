@@ -2,6 +2,8 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.utils.Utils;
 
+import java.util.Arrays;
+
 public class Int256 {
     public static final Int256 Zero = new Int256(0, false);
     public static final Int256 One  = new Int256(1, false);
@@ -123,8 +125,11 @@ public class Int256 {
     }
 
     public Int256 shiftr(int n) {
+        if (n <= 0) {
+            return new Int256(Arrays.copyOf(data, 8), signed);
+        }
+
         switch (n) {
-            case 0: return this;
             case 32: return new Int256(new int[]    {0, data[0], data[1], data[2], data[3], data[4], data[5], data[6]}, signed);
             case 64: return new Int256(new int[]    {0, 0, data[0], data[1], data[2], data[3], data[4], data[5]}, signed);
             case 96: return new Int256(new int[]    {0, 0, 0, data[0], data[1], data[2], data[3], data[4]}, signed);
@@ -134,17 +139,17 @@ public class Int256 {
             case 224: return new Int256(new int[]   {0, 0, 0, 0, 0, 0, 0, data[0]}, signed);
             case 256: return Zero;
             default:
-                return Zero;
+            {
+                int shift = n / 8;
+                int carry = 0;
+
+                for (int i = 0; i < data.length; i ++) {
+                    int omit = (0xFFFFFFFF << shift) & data[i];
+                    data[i]  = data[i] >> shift;
+                }
+
+                return null;
+            }
         }
-
-        int shift = n / 8;
-        int carry = 0;
-
-        for (int i = 0; i < data.length; i ++) {
-            int omit = (0xFFFFFFFF << shift) & data[i];
-            data[i]  = data[i] >> shift;
-        }
-
-        return null;
     }
 }
