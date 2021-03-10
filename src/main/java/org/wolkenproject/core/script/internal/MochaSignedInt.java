@@ -5,14 +5,14 @@ import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
 
-public class MochaInt extends MochaObject {
+public class MochaSignedInt extends MochaObject {
     private BigInteger value;
 
-    public MochaInt(long value, boolean signed) {
+    public MochaSignedInt(long value, boolean signed) {
         this.value = new BigInteger(signed ? 0 : 1, Utils.takeApartLong(value));
     }
 
-    public MochaInt(BigInteger integer) throws MochaException {
+    public MochaSignedInt(BigInteger integer) throws MochaException {
         this.value = integer;
         if (integer.bitLength() > 256) {
             throw new MochaException("the maximum size of int is 256 bits.");
@@ -21,8 +21,8 @@ public class MochaInt extends MochaObject {
 
     @Override
     public MochaObject add(MochaObject other) throws MochaException {
-        if (other instanceof MochaInt) {
-            return new MochaInt(value.add(((MochaInt) other).value));
+        if (other instanceof MochaSignedInt) {
+            return new MochaSignedInt(value.add(((MochaSignedInt) other).value));
         }
 
         throw new MochaException("cannot perform 'add' on object of type 'int' and '"+other.getClass().getName()+"' ");
@@ -30,8 +30,8 @@ public class MochaInt extends MochaObject {
 
     @Override
     public MochaObject sub(MochaObject other) throws MochaException {
-        if (other instanceof MochaInt) {
-            return new MochaInt(value.subtract(((MochaInt) other).value));
+        if (other instanceof MochaSignedInt) {
+            return new MochaSignedInt(value.subtract(((MochaSignedInt) other).value));
         }
 
         throw new MochaException("cannot perform 'sub' on object of type 'int' and '"+other.getClass().getName()+"' ");
@@ -39,8 +39,8 @@ public class MochaInt extends MochaObject {
 
     @Override
     public MochaObject mul(MochaObject other) throws MochaException {
-        if (other instanceof MochaInt) {
-            return new MochaInt(value.multiply(((MochaInt) other).value));
+        if (other instanceof MochaSignedInt) {
+            return new MochaSignedInt(value.multiply(((MochaSignedInt) other).value));
         }
 
         throw new MochaException("cannot perform 'mul' on object of type 'int' and '"+other.getClass().getName()+"' ");
@@ -48,8 +48,8 @@ public class MochaInt extends MochaObject {
 
     @Override
     public MochaObject div(MochaObject other, boolean sign) throws MochaException {
-        if (other instanceof MochaInt) {
-            return new MochaInt(value.divide(((MochaInt) other).value));
+        if (other instanceof MochaSignedInt) {
+            return new MochaSignedInt(value.divide(((MochaSignedInt) other).value));
         }
 
         throw new MochaException("cannot perform 'div' on object of type 'int' and '"+other.getClass().getName()+"' ");
@@ -57,8 +57,8 @@ public class MochaInt extends MochaObject {
 
     @Override
     public MochaObject mod(MochaObject other, boolean sign) throws MochaException {
-        if (other instanceof MochaInt) {
-            return new MochaInt(value.mod(((MochaInt) other).value));
+        if (other instanceof MochaSignedInt) {
+            return new MochaSignedInt(value.mod(((MochaSignedInt) other).value));
         }
 
         throw new MochaException("cannot perform 'mod' on object of type 'int' and '"+other.getClass().getName()+"' ");
