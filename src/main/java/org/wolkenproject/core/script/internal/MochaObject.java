@@ -19,4 +19,9 @@ public class MochaObject {
     public MochaObject xor(MochaObject other) { return this; }
     public MochaObject not() { return this; }
     public MochaObject negate() { return this; }
+    public MochaObject length() { return this; }
+    public MochaObject shape() { return this; }
+    public MochaObject reshape(MochaObject shape) { return this; }
+    public MochaObject append(MochaObject object) { return this; }
+    public MochaObject prepend(MochaObject object) { return this; }
 }
