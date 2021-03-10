@@ -40,7 +40,7 @@ public class MochaInt extends MochaObject {
     @Override
     public MochaObject mul(MochaObject other) throws MochaException {
         if (other instanceof MochaInt) {
-            return new MochaInt(value.subtract(((MochaInt) other).value));
+            return new MochaInt(value.multiply(((MochaInt) other).value));
         }
 
         throw new MochaException("cannot perform 'mul' on object of type 'int' and '"+other.getClass().getName()+"' ");
