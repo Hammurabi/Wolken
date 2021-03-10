@@ -24,4 +24,6 @@ public class MochaObject {
     public MochaObject reshape(MochaObject shape) { return this; }
     public MochaObject append(MochaObject object) { return this; }
     public MochaObject prepend(MochaObject object) { return this; }
+    public MochaObject pop() { return this; }
+    public MochaObject poll() { return this; }
 }
