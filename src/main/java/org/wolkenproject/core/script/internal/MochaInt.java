@@ -20,7 +20,7 @@ public class MochaInt extends MochaObject {
     }
 
     @Override
-    public MochaObject add(MochaObject other) {
+    public MochaObject add(MochaObject other) throws MochaException {
         if (other instanceof MochaInt) {
             return new MochaInt(value.add(((MochaInt) other).value));
         }
