@@ -3,6 +3,7 @@ package org.wolkenproject.core;
 import org.wolkenproject.utils.Utils;
 
 public class Int256 {
+    public static final Int256 Zero = new Int256(0, false);
     public static final Int256 Max  = new Int256(Utils.fillArray(new byte[32], (byte) 0xFF), false);
 
     public int      data[];
