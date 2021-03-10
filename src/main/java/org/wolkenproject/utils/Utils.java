@@ -32,6 +32,14 @@ public class Utils {
         return concatenated;
     }
 
+    public static void println(byte bytes[]) {
+        for (int i = 0; i < bytes.length; i ++) {
+            System.out.print(bytes[i] + " ");
+        }
+
+        System.out.println();
+    }
+
     public static short makeShort(byte b1, byte b0) {
         return (short) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
     }
