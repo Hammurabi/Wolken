@@ -35,10 +35,9 @@ public class Int256 {
         int result[]    = new int[8];
 
         for (int i = 0; i < 4; i ++) {
-            for (int b = 0; b < 32; b ++) {
-                int bit     = Utils.getBit(other.data[i], b);
-            }
+            result[i]   = ~other.data[i];
         }
-        return new Int256(result, !(other.signed & signed));
+
+        return add(new Int256(result, !(other.signed & signed)));
     }
 }
