@@ -23,6 +23,8 @@ public class Int256 {
                 int sum0    = (bit0 ^ bit1);
                 int sum1    = sum0 ^ carry;
                 carry       = ((bit0 & bit1) & sum1) | carry;
+
+                result[i]   = Utils.setBit(result[i], b, sum1);
             }
         }
 
