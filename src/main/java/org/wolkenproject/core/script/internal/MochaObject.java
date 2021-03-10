@@ -2,11 +2,21 @@ package org.wolkenproject.core.script.internal;
 
 import org.wolkenproject.core.script.MochaFunction;
 
+import java.util.Arrays;
+
 public class MochaObject {
     private MochaObject members[];
 
     public MochaObject() {
-        members = new MochaObject[21];
+        members = new MochaObject[0];
+    }
+
+    protected int addFunction(MochaFunction function) {
+        int len = members.length;
+        members = Arrays.copyOf(members, members.length + 1);
+        members[len] = function;
+
+        return len;
     }
 
     public MochaObject add(MochaObject other) { return this; }
