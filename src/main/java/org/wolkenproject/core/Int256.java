@@ -11,6 +11,17 @@ public class Int256 {
     }
 
     public Int256(long value, boolean signed) {
+        this(convertLong(value), signed);
+    }
+
+    private static int[] convertLong(long value) {
+        int result[] = new int[8];
+        byte bytes[] = Utils.takeApartLong(value);
+
+        result[0]   = Utils.makeInt(bytes, 0);
+        result[1]   = Utils.makeInt(bytes, 4);
+
+        return result;
     }
 
     private Int256(int data[], boolean signed) {
