@@ -19,6 +19,14 @@ public class MochaObject {
         return len;
     }
 
+    protected int addMember(MochaObject member) {
+        int len = members.length;
+        members = Arrays.copyOf(members, members.length + 1);
+        members[len] = member;
+
+        return len;
+    }
+
     public MochaObject add(MochaObject other) { return this; }
     public MochaObject sub(MochaObject other) { return this; }
     public MochaObject mul(MochaObject other) { return this; }
