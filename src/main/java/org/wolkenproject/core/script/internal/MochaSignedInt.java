@@ -49,7 +49,7 @@ public class MochaSignedInt extends MochaNumber {
 
     @Override
     public MochaObject div(MochaObject other, boolean sign) throws MochaException {
-        super.add(other);
+        super.div(other);
         if (other instanceof MochaNumber) {
             return new MochaNumber(value.divide(((MochaNumber) other).value));
         }
