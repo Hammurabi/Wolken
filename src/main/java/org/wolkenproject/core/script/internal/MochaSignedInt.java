@@ -11,7 +11,6 @@ public class MochaSignedInt extends MochaNumber {
     }
 
     public MochaSignedInt(BigInteger integer) throws MochaException {
-        this.value = integer;
         if (integer.bitLength() > 256) {
             throw new MochaException("the maximum size of int is 256 bits.");
         }
@@ -19,7 +18,6 @@ public class MochaSignedInt extends MochaNumber {
 
     @Override
     public MochaObject add(MochaObject other) throws MochaException {
-        super.add(other);
         if (other instanceof MochaNumber) {
             return new MochaNumber(value.add(((MochaNumber) other).value));
         }
@@ -29,7 +27,6 @@ public class MochaSignedInt extends MochaNumber {
 
     @Override
     public MochaObject sub(MochaObject other) throws MochaException {
-        super.sub(other);
         if (other instanceof MochaNumber) {
             return new MochaNumber(value.subtract(((MochaNumber) other).value));
         }
@@ -39,7 +36,6 @@ public class MochaSignedInt extends MochaNumber {
 
     @Override
     public MochaObject mul(MochaObject other) throws MochaException {
-        super.mul(other);
         if (other instanceof MochaNumber) {
             return new MochaNumber(value.multiply(((MochaNumber) other).value));
         }
@@ -49,7 +45,6 @@ public class MochaSignedInt extends MochaNumber {
 
     @Override
     public MochaObject div(MochaObject other, boolean sign) throws MochaException {
-        super.div(other, sign);
         if (other instanceof MochaNumber) {
             return new MochaNumber(value.divide(((MochaNumber) other).value));
         }
@@ -59,7 +54,6 @@ public class MochaSignedInt extends MochaNumber {
 
     @Override
     public MochaObject mod(MochaObject other, boolean sign) throws MochaException {
-        super.mod(other, sign);
         if (other instanceof MochaNumber) {
             return new MochaNumber(value.mod(((MochaNumber) other).value));
         }
