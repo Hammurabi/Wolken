@@ -25,6 +25,6 @@ public class MochaInt extends MochaObject {
             return new MochaInt(value.add(((MochaInt) other).value));
         }
 
-        return this;
+        throw new MochaException("cannot perform 'add' on object of type 'int' and '"+other.getClass().getName()+"' ");
     }
 }
