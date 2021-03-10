@@ -55,16 +55,16 @@ public class MochaObject {
         return callable.call(process);
     }
 
-    public MochaObject add(MochaObject other) { return this; }
-    public MochaObject sub(MochaObject other) { return this; }
-    public MochaObject mul(MochaObject other) { return this; }
-    public MochaObject div(MochaObject other, boolean sign) { return this; }
-    public MochaObject mod(MochaObject other, boolean sign) { return this; }
-    public MochaObject shiftRight(MochaObject other, boolean sign) { return this; }
-    public MochaObject shiftLeft(MochaObject other, boolean sign) { return this; }
-    public MochaObject arithmeticShift(MochaObject other, boolean sign) { return this; }
+    public MochaObject add(MochaObject other) throws MochaException { return this; }
+    public MochaObject sub(MochaObject other) throws MochaException { return this; }
+    public MochaObject mul(MochaObject other) throws MochaException { return this; }
+    public MochaObject div(MochaObject other, boolean sign) throws MochaException { return this; }
+    public MochaObject mod(MochaObject other, boolean sign) throws MochaException { return this; }
+    public MochaObject shiftRight(MochaObject other, boolean sign) throws MochaException { return this; }
+    public MochaObject shiftLeft(MochaObject other, boolean sign) throws MochaException { return this; }
+    public MochaObject arithmeticShift(MochaObject other, boolean sign) throws MochaException { return this; }
     // equals (x==y)
-    public MochaObject equal(MochaObject other) { return this; }
+    public MochaObject equal(MochaObject other) throws MochaException { return this; }
     // and (x&y)
     public MochaObject and(MochaObject other) { return this; }
     // or (x|y)
