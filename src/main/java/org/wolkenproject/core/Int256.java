@@ -123,9 +123,20 @@ public class Int256 {
     }
 
     public Int256 shiftr(int n) {
-        if (n >= 256) {
-            return Zero;
+        switch (n) {
+            case 0: return this;
+            case 32: return new Int256(new int[]    {0, data[0], data[1], data[2], data[3], data[4], data[5], data[6]}, signed);
+            case 64: return new Int256(new int[]    {0, 0, data[0], data[1], data[2], data[3], data[4], data[5]}, signed);
+            case 96: return new Int256(new int[]    {0, 0, 0, data[0], data[1], data[2], data[3], data[4]}, signed);
+            case 128: return new Int256(new int[]   {0, 0, 0, 0, data[0], data[1], data[2], data[3]}, signed);
+            case 160: return new Int256(new int[]   {0, 0, 0, 0, 0, data[0], data[1], data[2]}, signed);
+            case 192: return new Int256(new int[]   {0, 0, 0, 0, 0, 0, data[0], data[1]}, signed);
+            case 224: return new Int256(new int[]   {0, 0, 0, 0, 0, 0, 0, data[0]}, signed);
+            case 256: return Zero;
+            default:
+                return Zero;
         }
+
         int shift = n / 8;
         int carry = 0;
 
