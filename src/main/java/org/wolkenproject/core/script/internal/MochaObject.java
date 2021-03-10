@@ -1,6 +1,5 @@
 package org.wolkenproject.core.script.internal;
 
-import org.wolkenproject.core.script.MochaFunction;
 import org.wolkenproject.core.script.VirtualProcess;
 
 import java.util.Arrays;
@@ -9,22 +8,28 @@ public class MochaObject {
     private MochaObject     members[];
     private MochaCallable   callable;
 
-    public MochaObject() {
+    private MochaObject() {
         this((proc)->{ return null; });
     }
 
-    public MochaObject(MochaCallable callble) {
+    private MochaObject(MochaCallable callble) {
         members     = new MochaObject[0];
         callable    = callble;
-        addMember(new MochaObject());
     }
 
-    protected int addFunction(MochaObject callable) {
-        int len = members.length;
-        members = Arrays.copyOf(members, members.length + 1);
-        members[len] = callable;
+    public static final MochaObject createFunction(MochaCallable callable) {
+        return new MochaObject(callable);
+    }
 
-        return len;
+    public static final MochaObject createObject(MochaCallable callable) {
+        MochaObject object = new MochaObject(callable);
+        object.addMember(createFunction((proc)->{ return null; })); // add
+        object.addMember(createFunction((proc)->{ return null; })); // sub
+        object.addMember(createFunction((proc)->{ return null; })); // mul
+        object.addMember(createFunction((proc)->{ return null; })); // div
+        object.addMember(createFunction((proc)->{ return null; })); // mod
+
+        return object;
     }
 
     protected int addMember(MochaObject member) {
@@ -39,7 +44,7 @@ public class MochaObject {
     }
 
     public final MochaObject call(VirtualProcess process) {
-        return callable.execute(process);
+        return callable.call(process);
     }
 
     public MochaObject add(MochaObject other) { return this; }
