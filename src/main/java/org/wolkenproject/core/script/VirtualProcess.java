@@ -17,11 +17,12 @@ public class VirtualProcess {
     }
 
     public void swapMemoryState(MemoryState memoryState) {
-        memoryModule.setState(memoryState);
+//        memoryModule.setState(memoryState);
     }
 
     public MemoryState getMemoryState() {
-        return memoryModule.getState();
+//        return memoryModule.getState();
+        return null;
     }
 
     public MemoryModule getMemoryModule() {
