@@ -59,7 +59,7 @@ public class MochaSignedInt extends MochaNumber {
 
     @Override
     public MochaObject mod(MochaObject other, boolean sign) throws MochaException {
-        super.add(other);
+        super.mod(other);
         if (other instanceof MochaNumber) {
             return new MochaNumber(value.mod(((MochaNumber) other).value));
         }
