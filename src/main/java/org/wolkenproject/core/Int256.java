@@ -24,6 +24,13 @@ public class Int256 {
         return result;
     }
 
+    private static long convertInts(int result[]) {
+        byte bytes0[] = Utils.takeApart(result[0]);
+        byte bytes1[] = Utils.takeApart(result[1]);
+
+        return Utils.makeLong(Utils.concatenate(bytes0, bytes1));
+    }
+
     private Int256(int data[], boolean signed) {
         this.data   = data;
         this.signed = signed;
@@ -57,5 +64,9 @@ public class Int256 {
         }
 
         return add(new Int256(result, !(other.signed & signed)));
+    }
+
+    public long asLong() {
+        return convertInts(data);
     }
 }
