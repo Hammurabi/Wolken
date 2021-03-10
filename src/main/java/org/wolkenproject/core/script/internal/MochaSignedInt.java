@@ -11,6 +11,7 @@ public class MochaSignedInt extends MochaNumber {
     }
 
     public MochaSignedInt(BigInteger integer) throws MochaException {
+        this.value = integer;
         if (integer.bitLength() > 256) {
             throw new MochaException("the maximum size of int is 256 bits.");
         }
