@@ -75,7 +75,7 @@ public class MochaObject {
     // negate (~x)
     public MochaObject negate() { return this; }
     // get the length of an array
-    public MochaObject length() { return this; }
+    public MochaObject length() { return new MochaInt(members.length, false); }
     // get the shape of an array
     public MochaObject shape() { return this; }
     // reshape an array
