@@ -3,7 +3,7 @@ package org.wolkenproject.core.script.internal;
 import org.wolkenproject.core.script.MochaFunction;
 
 public class MochaObject {
-    private MochaFunction functions[];
+    private MochaObject functions[];
 
     public MochaObject add(MochaObject other) { return this; }
     public MochaObject sub(MochaObject other) { return this; }
