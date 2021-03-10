@@ -3,7 +3,7 @@ package org.wolkenproject.core;
 import org.wolkenproject.utils.Utils;
 
 public class Int256 {
-    public static final Int256 Max = new Int256(Utils.fillArray(new byte[32], (byte) 0xFF), false);
+    public static final Int256 Max  = new Int256(Utils.fillArray(new byte[32], (byte) 0xFF), false);
 
     public int      data[];
     public boolean  signed;
@@ -116,5 +116,20 @@ public class Int256 {
 
     public long asLong() {
         return convertInts(data);
+    }
+
+    public Int256 shiftr(int n) {
+        if (n >= 256) {
+            return Zero;
+        }
+        int shift = n / 8;
+        int carry = 0;
+
+        for (int i = 0; i < data.length; i ++) {
+            int omit = (0xFFFFFFFF << shift) & data[i];
+            data[i]  = data[i] >> shift;
+        }
+
+        return null;
     }
 }
