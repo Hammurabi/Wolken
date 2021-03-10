@@ -71,6 +71,6 @@ public class OpIConst extends Opcode {
 
     @Override
     public Opcode makeCopy() {
-        return new OpIConst(array);
+        return new OpIConst(integer);
     }
 }
