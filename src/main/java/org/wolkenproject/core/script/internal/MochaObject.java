@@ -5,16 +5,18 @@ import org.wolkenproject.core.script.VirtualProcess;
 import java.util.Arrays;
 
 public class MochaObject {
+    private static final MochaObject fn_add = createFunction((proc)->{ return null; });
     private MochaObject     members[];
     private MochaCallable   callable;
 
-    private MochaObject() {
+    public MochaObject() {
         this((proc)->{ return null; });
     }
 
-    private MochaObject(MochaCallable callble) {
+    public MochaObject(MochaCallable callble) {
         members     = new MochaObject[0];
         callable    = callble;
+        addMember(fn_add);
     }
 
     public static final MochaObject createFunction(MochaCallable callable) {
