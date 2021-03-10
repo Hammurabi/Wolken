@@ -54,4 +54,13 @@ public class MochaInt extends MochaObject {
 
         throw new MochaException("cannot perform 'div' on object of type 'int' and '"+other.getClass().getName()+"' ");
     }
+
+    @Override
+    public MochaObject mod(MochaObject other, boolean sign) throws MochaException {
+        if (other instanceof MochaInt) {
+            return new MochaInt(value.mod(((MochaInt) other).value));
+        }
+
+        throw new MochaException("cannot perform 'mod' on object of type 'int' and '"+other.getClass().getName()+"' ");
+    }
 }
