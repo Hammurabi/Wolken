@@ -58,6 +58,28 @@ public class Int256 {
         return new Int256(result, !(other.signed & signed));
     }
 
+    public Int256 mul(Int256 other) {
+        int carry       = 0;
+        int result[]    = new int[8];
+
+        for (int x = 0; x < 8; x ++) {
+            int i = 7 - x;
+
+            for (int b = 0; b < 32; b ++) {
+                int bit0    = Utils.getBit(data[i], b);
+                int bit1    = Utils.getBit(other.data[i], b);
+
+                int sum0    = (bit0 ^ bit1);
+                int sum1    = sum0 ^ carry;
+                carry       = (bit0 & bit1) | (carry & sum0);
+
+                result[i]   = Utils.setBit(result[i], b, sum1);
+            }
+        }
+
+        return new Int256(result, !(other.signed & signed));
+    }
+
     public Int256 sub(Int256 other) {
         int result[]    = new int[8];
 
