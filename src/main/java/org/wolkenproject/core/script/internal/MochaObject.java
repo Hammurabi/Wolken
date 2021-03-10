@@ -1,6 +1,7 @@
 package org.wolkenproject.core.script.internal;
 
 import org.wolkenproject.core.script.VirtualProcess;
+import org.wolkenproject.utils.Utils;
 
 import java.util.Arrays;
 
@@ -42,6 +43,10 @@ public class MochaObject {
         return len;
     }
 
+    protected void addMemberToFront(MochaObject member) {
+        members = Utils.prepend(member, members);
+    }
+
     public void isCallable() {
     }
 
@@ -76,9 +81,9 @@ public class MochaObject {
     // reshape an array
     public MochaObject reshape(MochaObject shape) { return this; }
     // add an element to the back
-    public MochaObject append(MochaObject object) { return this; }
+    public MochaObject append(MochaObject object) { addMember(object); return this; }
     // add an element to the front
-    public MochaObject prepend(MochaObject object) { return this; }
+    public MochaObject prepend(MochaObject object) { addMemberToFront(object); return this; }
     // pop the last element
     public MochaObject pop() { return this; }
     // poll the first element
