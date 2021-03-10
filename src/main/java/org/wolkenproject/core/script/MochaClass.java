@@ -38,7 +38,7 @@ public class MochaClass {
     public void populateMembers(VirtualProcess virtualProcess, MochaObject[] members) {
         for (String string : this.members.keySet()) {
             Tuple<Integer, Field> member = this.members.get(string);
-            members[member.getFirst()] = member.getSecond().newInstance(virtualProcess);
+//            members[member.getFirst()] = member.getSecond().newInstance(virtualProcess);
         }
     }
 
