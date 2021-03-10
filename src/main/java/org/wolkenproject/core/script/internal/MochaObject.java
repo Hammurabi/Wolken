@@ -10,9 +10,13 @@ public class MochaObject {
     private MochaCallable   callable;
 
     public MochaObject() {
+        this()
+    }
+
+    public MochaObject(MochaCallable callble) {
         members     = new MochaObject[0];
-        callable    = (proc)->{ return null; };
-        addMember(new NativceMochaFunction());
+        callable    = callble;
+        addMember(new MochaObject());
     }
 
     protected int addFunction(MochaObject callable) {
