@@ -2,7 +2,11 @@ package org.wolkenproject.core.script.internal;
 
 import org.wolkenproject.exceptions.MochaException;
 
+import java.math.BigInteger;
+
 public class MochaNumber extends MochaObject {
+    protected BigInteger value;
+
     @Override
     public MochaObject add(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
