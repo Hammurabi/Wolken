@@ -1,5 +1,6 @@
 package org.wolkenproject.utils;
 
+import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 public class Utils {
@@ -302,5 +304,17 @@ public class Utils {
         }
 
         return value;
+    }
+
+    public static <T> T[] prepend(T element, T[] elements) {
+        Object n[] = new Object[elements.length + 1];
+
+        n[0] = element;
+
+        for (int i = 1; i < n.length; i ++) {
+            n[i] = elements[i - 1];
+        }
+
+        return (T[]) n;
     }
 }
