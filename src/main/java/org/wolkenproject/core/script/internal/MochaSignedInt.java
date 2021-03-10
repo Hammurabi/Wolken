@@ -39,7 +39,7 @@ public class MochaSignedInt extends MochaNumber {
 
     @Override
     public MochaObject mul(MochaObject other) throws MochaException {
-        super.add(other);
+        super.mul(other);
         if (other instanceof MochaNumber) {
             return new MochaNumber(value.multiply(((MochaNumber) other).value));
         }
