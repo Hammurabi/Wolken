@@ -109,6 +109,6 @@ public class MochaObject {
             return first;
         }
 
-        return null;
+        throw new MochaException("cannot poll() from empty array.");
     }
 }
