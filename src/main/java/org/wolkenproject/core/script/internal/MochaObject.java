@@ -11,7 +11,7 @@ public class MochaObject {
 
     public MochaObject() {
         members     = new MochaObject[0];
-        callable    = (proc)-{ return null; };
+        callable    = (proc)->{ return null; };
         addMember(new NativceMochaFunction());
     }
 
