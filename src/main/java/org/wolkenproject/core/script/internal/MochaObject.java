@@ -1,6 +1,7 @@
 package org.wolkenproject.core.script.internal;
 
 import org.wolkenproject.core.script.MochaFunction;
+import org.wolkenproject.core.script.VirtualProcess;
 
 import java.util.Arrays;
 
@@ -9,6 +10,7 @@ public class MochaObject {
 
     public MochaObject() {
         members = new MochaObject[0];
+        addMember(new NativceMochaFunction());
     }
 
     protected int addFunction(MochaObject callable) {
@@ -25,6 +27,13 @@ public class MochaObject {
         members[len] = member;
 
         return len;
+    }
+
+    public void isCallable() {
+    }
+
+    public final MochaObject call(VirtualProcess process) {
+        return callable.execute(process);
     }
 
     public MochaObject add(MochaObject other) { return this; }
