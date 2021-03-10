@@ -6,10 +6,12 @@ import org.wolkenproject.core.script.VirtualProcess;
 import java.util.Arrays;
 
 public class MochaObject {
-    private MochaObject members[];
+    private MochaObject     members[];
+    private MochaCallable   callable;
 
     public MochaObject() {
-        members = new MochaObject[0];
+        members     = new MochaObject[0];
+        callable    = (proc)-{ return null; };
         addMember(new NativceMochaFunction());
     }
 
