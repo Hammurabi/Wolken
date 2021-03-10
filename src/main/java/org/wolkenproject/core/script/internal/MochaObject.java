@@ -95,5 +95,19 @@ public class MochaObject {
         return null;
     }
     // poll the first element
-    public MochaObject poll() { return this; }
+    public MochaObject poll() {
+        if (members.length > 0) {
+            MochaObject first = members[0];
+            MochaObject temp[] = members;
+            members = new MochaObject[members.length - 1];
+
+            for (int i = 0; i < members.length; i ++) {
+                members[i] = temp[i + 1];
+            }
+
+            return first;
+        }
+
+        return null;
+    }
 }
