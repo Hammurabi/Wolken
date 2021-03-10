@@ -93,7 +93,7 @@ public class MochaObject {
             return last;
         }
 
-        return null;
+        throw new MochaException("cannot pop() from empty array.");
     }
     // poll the first element
     public MochaObject poll() throws MochaException {
