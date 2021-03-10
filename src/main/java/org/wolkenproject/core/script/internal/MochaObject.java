@@ -5,6 +5,10 @@ import org.wolkenproject.core.script.MochaFunction;
 public class MochaObject {
     private MochaObject members[];
 
+    public MochaObject() {
+        members = new MochaObject[21];
+    }
+
     public MochaObject add(MochaObject other) { return this; }
     public MochaObject sub(MochaObject other) { return this; }
     public MochaObject mul(MochaObject other) { return this; }
