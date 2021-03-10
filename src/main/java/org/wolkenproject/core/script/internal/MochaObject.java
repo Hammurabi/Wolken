@@ -11,10 +11,10 @@ public class MochaObject {
         members = new MochaObject[0];
     }
 
-    protected int addFunction(MochaFunction function) {
+    protected int addFunction(MochaObject callable) {
         int len = members.length;
         members = Arrays.copyOf(members, members.length + 1);
-        members[len] = function;
+        members[len] = callable;
 
         return len;
     }
