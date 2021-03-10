@@ -142,13 +142,14 @@ public class Int256 {
             {
                 int shift = n / 8;
                 int carry = 0;
+                int result[] = new int[8];
 
                 for (int i = 0; i < data.length; i ++) {
                     int omit = (0xFFFFFFFF << shift) & data[i];
                     data[i]  = data[i] >> shift;
                 }
 
-                return null;
+                return new Int256(result, signed);
             }
         }
     }
