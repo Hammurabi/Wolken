@@ -6,11 +6,13 @@ import org.wolkenproject.utils.Utils;
 import java.math.BigInteger;
 
 public class MochaSignedInt extends MochaNumber {
-    public MochaSignedInt(long value) {
+    public MochaSignedInt(long value) throws MochaException {
+        super(null);
         this.value = new BigInteger(Utils.takeApartLong(value));
     }
 
     public MochaSignedInt(BigInteger integer) throws MochaException {
+        super(null);
         this.value = integer;
         if (integer.bitLength() > 256) {
             throw new MochaException("the maximum size of int is 256 bits.");
