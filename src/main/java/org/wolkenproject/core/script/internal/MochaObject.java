@@ -1,6 +1,7 @@
 package org.wolkenproject.core.script.internal;
 
 import org.wolkenproject.core.script.VirtualProcess;
+import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.Utils;
 
 import java.util.Arrays;
@@ -95,7 +96,7 @@ public class MochaObject {
         return null;
     }
     // poll the first element
-    public MochaObject poll() {
+    public MochaObject poll() throws MochaException {
         if (members.length > 0) {
             MochaObject first = members[0];
             MochaObject temp[] = members;
