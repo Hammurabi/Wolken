@@ -1,8 +1,5 @@
 package org.wolkenproject.core.script;
 
-import org.wolkenproject.core.script.MochaClass;
-import org.wolkenproject.core.script.MochaObject;
-import org.wolkenproject.core.script.VirtualProcess;
 import org.wolkenproject.exceptions.UndefClassException;
 
 public class MochaArray extends MochaObject {
