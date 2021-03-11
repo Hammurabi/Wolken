@@ -20,7 +20,7 @@ public abstract class Opcode {
         this.usage= usage;
     }
 
-    public abstract void execute(VirtualProcess virtualProcess) throws MochaException;
+    public abstract void execute(Contract contract) throws MochaException;
     public abstract void write(BitOutputStream outputStream) throws IOException;
     public abstract void read(BitInputStream inputStream) throws IOException;
     public abstract Opcode makeCopy();
