@@ -1,8 +1,6 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.exceptions.MochaException;
-import org.wolkenproject.exceptions.UndefClassException;
-import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
 
