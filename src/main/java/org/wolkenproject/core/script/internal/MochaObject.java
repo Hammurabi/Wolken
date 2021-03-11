@@ -36,6 +36,11 @@ public class MochaObject {
         return object;
     }
 
+    // creates an array of element type 'byte' and NOT 'int256'
+    public static MochaObject createArray(byte[] array) {
+        return null;
+    }
+
     protected int addMember(MochaObject member) {
         int len = members.length;
         members = Arrays.copyOf(members, members.length + 1);
