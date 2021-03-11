@@ -24,13 +24,7 @@ public class OpPush extends Opcode {
 
     @Override
     public void execute(Contract contract, Stack<MochaObject> stack) throws MochaException {
-        MochaObject object = M;
-        array.setArrayLength(this.array.length);
-        for (int i = 0; i < this.array.length; i ++) {
-            array.setMember(i, null);
-        }
-
-        virtualProcess.getMemoryModule().getStack().push(array);
+        stack.push(MochaObject.createArray(array));
     }
 
     @Override
