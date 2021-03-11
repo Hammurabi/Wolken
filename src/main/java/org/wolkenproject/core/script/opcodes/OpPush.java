@@ -1,13 +1,13 @@
 package org.wolkenproject.core.script.opcodes;
 
 import org.wolkenproject.core.script.*;
+import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
-import java.util.Stack;
 
 public class OpPush extends Opcode {
     private byte array[];
