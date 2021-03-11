@@ -1,8 +1,7 @@
 package org.wolkenproject.core.script.internal;
 
-import org.wolkenproject.core.script.Contract;
-import org.wolkenproject.core.script.VirtualProcess;
+import org.wolkenproject.core.script.Scope;
 
 public interface MochaCallable {
-    MochaObject call(Contract contract, );
+    MochaObject call(Scope scope);
 }
