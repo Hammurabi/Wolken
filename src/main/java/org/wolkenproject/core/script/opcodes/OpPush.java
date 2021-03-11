@@ -8,6 +8,7 @@ import org.wolkenproject.utils.BitOutputStream;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
+import java.util.Stack;
 
 public class OpPush extends Opcode {
     private byte array[];
