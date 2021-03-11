@@ -13,7 +13,7 @@ public class MochaObject {
     private MochaCallable   callable;
 
     public MochaObject() {
-        this((proc)->{ return null; });
+        this(defaultCallable);
     }
 
     public MochaObject(MochaCallable callble) {
@@ -24,6 +24,10 @@ public class MochaObject {
 
     public static final MochaObject createFunction(MochaCallable callable) {
         return new MochaObject(callable);
+    }
+
+    public static final MochaObject createObject() {
+        return createObject(defaultCallable);
     }
 
     public static final MochaObject createObject(MochaCallable callable) {
@@ -39,7 +43,7 @@ public class MochaObject {
 
     // creates an array of element type 'byte' and NOT 'int256'
     public static MochaObject createArray(byte[] array) {
-        MochaObject object = createObject();
+        MochaObject object = createObject(defaultCallable);
 
         return null;
     }
