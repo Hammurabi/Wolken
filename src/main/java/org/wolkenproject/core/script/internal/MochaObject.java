@@ -43,7 +43,8 @@ public class MochaObject {
 
     // creates an array of element type 'byte' and NOT 'int256'
     public static MochaObject createArray(byte[] array) {
-        MochaObject object = createObject(defaultCallable);
+        MochaObject object = createObject();
+
 
         return null;
     }
