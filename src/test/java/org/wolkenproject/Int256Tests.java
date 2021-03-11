@@ -20,13 +20,13 @@ public class Int256Tests {
         }
         {
             for (int i = 0; i < 20; i ++) {
-                long f          = (i * 1000) * 1000;
-                long s          = (i * 1000) * 1000 + 1;
+                long f          = (i * Integer.MAX_VALUE) * 23 + 1;
+                long s          = (i * Integer.MAX_VALUE) * 23;
 
                 Int256 first    = new Int256(f);
                 Int256 second   = new Int256(s);
-                long value      = first.mul(second).asLong();
-                Assertions.assertEquals(f + s, value);
+                long value      = first.sub(second).asLong();
+                Assertions.assertEquals(f - s, value);
             }
         }
     }
