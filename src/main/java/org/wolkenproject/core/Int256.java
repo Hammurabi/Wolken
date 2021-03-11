@@ -63,6 +63,20 @@ public class Int256 {
         this.signed = signed;
     }
 
+    public Int256 add(long number) {
+        return add(new Int256(convertLong(number), number < 0));
+    }
+
+    public Int256 add(long number, boolean signed) {
+        Int256 number256 = new Int256(convertLong(number), signed);
+
+        if (signed) {
+            return sub(number256);
+        }
+
+        return add(number256);
+    }
+
     public Int256 add(Int256 other) {
         int carry       = 0;
         int result[]    = new int[8];
@@ -114,7 +128,7 @@ public class Int256 {
             result[i]   = ~other.data[i];
         }
 
-        return add(new Int256(result, !(other.signed & signed)));
+        return add(new Int256(result, !(other.signed & signed)).add(1));
     }
 
     public int[] getData() {
@@ -141,14 +155,23 @@ public class Int256 {
             case 256: return Zero;
             default:
             {
-                int shift = n / 8;
-                int carry = 0;
-                int result[] = new int[8];
+                byte bits[] = new byte[256];
+                int offset = 0;
 
-                for (int i = 0; i < data.length; i ++) {
-                    int omit = (0xFFFFFFFF << shift) & data[i];
-                    result[i]= (data[i] >> shift) | carry;
-                    carry = omit << (32 - shift);
+                for (int x = 0; x < 8; x ++) {
+                    for (int b = 0; b < 32; b ++) {
+                        bits[offset ++] = (byte) Utils.getBit(data[x], b);
+                    }
+                }
+
+                bits = Utils.pad(n, Arrays.copyOf(bits, (256 - n)));
+                offset = 0;
+                int result[] = Arrays.copyOf(data, 8);
+
+                for (int x = 0; x < 8; x ++) {
+                    for (int b = 0; b < 32; b ++) {
+                        result[x] = (byte) Utils.setBit(result[x], b, bits[offset ++]);
+                    }
                 }
 
                 return new Int256(result, signed);
