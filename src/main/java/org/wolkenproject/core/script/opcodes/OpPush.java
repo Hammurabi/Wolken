@@ -1,14 +1,13 @@
 package org.wolkenproject.core.script.opcodes;
 
-import org.wolkenproject.core.script.Opcode;
-import org.wolkenproject.core.script.VirtualProcess;
-import org.wolkenproject.core.script.MochaArray;
+import org.wolkenproject.core.script.*;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
+import java.util.Stack;
 
 public class OpPush extends Opcode {
     private byte array[];
@@ -23,8 +22,8 @@ public class OpPush extends Opcode {
     }
 
     @Override
-    public void execute(VirtualProcess virtualProcess) throws MochaException {
-        MochaArray array = new MochaArray(virtualProcess, virtualProcess.getClassProvider().getArrayMochaClass());
+    public void execute(Contract contract, Stack<MochaObject> stack) throws MochaException {
+        MochaObject object = M;
         array.setArrayLength(this.array.length);
         for (int i = 0; i < this.array.length; i ++) {
             array.setMember(i, null);
