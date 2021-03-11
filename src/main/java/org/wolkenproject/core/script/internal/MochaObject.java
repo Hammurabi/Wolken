@@ -7,7 +7,8 @@ import org.wolkenproject.utils.Utils;
 import java.util.Arrays;
 
 public class MochaObject {
-    private static final MochaObject fn_add = createFunction((proc)->{ return null; });
+    private static final MochaObject    fn_add          = createFunction((proc)->{ return null; });
+    private static final MochaCallable  defaultCallable = (proc)->{ return null; };
     private MochaObject     members[];
     private MochaCallable   callable;
 
@@ -38,6 +39,8 @@ public class MochaObject {
 
     // creates an array of element type 'byte' and NOT 'int256'
     public static MochaObject createArray(byte[] array) {
+        MochaObject object = createObject();
+
         return null;
     }
 
