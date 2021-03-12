@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.core.script.opcodes.OpHalt;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
@@ -7,6 +8,17 @@ import org.wolkenproject.utils.BitOutputStream;
 import java.io.IOException;
 
 public abstract class Opcode {
+    public static final Opcode halt = new OpHalt();
+
+
+
+
+
+
+
+
+
+
     private String          name;
     private int             identifier;
     private String          desc;
