@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.utils.Tuple;
 
 import java.util.HashMap;
@@ -42,8 +43,8 @@ public class MochaClass {
         }
     }
 
-    public MochaObject newInstance(VirtualProcess virtualProcess) {
-        return new MochaObject(virtualProcess, this);
+    public MochaObject newInstance(Scope scope) {
+        return new MochaObject();
     }
 
     // call any functions defined in this class by name
@@ -83,7 +84,7 @@ public class MochaClass {
         return totalMembers;
     }
 
-    public MochaObject newInstanceNative(VirtualProcess virtualProcess, Object... objects) {
-        return newInstance(virtualProcess);
+    public MochaObject newInstanceNative(Scope scope, Object... objects) {
+        return newInstance(scope);
     }
 }
