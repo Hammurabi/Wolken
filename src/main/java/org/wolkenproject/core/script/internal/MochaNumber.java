@@ -141,6 +141,7 @@ public class MochaNumber extends MochaObject {
     @Override
     public MochaObject div(MochaObject other, boolean sign) throws MochaException {
         if (other instanceof MochaNumber) {
+            do_div((MochaNumber) other);
         }
 
         throw new MochaException("cannot perform 'div' on object of type 'Number' and '"+other.getClass().getName()+"' ");
