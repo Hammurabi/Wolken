@@ -35,25 +35,17 @@ public class MochaNumber extends MochaObject {
     @Override
     public MochaObject add(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
-            cAdd(other);
         }
 
         throw new MochaException("cannot perform 'add' on object of type 'Number' and '"+other.getClass().getName()+"' ");
     }
 
-    private void cAdd(MochaObject other) {
-    }
-
     @Override
     public MochaObject sub(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
-            cSub(other);
         }
 
         throw new MochaException("cannot perform 'sub' on object of type 'Number' and '"+other.getClass().getName()+"' ");
-    }
-
-    private void cSub(MochaObject other) {
     }
 
     @Override
