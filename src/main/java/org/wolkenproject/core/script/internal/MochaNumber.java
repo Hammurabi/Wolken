@@ -150,6 +150,7 @@ public class MochaNumber extends MochaObject {
     @Override
     public MochaObject mod(MochaObject other, boolean sign) throws MochaException {
         if (other instanceof MochaNumber) {
+            do_mod((MochaNumber) other);
         }
 
         throw new MochaException("cannot perform 'mod' on object of type 'Number' and '"+other.getClass().getName()+"' ");
