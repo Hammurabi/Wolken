@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.utils.Utils;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 public class Int256 {
@@ -60,6 +61,44 @@ public class Int256 {
     private Int256(int data[], boolean signed) {
         this.data   = data;
         this.signed = signed;
+    }
+
+    private static int[] mul(int x[], int y[]) {
+        int xstart  = x.length - 1;
+        int ystart  = y.length - 1;
+        int z[]       = new int[16];
+
+        long carry = 0L;
+        int i = ystart;
+
+        int j;
+        for(j = ystart + 1 + xstart; i >= 0; --j) {
+            long product = ((long)y[i] & 4294967295L) * ((long)x[xstart] & 4294967295L) + carry;
+            z[j] = (int)product;
+            carry = product >>> 32;
+            --i;
+        }
+
+        z[xstart] = (int)carry;
+
+        for(i = xstart - 1; i >= 0; --i) {
+            carry = 0L;
+            j = ystart;
+
+            for(int k = ystart + 1 + i; j >= 0; --k) {
+                long product = ((long)y[j] & 4294967295L) * ((long)x[i] & 4294967295L) + ((long)z[k] & 4294967295L) + carry;
+                z[k] = (int)product;
+                carry = product >>> 32;
+                --j;
+            }
+
+            z[i] = (int) carry;
+        }
+
+        int result[] = new int[8];
+        System.arraycopy(z, 8, result, 0, 8);
+
+        return result;
     }
 
     private static int[] add(int x[], int y[]) {
@@ -137,25 +176,7 @@ public class Int256 {
     }
 
     public Int256 mul(Int256 other) {
-        int carry       = 0;
-        int result[]    = new int[8];
-
-        for (int x = 0; x < 8; x ++) {
-            int i = 7 - x;
-
-            for (int b = 0; b < 32; b ++) {
-                int bit0    = Utils.getBit(data[i], b);
-                int bit1    = Utils.getBit(other.data[i], b);
-
-                int sum0    = (bit0 ^ bit1);
-                int sum1    = sum0 ^ carry;
-                carry       = (bit0 & bit1) | (carry & sum0);
-
-                result[i]   = Utils.setBit(result[i], b, sum1);
-            }
-        }
-
-        return new Int256(result, !(other.signed & signed));
+        return new Int256(mul(data, other.data), other.signed || signed);
     }
 
     public Int256 sub(Int256 other) {
