@@ -15,12 +15,15 @@ import java.math.BigInteger;
 import java.util.Stack;
 
 public class OpIConst_4bits extends Opcode {
-    public OpIConst_4bits(String name, String desc, String usage) {
-        super("OpIConst{d}", "push an int to the stack (0-15)", "iconst{d}");
+    private int integer;
+
+    public OpIConst_4bits(int number) {
+        super("OpIConst{d}", "push an unsigned int to the stack (0-15)", "iconst{d}");
     }
 
     @Override
     public void execute(Scope scope) throws MochaException {
+        scope.getStack().push(new MochaNumber(integer, false));
     }
 
     @Override
