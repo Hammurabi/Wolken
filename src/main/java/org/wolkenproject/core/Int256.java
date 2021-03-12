@@ -2,7 +2,6 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.utils.Utils;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 
 public class Int256 {
@@ -63,21 +62,59 @@ public class Int256 {
         this.signed = signed;
     }
 
-    public Int256 add(long number) {
-        return add(new Int256(convertLong(number), number < 0));
+    private static int[] add(int x[], int y[]) {
+        int xIndex = x.length;
+        int yIndex = y.length;
+        int[] result = new int[8];
+        long sum = 0L;
+
+        while(yIndex > 0) {
+            --xIndex;
+            long var10000 = (long)x[xIndex] & 4294967295L;
+            --yIndex;
+            sum = var10000 + ((long)y[yIndex] & 4294967295L) + (sum >>> 32);
+            result[xIndex] = (int)sum;
+        }
+
+        boolean carry;
+        for(carry = sum >>> 32 != 0L; xIndex > 0 && carry; carry = (result[xIndex] = x[xIndex] + 1) == 0) {
+            --xIndex;
+        }
+
+        while(xIndex > 0) {
+            --xIndex;
+            result[xIndex] = x[xIndex];
+        }
+
+        // check for sign later
+        if (carry) {
+            for (int i = 0; i < 8; i ++) {
+                result[i] = 0;
+            }
+        }
+
+        return result;
     }
 
-    public Int256 add(long number, boolean signed) {
+    public Int256 add(long number) {
+        return new Int256(add(data, convertLong(number)), false);
+    }
+
+    public Int256 add(Int256 other) {
+        return new Int256(add(data, other.data), false);
+    }
+
+    public Int256 software_adder(long number, boolean signed) {
         Int256 number256 = new Int256(convertLong(number), signed);
 
         if (signed) {
             return sub(number256);
         }
 
-        return add(number256);
+        return software_adder(number256);
     }
 
-    public Int256 add(Int256 other) {
+    public Int256 software_adder(Int256 other) {
         int carry       = 0;
         int result[]    = new int[8];
 
@@ -128,7 +165,7 @@ public class Int256 {
             result[i]   = ~other.data[i];
         }
 
-        return add(new Int256(result, !(other.signed & signed)).add(1));
+        return software_adder(new Int256(result, !(other.signed & signed)).add(1));
     }
 
     public int[] getData() {
@@ -181,16 +218,21 @@ public class Int256 {
 
     @Override
     public String toString() {
-        byte array[] = new byte[0];
-        for (int i  = 0; i < 8; i ++) {
-            array   = Utils.concatenate(array, Utils.takeApart(data[i]));
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < data.length; i ++) {
+            long x = Integer.toUnsignedLong(data[i]);
+
+            do {
+                builder.append(x % 10);
+                x /= 10;
+            } while (x > 0);
         }
 
-        // no ternary
-        if (signed) {
-            return new BigInteger(array).toString();
-        } else {
-            return new BigInteger(1, array).toString();
+        String string = new StringBuilder(builder.toString().replaceAll("^(0)+", "")).reverse().toString();
+        if (string.isEmpty()) {
+            return "0";
         }
+
+        return string;
     }
 }
