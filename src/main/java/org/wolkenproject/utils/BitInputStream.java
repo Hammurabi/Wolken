@@ -1,5 +1,6 @@
 package org.wolkenproject.utils;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -16,7 +17,7 @@ public class BitInputStream extends InputStream {
     public int read() throws IOException {
         int location = index ++;
         if (location / 8 >= array.length) {
-            return -1;
+            throw new EOFException("reached end of stream.");
         }
 
         int byteAddress = location / 8;
