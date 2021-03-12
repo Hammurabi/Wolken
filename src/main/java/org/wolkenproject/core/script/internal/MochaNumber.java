@@ -34,13 +34,25 @@ public class MochaNumber extends MochaObject {
     }
 
     public MochaObject do_add(MochaNumber other) throws MochaException {
-        BigInteger result = value.add(other.value);
+        BigInteger result   = value.add(other.value);
 
         return new MochaNumber(result, sign || other.sign);
     }
 
     public MochaObject do_sub(MochaNumber other) throws MochaException {
         BigInteger result   = value.subtract(other.value);
+        boolean nSign       = sign || other.sign;
+
+        // overflow
+        if (value.signum() < 0 && !nSign) {
+            return new MochaNumber(MaxUnsignedInt, false);
+        }
+
+        return new MochaNumber(result, nSign);
+    }
+
+    public MochaObject do_mul(MochaNumber other) throws MochaException {
+        BigInteger result   = value.multiply(other.value);
         boolean nSign       = sign || other.sign;
 
         // overflow
