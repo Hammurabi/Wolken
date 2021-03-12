@@ -2,6 +2,7 @@ package org.wolkenproject.core.script.opcodes;
 
 import org.wolkenproject.core.script.Contract;
 import org.wolkenproject.core.script.Opcode;
+import org.wolkenproject.core.script.Scope;
 import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.exceptions.MochaException;
@@ -25,8 +26,8 @@ public class OpIConst extends Opcode {
     }
 
     @Override
-    public void execute(Contract contract, Stack<MochaObject> stack) throws MochaException {
-        stack.push(new MochaNumber(integer));
+    public void execute(Scope scope) throws MochaException {
+        scope.getStack().push(new MochaNumber(integer));
     }
 
     private static boolean isSigned(long integer) {
