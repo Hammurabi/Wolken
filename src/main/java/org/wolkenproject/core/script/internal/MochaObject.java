@@ -1,7 +1,6 @@
 package org.wolkenproject.core.script.internal;
 
 import org.wolkenproject.core.script.Scope;
-import org.wolkenproject.core.script.VirtualProcess;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.Utils;
 
