@@ -32,6 +32,12 @@ public class MochaNumber extends MochaObject {
         return result;
     }
 
+    public MochaObject do_add(MochaNumber other) throws MochaException {
+        BigInteger result = value.add(other.value);
+
+        return new MochaNumber(result, sign || other.sign);
+    }
+
     @Override
     public MochaObject add(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
