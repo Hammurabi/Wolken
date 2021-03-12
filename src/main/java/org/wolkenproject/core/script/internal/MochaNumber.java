@@ -114,7 +114,7 @@ public class MochaNumber extends MochaObject {
     @Override
     public MochaObject add(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
-            
+            do_add((MochaNumber) other);
         }
 
         throw new MochaException("cannot perform 'add' on object of type 'Number' and '"+other.getClass().getName()+"' ");
