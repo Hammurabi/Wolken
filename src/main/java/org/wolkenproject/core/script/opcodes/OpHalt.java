@@ -1,7 +1,6 @@
 package org.wolkenproject.core.script.opcodes;
 
 import org.wolkenproject.core.script.Opcode;
-import org.wolkenproject.core.script.VirtualProcess;
 import org.wolkenproject.utils.BitInputStream;
 import org.wolkenproject.utils.BitOutputStream;
 
