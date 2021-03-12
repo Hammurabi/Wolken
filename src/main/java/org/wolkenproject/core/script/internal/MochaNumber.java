@@ -123,6 +123,7 @@ public class MochaNumber extends MochaObject {
     @Override
     public MochaObject sub(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
+            do_sub((MochaNumber) other);
         }
 
         throw new MochaException("cannot perform 'sub' on object of type 'Number' and '"+other.getClass().getName()+"' ");
