@@ -18,7 +18,8 @@ public class MochaNumber extends MochaObject {
         this.value  = integer;
         this.sign   = signed;
         if (integer.bitLength() > 256) {
-            throw new MochaException("The maximum size of Number is 256 bits.");
+            // overflow
+            value = BigInteger.ZERO;
         }
     }
 
