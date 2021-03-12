@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.wolkenproject.core.Int256;
 import org.wolkenproject.utils.Utils;
 
+import java.math.BigInteger;
+
 public class Int256Tests {
     @Test
     void testInt256() {
@@ -50,15 +52,29 @@ public class Int256Tests {
             }
         }
         {
-            for (int i = 0; i < 20; i ++) {
-                long f          = (i * Integer.MAX_VALUE) * 23;
-                long s          = i;
+            for (int i = 0; i < 1_000_000; i ++) {
+                long f          = (i * Integer.MAX_VALUE) * 2;
+                long s          = (i * Short.MAX_VALUE) * 16;
 
                 Int256 first    = new Int256(f);
                 Int256 second   = new Int256(s);
 
                 long value      = first.mul(second).asLong();
                 Assertions.assertEquals(f * s, value);
+            }
+        }
+        {
+            BigInteger a        = BigInteger.TWO.pow(32);
+            for (int i = 0; i < 32_000; i ++) {
+                BigInteger b    = a.multiply(new BigInteger(Integer.toString(i)));
+
+                byte aa[]       = a.toByteArray();
+                byte ab[]       = b.toByteArray();
+
+                Int256 first    = new Int256(Utils.pad(32 - aa.length, aa), false);
+                Int256 second   = new Int256(Utils.pad(32 - ab.length, ab), false);
+
+                Assertions.assertEquals(a.multiply(b).toString(), first.mul(second).toString());
             }
         }
     }
