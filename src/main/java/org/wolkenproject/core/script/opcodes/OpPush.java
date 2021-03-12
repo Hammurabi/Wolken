@@ -23,8 +23,8 @@ public class OpPush extends Opcode {
     }
 
     @Override
-    public void execute(Contract contract, Stack<MochaObject> stack) throws MochaException {
-        stack.push(MochaObject.createArray(array));
+    public void execute(Scope scope) throws MochaException {
+        scope.getStack().push(MochaObject.createArray(array));
     }
 
     @Override
