@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.util.Stack;
 
 public class OpIConst extends Opcode {
-    private long integer;
+    private long    integer;
+    private boolean signed;
 
     public OpIConst() {
         this(0);
@@ -27,7 +28,7 @@ public class OpIConst extends Opcode {
 
     @Override
     public void execute(Scope scope) throws MochaException {
-        scope.getStack().push(new MochaNumber(integer));
+        scope.getStack().push(new MochaNumber(integer, signed));
     }
 
     private static boolean isSigned(long integer) {
