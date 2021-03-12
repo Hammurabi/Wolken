@@ -333,7 +333,8 @@ public class Int256 {
         return new Int256(new BigInteger(getSignum(), Utils.takeApart(data)).mod(new BigInteger(other.getSignum(), Utils.takeApart(other.data))).toByteArray(), signed || other.signed);
     }
 
-    public Int256 shiftLeft(int other) {
+    public Int256 shiftLeft(int shift) {
+        return new Int256(shiftLeft(data, shift), signed);
     }
 
     private static int[] shiftLeft(int[] mag, int n) {
