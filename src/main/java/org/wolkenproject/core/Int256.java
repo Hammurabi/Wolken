@@ -3,6 +3,7 @@ package org.wolkenproject.core;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
+import java.math.MutableBigInteger;
 import java.util.Arrays;
 
 public class Int256 {
@@ -135,6 +136,45 @@ public class Int256 {
         return result;
     }
 
+    private static int[] div(int x[], int y[]) {
+        BigInteger f;
+        int xstart  = x.length - 1;
+        int ystart  = y.length - 1;
+        int z[]       = new int[16];
+
+        long carry = 0L;
+        int i = ystart;
+
+        int j;
+        for(j = ystart + 1 + xstart; i >= 0; --j) {
+            long product = ((long)y[i] & 4294967295L) * ((long)x[xstart] & 4294967295L) + carry;
+            z[j] = (int)product;
+            carry = product >>> 32;
+            --i;
+        }
+
+        z[xstart] = (int)carry;
+
+        for(i = xstart - 1; i >= 0; --i) {
+            carry = 0L;
+            j = ystart;
+
+            for(int k = ystart + 1 + i; j >= 0; --k) {
+                long product = ((long)y[j] & 4294967295L) * ((long)x[i] & 4294967295L) + ((long)z[k] & 4294967295L) + carry;
+                z[k] = (int)product;
+                carry = product >>> 32;
+                --j;
+            }
+
+            z[i] = (int) carry;
+        }
+
+        int result[] = new int[8];
+        System.arraycopy(z, 8, result, 0, 8);
+
+        return result;
+    }
+
     public Int256 add(long number) {
         return new Int256(add(data, convertLong(number)), false);
     }
@@ -197,57 +237,21 @@ public class Int256 {
         return convertInts(data);
     }
 
-    public Int256 shiftr(int n) {
-        if (n <= 0) {
-            return new Int256(Arrays.copyOf(data, 8), signed);
-        }
-
-        switch (n) {
-            case 32: return new Int256(new int[]    {0, data[0], data[1], data[2], data[3], data[4], data[5], data[6]}, signed);
-            case 64: return new Int256(new int[]    {0, 0, data[0], data[1], data[2], data[3], data[4], data[5]}, signed);
-            case 96: return new Int256(new int[]    {0, 0, 0, data[0], data[1], data[2], data[3], data[4]}, signed);
-            case 128: return new Int256(new int[]   {0, 0, 0, 0, data[0], data[1], data[2], data[3]}, signed);
-            case 160: return new Int256(new int[]   {0, 0, 0, 0, 0, data[0], data[1], data[2]}, signed);
-            case 192: return new Int256(new int[]   {0, 0, 0, 0, 0, 0, data[0], data[1]}, signed);
-            case 224: return new Int256(new int[]   {0, 0, 0, 0, 0, 0, 0, data[0]}, signed);
-            case 256: return Zero;
-            default:
-            {
-                byte bits[] = new byte[256];
-                int offset = 0;
-
-                for (int x = 0; x < 8; x ++) {
-                    for (int b = 0; b < 32; b ++) {
-                        bits[offset ++] = (byte) Utils.getBit(data[x], b);
-                    }
-                }
-
-                bits = Utils.pad(n, Arrays.copyOf(bits, (256 - n)));
-                offset = 0;
-                int result[] = Arrays.copyOf(data, 8);
-
-                for (int x = 0; x < 8; x ++) {
-                    for (int b = 0; b < 32; b ++) {
-                        result[x] = (byte) Utils.setBit(result[x], b, bits[offset ++]);
-                    }
-                }
-
-                return new Int256(result, signed);
-            }
-        }
+    public int asInt() {
+        return data[7];
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < data.length; i ++) {
-            long x = Integer.toUnsignedLong(data[i]);
+        Int256 self = new Int256(Arrays.copyOf(data, 8), signed);
+        Int256 base = new Int256(10, false);
 
-            do {
-                builder.append(x % 10);
-                x /= 10;
-            } while (x > 0);
-        }
+        do {
+            Int256 remainder = self.mod(base);
+            builder.append(remainder.asInt());
+            self = self.div(base);
+        } while (self.asInt() > 0);
 
         String string = new StringBuilder(builder.toString().replaceAll("^(0)+", "")).reverse().toString();
         if (string.isEmpty()) {
@@ -255,5 +259,134 @@ public class Int256 {
         }
 
         return string;
+                //new BigInteger(1, Utils.takeApart(data)).toString();
+    }
+
+    public int compare(Int256 other) {
+        for(int i = 0; i < 8; ++i) {
+            int a = data[i];
+            int b = other.data[i];
+            if (a != b) {
+                return ((long)a & 4294967295L) < ((long)b & 4294967295L) ? -1 : 1;
+            }
+        }
+
+        return 0;
+    }
+
+    public boolean isGreaterThan(Int256 other) {
+        for(int i = 0; i < 8; ++i) {
+            int a = data[i];
+            int b = other.data[i];
+
+            if (a != b) {
+                return ((long)a & 4294967295L) > ((long)b & 4294967295L);
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isGreaterThanOrEqual(Int256 other) {
+        for(int i = 0; i < 8; ++i) {
+            int a = data[i];
+            int b = other.data[i];
+
+            if (a != b) {
+                return ((long)a & 4294967295L) > ((long)b & 4294967295L);
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isLessThan(Int256 other) {
+        for(int i = 0; i < 8; ++i) {
+            int a = data[i];
+            int b = other.data[i];
+
+            if (a != b) {
+                return ((long)a & 4294967295L) < ((long)b & 4294967295L);
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isLessThanOrEqual(Int256 other) {
+        for(int i = 0; i < 8; ++i) {
+            int a = data[i];
+            int b = other.data[i];
+
+            if (a != b) {
+                return ((long)a & 4294967295L) <= ((long)b & 4294967295L);
+            }
+        }
+
+        return true;
+    }
+
+    public Int256 div(Int256 other) {
+        return new Int256(new BigInteger(getSignum(), Utils.takeApart(data)).divide(new BigInteger(other.getSignum(), Utils.takeApart(other.data))).toByteArray(), signed || other.signed);
+    }
+
+    public Int256 mod(Int256 other) {
+        return new Int256(new BigInteger(getSignum(), Utils.takeApart(data)).mod(new BigInteger(other.getSignum(), Utils.takeApart(other.data))).toByteArray(), signed || other.signed);
+    }
+
+    public Int256 shiftLeft(int other) {
+    }
+
+    private static int[] shiftLeft(int[] mag, int n) {
+        int nInts = n >>> 5;
+        int nBits = n & 31;
+        int magLen = mag.length;
+        int[] newMag = null;
+
+        if (nBits == 0) {
+            newMag = new int[magLen + nInts];
+            System.arraycopy(mag, 0, newMag, 0, magLen);
+        } else {
+            int i = 0;
+            int nBits2 = 32 - nBits;
+            int highBits = mag[0] >>> nBits2;
+            if (highBits != 0) {
+                newMag = new int[magLen + nInts + 1];
+                newMag[i++] = highBits;
+            } else {
+                newMag = new int[magLen + nInts];
+            }
+
+            int j;
+            for(j = 0; j < magLen - 1; newMag[i++] = mag[j++] << nBits | mag[j] >>> nBits2) {
+            }
+
+            newMag[i] = mag[j] << nBits;
+        }
+
+        int result[] = newMag;
+
+        if (newMag.length > 8) {
+            result = new int[8];
+            System.arraycopy(newMag, newMag.length - 8, result, 0, 8);
+        }
+
+        return result;
+    }
+
+    public int getSignum() {
+        if (signed) {
+            if (Utils.getBit(data[0], 32) == 1) {
+                return -1;
+            }
+        }
+
+        for (int i = 0; i < 8; i ++) {
+            if (data[i] != 0) {
+                return 1;
+            }
+        }
+
+        return 0;
     }
 }
