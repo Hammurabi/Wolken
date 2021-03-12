@@ -252,7 +252,7 @@ public class Int256 {
             self = self.div(base);
         } while (self.asInt() > 0);
 
-        String string = new StringBuilder(builder.toString().replaceAll("^(0)+", "")).reverse().toString();
+        String string = builder.reverse().toString();//new StringBuilder(builder.reverse().toString().replaceAll("^(0)+", "")).reverse().toString();
         if (string.isEmpty()) {
             return "0";
         }
