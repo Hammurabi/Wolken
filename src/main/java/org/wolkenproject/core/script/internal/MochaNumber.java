@@ -132,6 +132,7 @@ public class MochaNumber extends MochaObject {
     @Override
     public MochaObject mul(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
+            do_mul((MochaNumber) other);
         }
 
         throw new MochaException("cannot perform 'mul' on object of type 'Number' and '"+other.getClass().getName()+"' ");
