@@ -63,6 +63,40 @@ public class Int256 {
         this.signed = signed;
     }
 
+    private static int[] add(int x[], int y[]) {
+        int xIndex = x.length;
+        int yIndex = y.length;
+        int[] result = new int[8];
+        long sum = 0L;
+
+        while(yIndex > 0) {
+            --xIndex;
+            long var10000 = (long)x[xIndex] & 4294967295L;
+            --yIndex;
+            sum = var10000 + ((long)y[yIndex] & 4294967295L) + (sum >>> 32);
+            result[xIndex] = (int)sum;
+        }
+
+        boolean carry;
+        for(carry = sum >>> 32 != 0L; xIndex > 0 && carry; carry = (result[xIndex] = x[xIndex] + 1) == 0) {
+            --xIndex;
+        }
+
+        while(xIndex > 0) {
+            --xIndex;
+            result[xIndex] = x[xIndex];
+        }
+
+        // check for sign later
+        if (carry) {
+            for (int i = 0; i < 8; i ++) {
+                result[i] = 0;
+            }
+        }
+
+        return result;
+    }
+
     private static int[] mul(int x[], int y[]) {
         int xstart  = x.length - 1;
         int ystart  = y.length - 1;
@@ -97,40 +131,6 @@ public class Int256 {
 
         int result[] = new int[8];
         System.arraycopy(z, 8, result, 0, 8);
-
-        return result;
-    }
-
-    private static int[] add(int x[], int y[]) {
-        int xIndex = x.length;
-        int yIndex = y.length;
-        int[] result = new int[8];
-        long sum = 0L;
-
-        while(yIndex > 0) {
-            --xIndex;
-            long var10000 = (long)x[xIndex] & 4294967295L;
-            --yIndex;
-            sum = var10000 + ((long)y[yIndex] & 4294967295L) + (sum >>> 32);
-            result[xIndex] = (int)sum;
-        }
-
-        boolean carry;
-        for(carry = sum >>> 32 != 0L; xIndex > 0 && carry; carry = (result[xIndex] = x[xIndex] + 1) == 0) {
-            --xIndex;
-        }
-
-        while(xIndex > 0) {
-            --xIndex;
-            result[xIndex] = x[xIndex];
-        }
-
-        // check for sign later
-        if (carry) {
-            for (int i = 0; i < 8; i ++) {
-                result[i] = 0;
-            }
-        }
 
         return result;
     }
