@@ -15,19 +15,20 @@ import java.math.BigInteger;
 import java.util.Stack;
 
 public class OpIConst_4bits extends Opcode {
+    public OpIConst_4bits(String name, String desc, String usage) {
+        super("OpIConst{d}", "push an int to the stack (0-15)", "iconst{d}");
+    }
+
     @Override
     public void execute(Scope scope) throws MochaException {
-        
     }
 
     @Override
     public void write(BitOutputStream outputStream) throws IOException {
-
     }
 
     @Override
     public void read(BitInputStream inputStream) throws IOException {
-
     }
 
     @Override
