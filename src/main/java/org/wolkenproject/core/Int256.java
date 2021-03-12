@@ -3,7 +3,6 @@ package org.wolkenproject.core;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
-import java.math.MutableBigInteger;
 import java.util.Arrays;
 
 public class Int256 {
