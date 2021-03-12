@@ -36,10 +36,14 @@ public class OpIConst_4bits extends Opcode {
 
     @Override
     public void read(BitInputStream inputStream) throws IOException {
+        number = 0;
+        for (int i = 0; i < 4; i ++) {
+            number = Utils.setBit(number, i, inputStream.read());
+        }
     }
 
     @Override
     public Opcode makeCopy() {
-        return null;
+        return new OpIConst_4bits(number);
     }
 }
