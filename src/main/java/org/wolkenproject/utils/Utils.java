@@ -339,4 +339,14 @@ public class Utils {
 
         return (T[]) n;
     }
+
+    public static byte[] takeApart(int[] array) {
+        byte bArray[] = new byte[0];
+
+        for (int i = 0; i < array.length; i ++) {
+            bArray  = concatenate(bArray, takeApart(array[i]));
+        }
+
+        return bArray;
+    }
 }
