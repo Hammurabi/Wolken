@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script.internal;
 
+import org.wolkenproject.core.script.Scope;
 import org.wolkenproject.core.script.VirtualProcess;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.Utils;
@@ -41,12 +42,17 @@ public class MochaObject {
         return object;
     }
 
+    public static final MochaObject createContainerObject() {
+        MochaObject object = new MochaObject(defaultCallable);
+        return object;
+    }
+
     // creates an array of element type 'byte' and NOT 'int256'
+    // this type of object is different to generic arrays.
     public static MochaObject createArray(byte[] array) {
-        MochaObject object = createObject();
+        MochaObject object      = new ByteArray(array);
 
-
-        return null;
+        return object;
     }
 
     protected int addMember(MochaObject member) {
@@ -64,8 +70,8 @@ public class MochaObject {
     public void isCallable() {
     }
 
-    public final MochaObject call(VirtualProcess process) {
-        return callable.call(process);
+    public final MochaObject call(Scope scope) {
+        return callable.call(scope);
     }
 
     public MochaObject add(MochaObject other) throws MochaException { return this; }
@@ -91,6 +97,10 @@ public class MochaObject {
     // get the length of an array
     public MochaObject length() { return null;//new MochaNumber(members.length, false);
     }
+    // access an element of array
+    public MochaObject subscriptGet(int index) throws MochaException { return this; }
+    // access an element of array
+    public MochaObject subscriptSet(int index, MochaObject object) throws MochaException { return this; }
     // get the shape of an array
     public MochaObject shape() { return this; }
     // reshape an array
@@ -124,5 +134,13 @@ public class MochaObject {
         }
 
         throw new MochaException("cannot poll() from empty array.");
+    }
+    // return the integer representation of this object
+    public long asInt() {
+        return 0;
+    }
+    // return the natural representation of this object
+    public double asFloat() {
+        return 0;
     }
 }
