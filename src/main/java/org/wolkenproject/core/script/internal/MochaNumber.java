@@ -75,6 +75,18 @@ public class MochaNumber extends MochaObject {
         return new MochaNumber(result, nSign);
     }
 
+    public MochaObject do_shiftRight(MochaNumber other) throws MochaException {
+        BigInteger result   = value.shiftRight(other.value.intValue());
+        boolean nSign       = sign || other.sign;
+
+        // overflow
+        if (value.signum() < 0 && !nSign) {
+            return new MochaNumber(MaxUnsignedInt, false);
+        }
+
+        return new MochaNumber(result, nSign);
+    }
+
     @Override
     public MochaObject add(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
