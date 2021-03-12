@@ -97,6 +97,16 @@ public class Utils {
         return new_bytes;
     }
 
+    public static int[] trim(int[] array, int offset, int length) {
+        int new_array[]    = new int[length];
+
+        int free            = 0;
+
+        for(int index = offset; index < (offset + length); index ++)
+            new_array[free ++] = array[index];
+        return new_array;
+    }
+
     public static boolean equals(byte[] trim, byte[] trim1) {
         if(trim.length != trim1.length) return false;
 
