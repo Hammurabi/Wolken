@@ -2,8 +2,6 @@ package org.wolkenproject.core.script.opcodes;
 
 import org.wolkenproject.core.script.Contract;
 import org.wolkenproject.core.script.Opcode;
-import org.wolkenproject.core.script.VirtualProcess;
-import org.wolkenproject.core.script.MochaArray;
 import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.exceptions.MochaException;
