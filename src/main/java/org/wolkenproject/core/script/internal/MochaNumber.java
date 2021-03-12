@@ -23,16 +23,6 @@ public class MochaNumber extends MochaObject {
         }
     }
 
-    protected BigInteger fixOverflow(BigInteger integer, boolean signed) {
-        BigInteger result = integer;
-        BigInteger subint = signed ? MaxSignedInt : MaxUnsignedInt;
-        while (result.bitLength() > 256) {
-            result = integer.subtract(subint);
-        }
-
-        return result;
-    }
-
     public MochaObject do_add(MochaNumber other) throws MochaException {
         BigInteger result   = value.add(other.value);
 
