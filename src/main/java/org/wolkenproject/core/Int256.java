@@ -326,11 +326,28 @@ public class Int256 {
     }
 
     public Int256 div(Int256 other) {
-        return new Int256(new BigInteger(getSignum(), Utils.takeApart(data)).divide(new BigInteger(other.getSignum(), Utils.takeApart(other.data))).toByteArray(), signed || other.signed);
+        byte result[] = new BigInteger(getSignum(), Utils.takeApart(data)).divide(new BigInteger(other.getSignum(), Utils.takeApart(other.data))).toByteArray();
+        if (result.length > 32) {
+            byte temp[] = new byte[32];
+            System.arraycopy(result, result.length - 32, temp, 0, 32);
+            result = temp;
+        } else if (result.length < 32) {
+            result = Utils.pad(32 - result.length, result);
+        }
+        return new Int256(result, signed || other.signed);
     }
 
     public Int256 mod(Int256 other) {
-        return new Int256(new BigInteger(getSignum(), Utils.takeApart(data)).mod(new BigInteger(other.getSignum(), Utils.takeApart(other.data))).toByteArray(), signed || other.signed);
+        byte result[] = new BigInteger(getSignum(), Utils.takeApart(data)).mod(new BigInteger(other.getSignum(), Utils.takeApart(other.data))).toByteArray();
+        if (result.length > 32) {
+            byte temp[] = new byte[32];
+            System.arraycopy(result, result.length - 32, temp, 0, 32);
+            result = temp;
+        } else if (result.length < 32) {
+            result = Utils.pad(32 - result.length, result);
+        }
+
+        return new Int256(result, signed || other.signed);
     }
 
     public Int256 shiftLeft(int shift) {
