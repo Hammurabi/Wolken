@@ -14,7 +14,7 @@ public class Int256Tests {
             for (int i = 0; i < 320; i ++) {
                 long x          = ((long) Integer.MAX_VALUE * 2L) * i;
 
-                // Assertions.assertEquals(Long.toString(x), new Int256(x).toString());
+                Assertions.assertEquals(Long.toString(x), new Int256(x).toString());
             }
         }
         {
