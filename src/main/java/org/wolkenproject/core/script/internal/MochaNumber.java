@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script.internal;
 
+import org.wolkenproject.core.Int256;
 import org.wolkenproject.exceptions.MochaException;
 
 import java.math.BigInteger;
@@ -7,14 +8,18 @@ import java.math.BigInteger;
 public class MochaNumber extends MochaObject {
     public static final BigInteger MaxSignedInt     = BigInteger.TWO.pow(255).subtract(BigInteger.ONE);
     public static final BigInteger MaxUnsignedInt   = BigInteger.TWO.pow(256).subtract(BigInteger.ONE);
-    protected BigInteger value;
+    protected Int256 value;
 
-    public MochaNumber(BigInteger integer) throws MochaException {
+    public MochaNumber(long integer) throws MochaException {
+        this(new Int256(integer));
+    }
+
+    public MochaNumber(Int256 integer) throws MochaException {
         this.value = integer;
 
-        if (integer.bitLength() > 256) {
-            throw new MochaException("The maximum size of Number is 256 bits.");
-        }
+//        if (integer.bitLength() > 256) {
+//            throw new MochaException("The maximum size of Number is 256 bits.");
+//        }
     }
 
     protected BigInteger fixOverflow(BigInteger integer, boolean signed) {
