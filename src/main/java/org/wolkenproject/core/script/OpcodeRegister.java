@@ -11,6 +11,7 @@ import org.wolkenproject.utils.VoidCallableThrowsT;
 import org.wolkenproject.utils.VoidCallableThrowsTY;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -25,7 +26,7 @@ public class OpcodeRegister {
         opcodeSet = new LinkedHashSet<>();
     }
 
-    public byte[] parse(String asm) throws MochaException {
+    public byte[] parse(String asm) throws MochaException, IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         String data[] = asm.replaceAll("\n", " ").replaceAll("\\s+", " ").split(" ");
@@ -80,22 +81,14 @@ public class OpcodeRegister {
                         length = Utils.takeApartInt24((char) array.length);
                         break;
                     case 4:
-                        break;
-                    case 5:
-                        break;
-                    case 6:
-                        break;
-                    case 7:
-                        break;
-                    case 8:
+                        length = Utils.takeApart((char) array.length);
                         break;
                     default:
-                        throw new MochaException("Unsupported vararg size larger than '8'.");
+                        throw new MochaException("Unsupported vararg size larger than '4'.");
                 }
 
-                if (array.length > maxArgs) {
-                    throw new MochaException("Opcode '" + opName + "' takes maximum arguments of '" + array.length + "'.");
-                }
+                outputStream.write(length);
+                outputStream.write(array);
             } else if (opcode.getNumArgs() > 0) {
             }
         }
