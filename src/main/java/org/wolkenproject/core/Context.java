@@ -100,12 +100,12 @@ public class Context {
         virtualMachine.registerOp("const14", "push an integer with value '14' (unsigned).", proc->proc.getStack().push(new MochaNumber(14, false)));
         virtualMachine.registerOp("const15", "push an integer with value '15' (unsigned).", proc->proc.getStack().push(new MochaNumber(15, false)));
 
-        virtualMachine.registerOp("bconst", "push an integer of size '8' (unsigned).", 1);
-        virtualMachine.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2);
-        virtualMachine.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4);
-        virtualMachine.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8);
-        virtualMachine.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16);
-        virtualMachine.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32);
+        virtualMachine.registerOp("bconst", "push an integer of size '8' (unsigned).", 1, proc->proc.getStack().push(new MochaNumber(proc.getProgramCounter().get(), false)));
+        virtualMachine.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2, proc->proc.getStack().push(new MochaNumber(proc.getProgramCounter().getChar(), false)));
+        virtualMachine.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4, proc->proc.getStack().push(new MochaNumber(Integer.toUnsignedLong(proc.getProgramCounter().getInt()), false)));
+        virtualMachine.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8, proc->proc.getStack().push(new MochaNumber(Long.toUnsignedString(proc.getProgramCounter().getLong()), false)));
+        virtualMachine.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, proc->{ byte array[] = new byte[16]; proc.getProgramCounter().get(array); proc.getStack().push(new MochaNumber(0, false)); });
+        virtualMachine.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, proc->proc.getStack().push(new MochaNumber(proc.getProgramCounter().get(), false)));
 
         virtualMachine.registerOp("fconst", "push a float of size '32' (unsigned).", 4);
         virtualMachine.registerOp("fconst64", "push a float of size '64' (unsigned).", 8);
@@ -113,7 +113,7 @@ public class Context {
 
         virtualMachine.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.");
 
-        virtualMachine.registerOp("add", "pop two objects from the stack and add them.");
+        virtualMachine.registerOp("add", "pop two objects from the stack and add them.", scope -> scope.getStack().push(scope.getStack().pop().getMember(0, "add").call(scope)));
         virtualMachine.registerOp("sub", "pop two objects from the stack and sub them.");
         virtualMachine.registerOp("mul", "pop two objects from the stack and mul them.");
         virtualMachine.registerOp("div", "pop two objects from the stack and div them.");
