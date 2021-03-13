@@ -2,8 +2,6 @@ package org.wolkenproject.core.script;
 
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
-import org.wolkenproject.utils.VoidCallable;
-import org.wolkenproject.utils.VoidCallableThrowsT;
 import org.wolkenproject.utils.VoidCallableThrowsTY;
 
 public class Opcode {
