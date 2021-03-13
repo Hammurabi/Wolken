@@ -7,6 +7,7 @@ import org.wolkenproject.core.script.opcodes.OpHalt;
 import org.wolkenproject.core.script.opcodes.OpIConst_4bits;
 import org.wolkenproject.core.script.opcodes.OpPush;
 import org.wolkenproject.core.transactions.Transaction;
+import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
@@ -107,9 +108,9 @@ public class Context {
         virtualMachine.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, proc->{ byte array[] = new byte[16]; proc.getProgramCounter().get(array); proc.getStack().push(new MochaNumber(0, false)); });
         virtualMachine.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, proc->proc.getStack().push(new MochaNumber(proc.getProgramCounter().get(), false)));
 
-        virtualMachine.registerOp("fconst", "push a float of size '32' (unsigned).", 4);
-        virtualMachine.registerOp("fconst64", "push a float of size '64' (unsigned).", 8);
-        virtualMachine.registerOp("fconst256", "push a float of size '256' (unsigned).", 32);
+        virtualMachine.registerOp("fconst", "push a float of size '32' (unsigned).", 4, scope -> { throw new MochaException("float is not supported at the moment."); });
+        virtualMachine.registerOp("fconst64", "push a float of size '64' (unsigned).", 8, scope -> { throw new MochaException("float is not supported at the moment."); });
+        virtualMachine.registerOp("fconst256", "push a float of size '256' (unsigned).", 32, scope -> { throw new MochaException("float is not supported at the moment."); });
 
         virtualMachine.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.", scope -> scope.getStack().peek().flipSign());
 
@@ -127,8 +128,8 @@ public class Context {
         virtualMachine.registerOp("not", "pop an object from the stack and perform bitwise not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(11, "not").call(scope)));
         virtualMachine.registerOp("ngt", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
 
-        virtualMachine.registerOp("dup1", "duplicate the first stack element (by reference).");
-        virtualMachine.registerOp("dup2", "duplicate the second stack element (by reference).");
+        virtualMachine.registerOp("dup1", "duplicate the first stack element (by reference).", scope -> scope.getStack().dup());
+        virtualMachine.registerOp("dup2", "duplicate the second stack element (by reference).", scope -> scope.getStack().dup(2));
         virtualMachine.registerOp("dup3", "duplicate the third stack element (by reference).");
         virtualMachine.registerOp("dup4", "duplicate the fourth stack element (by reference).");
         virtualMachine.registerOp("dup5", "duplicate the fifth stack element (by reference).");
