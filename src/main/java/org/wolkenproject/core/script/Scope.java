@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 import org.wolkenproject.core.script.internal.MochaObject;
 
+import java.nio.ByteBuffer;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,6 +16,8 @@ public class Scope {
     private AtomicBoolean       keepRunning;
     // an interrupt signal (if any)
     private AtomicInteger       interruptSignal;
+    // the program counter
+    private ByteBuffer          programCounter;
 
     public Scope(VirtualMachine virtualMachine, Contract contract, Stack<MochaObject> stack) {
         this.contract   = contract;
@@ -27,6 +30,10 @@ public class Scope {
 
     public Stack<MochaObject> getStack() {
         return stack;
+    }
+
+    public ByteBuffer getProgramCounter() {
+        return programCounter;
     }
 
     public void stopProcesses(int signal) {
