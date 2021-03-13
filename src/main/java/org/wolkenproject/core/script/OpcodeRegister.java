@@ -1,8 +1,10 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.VoidCallable;
 import org.wolkenproject.utils.VoidCallableThrowsT;
+import org.wolkenproject.utils.VoidCallableThrowsTY;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -21,11 +23,11 @@ public class OpcodeRegister {
     }
 
     // register an opcode into the vm
-    public OpcodeRegister registerOp(String name, String description, VoidCallableThrowsT<Scope, MochaException> callable) {
+    public OpcodeRegister registerOp(String name, String description, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
         return registerOp(name, description, 0, callable);
     }
 
-    public OpcodeRegister registerOp(String name, String description, int numArgs, VoidCallableThrowsT<Scope, MochaException> callable) {
+    public OpcodeRegister registerOp(String name, String description, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
         Opcode opcode = new Opcode(name, description, "", opcodeSet.size(), numArgs, callable);
         opcodeNameMap.put(name, opcode);
         opcodeMap.put(opcode.getIdentifier(), opcode);
