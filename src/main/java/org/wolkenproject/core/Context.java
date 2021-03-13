@@ -80,6 +80,10 @@ public class Context {
 
         virtualMachine = new OpcodeRegister();
         virtualMachine.registerOp("halt", "stop virtual process (and sub-processes).", 1, proc->proc.stopProcesses(Byte.toUnsignedInt(proc.getProgramCounter().get())));
+
+        virtualMachine.registerOp("load", "load an object from an offset.", 2, proc->proc.getStack().pop().getMember(proc.getProgramCounter().getChar()));
+        virtualMachine.registerOp("store", "store an object to an offset.", 2, proc->proc.getStack().pop().setMember(proc.getProgramCounter().getChar(), proc.getStack().pop()));
+
         virtualMachine.registerOp("data", "push an array of bytes into the stack.", 1, proc->{});
 
         virtualMachine.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().position(scope.getProgramCounter().getChar()));
