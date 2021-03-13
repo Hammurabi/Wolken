@@ -84,6 +84,9 @@ public class Context {
         virtualMachine.registerOp("halt", "stop virtual process (and sub-processes).", 1, proc->proc.stopProcesses(Byte.toUnsignedInt(proc.getProgramCounter().get())));
         virtualMachine.registerOp("push", "push an array of bytes into the stack.", 1, proc->{});
 
+        virtualMachine.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().position(scope.getProgramCounter().getChar()));
+        virtualMachine.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (scope.getStack().pop().isTrue()) scope.getProgramCounter().position(scope.getProgramCounter().getChar()); });
+
         virtualMachine.registerOp("const0", "push an integer with value '0' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
         virtualMachine.registerOp("const1", "push an integer with value '1' (unsigned).", proc->proc.getStack().push(new MochaNumber(1, false)));
         virtualMachine.registerOp("const2", "push an integer with value '2' (unsigned).", proc->proc.getStack().push(new MochaNumber(2, false)));
@@ -160,8 +163,6 @@ public class Context {
         virtualMachine.registerOp("swap13", "swap two objects (the 1st and 14th) on the stack.", scope -> scope.getStack().swap(1, 14));
         virtualMachine.registerOp("swap14", "swap two objects (the 1st and 15th) on the stack.", scope -> scope.getStack().swap(1, 15));
         virtualMachine.registerOp("swap15", "swap two objects (the 1st and 16th) on the stack.", scope -> scope.getStack().swap(1, 16));
-
-        virtualMachine.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (scope.getStack().pop().isTrue()) scope.getProgramCounter().position(scope.getProgramCounter().getChar()); });
 
         System.out.println(virtualMachine.opCount());
         System.exit(0);
