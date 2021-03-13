@@ -21,17 +21,24 @@ public class OpcodeRegister {
         opcodeSet = new LinkedHashSet<>();
     }
 
-    public byte[] parse(String asm) throws UndefOpcodeException {
+    public byte[] parse(String asm) throws MochaException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         String data[] = asm.replaceAll("\n", " ").replaceAll("\\s+", " ").split(" ");
         Iterator<String> iterator = Arrays.stream(data).iterator();
 
         while (iterator.hasNext()) {
-            String opName = iterator.next().replaceAll("^(Op)", "");
-            Opcode opcode = getOpcode(opName);
+            String opName   = iterator.next().replaceAll("^(Op)", "").toLowerCase();
+            Opcode opcode   = getOpcode(opName);
 
+            if (opcode.hasVarargs()) {
+                if (!iterator.hasNext()) {
+                    throw new MochaException("Reached EOF but expected arguments for 'Op" + opName + "'.");
+                }
 
+                byte args[]     = null;
+            } else if (opcode.getNumArgs() > 0) {
+            }
         }
 
         return outputStream.toByteArray();
