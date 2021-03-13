@@ -84,7 +84,7 @@ public class OpcodeRegister {
                         length = Utils.takeApart((char) array.length);
                         break;
                     default:
-                        throw new MochaException("Unsupported vararg size larger than '4'.");
+                        throw new MochaException("Unsupported vararg size not in range of '1' to '4'.");
                 }
 
                 outputStream.write(length);
