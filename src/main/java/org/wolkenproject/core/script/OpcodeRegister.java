@@ -20,7 +20,7 @@ public class OpcodeRegister {
     }
 
     // register an opcode into the vm
-    public OpcodeRegister registerOp(String name, String description, int numArgs, VoidCallable callable) {
+    public OpcodeRegister registerOp(String name, String description, int numArgs, VoidCallable<Scope> callable) {
         Opcode opcode = new Opcode(name, description, "", opcodeSet.size(), numArgs, callable);
         opcodeNameMap.put(name, opcode);
         opcodeMap.put(opcode.getIdentifier(), opcode);
