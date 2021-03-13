@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.script.*;
+import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.core.script.opcodes.OpHalt;
 import org.wolkenproject.core.script.opcodes.OpIConst_4bits;
@@ -82,7 +83,7 @@ public class Context {
         virtualMachine.registerOp("halt", "stop virtual process (and sub-processes).", 1, proc->proc.stopProcesses(Byte.toUnsignedInt(proc.getProgramCounter().get())));
         virtualMachine.registerOp("push", "push an array of bytes into the stack.", 1, proc->{});
 
-        virtualMachine.registerOp("const0", "push an integer with value '0' (unsigned).");
+        virtualMachine.registerOp("const0", "push an integer with value '0' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
         virtualMachine.registerOp("const1", "push an integer with value '1' (unsigned).");
         virtualMachine.registerOp("const2", "push an integer with value '2' (unsigned).");
         virtualMachine.registerOp("const3", "push an integer with value '3' (unsigned).");
