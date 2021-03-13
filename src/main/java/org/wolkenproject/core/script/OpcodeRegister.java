@@ -28,6 +28,8 @@ public class OpcodeRegister {
         Iterator<String> iterator = Arrays.stream(data).iterator();
 
         while (iterator.hasNext()) {
+            String opName = iterator.next().replaceAll("^(Op)", "");
+            Opcode opcode = getOpcode(opName);
         }
 
         return outputStream.toByteArray();
@@ -49,6 +51,14 @@ public class OpcodeRegister {
         opcodeSet.add(opcode);
 
         return this;
+    }
+
+    private Opcode getOpcode(String opName) throws UndefOpcodeException {
+        if (opcodeNameMap.containsKey(opName)) {
+            return opcodeNameMap.get(opName);
+        }
+
+        throw new UndefOpcodeException();
     }
 
     public Opcode getOpcode(int opcode) throws UndefOpcodeException {
