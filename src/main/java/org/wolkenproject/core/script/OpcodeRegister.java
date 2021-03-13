@@ -21,7 +21,7 @@ public class OpcodeRegister {
         opcodeSet = new LinkedHashSet<>();
     }
 
-    public byte[] parse(String asm) {
+    public byte[] parse(String asm) throws UndefOpcodeException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         String data[] = asm.replaceAll("\n", " ").replaceAll("\\s+", " ").split(" ");
@@ -30,6 +30,8 @@ public class OpcodeRegister {
         while (iterator.hasNext()) {
             String opName = iterator.next().replaceAll("^(Op)", "");
             Opcode opcode = getOpcode(opName);
+
+
         }
 
         return outputStream.toByteArray();
@@ -58,7 +60,7 @@ public class OpcodeRegister {
             return opcodeNameMap.get(opName);
         }
 
-        throw new UndefOpcodeException();
+        throw new UndefOpcodeException(opName);
     }
 
     public Opcode getOpcode(int opcode) throws UndefOpcodeException {
@@ -66,7 +68,7 @@ public class OpcodeRegister {
             return opcodeMap.get(opcode);
         }
 
-        throw new UndefOpcodeException();
+        throw new UndefOpcodeException(opcode);
     }
 
     public int opCount() {
