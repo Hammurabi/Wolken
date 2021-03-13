@@ -15,7 +15,7 @@ public class ByteArray extends MochaObject {
             throw new MochaException("accessing element '" + index + "' from array of size '" + array.length + "'.");
         }
 
-        return new MochaNumber(array[index]);
+        return new MochaNumber(Byte.toUnsignedInt(array[index]), false);
     }
 
     @Override
