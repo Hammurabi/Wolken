@@ -33,7 +33,7 @@ public class OpcodeRegister {
 
             if (opcode.hasVarargs()) {
                 if (!iterator.hasNext()) {
-                    throw new MochaException("Reached EOF but expected arguments for 'Op" + opName + "'.");
+                    throw new MochaException("Reached EOF but expected arguments for '" + opName + "'.");
                 }
 
                 byte args[]     = null;
