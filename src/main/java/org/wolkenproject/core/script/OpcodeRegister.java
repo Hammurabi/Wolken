@@ -1,8 +1,11 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
+import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VoidCallable;
 import org.wolkenproject.utils.VoidCallableThrowsT;
 import org.wolkenproject.utils.VoidCallableThrowsTY;
@@ -36,6 +39,12 @@ public class OpcodeRegister {
                     throw new MochaException("Reached EOF but expected arguments for '" + opName + "'.");
                 }
 
+                String argument = iterator.next();
+
+                if (argument.matches("\\d+")) {     // base 10 number
+                } else if (Base58.isEncoded(argument)) {  // base 58 value
+                } else if (Base16.isEncoded(argument)) {  // base 16 value
+                }
                 byte args[]     = null;
             } else if (opcode.getNumArgs() > 0) {
             }
