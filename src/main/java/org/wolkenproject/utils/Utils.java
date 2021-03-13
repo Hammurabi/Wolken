@@ -167,7 +167,7 @@ public class Utils {
                 (byte) ((integer) & 0xFF)};
     }
 
-    public static byte[] takeApart(int integer) {
+    public static byte[] takeApart(long integer) {
         return new byte[] {
                 (byte) ((integer >> 24) & 0xFF),
                 (byte) ((integer >> 16) & 0xFF),
@@ -350,7 +350,7 @@ public class Utils {
         return bArray;
     }
 
-    public static byte[] takeApartInt24(char integer) {
+    public static byte[] takeApartInt24(long integer) {
         return new byte[] {
                 (byte) ((integer >> 16) & 0xFF),
                 (byte) ((integer >> 8) & 0xFF),
