@@ -111,7 +111,7 @@ public class Context {
         virtualMachine.registerOp("fconst64", "push a float of size '64' (unsigned).", 8);
         virtualMachine.registerOp("fconst256", "push a float of size '256' (unsigned).", 32);
 
-        virtualMachine.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.");
+        virtualMachine.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.", scope -> scope.getStack().peek().flipSign());
 
         virtualMachine.registerOp("add", "pop two objects from the stack and add them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(0, "add").call(scope)));
         virtualMachine.registerOp("sub", "pop two objects from the stack and sub them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(1, "sub").call(scope)));
