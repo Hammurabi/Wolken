@@ -84,6 +84,11 @@ public class Context {
         virtualMachine.registerOp("load", "load an object from an offset.", 2, proc->proc.getStack().pop().getMember(proc.getProgramCounter().getChar()));
         virtualMachine.registerOp("store", "store an object to an offset.", 2, proc->proc.getStack().pop().setMember(proc.getProgramCounter().getChar(), proc.getStack().pop()));
 
+        virtualMachine.registerOp("getfield", "load an object from an offset in array.", 2, proc->proc.getStack().pop().subscriptSet((int) proc.getStack().pop().asInt(), proc.getStack().pop()));
+        virtualMachine.registerOp("setfield", "store an object to an offset in array.", 2, proc->proc.getStack().push(proc.getStack().pop().subscriptGet((int) proc.getStack().pop().asInt())));
+        virtualMachine.registerOp("append", "append an object to an array.", 2, proc->proc.getStack().pop().append(proc.getStack().pop()));
+        virtualMachine.registerOp("prepend", "prepend an object to an array.", 2, proc->proc.getStack().pop().setMember(proc.getProgramCounter().getChar(), proc.getStack().pop()));
+
         virtualMachine.registerOp("data", "push an array of bytes into the stack.", 1, proc->{});
 
         virtualMachine.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().position(scope.getProgramCounter().getChar()));
