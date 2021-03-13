@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.VoidCallable;
+import org.wolkenproject.utils.VoidCallableThrowsT;
 
 public class Opcode {
     private String          name;
@@ -9,9 +10,9 @@ public class Opcode {
     private String          usage;
     private int             identifier;
     private int             numArgs;
-    private VoidCallable<Scope> callable;
+    private VoidCallableThrowsT<Scope, MochaException> callable;
 
-    public Opcode(String name, String desc, String usage, int identifier, int numArgs, VoidCallable<Scope> callable) {
+    public Opcode(String name, String desc, String usage, int identifier, int numArgs, VoidCallableThrowsT<Scope, MochaException> callable) {
         this.name = name;
         this.desc = desc;
         this.usage= usage;
