@@ -7,10 +7,8 @@ import org.wolkenproject.utils.VoidCallable;
 import org.wolkenproject.utils.VoidCallableThrowsT;
 import org.wolkenproject.utils.VoidCallableThrowsTY;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.ByteArrayOutputStream;
+import java.util.*;
 
 public class OpcodeRegister {
     private Map<String, Opcode>     opcodeNameMap;
@@ -21,6 +19,18 @@ public class OpcodeRegister {
         opcodeNameMap = new HashMap<>();
         opcodeMap = new HashMap<>();
         opcodeSet = new LinkedHashSet<>();
+    }
+
+    public byte[] parse(String asm) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        String data[] = asm.replaceAll("\n", " ").replaceAll("\\s+", " ").split(" ");
+        Iterator<String> iterator = Arrays.stream(data).iterator();
+
+        while (iterator.hasNext()) {
+        }
+
+        return outputStream.toByteArray();
     }
 
     // register an opcode into the vm
