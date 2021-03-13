@@ -161,6 +161,8 @@ public class Context {
         virtualMachine.registerOp("swap14", "swap two objects (the 1st and 15th) on the stack.", scope -> scope.getStack().swap(1, 15));
         virtualMachine.registerOp("swap15", "swap two objects (the 1st and 16th) on the stack.", scope -> scope.getStack().swap(1, 16));
 
+        virtualMachine.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (scope.getStack().pop().isTrue()) scope.getProgramCounter().position(scope.getProgramCounter().getChar()); });
+
         System.out.println(virtualMachine.opCount());
         System.exit(0);
 //        serializationFactory.registerClass(MochaObject.class, new MochaObject());;
