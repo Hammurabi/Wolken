@@ -79,45 +79,46 @@ public class Context {
         serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
 
-        opcodeRegister.registerOp("halt", "stop virtual process (and sub-processes).", 1, proc->proc.stopProcesses(proc.getProgramCounter().nextByte()));
+        opcodeRegister.registerOp("halt", "stop virtual scopeess (and sub-scopeesses).", 1, scope->scope.stopProcesses(scope.getProgramCounter().nextByte()));
 
-        opcodeRegister.registerOp("load", "load an object from an offset.", 2, proc->proc.getStack().pop().getMember(proc.getProgramCounter().nextUnsignedShort()));
-        opcodeRegister.registerOp("store", "store an object to an offset.", 2, proc->proc.getStack().pop().setMember(proc.getProgramCounter().nextUnsignedShort(), proc.getStack().pop()));
+        opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, scope->scope.getStack().pop().call(scope));
+        opcodeRegister.registerOp("load", "load an object from an offset.", 2, scope->scope.getStack().pop().getMember(scope.getProgramCounter().nextUnsignedShort()));
+        opcodeRegister.registerOp("store", "store an object to an offset.", 2, scope->scope.getStack().pop().setMember(scope.getProgramCounter().nextUnsignedShort(), scope.getStack().pop()));
 
-        opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, proc->proc.getStack().pop().subscriptSet((int) proc.getStack().pop().asInt(), proc.getStack().pop()));
-        opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, proc->proc.getStack().push(proc.getStack().pop().subscriptGet((int) proc.getStack().pop().asInt())));
-        opcodeRegister.registerOp("append", "append an object to an array.", proc->proc.getStack().pop().append(proc.getStack().pop()));
+        opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, scope->scope.getStack().pop().subscriptSet((int) scope.getStack().pop().asInt(), scope.getStack().pop()));
+        opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, scope->scope.getStack().push(scope.getStack().pop().subscriptGet((int) scope.getStack().pop().asInt())));
+        opcodeRegister.registerOp("append", "append an object to an array.", scope->scope.getStack().pop().append(scope.getStack().pop()));
 
-        opcodeRegister.registerOp("data1", "push an array of bytes of length (8) into the stack.", 1, proc -> proc.getStack().push(new ByteArray(proc.getProgramCounter().next(proc.getProgramCounter().nextByte()))));
-        opcodeRegister.registerOp("data2", "push an array of bytes of length (16) into the stack.", 2, proc -> proc.getStack().push(new ByteArray(proc.getProgramCounter().next(proc.getProgramCounter().nextUnsignedShort()))));
-        opcodeRegister.registerOp("data3", "push an array of bytes of length (24) into the stack.", 3, proc -> proc.getStack().push(new ByteArray(proc.getProgramCounter().next(proc.getProgramCounter().nextInt24()))));
+        opcodeRegister.registerOp("pushdata", "push an array of bytes of length (8) into the stack.", true, 1, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextByte()))));
+        opcodeRegister.registerOp("pushdata2", "push an array of bytes of length (16) into the stack.", true, 2, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextUnsignedShort()))));
+        opcodeRegister.registerOp("pushdata3", "push an array of bytes of length (24) into the stack.", true, 3, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextInt24()))));
 
         opcodeRegister.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()));
         opcodeRegister.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (!scope.getStack().pop().isTrue()) scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()); });
 
-        opcodeRegister.registerOp("const0", "push an integer with value '0' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        opcodeRegister.registerOp("const1", "push an integer with value '1' (unsigned).", proc->proc.getStack().push(new MochaNumber(1, false)));
-        opcodeRegister.registerOp("const2", "push an integer with value '2' (unsigned).", proc->proc.getStack().push(new MochaNumber(2, false)));
-        opcodeRegister.registerOp("const3", "push an integer with value '3' (unsigned).", proc->proc.getStack().push(new MochaNumber(3, false)));
-        opcodeRegister.registerOp("const4", "push an integer with value '4' (unsigned).", proc->proc.getStack().push(new MochaNumber(4, false)));
-        opcodeRegister.registerOp("const5", "push an integer with value '5' (unsigned).", proc->proc.getStack().push(new MochaNumber(5, false)));
-        opcodeRegister.registerOp("const6", "push an integer with value '6' (unsigned).", proc->proc.getStack().push(new MochaNumber(6, false)));
-        opcodeRegister.registerOp("const7", "push an integer with value '7' (unsigned).", proc->proc.getStack().push(new MochaNumber(7, false)));
-        opcodeRegister.registerOp("const8", "push an integer with value '8' (unsigned).", proc->proc.getStack().push(new MochaNumber(8, false)));
-        opcodeRegister.registerOp("const9", "push an integer with value '9' (unsigned).", proc->proc.getStack().push(new MochaNumber(9, false)));
-        opcodeRegister.registerOp("const10", "push an integer with value '10' (unsigned).", proc->proc.getStack().push(new MochaNumber(10, false)));
-        opcodeRegister.registerOp("const11", "push an integer with value '11' (unsigned).", proc->proc.getStack().push(new MochaNumber(11, false)));
-        opcodeRegister.registerOp("const12", "push an integer with value '12' (unsigned).", proc->proc.getStack().push(new MochaNumber(12, false)));
-        opcodeRegister.registerOp("const13", "push an integer with value '13' (unsigned).", proc->proc.getStack().push(new MochaNumber(13, false)));
-        opcodeRegister.registerOp("const14", "push an integer with value '14' (unsigned).", proc->proc.getStack().push(new MochaNumber(14, false)));
-        opcodeRegister.registerOp("const15", "push an integer with value '15' (unsigned).", proc->proc.getStack().push(new MochaNumber(15, false)));
+        opcodeRegister.registerOp("const0", "push an integer with value '0' (unsigned).", scope->scope.getStack().push(new MochaNumber(0, false)));
+        opcodeRegister.registerOp("const1", "push an integer with value '1' (unsigned).", scope->scope.getStack().push(new MochaNumber(1, false)));
+        opcodeRegister.registerOp("const2", "push an integer with value '2' (unsigned).", scope->scope.getStack().push(new MochaNumber(2, false)));
+        opcodeRegister.registerOp("const3", "push an integer with value '3' (unsigned).", scope->scope.getStack().push(new MochaNumber(3, false)));
+        opcodeRegister.registerOp("const4", "push an integer with value '4' (unsigned).", scope->scope.getStack().push(new MochaNumber(4, false)));
+        opcodeRegister.registerOp("const5", "push an integer with value '5' (unsigned).", scope->scope.getStack().push(new MochaNumber(5, false)));
+        opcodeRegister.registerOp("const6", "push an integer with value '6' (unsigned).", scope->scope.getStack().push(new MochaNumber(6, false)));
+        opcodeRegister.registerOp("const7", "push an integer with value '7' (unsigned).", scope->scope.getStack().push(new MochaNumber(7, false)));
+        opcodeRegister.registerOp("const8", "push an integer with value '8' (unsigned).", scope->scope.getStack().push(new MochaNumber(8, false)));
+        opcodeRegister.registerOp("const9", "push an integer with value '9' (unsigned).", scope->scope.getStack().push(new MochaNumber(9, false)));
+        opcodeRegister.registerOp("const10", "push an integer with value '10' (unsigned).", scope->scope.getStack().push(new MochaNumber(10, false)));
+        opcodeRegister.registerOp("const11", "push an integer with value '11' (unsigned).", scope->scope.getStack().push(new MochaNumber(11, false)));
+        opcodeRegister.registerOp("const12", "push an integer with value '12' (unsigned).", scope->scope.getStack().push(new MochaNumber(12, false)));
+        opcodeRegister.registerOp("const13", "push an integer with value '13' (unsigned).", scope->scope.getStack().push(new MochaNumber(13, false)));
+        opcodeRegister.registerOp("const14", "push an integer with value '14' (unsigned).", scope->scope.getStack().push(new MochaNumber(14, false)));
+        opcodeRegister.registerOp("const15", "push an integer with value '15' (unsigned).", scope->scope.getStack().push(new MochaNumber(15, false)));
 
-        opcodeRegister.registerOp("bconst", "push an integer of size '8' (unsigned).", 1, proc -> proc.getStack().push(new MochaNumber(proc.getProgramCounter().nextByte(), false)));
-        opcodeRegister.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2, proc -> proc.getStack().push(new MochaNumber(proc.getProgramCounter().nextUnsignedShort(), false)));
-        opcodeRegister.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4, proc -> proc.getStack().push(new MochaNumber(Integer.toUnsignedLong(proc.getProgramCounter().nextInt()), false)));
-        opcodeRegister.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8, proc -> proc.getStack().push(new MochaNumber(Long.toUnsignedString(proc.getProgramCounter().nextLong()), false)));
-        opcodeRegister.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, proc -> proc.getStack().push(new MochaNumber(new BigInteger(proc.getProgramCounter().next(16)), false)));
-        opcodeRegister.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, proc -> proc.getStack().push(new MochaNumber(new BigInteger(proc.getProgramCounter().next(32)), false)));
+        opcodeRegister.registerOp("bconst", "push an integer of size '8' (unsigned).", 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextByte(), false)));
+        opcodeRegister.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextUnsignedShort(), false)));
+        opcodeRegister.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4, scope -> scope.getStack().push(new MochaNumber(Integer.toUnsignedLong(scope.getProgramCounter().nextInt()), false)));
+        opcodeRegister.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8, scope -> scope.getStack().push(new MochaNumber(Long.toUnsignedString(scope.getProgramCounter().nextLong()), false)));
+        opcodeRegister.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, scope -> scope.getStack().push(new MochaNumber(new BigInteger(scope.getProgramCounter().next(16)), false)));
+        opcodeRegister.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, scope -> scope.getStack().push(new MochaNumber(new BigInteger(scope.getProgramCounter().next(32)), false)));
 
         opcodeRegister.registerOp("fconst", "push a float of size '32' (unsigned).", 4, scope -> { throw new MochaException("float is not supported at the moment."); });
         opcodeRegister.registerOp("fconst64", "push a float of size '64' (unsigned).", 8, scope -> { throw new MochaException("float is not supported at the moment."); });
@@ -180,8 +181,6 @@ public class Context {
         opcodeRegister.registerOp("swap13", "swap two objects (the 1st and 14th) on the stack.", scope -> scope.getStack().swap(1, 14));
         opcodeRegister.registerOp("swap14", "swap two objects (the 1st and 15th) on the stack.", scope -> scope.getStack().swap(1, 15));
         opcodeRegister.registerOp("swap15", "swap two objects (the 1st and 16th) on the stack.", scope -> scope.getStack().swap(1, 16));
-
-        opcodeRegister.parse("push ");
 
         System.out.println(opcodeRegister.opCount());
         System.exit(0);
