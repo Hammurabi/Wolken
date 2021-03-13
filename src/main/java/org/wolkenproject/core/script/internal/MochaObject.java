@@ -157,4 +157,7 @@ public class MochaObject {
     public double asFloat() {
         return 0;
     }
+
+    public void flipSign() {
+    }
 }
