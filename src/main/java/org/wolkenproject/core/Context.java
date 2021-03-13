@@ -82,6 +82,7 @@ public class Context {
         opcodeRegister.registerOp("halt", "stop virtual scopeess (and sub-scopeesses).", 1, scope->scope.stopProcesses(scope.getProgramCounter().nextByte()));
 
         opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, scope->scope.getStack().pop().call(scope));
+
         opcodeRegister.registerOp("load", "load an object from an offset.", 2, scope->scope.getStack().pop().getMember(scope.getProgramCounter().nextUnsignedShort()));
         opcodeRegister.registerOp("store", "store an object to an offset.", 2, scope->scope.getStack().pop().setMember(scope.getProgramCounter().nextUnsignedShort(), scope.getStack().pop()));
 
@@ -182,8 +183,6 @@ public class Context {
         opcodeRegister.registerOp("swap14", "swap two objects (the 1st and 15th) on the stack.", scope -> scope.getStack().swap(1, 15));
         opcodeRegister.registerOp("swap15", "swap two objects (the 1st and 16th) on the stack.", scope -> scope.getStack().swap(1, 16));
 
-        System.out.println(opcodeRegister.opCount());
-        System.exit(0);
 //        serializationFactory.registerClass(MochaObject.class, new MochaObject());;
 
         MochaObject mochaObject = new MochaObject();
