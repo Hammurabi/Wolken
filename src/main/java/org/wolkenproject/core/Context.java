@@ -115,6 +115,11 @@ public class Context {
         virtualMachine.registerOp("fconst64", "push a float of size '64' (unsigned).", 8, scope -> { throw new MochaException("float is not supported at the moment."); });
         virtualMachine.registerOp("fconst256", "push a float of size '256' (unsigned).", 32, scope -> { throw new MochaException("float is not supported at the moment."); });
 
+        virtualMachine.registerOp("aconst200", "push an address of size '200'.", 25, scope -> { throw new MochaException("address is not supported at the moment."); });
+        virtualMachine.registerOp("aconst256", "push a hash of size '256'.", 32, scope -> { throw new MochaException("hash256 is not supported at the moment."); });
+        virtualMachine.registerOp("pubkey", "push a public key of size '264' (compressed).", 32, scope -> { throw new MochaException("pubkey is not supported at the moment."); });
+        virtualMachine.registerOp("ecsig", "push a signature of size '~'.", 32, scope -> { throw new MochaException("sig is not supported at the moment."); });
+
         virtualMachine.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.", scope -> scope.getStack().peek().flipSign());
 
         virtualMachine.registerOp("add", "pop two objects from the stack and add them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(0, "add").call(scope)));
