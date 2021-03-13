@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.script.*;
+import org.wolkenproject.core.script.internal.ByteArray;
 import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.core.transactions.Transaction;
@@ -79,16 +80,18 @@ public class Context {
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
 
         virtualMachine = new OpcodeRegister();
-        virtualMachine.registerOp("halt", "stop virtual process (and sub-processes).", 1, proc->proc.stopProcesses(Byte.toUnsignedInt(proc.getProgramCounter().get())));
+        virtualMachine.registerOp("halt", "stop virtual process (and sub-processes).", 1, proc->proc.stopProcesses(proc.getProgramCounter().nextByte()));
 
-        virtualMachine.registerOp("load", "load an object from an offset.", 2, proc->proc.getStack().pop().getMember(proc.getProgramCounter().getChar()));
-        virtualMachine.registerOp("store", "store an object to an offset.", 2, proc->proc.getStack().pop().setMember(proc.getProgramCounter().getChar(), proc.getStack().pop()));
+        virtualMachine.registerOp("load", "load an object from an offset.", 2, proc->proc.getStack().pop().getMember(proc.getProgramCounter().nextUnsignedShort()));
+        virtualMachine.registerOp("store", "store an object to an offset.", 2, proc->proc.getStack().pop().setMember(proc.getProgramCounter().nextUnsignedShort(), proc.getStack().pop()));
 
         virtualMachine.registerOp("getfield", "load an object from an offset in array.", 2, proc->proc.getStack().pop().subscriptSet((int) proc.getStack().pop().asInt(), proc.getStack().pop()));
         virtualMachine.registerOp("setfield", "store an object to an offset in array.", 2, proc->proc.getStack().push(proc.getStack().pop().subscriptGet((int) proc.getStack().pop().asInt())));
         virtualMachine.registerOp("append", "append an object to an array.", proc->proc.getStack().pop().append(proc.getStack().pop()));
 
-        virtualMachine.registerOp("data", "push an array of bytes into the stack.", 1, proc->{});
+        virtualMachine.registerOp("data1", "push an array of bytes of length (8) into the stack.", 1, proc -> proc.getStack().push(new ByteArray(proc.getProgramCounter().next(proc.getProgramCounter().nextByte()))));
+        virtualMachine.registerOp("data2", "push an array of bytes of length (16) into the stack.", 2, proc -> proc.getStack().push(new ByteArray(proc.getProgramCounter().next(proc.getProgramCounter().nextUnsignedShort()))));
+        virtualMachine.registerOp("data3", "push an array of bytes of length (24) into the stack.", 3, proc -> proc.getStack().push(new ByteArray(proc.getProgramCounter().next(proc.getProgramCounter().nextInt24()))));
 
         virtualMachine.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().position(scope.getProgramCounter().getChar()));
         virtualMachine.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (scope.getStack().pop().isTrue()) scope.getProgramCounter().position(scope.getProgramCounter().getChar()); });
