@@ -1,7 +1,9 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.script.*;
+import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.core.script.opcodes.OpHalt;
+import org.wolkenproject.core.script.opcodes.OpIConst_4bits;
 import org.wolkenproject.core.script.opcodes.OpPush;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
@@ -30,7 +32,7 @@ public class Context {
     private Server                  server;
     private Address                 payList[];
     private BlockChain              blockChain;
-    private OpcodeRegister virtualMachine;
+    private OpcodeRegister          virtualMachine;
     private FileService             fileService;
 
     public Context(FileService service, boolean testNet, Address[] payList) throws WolkenException, IOException {
@@ -76,70 +78,82 @@ public class Context {
         serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
 
+        virtualMachine = new OpcodeRegister();
+        virtualMachine.registerOp("halt", "stop virtual process (and sub-processes).", 1);
+        virtualMachine.registerOp("push", "push an array of bytes into the stack.", 1);
+
+        virtualMachine.registerOp("const0", "push an integer with value '0' (unsigned).");
+        virtualMachine.registerOp("const1", "push an integer with value '1' (unsigned).");
+        virtualMachine.registerOp("const2", "push an integer with value '2' (unsigned).");
+        virtualMachine.registerOp("const3", "push an integer with value '3' (unsigned).");
+        virtualMachine.registerOp("const4", "push an integer with value '4' (unsigned).");
+        virtualMachine.registerOp("const5", "push an integer with value '5' (unsigned).");
+        virtualMachine.registerOp("const6", "push an integer with value '6' (unsigned).");
+        virtualMachine.registerOp("const7", "push an integer with value '7' (unsigned).");
+        virtualMachine.registerOp("const8", "push an integer with value '8' (unsigned).");
+        virtualMachine.registerOp("const9", "push an integer with value '9' (unsigned).");
+        virtualMachine.registerOp("const10", "push an integer with value '10' (unsigned).");
+        virtualMachine.registerOp("const11", "push an integer with value '11' (unsigned).");
+        virtualMachine.registerOp("const12", "push an integer with value '12' (unsigned).");
+        virtualMachine.registerOp("const13", "push an integer with value '13' (unsigned).");
+        virtualMachine.registerOp("const14", "push an integer with value '14' (unsigned).");
+        virtualMachine.registerOp("const15", "push an integer with value '15' (unsigned).");
+
+        virtualMachine.registerOp("bconst", "push an integer of size '8' (unsigned).", 1);
+        virtualMachine.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2);
+        virtualMachine.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4);
+        virtualMachine.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8);
+        virtualMachine.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16);
+        virtualMachine.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32);
+
+        virtualMachine.registerOp("fconst", "push a float of size '32' (unsigned).", 4);
+        virtualMachine.registerOp("fconst64", "push a float of size '64' (unsigned).", 8);
+        virtualMachine.registerOp("fconst256", "push a float of size '256' (unsigned).", 32);
+
+        virtualMachine.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.");
+
+        virtualMachine.registerOp("add", "pop two objects from the stack and add them.");
+        virtualMachine.registerOp("sub", "pop two objects from the stack and sub them.");
+        virtualMachine.registerOp("mul", "pop two objects from the stack and mul them.");
+        virtualMachine.registerOp("div", "pop two objects from the stack and div them.");
+        virtualMachine.registerOp("mod", "pop two objects from the stack and mod them.");
+        virtualMachine.registerOp("and", "pop two objects from the stack and perform bitwise and on them.");
+        virtualMachine.registerOp("or", "pop two objects from the stack and perform bitwise or on them.");
+        virtualMachine.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.");
+        virtualMachine.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.");
+        virtualMachine.registerOp("lsh", "pop two objects from the stack left shift.");
+        virtualMachine.registerOp("rsh", "pop two objects from the stack right shift.");
+        virtualMachine.registerOp("not", "pop an object from the stack and perform bitwise not on it.");
+        virtualMachine.registerOp("ngt", "pop an object from the stack and perform logical not on it.");
+
+        virtualMachine.registerOp("dup1", "duplicate the first stack element (by reference).");
+        virtualMachine.registerOp("dup2", "duplicate the second stack element (by reference).");
+        virtualMachine.registerOp("dup3", "duplicate the third stack element (by reference).");
+        virtualMachine.registerOp("dup4", "duplicate the fourth stack element (by reference).");
+        virtualMachine.registerOp("dup5", "duplicate the fifth stack element (by reference).");
+        virtualMachine.registerOp("dup6", "duplicate the sixth stack element (by reference).");
+        virtualMachine.registerOp("dup7", "duplicate the seventh stack element (by reference).");
+        virtualMachine.registerOp("dup8", "duplicate the eighth stack element (by reference).");
+        virtualMachine.registerOp("dup9", "duplicate the ninth stack element (by reference).");
+        virtualMachine.registerOp("dup10", "duplicate the tenth stack element (by reference).");
+        virtualMachine.registerOp("dup11", "duplicate the eleventh stack element (by reference).");
+        virtualMachine.registerOp("dup12", "duplicate the twelfth stack element (by reference).");
+        virtualMachine.registerOp("dup13", "duplicate the thirteenth stack element (by reference).");
+        virtualMachine.registerOp("dup14", "duplicate the fourteenth stack element (by reference).");
+        virtualMachine.registerOp("dup15", "duplicate the fifteenth stack element (by reference).");
+        virtualMachine.registerOp("dup16", "duplicate the sixteenth stack element (by reference).");
+
+        virtualMachine.registerOp("swap1", "pop an object  the stack and perform logical not on it.");
+
+        System.out.println(virtualMachine.opCount());
+        System.exit(0);
 //        serializationFactory.registerClass(MochaObject.class, new MochaObject());;
+
+        MochaObject mochaObject = new MochaObject();
 
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
 
-        virtualMachine.registerOp(new OpHalt());
-        virtualMachine.registerOp(new OpPush());
-
-        virtualMachine.registerOp("iconst",  new BitFields()
-                                                    .addField(1, "sign")
-                                                    .addField(2, "length", (a, b)->{
-                                                        switch (a.get()[0]) {
-                                                            case 0:
-                                                                b.set(5);
-                                                                return true;
-                                                            case 1:
-                                                                b.set(16);
-                                                                return true;
-                                                            case 2:
-                                                                b.set(32);
-                                                                return true;
-                                                            case 3:
-                                                                b.set(64);
-                                                                return true;
-                                                            default:
-                                                                return false;
-                                                        }
-                                                    })
-                                                    , "push an int into the stack.", null);
-
-        virtualMachine.registerOp("fconst", "push a fixed float of size [ 32 ] into the stack.", null);
-
-        virtualMachine.registerOp("aconst", "push an address of size [ 200 ] into the stack.", null);
-        virtualMachine.registerOp("aaconst", "push an array of max length [ 16 ] bits into the stack.", null);
-        virtualMachine.registerOp("aaconstl", "push an array of max length [ 32 ] bits into the stack.", null);
-
-        virtualMachine.registerOp("add", "add two top elements of the stack.", null);
-        virtualMachine.registerOp("sub", "sub two top elements of the stack.", null);
-        virtualMachine.registerOp("mul", "mul two top elements of the stack.", null);
-        virtualMachine.registerOp("div", "div two top elements of the stack.", null);
-        virtualMachine.registerOp("mod", "mod two top elements of the stack.", null);
-
-        virtualMachine.registerOp("store", new BitFields()
-                                                    .addField(4, "register")
-                                                    , "pop x from stack and store it in register", null);
-        virtualMachine.registerOp("load", new BitFields()
-                                                    .addField(4, "register")
-                                                    , "load x from register and push it to stack", null);
-        virtualMachine.registerOp("call", new BitFields()
-                                                    .addField(4, "arg")
-                                                    , "call a function [4:arg].", null);
-        virtualMachine.registerOp("jump", new BitFields()
-                                                    .addField(16, "position")
-                                                    , "jump to position.", null);
-
-        virtualMachine.registerOp("getmember", new BitFields()
-                                                    .addField(2, "6/14/22")
-                                                    , "set or get (and jump) a jump location.", null);
-        virtualMachine.registerOp("setmember", new BitFields()
-                                                    .addField(2, "6/14/22")
-                                                    , "set or get (and jump) a jump location.", null);
-
-
-        System.out.println(virtualMachine.opCount());
 //        virtualMachine.addOp("push", true, 0, 0, "push x amount of bytes into the stack", null);
 //        virtualMachine.addOp("pop", false, 0, 0, "pop item from the stack", null);
     }
