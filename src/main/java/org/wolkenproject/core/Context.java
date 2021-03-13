@@ -80,7 +80,7 @@ public class Context {
 
         virtualMachine = new OpcodeRegister();
         virtualMachine.registerOp("halt", "stop virtual process (and sub-processes).", 1, proc->proc.stopProcesses(Byte.toUnsignedInt(proc.getProgramCounter().get())));
-        virtualMachine.registerOp("push", "push an array of bytes into the stack.", 1, proc->{});
+        virtualMachine.registerOp("data", "push an array of bytes into the stack.", 1, proc->{});
 
         virtualMachine.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().position(scope.getProgramCounter().getChar()));
         virtualMachine.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (scope.getStack().pop().isTrue()) scope.getProgramCounter().position(scope.getProgramCounter().getChar()); });
@@ -154,6 +154,23 @@ public class Context {
         virtualMachine.registerOp("dup14", "duplicate the fourteenth stack element (by reference).", scope -> scope.getStack().dup(14));
         virtualMachine.registerOp("dup15", "duplicate the fifteenth stack element (by reference).", scope -> scope.getStack().dup(15));
         virtualMachine.registerOp("dup16", "duplicate the sixteenth stack element (by reference).", scope -> scope.getStack().dup(16));
+
+        virtualMachine.registerOp("cpy1", "duplicate the first stack element (by value).", scope -> scope.getStack().dup());
+        virtualMachine.registerOp("cpy2", "duplicate the second stack element (by value).", scope -> scope.getStack().dup(2));
+        virtualMachine.registerOp("cpy3", "duplicate the third stack element (by value).", scope -> scope.getStack().dup(3));
+        virtualMachine.registerOp("cpy4", "duplicate the fourth stack element (by value).", scope -> scope.getStack().dup(4));
+        virtualMachine.registerOp("cpy5", "duplicate the fifth stack element (by value).", scope -> scope.getStack().dup(5));
+        virtualMachine.registerOp("cpy6", "duplicate the sixth stack element (by value).", scope -> scope.getStack().dup(6));
+        virtualMachine.registerOp("cpy7", "duplicate the seventh stack element (by value).", scope -> scope.getStack().dup(7));
+        virtualMachine.registerOp("cpy8", "duplicate the eighth stack element (by value).", scope -> scope.getStack().dup(8));
+        virtualMachine.registerOp("cpy9", "duplicate the ninth stack element (by value).", scope -> scope.getStack().dup(9));
+        virtualMachine.registerOp("cpy10", "duplicate the tenth stack element (by value).", scope -> scope.getStack().dup(10));
+        virtualMachine.registerOp("cpy11", "duplicate the eleventh stack element (by value).", scope -> scope.getStack().dup(11));
+        virtualMachine.registerOp("cpy12", "duplicate the twelfth stack element (by value).", scope -> scope.getStack().dup(12));
+        virtualMachine.registerOp("cpy13", "duplicate the thirteenth stack element (by value).", scope -> scope.getStack().dup(13));
+        virtualMachine.registerOp("cpy14", "duplicate the fourteenth stack element (by value).", scope -> scope.getStack().dup(14));
+        virtualMachine.registerOp("cpy15", "duplicate the fifteenth stack element (by value).", scope -> scope.getStack().dup(15));
+        virtualMachine.registerOp("cpy16", "duplicate the sixteenth stack element (by value).", scope -> scope.getStack().dup(16));
 
         virtualMachine.registerOp("swap1", "swap two objects (the 1st and 2nd) on the stack.", scope -> scope.getStack().swap(1, 2));
         virtualMachine.registerOp("swap2", "swap two objects (the 1st and 3rd) on the stack.", scope -> scope.getStack().swap(1, 3));
