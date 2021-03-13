@@ -55,7 +55,47 @@ public class OpcodeRegister {
                     throw new MochaException("Unknown format format for string '" + argument + "'.");
                 }
 
-                byte args[]     = null;
+                byte length[] = null;
+
+                switch (opcode.getNumArgs()) {
+                    case 1:
+                        if (array.length > 255) {
+                            throw new MochaException("Opcode '" + opName + "' takes maximum arguments of '" + opcode.getNumArgs() + "'.");
+                        }
+
+                        length = new byte[] { (byte) array.length };
+                        break;
+                    case 2:
+                        if (array.length > 65535) {
+                            throw new MochaException("Opcode '" + opName + "' takes maximum arguments of '" + opcode.getNumArgs() + "'.");
+                        }
+
+                        length = Utils.takeApartChar((char) array.length);
+                        break;
+                    case 3:
+                        if (array.length > 16777215) {
+                            throw new MochaException("Opcode '" + opName + "' takes maximum arguments of '" + opcode.getNumArgs() + "'.");
+                        }
+
+                        length = Utils.takeApartInt24((char) array.length);
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                    case 7:
+                        break;
+                    case 8:
+                        break;
+                    default:
+                        throw new MochaException("Unsupported vararg size larger than '8'.");
+                }
+
+                if (array.length > maxArgs) {
+                    throw new MochaException("Opcode '" + opName + "' takes maximum arguments of '" + array.length + "'.");
+                }
             } else if (opcode.getNumArgs() > 0) {
             }
         }
