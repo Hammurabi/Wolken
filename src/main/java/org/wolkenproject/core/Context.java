@@ -121,7 +121,7 @@ public class Context {
         virtualMachine.registerOp("ecpubk", "push a public key of size '264' (compressed).", 33, scope -> { throw new MochaException("pubkey is not supported at the moment."); });
         virtualMachine.registerOp("ecsig", "push a signature of size '~'.", 73, scope -> { throw new MochaException("sig is not supported at the moment."); });
 
-        virtualMachine.registerOp("verify", "throws an 'InvalidTransactionException' if the top stack item is not true.", scope -> { throw new InvalidTransactionException(); });
+        virtualMachine.registerOp("verify", "throws an 'InvalidTransactionException' if the top stack item is not true.", scope -> scope.verify() );
         virtualMachine.registerOp("checksig", "check signature against signer.", scope -> { throw new MochaException("sig is not supported at the moment."); });
         virtualMachine.registerOp("checksigverify", "checksig + verify.", scope -> { throw new MochaException("sig is not supported at the moment."); });
 
