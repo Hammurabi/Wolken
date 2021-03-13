@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.EmptyProgramCounterException;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
@@ -99,5 +100,80 @@ public class ProgramCounter {
         }
 
         program.position(jumpLoc);
+    }
+
+    public String hexDump() throws MochaException {
+        StringBuilder builder   = new StringBuilder();
+        int lineLength = 0;
+
+        final int strip     = 20;
+        final int indent    = 2;
+
+        for (int i = 0; i < strip; i ++) {
+            lineLength ++;
+            builder.append("----");
+        }
+
+        builder.append("\n ");
+
+        while (hasNext()) {
+            Opcode next = next();
+            String hexCode = Base16.encode(new byte[] {(byte) next.getIdentifier()});
+            lineLength += hexCode.length() + 1;
+            builder.append(hexCode).append(" ");
+
+            if (lineLength % strip == 0) {
+                builder.append("\n ");
+            } else if (lineLength % indent == 0) {
+                builder.append("\t");
+            }
+
+            if (next.hasVarargs()) {
+                int length = 0;
+
+                switch (next.getNumArgs()) {
+                    case 1:
+                        length = nextByte();
+                        break;
+                    case 2:
+                        length = nextUnsignedShort();
+                        break;
+                    case 3:
+                        length = nextInt24();
+                        break;
+                    case 4:
+                        length = nextInt();
+                        break;
+                    default:
+                        throw new MochaException("Opcode corrupt.");
+                }
+
+                String hex = Base16.encode(next(length));
+                for (int i = 0; i < hex.length(); i += 2) {
+                    builder.append(hex.substring(i, i + 2)).append(" ");
+                    lineLength += 3;
+
+                    if (lineLength % strip == 0) {
+                        builder.append("\n ");
+                    } else if (lineLength % indent == 0) {
+                        builder.append("\t");
+                    }
+                }
+            } else if (next.getNumArgs() > 0) {
+                String hex = Base16.encode(next(next.getNumArgs()));
+                for (int i = 0; i < hex.length(); i += 2) {
+                    builder.append(hex.substring(i, i + 2)).append(" ");
+                    lineLength += 3;
+
+                    if (lineLength % strip == 0) {
+                        builder.append("\n ");
+                    } else if (lineLength % indent == 0) {
+                        builder.append("\t");
+                    }
+                }
+            }
+        }
+
+        return builder.toString();
     }
 }
