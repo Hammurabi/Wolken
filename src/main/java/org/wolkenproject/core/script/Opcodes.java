@@ -26,4 +26,9 @@ public class Opcodes {
     public static final Opcode iconst15         = new OpIConst_4bits(15);
 
     public static final Opcode bconst           = new OpIConst_4bits(15);
+    public static final Opcode sconst           = new OpIConst_4bits(15);
+    public static final Opcode iconst           = new OpIConst_4bits(15);
+    public static final Opcode lconst           = new OpIConst_4bits(15);
+    public static final Opcode const128         = new OpIConst_4bits(15);
+    public static final Opcode const256         = new OpIConst_4bits(15);
 }
