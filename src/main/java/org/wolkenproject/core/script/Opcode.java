@@ -1,26 +1,31 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.core.script.internal.MochaCallable;
 import org.wolkenproject.exceptions.MochaException;
-import org.wolkenproject.utils.BitInputStream;
-import org.wolkenproject.utils.BitOutputStream;
 
-import java.io.IOException;
-
-public abstract class Opcode { private String          name;
-    private int             identifier;
+public class Opcode {
+    private String          name;
     private String          desc;
     private String          usage;
+    private int             identifier;
+    private int             numArgs;
+    private MochaCallable   callable;
 
-    public Opcode(String name, String desc, String usage) {
+    public Opcode(String name, String desc, String usage, int identifier, int numArgs, MochaCallable callable) {
         this.name = name;
         this.desc = desc;
         this.usage= usage;
+        this.numArgs= numArgs;
+        this.callable= callable;
     }
 
-    public abstract void execute(Scope scope) throws MochaException;
-    public abstract void write(BitOutputStream outputStream) throws IOException;
-    public abstract void read(BitInputStream inputStream) throws IOException;
-    public abstract Opcode makeCopy();
+    public void execute(Scope scope) throws MochaException {
+        callable.call(scope);
+    }
+
+    public Opcode makeCopy() {
+        return new Opcode(name, desc, usage, identifier, numArgs, callable);
+    }
 
     protected void setIdentifier(int id) {
         this.identifier = id;
