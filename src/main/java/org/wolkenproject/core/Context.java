@@ -14,6 +14,7 @@ import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.LinkedHashSet;
 import java.util.concurrent.ExecutorService;
@@ -113,12 +114,12 @@ public class Context {
         virtualMachine.registerOp("const14", "push an integer with value '14' (unsigned).", proc->proc.getStack().push(new MochaNumber(14, false)));
         virtualMachine.registerOp("const15", "push an integer with value '15' (unsigned).", proc->proc.getStack().push(new MochaNumber(15, false)));
 
-        virtualMachine.registerOp("bconst", "push an integer of size '8' (unsigned).", 1, proc->proc.getStack().push(new MochaNumber(proc.getProgramCounter().get(), false)));
-        virtualMachine.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2, proc->proc.getStack().push(new MochaNumber(proc.getProgramCounter().getChar(), false)));
-        virtualMachine.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4, proc->proc.getStack().push(new MochaNumber(Integer.toUnsignedLong(proc.getProgramCounter().getInt()), false)));
-        virtualMachine.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8, proc->proc.getStack().push(new MochaNumber(Long.toUnsignedString(proc.getProgramCounter().getLong()), false)));
-        virtualMachine.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, proc->{ byte array[] = new byte[16]; proc.getProgramCounter().get(array); proc.getStack().push(new MochaNumber(0, false)); });
-        virtualMachine.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, proc->proc.getStack().push(new MochaNumber(proc.getProgramCounter().get(), false)));
+        virtualMachine.registerOp("bconst", "push an integer of size '8' (unsigned).", 1, proc -> proc.getStack().push(new MochaNumber(proc.getProgramCounter().nextByte(), false)));
+        virtualMachine.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2, proc -> proc.getStack().push(new MochaNumber(proc.getProgramCounter().nextUnsignedShort(), false)));
+        virtualMachine.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4, proc -> proc.getStack().push(new MochaNumber(Integer.toUnsignedLong(proc.getProgramCounter().nextInt()), false)));
+        virtualMachine.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8, proc -> proc.getStack().push(new MochaNumber(Long.toUnsignedString(proc.getProgramCounter().nextLong()), false)));
+        virtualMachine.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, proc -> proc.getStack().push(new MochaNumber(new BigInteger(proc.getProgramCounter().next(16)), false)));
+        virtualMachine.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, proc -> proc.getStack().push(new MochaNumber(new BigInteger(proc.getProgramCounter().next(32)), false)));
 
         virtualMachine.registerOp("fconst", "push a float of size '32' (unsigned).", 4, scope -> { throw new MochaException("float is not supported at the moment."); });
         virtualMachine.registerOp("fconst64", "push a float of size '64' (unsigned).", 8, scope -> { throw new MochaException("float is not supported at the moment."); });
