@@ -19,11 +19,12 @@ public class Scope {
     // an interrupt signal (if any)
     private AtomicInteger           interruptSignal;
     // the program counter
-    private ByteBuffer              programCounter;
+    private ProgramCounter          programCounter;
 
-    public Scope(VirtualMachine virtualMachine, Contract contract, Stack<MochaObject> stack) {
+    public Scope(VirtualMachine virtualMachine, Contract contract, Stack<MochaObject> stack, ProgramCounter programCounter) {
         this.contract   = contract;
         this.stack      = new MochaStack<>();
+        this.programCounter = programCounter;
     }
 
     public Contract getContract() {
@@ -34,7 +35,7 @@ public class Scope {
         return stack;
     }
 
-    public ByteBuffer getProgramCounter() {
+    public ProgramCounter getProgramCounter() {
         return programCounter;
     }
 
