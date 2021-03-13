@@ -349,4 +349,11 @@ public class Utils {
 
         return bArray;
     }
+
+    public static byte[] takeApartInt24(char integer) {
+        return new byte[] {
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
 }
