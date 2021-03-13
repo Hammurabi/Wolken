@@ -187,9 +187,6 @@ public class Context {
 
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
-
-//        virtualMachine.addOp("push", true, 0, 0, "push x amount of bytes into the stack", null);
-//        virtualMachine.addOp("pop", false, 0, 0, "pop item from the stack", null);
     }
 
     public void shutDown()
