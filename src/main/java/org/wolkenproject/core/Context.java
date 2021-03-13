@@ -11,10 +11,12 @@ import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
+import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 import java.util.LinkedHashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -79,7 +81,7 @@ public class Context {
         serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
 
-        opcodeRegister.registerOp("halt", "stop virtual scopeess (and sub-scopeesses).", 1, scope->scope.stopProcesses(scope.getProgramCounter().nextByte()));
+        opcodeRegister.registerOp("halt", "stop virtual process (and sub-processes).", 1, scope->scope.stopProcesses(scope.getProgramCounter().nextByte()));
 
         opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, scope->scope.getStack().pop().call(scope));
 
@@ -182,10 +184,6 @@ public class Context {
         opcodeRegister.registerOp("swap13", "swap two objects (the 1st and 14th) on the stack.", scope -> scope.getStack().swap(1, 14));
         opcodeRegister.registerOp("swap14", "swap two objects (the 1st and 15th) on the stack.", scope -> scope.getStack().swap(1, 15));
         opcodeRegister.registerOp("swap15", "swap two objects (the 1st and 16th) on the stack.", scope -> scope.getStack().swap(1, 16));
-
-//        serializationFactory.registerClass(MochaObject.class, new MochaObject());;
-
-        MochaObject mochaObject = new MochaObject();
 
         this.server                 = new Server();
         this.blockChain             = new BlockChain();
