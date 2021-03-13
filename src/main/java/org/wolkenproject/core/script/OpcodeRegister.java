@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.UndefOpcodeException;
 import org.wolkenproject.utils.VoidCallable;
 import org.wolkenproject.utils.VoidCallableThrowsT;
 import org.wolkenproject.utils.VoidCallableThrowsTY;
@@ -36,12 +37,12 @@ public class OpcodeRegister {
         return this;
     }
 
-    public Opcode getOpcode(int opcode) {
+    public Opcode getOpcode(int opcode) throws UndefOpcodeException {
         if (opcodeMap.containsKey(opcode)) {
             return opcodeMap.get(opcode);
         }
 
-        return null;
+        throw new UndefOpcodeException();
     }
 
     public int opCount() {
