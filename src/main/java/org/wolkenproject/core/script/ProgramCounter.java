@@ -1,6 +1,7 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.exceptions.EmptyProgramCounterException;
+import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
 import org.wolkenproject.utils.Utils;
 
@@ -90,5 +91,13 @@ public class ProgramCounter {
 
     public boolean hasNext() {
         return program.hasRemaining();
+    }
+
+    public void jump(int jumpLoc) throws MochaException {
+        if (program.capacity() < jumpLoc) {
+            throw new MochaException("invalid jump location.");
+        }
+
+        program.position(jumpLoc);
     }
 }
