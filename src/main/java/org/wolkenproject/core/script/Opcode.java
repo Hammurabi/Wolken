@@ -1,8 +1,10 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.utils.VoidCallable;
 import org.wolkenproject.utils.VoidCallableThrowsT;
+import org.wolkenproject.utils.VoidCallableThrowsTY;
 
 public class Opcode {
     private String          name;
@@ -10,9 +12,9 @@ public class Opcode {
     private String          usage;
     private int             identifier;
     private int             numArgs;
-    private VoidCallableThrowsT<Scope, MochaException> callable;
+    private VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable;
 
-    public Opcode(String name, String desc, String usage, int identifier, int numArgs, VoidCallableThrowsT<Scope, MochaException> callable) {
+    public Opcode(String name, String desc, String usage, int identifier, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
         this.name = name;
         this.desc = desc;
         this.usage= usage;
@@ -20,7 +22,7 @@ public class Opcode {
         this.callable= callable;
     }
 
-    public void execute(Scope scope) throws MochaException {
+    public void execute(Scope scope) throws MochaException, InvalidTransactionException {
         callable.call(scope);
     }
 
