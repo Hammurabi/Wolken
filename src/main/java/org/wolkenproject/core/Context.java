@@ -93,8 +93,8 @@ public class Context {
         virtualMachine.registerOp("data2", "push an array of bytes of length (16) into the stack.", 2, proc -> proc.getStack().push(new ByteArray(proc.getProgramCounter().next(proc.getProgramCounter().nextUnsignedShort()))));
         virtualMachine.registerOp("data3", "push an array of bytes of length (24) into the stack.", 3, proc -> proc.getStack().push(new ByteArray(proc.getProgramCounter().next(proc.getProgramCounter().nextInt24()))));
 
-        virtualMachine.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().position(scope.getProgramCounter().getChar()));
-        virtualMachine.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (scope.getStack().pop().isTrue()) scope.getProgramCounter().position(scope.getProgramCounter().getChar()); });
+        virtualMachine.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()));
+        virtualMachine.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (scope.getStack().pop().isTrue()) scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()); });
 
         virtualMachine.registerOp("const0", "push an integer with value '0' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
         virtualMachine.registerOp("const1", "push an integer with value '1' (unsigned).", proc->proc.getStack().push(new MochaNumber(1, false)));
