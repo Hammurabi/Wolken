@@ -16,9 +16,49 @@ public class ProgramCounter {
         program.position(0);
     }
 
-    public int nextInt() {
+    public int nextByte() throws EmptyProgramCounterException {
+        if (hasNext()) {
+            return Byte.toUnsignedInt(program.get());
+        }
+
+        throw new EmptyProgramCounterException();
+    }
+
+    public int nextShort() throws EmptyProgramCounterException {
+        if (remaining() >= 2) {
+            return program.getShort();
+        }
+
+        throw new EmptyProgramCounterException();
+    }
+
+    public int nextUnsignedShort() throws EmptyProgramCounterException {
+        if (remaining() >= 2) {
+            return program.getChar();
+        }
+
+        throw new EmptyProgramCounterException();
+    }
+
+    public int nextInt24() throws EmptyProgramCounterException {
+        if (remaining() >= 3) {
+            return Utils.makeInt((byte) 0, program.get(), program.get(), program.get());
+        }
+
+        throw new EmptyProgramCounterException();
+    }
+
+    public int nextInt() throws EmptyProgramCounterException {
         if (remaining() >= 4) {
-            return Utils.makeInt(program.get(), program.get(), program.get(), program.get());
+            return program.getInt();
+        }
+
+        throw new EmptyProgramCounterException();
+    }
+
+    public long nextLong() throws EmptyProgramCounterException {
+        if (remaining() >= 8) {
+            return program.getLong();
         }
 
         throw new EmptyProgramCounterException();
