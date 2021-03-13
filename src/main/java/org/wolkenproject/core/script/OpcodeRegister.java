@@ -1,34 +1,42 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.core.script.internal.MochaCallable;
+
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class OpcodeRegister {
-    private Set<Opcode> opcodeList;
+    private Map<String, Opcode>     opcodeNameMap;
+    private Map<Integer, Opcode>    opcodeMap;
+    private Set<Opcode>             opcodeSet;
 
     public OpcodeRegister() {
-        opcodeList = new LinkedHashSet<>();
+        opcodeNameMap = new HashMap<>();
+        opcodeMap = new HashMap<>();
+        opcodeSet = new LinkedHashSet<>();
     }
 
     // register an opcode into the vm
-    public OpcodeRegister registerOp(Opcode opcode) {
-        opcode.setIdentifier(opcodeList.size());
-        opcodeList.add(opcode);
+    public OpcodeRegister registerOp(String name, String description, int numArgs, MochaCallable callable) {
+        Opcode opcode = new Opcode(name, description, "", opcodeSet.size(), numArgs, callable);
+        opcodeNameMap.put(name, opcode);
+        opcodeMap.put(opcode.getIdentifier(), opcode);
+        opcodeSet.add(opcode);
 
         return this;
     }
 
     public Opcode getOpcode(int opcode) {
-        for (Opcode op : opcodeList) {
-            if (op.getIdentifier() == opcode) {
-                return op;
-            }
+        if (opcodeMap.containsKey(opcode)) {
+            return opcodeMap.get(opcode);
         }
 
         return null;
     }
 
     public int opCount() {
-        return opcodeList.size();
+        return opcodeSet.size();
     }
 }
