@@ -2,6 +2,7 @@ package org.wolkenproject.core.script.internal;
 
 import org.wolkenproject.core.script.Scope;
 import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.UndefMemberException;
 import org.wolkenproject.utils.Utils;
 
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import java.util.Arrays;
 public class MochaObject {
     private static final MochaObject    fn_add          = createFunction((proc)->{ return null; });
     private static final MochaCallable  defaultCallable = (proc)->{ return null; };
+    private static final String         undefined       = "undefined";
     private MochaObject     members[];
     private MochaCallable   callable;
 
@@ -20,6 +22,18 @@ public class MochaObject {
         members     = new MochaObject[0];
         callable    = callble;
         addMember(fn_add);
+    }
+
+    public MochaObject getMember(int member) throws UndefMemberException {
+        return getMember(member, undefined);
+    }
+
+    public MochaObject getMember(int member, String msg) throws UndefMemberException {
+        if (member >= members.length || member < 0) {
+            throw new UndefMemberException("member '" + msg + "' at index '" + member + "' exceeds the size of memberlist.");
+        }
+
+        return members[member];
     }
 
     public static final MochaObject createFunction(MochaCallable callable) {
@@ -66,7 +80,8 @@ public class MochaObject {
         members = Utils.prepend(member, members);
     }
 
-    public void isCallable() {
+    public boolean isCallable() {
+        return callable != null;
     }
 
     public final MochaObject call(Scope scope) {
