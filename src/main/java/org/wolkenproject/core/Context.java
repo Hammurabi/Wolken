@@ -114,10 +114,10 @@ public class Context {
         virtualMachine.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.");
 
         virtualMachine.registerOp("add", "pop two objects from the stack and add them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(0, "add").call(scope)));
-        virtualMachine.registerOp("sub", "pop two objects from the stack and sub them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(0, "add").call(scope)));
-        virtualMachine.registerOp("mul", "pop two objects from the stack and mul them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(0, "add").call(scope)));
-        virtualMachine.registerOp("div", "pop two objects from the stack and div them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(0, "add").call(scope)));
-        virtualMachine.registerOp("mod", "pop two objects from the stack and mod them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(0, "add").call(scope)));
+        virtualMachine.registerOp("sub", "pop two objects from the stack and sub them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(1, "sub").call(scope)));
+        virtualMachine.registerOp("mul", "pop two objects from the stack and mul them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(2, "mul").call(scope)));
+        virtualMachine.registerOp("div", "pop two objects from the stack and div them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(3, "div").call(scope)));
+        virtualMachine.registerOp("mod", "pop two objects from the stack and mod them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(4, "mod").call(scope)));
         virtualMachine.registerOp("and", "pop two objects from the stack and perform bitwise and on them.");
         virtualMachine.registerOp("or", "pop two objects from the stack and perform bitwise or on them.");
         virtualMachine.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.");
