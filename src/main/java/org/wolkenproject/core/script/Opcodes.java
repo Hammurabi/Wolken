@@ -31,4 +31,10 @@ public class Opcodes {
     public static final Opcode lconst           = new OpIConst_4bits(15);
     public static final Opcode const128         = new OpIConst_4bits(15);
     public static final Opcode const256         = new OpIConst_4bits(15);
+
+    public static final Opcode dup              = new OpDup(0);
+    public static final Opcode dup2             = new OpDup(0);
+    public static final Opcode dup4             = new OpDup(0);
+
+    public static final Opcode rot              = new OpDup(0);
 }
