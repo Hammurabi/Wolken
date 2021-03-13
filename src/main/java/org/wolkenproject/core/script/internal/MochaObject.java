@@ -31,10 +31,22 @@ public class MochaObject {
 
     public MochaObject getMember(int member, String msg) throws UndefMemberException {
         if (member >= members.length || member < 0) {
-            throw new UndefMemberException("member '" + msg + "' at index '" + member + "' exceeds the size of memberlist.");
+            throw new UndefMemberException("member [LOAD] '" + msg + "' at index '" + member + "' exceeds the size of memberlist.");
         }
 
         return members[member];
+    }
+
+    public void setMember(int member, MochaObject object) throws UndefMemberException {
+        setMember(member, object, undefined);
+    }
+
+    public void setMember(int member, MochaObject object, String msg) throws UndefMemberException {
+        if (member >= members.length) {
+            throw new UndefMemberException("member [STORE] '" + msg + "' at index '" + member + "' exceeds the size of memberlist.");
+        }
+
+        members[member] = object;
     }
 
     public static final MochaObject createFunction(MochaCallable callable) {
