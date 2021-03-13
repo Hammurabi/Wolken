@@ -9,26 +9,26 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Scope {
     // the contract in which the point of entry exists
-    private Contract            contract;
+    private Contract                contract;
     // the stack
-    private Stack<MochaObject>  stack;
+    private MochaStack<MochaObject> stack;
     // tell all subprocesses to continue running
-    private AtomicBoolean       keepRunning;
+    private AtomicBoolean           keepRunning;
     // an interrupt signal (if any)
-    private AtomicInteger       interruptSignal;
+    private AtomicInteger           interruptSignal;
     // the program counter
-    private ByteBuffer          programCounter;
+    private ByteBuffer              programCounter;
 
     public Scope(VirtualMachine virtualMachine, Contract contract, Stack<MochaObject> stack) {
         this.contract   = contract;
-        this.stack      = stack;
+        this.stack      = new MochaStack<>();
     }
 
     public Contract getContract() {
         return contract;
     }
 
-    public Stack<MochaObject> getStack() {
+    public MochaStack<MochaObject> getStack() {
         return stack;
     }
 
