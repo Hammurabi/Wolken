@@ -1,6 +1,8 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.core.script.internal.MochaObject;
+import org.wolkenproject.exceptions.InvalidTransactionException;
+import org.wolkenproject.exceptions.MochaException;
 
 import java.nio.ByteBuffer;
 import java.util.Stack;
@@ -39,5 +41,11 @@ public class Scope {
     public void stopProcesses(int signal) {
         keepRunning.set(false);
         interruptSignal.set(signal);
+    }
+
+    public void verify() throws InvalidTransactionException, MochaException {
+        if (!getStack().pop().isTrue()) {
+            throw new InvalidTransactionException();
+        }
     }
 }
