@@ -113,19 +113,19 @@ public class Context {
 
         virtualMachine.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.");
 
-        virtualMachine.registerOp("add", "pop two objects from the stack and add them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(0, "add").call(scope)));
-        virtualMachine.registerOp("sub", "pop two objects from the stack and sub them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(1, "sub").call(scope)));
-        virtualMachine.registerOp("mul", "pop two objects from the stack and mul them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(2, "mul").call(scope)));
-        virtualMachine.registerOp("div", "pop two objects from the stack and div them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(3, "div").call(scope)));
-        virtualMachine.registerOp("mod", "pop two objects from the stack and mod them.", scope -> scope.getStack().dupr().push(scope.getStack().pop().getMember(4, "mod").call(scope)));
-        virtualMachine.registerOp("and", "pop two objects from the stack and perform bitwise and on them.");
-        virtualMachine.registerOp("or", "pop two objects from the stack and perform bitwise or on them.");
-        virtualMachine.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.");
-        virtualMachine.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.");
-        virtualMachine.registerOp("lsh", "pop two objects from the stack left shift.");
-        virtualMachine.registerOp("rsh", "pop two objects from the stack right shift.");
-        virtualMachine.registerOp("not", "pop an object from the stack and perform bitwise not on it.");
-        virtualMachine.registerOp("ngt", "pop an object from the stack and perform logical not on it.");
+        virtualMachine.registerOp("add", "pop two objects from the stack and add them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(0, "add").call(scope)));
+        virtualMachine.registerOp("sub", "pop two objects from the stack and sub them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(1, "sub").call(scope)));
+        virtualMachine.registerOp("mul", "pop two objects from the stack and mul them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(2, "mul").call(scope)));
+        virtualMachine.registerOp("div", "pop two objects from the stack and div them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(3, "div").call(scope)));
+        virtualMachine.registerOp("mod", "pop two objects from the stack and mod them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(4, "mod").call(scope)));
+        virtualMachine.registerOp("and", "pop two objects from the stack and perform bitwise and on them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(5, "and").call(scope)));
+        virtualMachine.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(6, "or").call(scope)));
+        virtualMachine.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(7, "xor").call(scope)));
+        virtualMachine.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(8, "shf").call(scope)));
+        virtualMachine.registerOp("lsh", "pop two objects from the stack left shift.", scope -> scope.getStack().push(scope.getStack().peek().getMember(9, "lsh").call(scope)));
+        virtualMachine.registerOp("rsh", "pop two objects from the stack right shift.", scope -> scope.getStack().push(scope.getStack().peek().getMember(10, "rsh").call(scope)));
+        virtualMachine.registerOp("not", "pop an object from the stack and perform bitwise not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(11, "not").call(scope)));
+        virtualMachine.registerOp("ngt", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
 
         virtualMachine.registerOp("dup1", "duplicate the first stack element (by reference).");
         virtualMachine.registerOp("dup2", "duplicate the second stack element (by reference).");
