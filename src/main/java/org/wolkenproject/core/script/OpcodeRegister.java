@@ -49,6 +49,8 @@ public class OpcodeRegister {
                     array = Base58.decode(argument);
                 } else if (Base16.isEncoded(argument)) {  // base 16 value
                     array = Base16.decode(argument);
+                } else if (argument.startsWith("'") && argument.endsWith("'")) {  // regular string
+                    array = Base16.decode(argument);
                 } else {
                     throw new MochaException("Unknown format format for string '" + argument + "'.");
                 }
