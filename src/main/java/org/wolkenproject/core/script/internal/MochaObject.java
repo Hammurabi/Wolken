@@ -1,6 +1,7 @@
 package org.wolkenproject.core.script.internal;
 
 import org.wolkenproject.core.script.Scope;
+import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.UndefMemberException;
 import org.wolkenproject.utils.Utils;
@@ -84,7 +85,7 @@ public class MochaObject {
         return callable != null;
     }
 
-    public final MochaObject call(Scope scope) {
+    public final MochaObject call(Scope scope) throws MochaException, InvalidTransactionException {
         return callable.call(scope);
     }
 
