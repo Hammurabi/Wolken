@@ -11,6 +11,7 @@ import org.wolkenproject.utils.VoidCallableThrowsT;
 import org.wolkenproject.utils.VoidCallableThrowsTY;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigInteger;
 import java.util.*;
 
 public class OpcodeRegister {
@@ -39,12 +40,19 @@ public class OpcodeRegister {
                     throw new MochaException("Reached EOF but expected arguments for '" + opName + "'.");
                 }
 
+                byte array[]    = null;
                 String argument = iterator.next();
 
                 if (argument.matches("\\d+")) {     // base 10 number
+                    array = new BigInteger(argument).toByteArray();
                 } else if (Base58.isEncoded(argument)) {  // base 58 value
+                    array = Base58.decode(argument);
                 } else if (Base16.isEncoded(argument)) {  // base 16 value
+                    array = Base16.decode(argument);
+                } else {
+                    throw new MochaException("Unknown format format for string '" + argument + "'.");
                 }
+
                 byte args[]     = null;
             } else if (opcode.getNumArgs() > 0) {
             }
