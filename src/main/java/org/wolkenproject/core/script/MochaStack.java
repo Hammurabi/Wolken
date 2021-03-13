@@ -34,10 +34,13 @@ public class MochaStack<T> {
         stack.push(stack.get(stack.size() - element));
     }
 
-    public void rot(int a, int b) {
-        T temp = stack.get(a);
-        stack.set(a, stack.get(b));
-        stack.set(b, temp);
+    public void rot(int index) {
+    }
+
+    public void swap(int a, int b) {
+        T temp = stack.get(stack.size() - a);
+        stack.set(stack.size() - a, stack.get(stack.size() - b));
+        stack.set(stack.size() - b, temp);
     }
 
     public boolean isEmpty() {
