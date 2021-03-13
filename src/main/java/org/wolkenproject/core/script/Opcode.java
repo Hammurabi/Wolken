@@ -20,6 +20,7 @@ public class Opcode {
         this.vararg= vararg;
         this.numArgs= numArgs;
         this.callable= callable;
+        this.identifier= identifier;
     }
 
     public void execute(Scope scope) throws MochaException, InvalidTransactionException {
