@@ -64,6 +64,17 @@ public class ProgramCounter {
         throw new EmptyProgramCounterException();
     }
 
+    public byte[] next(int length) throws EmptyProgramCounterException {
+        if (remaining() >= length) {
+            byte array[] = new byte[length];
+            program.get(array);
+
+            return array;
+        }
+
+        throw new EmptyProgramCounterException();
+    }
+
     public int remaining() {
         return program.remaining();
     }
