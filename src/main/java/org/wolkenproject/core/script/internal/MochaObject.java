@@ -160,4 +160,8 @@ public class MochaObject {
 
     public void flipSign() {
     }
+
+    public boolean isTrue() {
+        return false;
+    }
 }
