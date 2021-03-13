@@ -35,23 +35,38 @@ public class OpcodeRegister {
         while (iterator.hasNext()) {
             String opName   = iterator.next().replaceAll("^(Op)", "").toLowerCase();
             Opcode opcode   = getOpcode(opName);
+            outputStream.write(opcode.getIdentifier());
 
             if (opcode.hasVarargs()) {
                 if (!iterator.hasNext()) {
-                    throw new MochaException("Reached EOF but expected arguments for '" + opName + "'.");
+                    throw new MochaException("Reached EOF but expected argument(s) for '" + opName + "'.");
                 }
 
                 byte array[]    = null;
                 String argument = iterator.next();
 
                 if (argument.matches("\\d+")) {     // base 10 number
-                    array = new BigInteger(argument).toByteArray();
+                    long arg = Long.parseLong(argument);
+
+                    if (Long.toString(arg).equals(argument)) {
+                        if (arg <= 255) {
+                            array = new byte[] { (byte) arg };
+                        } else if (arg <= 65535) {
+                            array = Utils.takeApartChar((char) arg);
+                        } else if (arg <= 16777215) {
+                            array = Utils.takeApartInt24(arg);
+                        } else if (arg <= 4294967295L) {
+                            array = Utils.takeApart(arg);
+                        } else {
+                            array = Utils.takeApartLong(arg);
+                        }
+                    } else {
+                        array = new BigInteger(argument).toByteArray();
+                    }
                 } else if (Base58.isEncoded(argument)) {  // base 58 value
                     array = Base58.decode(argument);
                 } else if (Base16.isEncoded(argument)) {  // base 16 value
                     array = Base16.decode(argument);
-                } else if (argument.startsWith("'") && argument.endsWith("'")) {  // regular string
-                    array = argument.getBytes();
                 } else {
                     throw new MochaException("Unknown format format for string '" + argument + "'.");
                 }
@@ -61,21 +76,21 @@ public class OpcodeRegister {
                 switch (opcode.getNumArgs()) {
                     case 1:
                         if (array.length > 255) {
-                            throw new MochaException("Opcode '" + opName + "' takes maximum length arguments of '" + opcode.getNumArgs() + "'.");
+                            throw new MochaException("Opcode '" + opName + "' takes maximum length argument(s) of '" + opcode.getNumArgs() + "'.");
                         }
 
                         length = new byte[] { (byte) array.length };
                         break;
                     case 2:
                         if (array.length > 65535) {
-                            throw new MochaException("Opcode '" + opName + "' takes maximum length arguments of '" + opcode.getNumArgs() + "'.");
+                            throw new MochaException("Opcode '" + opName + "' takes maximum length argument(s) of '" + opcode.getNumArgs() + "'.");
                         }
 
                         length = Utils.takeApartChar((char) array.length);
                         break;
                     case 3:
                         if (array.length > 16777215) {
-                            throw new MochaException("Opcode '" + opName + "' takes maximum length arguments of '" + opcode.getNumArgs() + "'.");
+                            throw new MochaException("Opcode '" + opName + "' takes maximum length argument(s) of '" + opcode.getNumArgs() + "'.");
                         }
 
                         length = Utils.takeApartInt24((char) array.length);
@@ -94,25 +109,43 @@ public class OpcodeRegister {
                 String argument = iterator.next();
 
                 if (argument.matches("\\d+")) {     // base 10 number
-                    array = new BigInteger(argument).toByteArray();
+                    long arg = Long.parseLong(argument);
+
+                    if (Long.toString(arg).equals(argument)) {
+                        if (arg <= 255 && opcode.getNumArgs() == 1) {
+                            array = new byte[] { (byte) arg };
+                        } else if (arg <= 65535 && opcode.getNumArgs() == 2) {
+                            array = Utils.takeApartChar((char) arg);
+                        } else if (arg <= 16777215 && opcode.getNumArgs() == 3) {
+                            array = Utils.takeApartInt24(arg);
+                        } else if (arg <= 4294967295L && opcode.getNumArgs() == 4) {
+                            array = Utils.takeApart(arg);
+                        } else if (arg <= Long.MAX_VALUE && opcode.getNumArgs() == 8) {
+                            array = Utils.takeApartLong(arg);
+                        } else {
+                            throw new MochaException("Opcode '" + opName + "' takes '" + opcode.getNumArgs() + "' argument(s).");
+                        }
+                    } else {
+                        array = new BigInteger(argument).toByteArray();
+                    }
                 } else if (Base58.isEncoded(argument)) {  // base 58 value
                     array = Base58.decode(argument);
                 } else if (Base16.isEncoded(argument)) {  // base 16 value
                     array = Base16.decode(argument);
-                } else if (argument.startsWith("'") && argument.endsWith("'")) {  // regular string
-                    array = argument.getBytes();
                 } else {
                     throw new MochaException("Unknown format format for string '" + argument + "'.");
                 }
 
                 if (array.length != opcode.getNumArgs()) {
-                    throw new MochaException("Opcode '" + opName + "' takes '" + opcode.getNumArgs() + "' arguments .");
+                    throw new MochaException("Opcode '" + opName + "' takes '" + opcode.getNumArgs() + "' argument(s).");
                 }
 
                 outputStream.write(array);
             }
         }
 
+        outputStream.flush();
+        outputStream.close();
         return outputStream.toByteArray();
     }
 
