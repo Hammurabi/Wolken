@@ -79,7 +79,7 @@ public class Context {
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
 
         virtualMachine = new OpcodeRegister();
-        virtualMachine.registerOp("halt", "stop virtual process (and sub-processes).", 1);
+        virtualMachine.registerOp("halt", "stop virtual process (and sub-processes).", 1, proc->{ proc.stopProcesses(Byte.toUnsignedInt(proc.getProgramCounter().get())); return null; });
         virtualMachine.registerOp("push", "push an array of bytes into the stack.", 1);
 
         virtualMachine.registerOp("const0", "push an integer with value '0' (unsigned).");
