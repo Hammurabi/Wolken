@@ -84,21 +84,21 @@ public class Context {
         virtualMachine.registerOp("push", "push an array of bytes into the stack.", 1, proc->{});
 
         virtualMachine.registerOp("const0", "push an integer with value '0' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const1", "push an integer with value '1' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const2", "push an integer with value '2' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const3", "push an integer with value '3' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const4", "push an integer with value '4' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const5", "push an integer with value '5' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const6", "push an integer with value '6' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const7", "push an integer with value '7' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const8", "push an integer with value '8' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const9", "push an integer with value '9' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const10", "push an integer with value '10' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const11", "push an integer with value '11' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const12", "push an integer with value '12' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const13", "push an integer with value '13' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const14", "push an integer with value '14' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
-        virtualMachine.registerOp("const15", "push an integer with value '15' (unsigned).", proc->proc.getStack().push(new MochaNumber(0, false)));
+        virtualMachine.registerOp("const1", "push an integer with value '1' (unsigned).", proc->proc.getStack().push(new MochaNumber(1, false)));
+        virtualMachine.registerOp("const2", "push an integer with value '2' (unsigned).", proc->proc.getStack().push(new MochaNumber(2, false)));
+        virtualMachine.registerOp("const3", "push an integer with value '3' (unsigned).", proc->proc.getStack().push(new MochaNumber(3, false)));
+        virtualMachine.registerOp("const4", "push an integer with value '4' (unsigned).", proc->proc.getStack().push(new MochaNumber(4, false)));
+        virtualMachine.registerOp("const5", "push an integer with value '5' (unsigned).", proc->proc.getStack().push(new MochaNumber(5, false)));
+        virtualMachine.registerOp("const6", "push an integer with value '6' (unsigned).", proc->proc.getStack().push(new MochaNumber(6, false)));
+        virtualMachine.registerOp("const7", "push an integer with value '7' (unsigned).", proc->proc.getStack().push(new MochaNumber(7, false)));
+        virtualMachine.registerOp("const8", "push an integer with value '8' (unsigned).", proc->proc.getStack().push(new MochaNumber(8, false)));
+        virtualMachine.registerOp("const9", "push an integer with value '9' (unsigned).", proc->proc.getStack().push(new MochaNumber(9, false)));
+        virtualMachine.registerOp("const10", "push an integer with value '10' (unsigned).", proc->proc.getStack().push(new MochaNumber(10, false)));
+        virtualMachine.registerOp("const11", "push an integer with value '11' (unsigned).", proc->proc.getStack().push(new MochaNumber(11, false)));
+        virtualMachine.registerOp("const12", "push an integer with value '12' (unsigned).", proc->proc.getStack().push(new MochaNumber(12, false)));
+        virtualMachine.registerOp("const13", "push an integer with value '13' (unsigned).", proc->proc.getStack().push(new MochaNumber(13, false)));
+        virtualMachine.registerOp("const14", "push an integer with value '14' (unsigned).", proc->proc.getStack().push(new MochaNumber(14, false)));
+        virtualMachine.registerOp("const15", "push an integer with value '15' (unsigned).", proc->proc.getStack().push(new MochaNumber(15, false)));
 
         virtualMachine.registerOp("bconst", "push an integer of size '8' (unsigned).", 1);
         virtualMachine.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2);
