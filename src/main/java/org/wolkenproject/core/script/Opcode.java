@@ -10,12 +10,14 @@ public class Opcode {
     private String          usage;
     private int             identifier;
     private int             numArgs;
+    private boolean         vararg;
     private VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable;
 
-    public Opcode(String name, String desc, String usage, int identifier, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
+    public Opcode(String name, String desc, String usage, int identifier, boolean vararg, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
         this.name = name;
         this.desc = desc;
         this.usage= usage;
+        this.vararg= vararg;
         this.numArgs= numArgs;
         this.callable= callable;
     }
@@ -25,7 +27,7 @@ public class Opcode {
     }
 
     public Opcode makeCopy() {
-        return new Opcode(name, desc, usage, identifier, numArgs, callable);
+        return new Opcode(name, desc, usage, identifier, vararg, numArgs, callable);
     }
 
     protected void setIdentifier(int id) {
@@ -46,5 +48,13 @@ public class Opcode {
 
     public String getUsage() {
         return usage;
+    }
+
+    public boolean hasVarargs() {
+        return vararg;
+    }
+
+    public int getNumArgs() {
+        return numArgs;
     }
 }
