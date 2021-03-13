@@ -29,7 +29,11 @@ public class OpcodeRegister {
     }
 
     public OpcodeRegister registerOp(String name, String description, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
-        Opcode opcode = new Opcode(name, description, "", opcodeSet.size(), numArgs, callable);
+        return registerOp(name, description, false, numArgs, callable);
+    }
+
+    public OpcodeRegister registerOp(String name, String description, boolean vararg, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
+        Opcode opcode = new Opcode(name, description, "", opcodeSet.size(), vararg, numArgs, callable);
         opcodeNameMap.put(name, opcode);
         opcodeMap.put(opcode.getIdentifier(), opcode);
         opcodeSet.add(opcode);
