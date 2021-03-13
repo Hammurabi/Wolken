@@ -25,6 +25,11 @@ public class MochaStack<T> {
         stack.push(stack.peek());
     }
 
+    public MochaStack<T> dupr() {
+        stack.push(stack.peek());
+        return this;
+    }
+
     public void dup(int element) {
         stack.push(stack.get(stack.size() - element));
     }
