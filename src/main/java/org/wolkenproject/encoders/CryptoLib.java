@@ -122,7 +122,7 @@ public class CryptoLib {
         }
     }
 
-    public Signature sign(BCECPrivateKey privateKey, BCECPublicKey publicKey, byte data[]) {
+    public Signature sign(BCECPrivateKey privateKey, BCECPublicKey publicKey, byte data[]) throws WolkenException {
     }
 
     /**
