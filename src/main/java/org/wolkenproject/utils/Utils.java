@@ -222,6 +222,18 @@ public class Utils {
                 (byte) ((integer) & 0xFF)};
     }
 
+    public static byte[] takeApartInt56(long integer)
+    {
+        return new byte[] {
+                (byte) ((integer >> 48) & 0xFF),
+                (byte) ((integer >> 40) & 0xFF),
+                (byte) ((integer >> 32) & 0xFF),
+                (byte) ((integer >> 24) & 0xFF),
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
+
     public static byte[] fromSet(Set<byte[]> hashes) {
         byte bytes[] = new byte[0];
 
