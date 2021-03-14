@@ -1,9 +1,9 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.core.TransactionI;
-import org.wolkenproject.core.script.internal.MochaECSig;
+import org.wolkenproject.core.script.internal.MochaCryptoSignature;
 import org.wolkenproject.core.script.internal.MochaObject;
-import org.wolkenproject.core.script.internal.MochaECPubKey;
+import org.wolkenproject.core.script.internal.MochaPublicKey;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 
@@ -56,17 +56,17 @@ public class Scope {
         MochaObject signature = getStack().pop();
         byte signatureData[]  = getSignatureData();
 
-        if (publicKey instanceof MochaECPubKey) {
+        if (publicKey instanceof MochaPublicKey) {
             getStack().push(new MochaBool(false));
             return;
         }
 
-        if (signature instanceof MochaECSig) {
+        if (signature instanceof MochaCryptoSignature) {
             getStack().push(new MochaBool(false));
             return;
         }
 
-        getStack().push(((MochaECPubKey) publicKey).checkSignature((MochaECSig) signature, signatureData));
+        getStack().push(((MochaPublicKey) publicKey).checkSignature((MochaCryptoSignature) signature, signatureData));
     }
 
     public void verify() throws InvalidTransactionException, MochaException {

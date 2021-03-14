@@ -6,6 +6,7 @@ import org.wolkenproject.encoders.Base58;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;
@@ -363,5 +364,28 @@ public class Utils {
         }
 
         return argument.toString();
+    }
+
+    public static byte[] toBytesPadded(BigInteger value, int length) {
+        byte[] result = new byte[length];
+        byte[] bytes = value.toByteArray();
+
+        int bytesLength;
+        int srcOffset;
+        if (bytes[0] == 0) {
+            bytesLength = bytes.length - 1;
+            srcOffset = 1;
+        } else {
+            bytesLength = bytes.length;
+            srcOffset = 0;
+        }
+
+        if (bytesLength > length) {
+            return bytes;
+        }
+
+        int destOffset = length - bytesLength;
+        System.arraycopy(bytes, srcOffset, result, destOffset, bytesLength);
+        return result;
     }
 }

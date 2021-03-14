@@ -2,9 +2,8 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.core.script.*;
 import org.wolkenproject.core.script.internal.ByteArray;
-import org.wolkenproject.core.script.internal.MochaECPubKey;
+import org.wolkenproject.core.script.internal.MochaPublicKey;
 import org.wolkenproject.core.script.internal.MochaNumber;
-import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.WolkenException;
@@ -12,12 +11,10 @@ import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
-import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
-import java.nio.ByteBuffer;
 import java.util.LinkedHashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -131,8 +128,8 @@ public class Context {
 
         opcodeRegister.registerOp("aconst200", "push an address of size '200'.", 25, scope -> { throw new MochaException("address is not supported at the moment."); });
         opcodeRegister.registerOp("aconst256", "push a hash of size '256'.", 32, scope -> { throw new MochaException("hash256 is not supported at the moment."); });
-        opcodeRegister.registerOp("ecpub", "push a public key of size '264' (compressed).", 33, scope -> scope.getStack().push(new MochaECPubKey(scope.getProgramCounter().next(33))));
-        opcodeRegister.registerOp("ecsig", "push a signature of size '~'.", 73, scope -> scope.getStack().push(new MochaECPubKey(scope.getProgramCounter().next(73))));
+        opcodeRegister.registerOp("ecpub", "push a public key of size '264' (compressed).", 33, scope -> scope.getStack().push(new MochaPublicKey(scope.getProgramCounter().next(33))));
+        opcodeRegister.registerOp("ecsig", "push a signature of size '~'.", 73, scope -> scope.getStack().push(new MochaPublicKey(scope.getProgramCounter().next(73))));
 
         opcodeRegister.registerOp("verify", "throws an 'InvalidTransactionException' if the top stack item is not true.", Scope::verify);
         opcodeRegister.registerOp("checksig", "check signature against signer.", Scope::checkSig);
