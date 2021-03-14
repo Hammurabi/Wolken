@@ -26,18 +26,18 @@ public abstract class Keypair {
 
     public abstract Signature sign(byte message[]) throws WolkenException;
 
-    public static Keypair ellipticCurvePair() {
+    public static Keypair ellipticCurvePair() throws WolkenException {
         return ellipticCurvePair(new SecureRandom());
     }
 
-    public static Keypair ellipticCurvePair(Random random) {
+    public static Keypair ellipticCurvePair(Random random) throws WolkenException {
         byte pkBytes[] = new byte[32];
         random.nextBytes(pkBytes);
 
         return ellipticCurvePair(new BigInteger(1, pkBytes));
     }
 
-    private static Keypair ellipticCurvePair(BigInteger privateKey) {
+    private static Keypair ellipticCurvePair(BigInteger privateKey) throws WolkenException {
         return new ECKeypair(privateKey);
     }
 }
