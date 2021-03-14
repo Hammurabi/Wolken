@@ -33,7 +33,7 @@ public class Account extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return new Account(0, 0);
+        return (Type) new Account(0, 0);
     }
 
     @Override
