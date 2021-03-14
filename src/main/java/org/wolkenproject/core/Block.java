@@ -99,6 +99,7 @@ public class Block extends BlockHeader {
     }
 
     public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
     }
 
     public int getTransactionCount() {
