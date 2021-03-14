@@ -95,6 +95,7 @@ public class Context {
         opcodeRegister.registerOp("pushdata", "push an array of bytes of length (8) into the stack.", true, 1, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextByte()))));
         opcodeRegister.registerOp("pushdata2", "push an array of bytes of length (16) into the stack.", true, 2, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextUnsignedShort()))));
         opcodeRegister.registerOp("pushdata3", "push an array of bytes of length (24) into the stack.", true, 3, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextInt24()))));
+        opcodeRegister.registerOp("push20", "push an array of bytes of length (160) into the stack.", true, 20, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(20))));
 
         opcodeRegister.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()));
         opcodeRegister.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (!scope.getStack().pop().isTrue()) scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()); });
