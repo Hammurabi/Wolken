@@ -24,7 +24,7 @@ public class CryptoLib {
     static X9ECParameters params;
     static ECDomainParameters CURVE;
 
-    public static CryptoLib initialize() {
+    public static CryptoLib getInstance() {
         return secureLib;
     }
 
