@@ -1,11 +1,14 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.core.Address;
 import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.core.script.internal.MochaCryptoSignature;
 import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.core.script.internal.MochaPublicKey;
+import org.wolkenproject.crypto.Key;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.WolkenException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -52,14 +55,11 @@ public class Scope {
     }
 
     public void checkSig() throws MochaException {
-        MochaObject publicKey = getStack().pop();
-        MochaObject signature = getStack().pop();
-        byte signatureData[]  = getSignatureData();
+        MochaObject address     = getStack().pop();
+        MochaObject signature   = getStack().pop();
+        byte signatureData[]    = getSignatureData();
 
-        if (publicKey instanceof MochaPublicKey) {
-            getStack().push(new MochaBool(false));
-            return;
-        }
+        Key key                 = ((MochaCryptoSignature) signature).getSignature().recover(signatureData);
 
         if (signature instanceof MochaCryptoSignature) {
             getStack().push(new MochaBool(false));
