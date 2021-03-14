@@ -5,7 +5,6 @@ import org.wolkenproject.core.script.internal.ByteArray;
 import org.wolkenproject.core.script.internal.MochaCryptoSignature;
 import org.wolkenproject.core.script.internal.MochaPublicKey;
 import org.wolkenproject.core.script.internal.MochaNumber;
-import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.ECPublicKey;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.MochaException;
@@ -58,10 +57,10 @@ public class Context {
         serializationFactory.registerClass(Block.class, new Block());
         serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
         serializationFactory.registerClass(Ancestors.class, new Ancestors(new byte[Block.UniqueIdentifierLength]));
-        serializationFactory.registerClass(Ancestors.class, new Input(new byte[TransactionI.UniqueIdentifierLength], 0, new byte[0]));
+        serializationFactory.registerClass(Ancestors.class, new Input(new byte[Transaction.UniqueIdentifierLength], 0, new byte[0]));
         serializationFactory.registerClass(Ancestors.class, new Output(0, new byte[0]));
 
-        serializationFactory.registerClass(Transaction.class, new Transaction(0, 0, 0, new Input[0], new Output[0]));
+        serializationFactory.registerClass(org.wolkenproject.core.transactions.Transaction.class, new org.wolkenproject.core.transactions.Transaction(0, 0, 0, new Input[0], new Output[0]));
         serializationFactory.registerClass(Input.class, new Input(new byte[32], 0, new byte[1]));
         serializationFactory.registerClass(Output.class, new Output(0, new byte[1]));
 
