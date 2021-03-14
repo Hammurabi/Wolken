@@ -6,7 +6,7 @@ import java.math.BigInteger;
 
 public abstract class Key {
     // return the actual key as an integer
-    public abstract BigInteger getKey();
+    public abstract BigInteger asInteger();
     // should return only the significant key bytes
     public abstract byte[] getRaw();
     // should return a neatly packed version of this key
