@@ -1,21 +1,19 @@
 package org.wolkenproject.core.script;
 
-import org.wolkenproject.core.Address;
-import org.wolkenproject.core.TransactionI;
+import org.wolkenproject.core.Transaction;
 import org.wolkenproject.core.script.internal.MochaCryptoSignature;
 import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.core.script.internal.MochaPublicKey;
 import org.wolkenproject.crypto.Key;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
-import org.wolkenproject.exceptions.WolkenException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Scope {
     // the 'caller' transaction
-    private TransactionI            caller;
+    private Transaction caller;
     // the input index which we are calling from
     private int                     callerIdx;
     // the contract in which the point of entry exists
@@ -29,7 +27,7 @@ public class Scope {
     // the program counter
     private ProgramCounter          programCounter;
 
-    public Scope(TransactionI caller, int callerIdx, Contract contract, MochaStack<MochaObject> stack, ProgramCounter programCounter) {
+    public Scope(Transaction caller, int callerIdx, Contract contract, MochaStack<MochaObject> stack, ProgramCounter programCounter) {
         this.caller     = caller;
         this.callerIdx  = callerIdx;
         this.contract   = contract;
