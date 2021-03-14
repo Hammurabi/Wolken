@@ -2,8 +2,12 @@ package org.wolkenproject.encoders;
 
 import org.bouncycastle.asn1.sec.SECNamedCurves;
 import org.bouncycastle.asn1.x9.X9ECParameters;
+import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.params.ECDomainParameters;
+import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
+import org.bouncycastle.crypto.signers.ECDSASigner;
+import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.ECNamedCurveTable;
@@ -21,8 +25,9 @@ import java.security.spec.InvalidKeySpecException;
 
 public class CryptoLib {
     private static final CryptoLib secureLib = new CryptoLib();
-    static X9ECParameters params;
+    static X9ECParameters PARAMS;
     static ECDomainParameters CURVE;
+    static BigInteger HALF_CURVE_ORDER;
 
     public static CryptoLib getInstance() {
         return secureLib;
@@ -30,8 +35,9 @@ public class CryptoLib {
 
     protected CryptoLib() {
         Security.addProvider(new BouncyCastleProvider());
-        params = CustomNamedCurves.getByName("secp256k1");//SECNamedCurves.getByName("secp256k1");
-        CURVE = new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH());
+        PARAMS = CustomNamedCurves.getByName("secp256k1");//SECNamedCurves.getByName("secp256k1");
+        CURVE = new ECDomainParameters(PARAMS.getCurve(), PARAMS.getG(), PARAMS.getN(), PARAMS.getH());
+        HALF_CURVE_ORDER = PARAMS.getN().shiftRight(1);
     }
 
     /**
@@ -123,7 +129,8 @@ public class CryptoLib {
     }
 
     public Signature sign(BCECPrivateKey privateKey, BCECPublicKey publicKey, byte data[]) throws WolkenException {
-        ECDSASignature
+        ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
+
         return new Signature(header, r, s);
     }
 
