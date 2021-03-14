@@ -123,6 +123,8 @@ public class CryptoLib {
     }
 
     public Signature sign(BCECPrivateKey privateKey, BCECPublicKey publicKey, byte data[]) throws WolkenException {
+        ECDSASignature
+        return new Signature(header, r, s);
     }
 
     /**
