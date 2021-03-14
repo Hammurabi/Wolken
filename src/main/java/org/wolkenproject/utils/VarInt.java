@@ -151,7 +151,7 @@ public class VarInt extends SerializableI {
                 stream.write((Byte.toUnsignedInt(bytes[2])));
                 stream.write((Byte.toUnsignedInt(bytes[3])));
             } else if (bits <= 37) {
-                byte bytes[] = Utils.takeApart(integer);
+                byte bytes[] = Utils.takeApartInt40(integer);
                 stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 4 << 5);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
                 stream.write((Byte.toUnsignedInt(bytes[2])));
