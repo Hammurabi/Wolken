@@ -18,7 +18,7 @@ public class EcLib {
         SecureRandom random = new SecureRandom();
         byte message[] = new byte[256];
 
-        for (int i = 0; i < 1000_000; i ++) {
+        for (int i = 0; i < 2000; i ++) {
             random.nextBytes(message);
 
             // make a random keypair
@@ -26,8 +26,9 @@ public class EcLib {
             // sign
             Signature signature = keypair.sign(message);
             // verify signature
+            Assertions.assertTrue(signature.checkSignature(message, keypair.getPublicKey()), "could not verify signature");
             // verify key
-            Assertions.assertTrue(signature.recover(message).compareTo(keypair.getPublicKey()) == 0, "could not recover public key from signature");
+            Assertions.assertEquals(0, signature.recover(message).compareTo(keypair.getPublicKey()), "could not recover public key from signature");
         }
     }
 }
