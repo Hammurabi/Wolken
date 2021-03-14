@@ -3,7 +3,7 @@ package org.wolkenproject;
 import org.apache.commons.cli.*;
 import org.wolkenproject.core.*;
 import org.wolkenproject.encoders.Base58;
-import org.wolkenproject.encoders.CryptoLib;
+import org.wolkenproject.crypto.CryptoLib;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.Logger;
