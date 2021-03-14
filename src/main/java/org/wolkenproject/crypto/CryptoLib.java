@@ -124,11 +124,6 @@ public class CryptoLib {
         }
     }
 
-    public Signature sign(BCECPrivateKey privateKey, BCECPublicKey publicKey, byte data[]) throws WolkenException {
-
-        return new Signature(header, r, s);
-    }
-
     /**
      * @param pubkey Public key to be used for signature verification.
      * @param data A sha256d of the original signed data.
@@ -137,7 +132,7 @@ public class CryptoLib {
      */
     public final boolean verifySignature(BCECPublicKey pubkey, byte[] data, byte[] sig) throws WolkenException {
         try {
-            Signature signature = Signature.getInstance("SHA256withECDSA");
+            java.security.Signature signature = java.security.Signature.getInstance("SHA256withECDSA");
             signature.initVerify(pubkey);
 
             signature.update(data);
