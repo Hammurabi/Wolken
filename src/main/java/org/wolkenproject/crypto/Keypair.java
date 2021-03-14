@@ -3,6 +3,8 @@ package org.wolkenproject.crypto;
 import org.wolkenproject.exceptions.WolkenException;
 
 import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Random;
 
 public abstract class Keypair {
     private final BigInteger privateKey;
@@ -22,4 +24,8 @@ public abstract class Keypair {
     }
 
     public abstract Signature sign(byte message[]) throws WolkenException;
+
+    public static Keypair ellipticCurvePair() {
+        return ellipticCurvePair(new SecureRandom());
+    }
 }
