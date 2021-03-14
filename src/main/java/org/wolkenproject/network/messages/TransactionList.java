@@ -1,11 +1,8 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.TransactionI;
+import org.wolkenproject.core.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.network.Message;
-import org.wolkenproject.network.Node;
-import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
 
@@ -17,9 +14,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class TransactionList extends ResponseMessage {
-    private Set<TransactionI>   transactions;
+    private Set<Transaction>   transactions;
 
-    public TransactionList(int version, Collection<TransactionI> transactions, byte[] uniqueMessageIdentifier) {
+    public TransactionList(int version, Collection<Transaction> transactions, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
         this.transactions   = new LinkedHashSet<>(transactions);
     }
@@ -27,7 +24,7 @@ public class TransactionList extends ResponseMessage {
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(transactions.size(), stream);
-        for (TransactionI transaction : transactions)
+        for (Transaction transaction : transactions)
         {
             transaction.write(stream);
         }
@@ -42,7 +39,7 @@ public class TransactionList extends ResponseMessage {
         for (int i = 0; i < length; i ++)
         {
             try {
-                TransactionI transaction = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(TransactionI.class), stream);
+                Transaction transaction = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(Transaction.class), stream);
                 transactions.add(transaction);
             } catch (WolkenException e) {
                 throw new IOException(e);
