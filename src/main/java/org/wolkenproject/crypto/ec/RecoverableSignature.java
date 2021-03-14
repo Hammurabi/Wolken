@@ -16,7 +16,6 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Assertions;
 import org.wolkenproject.utils.HashUtil;
-import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
