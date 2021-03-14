@@ -10,6 +10,7 @@ import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.math.ec.ECPoint;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.crypto.CryptoLib;
+import org.wolkenproject.crypto.Key;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -68,7 +69,7 @@ public class RecoverableSignature extends Signature {
     }
 
     @Override
-    public boolean checkSignature(byte[] originalMessage, BigInteger publicKey) {
+    public boolean checkSignature(byte[] originalMessage, Key publicKey) {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
 
         X9ECParameters params = SECNamedCurves.getByName("secp256k1");
@@ -83,7 +84,7 @@ public class RecoverableSignature extends Signature {
     }
 
     @Override
-    public BigInteger recover(byte originalMessage[]) throws WolkenException {
+    public Key recover(byte originalMessage[]) throws WolkenException {
         Assertions.assertTrue(r != null && r.length == 32, "r must be 32 bytes in length");
         Assertions.assertTrue(s != null && s.length == 32, "s must be 32 bytes in length");
 
