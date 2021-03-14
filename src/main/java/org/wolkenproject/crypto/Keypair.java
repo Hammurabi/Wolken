@@ -7,5 +7,5 @@ import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 
 import java.math.BigInteger;
 
-public class Keypair {
+public abstract class Keypair {
 }
