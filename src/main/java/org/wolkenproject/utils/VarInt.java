@@ -134,25 +134,25 @@ public class VarInt extends SerializableI {
             }
         } else {
             if (bits <= 5) {
-                stream.write((int) (integer & 0x3F));
+                stream.write((int) (integer & 0x1F));
             } else if (bits <= 13) {
                 byte bytes[] = Utils.takeApartShort(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 1 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 1 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
             } else if (bits <= 21) {
                 byte bytes[] = Utils.takeApartInt24(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 2 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 2 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
                 stream.write((Byte.toUnsignedInt(bytes[2])));
             } else if (bits <= 29) {
                 byte bytes[] = Utils.takeApart(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 3 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 3 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
                 stream.write((Byte.toUnsignedInt(bytes[2])));
                 stream.write((Byte.toUnsignedInt(bytes[3])));
             } else if (bits <= 37) {
                 byte bytes[] = Utils.takeApart(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 3 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 3 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
                 stream.write((Byte.toUnsignedInt(bytes[2])));
                 stream.write((Byte.toUnsignedInt(bytes[3])));
