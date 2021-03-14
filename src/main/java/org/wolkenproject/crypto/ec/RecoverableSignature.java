@@ -1,5 +1,8 @@
 package org.wolkenproject.crypto.ec;
 
+import org.bouncycastle.crypto.digests.SHA256Digest;
+import org.bouncycastle.crypto.signers.ECDSASigner;
+import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.crypto.CryptoLib;
 import org.wolkenproject.crypto.Signature;
@@ -59,8 +62,10 @@ public class RecoverableSignature extends Signature {
     }
 
     @Override
-    public boolean checkSignature(byte[] originalMessage) {
-        return false;
+    public boolean checkSignature(byte[] originalMessage, BigInteger publicKey) {
+        ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
+
+        return signer.verifySignature(HashUtil.sha256d(originalMessage), new BigInteger(1, r), new BigInteger(1, s));
     }
 
     @Override
