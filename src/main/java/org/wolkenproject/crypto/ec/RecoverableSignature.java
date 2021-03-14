@@ -75,9 +75,7 @@ public class RecoverableSignature extends Signature {
         X9ECParameters params = SECNamedCurves.getByName("secp256k1");
         ECDomainParameters curve = new ECDomainParameters(params.getCurve(), params.getG(), params.getN(), params.getH());
 
-        byte pubK[] = publicKey.toByteArray();
-        System.out.println(pubK.length + " " + pubK[0]);
-        ECPoint point = curve.getCurve().decodePoint(publicKey.toByteArray());
+        ECPoint point = curve.getCurve().decodePoint(publicKey.getEncoded());
 
         signer.init(false, new ECPublicKeyParameters(point, CryptoLib.getCurve()));
         return signer.verifySignature(HashUtil.sha256d(originalMessage), new BigInteger(1, r), new BigInteger(1, s));
