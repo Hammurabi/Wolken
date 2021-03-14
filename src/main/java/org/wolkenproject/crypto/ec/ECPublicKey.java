@@ -63,4 +63,9 @@ public class ECPublicKey extends Key {
 
         return this;
     }
+
+    @Override
+    public Key getDecompressed() throws WolkenException {
+        return null;
+    }
 }
