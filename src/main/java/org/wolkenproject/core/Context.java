@@ -121,8 +121,8 @@ public class Context {
         opcodeRegister.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextUnsignedShort(), false)));
         opcodeRegister.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4, scope -> scope.getStack().push(new MochaNumber(Integer.toUnsignedLong(scope.getProgramCounter().nextInt()), false)));
         opcodeRegister.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8, scope -> scope.getStack().push(new MochaNumber(Long.toUnsignedString(scope.getProgramCounter().nextLong()), false)));
-        opcodeRegister.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, scope -> scope.getStack().push(new MochaNumber(new BigInteger(scope.getProgramCounter().next(16)), false)));
-        opcodeRegister.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, scope -> scope.getStack().push(new MochaNumber(new BigInteger(scope.getProgramCounter().next(32)), false)));
+        opcodeRegister.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, scope -> scope.getStack().push(new MochaNumber(new BigInteger(1, scope.getProgramCounter().next(16)), false)));
+        opcodeRegister.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, scope -> scope.getStack().push(new MochaNumber(new BigInteger(1, scope.getProgramCounter().next(32)), false)));
 
         opcodeRegister.registerOp("fconst", "push a float of size '32' (unsigned).", 4, scope -> { throw new MochaException("float is not supported at the moment."); });
         opcodeRegister.registerOp("fconst64", "push a float of size '64' (unsigned).", 8, scope -> { throw new MochaException("float is not supported at the moment."); });
@@ -134,8 +134,11 @@ public class Context {
         opcodeRegister.registerOp("ecsig", "push a signature of size '~'.", 73, scope -> { throw new MochaException("sig is not supported at the moment."); });
 
         opcodeRegister.registerOp("verify", "throws an 'InvalidTransactionException' if the top stack item is not true.", Scope::verify);
-        opcodeRegister.registerOp("checksig", "check signature against signer.", scope -> { throw new MochaException("sig is not supported at the moment."); });
-        opcodeRegister.registerOp("checksigverify", "checksig + verify.", scope -> { throw new MochaException("sig is not supported at the moment."); });
+        opcodeRegister.registerOp("checksig", "check signature against signer.", Scope::checkSig);
+        opcodeRegister.registerOp("checksigverify", "checksig + verify.", scope -> {
+            scope.checkSig();
+            scope.verify();
+        });
 
         opcodeRegister.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.", scope -> scope.getStack().peek().flipSign());
 
