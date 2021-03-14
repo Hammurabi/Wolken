@@ -27,6 +27,11 @@ public class MochaNumber extends MochaObject {
         }
     }
 
+    @Override
+    public boolean isTrue() {
+        return value.compareTo(BigInteger.ZERO) != 0;
+    }
+
     public MochaObject do_add(MochaNumber other) throws MochaException {
         BigInteger result   = value.add(other.value);
 
