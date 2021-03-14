@@ -51,11 +51,11 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         VarInt.writeCompactUInt32(version, false, stream);
-        if (version == 0x2) {
+        if (version == 0x1) {
+        } else if (version == 0x2) {
             // write it as a single byte
             stream.write(flags);
         }
-        
     }
 
     @Override
