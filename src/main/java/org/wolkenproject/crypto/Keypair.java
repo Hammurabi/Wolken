@@ -28,4 +28,11 @@ public abstract class Keypair {
     public static Keypair ellipticCurvePair() {
         return ellipticCurvePair(new SecureRandom());
     }
+
+    public static Keypair ellipticCurvePair(Random random) {
+        byte pkBytes[] = new byte[32];
+        random.nextBytes(pkBytes);
+
+        return ellipticCurvePair(new BigInteger(1, pkBytes));
+    }
 }
