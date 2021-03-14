@@ -1,5 +1,7 @@
 package org.wolkenproject.crypto;
 
+import org.wolkenproject.exceptions.WolkenException;
+
 import java.math.BigInteger;
 
 public abstract class Key {
@@ -10,5 +12,5 @@ public abstract class Key {
     // should return a neatly packed version of this key
     public abstract byte[] getEncoded();
     // should return a compressed version of this key
-    public abstract Key getCompressed();
+    public abstract Key getCompressed() throws WolkenException;
 }
