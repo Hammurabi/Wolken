@@ -129,7 +129,6 @@ public class CryptoLib {
     }
 
     public Signature sign(BCECPrivateKey privateKey, BCECPublicKey publicKey, byte data[]) throws WolkenException {
-        ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
 
         return new Signature(header, r, s);
     }
