@@ -29,6 +29,10 @@ public class EcPublicKey extends Key {
 
     @Override
     public Key getCompressed() {
-        return null;
+        if (key[0] == 0x04) {
+            return new EcPublicKey(key);
+        }
+
+        return this;
     }
 }
