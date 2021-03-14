@@ -13,4 +13,6 @@ public abstract class Key {
     public abstract byte[] getEncoded();
     // should return a compressed version of this key
     public abstract Key getCompressed() throws WolkenException;
+    // should return a decompressed version of this key
+    public abstract Key getDecompressed() throws WolkenException;
 }
