@@ -1,9 +1,7 @@
 package org.wolkenproject.network.messages;
 
-import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.TransactionI;
-import org.wolkenproject.core.transactions.Transaction;
+import org.wolkenproject.core.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
@@ -29,10 +27,10 @@ public class RequestTransactions extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        Set<TransactionI> transactions = new LinkedHashSet<>();
+        Set<Transaction> transactions = new LinkedHashSet<>();
         for (byte[] txid : this.transactions)
         {
-            TransactionI transaction = Context.getInstance().getTransactionPool().getTransaction(txid);
+            Transaction transaction = Context.getInstance().getTransactionPool().getTransaction(txid);
 
             if (transaction != null)
             {
@@ -62,7 +60,7 @@ public class RequestTransactions extends Message {
 
         for (int i = 0; i < length; i ++)
         {
-            byte txid[] = new byte[TransactionI.UniqueIdentifierLength];
+            byte txid[] = new byte[Transaction.UniqueIdentifierLength];
             stream.read(txid);
 
             transactions.add(txid);
@@ -94,10 +92,10 @@ public class RequestTransactions extends Message {
             }
 
             int response = 0;
-            Collection<TransactionI> transactions = msg.getPayload();
+            Collection<Transaction> transactions = msg.getPayload();
 
             int checked = 0;
-            for (TransactionI transaction : transactions) {
+            for (Transaction transaction : transactions) {
                 if (this.transactions.contains(transaction.getTransactionID())) {
                     checked ++;
                 }
