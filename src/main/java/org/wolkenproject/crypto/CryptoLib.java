@@ -27,12 +27,24 @@ import java.util.Arrays;
 
 public class CryptoLib {
     private static final CryptoLib secureLib = new CryptoLib();
-    public static X9ECParameters PARAMS;
-    public static ECDomainParameters CURVE;
-    public static BigInteger HALF_CURVE_ORDER;
+    private static X9ECParameters PARAMS;
+    private static ECDomainParameters CURVE;
+    private static BigInteger HALF_CURVE_ORDER;
 
     public static CryptoLib getInstance() {
         return secureLib;
+    }
+
+    public static X9ECParameters getParams() {
+        return PARAMS;
+    }
+
+    public static ECDomainParameters getCurve() {
+        return CURVE;
+    }
+
+    public static BigInteger getHalfCurveOrder() {
+        return HALF_CURVE_ORDER;
     }
 
     protected CryptoLib() {
