@@ -3,7 +3,7 @@ package org.wolkenproject.core.script;
 import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.core.script.internal.MochaECSig;
 import org.wolkenproject.core.script.internal.MochaObject;
-import org.wolkenproject.core.script.internal.MochaPublicKey;
+import org.wolkenproject.core.script.internal.MochaECPubKey;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 
@@ -56,7 +56,7 @@ public class Scope {
         MochaObject signature = getStack().pop();
         byte signatureData[]  = getSignatureData();
 
-        if (publicKey instanceof MochaPublicKey) {
+        if (publicKey instanceof MochaECPubKey) {
             getStack().push(new MochaBool(false));
             return;
         }
