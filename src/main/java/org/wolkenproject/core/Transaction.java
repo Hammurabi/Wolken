@@ -55,7 +55,13 @@ public class Transaction extends SerializableI implements Comparable<Transaction
         if (version == 0x1) {
             stream.write(recipient);
             VarInt.writeCompactUInt64(version, true, stream);
-            stream.write();
+            stream.write(v);
+            stream.write(r);
+            stream.write(s);
+            VarInt.writeCompactUInt32(payload.length, true, stream);
+            if (payload.length > 0) {
+                stream.write(payload);
+            }
         } else if (version == 0x2) {
             // write it as a single byte
             stream.write(flags);
