@@ -1,4 +1,8 @@
 package org.wolkenproject.core;
 
-public class Account {
+import org.wolkenproject.serialization.SerializableI;
+
+public class Account extends SerializableI {
+    private final long nonce;
+    private final long balance;
 }
