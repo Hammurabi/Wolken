@@ -132,7 +132,7 @@ public class Context {
 
         opcodeRegister.registerOp("aconst200", "push an address of size '200'.", 25, scope -> { throw new MochaException("address is not supported at the moment."); });
         opcodeRegister.registerOp("aconst256", "push a hash of size '256'.", 32, scope -> { throw new MochaException("hash256 is not supported at the moment."); });
-        opcodeRegister.registerOp("ecpub", "push a public key of size '264' (compressed).", 33, scope -> scope.getStack().push(new MochaPublicKey(scope.getProgramCounter().next(33))));
+        opcodeRegister.registerOp("ecpub", "push a public key of size '264' (compressed).", 33, scope -> scope.getStack().push(new MochaPublicKey(new ECPublicKey(scope.getProgramCounter().next(33)))));
         opcodeRegister.registerOp("ecsig", "push a signature of size '~'.", 73, scope -> scope.getStack().push(new MochaPublicKey(scope.getProgramCounter().next(73))));
 
         opcodeRegister.registerOp("verify", "throws an 'InvalidTransactionException' if the top stack item is not true.", Scope::verify);
