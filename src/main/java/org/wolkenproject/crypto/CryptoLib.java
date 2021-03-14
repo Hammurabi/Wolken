@@ -16,6 +16,7 @@ import org.bouncycastle.math.ec.ECAlgorithms;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
+import org.wolkenproject.crypto.ec.ECPublicKey;
 import org.wolkenproject.crypto.ec.ECSig;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.Assertions;
@@ -54,7 +55,7 @@ public class CryptoLib {
         HALF_CURVE_ORDER = PARAMS.getN().shiftRight(1);
     }
 
-    public static BigInteger recoverFromSignature(int recId, ECSig sig, byte[] message) throws WolkenException {
+    public static Key recoverFromSignature(int recId, ECSig sig, byte[] message) throws WolkenException {
         Assertions.assertTrue(recId >= 0, "recId must be positive");
         Assertions.assertTrue(sig.getR().signum() >= 0, "r must be positive");
         Assertions.assertTrue(sig.getS().signum() >= 0, "s must be positive");
@@ -109,7 +110,8 @@ public class CryptoLib {
 
         byte[] qBytes = q.getEncoded(false);
         // We remove the prefix
-        return new BigInteger(1, Arrays.copyOfRange(qBytes, 1, qBytes.length));
+//        new BigInteger(1, Arrays.copyOfRange(qBytes, 1, qBytes.length));
+        return new ECPublicKey(qBytes);
     }
 
     /** Decompress a compressed public key (x co-ord and low-bit of y-coord). */
