@@ -52,12 +52,13 @@ public class Server implements Runnable {
         {
             try {
                 SocketChannel socket = SocketChannel.open();
-                socket.bind(new InetSocketAddress(address.getAddress(), address.getPort()));
+                socket.connect(new InetSocketAddress(address.getAddress(), address.getPort()));
 
                 Node node = new Node(socket);
                 mutex.lock();
                 try {
                     connectedNodes.add(node);
+                    Logger.alert("connected to ${s}", address);
                 } finally {
                     mutex.unlock();
                 }

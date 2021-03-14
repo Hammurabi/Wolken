@@ -40,6 +40,9 @@ public class VersionMessage extends Message {
                     0
             )));
         }
+
+        Context.getInstance().getIpAddressList().send(node);
+        node.sendMessage(new RequestInv(Context.getInstance().getNetworkParameters().getVersion()));
     }
 
     @Override

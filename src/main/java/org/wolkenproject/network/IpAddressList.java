@@ -1,10 +1,13 @@
 package org.wolkenproject.network;
 
+import org.wolkenproject.core.Context;
 import org.wolkenproject.utils.FileService;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class IpAddressList {
     private Map<byte[], NetAddress> addresses;
@@ -28,6 +31,27 @@ public class IpAddressList {
         }
 
         this.service = service;
+    }
+
+    public void send(Node node) {
+        Queue<byte[]> addresses = new PriorityBlockingQueue<>(this.addresses.keySet());
+        int sent = 0;
+
+        while (!addresses.isEmpty()) {
+            Set<NetAddress> list    = new LinkedHashSet<>();
+            for (int i = 0; i < 1024; i ++) {
+                list.add(this.addresses.get(addresses.poll()));
+
+                if (addresses.isEmpty()) {
+                    break;
+                }
+            }
+
+            node.sendMessage(new AddressList(Context.getInstance().getNetworkParameters().getVersion(), list));
+            if (++ sent == 1024) {
+                return;
+            }
+        }
     }
 
     public void addAddress(NetAddress address)
@@ -54,5 +78,11 @@ public class IpAddressList {
 
     public NetAddress getAddress(InetAddress inetAddress) {
         return addresses.get(inetAddress.getAddress());
+    }
+
+    public void add(Set<NetAddress> addresses) {
+        for (NetAddress address : addresses) {
+            addAddress(address);
+        }
     }
 }

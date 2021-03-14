@@ -55,7 +55,7 @@ public abstract class SerializableI {
 
     public abstract <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException;
 
-    public byte[] checksum() throws IOException {
+    public byte[] checksum() {
         return HashUtil.hash160(asByteArray());
     }
 

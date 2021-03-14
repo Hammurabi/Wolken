@@ -3,22 +3,23 @@ package org.wolkenproject;
 import org.apache.commons.cli.*;
 import org.wolkenproject.core.*;
 import org.wolkenproject.encoders.Base58;
-import org.wolkenproject.encoders.CryptoLib;
+import org.wolkenproject.crypto.CryptoLib;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.Logger;
-
 import java.io.IOException;
 
 public class Wolken {
     public static void main(String args[]) throws ParseException, WolkenException, IOException {
-        CryptoLib.initialize();
+        CryptoLib.getInstance();
 
         Options options = new Options();
         options.addOption("dir", true, "set the main directory for wolken, otherwise uses the default application directory of the system.");
         options.addOption("enable_testnet", true, "set the testnet to enabled/disabled.");
         options.addOption("enable_mining", true, "set the node to a mining node.");
-        options.addOption("force_connect", true, "force a connection to an ip:port.");
+        options.addOption("enable_storage", true, "act as a storage node.");
+        options.addOption("enable_seeding", false, "act as a seeding node.");
+        options.addOption("force_connect", true, "force a connection to an array of ip:port.");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -54,7 +55,7 @@ public class Wolken {
             mainDirectory.makeDirectory();
         }
 
-        Address address[] = new Address[8];
+        Address address[] = null;
 
         if (cmd.hasOption("enable_mining")) {
             String value = cmd.getOptionValue("enable_mining").toLowerCase();

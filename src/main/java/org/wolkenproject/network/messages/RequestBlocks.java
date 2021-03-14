@@ -3,7 +3,6 @@ package org.wolkenproject.network.messages;
 import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
@@ -41,12 +40,10 @@ public class RequestBlocks extends Message {
     @Override
     public void executePayload(Server server, Node node) {
         Set<BlockIndex> blocks = new LinkedHashSet<>();
-        for (byte[] hash : this.blocks)
-        {
-            BlockIndex block = Context.getInstance().getDatabase().findBlock(hash);
+        for (byte[] hash : this.blocks) {
+            BlockIndex block    = Context.getInstance().getDatabase().findBlock(hash);
 
-            if (block != null)
-            {
+            if (block != null) {
                 blocks.add(block);
             }
         }
@@ -58,9 +55,9 @@ public class RequestBlocks extends Message {
     @Override
     public void writeContents(OutputStream stream) throws IOException {
         Utils.writeInt(blocks.size(), stream);
-        for (byte[] txid : blocks)
+        for (byte[] hash : blocks)
         {
-            stream.write(txid);
+            stream.write(hash);
         }
     }
 
@@ -73,10 +70,10 @@ public class RequestBlocks extends Message {
 
         for (int i = 0; i < length; i ++)
         {
-            byte txid[] = new byte[TransactionI.UniqueIdentifierLength];
-            stream.read(txid);
+            byte hash[] = new byte[Block.UniqueIdentifierLength];
+            stream.read(hash);
 
-            blocks.add(txid);
+            blocks.add(hash);
         }
     }
 
@@ -91,7 +88,7 @@ public class RequestBlocks extends Message {
             boolean isCorrectType = msg instanceof BlockList;
 
             if (!isCorrectType) {
-                return ResponseMetadata.ValidationBits.InvalidResponse;
+                return ResponseMetadata.ValidationBits.InvalidResponse | ResponseMetadata.ValidationBits.SpamfulResponse;
             }
 
             int response = 0;
