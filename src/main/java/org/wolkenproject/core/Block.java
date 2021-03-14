@@ -39,7 +39,7 @@ public class Block extends BlockHeader {
         return new BlockHeader(getVersion(), getTimestamp(), getParentHash(), getMerkleRoot(), getBits(), getNonce());
     }
 
-    public byte[] calculateMerkleRoot() {
+    protected byte[] calculateMerkleRoot() {
         Queue<byte[]> txids = new LinkedBlockingQueue<>();
         for (Transaction transaction : transactions) {
             txids.add(transaction.getTransactionID());
