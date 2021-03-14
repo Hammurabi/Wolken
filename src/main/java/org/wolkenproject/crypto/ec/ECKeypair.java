@@ -14,6 +14,10 @@ import org.wolkenproject.utils.Utils;
 import java.math.BigInteger;
 
 public class ECKeypair extends Keypair {
+    public ECKeypair(BigInteger priv) {
+        this(priv, CryptoLib.getInstance().derivePublicKey(priv));
+    }
+
     public ECKeypair(BigInteger priv, BigInteger pubk) {
         super(priv, pubk);
     }
