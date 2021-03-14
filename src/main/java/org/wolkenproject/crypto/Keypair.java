@@ -1,11 +1,10 @@
 package org.wolkenproject.crypto;
 
 import org.wolkenproject.crypto.ec.ECKeypair;
+import org.wolkenproject.crypto.ec.ECPrivateKey;
 import org.wolkenproject.exceptions.WolkenException;
 
-import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.security.interfaces.ECPrivateKey;
 import java.util.Random;
 
 public abstract class Keypair {
