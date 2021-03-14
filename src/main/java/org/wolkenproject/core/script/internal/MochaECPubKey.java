@@ -14,7 +14,7 @@ public class MochaECPubKey extends MochaObject {
         this.compressed= key[0] == 0x3;
     }
 
-    public MochaObject verifySignature(MochaECSig signature, byte signatureData[]) {
+    public MochaObject checkSignature(MochaECSig signature, byte signatureData[]) {
         try {
             return new MochaBool(CryptoLib.getInstance().verifySignature(publicKey, signatureData, signature.getSignature()));
         } catch (WolkenException e) {
