@@ -60,7 +60,7 @@ public class Context {
         serializationFactory.registerClass(Ancestors.class, new Input(new byte[Transaction.UniqueIdentifierLength], 0, new byte[0]));
         serializationFactory.registerClass(Ancestors.class, new Output(0, new byte[0]));
 
-        serializationFactory.registerClass(org.wolkenproject.core.transactions.Transaction.class, new org.wolkenproject.core.transactions.Transaction(0, 0, 0, new Input[0], new Output[0]));
+        serializationFactory.registerClass(Transaction.class, new Transaction());
         serializationFactory.registerClass(Input.class, new Input(new byte[32], 0, new byte[1]));
         serializationFactory.registerClass(Output.class, new Output(0, new byte[1]));
 
