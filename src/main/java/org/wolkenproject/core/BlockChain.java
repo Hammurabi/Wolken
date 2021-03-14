@@ -242,7 +242,7 @@ public class BlockChain implements Runnable {
         BlockHeader commonAncestor = findCommonAncestor(block);
 
         if (commonAncestor != null) {
-            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
+            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
         } else {
             addOrphan(block);
         }
