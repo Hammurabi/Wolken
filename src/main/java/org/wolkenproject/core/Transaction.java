@@ -6,6 +6,7 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,43 +43,6 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     // payload to execute
     private byte payload[];
 
-
-    // a transaction that creates a contract
-    public static Transaction newPayload(long amount, byte payLoad[]) {
-        return new Transaction();
-    }
-
-    // a purely monetary transaction
-    public static Transaction newTransfer(byte recipient[], long amount, long fee) {
-        return new Transaction();
-    }
-
-    public static Transaction newCoinbase(int blockHeight, String msg, long reward, Address addresses[]) {
-        Input inputs[] = { new Input(new byte[UniqueIdentifierLength], 0, Utils.concatenate(Utils.takeApart(blockHeight), msg.getBytes())) };
-        Output outputs[] = new Output[addresses.length];
-
-        long rewardPerAddress   = reward / addresses.length;
-        long change             = reward - (addresses.length * rewardPerAddress);
-
-        for (int i = 0; i < addresses.length; i ++)
-        {
-            long outputValue = rewardPerAddress;
-            if (i == 0)
-            {
-                outputValue += change;
-            }
-
-            outputs[i] = new Output(outputValue, Script.newP2PKH(addresses[i]));
-        }
-
-        return new org.wolkenproject.core.transactions.Transaction(
-                Context.getInstance().getNetworkParameters().getVersion(),
-                Flags.RelativeLockTime,
-                Context.getInstance().getNetworkParameters().getCoinbaseLockTime(),
-                inputs,
-                outputs);
-    }
-
     @Override
     public int compareTo(Transaction transaction) {
         return 0;
@@ -86,7 +50,7 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
-
+        VarInt.writeCompactUInt32(version, stream);
     }
 
     @Override
@@ -152,5 +116,42 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
     public boolean verify() {
         return false;
+    }
+
+
+    // a transaction that creates a contract
+    public static Transaction newPayload(long amount, byte payLoad[]) {
+        return new Transaction();
+    }
+
+    // a purely monetary transaction
+    public static Transaction newTransfer(byte recipient[], long amount, long fee) {
+        return new Transaction();
+    }
+
+    public static Transaction newCoinbase(int blockHeight, String msg, long reward, Address addresses[]) {
+        Input inputs[] = { new Input(new byte[UniqueIdentifierLength], 0, Utils.concatenate(Utils.takeApart(blockHeight), msg.getBytes())) };
+        Output outputs[] = new Output[addresses.length];
+
+        long rewardPerAddress   = reward / addresses.length;
+        long change             = reward - (addresses.length * rewardPerAddress);
+
+        for (int i = 0; i < addresses.length; i ++)
+        {
+            long outputValue = rewardPerAddress;
+            if (i == 0)
+            {
+                outputValue += change;
+            }
+
+            outputs[i] = new Output(outputValue, Script.newP2PKH(addresses[i]));
+        }
+
+        return new org.wolkenproject.core.transactions.Transaction(
+                Context.getInstance().getNetworkParameters().getVersion(),
+                Flags.RelativeLockTime,
+                Context.getInstance().getNetworkParameters().getCoinbaseLockTime(),
+                inputs,
+                outputs);
     }
 }
