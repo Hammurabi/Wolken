@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
     // can be represented by 1 - 4 bytes
-    // version = 1 skips flags alltogether
+    // version = 1 skips flags all-together
     private int version;
     // anything below here is optional
 
@@ -84,13 +84,13 @@ public class Transaction extends SerializableI implements Comparable<Transaction
                 TwoByteFlags        = 1,
                 MochaPayload        = 1<<1,
                 MultipleRecipients  = 1<<2,
-                RelativeLockTime    = 1<<3,
-                UnusedFlag2         = 1<<4,
+                UseAliases          = 1<<3,
+                UnusedFlag1         = 1<<4,
+                UnusedFlag2         = 1<<5,
                 UnusedFlag3         = 1<<5,
-                UnusedFlag4         = 1<<5,
-                UnusedFlag6         = 1<<6,
-                UnusedFlag7         = 1<<7,
-                UnusedFlag8         = 1<<8
+                UnusedFlag4         = 1<<6,
+                UnusedFlag5         = 1<<7,
+                UnusedFlag6         = 1<<8
         ;
 
 //        public static boolean hasLocktime(int flags)
@@ -121,5 +121,9 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
     public byte[] getTransactionID() {
         return HashUtil.sha256d(asByteArray());
+    }
+
+    public boolean verify() {
+        return false;
     }
 }
