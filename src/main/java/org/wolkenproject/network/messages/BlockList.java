@@ -2,9 +2,7 @@ package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
 
