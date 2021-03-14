@@ -152,6 +152,10 @@ public class Context {
         opcodeRegister.registerOp("not", "pop an object from the stack and perform bitwise not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(11, "not").call(scope)));
         opcodeRegister.registerOp("ngt", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
 
+        opcodeRegister.registerOp("grt", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
+        opcodeRegister.registerOp("lst", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
+        opcodeRegister.registerOp("eql", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
+
         opcodeRegister.registerOp("dup1", "duplicate the first stack element (by reference).", scope -> scope.getStack().dup());
         opcodeRegister.registerOp("dup2", "duplicate the second stack element (by reference).", scope -> scope.getStack().dup(2));
         opcodeRegister.registerOp("dup3", "duplicate the third stack element (by reference).", scope -> scope.getStack().dup(3));
