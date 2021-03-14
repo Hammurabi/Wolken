@@ -156,13 +156,13 @@ public class Utils {
         return buf;
     }
 
-    public static byte[] takeApartShort(short integer) {
+    public static byte[] takeApartShort(long integer) {
         return new byte[] {
                 (byte) ((integer >> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
-    public static byte[] takeApartChar(char integer) {
+    public static byte[] takeApartChar(long integer) {
         return new byte[] {
                 (byte) ((integer >> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
