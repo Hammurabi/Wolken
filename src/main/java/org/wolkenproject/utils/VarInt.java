@@ -1,6 +1,7 @@
 package org.wolkenproject.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 // this class represents an UNSIGNED variable integer
@@ -162,5 +163,13 @@ public class VarInt {
                 stream.write((Byte.toUnsignedInt(bytes[7])));
             }
         }
+    }
+
+    public static int readCompactUInt32(boolean b, InputStream stream) {
+        return 0;
+    }
+
+    public static long readCompactUInt64(boolean b, InputStream stream) {
+        return 0;
     }
 }
