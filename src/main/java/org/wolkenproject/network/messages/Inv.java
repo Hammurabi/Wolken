@@ -3,7 +3,7 @@ package org.wolkenproject.network.messages;
 import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.TransactionI;
+import org.wolkenproject.core.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.*;
@@ -42,7 +42,7 @@ public class Inv extends Message {
                 requiredLength = Block.UniqueIdentifierLength;
                 break;
             case Type.Transaction:
-                requiredLength = TransactionI.UniqueIdentifierLength;
+                requiredLength = Transaction.UniqueIdentifierLength;
                 break;
         }
 
@@ -60,10 +60,10 @@ public class Inv extends Message {
         }
     }
 
-    public static Set<byte[]> convert(Collection<TransactionI> transactions)
+    public static Set<byte[]> convert(Collection<Transaction> transactions)
     {
         Set<byte[]> result = new HashSet<>();
-        for (TransactionI transaction : transactions)
+        for (Transaction transaction : transactions)
         {
             result.add(transaction.getTransactionID());
         }
@@ -120,7 +120,7 @@ public class Inv extends Message {
                 CheckedResponse message = node.getResponse(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions), Context.getInstance().getNetworkParameters().getMessageTimeout());
                 if (message != null) {
                     if (message.noErrors()) {
-                        Set<TransactionI> transactions = message.getMessage().getPayload();
+                        Set<Transaction> transactions = message.getMessage().getPayload();
                         Context.getInstance().getTransactionPool().add(transactions);
 
                         Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Transaction, newTransactions);
@@ -167,7 +167,7 @@ public class Inv extends Message {
                 requiredLength = Block.UniqueIdentifierLength;
                 break;
             case Type.Transaction:
-                requiredLength = TransactionI.UniqueIdentifierLength;
+                requiredLength = Transaction.UniqueIdentifierLength;
                 break;
         }
 
