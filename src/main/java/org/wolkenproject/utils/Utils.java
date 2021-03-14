@@ -1,12 +1,15 @@
 package org.wolkenproject.utils;
 
+import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 public class Utils {
@@ -28,6 +31,14 @@ public class Utils {
         }
 
         return concatenated;
+    }
+
+    public static void println(byte bytes[]) {
+        for (int i = 0; i < bytes.length; i ++) {
+            System.out.print(bytes[i] + " ");
+        }
+
+        System.out.println();
     }
 
     public static short makeShort(byte b1, byte b0) {
@@ -85,6 +96,16 @@ public class Utils {
         for(int index = offset; index < (offset + length); index ++)
             new_bytes[free ++] = bytes[index];
         return new_bytes;
+    }
+
+    public static int[] trim(int[] array, int offset, int length) {
+        int new_array[]    = new int[length];
+
+        int free            = 0;
+
+        for(int index = offset; index < (offset + length); index ++)
+            new_array[free ++] = array[index];
+        return new_array;
     }
 
     public static boolean equals(byte[] trim, byte[] trim1) {
@@ -147,7 +168,7 @@ public class Utils {
                 (byte) ((integer) & 0xFF)};
     }
 
-    public static byte[] takeApart(int integer) {
+    public static byte[] takeApart(long integer) {
         return new byte[] {
                 (byte) ((integer >> 24) & 0xFF),
                 (byte) ((integer >> 16) & 0xFF),
@@ -266,7 +287,105 @@ public class Utils {
         return concatenate(new byte[padCount], bytes);
     }
 
+    public static byte[] append(byte[] bytes, int count) {
+        return concatenate(bytes, new byte[count]);
+    }
+
     public static byte[] pad(int padCount, int padValue, byte[] bytes) {
         return concatenate(fillArray(new byte[padCount], (byte) padValue), bytes);
+    }
+
+    public static int getBit(long byt, int position)
+    {
+        return (int) ((byt >> position) & 1);
+    }
+
+    public static int setBit(int byt, int position)
+    {
+        return byt | 1 << position;
+    }
+
+    public static int clearBit(int byt, int position)
+    {
+        return byt & ~(1 << position);
+    }
+
+    public static int toggleBit(int byt, int position)
+    {
+        return byt ^ ~(1 << position);
+    }
+
+    public static int setBit(int byt, int position, int value)
+    {
+        return byt ^ (-(value & 1) ^ byt) & (1 << position);
+    }
+
+    public static int makeByte(byte[] buffer) {
+        int value = 0;
+        for (int i = 0; i < buffer.length; i ++) {
+            value = setBit(value, i, buffer[i]);
+        }
+
+        return value;
+    }
+
+    public static <T> T[] prepend(T element, T[] elements) {
+        Object n[] = new Object[elements.length + 1];
+
+        n[0] = element;
+
+        for (int i = 1; i < n.length; i ++) {
+            n[i] = elements[i - 1];
+        }
+
+        return (T[]) n;
+    }
+
+    public static byte[] takeApart(int[] array) {
+        byte bArray[] = new byte[0];
+
+        for (int i = 0; i < array.length; i ++) {
+            bArray  = concatenate(bArray, takeApart(array[i]));
+        }
+
+        return bArray;
+    }
+
+    public static byte[] takeApartInt24(long integer) {
+        return new byte[] {
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
+
+    public static String toString(Object argument) {
+        if (argument == null) {
+            return "null";
+        }
+
+        return argument.toString();
+    }
+
+    public static byte[] toBytesPadded(BigInteger value, int length) {
+        byte[] result = new byte[length];
+        byte[] bytes = value.toByteArray();
+
+        int bytesLength;
+        int srcOffset;
+        if (bytes[0] == 0) {
+            bytesLength = bytes.length - 1;
+            srcOffset = 1;
+        } else {
+            bytesLength = bytes.length;
+            srcOffset = 0;
+        }
+
+        if (bytesLength > length) {
+            return bytes;
+        }
+
+        int destOffset = length - bytesLength;
+        System.arraycopy(bytes, srcOffset, result, destOffset, bytesLength);
+        return result;
     }
 }

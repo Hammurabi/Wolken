@@ -47,7 +47,7 @@ public class Base16 {
     }
 
     public static boolean isEncoded(String hash) {
-        hash = hash.toUpperCase();
+        hash = hash.toLowerCase();
         for (int i = 0; i < hash.length(); i ++) {
             if (Arrays.binarySearch(HEX, hash.charAt(i)) < 0)
                 return false;

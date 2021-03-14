@@ -173,7 +173,7 @@ public class Transaction extends TransactionI {
     }
 
     @Override
-    public byte[] checksum() throws IOException {
+    public byte[] checksum() {
         return HashUtil.hash160(getTransactionID());
     }
 }

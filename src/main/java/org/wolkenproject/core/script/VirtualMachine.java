@@ -1,4 +1,8 @@
 package org.wolkenproject.core.script;
 
-public class VirtualMachine {
+public abstract class VirtualMachine {
+    private OpcodeRegister      opcodeRegister;
+    public OpcodeRegister getOpcodeRegister() {
+        return opcodeRegister;
+    }
 }

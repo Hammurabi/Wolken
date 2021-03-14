@@ -103,4 +103,14 @@ public class NetAddress extends SerializableI implements Serializable {
     public void setServices(long services) {
         this.services = services;
     }
+
+    @Override
+    public String toString() {
+        return "NetAddress{" +
+                "address=" + address +
+                ", port=" + port +
+                ", services=" + services +
+                ", spamAverage=" + spamAverage +
+                '}';
+    }
 }
