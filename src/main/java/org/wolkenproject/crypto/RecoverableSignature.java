@@ -1,5 +1,6 @@
 package org.wolkenproject.crypto;
 
+import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 
@@ -12,7 +13,7 @@ public class RecoverableSignature extends Signature {
     private final byte r[];
     private final byte s[];
 
-    public Signature(byte[] v, byte[] r, byte[] s) {
+    public RecoverableSignature(byte[] v, byte[] r, byte[] s) {
         this.v = v;
         this.r = r;
         this.s = s;
@@ -45,6 +46,6 @@ public class RecoverableSignature extends Signature {
 
     @Override
     public int getSerialNumber() {
-        return 0;
+        return Context.getInstance().getSerialFactory().getSerialNumber(RecoverableSignature.class);
     }
 }
