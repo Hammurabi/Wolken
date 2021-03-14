@@ -122,6 +122,9 @@ public class CryptoLib {
         }
     }
 
+    public Signature sign(BCECPrivateKey privateKey, BCECPublicKey publicKey, byte data[]) {
+    }
+
     /**
      * @param pubkey Public key to be used for signature verification.
      * @param data A sha256d of the original signed data.
