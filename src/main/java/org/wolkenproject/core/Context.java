@@ -51,6 +51,8 @@ public class Context {
         this.opcodeRegister         = new OpcodeRegister();
 
         serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
+        serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
+        serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
 
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
         serializationFactory.registerClass(Block.class, new Block());
