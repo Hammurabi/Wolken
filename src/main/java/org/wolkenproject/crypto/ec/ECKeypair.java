@@ -4,6 +4,8 @@ import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
+import org.bouncycastle.math.ec.ECPoint;
+import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.wolkenproject.crypto.CryptoLib;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
@@ -12,10 +14,11 @@ import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 public class ECKeypair extends Keypair {
-    public ECKeypair(BigInteger priv) {
-        this(priv, CryptoLib.getInstance().derivePublicKey(priv));
+    public ECKeypair(BigInteger priv) throws WolkenException {
+        this(priv, publicKeyFromPrivate(priv));
     }
 
     public ECKeypair(BigInteger priv, BigInteger pubk) {
@@ -25,7 +28,7 @@ public class ECKeypair extends Keypair {
     public ECSig ellipticCurveSign(byte message[]) {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
 
-        ECPrivateKeyParameters privateKeyParameters = new ECPrivateKeyParameters(getPrivateKey(), CryptoLib.CURVE);
+        ECPrivateKeyParameters privateKeyParameters = new ECPrivateKeyParameters(getPrivateKey(), CryptoLib.getCurve());
         signer.init(true, privateKeyParameters);
 
         BigInteger components[] = signer.generateSignature(message);
@@ -72,5 +75,45 @@ public class ECKeypair extends Keypair {
         }
 
         return result;
+    }
+
+    /**
+     * Returns public key from the given private key.
+     *
+     * @param privKey the private key to derive the public key from
+     * @return BigInteger encoded public key
+     */
+    public static BigInteger publicKeyFromPrivate(BigInteger privKey) {
+        ECPoint point = publicPointFromPrivate(privKey);
+
+        byte[] encoded = point.getEncoded(false);
+        return new BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.length)); // remove prefix
+    }
+
+    /**
+     * Returns public key point from the given private key.
+     *
+     * @param privKey the private key to derive the public key from
+     * @return ECPoint public key
+     */
+    public static ECPoint publicPointFromPrivate(BigInteger privKey) {
+        /*
+         * TODO: FixedPointCombMultiplier currently doesn't support scalars longer than the group
+         * order, but that could change in future versions.
+         */
+        if (privKey.bitLength() > CryptoLib.getCurve().getN().bitLength()) {
+            privKey = privKey.mod(CryptoLib.getCurve().getN());
+        }
+        return new FixedPointCombMultiplier().multiply(CryptoLib.getCurve().getG(), privKey);
+    }
+
+    /**
+     * Returns public key point from the given curve.
+     *
+     * @param bits representing the point on the curve
+     * @return BigInteger encoded public key
+     */
+    public static BigInteger publicFromPoint(byte[] bits) {
+        return new BigInteger(1, Arrays.copyOfRange(bits, 1, bits.length)); // remove prefix
     }
 }
