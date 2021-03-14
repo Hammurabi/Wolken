@@ -29,7 +29,7 @@ public class ECKeypair extends Keypair {
     public ECSig ellipticCurveSign(byte message[]) {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
 
-        ECPrivateKeyParameters privateKeyParameters = new ECPrivateKeyParameters(getPrivateKey(), CryptoLib.getCurve());
+        ECPrivateKeyParameters privateKeyParameters = new ECPrivateKeyParameters(getPrivateKey().getKey(), CryptoLib.getCurve());
         signer.init(true, privateKeyParameters);
 
         BigInteger components[] = signer.generateSignature(message);
