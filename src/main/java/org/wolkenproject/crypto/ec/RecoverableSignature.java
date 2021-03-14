@@ -23,7 +23,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 
 public class RecoverableSignature extends Signature {
-    private final byte v;
+    private final byte v[];
     private final byte r[];
     private final byte s[];
 
@@ -32,13 +32,13 @@ public class RecoverableSignature extends Signature {
     }
 
     public RecoverableSignature(byte v, byte[] r, byte[] s) {
-        this.v = v;
+        this.v = new byte[] { v };
         this.r = r;
         this.s = s;
     }
 
     public byte getV() {
-        return v;
+        return v[0];
     }
 
     public byte[] getR() {
@@ -51,10 +51,16 @@ public class RecoverableSignature extends Signature {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        stream.write(v);
+        stream.write(r);
+        stream.write(s);
     }
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        stream.read(v);
+        stream.read(r);
+        stream.read(s);
     }
 
     @Override
@@ -85,14 +91,14 @@ public class RecoverableSignature extends Signature {
         Assertions.assertTrue(r != null && r.length == 32, "r must be 32 bytes in length");
         Assertions.assertTrue(s != null && s.length == 32, "s must be 32 bytes in length");
 
-        int header = v & 0xFF;
+        int header = v[0] & 0xFF;
 
         if (header < 27 || header > 34) {
             throw new WolkenException("header byte out of range: " + header);
         }
 
         ECSig sig = new ECSig(new BigInteger(1, r), new BigInteger(1, s));
-        Key result = CryptoLib.recoverFromSignature(v - 27, sig, HashUtil.sha256d(originalMessage));
+        Key result = CryptoLib.recoverFromSignature(v[0] - 27, sig, HashUtil.sha256d(originalMessage));
 
         if (result == null) {
             throw new WolkenException("could not recover public key.");
