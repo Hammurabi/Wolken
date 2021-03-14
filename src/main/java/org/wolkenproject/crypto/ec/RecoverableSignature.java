@@ -95,7 +95,7 @@ public class RecoverableSignature extends Signature {
         }
 
         ECSig sig = new ECSig(new BigInteger(1, r), new BigInteger(1, s));
-        BigInteger result = CryptoLib.recoverFromSignature(v - 27, sig, HashUtil.sha256d(originalMessage));
+        Key result = CryptoLib.recoverFromSignature(v - 27, sig, HashUtil.sha256d(originalMessage));
 
         if (result == null) {
             throw new WolkenException("could not recover public key.");
