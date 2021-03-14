@@ -53,4 +53,9 @@ public class RecoverableSignature extends Signature {
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(RecoverableSignature.class);
     }
+
+    @Override
+    public boolean checkSignature(byte[] originalMessage) {
+        return false;
+    }
 }
