@@ -4,7 +4,6 @@ import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
-import org.wolkenproject.encoders.CryptoLib;
 import org.wolkenproject.encoders.ECSig;
 
 import java.math.BigInteger;
