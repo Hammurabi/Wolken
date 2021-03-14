@@ -30,9 +30,23 @@ public class VarInt extends SerializableI {
         this.value = bigInteger;
     }
 
-    // write a uint32 to stream, or uint28 if !fullBitsNeeded
-    public static void writeCompactUInt32(int integer, boolean fullBitsNeeded, OutputStream stream) {
+    // write a uint32 to stream, or uint30 if !fullBitsNeeded
+    public static void writeCompactUInt32(long integer, boolean fullBitsNeeded, OutputStream stream) {
+        long bits = Long.highestOneBit(integer);
 
+        if (fullBitsNeeded) {
+            if (bits <= 8) {
+            } else if (bits <= 16) {
+            } else if (bits <= 24) {
+            } else if (bits <= 32) {
+            }
+        } else {
+            if (bits <= 6) {
+            } else if (bits <= 14) {
+            } else if (bits <= 22) {
+            } else if (bits <= 30) {
+            }
+        }
     }
 
     @Override
