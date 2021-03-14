@@ -23,7 +23,7 @@ public class ECSig {
     }
 
     public boolean isCanonical() {
-        return s.compareTo(CryptoLib.HALF_CURVE_ORDER) <= 0;
+        return s.compareTo(CryptoLib.getHalfCurveOrder()) <= 0;
     }
 
     /**
@@ -44,7 +44,7 @@ public class ECSig {
             //    N = 10
             //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
             //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-            return new ECSig(r, CryptoLib.CURVE.getN().subtract(s));
+            return new ECSig(r, CryptoLib.getCurve().getN().subtract(s));
         } else {
             return this;
         }
