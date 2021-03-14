@@ -23,7 +23,7 @@ public class RecoverableSignature extends Signature {
         this.s = s;
     }
 
-    public byte[] getV() {
+    public byte getV() {
         return v;
     }
 
