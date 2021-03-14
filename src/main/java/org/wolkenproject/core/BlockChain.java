@@ -265,7 +265,7 @@ public class BlockChain implements Runnable {
                 return;
             }
 
-            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getBlock().getHeight() - 1);
+            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
         } else {
             addOrphan(block);
         }
