@@ -16,6 +16,17 @@ public class Keypair {
         this.publicKey  = pubk;
     }
 
+    public ECSig sign(byte message[]) {
+        ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
+
+        ECPrivateKeyParameters privateKeyParameters = new ECPrivateKeyParameters(getPrivateKey(), CryptoLib.CURVE);
+        signer.init(true, privateKeyParameters);
+
+        BigInteger components[] = signer.generateSignature(message);
+
+        return new ECSig(components[0], components[1]).toCanonicalised();;
+    }
+
     public Signature sign(byte message[]) {
     }
 
