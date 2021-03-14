@@ -177,6 +177,11 @@ public class CryptoLib {
         return (BCECPublicKey) generatePublicKey(ec_point_point2oct(point.getEncoded(false), false), "secp256k1");
     }
 
+    public BCECPublicKey derivePublicKey(BigInteger privateKey) throws WolkenException {
+        BCECPrivateKey bcecPrivateKey = (BCECPrivateKey) genPrivateKey(privateKey, "secp256k1");
+        return derivePublicKey(bcecPrivateKey);
+    }
+
     /**
      * @param priv Private key to use for signing data.
      * @param data A double sha256 of the data to be signed.
