@@ -356,4 +356,12 @@ public class Utils {
                 (byte) ((integer >> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
+
+    public static String toString(Object argument) {
+        if (argument == null) {
+            return "null";
+        }
+
+        return argument.toString();
+    }
 }
