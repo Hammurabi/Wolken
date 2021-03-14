@@ -45,7 +45,7 @@ public class RecoverableSignature extends Signature {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return new RecoverableSignature();
+        return (Type) new RecoverableSignature();
     }
 
     @Override
