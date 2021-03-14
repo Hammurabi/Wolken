@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.core.script.internal.MochaObject;
+import org.wolkenproject.core.script.internal.MochaPublicKey;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 
@@ -53,7 +54,8 @@ public class Scope {
     public void checkSig() throws MochaException {
         MochaObject publicKey = getStack().pop();
         if (publicKey instanceof MochaPublicKey) {
-
+            getStack().push(new MochaBool(false));
+            throw new MochaException("public key expected.");
         }
         MochaObject signature = getStack().pop();
         byte signatureData[]  = getSignatureData();
