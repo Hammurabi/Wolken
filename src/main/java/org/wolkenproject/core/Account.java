@@ -29,6 +29,8 @@ public class Account extends SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        nonce   = VarInt.readCompactUInt64(false, stream);
+        balance = VarInt.readCompactUInt64(false, stream);
     }
 
     @Override
