@@ -30,7 +30,8 @@ public class VarInt extends SerializableI {
         this.value = bigInteger;
     }
 
-    public static void writeCompactUInt32(int version, OutputStream stream) {
+    // write a uint32 to stream, or uint28 if !fullBitsNeeded
+    public static void writeCompactUInt32(int version, boolean fullBitsNeeded, OutputStream stream) {
     }
 
     @Override
