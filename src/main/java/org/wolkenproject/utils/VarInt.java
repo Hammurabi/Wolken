@@ -79,6 +79,68 @@ public class VarInt extends SerializableI {
         }
     }
 
+    public static void writeCompactUInt64(long integer, boolean fullBitsNeeded, OutputStream stream) throws IOException {
+        long bits = Long.highestOneBit(integer);
+
+        if (fullBitsNeeded) {
+            if (bits <= 8) {
+                stream.write(0);
+                stream.write((int) integer);
+            } else if (bits <= 16) {
+                stream.write(1);
+                byte bytes[] = Utils.takeApartShort(integer);
+                stream.write(((bytes[0])));
+                stream.write(((bytes[1])));
+            } else if (bits <= 24) {
+                stream.write(2);
+                byte bytes[] = Utils.takeApartInt24(integer);
+                stream.write(((bytes[0])));
+                stream.write(((bytes[1])));
+                stream.write(((bytes[2])));
+            } else if (bits <= 32) {
+                stream.write(3);
+                byte bytes[] = Utils.takeApart(integer);
+                stream.write(bytes[0]);
+                stream.write(bytes[1]);
+                stream.write(bytes[2]);
+                stream.write(bytes[3]);
+            } else if (bits <= 40) {
+                stream.write(4);
+                byte bytes[] = Utils.takeApart(integer);
+                stream.write(bytes[0]);
+                stream.write(bytes[1]);
+                stream.write(bytes[2]);
+                stream.write(bytes[3]);
+                stream.write(bytes[3]);
+            }
+        } else {
+            if (bits <= 5) {
+                stream.write((int) (integer & 0x3F));
+            } else if (bits <= 13) {
+                byte bytes[] = Utils.takeApartShort(integer);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 1 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[1])));
+            } else if (bits <= 22) {
+                byte bytes[] = Utils.takeApartInt24(integer);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 2 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[1])));
+                stream.write((Byte.toUnsignedInt(bytes[2])));
+            } else if (bits <= 30) {
+                byte bytes[] = Utils.takeApart(integer);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 3 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[1])));
+                stream.write((Byte.toUnsignedInt(bytes[2])));
+                stream.write((Byte.toUnsignedInt(bytes[3])));
+            } else if (bits <= 30) {
+                byte bytes[] = Utils.takeApart(integer);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 3 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[1])));
+                stream.write((Byte.toUnsignedInt(bytes[2])));
+                stream.write((Byte.toUnsignedInt(bytes[3])));
+            }
+        }
+    }
+
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
     }
