@@ -69,5 +69,22 @@ public class ECPublicKey extends Key {
         if (key[0] == 0x04) {
             return this;
         }
+
+        ECPoint point = CryptoLib.getCurve().getCurve().decodePoint(key);
+        ECParameterSpec ecParameterSpec = ECNamedCurveTable.getParameterSpec("secp256k1");
+        ECPublicKeySpec publicKeySpec = new ECPublicKeySpec(point, ecParameterSpec);
+
+        KeyFactory keyFactory = null;
+        try {
+            keyFactory = KeyFactory.getInstance("EC");
+        } catch (NoSuchAlgorithmException e) {
+            throw new WolkenException(e);
+        }
+
+        try {
+            return new ECPublicKey(((BCECPublicKey) keyFactory.generatePublic(publicKeySpec)).getQ().getEncoded(false));
+        } catch (InvalidKeySpecException e) {
+            throw new WolkenException(e);
+        }
     }
 }
