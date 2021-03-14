@@ -52,6 +52,9 @@ public class Scope {
 
     public void checkSig() throws MochaException {
         MochaObject publicKey = getStack().pop();
+        if (publicKey instanceof MochaPublicKey) {
+
+        }
         MochaObject signature = getStack().pop();
         byte signatureData[]  = getSignatureData();
     }
