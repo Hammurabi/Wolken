@@ -124,9 +124,9 @@ public class CryptoLib {
         }
     }
 
-    public org.wolkenproject.encoders.Signature sign(BCECPrivateKey privateKey, BCECPublicKey publicKey, byte data[]) throws WolkenException {
+    public Signature sign(BCECPrivateKey privateKey, BCECPublicKey publicKey, byte data[]) throws WolkenException {
 
-        return new org.wolkenproject.encoders.Signature(header, r, s);
+        return new Signature(header, r, s);
     }
 
     /**
@@ -137,7 +137,7 @@ public class CryptoLib {
      */
     public final boolean verifySignature(BCECPublicKey pubkey, byte[] data, byte[] sig) throws WolkenException {
         try {
-            org.wolkenproject.encoders.Signature signature = org.wolkenproject.encoders.Signature.getInstance("SHA256withECDSA");
+            Signature signature = Signature.getInstance("SHA256withECDSA");
             signature.initVerify(pubkey);
 
             signature.update(data);
