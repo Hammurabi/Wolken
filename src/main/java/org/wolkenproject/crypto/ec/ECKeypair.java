@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 public class ECKeypair extends Keypair {
     public ECKeypair(Key priv) throws WolkenException {
-        this(priv, publicKeyFromPrivate(priv.getKey()));
+        this(priv, publicKeyFromPrivate(priv.asInteger()));
     }
 
     public ECKeypair(Key priv, Key pubk) {
@@ -29,7 +29,7 @@ public class ECKeypair extends Keypair {
     public ECSig ellipticCurveSign(byte message[]) {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
 
-        ECPrivateKeyParameters privateKeyParameters = new ECPrivateKeyParameters(getPrivateKey().getKey(), CryptoLib.getCurve());
+        ECPrivateKeyParameters privateKeyParameters = new ECPrivateKeyParameters(getPrivateKey().asInteger(), CryptoLib.getCurve());
         signer.init(true, privateKeyParameters);
 
         BigInteger components[] = signer.generateSignature(message);
@@ -39,7 +39,7 @@ public class ECKeypair extends Keypair {
 
     @Override
     public Signature sign(byte[] message) throws WolkenException {
-        BigInteger publicKey = getPublicKey().getKey();
+        BigInteger publicKey = getPublicKey().asInteger();
         // hash with sha256d
         byte[] messageHash = HashUtil.sha256d(message);
 
