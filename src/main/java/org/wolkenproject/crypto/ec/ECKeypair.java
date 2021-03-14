@@ -48,8 +48,8 @@ public class ECKeypair extends Keypair {
         // Now we have to work backwards to figure out the recId needed to recover the signature.
         int recId = -1;
         for (int i = 0; i < 4; i++) {
-            BigInteger k = CryptoLib.recoverFromSignature(i, sig, messageHash);
-            if (k != null && k.equals(publicKey)) {
+            Key key = CryptoLib.recoverFromSignature(i, sig, messageHash);
+            if (key != null && key.asInteger().equals(publicKey)) {
                 recId = i;
                 break;
             }
