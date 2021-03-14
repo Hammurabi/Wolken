@@ -3,15 +3,15 @@ package org.wolkenproject.core;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.ChainMath;
+import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Block extends BlockHeader {
     private static BigInteger LargestHash = BigInteger.ONE.shiftLeft(256);
@@ -37,6 +37,19 @@ public class Block extends BlockHeader {
      */
     public final BlockHeader getBlockHeader() {
         return new BlockHeader(getVersion(), getTimestamp(), getParentHash(), getMerkleRoot(), getBits(), getNonce());
+    }
+
+    public void calculateMerkleRoot() {
+        Queue<byte[]> txids = new LinkedBlockingQueue<>();
+        for (Transaction transaction : transactions) {
+            txids.add(transaction.getTransactionID());
+        }
+
+        while (txids.size() > 1) {
+            txids.add(HashUtil.sha256d(Utils.concatenate(txids.poll(), txids.poll())));
+        }
+
+        setMerkleRoot(txids.poll());
     }
 
     @Override
