@@ -57,7 +57,7 @@ public class Context {
         serializationFactory.registerClass(Block.class, new Block());
         serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
         serializationFactory.registerClass(Ancestors.class, new Ancestors(new byte[Block.UniqueIdentifierLength]));
-        serializationFactory.registerClass(Ancestors.class, new Input(new byte[Transaction.UniqueIdentifierLength], 0, new byte[0]));
+        serializationFactory.registerClass(Input.class, new Input(new byte[Transaction.UniqueIdentifierLength], 0, new byte[0]));
         serializationFactory.registerClass(Ancestors.class, new Output(0, new byte[0]));
 
         serializationFactory.registerClass(Transaction.class, new Transaction());
