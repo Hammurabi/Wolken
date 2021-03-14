@@ -2,7 +2,7 @@ package org.wolkenproject.core.script.internal;
 
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.wolkenproject.core.script.MochaBool;
-import org.wolkenproject.encoders.CryptoLib;
+import org.wolkenproject.crypto.CryptoLib;
 import org.wolkenproject.exceptions.WolkenException;
 
 public class MochaECPubKey extends MochaObject {
