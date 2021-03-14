@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class Wolken {
     public static void main(String args[]) throws ParseException, WolkenException, IOException {
-        CryptoLib.initialize();
+        CryptoLib.getInstance();
 
         Options options = new Options();
         options.addOption("dir", true, "set the main directory for wolken, otherwise uses the default application directory of the system.");
