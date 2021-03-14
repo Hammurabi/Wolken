@@ -12,13 +12,15 @@ import java.io.IOException;
 public class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
     // can be represented by 1 - 4 bytes
+    // version = 1 skips flags alltogether
     private int version;
+    // anything below here is optional
+
     // can be represented by 1 or more bytes
     // there are not enough flags at the moment
     // therefore it's represented by an int in
     // this version.
     private int flags;
-    // anything below here is optional
 
     // can be more than one recipient if FLAG&MULTIPLE_RECIPIENTS==MULTIPLE_RECIPIENTS
     // must be 20 bytes
