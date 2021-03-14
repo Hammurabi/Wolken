@@ -11,25 +11,7 @@ import java.math.BigInteger;
 
 // this class represents an UNSIGNED variable integer
 // that has a range of 1 - 8 bytes
-public class VarInt extends SerializableI {
-    private BigInteger value;
-
-    public VarInt() {
-        this(0);
-    }
-
-    public VarInt(String value) {
-        this(new BigInteger(value));
-    }
-
-    public VarInt(long value) {
-        this.value = new BigInteger(Long.toString(value));
-    }
-
-    public VarInt(BigInteger bigInteger) {
-        this.value = bigInteger;
-    }
-
+public class VarInt {
     // write a uint32 to stream, or uint30 if !fullBitsNeeded
     public static void writeCompactUInt32(long integer, boolean fullBitsNeeded, OutputStream stream) throws IOException {
         long bits = Long.highestOneBit(integer);
@@ -186,23 +168,5 @@ public class VarInt extends SerializableI {
                 stream.write((Byte.toUnsignedInt(bytes[7])));
             }
         }
-    }
-
-    @Override
-    public void write(OutputStream stream) throws IOException, WolkenException {
-    }
-
-    @Override
-    public void read(InputStream stream) throws IOException, WolkenException {
-    }
-
-    @Override
-    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new VarInt();
-    }
-
-    @Override
-    public int getSerialNumber() {
-        return Context.getInstance().getSerialFactory().getSerialNumber(VarInt.class);
     }
 }
