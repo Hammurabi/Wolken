@@ -21,9 +21,9 @@ import java.security.spec.InvalidKeySpecException;
 
 public class CryptoLib {
     private static final CryptoLib secureLib = new CryptoLib();
-    static X9ECParameters PARAMS;
-    static ECDomainParameters CURVE;
-    static BigInteger HALF_CURVE_ORDER;
+    public static X9ECParameters PARAMS;
+    public static ECDomainParameters CURVE;
+    public static BigInteger HALF_CURVE_ORDER;
 
     public static CryptoLib getInstance() {
         return secureLib;
