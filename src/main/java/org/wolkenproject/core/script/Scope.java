@@ -66,7 +66,7 @@ public class Scope {
             return;
         }
 
-        getStack().push(((MochaECPubKey) publicKey).verifySignature((MochaECSig) signature));
+        getStack().push(((MochaECPubKey) publicKey).checkSignature((MochaECSig) signature, signatureData));
     }
 
     public void verify() throws InvalidTransactionException, MochaException {
