@@ -9,11 +9,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class RecoverableSignature extends Signature {
-    private final byte v[];
+    private final byte v;
     private final byte r[];
     private final byte s[];
 
-    public RecoverableSignature(byte[] v, byte[] r, byte[] s) {
+    public RecoverableSignature() {
+        this((byte) 0, new byte[32], new byte[32]);
+    }
+
+    public RecoverableSignature(byte v, byte[] r, byte[] s) {
         this.v = v;
         this.r = r;
         this.s = s;
@@ -41,7 +45,7 @@ public class RecoverableSignature extends Signature {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        return new RecoverableSignature();
     }
 
     @Override
