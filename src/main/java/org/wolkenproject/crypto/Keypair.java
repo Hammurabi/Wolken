@@ -1,5 +1,7 @@
 package org.wolkenproject.crypto;
 
+import org.wolkenproject.exceptions.WolkenException;
+
 import java.math.BigInteger;
 
 public abstract class Keypair {
@@ -19,5 +21,5 @@ public abstract class Keypair {
         return publicKey;
     }
 
-    public abstract Signature sign(byte message[]);
+    public abstract Signature sign(byte message[]) throws WolkenException;
 }
