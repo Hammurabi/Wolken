@@ -44,6 +44,9 @@ public class Scope {
         interruptSignal.set(signal);
     }
 
+    public void checkSig() {
+    }
+
     public void verify() throws InvalidTransactionException, MochaException {
         if (!getStack().pop().isTrue()) {
             throw new InvalidTransactionException();
