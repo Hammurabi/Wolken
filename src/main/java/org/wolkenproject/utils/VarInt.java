@@ -106,12 +106,31 @@ public class VarInt extends SerializableI {
                 stream.write(bytes[3]);
             } else if (bits <= 40) {
                 stream.write(4);
-                byte bytes[] = Utils.takeApart(integer);
+                byte bytes[] = Utils.takeApartInt40(integer);
                 stream.write(bytes[0]);
                 stream.write(bytes[1]);
                 stream.write(bytes[2]);
                 stream.write(bytes[3]);
+                stream.write(bytes[4]);
+            } else if (bits <= 48) {
+                stream.write(5);
+                byte bytes[] = Utils.takeApartInt48(integer);
+                stream.write(bytes[0]);
+                stream.write(bytes[1]);
+                stream.write(bytes[2]);
                 stream.write(bytes[3]);
+                stream.write(bytes[4]);
+                stream.write(bytes[5]);
+            } else if (bits <= 56) {
+                stream.write(6);
+                byte bytes[] = Utils.takeApartInt48(integer);
+                stream.write(bytes[0]);
+                stream.write(bytes[1]);
+                stream.write(bytes[2]);
+                stream.write(bytes[3]);
+                stream.write(bytes[4]);
+                stream.write(bytes[5]);
+                stream.write(bytes[6]);
             }
         } else {
             if (bits <= 5) {
