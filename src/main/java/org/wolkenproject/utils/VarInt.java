@@ -31,7 +31,8 @@ public class VarInt extends SerializableI {
     }
 
     // write a uint32 to stream, or uint28 if !fullBitsNeeded
-    public static void writeCompactUInt32(int version, boolean fullBitsNeeded, OutputStream stream) {
+    public static void writeCompactUInt32(int integer, boolean fullBitsNeeded, OutputStream stream) {
+
     }
 
     @Override
