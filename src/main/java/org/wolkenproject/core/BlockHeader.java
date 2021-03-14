@@ -37,6 +37,10 @@ public class BlockHeader extends SerializableI {
         this.nonce = nonce;
     }
 
+    protected void setMerkleRoot(byte[] merkleRoot) {
+        this.merkleRoot = merkleRoot;
+    }
+
     public int getVersion() {
         return version;
     }
