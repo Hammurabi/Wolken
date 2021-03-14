@@ -1,9 +1,12 @@
-package org.wolkenproject.crypto;
+package org.wolkenproject.crypto.ec;
 
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
+import org.wolkenproject.crypto.CryptoLib;
+import org.wolkenproject.crypto.Keypair;
+import org.wolkenproject.crypto.Signature;
 
 import java.math.BigInteger;
 
