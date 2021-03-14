@@ -110,7 +110,7 @@ public class CryptoLib {
      */
     public final byte[] sign(BCECPrivateKey priv, byte data[]) throws WolkenException {
         try {
-            Signature dsa = Signature.getInstance("SHA256withECDSA", "BC");
+            java.security.Signature dsa = java.security.Signature.getInstance("SHA256withECDSA", "BC");
 
             dsa.initSign(priv);
 
