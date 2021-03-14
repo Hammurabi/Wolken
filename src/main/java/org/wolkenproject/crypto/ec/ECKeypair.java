@@ -7,6 +7,7 @@ import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.wolkenproject.crypto.CryptoLib;
+import org.wolkenproject.crypto.Key;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.exceptions.WolkenException;
@@ -17,11 +18,11 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 public class ECKeypair extends Keypair {
-    public ECKeypair(BigInteger priv) throws WolkenException {
-        this(priv, publicKeyFromPrivate(priv));
+    public ECKeypair(Key priv) throws WolkenException {
+        this(priv, publicKeyFromPrivate(priv.getKey()));
     }
 
-    public ECKeypair(BigInteger priv, BigInteger pubk) {
+    public ECKeypair(Key priv, Key pubk) {
         super(priv, pubk);
     }
 
@@ -38,7 +39,7 @@ public class ECKeypair extends Keypair {
 
     @Override
     public Signature sign(byte[] message) throws WolkenException {
-        BigInteger publicKey = getPublicKey();
+        BigInteger publicKey = getPublicKey().getKey();
         // hash with sha256d
         byte[] messageHash = HashUtil.sha256d(message);
 
@@ -83,11 +84,10 @@ public class ECKeypair extends Keypair {
      * @param privKey the private key to derive the public key from
      * @return BigInteger encoded public key
      */
-    public static BigInteger publicKeyFromPrivate(BigInteger privKey) {
+    public static Key publicKeyFromPrivate(BigInteger privKey) {
         ECPoint point = publicPointFromPrivate(privKey);
 
-        byte[] encoded = point.getEncoded(false);
-        return new BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.length)); // remove prefix
+        return new ECPublicKey(point.getEncoded(false));
     }
 
     /**
