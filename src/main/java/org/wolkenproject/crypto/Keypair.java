@@ -38,7 +38,7 @@ public abstract class Keypair {
         return ellipticCurvePair(new ECPrivateKey(pkBytes));
     }
 
-    private static Keypair ellipticCurvePair(BigInteger privateKey) throws WolkenException {
+    private static Keypair ellipticCurvePair(Key privateKey) throws WolkenException {
         return new ECKeypair(privateKey);
     }
 }
