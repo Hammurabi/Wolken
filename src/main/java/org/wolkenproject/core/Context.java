@@ -5,6 +5,7 @@ import org.wolkenproject.core.script.internal.ByteArray;
 import org.wolkenproject.core.script.internal.MochaPublicKey;
 import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.transactions.Transaction;
+import org.wolkenproject.crypto.ec.ECPublicKey;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.WolkenException;
@@ -50,8 +51,6 @@ public class Context {
         this.fileService            = service;
         this.opcodeRegister         = new OpcodeRegister();
 
-        serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
-        serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
         serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
 
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
