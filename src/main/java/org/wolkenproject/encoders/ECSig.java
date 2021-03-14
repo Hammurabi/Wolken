@@ -1,5 +1,7 @@
 package org.wolkenproject.encoders;
 
+import org.wolkenproject.crypto.CryptoLib;
+
 import java.math.BigInteger;
 
 public class ECSig {
