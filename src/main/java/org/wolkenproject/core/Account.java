@@ -9,8 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Account extends SerializableI {
-    private final long nonce;
-    private final long balance;
+    private long nonce;
+    private long balance;
 
     public Account(long nonce, long balance) {
         this.nonce      = nonce;
