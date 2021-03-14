@@ -104,6 +104,7 @@ public class ECKeypair extends Keypair {
         if (privKey.bitLength() > CryptoLib.getCurve().getN().bitLength()) {
             privKey = privKey.mod(CryptoLib.getCurve().getN());
         }
+
         return new FixedPointCombMultiplier().multiply(CryptoLib.getCurve().getG(), privKey);
     }
 
