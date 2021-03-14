@@ -139,23 +139,24 @@ public class VarInt extends SerializableI {
                 byte bytes[] = Utils.takeApartShort(integer);
                 stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 1 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
-            } else if (bits <= 22) {
+            } else if (bits <= 21) {
                 byte bytes[] = Utils.takeApartInt24(integer);
                 stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 2 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
                 stream.write((Byte.toUnsignedInt(bytes[2])));
-            } else if (bits <= 30) {
+            } else if (bits <= 29) {
                 byte bytes[] = Utils.takeApart(integer);
                 stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 3 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
                 stream.write((Byte.toUnsignedInt(bytes[2])));
                 stream.write((Byte.toUnsignedInt(bytes[3])));
-            } else if (bits <= 30) {
+            } else if (bits <= 37) {
                 byte bytes[] = Utils.takeApart(integer);
                 stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 3 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
                 stream.write((Byte.toUnsignedInt(bytes[2])));
                 stream.write((Byte.toUnsignedInt(bytes[3])));
+                stream.write((Byte.toUnsignedInt(bytes[4])));
             }
         }
     }
