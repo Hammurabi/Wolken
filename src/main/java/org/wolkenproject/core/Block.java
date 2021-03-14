@@ -107,16 +107,6 @@ public class Block extends BlockHeader {
         return null;
     }
 
-    public int getHeight() {
-        Transaction coinbase = getCoinbase();
-        if (coinbase != null)
-        {
-            return Utils.makeInt(coinbase.getInputs()[0].getData());
-        }
-
-        return -1;
-    }
-
     public BigInteger getWork() throws WolkenException {
         return LargestHash.divide(ChainMath.targetIntegerFromBits(getBits()).add(BigInteger.ONE));
     }
