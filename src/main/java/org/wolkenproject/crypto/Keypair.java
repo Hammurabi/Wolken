@@ -5,6 +5,7 @@ import org.wolkenproject.exceptions.WolkenException;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.security.interfaces.ECPrivateKey;
 import java.util.Random;
 
 public abstract class Keypair {
@@ -34,7 +35,7 @@ public abstract class Keypair {
         byte pkBytes[] = new byte[32];
         random.nextBytes(pkBytes);
 
-        return ellipticCurvePair(new BigInteger(1, pkBytes));
+        return ellipticCurvePair(new ECPrivateKey(pkBytes));
     }
 
     private static Keypair ellipticCurvePair(BigInteger privateKey) throws WolkenException {
