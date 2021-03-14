@@ -8,6 +8,8 @@ import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
@@ -75,6 +77,31 @@ public class Transaction extends SerializableI implements Comparable<Transaction
                 Context.getInstance().getNetworkParameters().getCoinbaseLockTime(),
                 inputs,
                 outputs);
+    }
+
+    @Override
+    public int compareTo(Transaction transaction) {
+        return 0;
+    }
+
+    @Override
+    public void write(OutputStream stream) throws IOException, WolkenException {
+
+    }
+
+    @Override
+    public void read(InputStream stream) throws IOException, WolkenException {
+
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return null;
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return 0;
     }
 
     public static final class Flags
