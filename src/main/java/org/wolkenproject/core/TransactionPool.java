@@ -6,12 +6,12 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TransactionPool {
-    private PriorityHashQueue<TransactionI> transactions;
+    private PriorityHashQueue<Transaction> transactions;
     private ReentrantLock                   mutex;
     private static final int                MaximumBlockQueueSize = 1_250_000_000;
 
     public TransactionPool() {
-        transactions    = new PriorityHashQueue<>(TransactionI.class);
+        transactions    = new PriorityHashQueue<>(Transaction.class);
         mutex           = new ReentrantLock();
     }
 
@@ -36,7 +36,7 @@ public class TransactionPool {
         return result;
     }
 
-    public TransactionI getTransaction(byte[] txid) {
+    public Transaction getTransaction(byte[] txid) {
         mutex.lock();
         try {
             return transactions.getByHash(txid);
@@ -57,8 +57,8 @@ public class TransactionPool {
         }
     }
 
-    public void add(Set<TransactionI> transactions) {
-        for (TransactionI transaction : transactions) {
+    public void add(Set<Transaction> transactions) {
+        for (Transaction transaction : transactions) {
             this.transactions.add(transaction);
         }
     }
