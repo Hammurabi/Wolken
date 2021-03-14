@@ -16,7 +16,7 @@ import java.util.Set;
 public class Block extends BlockHeader {
     private static BigInteger LargestHash = BigInteger.ONE.shiftLeft(256);
     public static int UniqueIdentifierLength = 32;
-    private Set<TransactionI>   transactions;
+    private Set<Transaction>   transactions;
 
     public Block() {
         this(new byte[32], 0);
@@ -43,7 +43,7 @@ public class Block extends BlockHeader {
     public void write(OutputStream stream) throws IOException, WolkenException {
         super.write(stream);
         Utils.writeInt(transactions.size(), stream);
-        for (TransactionI transaction : transactions)
+        for (Transaction transaction : transactions)
         {
             // use serialize here to write transaction serial id
             transaction.serialize(stream);
@@ -73,9 +73,9 @@ public class Block extends BlockHeader {
         return Context.getInstance().getSerialFactory().getSerialNumber(Block.class);
     }
 
-    public TransactionI getCoinbase()
+    public Transaction getCoinbase()
     {
-        Iterator<TransactionI> transactions = this.transactions.iterator();
+        Iterator<Transaction> transactions = this.transactions.iterator();
         if (transactions.hasNext())
         {
             return transactions.next();
@@ -85,7 +85,7 @@ public class Block extends BlockHeader {
     }
 
     public int getHeight() {
-        TransactionI coinbase = getCoinbase();
+        Transaction coinbase = getCoinbase();
         if (coinbase != null)
         {
             return Utils.makeInt(coinbase.getInputs()[0].getData());
@@ -98,7 +98,7 @@ public class Block extends BlockHeader {
         return LargestHash.divide(ChainMath.targetIntegerFromBits(getBits()).add(BigInteger.ONE));
     }
 
-    public void addTransaction(TransactionI transaction) {
+    public void addTransaction(Transaction transaction) {
     }
 
     public int getTransactionCount() {
