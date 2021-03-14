@@ -39,7 +39,7 @@ public class Block extends BlockHeader {
         return new BlockHeader(getVersion(), getTimestamp(), getParentHash(), getMerkleRoot(), getBits(), getNonce());
     }
 
-    public void calculateMerkleRoot() {
+    public byte[] calculateMerkleRoot() {
         Queue<byte[]> txids = new LinkedBlockingQueue<>();
         for (Transaction transaction : transactions) {
             txids.add(transaction.getTransactionID());
@@ -49,7 +49,17 @@ public class Block extends BlockHeader {
             txids.add(HashUtil.sha256d(Utils.concatenate(txids.poll(), txids.poll())));
         }
 
-        setMerkleRoot(txids.poll());
+        return txids.poll();
+    }
+
+    public void build() {
+        setMerkleRoot(calculateMerkleRoot());
+    }
+
+    public boolean verify() {
+        if (!Utils.equals(calculateMerkleRoot(), getMerkleRoot())) return false;
+
+        return true;
     }
 
     @Override
