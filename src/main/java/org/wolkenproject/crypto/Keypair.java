@@ -8,19 +8,19 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 public abstract class Keypair {
-    private final BigInteger privateKey;
-    private final BigInteger publicKey;
+    private final Key privateKey;
+    private final Key publicKey;
 
-    public Keypair(BigInteger priv, BigInteger pubk) {
+    public Keypair(Key priv, Key pubk) {
         this.privateKey = priv;
         this.publicKey  = pubk;
     }
 
-    public BigInteger getPrivateKey() {
+    public Key getPrivateKey() {
         return privateKey;
     }
 
-    public BigInteger getPublicKey() {
+    public Key getPublicKey() {
         return publicKey;
     }
 
