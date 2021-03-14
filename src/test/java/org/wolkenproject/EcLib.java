@@ -28,7 +28,7 @@ public class EcLib {
             // verify signature
             Assertions.assertTrue(signature.checkSignature(message, keypair.getPublicKey()), "could not verify signature");
             // verify key
-            Assertions.assertEquals(0, signature.recover(message).compareTo(keypair.getPublicKey()), "could not recover public key from signature");
+            Assertions.assertEquals(0, signature.recover(message).getKey().compareTo(keypair.getPublicKey().getKey()), "could not recover public key from signature");
         }
     }
 }
