@@ -1,4 +1,4 @@
 package org.wolkenproject.crypto;
 
-public class Key {
+public abstract class Key {
 }
