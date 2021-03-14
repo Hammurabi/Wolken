@@ -14,7 +14,7 @@ public class ECPrivateKey extends Key {
     }
 
     @Override
-    public BigInteger getKey() {
+    public BigInteger asInteger() {
         return new BigInteger(1, key);
     }
 
