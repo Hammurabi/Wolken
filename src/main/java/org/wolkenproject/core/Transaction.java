@@ -168,10 +168,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return HashUtil.sha256d(asByteArray());
     }
 
-    public boolean verify() {
-        return false;
-    }
-
+    public abstract boolean verify();
     public abstract Address getSender();
     public abstract Address getRecipient();
 
