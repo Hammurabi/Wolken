@@ -29,7 +29,18 @@ public class Transaction extends SerializableI implements Comparable<Transaction
         public static final int
         None                    = 0x0,
         BasicTransaction        = 0x1,
-        BasicFlaggedTransaction = 0x2
+        // the reason this is not
+        // a flag by itself is that
+        // flags should be used for
+        // modularity, and version
+        // numbers should be used
+        // to quickly distinguish
+        // transaction types, the
+        // point of aliases is to make
+        // transactions smaller, therefore
+        // it has a special version number
+        BasicTransactionToAlias = 0x2,
+        BasicFlaggedTransaction = 0x3
         ;
     }
 
@@ -49,29 +60,48 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     // therefore it's represented by an int in
     // this version.
     private int flags;
-
+    // must be 20 bytes
+    private byte recipient[];
+    // value
+    private long value;
     // maximum fee that sender is willing to pay
     private long fee;
-
+    // a recoverable ec signature
+    private RecoverableSignature signature;
     // a mocha payload
     private byte payload[];
-
-    // content of the transaction can vary depending on version+flags
-    private TransactionContent transactionContent;
 
     @Override
     public int compareTo(Transaction transaction) {
         return 0;
     }
 
+    private void writeBasic(OutputStream stream) throws IOException, WolkenException {
+    }
+
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         VarInt.writeCompactUInt32(version, false, stream);
-        if (version == 0x2) {
+        if (version == Magic.BasicTransaction) {
+            stream.write(recipient);
+            VarInt.writeCompactUInt32(value, false, stream);
+            VarInt.writeCompactUInt32(fee, false, stream);
+            stream.write(signature.getV());
+            stream.write(signature.getR());
+            stream.write(signature.getS());
+        } else if (version == Magic.BasicTransactionToAlias) {
+            stream.write(recipient);
+            VarInt.writeCompactUInt32(value, false, stream);
+            VarInt.writeCompactUInt32(fee, false, stream);
+            stream.write(signature.getV());
+            stream.write(signature.getR());
+            stream.write(signature.getS());
+        } else if (version == Magic.BasicFlaggedTransaction) {
             // write it as a single byte
             // we only have up to 8 flags
             // at the moment.
             stream.write(flags & 0xFF);
+
             if (hasFlag(Flags.TwoByteFlags)) {
                 stream.write((flags >> 8) & 0xFF);
             }
@@ -81,9 +111,9 @@ public class Transaction extends SerializableI implements Comparable<Transaction
                 VarInt.writeCompactUInt32(payload.length, false, stream);
                 stream.write(payload);
             }
-        }
 
-        transactionContent.write(stream);
+            VarInt.writeCompactUInt32(fee, false, stream);
+        }
     }
 
     @Override
@@ -91,8 +121,6 @@ public class Transaction extends SerializableI implements Comparable<Transaction
         version = VarInt.readCompactUInt32(false, stream);
 
         if (version == Magic.BasicTransaction) {
-            transactionContent = new BasicTransactionContent();
-            transactionContent.read(stream);
         } else if (version == Magic.BasicFlaggedTransaction) {
             flags = stream.read();
 
