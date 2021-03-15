@@ -240,7 +240,9 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public boolean verify() {
             // a transfer of 0 with a fee of 0 is not allowed
-            return (getTransactionValue() + getTransactionFee()) != 0;
+            return
+                    (getTransactionValue() + getTransactionFee()) != 0 &&
+                    (Context.getInstance().getDatabase().getAccount(getSender()).getNonce() + 1) == nonce;
         }
 
         @Override
