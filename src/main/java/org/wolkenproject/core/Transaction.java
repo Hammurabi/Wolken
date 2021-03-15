@@ -185,5 +185,40 @@ public class Transaction extends SerializableI implements Comparable<Transaction
         private long fee;
         // a recoverable ec signature
         private RecoverableSignature recoverableSignature;
+
+        @Override
+        public boolean verify() {
+            return false;
+        }
+
+        @Override
+        public List<Account> getAccountChanges() {
+            return null;
+        }
+
+        @Override
+        public long getTransactionValue() {
+            return value;
+        }
+
+        @Override
+        public long getFee() {
+            return fee;
+        }
+
+        @Override
+        public byte[] getPayload() {
+            return new byte[0];
+        }
+
+        @Override
+        public void read(InputStream stream) throws IOException {
+
+        }
+
+        @Override
+        public void write(OutputStream stream) throws IOException {
+
+        }
     }
 }
