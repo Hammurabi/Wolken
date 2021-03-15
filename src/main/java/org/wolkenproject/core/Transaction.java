@@ -345,7 +345,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public Address getSender() throws WolkenException {
-            return null;
+            return Address.fromKey(signature.recover(asByteArray()));
         }
 
         @Override
