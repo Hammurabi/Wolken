@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.script.Script;
+import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
