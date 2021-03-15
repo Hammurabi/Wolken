@@ -5,6 +5,7 @@ import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
 public class Address {
+    public static final int RawLength = 20;
     private byte[] address;
 
     private Address(byte address[]) {
