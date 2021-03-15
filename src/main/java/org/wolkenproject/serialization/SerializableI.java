@@ -61,4 +61,10 @@ public abstract class SerializableI {
     }
 
     public abstract int getSerialNumber();
+
+    protected void checkFullyRead(int result, int expected) throws IOException {
+        if (result != expected) {
+            throw new IOException("expected '" + expected + "' bytes but only received '" + result + "'");
+        }
+    }
 }
