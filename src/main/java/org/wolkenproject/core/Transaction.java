@@ -22,6 +22,17 @@ public class Transaction extends SerializableI implements Comparable<Transaction
         public abstract long getFee();
         public abstract byte[] getPayload();
 
+        public abstract Address getSender();
+        public abstract Address getRecipient();
+
+        // multiple recipients and senders might be possible in the future
+        public Address[] getSenders() {
+            return new Address[] { getSender() };
+        }
+        public Address[] getRecipients() {
+            return new Address[] { getRecipient() };
+        }
+
         public abstract void read(InputStream stream) throws IOException;
         public abstract void write(OutputStream stream) throws IOException;
     }
