@@ -175,7 +175,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
             stream.read(recipient);
             int length = VarInt.readCompactUInt32(false, stream);
             if (length > 0) {
-                stream.read(dump);
+                checkFullyRead(stream.read(dump), length);
             }
         }
 
