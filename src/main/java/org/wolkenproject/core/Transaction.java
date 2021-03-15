@@ -156,14 +156,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return transactionContent.getTransactionValue();
     }
 
-    public long getTransactionFee() {
-        return transactionContent.getTransactionFee();
-    }
-
-    public byte[] getPayload() {
-        return transactionContent.getPayload();
-    }
-
+    public abstract long getTransactionFee();
+    public abstract byte[] getPayload();
     public abstract boolean verify();
     public abstract Address getSender();
     public abstract Address getRecipient();
