@@ -164,10 +164,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return transactionContent.getPayload();
     }
 
-    public byte[] getTransactionID() {
-        return HashUtil.sha256d(asByteArray());
-    }
-
     public abstract boolean verify();
     public abstract Address getSender();
     public abstract Address getRecipient();
@@ -178,6 +174,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     }
     public Address[] getRecipients() {
         return new Address[] { getRecipient() };
+    }
+
+    public byte[] getTransactionID() {
+        return HashUtil.sha256d(asByteArray());
     }
 
 
