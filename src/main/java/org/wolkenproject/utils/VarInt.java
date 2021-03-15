@@ -168,7 +168,7 @@ public class VarInt {
     public static int readCompactUInt32(boolean preserveAllBits, InputStream stream) throws IOException {
         if (preserveAllBits) {
             int numBytes = stream.read();
-            byte bytes[] = new byte[numBytes];
+            byte bytes[] = new byte[numBytes + 1];
             stream.read(bytes);
 
             return Utils.makeInt(Utils.conditionalExpand(4, bytes));
@@ -176,6 +176,8 @@ public class VarInt {
             int test    = stream.read();
             int value   = test & 0x1F;
             int length  = test >> 5;
+
+
         }
 
         return 0;
