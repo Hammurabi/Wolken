@@ -33,6 +33,10 @@ public class Address {
         return new Address(rawBytes);
     }
 
+    public static Address newContractAddress(byte[] sender, long nonce) {
+        return new Address(HashUtil.hash160(Utils.concatenate(sender, Utils.takeApartLong(nonce))));
+    }
+
     public byte[] fromKey(byte prefix, byte publicKeyBytes[]) {
         byte prefixed[] = Utils.concatenate(new byte[] { prefix }, HashUtil.hash160(publicKeyBytes) );
         return Utils.concatenate(prefixed, Utils.trim(HashUtil.sha256d(prefixed), 0, 4));
