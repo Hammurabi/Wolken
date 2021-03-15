@@ -187,7 +187,7 @@ public class VarInt {
         }
     }
 
-    public static long readCompactUInt64(boolean preserveAllBits, InputStream stream) {
+    public static long readCompactUInt64(boolean preserveAllBits, InputStream stream) throws IOException {
         if (preserveAllBits) {
             int numBytes = stream.read();
             byte bytes[] = new byte[numBytes + 1];
