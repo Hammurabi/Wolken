@@ -87,7 +87,7 @@ public class NetworkParameters {
      * Term: 37 halvings or roughly 148 years.
      *
      */
-    public long getMaxResources() {
+    public long getMaxCoin() {
         return 21_000_000__00_000_000_000L;
     }
 
