@@ -33,6 +33,14 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         ;
     }
 
+    // can be represented by 1 - 4 bytes
+    // version = 1 skips flags all-together
+
+    // this should not be treated as a network version
+    // transaction versions should be treated as VARINT
+    // magic numbers that hint at the internal transaction
+    // structure.
+    // anything below here is optional
     public int getVersion() {
         return getSerialNumber();
     }
@@ -100,8 +108,23 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     }
 
     public static final class BasicTransaction extends Transaction {
+        // must be 20 bytes
+        private byte recipient[];
+        // value
+        private long value;
+        // maximum fee that sender is willing to pay
+        private long fee;
+        // a recoverable ec signature
+        private RecoverableSignature signature;
+        // a mocha payload
+        private byte payload[];
     }
 
     public static final class FlaggedTransaction extends Transaction {
+        // can be represented by 1 or more bytes
+        // there are not enough flags at the moment
+        // therefore it's represented by an int in
+        // this version.
+        private int flags;
     }
 }
