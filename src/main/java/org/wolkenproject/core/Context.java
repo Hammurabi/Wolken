@@ -166,14 +166,10 @@ public class Context {
         opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(6, "or").call(scope)));
         opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(7, "xor").call(scope)));
         opcodeRegister.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(8, "shf").call(scope)));
-        opcodeRegister.registerOp("lsh", "pop two objects from the stack left shift.", scope -> scope.getStack().push(scope.getStack().peek().getMember(9, "lsh").call(scope)));
-        opcodeRegister.registerOp("rsh", "pop two objects from the stack right shift.", scope -> scope.getStack().push(scope.getStack().peek().getMember(10, "rsh").call(scope)));
+        opcodeRegister.registerOp("rsh", "pop two objects from the stack right shift.", scope -> scope.getStack().push(scope.getStack().peek().getMember(9, "rsh").call(scope)));
+        opcodeRegister.registerOp("lsh", "pop two objects from the stack left shift.", scope -> scope.getStack().push(scope.getStack().peek().getMember(10, "lsh").call(scope)));
         opcodeRegister.registerOp("not", "pop an object from the stack and perform bitwise not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(11, "not").call(scope)));
         opcodeRegister.registerOp("ngt", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
-
-        opcodeRegister.registerOp("grt", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
-        opcodeRegister.registerOp("lst", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
-        opcodeRegister.registerOp("eql", "pop an object from the stack and perform logical not on it.", scope -> scope.getStack().push(scope.getStack().peek().getMember(12, "ngt").call(scope)));
 
         opcodeRegister.registerOp("dup1", "duplicate the first stack element (by reference).", scope -> scope.getStack().dup());
         opcodeRegister.registerOp("dup2", "duplicate the second stack element (by reference).", scope -> scope.getStack().dup(2));
