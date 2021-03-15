@@ -305,6 +305,17 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         // a valid mocha payload
         private byte payload[];
 
+        public PayloadTransaction() {
+            this(0, 0, 0, new byte[0]);
+        }
+
+        public PayloadTransaction(long value, long fee, long nonce, byte payload[]) {
+            this.value  = value;
+            this.fee    = fee;
+            this.nonce  = nonce;
+            this.payload= payload;
+        }
+
         @Override
         public int getFlags() {
             return 0;
