@@ -427,12 +427,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
-
         }
 
         @Override
         public void read(InputStream stream) throws IOException, WolkenException {
-
         }
 
         @Override
@@ -442,7 +440,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public int getSerialNumber() {
-            return 0;
+            return -1;
         }
     }
 }
