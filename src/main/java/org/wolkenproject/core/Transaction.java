@@ -25,6 +25,13 @@ public class Transaction extends SerializableI implements Comparable<Transaction
         public abstract void write(OutputStream stream) throws IOException;
     }
 
+    public static class Magic {
+        public static final int
+        None                    = 0x0,
+        BasicTransaction        = 0x1,
+        BasicFlaggedTransaction = 0x2
+    }
+
     public static int UniqueIdentifierLength = 32;
     // can be represented by 1 - 4 bytes
     // version = 1 skips flags all-together
