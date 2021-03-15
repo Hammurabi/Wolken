@@ -3,6 +3,7 @@ package org.wolkenproject.serialization;
 import org.wolkenproject.exceptions.InvalidSerialNumberException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,10 +35,9 @@ public class SerializationFactory {
     }
 
     public <Type extends SerializableI> Type fromStream(InputStream stream) throws IOException, WolkenException {
-        byte magicBytes[] = new byte[4];
-        stream.read(magicBytes);
+        int magic = VarInt.readCompactUInt32(false, stream);
 
-        return fromStream(Utils.makeInt(magicBytes), stream);
+        return fromStream(magic, stream);
     }
 
     public <Type extends SerializableI> Type fromStream(int magic, InputStream stream) throws IOException, WolkenException {
