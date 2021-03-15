@@ -164,7 +164,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public int getSerialNumber() {
-            return 0;
+            return Context.getInstance().getSerialFactory().getSerialNumber(MintTransaction.class);
         }
     }
 
