@@ -28,6 +28,11 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     public static int UniqueIdentifierLength = 32;
     // can be represented by 1 - 4 bytes
     // version = 1 skips flags all-together
+
+    // this should not be treated as a network version
+    // transaction versions should be treated as VARINT
+    // magic numbers that hint at the internal transaction
+    // structure.
     private int version;
     // anything below here is optional
 
