@@ -138,7 +138,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public long getTransactionFee() {
-            return value;
+            return fee;
         }
 
         @Override
