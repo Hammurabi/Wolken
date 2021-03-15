@@ -205,7 +205,7 @@ public class VarInt {
             byte remaining[] = new byte[length];
             stream.read(remaining);
 
-            return Utils.makeInt(Utils.concatenate(new byte[] {(byte) value}, remaining));
+            return Utils.makeInt(Utils.conditionalExpand(8, Utils.concatenate(new byte[] {(byte) value}, remaining)));
         }
     }
 }
