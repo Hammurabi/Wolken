@@ -80,7 +80,7 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return new Transaction();
+        return (Type) new Transaction();
     }
 
     @Override
