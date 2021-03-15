@@ -103,7 +103,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 //        factory.registerClass(FlaggedTransaction.class, new FlaggedTransaction());
     }
 
-    public static final class Mint extends Transaction {
+    public static final class MintTransaction extends Transaction {
     }
 
     // this is a basic transaction
