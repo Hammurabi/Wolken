@@ -14,6 +14,14 @@ public class MochaObject {
     private static final MochaObject    fn_mul          = createFunction(scope -> { return scope.getStack().rot().pop().mul(scope.getStack().pop()); });
     private static final MochaObject    fn_div          = createFunction(scope -> { return scope.getStack().rot().pop().div(scope.getStack().pop()); });
     private static final MochaObject    fn_mod          = createFunction(scope -> { return scope.getStack().rot().pop().mod(scope.getStack().pop()); });
+    private static final MochaObject    fn_and          = createFunction(scope -> { return scope.getStack().rot().pop().and(scope.getStack().pop()); });
+    private static final MochaObject    fn_or           = createFunction(scope -> { return scope.getStack().rot().pop().or (scope.getStack().pop()); });
+    private static final MochaObject    fn_xor          = createFunction(scope -> { return scope.getStack().rot().pop().xor(scope.getStack().pop()); });
+    private static final MochaObject    fn_shf          = createFunction(scope -> { return scope.getStack().rot().pop().arithmeticShift(scope.getStack().pop()); });
+    private static final MochaObject    fn_rsh          = createFunction(scope -> { return scope.getStack().rot().pop().shiftRight(scope.getStack().pop()); });
+    private static final MochaObject    fn_lsh          = createFunction(scope -> { return scope.getStack().rot().pop().shiftLeft(scope.getStack().pop()); });
+    private static final MochaObject    fn_not          = createFunction(scope -> { return scope.getStack().rot().pop().not(); });
+    private static final MochaObject    fn_ngt          = createFunction(scope -> { return scope.getStack().rot().pop().negate(); });
     private static final MochaCallable  defaultCallable = (proc)->{ return null; };
     private static final String         undefined       = "undefined";
     private MochaObject     members[];
@@ -114,9 +122,9 @@ public class MochaObject {
     public MochaObject mul(MochaObject other) throws MochaException { return this; }
     public MochaObject div(MochaObject other) throws MochaException { return this; }
     public MochaObject mod(MochaObject other) throws MochaException { return this; }
-    public MochaObject shiftRight(MochaObject other, boolean sign) throws MochaException { return this; }
-    public MochaObject shiftLeft(MochaObject other, boolean sign) throws MochaException { return this; }
-    public MochaObject arithmeticShift(MochaObject other, boolean sign) throws MochaException { return this; }
+    public MochaObject shiftRight(MochaObject other) throws MochaException { return this; }
+    public MochaObject shiftLeft(MochaObject other) throws MochaException { return this; }
+    public MochaObject arithmeticShift(MochaObject other) throws MochaException { return this; }
     // equals (x==y)
     public MochaObject equal(MochaObject other) throws MochaException { return this; }
     // and (x&y)
