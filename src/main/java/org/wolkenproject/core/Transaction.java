@@ -97,6 +97,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         // the recipient
         private byte recipient[];
         // a small data-dump for the miner
+        // can be used as an extra nonce
         private byte dump[];
 
         private MintTransaction() {
