@@ -11,6 +11,7 @@ public class Address {
         this.address = address;
     }
 
+    // return an address object from a key
     public static Address generate(Key key) {
         if (key == null) {
             return null;
@@ -21,6 +22,11 @@ public class Address {
 
         // return a hash160 of the key
         return new Address(HashUtil.hash160(encodedKey));
+    }
+
+    // return an address object from a 'raw' non-encoded 20 byte address
+    public static Address fromRaw(byte[] rawBytes) {
+        return new Address(rawBytes);
     }
 
     public byte[] generate(byte prefix, byte publicKeyBytes[]) {
