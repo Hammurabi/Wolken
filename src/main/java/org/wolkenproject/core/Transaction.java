@@ -145,7 +145,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public boolean verify() {
-            return false;
+            return dump.length <= 8192;
         }
 
         @Override
