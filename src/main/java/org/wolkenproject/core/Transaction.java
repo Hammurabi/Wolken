@@ -72,7 +72,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
     // a transaction that creates a contract
     public static Transaction newPayload(long amount, byte payLoad[]) {
-        return new Transaction();
+        return new PayloadTransaction();
     }
 
     // a purely monetary transaction
