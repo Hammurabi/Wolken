@@ -96,18 +96,14 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
             outputs[i] = new Output(outputValue, Script.newP2PKH(addresses[i]));
         }
-
-        return new org.wolkenproject.core.transactions.Transaction(
-                Context.getInstance().getNetworkParameters().getVersion(),
-                Flags.RelativeLockTime,
-                Context.getInstance().getNetworkParameters().getCoinbaseLockTime(),
-                inputs,
-                outputs);
     }
 
     public static final void register(SerializationFactory factory) {
         factory.registerClass(BasicTransaction.class, new BasicTransaction());
 //        factory.registerClass(FlaggedTransaction.class, new FlaggedTransaction());
+    }
+
+    public static final class Mint extends Transaction {
     }
 
     // this is a basic transaction
@@ -192,6 +188,61 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private RecoverableSignature signature;
         // a valid mocha payload
         private byte payload[];
+
+        @Override
+        public int getFlags() {
+            return 0;
+        }
+
+        @Override
+        public long getTransactionValue() {
+            return 0;
+        }
+
+        @Override
+        public long getTransactionFee() {
+            return 0;
+        }
+
+        @Override
+        public byte[] getPayload() {
+            return new byte[0];
+        }
+
+        @Override
+        public boolean verify() {
+            return false;
+        }
+
+        @Override
+        public Address getSender() throws WolkenException {
+            return null;
+        }
+
+        @Override
+        public Address getRecipient() {
+            return null;
+        }
+
+        @Override
+        public void write(OutputStream stream) throws IOException, WolkenException {
+
+        }
+
+        @Override
+        public void read(InputStream stream) throws IOException, WolkenException {
+
+        }
+
+        @Override
+        public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+            return null;
+        }
+
+        @Override
+        public int getSerialNumber() {
+            return 0;
+        }
     }
 
     // this is a modular transaction
