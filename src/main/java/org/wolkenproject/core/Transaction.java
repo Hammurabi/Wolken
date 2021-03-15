@@ -213,12 +213,20 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
         @Override
         public void read(InputStream stream) throws IOException {
+            stream.read(recipient);
+            value   = VarInt.readCompactUInt64(false, stream);
+            fee     = VarInt.readCompactUInt64(false, stream);
+            int v   = stream.read();
+            byte r[]= new byte[32];
+            byte s[]= new byte[32];
 
+            stream.read(r);
+            stream.read(s);
+            recoverableSignature = new RecoverableSignature((byte) v, r, s);
         }
 
         @Override
         public void write(OutputStream stream) throws IOException {
-
         }
     }
 }
