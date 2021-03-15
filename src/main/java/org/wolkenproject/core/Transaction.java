@@ -153,12 +153,13 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void read(InputStream stream) throws IOException, WolkenException {
-
+            value = VarInt.readCompactUInt64(false, stream);
+            stream.read(recipient);
         }
 
         @Override
         public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-            return null;
+            return new MintTransaction();
         }
 
         @Override
