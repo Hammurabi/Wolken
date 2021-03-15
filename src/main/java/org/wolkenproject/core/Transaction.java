@@ -80,23 +80,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return new BasicTransaction(recipient, amount, fee);
     }
 
-    public static Transaction newCoinbase(int blockHeight, String msg, long reward, Address addresses[]) {
-        Input inputs[] = { new Input(new byte[UniqueIdentifierLength], 0, Utils.concatenate(Utils.takeApart(blockHeight), msg.getBytes())) };
-        Output outputs[] = new Output[addresses.length];
-
-        long rewardPerAddress   = reward / addresses.length;
-        long change             = reward - (addresses.length * rewardPerAddress);
-
-        for (int i = 0; i < addresses.length; i ++)
-        {
-            long outputValue = rewardPerAddress;
-            if (i == 0)
-            {
-                outputValue += change;
-            }
-
-            outputs[i] = new Output(outputValue, Script.newP2PKH(addresses[i]));
-        }
+    public static Transaction newCoinbase(String msg, long reward, Address addresses) {
+        return new MintTransaction(reward, addresses.getRaw(), msg.getBytes());
     }
 
     public static final void register(SerializationFactory factory) {
@@ -115,12 +100,13 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private byte dump[];
 
         private MintTransaction() {
-            this(0, new byte[Address.RawLength]);
+            this(0, new byte[Address.RawLength], new byte[0]);
         }
 
-        private MintTransaction(long value, byte recipient[]) {
-            this.value = value;
-            this.recipient = recipient;
+        private MintTransaction(long value, byte recipient[], byte dump[]) {
+            this.value      = value;
+            this.recipient  = recipient;
+            this.dump       = dump;
         }
 
         @Override
