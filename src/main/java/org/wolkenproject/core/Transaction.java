@@ -120,15 +120,15 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     }
 
     public long getTransactionValue() {
-        return value;
+        return transactionContent.getTransactionValue();
     }
 
     public long getFee() {
-        return fee;
+        return transactionContent.getFee();
     }
 
     public byte[] getPayload() {
-        return payload;
+        return transactionContent.getPayload();
     }
 
     public byte[] getTransactionID() {
