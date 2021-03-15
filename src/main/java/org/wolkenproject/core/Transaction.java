@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.wolkenproject.core.script.Script;
+import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.HashUtil;
@@ -13,6 +14,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Transaction extends SerializableI implements Comparable<Transaction> {
+    public static class TransactionContent {
+    }
+
     public static int UniqueIdentifierLength = 32;
     // can be represented by 1 - 4 bytes
     // version = 1 skips flags all-together
@@ -35,10 +39,8 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     // value
     private long fee;
 
-    // signature data
-    private byte v;
-    private byte r[];
-    private byte s[];
+    // a recoverable ec signature
+    private RecoverableSignature recoverableSignature;
 
     // payload to execute
     private byte payload[];
@@ -55,9 +57,9 @@ public class Transaction extends SerializableI implements Comparable<Transaction
         if (version == 0x1) {
             stream.write(recipient);
             VarInt.writeCompactUInt64(value, false, stream);
-            stream.write(v);
-            stream.write(r);
-            stream.write(s);
+            stream.write(recoverableSignature.getV());
+            stream.write(recoverableSignature.getR());
+            stream.write(recoverableSignature.getS());
             VarInt.writeCompactUInt32(payload.length, false, stream);
             if (payload.length > 0) {
                 stream.write(payload);
@@ -70,7 +72,6 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
-
     }
 
     @Override
