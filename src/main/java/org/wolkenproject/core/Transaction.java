@@ -294,12 +294,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         // a recoverable ec signature
         private RecoverableSignature signature;
 
-        public BasicTransaction() {
-            this(new byte[Address.RawLength], 0, 0, 0);
+        public BasicTransactionToAlias() {
+            this(0, 0, 0, 0);
         }
 
-        public BasicTransaction(byte recipient[], long value, long fee, long nonce) {
-            this.recipient  = recipient;
+        public BasicTransactionToAlias(long alias, long value, long fee, long nonce) {
+            this.alias      = alias;
             this.value      = value;
             this.fee        = fee;
             this.nonce      = nonce;
@@ -344,7 +344,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public Address getRecipient() {
-            return Address.fromRaw(recipient);
+            return Context.getInstance().getDatabase().getAddressFromAlias(alias);
         }
 
         @Override
