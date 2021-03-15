@@ -227,8 +227,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
     public static final void register(SerializationFactory factory) {
         factory.registerClass(BasicTransaction.class, new BasicTransaction());
+        factory.registerClass(FlaggedTransaction.class, new FlaggedTransaction());
     }
 
-    public static final class BasicTransaction {
+    public static final class BasicTransaction extends Transaction {
+    }
+
+    public static final class FlaggedTransaction extends Transaction {
     }
 }
