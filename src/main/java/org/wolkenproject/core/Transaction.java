@@ -96,6 +96,9 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
             // read the payload
             if (hasFlag(Flags.MochaPayload)) {
+                int length = VarInt.readCompactUInt32(false, stream);
+                payload     = new byte[length];
+                stream.read(payload);
             }
         }
     }
