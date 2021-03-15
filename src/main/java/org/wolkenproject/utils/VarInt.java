@@ -187,7 +187,25 @@ public class VarInt {
         }
     }
 
-    public static long readCompactUInt64(boolean b, InputStream stream) {
-        return 0;
+    public static long readCompactUInt64(boolean preserveAllBits, InputStream stream) {
+        if (preserveAllBits) {
+            int numBytes = stream.read();
+            byte bytes[] = new byte[numBytes + 1];
+            stream.read(bytes);
+
+            return Utils.makeInt(Utils.conditionalExpand(4, bytes));
+        } else {
+            int test    = stream.read();
+            int value   = test & 0x3F;
+            int length  = test >> 5;
+            if (length == 0) {
+                return value;
+            }
+
+            byte remaining[] = new byte[length];
+            stream.read(remaining);
+
+            return Utils.makeInt(Utils.concatenate(new byte[] {(byte) value}, remaining));
+        }
     }
 }
