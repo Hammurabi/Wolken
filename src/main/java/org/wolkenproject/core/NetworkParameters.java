@@ -178,4 +178,8 @@ public class NetworkParameters {
     public Address[] getFoundingAddresses() {
         return new Address[] {};
     }
+
+    public long getMinimumTransactionFee() {
+        return 0;
+    }
 }
