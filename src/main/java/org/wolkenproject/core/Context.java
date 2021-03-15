@@ -86,7 +86,7 @@ public class Context {
         opcodeRegister.registerOp("halt", "stop virtual process (and sub-processes).", 1, scope -> scope.stopProcesses(scope.getProgramCounter().nextByte()));
         opcodeRegister.registerOp("pop", "pop the top element from the stack.", scope -> scope.getStack().pop());
 
-        opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, scope -> scope.getStack().pop().call(scope));
+        opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, scope -> scope.getStack().push(scope.getStack().pop().call(scope)));
 
         opcodeRegister.registerOp("load", "load an object from an offset.", 2, scope -> scope.getStack().pop().getMember(scope.getProgramCounter().nextUnsignedShort()));
         opcodeRegister.registerOp("store", "store an object to an offset.", 2, scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextUnsignedShort(), scope.getStack().pop()));
