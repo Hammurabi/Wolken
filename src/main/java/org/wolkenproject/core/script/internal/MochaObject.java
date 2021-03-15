@@ -28,7 +28,7 @@ public class MochaObject {
     private MochaCallable   callable;
 
     public MochaObject() {
-        this(defaultCallable, true);
+        this(defaultCallable);
     }
 
     public MochaObject(MochaCallable callable) {
