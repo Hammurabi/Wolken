@@ -12,7 +12,7 @@ public class Address {
     }
 
     // return an address object from a key
-    public static Address generate(Key key) {
+    public static Address fromKey(Key key) {
         if (key == null) {
             return null;
         }
@@ -29,7 +29,7 @@ public class Address {
         return new Address(rawBytes);
     }
 
-    public byte[] generate(byte prefix, byte publicKeyBytes[]) {
+    public byte[] fromKey(byte prefix, byte publicKeyBytes[]) {
         byte prefixed[] = Utils.concatenate(new byte[] { prefix }, HashUtil.hash160(publicKeyBytes) );
         return Utils.concatenate(prefixed, Utils.trim(HashUtil.sha256d(prefixed), 0, 4));
     }
