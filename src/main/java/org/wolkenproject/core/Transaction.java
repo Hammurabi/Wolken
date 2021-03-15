@@ -50,7 +50,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract long getTransactionFee();
     public abstract byte[] getPayload();
     public abstract boolean verify();
-    public abstract Address getSender();
+    public abstract Address getSender() throws WolkenException;
     public abstract Address getRecipient();
 
     // multiple recipients and senders might be possible in the future
@@ -120,6 +120,66 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private long fee;
         // a recoverable ec signature
         private RecoverableSignature signature;
+
+        @Override
+        public int getFlags() {
+            return 0;
+        }
+
+        @Override
+        public long getTransactionValue() {
+            return value;
+        }
+
+        @Override
+        public long getTransactionFee() {
+            return value;
+        }
+
+        @Override
+        public byte[] getPayload() {
+            return new byte[0];
+        }
+
+        @Override
+        public boolean verify() {
+            return false;
+        }
+
+        @Override
+        public Address getSender() throws WolkenException {
+            return Address.generate(signature.recover(asByteArray()));
+        }
+
+        @Override
+        public Address getRecipient() {
+            return null;
+        }
+
+        @Override
+        public int compareTo(@org.jetbrains.annotations.NotNull Transaction transaction) {
+            return 0;
+        }
+
+        @Override
+        public void write(OutputStream stream) throws IOException, WolkenException {
+
+        }
+
+        @Override
+        public void read(InputStream stream) throws IOException, WolkenException {
+
+        }
+
+        @Override
+        public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+            return null;
+        }
+
+        @Override
+        public int getSerialNumber() {
+            return 0;
+        }
     }
 
     // this is a basic payload transaction
