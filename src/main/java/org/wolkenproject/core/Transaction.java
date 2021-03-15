@@ -111,6 +111,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private long value;
         // the recipient
         private byte recipient[];
+        // a small data-dump for the miner
+        private byte dump[];
 
         private MintTransaction() {
             this(0, new byte[Address.RawLength]);
