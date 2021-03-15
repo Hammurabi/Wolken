@@ -172,7 +172,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public void read(InputStream stream) throws IOException, WolkenException {
             value = VarInt.readCompactUInt64(false, stream);
-            stream.read(recipient);
+            checkFullyRead(stream.read(recipient), Address.RawLength);
             int length = VarInt.readCompactUInt32(false, stream);
             if (length > 0) {
                 checkFullyRead(stream.read(dump), length);
