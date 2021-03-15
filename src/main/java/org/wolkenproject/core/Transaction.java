@@ -75,6 +75,12 @@ public class Transaction extends SerializableI implements Comparable<Transaction
             if (hasFlag(Flags.TwoByteFlags)) {
                 stream.write((flags >> 8) & 0xFF);
             }
+
+            // write the payload
+            if (hasFlag(Flags.MochaPayload)) {
+                VarInt.writeCompactUInt32(payload.length, false, stream);
+                stream.write(payload);
+            }
         }
 
         transactionContent.write(stream);
