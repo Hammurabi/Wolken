@@ -108,7 +108,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     }
 
     public static final class BasicTransaction extends Transaction {
-        // must be 20 bytes
+        // must be a valid 20 byte address hash160(hash256(publicKey))
         private byte recipient[];
         // value
         private long value;
