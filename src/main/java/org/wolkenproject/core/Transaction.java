@@ -30,6 +30,7 @@ public class Transaction extends SerializableI implements Comparable<Transaction
         None                    = 0x0,
         BasicTransaction        = 0x1,
         BasicFlaggedTransaction = 0x2
+        ;
     }
 
     public static int UniqueIdentifierLength = 32;
