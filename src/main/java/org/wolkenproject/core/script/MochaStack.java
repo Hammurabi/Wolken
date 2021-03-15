@@ -49,6 +49,12 @@ public class MochaStack<T> {
         stack.push(stack.get(stack.size() - element));
     }
 
+    public MochaStack<T> rot() throws MochaException {
+        swap(1, 2);
+
+        return this;
+    }
+
     public void rot(int index) {
     }
 
