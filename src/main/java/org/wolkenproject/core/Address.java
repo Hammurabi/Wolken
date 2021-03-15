@@ -48,4 +48,8 @@ public class Address {
 
         return Utils.equals(Utils.trim(HashUtil.sha256d(prefixed), 0, 4), Utils.trim(address, 21, 4));
     }
+
+    public byte[] getRaw() {
+        return address;
+    }
 }
