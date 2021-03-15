@@ -349,7 +349,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
-            stream.write(recipient);
+            VarInt.writeCompactUInt64(alias, false, stream);
             VarInt.writeCompactUInt64(value, false, stream);
             VarInt.writeCompactUInt64(fee, false, stream);
             VarInt.writeCompactUInt64(nonce, false, stream);
