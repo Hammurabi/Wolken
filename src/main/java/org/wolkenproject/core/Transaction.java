@@ -104,9 +104,13 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
     public static final void register(SerializationFactory factory) {
         factory.registerClass(BasicTransaction.class, new BasicTransaction());
-        factory.registerClass(FlaggedTransaction.class, new FlaggedTransaction());
+//        factory.registerClass(FlaggedTransaction.class, new FlaggedTransaction());
     }
 
+    // this is a basic transaction
+    // min size: 1 + 87
+    // avg size: 1 + 97
+    // max size: 1 + 101
     public static final class BasicTransaction extends Transaction {
         // must be a valid 20 byte address hash160(hash256(publicKey))
         private byte recipient[];
@@ -116,10 +120,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private long fee;
         // a recoverable ec signature
         private RecoverableSignature signature;
-        // a mocha payload
-        private byte payload[];
     }
 
+    // this is a modular transaction
+    // it should be possible to use
+    // flags to enable/disable specific
+    // functionality
     public static final class FlaggedTransaction extends Transaction {
         // can be represented by 1 or more bytes
         // there are not enough flags at the moment
