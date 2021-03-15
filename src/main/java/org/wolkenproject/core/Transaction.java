@@ -260,10 +260,20 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
+            stream.write(recipient);
+            VarInt.writeCompactUInt64(value, false, stream);
+            VarInt.writeCompactUInt64(fee, false, stream);
+            VarInt.writeCompactUInt64(nonce, false, stream);
+            signature.write(stream);
         }
 
         @Override
         public void read(InputStream stream) throws IOException, WolkenException {
+            checkFullyRead(stream.read(recipient), 20);
+            value   = VarInt.readCompactUInt64(false, stream);
+            fee     = VarInt.readCompactUInt64(false, stream);
+            nonce   = VarInt.readCompactUInt64(false, stream);
+            signature.read(stream);
         }
 
         @Override
