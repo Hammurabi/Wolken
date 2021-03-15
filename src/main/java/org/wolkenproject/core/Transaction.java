@@ -276,6 +276,106 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
     }
 
+    // this is a basic transaction
+    // min size: 1 + 69
+    // avg size: 1 + 82
+    // max size: 1 + 97
+    public static final class BasicTransactionToAlias extends Transaction {
+        // must be a valid 1-8 byte alias to address
+        // if alias does not exist, the transaction
+        // will be rejected
+        private long alias;
+        // value of the transfer
+        private long value;
+        // maximum fee that sender is willing to pay
+        private long fee;
+        // transaction index
+        private long nonce;
+        // a recoverable ec signature
+        private RecoverableSignature signature;
+
+        public BasicTransaction() {
+            this(new byte[Address.RawLength], 0, 0, 0);
+        }
+
+        public BasicTransaction(byte recipient[], long value, long fee, long nonce) {
+            this.recipient  = recipient;
+            this.value      = value;
+            this.fee        = fee;
+            this.nonce      = nonce;
+            this.signature = new RecoverableSignature();
+        }
+
+        @Override
+        public int getFlags() {
+            return 0;
+        }
+
+        @Override
+        public long getTransactionValue() {
+            return value;
+        }
+
+        @Override
+        public long getTransactionFee() {
+            return fee;
+        }
+
+        @Override
+        public byte[] getPayload() {
+            return new byte[0];
+        }
+
+        @Override
+        public boolean verify() throws WolkenException {
+            // a transfer of 0 with a fee of 0 is not allowed
+            return
+                    (getTransactionValue() + getTransactionFee()) != 0 &&
+                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                    (signature.getR().length == 32) &&
+                    (signature.getS().length == 32) &&
+                    getSender() != null;
+        }
+
+        @Override
+        public Address getSender() throws WolkenException {
+            return Address.fromKey(signature.recover(asByteArray()));
+        }
+
+        @Override
+        public Address getRecipient() {
+            return Address.fromRaw(recipient);
+        }
+
+        @Override
+        public void write(OutputStream stream) throws IOException, WolkenException {
+            stream.write(recipient);
+            VarInt.writeCompactUInt64(value, false, stream);
+            VarInt.writeCompactUInt64(fee, false, stream);
+            VarInt.writeCompactUInt64(nonce, false, stream);
+            signature.write(stream);
+        }
+
+        @Override
+        public void read(InputStream stream) throws IOException, WolkenException {
+            checkFullyRead(stream.read(recipient), 20);
+            value   = VarInt.readCompactUInt64(false, stream);
+            fee     = VarInt.readCompactUInt64(false, stream);
+            nonce   = VarInt.readCompactUInt64(false, stream);
+            signature.read(stream);
+        }
+
+        @Override
+        public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+            return (Type) new BasicTransaction();
+        }
+
+        @Override
+        public int getSerialNumber() {
+            return Context.getInstance().getSerialFactory().getSerialNumber(BasicTransaction.class);
+        }
+    }
+
     // this is a basic payload transaction (contract creation)
     // transfer value is sent to the contract's account
     // min size: 1 + 67 + (varint) + payload
