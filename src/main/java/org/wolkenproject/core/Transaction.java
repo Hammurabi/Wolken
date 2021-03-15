@@ -172,13 +172,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return false;
     }
 
-    public Address getSender() {
-        return null;
-    }
-
-    public Address getRecipient() {
-        return null;
-    }
+    public abstract Address getSender();
+    public abstract Address getRecipient();
 
     // multiple recipients and senders might be possible in the future
     public Address[] getSenders() {
