@@ -1,13 +1,26 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.crypto.Key;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
 public class Address {
     private byte[] address;
 
-    public Address(byte address[]) {
+    private Address(byte address[]) {
         this.address = address;
+    }
+
+    public static Address generate(Key key) {
+        if (key == null) {
+            return null;
+        }
+
+        // get the encoded key (with prefix byte)
+        byte encodedKey[]   = key.getEncoded();
+
+        // return a hash160 of the key
+        return new Address(HashUtil.hash160(encodedKey));
     }
 
     public byte[] generate(byte prefix, byte publicKeyBytes[]) {
