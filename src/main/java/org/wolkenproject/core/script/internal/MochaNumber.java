@@ -138,7 +138,7 @@ public class MochaNumber extends MochaObject {
     }
 
     @Override
-    public MochaObject div(MochaObject other, boolean sign) throws MochaException {
+    public MochaObject div(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
             do_div((MochaNumber) other);
         }
@@ -147,7 +147,7 @@ public class MochaNumber extends MochaObject {
     }
 
     @Override
-    public MochaObject mod(MochaObject other, boolean sign) throws MochaException {
+    public MochaObject mod(MochaObject other) throws MochaException {
         if (other instanceof MochaNumber) {
             do_mod((MochaNumber) other);
         }
