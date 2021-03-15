@@ -358,7 +358,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void read(InputStream stream) throws IOException, WolkenException {
-            checkFullyRead(stream.read(recipient), 20);
+            alias   = VarInt.readCompactUInt64(false, stream);
             value   = VarInt.readCompactUInt64(false, stream);
             fee     = VarInt.readCompactUInt64(false, stream);
             nonce   = VarInt.readCompactUInt64(false, stream);
@@ -372,7 +372,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public int getSerialNumber() {
-            return Context.getInstance().getSerialFactory().getSerialNumber(BasicTransaction.class);
+            return Context.getInstance().getSerialFactory().getSerialNumber(BasicTransactionToAlias.class);
         }
     }
 
