@@ -51,6 +51,7 @@ public class Context {
         this.fileService            = service;
         this.opcodeRegister         = new OpcodeRegister();
 
+        Transaction.register(serializationFactory);
         serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
 
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
@@ -60,7 +61,6 @@ public class Context {
         serializationFactory.registerClass(Input.class, new Input(new byte[Transaction.UniqueIdentifierLength], 0, new byte[0]));
         serializationFactory.registerClass(Output.class, new Output(0, new byte[0]));
 
-        serializationFactory.registerClass(Transaction.class, new Transaction());
         serializationFactory.registerClass(Input.class, new Input(new byte[32], 0, new byte[1]));
         serializationFactory.registerClass(Output.class, new Output(0, new byte[1]));
 
