@@ -31,6 +31,10 @@ public class MochaObject {
         this(defaultCallable, true);
     }
 
+    public MochaObject(MochaCallable callable) {
+        this(callable, true);
+    }
+
     public MochaObject(MochaCallable callable, boolean addBasicFunctions) {
         members         = new MochaObject[0];
         this.callable   = callable;
@@ -76,7 +80,7 @@ public class MochaObject {
     }
 
     public static final MochaObject createFunction(MochaCallable callable) {
-        return new MochaObject(callable);
+        return new MochaObject(callable, false);
     }
 
     public static final MochaObject createObject() {
