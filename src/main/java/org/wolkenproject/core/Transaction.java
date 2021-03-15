@@ -177,20 +177,13 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     }
 
     private static final class BasicTransactionContent extends TransactionContent {
-        // can be more than one recipient if FLAG&MULTIPLE_RECIPIENTS==MULTIPLE_RECIPIENTS
         // must be 20 bytes
         private byte recipient[];
-
         // value
         private long value;
-
-        // value
+        // maximum fee that sender is willing to pay
         private long fee;
-
         // a recoverable ec signature
         private RecoverableSignature recoverableSignature;
-
-        // payload to execute
-        private byte payload[];
     }
 }
