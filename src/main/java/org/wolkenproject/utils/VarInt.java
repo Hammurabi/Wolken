@@ -176,8 +176,11 @@ public class VarInt {
             int test    = stream.read();
             int value   = test & 0x3F;
             int length  = test >> 5;
+            if (length == 0) {
+                return value;
+            }
 
-
+            
         }
 
         return 0;
