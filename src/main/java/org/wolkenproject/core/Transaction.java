@@ -64,8 +64,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     }
 
     // a purely monetary transaction
-    public static Transaction newTransfer(byte recipient[], long amount, long fee) {
-        return new Transaction();
+    public static Transaction newTransfer(Address recipient, long amount, long fee) {
+        return new BasicTransaction(recipient, amount, fee);
     }
 
     public static Transaction newCoinbase(int blockHeight, String msg, long reward, Address addresses[]) {
