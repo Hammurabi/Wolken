@@ -70,7 +70,10 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     public void read(InputStream stream) throws IOException, WolkenException {
         version = VarInt.readCompactUInt32(false, stream);
 
-        if (version == 0x2) {
+        if (version == 0x1) {
+            transactionContent = new BasicTransactionContent();
+            transactionContent.read(stream);
+        } else if (version == 0x2) {
             flags = stream.read();
 
             if (hasFlag(Flags.TwoByteFlags)) {
