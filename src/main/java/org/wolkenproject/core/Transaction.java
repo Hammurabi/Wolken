@@ -1,6 +1,5 @@
 package org.wolkenproject.core;
 
-import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.wolkenproject.core.script.Script;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.WolkenException;
@@ -16,10 +15,11 @@ import java.util.List;
 
 public class Transaction extends SerializableI implements Comparable<Transaction> {
     public static abstract class TransactionContent {
-        public List<Account> getAccountChanges();
-        public long getTransactionValue();
-        public long getFee();
-        public byte[] getPayload();
+        public abstract boolean verify();
+        public abstract List<Account> getAccountChanges();
+        public abstract long getTransactionValue();
+        public abstract long getFee();
+        public abstract byte[] getPayload();
     }
 
     public static int UniqueIdentifierLength = 32;
