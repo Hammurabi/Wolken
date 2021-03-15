@@ -316,6 +316,14 @@ public class Utils {
         return (int) (System.currentTimeMillis() / 1000) - 1048035600;
     }
 
+    public static byte[] conditionalExpand(int newLength, byte[] bytes) {
+        if (newLength == bytes.length) {
+            return bytes;
+        }
+
+        return concatenate(new byte[newLength - bytes.length], bytes);
+    }
+
     public static byte[] pad(int padCount, byte[] bytes) {
         return concatenate(new byte[padCount], bytes);
     }
