@@ -12,6 +12,10 @@ public class MochaStack<T> {
     }
 
     public void push(T element) {
+        if (element == null) {
+            return;
+        }
+
         stack.push(element);
     }
 
