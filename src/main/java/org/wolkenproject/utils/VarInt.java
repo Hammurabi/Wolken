@@ -174,7 +174,7 @@ public class VarInt {
             return Utils.makeInt(Utils.conditionalExpand(4, bytes));
         } else {
             int test    = stream.read();
-            int value   = test & 0x1F;
+            int value   = test & 0x3F;
             int length  = test >> 5;
 
 
