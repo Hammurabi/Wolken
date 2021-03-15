@@ -204,6 +204,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         // a recoverable ec signature
         private RecoverableSignature signature;
 
+        public BasicTransaction() {
+            this(new byte[Address.RawLength], 0, 0);
+        }
+
         public BasicTransaction(byte recipient[], long value, long fee) {
             this.recipient  = recipient;
             this.value      = value;
@@ -256,7 +260,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-            return null;
+            return new BasicTransaction();
         }
 
         @Override
