@@ -9,10 +9,11 @@ import org.wolkenproject.utils.Utils;
 import java.util.Arrays;
 
 public class MochaObject {
-    private static final MochaObject    fn_add          = createFunction(scope -> { return scope.getStack().rot().pop(); });
-    private static final MochaObject    fn_add          = createFunction((proc)->{ return null; });
-    private static final MochaObject    fn_add          = createFunction((proc)->{ return null; });
-    private static final MochaObject    fn_add          = createFunction((proc)->{ return null; });
+    private static final MochaObject    fn_add          = createFunction(scope -> { return scope.getStack().rot().pop().add(scope.getStack().pop()); });
+    private static final MochaObject    fn_sub          = createFunction(scope -> { return scope.getStack().rot().pop().sub(scope.getStack().pop()); });
+    private static final MochaObject    fn_mul          = createFunction(scope -> { return scope.getStack().rot().pop().mul(scope.getStack().pop()); });
+    private static final MochaObject    fn_div          = createFunction(scope -> { return scope.getStack().rot().pop().div(scope.getStack().pop()); });
+    private static final MochaObject    fn_mod          = createFunction(scope -> { return scope.getStack().rot().pop().mod(scope.getStack().pop()); });
     private static final MochaCallable  defaultCallable = (proc)->{ return null; };
     private static final String         undefined       = "undefined";
     private MochaObject     members[];
@@ -111,8 +112,8 @@ public class MochaObject {
     public MochaObject add(MochaObject other) throws MochaException { return this; }
     public MochaObject sub(MochaObject other) throws MochaException { return this; }
     public MochaObject mul(MochaObject other) throws MochaException { return this; }
-    public MochaObject div(MochaObject other, boolean sign) throws MochaException { return this; }
-    public MochaObject mod(MochaObject other, boolean sign) throws MochaException { return this; }
+    public MochaObject div(MochaObject other) throws MochaException { return this; }
+    public MochaObject mod(MochaObject other) throws MochaException { return this; }
     public MochaObject shiftRight(MochaObject other, boolean sign) throws MochaException { return this; }
     public MochaObject shiftLeft(MochaObject other, boolean sign) throws MochaException { return this; }
     public MochaObject arithmeticShift(MochaObject other, boolean sign) throws MochaException { return this; }
