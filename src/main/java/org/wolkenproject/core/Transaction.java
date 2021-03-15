@@ -14,36 +14,6 @@ import java.io.OutputStream;
 import java.util.List;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
-    private static abstract class TransactionContent {
-        public abstract boolean verify();
-        public abstract List<Account> getAccountChanges();
-        public abstract long getTransactionValue();
-        public abstract long getTransactionFee();
-        public abstract byte[] getPayload();
-
-        public abstract void read(InputStream stream) throws IOException;
-        public abstract void write(OutputStream stream) throws IOException;
-    }
-
-    public static class Magic {
-        public static final int
-        None                    = 0x0,
-        BasicTransaction        = 0x1,
-        // the reason this is not
-        // a flag by itself is that
-        // flags should be used for
-        // modularity, and version
-        // numbers should be used
-        // to quickly distinguish
-        // transaction types, the
-        // point of aliases is to make
-        // transactions smaller, therefore
-        // it has a special version number
-        BasicTransactionToAlias = 0x2,
-        BasicFlaggedTransaction = 0x3
-        ;
-    }
-
     public static int UniqueIdentifierLength = 32;
     // can be represented by 1 - 4 bytes
     // version = 1 skips flags all-together
@@ -254,62 +224,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                 outputs);
     }
 
-    private static final class BasicTransactionContent extends TransactionContent {
-        // must be 20 bytes
-        private byte recipient[];
-        // value
-        private long value;
-        // maximum fee that sender is willing to pay
-        private long fee;
-        // a recoverable ec signature
-        private RecoverableSignature recoverableSignature;
-
-        @Override
-        public boolean verify() {
-            return false;
-        }
-
-        @Override
-        public List<Account> getAccountChanges() {
-            return null;
-        }
-
-        @Override
-        public long getTransactionValue() {
-            return value;
-        }
-
-        @Override
-        public long getTransactionFee() {
-            return fee;
-        }
-
-        @Override
-        public byte[] getPayload() {
-            return new byte[0];
-        }
-
-        @Override
-        public void read(InputStream stream) throws IOException {
-            stream.read(recipient);
-            value   = VarInt.readCompactUInt64(false, stream);
-            fee     = VarInt.readCompactUInt64(false, stream);
-            int v   = stream.read();
-            byte r[]= new byte[32];
-            byte s[]= new byte[32];
-
-            stream.read(r);
-            stream.read(s);
-            recoverableSignature = new RecoverableSignature((byte) v, r, s);
-        }
-
-        @Override
-        public void write(OutputStream stream) throws IOException {
-            VarInt.writeCompactUInt64(value, false, stream);
-            VarInt.writeCompactUInt64(fee, false, stream);
-            stream.write(recoverableSignature.getV());
-            stream.write(recoverableSignature.getR());
-            stream.write(recoverableSignature.getS());
-        }
+    public static final void register() {
     }
 }
