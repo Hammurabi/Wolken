@@ -1,15 +1,18 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.crypto.Key;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
+import java.util.Arrays;
+
 public class Address {
     public static final int RawLength = 20;
-    private byte[] address;
+    private byte[] raw;
 
-    private Address(byte address[]) {
-        this.address = address;
+    private Address(byte raw[]) {
+        this.raw = raw;
     }
 
     // return an address object from a key
@@ -50,6 +53,13 @@ public class Address {
     }
 
     public byte[] getRaw() {
-        return address;
+        return raw;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "raw=" + Base58.encode(raw) +
+                '}';
     }
 }
