@@ -158,7 +158,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public Address getRecipient() {
-            return null;
+            return Address.fromRaw(recipient);
         }
 
         @Override
