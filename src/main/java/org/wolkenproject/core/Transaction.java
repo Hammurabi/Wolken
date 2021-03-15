@@ -350,7 +350,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public Address getRecipient() {
-            return null;
+            try {
+                return Address.newContractAddress(getSender().getRaw(), nonce);
+            } catch (WolkenException e) {
+                return null;
+            }
         }
 
         @Override
