@@ -191,9 +191,9 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     }
 
     // this is a basic transaction
-    // min size: 1 + 87
-    // avg size: 1 + 97
-    // max size: 1 + 101
+    // min size: 1 + 88
+    // avg size: 1 + 98
+    // max size: 1 + 109
     public static final class BasicTransaction extends Transaction {
         // must be a valid 20 byte address hash160(hash256(publicKey))
         private byte recipient[];
@@ -201,17 +201,20 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private long value;
         // maximum fee that sender is willing to pay
         private long fee;
+        // transaction index
+        private long nonce;
         // a recoverable ec signature
         private RecoverableSignature signature;
 
         public BasicTransaction() {
-            this(new byte[Address.RawLength], 0, 0);
+            this(new byte[Address.RawLength], 0, 0, 0);
         }
 
-        public BasicTransaction(byte recipient[], long value, long fee) {
+        public BasicTransaction(byte recipient[], long value, long fee, long nonce) {
             this.recipient  = recipient;
             this.value      = value;
             this.fee        = fee;
+            this.nonce      = nonce;
         }
 
         @Override
