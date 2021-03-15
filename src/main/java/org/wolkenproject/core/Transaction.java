@@ -54,7 +54,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract Address getRecipient();
 
     // multiple recipients and senders might be possible in the future
-    public Address[] getSenders() {
+    public Address[] getSenders() throws WolkenException {
         return new Address[] { getSender() };
     }
     public Address[] getRecipients() {
@@ -63,6 +63,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
     public byte[] getTransactionID() {
         return HashUtil.sha256d(asByteArray());
+    }
+
+    @Override
+    public int compareTo(Transaction transaction) {
+        return (getTransactionFee() > transaction.getTransactionFee() ? 1 : -1);
     }
 
 
@@ -154,11 +159,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public Address getRecipient() {
             return null;
-        }
-
-        @Override
-        public int compareTo(@org.jetbrains.annotations.NotNull Transaction transaction) {
-            return 0;
         }
 
         @Override
