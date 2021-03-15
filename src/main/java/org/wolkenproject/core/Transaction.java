@@ -7,6 +7,7 @@ import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -146,6 +147,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
+            VarInt.writeCompactUInt64(value, false, stream);
+            stream.write(recipient);
         }
 
         @Override
