@@ -216,6 +216,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
             this.value      = value;
             this.fee        = fee;
             this.nonce      = nonce;
+            this.signature = new RecoverableSignature();
         }
 
         @Override
