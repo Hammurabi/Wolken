@@ -146,7 +146,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public boolean verify() {
-            return false;
+            // a transfer of 0 with a fee of 0 is not allowed
+            return (getTransactionValue() + getTransactionFee()) != 0;
         }
 
         @Override
