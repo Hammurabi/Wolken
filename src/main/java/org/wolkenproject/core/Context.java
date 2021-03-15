@@ -25,31 +25,31 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Context {
     private static Context instance;
 
-    private Database                database;
-    private NetworkParameters       networkParameters;
-    private ExecutorService         threadPool;
-    private AtomicBoolean           isRunning;
-    private IpAddressList           ipAddressList;
-    private SerializationFactory    serializationFactory;
-    private TransactionPool         transactionPool;
-    private Server                  server;
-    private Address                 payList[];
-    private BlockChain              blockChain;
-    private OpcodeRegister          opcodeRegister;
-    private FileService             fileService;
+    private Database database;
+    private NetworkParameters networkParameters;
+    private ExecutorService threadPool;
+    private AtomicBoolean isRunning;
+    private IpAddressList ipAddressList;
+    private SerializationFactory serializationFactory;
+    private TransactionPool transactionPool;
+    private Server server;
+    private Address payList[];
+    private BlockChain blockChain;
+    private OpcodeRegister opcodeRegister;
+    private FileService fileService;
 
     public Context(FileService service, boolean testNet, Address[] payList) throws WolkenException, IOException {
-        Context.instance            = this;
-        this.database               = new Database(service.newFile("db"));
-        this.networkParameters      = new NetworkParameters(testNet);
-        this.threadPool             = Executors.newFixedThreadPool(3);
-        this.isRunning              = new AtomicBoolean(true);
-        this.ipAddressList          = new IpAddressList(service.newFile("peers"));
-        this.serializationFactory   = new SerializationFactory();
-        this.transactionPool        = new TransactionPool();
-        this.payList                = payList;
-        this.fileService            = service;
-        this.opcodeRegister         = new OpcodeRegister();
+        Context.instance = this;
+        this.database = new Database(service.newFile("db"));
+        this.networkParameters = new NetworkParameters(testNet);
+        this.threadPool = Executors.newFixedThreadPool(3);
+        this.isRunning = new AtomicBoolean(true);
+        this.ipAddressList = new IpAddressList(service.newFile("peers"));
+        this.serializationFactory = new SerializationFactory();
+        this.transactionPool = new TransactionPool();
+        this.payList = payList;
+        this.fileService = service;
+        this.opcodeRegister = new OpcodeRegister();
 
         Transaction.register(serializationFactory);
         serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
@@ -83,16 +83,16 @@ public class Context {
         serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
 
-        opcodeRegister.registerOp("halt", "stop virtual process (and sub-processes).", 1, scope->scope.stopProcesses(scope.getProgramCounter().nextByte()));
+        opcodeRegister.registerOp("halt", "stop virtual process (and sub-processes).", 1, scope -> scope.stopProcesses(scope.getProgramCounter().nextByte()));
 
-        opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, scope->scope.getStack().pop().call(scope));
+        opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, scope -> scope.getStack().pop().call(scope));
 
-        opcodeRegister.registerOp("load", "load an object from an offset.", 2, scope->scope.getStack().pop().getMember(scope.getProgramCounter().nextUnsignedShort()));
-        opcodeRegister.registerOp("store", "store an object to an offset.", 2, scope->scope.getStack().pop().setMember(scope.getProgramCounter().nextUnsignedShort(), scope.getStack().pop()));
+        opcodeRegister.registerOp("load", "load an object from an offset.", 2, scope -> scope.getStack().pop().getMember(scope.getProgramCounter().nextUnsignedShort()));
+        opcodeRegister.registerOp("store", "store an object to an offset.", 2, scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextUnsignedShort(), scope.getStack().pop()));
 
-        opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, scope->scope.getStack().pop().subscriptSet((int) scope.getStack().pop().asInt(), scope.getStack().pop()));
-        opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, scope->scope.getStack().push(scope.getStack().pop().subscriptGet((int) scope.getStack().pop().asInt())));
-        opcodeRegister.registerOp("append", "append an object to an array.", scope->scope.getStack().pop().append(scope.getStack().pop()));
+        opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, scope -> scope.getStack().pop().subscriptSet((int) scope.getStack().pop().asInt(), scope.getStack().pop()));
+        opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, scope -> scope.getStack().push(scope.getStack().pop().subscriptGet((int) scope.getStack().pop().asInt())));
+        opcodeRegister.registerOp("append", "append an object to an array.", scope -> scope.getStack().pop().append(scope.getStack().pop()));
 
         opcodeRegister.registerOp("pushdata", "push an array of bytes of length (8) into the stack.", true, 1, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextByte()))));
         opcodeRegister.registerOp("pushdata2", "push an array of bytes of length (16) into the stack.", true, 2, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextUnsignedShort()))));
@@ -100,24 +100,27 @@ public class Context {
         opcodeRegister.registerOp("push20", "push an array of bytes of length (160) into the stack.", true, 20, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(20))));
 
         opcodeRegister.registerOp("jmp", "jumps to a location in code", scope -> scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()));
-        opcodeRegister.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> { if (!scope.getStack().pop().isTrue()) scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()); });
+        opcodeRegister.registerOp("jnt", "branch operator, jumps if condition is not true.", scope -> {
+            if (!scope.getStack().pop().isTrue())
+                scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort());
+        });
 
-        opcodeRegister.registerOp("const0", "push an integer with value '0' (unsigned).", scope->scope.getStack().push(new MochaNumber(0, false)));
-        opcodeRegister.registerOp("const1", "push an integer with value '1' (unsigned).", scope->scope.getStack().push(new MochaNumber(1, false)));
-        opcodeRegister.registerOp("const2", "push an integer with value '2' (unsigned).", scope->scope.getStack().push(new MochaNumber(2, false)));
-        opcodeRegister.registerOp("const3", "push an integer with value '3' (unsigned).", scope->scope.getStack().push(new MochaNumber(3, false)));
-        opcodeRegister.registerOp("const4", "push an integer with value '4' (unsigned).", scope->scope.getStack().push(new MochaNumber(4, false)));
-        opcodeRegister.registerOp("const5", "push an integer with value '5' (unsigned).", scope->scope.getStack().push(new MochaNumber(5, false)));
-        opcodeRegister.registerOp("const6", "push an integer with value '6' (unsigned).", scope->scope.getStack().push(new MochaNumber(6, false)));
-        opcodeRegister.registerOp("const7", "push an integer with value '7' (unsigned).", scope->scope.getStack().push(new MochaNumber(7, false)));
-        opcodeRegister.registerOp("const8", "push an integer with value '8' (unsigned).", scope->scope.getStack().push(new MochaNumber(8, false)));
-        opcodeRegister.registerOp("const9", "push an integer with value '9' (unsigned).", scope->scope.getStack().push(new MochaNumber(9, false)));
-        opcodeRegister.registerOp("const10", "push an integer with value '10' (unsigned).", scope->scope.getStack().push(new MochaNumber(10, false)));
-        opcodeRegister.registerOp("const11", "push an integer with value '11' (unsigned).", scope->scope.getStack().push(new MochaNumber(11, false)));
-        opcodeRegister.registerOp("const12", "push an integer with value '12' (unsigned).", scope->scope.getStack().push(new MochaNumber(12, false)));
-        opcodeRegister.registerOp("const13", "push an integer with value '13' (unsigned).", scope->scope.getStack().push(new MochaNumber(13, false)));
-        opcodeRegister.registerOp("const14", "push an integer with value '14' (unsigned).", scope->scope.getStack().push(new MochaNumber(14, false)));
-        opcodeRegister.registerOp("const15", "push an integer with value '15' (unsigned).", scope->scope.getStack().push(new MochaNumber(15, false)));
+        opcodeRegister.registerOp("const0", "push an integer with value '0' (unsigned).", scope -> scope.getStack().push(new MochaNumber(0, false)));
+        opcodeRegister.registerOp("const1", "push an integer with value '1' (unsigned).", scope -> scope.getStack().push(new MochaNumber(1, false)));
+        opcodeRegister.registerOp("const2", "push an integer with value '2' (unsigned).", scope -> scope.getStack().push(new MochaNumber(2, false)));
+        opcodeRegister.registerOp("const3", "push an integer with value '3' (unsigned).", scope -> scope.getStack().push(new MochaNumber(3, false)));
+        opcodeRegister.registerOp("const4", "push an integer with value '4' (unsigned).", scope -> scope.getStack().push(new MochaNumber(4, false)));
+        opcodeRegister.registerOp("const5", "push an integer with value '5' (unsigned).", scope -> scope.getStack().push(new MochaNumber(5, false)));
+        opcodeRegister.registerOp("const6", "push an integer with value '6' (unsigned).", scope -> scope.getStack().push(new MochaNumber(6, false)));
+        opcodeRegister.registerOp("const7", "push an integer with value '7' (unsigned).", scope -> scope.getStack().push(new MochaNumber(7, false)));
+        opcodeRegister.registerOp("const8", "push an integer with value '8' (unsigned).", scope -> scope.getStack().push(new MochaNumber(8, false)));
+        opcodeRegister.registerOp("const9", "push an integer with value '9' (unsigned).", scope -> scope.getStack().push(new MochaNumber(9, false)));
+        opcodeRegister.registerOp("const10", "push an integer with value '10' (unsigned).", scope -> scope.getStack().push(new MochaNumber(10, false)));
+        opcodeRegister.registerOp("const11", "push an integer with value '11' (unsigned).", scope -> scope.getStack().push(new MochaNumber(11, false)));
+        opcodeRegister.registerOp("const12", "push an integer with value '12' (unsigned).", scope -> scope.getStack().push(new MochaNumber(12, false)));
+        opcodeRegister.registerOp("const13", "push an integer with value '13' (unsigned).", scope -> scope.getStack().push(new MochaNumber(13, false)));
+        opcodeRegister.registerOp("const14", "push an integer with value '14' (unsigned).", scope -> scope.getStack().push(new MochaNumber(14, false)));
+        opcodeRegister.registerOp("const15", "push an integer with value '15' (unsigned).", scope -> scope.getStack().push(new MochaNumber(15, false)));
 
         opcodeRegister.registerOp("bconst", "push an integer of size '8' (unsigned).", 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextByte(), false)));
         opcodeRegister.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextUnsignedShort(), false)));
@@ -126,12 +129,22 @@ public class Context {
         opcodeRegister.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, scope -> scope.getStack().push(new MochaNumber(new BigInteger(1, scope.getProgramCounter().next(16)), false)));
         opcodeRegister.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, scope -> scope.getStack().push(new MochaNumber(new BigInteger(1, scope.getProgramCounter().next(32)), false)));
 
-        opcodeRegister.registerOp("fconst", "push a float of size '32' (unsigned).", 4, scope -> { throw new MochaException("float is not supported at the moment."); });
-        opcodeRegister.registerOp("fconst64", "push a float of size '64' (unsigned).", 8, scope -> { throw new MochaException("float is not supported at the moment."); });
-        opcodeRegister.registerOp("fconst256", "push a float of size '256' (unsigned).", 32, scope -> { throw new MochaException("float is not supported at the moment."); });
+        opcodeRegister.registerOp("fconst", "push a float of size '32' (unsigned).", 4, scope -> {
+            throw new MochaException("float is not supported at the moment.");
+        });
+        opcodeRegister.registerOp("fconst64", "push a float of size '64' (unsigned).", 8, scope -> {
+            throw new MochaException("float is not supported at the moment.");
+        });
+        opcodeRegister.registerOp("fconst256", "push a float of size '256' (unsigned).", 32, scope -> {
+            throw new MochaException("float is not supported at the moment.");
+        });
 
-        opcodeRegister.registerOp("aconst200", "push an address of size '200'.", 25, scope -> { throw new MochaException("address is not supported at the moment."); });
-        opcodeRegister.registerOp("aconst256", "push a hash of size '256'.", 32, scope -> { throw new MochaException("hash256 is not supported at the moment."); });
+        opcodeRegister.registerOp("aconst200", "push an address of size '200'.", 25, scope -> {
+            throw new MochaException("address is not supported at the moment.");
+        });
+        opcodeRegister.registerOp("aconst256", "push a hash of size '256'.", 32, scope -> {
+            throw new MochaException("hash256 is not supported at the moment.");
+        });
         opcodeRegister.registerOp("ecpub", "push a public key of size '264' (compressed).", 33, scope -> scope.getStack().push(new MochaPublicKey(new ECPublicKey(scope.getProgramCounter().next(33)))));
         opcodeRegister.registerOp("ecsig", "push a signature of size '~'.", 73, scope -> scope.getStack().push(new MochaCryptoSignature(new RecoverableSignature((byte) scope.getProgramCounter().nextByte(), scope.getProgramCounter().next(32), scope.getProgramCounter().next(32)))));
 
@@ -195,12 +208,11 @@ public class Context {
         opcodeRegister.registerOp("swap14", "swap two objects (the 1st and 15th) on the stack.", scope -> scope.getStack().swap(1, 15));
         opcodeRegister.registerOp("swap15", "swap two objects (the 1st and 16th) on the stack.", scope -> scope.getStack().swap(1, 16));
 
-        this.server                 = new Server();
-        this.blockChain             = new BlockChain();
+        this.server = new Server();
+        this.blockChain = new BlockChain();
     }
 
-    public void shutDown()
-    {
+    public void shutDown() {
         isRunning.set(false);
         server.shutdown();
         try {
@@ -210,18 +222,15 @@ public class Context {
         }
     }
 
-    public Database getDatabase()
-    {
+    public Database getDatabase() {
         return database;
     }
 
-    public NetworkParameters getNetworkParameters()
-    {
+    public NetworkParameters getNetworkParameters() {
         return networkParameters;
     }
 
-    public static Context getInstance()
-    {
+    public static Context getInstance() {
         return instance;
     }
 
