@@ -16,37 +16,6 @@ import java.util.List;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
-    // can be represented by 1 - 4 bytes
-    // version = 1 skips flags all-together
-
-    // this should not be treated as a network version
-    // transaction versions should be treated as VARINT
-    // magic numbers that hint at the internal transaction
-    // structure.
-    private int version;
-    // anything below here is optional
-
-    // can be represented by 1 or more bytes
-    // there are not enough flags at the moment
-    // therefore it's represented by an int in
-    // this version.
-    private int flags;
-    // must be 20 bytes
-    private byte recipient[];
-    // value
-    private long value;
-    // maximum fee that sender is willing to pay
-    private long fee;
-    // a recoverable ec signature
-    private RecoverableSignature signature;
-    // a mocha payload
-    private byte payload[];
-
-    @Override
-    public int compareTo(Transaction transaction) {
-        return 0;
-    }
-
     public static final class Flags
     {
         public static final int
