@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-public class Transaction extends SerializableI implements Comparable<Transaction> {
+public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     private static abstract class TransactionContent {
         public abstract boolean verify();
         public abstract List<Account> getAccountChanges();
