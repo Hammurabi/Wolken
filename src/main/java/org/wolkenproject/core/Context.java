@@ -84,6 +84,7 @@ public class Context {
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
 
         opcodeRegister.registerOp("halt", "stop virtual process (and sub-processes).", 1, scope -> scope.stopProcesses(scope.getProgramCounter().nextByte()));
+        opcodeRegister.registerOp("pop", "pop the top element from the stack.", scope -> scope.getStack().pop());
 
         opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, scope -> scope.getStack().pop().call(scope));
 
