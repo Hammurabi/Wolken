@@ -145,13 +145,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     }
 
     public int getVersion() {
-        return version;
+        return getSerialNumber();
     }
 
-    public int getFlags() {
-        return flags;
-    }
-
+    public abstract int getFlags();
     public abstract long getTransactionValue();
     public abstract long getTransactionFee();
     public abstract byte[] getPayload();
