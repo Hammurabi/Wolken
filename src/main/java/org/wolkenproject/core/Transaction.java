@@ -104,6 +104,64 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     }
 
     public static final class MintTransaction extends Transaction {
+        // the amount of coins to be minted
+        private long value;
+        // the recipient
+        private byte recipient[];
+
+        @Override
+        public int getFlags() {
+            return 0;
+        }
+
+        @Override
+        public long getTransactionValue() {
+            return value;
+        }
+
+        @Override
+        public long getTransactionFee() {
+            return 0;
+        }
+
+        @Override
+        public byte[] getPayload() {
+            return new byte[0];
+        }
+
+        @Override
+        public boolean verify() {
+            return false;
+        }
+
+        @Override
+        public Address getSender() throws WolkenException {
+            return null;
+        }
+
+        @Override
+        public Address getRecipient() {
+            return Address.fromRaw(recipient);
+        }
+
+        @Override
+        public void write(OutputStream stream) throws IOException, WolkenException {
+        }
+
+        @Override
+        public void read(InputStream stream) throws IOException, WolkenException {
+
+        }
+
+        @Override
+        public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+            return null;
+        }
+
+        @Override
+        public int getSerialNumber() {
+            return 0;
+        }
     }
 
     // this is a basic transaction
