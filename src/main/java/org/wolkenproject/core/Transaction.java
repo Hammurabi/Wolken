@@ -7,12 +7,10 @@ import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
-import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
@@ -153,7 +151,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public Address getSender() throws WolkenException {
-            return Address.generate(signature.recover(asByteArray()));
+            return Address.fromKey(signature.recover(asByteArray()));
         }
 
         @Override
