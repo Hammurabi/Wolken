@@ -4,12 +4,13 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.*;
 
 public abstract class SerializableI {
     public void serialize(OutputStream stream) throws IOException {
-        Utils.writeInt(getSerialNumber(), stream);
+        VarInt.writeCompactUInt32(getSerialNumber(), false, stream);
         byte content[] = asByteArray();
         Utils.writeInt(content.length, stream);
         stream.write(content);
