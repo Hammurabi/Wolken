@@ -180,10 +180,11 @@ public class VarInt {
                 return value;
             }
 
-            
-        }
+            byte remaining[] = new byte[length];
+            stream.read(remaining);
 
-        return 0;
+            return Utils.makeInt(Utils.concatenate(new byte[] {(byte) value}, remaining));
+        }
     }
 
     public static long readCompactUInt64(boolean b, InputStream stream) {
