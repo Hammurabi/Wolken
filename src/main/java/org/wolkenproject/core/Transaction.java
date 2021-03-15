@@ -12,10 +12,14 @@ import org.wolkenproject.utils.VarInt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 public class Transaction extends SerializableI implements Comparable<Transaction> {
     public static abstract class TransactionContent {
-
+        public List<Account> getAccountChanges();
+        public long getTransactionValue();
+        public long getFee();
+        public byte[] getPayload();
     }
 
     public static int UniqueIdentifierLength = 32;
