@@ -52,20 +52,20 @@ public class Scope {
         interruptSignal.set(signal);
     }
 
-    public void checkSig() throws MochaException {
-        MochaObject address     = getStack().pop();
-        MochaObject signature   = getStack().pop();
-        byte signatureData[]    = getSignatureData();
-
-        Key key                 = ((MochaCryptoSignature) signature).getSignature().recover(signatureData);
-
-        if (signature instanceof MochaCryptoSignature) {
-            getStack().push(new MochaBool(false));
-            return;
-        }
-
-        getStack().push(((MochaPublicKey) publicKey).checkSignature((MochaCryptoSignature) signature, signatureData));
-    }
+//    public void checkSig() throws MochaException {
+//        MochaObject address     = getStack().pop();
+//        MochaObject signature   = getStack().pop();
+//        byte signatureData[]    = getSignatureData();
+//
+//        Key key                 = ((MochaCryptoSignature) signature).getSignature().checkSignature(signatureData);
+//
+//        if (signature instanceof MochaCryptoSignature) {
+//            getStack().push(new MochaBool(false));
+//            return;
+//        }
+//
+//        getStack().push(((MochaPublicKey) publicKey).checkSignature((MochaCryptoSignature) signature, signatureData));
+//    }
 
     public void verify() throws InvalidTransactionException, MochaException {
         if (!getStack().pop().isTrue()) {
