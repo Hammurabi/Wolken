@@ -122,6 +122,21 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private RecoverableSignature signature;
     }
 
+    // this is a basic payload transaction
+    // min size: 1 + 67 + (varint) + payload
+    // avg size: 1 + 77 + (varint) + payload
+    // max size: 1 + 81 + (varint) + payload
+    public static final class PayloadTransaction extends Transaction {
+        // value of the transfer
+        private long value;
+        // maximum fee that sender is willing to pay
+        private long fee;
+        // a recoverable ec signature
+        private RecoverableSignature signature;
+        // a valid mocha payload
+        private byte payload[];
+    }
+
     // this is a modular transaction
     // it should be possible to use
     // flags to enable/disable specific
