@@ -204,6 +204,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         // a recoverable ec signature
         private RecoverableSignature signature;
 
+        public BasicTransaction(byte recipient[], long value, long fee) {
+            this.recipient  = recipient;
+            this.value      = value;
+            this.fee        = fee;
+        }
+
         @Override
         public int getFlags() {
             return 0;
