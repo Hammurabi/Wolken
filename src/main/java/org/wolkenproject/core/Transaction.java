@@ -260,7 +260,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-            return new BasicTransaction();
+            return (Type) new BasicTransaction();
         }
 
         @Override
