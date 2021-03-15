@@ -50,6 +50,12 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     // this version.
     private int flags;
 
+    // maximum fee that sender is willing to pay
+    private long fee;
+
+    // a mocha payload
+    private byte payload[];
+
     // content of the transaction can vary depending on version+flags
     private TransactionContent transactionContent;
 
@@ -78,14 +84,18 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     public void read(InputStream stream) throws IOException, WolkenException {
         version = VarInt.readCompactUInt32(false, stream);
 
-        if (version == 0x1) {
+        if (version == Magic.BasicTransaction) {
             transactionContent = new BasicTransactionContent();
             transactionContent.read(stream);
-        } else if (version == 0x2) {
+        } else if (version == Magic.BasicFlaggedTransaction) {
             flags = stream.read();
 
             if (hasFlag(Flags.TwoByteFlags)) {
                 flags |= stream.read() << 8;
+            }
+
+            // read the payload
+            if (hasFlag(Flags.MochaPayload)) {
             }
         }
     }
@@ -258,6 +268,11 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
         @Override
         public void write(OutputStream stream) throws IOException {
+            VarInt.writeCompactUInt64(value, false, stream);
+            VarInt.writeCompactUInt64(fee, false, stream);
+            stream.write(recoverableSignature.getV());
+            stream.write(recoverableSignature.getR());
+            stream.write(recoverableSignature.getS());
         }
     }
 }
