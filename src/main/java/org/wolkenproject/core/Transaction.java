@@ -112,6 +112,15 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         // the recipient
         private byte recipient[];
 
+        private MintTransaction() {
+            this(0, new byte[Address.RawLength]);
+        }
+
+        private MintTransaction(long value, byte recipient[]) {
+            this.value = value;
+            this.recipient = recipient;
+        }
+
         @Override
         public int getFlags() {
             return 0;
