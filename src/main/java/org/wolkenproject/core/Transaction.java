@@ -132,5 +132,65 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         // therefore it's represented by an int in
         // this version.
         private int flags;
+
+        @Override
+        public int getFlags() {
+            return 0;
+        }
+
+        @Override
+        public long getTransactionValue() {
+            return 0;
+        }
+
+        @Override
+        public long getTransactionFee() {
+            return 0;
+        }
+
+        @Override
+        public byte[] getPayload() {
+            return new byte[0];
+        }
+
+        @Override
+        public boolean verify() {
+            return false;
+        }
+
+        @Override
+        public Address getSender() {
+            return null;
+        }
+
+        @Override
+        public Address getRecipient() {
+            return null;
+        }
+
+        @Override
+        public int compareTo(Transaction transaction) {
+            return 0;
+        }
+
+        @Override
+        public void write(OutputStream stream) throws IOException, WolkenException {
+
+        }
+
+        @Override
+        public void read(InputStream stream) throws IOException, WolkenException {
+
+        }
+
+        @Override
+        public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+            return null;
+        }
+
+        @Override
+        public int getSerialNumber() {
+            return 0;
+        }
     }
 }
