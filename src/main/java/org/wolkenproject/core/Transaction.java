@@ -48,21 +48,14 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         VarInt.writeCompactUInt32(version, false, stream);
-
-        if (version == 0x1) {
-            stream.write(recipient);
-            VarInt.writeCompactUInt64(value, false, stream);
-            stream.write(recoverableSignature.getV());
-            stream.write(recoverableSignature.getR());
-            stream.write(recoverableSignature.getS());
-            VarInt.writeCompactUInt32(payload.length, false, stream);
-            if (payload.length > 0) {
-                stream.write(payload);
-            }
-        } else if (version == 0x2) {
+        if (version == 0x2) {
             // write it as a single byte
+            // we only have up to 8 flags
+            // at the moment.
             stream.write(flags);
         }
+
+        transactionContent.write(stream);
     }
 
     @Override
