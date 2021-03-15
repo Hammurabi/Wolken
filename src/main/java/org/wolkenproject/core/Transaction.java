@@ -52,7 +52,10 @@ public class Transaction extends SerializableI implements Comparable<Transaction
             // write it as a single byte
             // we only have up to 8 flags
             // at the moment.
-            stream.write(flags);
+            stream.write(flags & 0xFF);
+            if (hasFlag(Flags.TwoByteFlags)) {
+                stream.write((flags >> 8) & 0xFF);
+            }
         }
 
         transactionContent.write(stream);
@@ -64,6 +67,7 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
         if (version == 0x2) {
             flags = stream.read();
+
             if (hasFlag(Flags.TwoByteFlags)) {
                 flags |= stream.read() << 8;
             }
