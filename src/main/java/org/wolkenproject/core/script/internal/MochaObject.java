@@ -9,6 +9,9 @@ import org.wolkenproject.utils.Utils;
 import java.util.Arrays;
 
 public class MochaObject {
+    private static final MochaObject    fn_add          = createFunction(scope -> { return scope.getStack().rot().pop(); });
+    private static final MochaObject    fn_add          = createFunction((proc)->{ return null; });
+    private static final MochaObject    fn_add          = createFunction((proc)->{ return null; });
     private static final MochaObject    fn_add          = createFunction((proc)->{ return null; });
     private static final MochaCallable  defaultCallable = (proc)->{ return null; };
     private static final String         undefined       = "undefined";
@@ -23,6 +26,10 @@ public class MochaObject {
         members     = new MochaObject[0];
         callable    = callble;
         addMember(fn_add);
+        addMember(fn_sub);
+        addMember(fn_mul);
+        addMember(fn_div);
+        addMember(fn_mod);
     }
 
     public MochaObject getMember(int member) throws UndefMemberException {
