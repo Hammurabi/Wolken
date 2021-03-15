@@ -8,10 +8,10 @@ import java.io.OutputStream;
 // that has a range of 1 - 8 bytes
 public class VarInt {
     // write a uint32 to stream, or uint30 if !fullBitsNeeded
-    public static void writeCompactUInt32(long integer, boolean fullBitsNeeded, OutputStream stream) throws IOException {
+    public static void writeCompactUInt32(long integer, boolean preserveAllBits, OutputStream stream) throws IOException {
         long bits = Long.highestOneBit(integer);
 
-        if (fullBitsNeeded) {
+        if (preserveAllBits) {
             if (bits <= 8) {
                 stream.write(0);
                 stream.write((int) integer);
@@ -56,10 +56,10 @@ public class VarInt {
         }
     }
 
-    public static void writeCompactUInt64(long integer, boolean fullBitsNeeded, OutputStream stream) throws IOException {
+    public static void writeCompactUInt64(long integer, boolean preserveAllBits, OutputStream stream) throws IOException {
         long bits = Long.highestOneBit(integer);
 
-        if (fullBitsNeeded) {
+        if (preserveAllBits) {
             if (bits <= 8) {
                 stream.write(0);
                 stream.write((int) integer);
@@ -165,7 +165,10 @@ public class VarInt {
         }
     }
 
-    public static int readCompactUInt32(boolean b, InputStream stream) {
+    public static int readCompactUInt32(boolean preserveAllBits, InputStream stream) throws IOException {
+        if (preserveAllBits) {
+            int numBytes = stream.read();
+        }
         return 0;
     }
 
