@@ -14,12 +14,15 @@ import java.io.OutputStream;
 import java.util.List;
 
 public class Transaction extends SerializableI implements Comparable<Transaction> {
-    public static abstract class TransactionContent {
+    private static abstract class TransactionContent {
         public abstract boolean verify();
         public abstract List<Account> getAccountChanges();
         public abstract long getTransactionValue();
         public abstract long getFee();
         public abstract byte[] getPayload();
+
+        public abstract void read(InputStream stream) throws IOException;
+        public abstract void write(OutputStream stream) throws IOException;
     }
 
     public static int UniqueIdentifierLength = 32;
@@ -34,21 +37,8 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     // this version.
     private int flags;
 
-    // can be more than one recipient if FLAG&MULTIPLE_RECIPIENTS==MULTIPLE_RECIPIENTS
-    // must be 20 bytes
-    private byte recipient[];
-
-    // value
-    private long value;
-
-    // value
-    private long fee;
-
-    // a recoverable ec signature
-    private RecoverableSignature recoverableSignature;
-
-    // payload to execute
-    private byte payload[];
+    // content of the transaction can vary depending on version+flags
+    TransactionContent transactionContent;
 
     @Override
     public int compareTo(Transaction transaction) {
