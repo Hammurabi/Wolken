@@ -47,81 +47,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return 0;
     }
 
-    private void writeBasic(OutputStream stream) throws IOException, WolkenException {
-    }
-
-    @Override
-    public void write(OutputStream stream) throws IOException, WolkenException {
-        VarInt.writeCompactUInt32(version, false, stream);
-        if (version == Magic.BasicTransaction) {
-            stream.write(recipient);
-            VarInt.writeCompactUInt32(value, false, stream);
-            VarInt.writeCompactUInt32(fee, false, stream);
-            stream.write(signature.getV());
-            stream.write(signature.getR());
-            stream.write(signature.getS());
-        } else if (version == Magic.BasicTransactionToAlias) {
-            stream.write(recipient);
-            VarInt.writeCompactUInt32(value, false, stream);
-            VarInt.writeCompactUInt32(fee, false, stream);
-            stream.write(signature.getV());
-            stream.write(signature.getR());
-            stream.write(signature.getS());
-        } else if (version == Magic.BasicFlaggedTransaction) {
-            // write it as a single byte
-            // we only have up to 8 flags
-            // at the moment.
-            stream.write(flags & 0xFF);
-
-            if (hasFlag(Flags.TwoByteFlags)) {
-                stream.write((flags >> 8) & 0xFF);
-            }
-
-            // write the payload
-            if (hasFlag(Flags.MochaPayload)) {
-                VarInt.writeCompactUInt32(payload.length, false, stream);
-                stream.write(payload);
-            }
-
-            VarInt.writeCompactUInt32(fee, false, stream);
-        }
-    }
-
-    @Override
-    public void read(InputStream stream) throws IOException, WolkenException {
-        version = VarInt.readCompactUInt32(false, stream);
-
-        if (version == Magic.BasicTransaction) {
-        } else if (version == Magic.BasicFlaggedTransaction) {
-            flags = stream.read();
-
-            if (hasFlag(Flags.TwoByteFlags)) {
-                flags |= stream.read() << 8;
-            }
-
-            // read the payload
-            if (hasFlag(Flags.MochaPayload)) {
-                int length = VarInt.readCompactUInt32(false, stream);
-                payload     = new byte[length];
-                stream.read(payload);
-            }
-        }
-    }
-
-    public boolean hasFlag(int flag) {
-        return (flags & flag) == flag;
-    }
-
-    @Override
-    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new Transaction();
-    }
-
-    @Override
-    public int getSerialNumber() {
-        return Context.getInstance().getSerialFactory().getSerialNumber(Transaction.class);
-    }
-
     public static final class Flags
     {
         public static final int
@@ -137,11 +62,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                 UnusedFlag5         = 1<<7,
                 UnusedFlag6         = 1<<8
         ;
-
-//        public static boolean hasLocktime(int flags)
-//        {
-//            return (flags & RelativeLockTime) == RelativeLockTime || (flags & TimestampLockTime) == TimestampLockTime;
-//        }
     }
 
     public int getVersion() {
