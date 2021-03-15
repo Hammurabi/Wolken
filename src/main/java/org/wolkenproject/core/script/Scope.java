@@ -1,10 +1,7 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.core.Transaction;
-import org.wolkenproject.core.script.internal.MochaCryptoSignature;
 import org.wolkenproject.core.script.internal.MochaObject;
-import org.wolkenproject.core.script.internal.MochaPublicKey;
-import org.wolkenproject.crypto.Key;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 
