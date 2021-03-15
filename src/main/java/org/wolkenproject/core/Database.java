@@ -201,4 +201,12 @@ public class Database {
 
         return null;
     }
+
+    public Account getAccount(long alias) {
+        return null;
+    }
+
+    public Account getAccount(byte address[]) {
+        return null;
+    }
 }
