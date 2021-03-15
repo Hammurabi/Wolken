@@ -209,4 +209,8 @@ public class Database {
     public Account getAccount(byte address[]) {
         return null;
     }
+
+    public Address getAddressFromAlias(long alias) {
+        return null;
+    }
 }
