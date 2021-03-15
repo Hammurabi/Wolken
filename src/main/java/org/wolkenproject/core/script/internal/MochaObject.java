@@ -22,6 +22,9 @@ public class MochaObject {
     private static final MochaObject    fn_lsh          = createFunction(scope -> { return scope.getStack().rot().pop().shiftLeft(scope.getStack().pop()); });
     private static final MochaObject    fn_not          = createFunction(scope -> { return scope.getStack().rot().pop().not(); });
     private static final MochaObject    fn_ngt          = createFunction(scope -> { return scope.getStack().rot().pop().negate(); });
+    private static final MochaObject    fn_append       = createFunction(scope -> { return scope.getStack().rot().pop().append(scope.getStack().pop()); });
+    private static final MochaObject    fn_prepend      = createFunction(scope -> { return scope.getStack().rot().pop().prepend(scope.getStack().pop()); });
+    private static final MochaObject    fn_pop          = createFunction(scope -> { return scope.getStack().rot().pop().pop(); });
     private static final MochaCallable  defaultCallable = (proc)->{ return null; };
     private static final String         undefined       = "undefined";
     private MochaObject     members[];
@@ -52,6 +55,9 @@ public class MochaObject {
             addMember(fn_lsh);
             addMember(fn_not);
             addMember(fn_ngt);
+            addMember(fn_append);
+            addMember(fn_prepend);
+            addMember(fn_pop);
         }
     }
 
@@ -88,14 +94,7 @@ public class MochaObject {
     }
 
     public static final MochaObject createObject(MochaCallable callable) {
-        MochaObject object = new MochaObject(callable);
-        object.addMember(createFunction((proc)->{ return null; })); // add
-        object.addMember(createFunction((proc)->{ return null; })); // sub
-        object.addMember(createFunction((proc)->{ return null; })); // mul
-        object.addMember(createFunction((proc)->{ return null; })); // div
-        object.addMember(createFunction((proc)->{ return null; })); // mod
-
-        return object;
+        return new MochaObject(callable);
     }
 
     public static final MochaObject createContainerObject() {
