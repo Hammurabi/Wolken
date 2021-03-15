@@ -85,7 +85,7 @@ public class Transaction extends SerializableI implements Comparable<Transaction
 
     @Override
     public int getSerialNumber() {
-        return 0;
+        return Context.getInstance().getSerialFactory().getSerialNumber(Transaction.class);
     }
 
     public static final class Flags
