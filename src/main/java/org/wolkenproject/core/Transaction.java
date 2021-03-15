@@ -70,6 +70,10 @@ public class Transaction extends SerializableI implements Comparable<Transaction
         }
     }
 
+    public boolean hasFlag(int flag) {
+        return (flags & flag) == flag;
+    }
+
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
         return null;
