@@ -171,7 +171,7 @@ public class VarInt {
             byte bytes[] = new byte[numBytes];
             stream.read(bytes);
 
-            return Utils.makeInt(Utils.conditionalExpand(bytes));
+            return Utils.makeInt(Utils.conditionalExpand(4, bytes));
         }
         return 0;
     }
