@@ -14,7 +14,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Transaction extends SerializableI implements Comparable<Transaction> {
-    public static class TransactionContent {
+    public static abstract class TransactionContent {
+
     }
 
     public static int UniqueIdentifierLength = 32;
