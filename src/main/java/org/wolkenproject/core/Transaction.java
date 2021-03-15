@@ -4,6 +4,7 @@ import org.wolkenproject.core.script.Script;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
@@ -224,6 +225,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                 outputs);
     }
 
-    public static final void register() {
+    public static final void register(SerializationFactory factory) {
+        factory.registerClass(BasicTransaction.class, new BasicTransaction());
+    }
+
+    public static final class BasicTransaction {
     }
 }
