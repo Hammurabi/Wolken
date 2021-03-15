@@ -173,6 +173,7 @@ public class VarInt {
 
             return Utils.makeInt(Utils.conditionalExpand(4, bytes));
         }
+        
         return 0;
     }
 
