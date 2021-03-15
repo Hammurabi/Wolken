@@ -31,14 +31,22 @@ public class MochaObject {
         this(defaultCallable);
     }
 
-    public MochaObject(MochaCallable callble) {
-        members     = new MochaObject[0];
-        callable    = callble;
+    public MochaObject(MochaCallable callable) {
+        members         = new MochaObject[0];
+        this.callable   = callable;
         addMember(fn_add);
         addMember(fn_sub);
         addMember(fn_mul);
         addMember(fn_div);
         addMember(fn_mod);
+        addMember(fn_and);
+        addMember(fn_or );
+        addMember(fn_xor);
+        addMember(fn_shf);
+        addMember(fn_rsh);
+        addMember(fn_lsh);
+        addMember(fn_not);
+        addMember(fn_ngt);
     }
 
     public MochaObject getMember(int member) throws UndefMemberException {
