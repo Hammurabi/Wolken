@@ -38,7 +38,7 @@ public class Transaction extends SerializableI implements Comparable<Transaction
     private int flags;
 
     // content of the transaction can vary depending on version+flags
-    TransactionContent transactionContent;
+    private TransactionContent transactionContent;
 
     @Override
     public int compareTo(Transaction transaction) {
