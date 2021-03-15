@@ -145,6 +145,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public boolean verify() {
+            // this is not 100% necessary
             return dump.length <= 8192;
         }
 
@@ -162,6 +163,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         public void write(OutputStream stream) throws IOException, WolkenException {
             VarInt.writeCompactUInt64(value, false, stream);
             stream.write(recipient);
+            VarInt.writeCompactUInt32(dump.length, false, stream);
+            if (dump.length > 0) {
+                stream.write(dump);
+            }
         }
 
         @Override
