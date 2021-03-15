@@ -48,7 +48,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract long getTransactionValue();
     public abstract long getTransactionFee();
     public abstract byte[] getPayload();
-    public abstract boolean verify();
+    public abstract boolean verify() throws WolkenException;
     public abstract Address getSender() throws WolkenException;
     public abstract Address getRecipient();
 
@@ -238,11 +238,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean verify() {
+        public boolean verify() throws WolkenException {
             // a transfer of 0 with a fee of 0 is not allowed
             return
                     (getTransactionValue() + getTransactionFee()) != 0 &&
-                    (Context.getInstance().getDatabase().getAccount(getSender()).getNonce() + 1) == nonce;
+                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce;
         }
 
         @Override
