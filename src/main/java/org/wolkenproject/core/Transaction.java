@@ -287,7 +287,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
     }
 
-    // this is a basic payload transaction
+    // this is a basic payload transaction (contract creation)
+    // transfer value is sent to the contract's account
     // min size: 1 + 67 + (varint) + payload
     // avg size: 1 + 77 + (varint) + payload
     // max size: 1 + 81 + (varint) + payload
@@ -296,6 +297,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private long value;
         // maximum fee that sender is willing to pay
         private long fee;
+        // transaction index
+        private long nonce;
         // a recoverable ec signature
         private RecoverableSignature signature;
         // a valid mocha payload
@@ -308,12 +311,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public long getTransactionValue() {
-            return 0;
+            return value;
         }
 
         @Override
         public long getTransactionFee() {
-            return 0;
+            return fee;
         }
 
         @Override
@@ -338,7 +341,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
-
+            VarInt.writeCompactUInt64(value, false, stream);
+            VarInt.writeCompactUInt64(fee, false, stream);
+            VarInt.writeCompactUInt64(nonce, false, stream);
+            signature.write(stream);
+            VarInt.writeCompactUInt32(payload.length, false, stream);
+            stream.write(payload);
         }
 
         @Override
