@@ -2,6 +2,7 @@ package org.wolkenproject.serialization;
 
 import org.wolkenproject.exceptions.InvalidSerialNumberException;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
