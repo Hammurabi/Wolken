@@ -15,7 +15,7 @@ public class VersionMessage extends Message {
     private VersionInformation versionInformation;
 
     public VersionMessage() throws UnknownHostException {
-        this(0, new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0, 0), new NetAddress(InetAddress.getLocalHost(), 0, 0), 0 ));
+        this(0, new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0, 0), new NetAddress(InetAddress.getLocalHost(), 0, 0), 0, new byte[20]));
     }
 
     public VersionMessage(int version, VersionInformation versionInformation) {
