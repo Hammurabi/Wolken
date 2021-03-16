@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.core.Address;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Transaction;
 import org.wolkenproject.core.script.internal.MochaNumber;
@@ -20,7 +21,7 @@ public class Contract extends MochaObject {
     // 1: any exception thrown will invalidate the contract             (r0)
     // 2: if function returns null, the contract will not be serialized (r1)
     // 3: if function returns null, the contract will not be serialized
-    public static final void create(Transaction transaction, ProgramCounter programCounter, long maxSpend) throws MochaException, ContractOutOfFundsExceptions, InvalidTransactionException {
+    public static final void create(Transaction transaction, Address contractAddress, ProgramCounter programCounter, long maxSpend) throws MochaException, ContractOutOfFundsExceptions, InvalidTransactionException {
         // create the contract object
         Contract contract = new Contract();
 
@@ -47,7 +48,7 @@ public class Contract extends MochaObject {
         // check if the contract should be stored
         if (contract.shouldStoreContract()) {
             // store the contract
-            Context.getInstance().getDatabase().storeContract(transaction.getRecipient(), contract);
+            Context.getInstance().getDatabase().storeContract(contractAddress, contract);
         }
     }
 
