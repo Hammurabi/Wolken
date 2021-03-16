@@ -47,6 +47,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract int getFlags();
     public abstract long getTransactionValue();
     public abstract long getTransactionFee();
+    public abstract long getMaximumPrice();
     public abstract byte[] getPayload();
     public abstract boolean verify() throws WolkenException;
     public abstract Address getSender() throws WolkenException;
@@ -123,6 +124,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public long getTransactionFee() {
+            return 0;
+        }
+
+        @Override
+        public long getMaximumPrice() {
             return 0;
         }
 
