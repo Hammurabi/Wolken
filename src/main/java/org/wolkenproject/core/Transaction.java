@@ -433,6 +433,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private long value;
         // maximum fee that sender is willing to pay
         private long fee;
+        // maximum fee that sender is willing to pay
+        private long costPer;
         // transaction index
         private long nonce;
         // a recoverable ec signature
@@ -465,6 +467,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public long getTransactionFee() {
             return fee;
+        }
+
+        @Override
+        public long getMaximumPrice() {
+            return ;
         }
 
         @Override
