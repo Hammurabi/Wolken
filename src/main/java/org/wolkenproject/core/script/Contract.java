@@ -22,7 +22,7 @@ public class Contract extends MochaObject {
     // 1: any exception thrown will invalidate the contract             (r0)
     // 2: if function returns null, the contract will not be serialized (r1)
     // 3: if function returns null, the contract will not be serialized
-    public static final void create(Transaction transaction, Address contractAddress, ProgramCounter programCounter, long maxSpend) throws MochaException, ContractOutOfFundsExceptions, InvalidTransactionException, WolkenException {
+    public static final void create(Transaction transaction, Address contractAddress, ProgramCounter programCounter) throws MochaException, ContractOutOfFundsExceptions, InvalidTransactionException, WolkenException {
         // create the contract object
         Contract contract = new Contract();
 
@@ -39,6 +39,9 @@ public class Contract extends MochaObject {
         stack.push(contract);
         stack.push(transactionObject);
 
+        // maximum amount to spend
+        long maxSpend = transaction.getMaxUnitCost() * transaction.getTransactionFee();
+
         // create a scope
         Scope scope = new Scope(transaction, contract, stack, programCounter);
 
@@ -53,8 +56,12 @@ public class Contract extends MochaObject {
             // check the length of the contract
             long storageCost = (serializedContract.length / 32 + serializedContract.length % 32) * transaction.getMaxUnitCost();
 
-            // store the contract
-            Context.getInstance().getDatabase().storeContract(contractAddress, contract);
+            if (remaining >= storageCost) {
+                // store the contract
+                Context.getInstance().getDatabase().storeContract(contractAddress, serializedContract);
+            }
+
+            throw new ContractOutOfFundsExceptions();
         }
     }
 
