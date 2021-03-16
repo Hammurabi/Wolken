@@ -150,16 +150,16 @@ public class OpcodeRegister {
     }
 
     // register an opcode into the vm
-    public OpcodeRegister registerOp(String name, String description, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
-        return registerOp(name, description, 0, callable);
+    public OpcodeRegister registerOp(String name, String description, long weight, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
+        return registerOp(name, description, 0, weight, callable);
     }
 
-    public OpcodeRegister registerOp(String name, String description, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
-        return registerOp(name, description, false, numArgs, callable);
+    public OpcodeRegister registerOp(String name, String description, int numArgs, long weight, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
+        return registerOp(name, description, false, numArgs, weight, callable);
     }
 
-    public OpcodeRegister registerOp(String name, String description, boolean vararg, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
-        Opcode opcode = new Opcode(name, description, "", opcodeSet.size(), vararg, numArgs, callable);
+    public OpcodeRegister registerOp(String name, String description, boolean vararg, int numArgs, long weight, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
+        Opcode opcode = new Opcode(name, description, "", opcodeSet.size(), vararg, numArgs, callable, weight);
         opcodeNameMap.put(name, opcode);
         opcodeMap.put(opcode.getIdentifier(), opcode);
         opcodeSet.add(opcode);
