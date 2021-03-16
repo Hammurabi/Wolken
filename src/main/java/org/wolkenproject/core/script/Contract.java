@@ -1,5 +1,6 @@
 package org.wolkenproject.core.script;
 
+import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Transaction;
 import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
@@ -45,7 +46,8 @@ public class Contract extends MochaObject {
 
         // check if the contract should be stored
         if (contract.shouldStoreContract()) {
-            //
+            // store the contract
+            Context.getInstance().getDatabase().storeContract(transaction.getRecipient(), contract);
         }
     }
 
