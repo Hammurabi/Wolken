@@ -115,4 +115,14 @@ public class Contract extends MochaObject {
 
             self.setMember(Structure.m_isDeployed, new MochaBool(true));
         };
+
+    public static MochaCallable DestroyFunction =
+        scope -> {
+            MochaObject self = scope.getStack().pop();
+            if (self.getMember(Structure.m_isDeployed).isTrue()) {
+                throw new MochaException("Contract already deployed.");
+            }
+
+            self.setMember(Structure.m_isDeployed, new MochaBool(true));
+        };
 }
