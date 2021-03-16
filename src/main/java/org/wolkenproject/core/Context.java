@@ -55,12 +55,7 @@ public class Context {
         serializationFactory.registerClass(Block.class, new Block());
         serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
         serializationFactory.registerClass(Ancestors.class, new Ancestors(new byte[Block.UniqueIdentifierLength]));
-        serializationFactory.registerClass(Input.class, new Input(new byte[Transaction.UniqueIdentifierLength], 0, new byte[0]));
-        serializationFactory.registerClass(Output.class, new Output(0, new byte[0]));
-
-        serializationFactory.registerClass(Input.class, new Input(new byte[32], 0, new byte[1]));
-        serializationFactory.registerClass(Output.class, new Output(0, new byte[1]));
-
+        
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
         serializationFactory.registerClass(VersionMessage.class, new VersionMessage());
         serializationFactory.registerClass(VerackMessage.class, new VerackMessage());
