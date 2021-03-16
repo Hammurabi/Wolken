@@ -10,9 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Scope {
     // the 'caller' transaction
-    private Transaction caller;
-    // the input index which we are calling from
-    private int                     callerIdx;
+    private Transaction             caller;
     // the contract in which the point of entry exists
     private Contract                contract;
     // the stack
@@ -24,9 +22,8 @@ public class Scope {
     // the program counter
     private ProgramCounter          programCounter;
 
-    public Scope(Transaction caller, int callerIdx, Contract contract, MochaStack<MochaObject> stack, ProgramCounter programCounter) {
+    public Scope(Transaction caller, Contract contract, MochaStack<MochaObject> stack, ProgramCounter programCounter) {
         this.caller     = caller;
-        this.callerIdx  = callerIdx;
         this.contract   = contract;
         this.stack      = stack;
         this.programCounter = programCounter;
