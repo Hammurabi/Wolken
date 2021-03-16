@@ -33,6 +33,7 @@ public class Node implements Runnable {
     private ByteArrayOutputStream           stream;
     private int                             receivedAddresses;
     private VersionInformation              versionMessage;
+    private boolean                         isClosed;
 
 //    public Node(String ip, int port) throws IOException {
 //        this(new Socket(ip, port));
@@ -173,6 +174,10 @@ public class Node implements Runnable {
         mutex.lock();
 
         try {
+            if (isClosed) {
+                return;
+            }
+
             if (!socket.finishConnect()) {
                 return;
             }
@@ -292,6 +297,7 @@ public class Node implements Runnable {
     }
 
     public void close() throws IOException {
+        isClosed = true;
         socket.close();
     }
 
