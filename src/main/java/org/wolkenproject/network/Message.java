@@ -61,15 +61,7 @@ public abstract class Message extends SerializableI {
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         writeHeader(stream);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        writeContents(byteArrayOutputStream);
-        byteArrayOutputStream.flush();
-        byteArrayOutputStream.close();
-
-        byte bytes[] = byteArrayOutputStream.toByteArray();
-        Utils.writeInt(bytes.length, stream);
-
-        stream.write(bytes);
+        writeContents(stream);
     }
 
     @Override
