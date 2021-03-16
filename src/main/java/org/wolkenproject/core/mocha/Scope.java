@@ -1,6 +1,7 @@
 package org.wolkenproject.core.mocha;
 
 import org.wolkenproject.core.Transaction;
+import org.wolkenproject.core.mocha.internal.MochaAddress;
 import org.wolkenproject.core.mocha.internal.MochaObject;
 import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
 import org.wolkenproject.exceptions.InvalidTransactionException;
@@ -86,5 +87,15 @@ public class Scope {
 
     protected byte[] getSignatureData() {
         return null;
+    }
+
+    public void destroyContract() throws MochaException {
+        // this is the address that we will send any remaining funds to
+        MochaObject address = getStack().pop();
+
+        if (address instanceof MochaAddress) {
+        }
+
+        throw new MochaException("invalid address provided.");
     }
 }
