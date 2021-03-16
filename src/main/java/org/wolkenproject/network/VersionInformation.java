@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 public class VersionInformation extends SerializableI {
     public static final class Flags{
@@ -56,6 +57,7 @@ public class VersionInformation extends SerializableI {
         sender.write(stream);
         receiver.write(stream);
         Utils.writeInt(blockHeight, stream);
+        stream.write(nonce);
     }
 
     @Override
@@ -71,6 +73,7 @@ public class VersionInformation extends SerializableI {
         receiver = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class), stream);
         stream.read(buffer, 0, 4);
         this.blockHeight = Utils.makeInt(buffer);
+        checkFullyRead(stream.read(nonce), 20);
     }
 
     @Override
@@ -115,5 +118,9 @@ public class VersionInformation extends SerializableI {
     public int getBlockHeight()
     {
         return blockHeight;
+    }
+
+    public boolean isSelfConnection(byte nonce[]) {
+        return Arrays.equals(nonce, this.nonce);
     }
 }
