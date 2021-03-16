@@ -13,6 +13,10 @@ public class Contract extends MochaObject {
         // create the contract object
         Contract contract = new Contract();
 
+        // create the transaction object
+        MochaObject transactionObject = new MochaObject();
+
+
         // create the stack and populate it
         MochaStack<MochaObject> stack = new MochaStack<>();
         stack.push(contract);
