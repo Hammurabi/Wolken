@@ -501,4 +501,13 @@ public class BlockChain implements Runnable {
             pool(block);
         }
     }
+
+    public int getHeight() {
+        BlockIndex tip = getTip();
+        if (tip != null) {
+            return tip.getHeight();
+        }
+
+        return 0;
+    }
 }
