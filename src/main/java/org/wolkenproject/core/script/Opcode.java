@@ -12,8 +12,9 @@ public class Opcode {
     private int             numArgs;
     private boolean         vararg;
     private VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable;
+    private long            weight;
 
-    public Opcode(String name, String desc, String usage, int identifier, boolean vararg, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
+    public Opcode(String name, String desc, String usage, int identifier, boolean vararg, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable, long weight) {
         this.name = name;
         this.desc = desc;
         this.usage= usage;
@@ -21,6 +22,7 @@ public class Opcode {
         this.numArgs= numArgs;
         this.callable= callable;
         this.identifier= identifier;
+        this.weight = weight;
     }
 
     public void execute(Scope scope) throws MochaException, InvalidTransactionException {
@@ -57,5 +59,9 @@ public class Opcode {
 
     public int getNumArgs() {
         return numArgs;
+    }
+
+    public long getWeight() {
+        return weight;
     }
 }
