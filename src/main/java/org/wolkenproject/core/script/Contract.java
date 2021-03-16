@@ -1,11 +1,14 @@
 package org.wolkenproject.core.script;
 
 import org.wolkenproject.core.Transaction;
-import org.wolkenproject.core.script.internal.MochaCallable;
 import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
 
 public class Contract extends MochaObject {
+    public Contract() {
+        super(false);
+    }
+
     public void call(int functionAddress, MochaObject...arguments) {
     }
 
@@ -15,7 +18,7 @@ public class Contract extends MochaObject {
         Contract contract = new Contract();
 
         // create the transaction object
-        MochaObject transactionObject = new MochaObject();
+        MochaObject transactionObject = new MochaObject(false);
         transactionObject.addMember(new MochaBool(transaction.hasMultipleSenders()));
         transactionObject.addMember(new MochaBool(transaction.hasMultipleRecipients()));
         transactionObject.addMember(new MochaNumber(transaction.getVersion(), false));
