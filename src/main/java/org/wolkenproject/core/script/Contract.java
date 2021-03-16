@@ -118,7 +118,11 @@ public class Contract extends MochaObject {
 
     public static MochaCallable DestroyFunction =
         scope -> {
-            MochaObject self = scope.getStack().pop();
+            MochaObject self    = scope.getStack().pop();
+
+            // this is an address where
+            // any remaining funds will be sent to
+            MochaObject address = scope.getStack().pop();
             if (self.getMember(Structure.m_isDeployed).isTrue()) {
                 throw new MochaException("Contract already deployed.");
             }
