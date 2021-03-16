@@ -55,7 +55,7 @@ public class Context {
         serializationFactory.registerClass(Block.class, new Block());
         serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
         serializationFactory.registerClass(Ancestors.class, new Ancestors(new byte[Block.UniqueIdentifierLength]));
-        
+
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
         serializationFactory.registerClass(VersionMessage.class, new VersionMessage());
         serializationFactory.registerClass(VerackMessage.class, new VerackMessage());
@@ -142,12 +142,6 @@ public class Context {
 //        opcodeRegister.registerOp("ecsig", "push a signature of size '~'.", 73, scope -> scope.getStack().push(new MochaCryptoSignature(new RecoverableSignature((byte) scope.getProgramCounter().nextByte(), scope.getProgramCounter().next(32), scope.getProgramCounter().next(32)))));
 
         opcodeRegister.registerOp("verify", "throws an 'InvalidTransactionException' if the top stack item is not true.", Scope::verify);
-        opcodeRegister.registerOp("checksig", "check signature against signer.", Scope::checkSig);
-        opcodeRegister.registerOp("checksigverify", "checksig + verify.", scope -> {
-            scope.checkSig();
-            scope.verify();
-        });
-
         opcodeRegister.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.", scope -> scope.getStack().peek().flipSign());
 
         opcodeRegister.registerOp("add", "pop two objects from the stack and add them.", scope -> scope.getStack().push(scope.getStack().peek().getMember(0, "add").call(scope)));
