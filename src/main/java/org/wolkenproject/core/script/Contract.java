@@ -20,6 +20,7 @@ public class Contract extends MochaObject {
         // create the stack and populate it
         MochaStack<MochaObject> stack = new MochaStack<>();
         stack.push(contract);
+        stack.push(transactionObject);
 
         // create a scope
         Scope scope = new Scope(transaction, contract, stack, programCounter);
