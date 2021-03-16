@@ -1,7 +1,6 @@
 package org.wolkenproject.core;
 
 import org.iq80.leveldb.DB;
-import org.wolkenproject.core.script.Contract;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
@@ -9,7 +8,6 @@ import org.iq80.leveldb.Options;
 import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.wolkenproject.utils.Utils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
