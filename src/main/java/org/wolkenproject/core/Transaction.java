@@ -148,6 +148,16 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
+        public boolean hasMultipleSenders() {
+            return false;
+        }
+
+        @Override
+        public boolean hasMultipleRecipients() {
+            return false;
+        }
+
+        @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
             VarInt.writeCompactUInt64(value, false, stream);
             stream.write(recipient);
