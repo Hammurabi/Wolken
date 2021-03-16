@@ -7,6 +7,8 @@ import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
 
+import java.nio.ByteBuffer;
+
 public abstract class Script {
     public static byte[] newP2PKH(Address address) {
         return new byte[0];
@@ -16,6 +18,12 @@ public abstract class Script {
     public abstract byte[] getCompressed();
 
     public static void executePayload(Transaction transaction) {
+        // create a program counter from opcodes
+        ProgramCounter programCounter = new ProgramCounter(ByteBuffer.wrap(transaction.getPayload()), Context.getInstance().getOpcodeRegister());
+
+        // create the contract object
+        Contract contract = new Contract();
+
         // create the transaction object
         MochaObject transactionObject = new MochaObject(false);
         transactionObject.addMember(new MochaBool(transaction.hasMultipleSenders()));
