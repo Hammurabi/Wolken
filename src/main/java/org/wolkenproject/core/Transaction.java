@@ -239,6 +239,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
+        public long getMaximumPrice() {
+            return 0;
+        }
+
+        @Override
         public byte[] getPayload() {
             return new byte[0];
         }
