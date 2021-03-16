@@ -21,7 +21,7 @@ public class Database {
     private ReentrantLock   mutex;
 
     private final static byte[]
-    UnspentTransactionOutput= Utils.takeApartShort((short) 1),
+    Account                 = Utils.takeApartShort((short) 1),
     ChainTip                = Utils.takeApartShort((short) 2),
     BlockHeader             = Utils.takeApartShort((short) 3),
     BlockIndex              = Utils.takeApartShort((short) 4);
@@ -30,43 +30,6 @@ public class Database {
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
         this.location = location;
         mutex   = new ReentrantLock();
-    }
-
-    public void storeOutput(byte[] txid, char index, Output output) throws WolkenException {
-        mutex.lock();
-        try {
-            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApartChar(index)));
-            byte data[] = database.get(id);
-
-            database.put(id, output.asByteArray());
-        } finally {
-            mutex.unlock();
-        }
-    }
-
-    public LookupResult<Output> findOutput(byte[] txid, char index) throws WolkenException {
-        mutex.lock();
-        try {
-            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApartChar(index)));
-            byte data[] = database.get(id);
-
-            return new LookupResult<>(new Output(data), data != null);
-        } finally {
-            mutex.unlock();
-        }
-    }
-
-    public boolean getOutputExists(byte[] txid, char index)
-    {
-        mutex.lock();
-        try {
-            byte id[]   = Utils.concatenate(UnspentTransactionOutput, Utils.concatenate(txid, Utils.takeApartChar(index)));
-            byte data[] = database.get(id);
-
-            return data != null;
-        } finally {
-            mutex.unlock();
-        }
     }
 
     public void setTip(BlockIndex block) {
