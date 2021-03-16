@@ -33,7 +33,7 @@ public class VarIntTests {
             Assertions.assertTrue(Utils.isEmpty(empty), "array should consist of zeros.");
         }
     }
-    
+
     @Test
     public void testReadWriteLossless32() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
