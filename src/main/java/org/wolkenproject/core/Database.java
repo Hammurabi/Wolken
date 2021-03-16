@@ -216,11 +216,11 @@ public class Database {
         return null;
     }
 
-    public void storeContract(Address contractAddress, Contract contract) throws WolkenException {
+    public void storeContract(Address contractAddress, byte contract[]) throws WolkenException {
         mutex.lock();
         try {
             OutputStream outputStream = location.newFile(".contracts").newFile(Base16.encode(contractAddress.getRaw())).openFileOutputStream();
-            contract.write(outputStream);
+            outputStream.write(contract);
             outputStream.flush();
             outputStream.close();
         } catch (IOException e) {
