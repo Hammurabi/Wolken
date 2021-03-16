@@ -43,6 +43,11 @@ public class Contract extends MochaObject {
         // execute the payload
         scope.startProcess(maxSpend);
 
-        return contract;
+        // check if the contract should be stored
+        if (contract.shouldStoreContract()) {
+            return contract;
+        }
+
+        return null;
     }
 }
