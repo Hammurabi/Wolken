@@ -275,8 +275,9 @@ public class Node implements Runnable {
                 int offset = 0;
 
                 while (offset < msg.length) {
+                    int remainder = msg.length - offset;
                     buffer.clear();
-                    buffer.put(msg, offset, Context.getInstance().getNetworkParameters().getBufferSize());
+                    buffer.put(msg, offset, Math.min(Context.getInstance().getNetworkParameters().getBufferSize(), remainder));
                     buffer.flip();
                     while (buffer.hasRemaining()) {
                         offset += socket.write(buffer);
