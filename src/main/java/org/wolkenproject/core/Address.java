@@ -9,10 +9,22 @@ import java.util.Arrays;
 
 public class Address {
     public static final int RawLength = 20;
-    private byte[] raw;
+    private int     prefix;
+    private byte[]  raw;
+    private byte[]  checksum;
 
     private Address(byte raw[]) {
-        this.raw = raw;
+        this(Context.getInstance().getNetworkParameters().getGenericAddressPrefix(), raw);
+    }
+
+    private Address(byte prefix, byte raw[]) {
+        this(prefix, raw, Utils.trim(HashUtil.sha256d(Utils.concatenate(new byte[] { prefix }, raw)), 0, 4));
+    }
+
+    private Address(byte prefix, byte raw[], byte checksum[]) {
+        this.prefix     = Byte.toUnsignedInt(prefix);
+        this.raw        = raw;
+        this.checksum   = checksum;
     }
 
     // return an address object from a key
@@ -24,8 +36,8 @@ public class Address {
         // get the encoded key (with prefix byte)
         byte encodedKey[]   = key.getEncoded();
 
-        // return a hash160 of the key
-        return new Address(HashUtil.hash160(encodedKey));
+        // return a hash160 of the key (with a network 'address' prefix)
+        return new Address(Context.getInstance().getNetworkParameters().getGenericAddressPrefix(), HashUtil.hash160(encodedKey));
     }
 
     // return an address object from a 'raw' non-encoded 20 byte address
@@ -37,9 +49,8 @@ public class Address {
         return new Address(HashUtil.hash160(Utils.concatenate(sender, Utils.takeApartLong(nonce))));
     }
 
-    public byte[] fromKey(byte prefix, byte publicKeyBytes[]) {
-        byte prefixed[] = Utils.concatenate(new byte[] { prefix }, HashUtil.hash160(publicKeyBytes) );
-        return Utils.concatenate(prefixed, Utils.trim(HashUtil.sha256d(prefixed), 0, 4));
+    public static Address fromFormatted(byte[] formattedAddress) {
+        return new Address(formattedAddress[0], Utils.trim(formattedAddress, 1, 20), Utils.trim(formattedAddress, 21, 4));
     }
 
     public static boolean isValidAddress(byte[] address) {
