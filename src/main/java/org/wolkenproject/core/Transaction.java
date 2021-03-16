@@ -51,6 +51,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract boolean verify() throws WolkenException;
     public abstract Address getSender() throws WolkenException;
     public abstract Address getRecipient();
+    public abstract boolean hasMultipleSenders();
+    public abstract boolean hasMultipleRecipients();
 
     // multiple recipients and senders might be possible in the future
     public Address[] getSenders() throws WolkenException {
