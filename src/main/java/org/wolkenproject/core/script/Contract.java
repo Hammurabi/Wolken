@@ -98,6 +98,7 @@ public class Contract extends MochaObject {
         contract.addMember(new MochaBool(isDestroyCalled));
 
         // add deploy(self)
+        contract.addMember(createFunction(DeployFunction));
 
         // add destroy(self, address)
 
