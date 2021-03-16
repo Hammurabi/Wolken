@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 import org.wolkenproject.core.Transaction;
 import org.wolkenproject.core.script.internal.MochaCallable;
+import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
 
 public class Contract extends MochaObject {
@@ -17,6 +18,9 @@ public class Contract extends MochaObject {
         MochaObject transactionObject = new MochaObject();
         transactionObject.addMember(new MochaBool(transaction.hasMultipleSenders()));
         transactionObject.addMember(new MochaBool(transaction.hasMultipleRecipients()));
+        transactionObject.addMember(new MochaNumber(transaction.getVersion(), false));
+        transactionObject.addMember(new MochaNumber(transaction.getTransactionValue(), false));
+        transactionObject.addMember(new MochaNumber(transaction.getTransactionFee(), false));
 
 
         // create the stack and populate it
