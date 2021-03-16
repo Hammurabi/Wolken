@@ -34,6 +34,10 @@ public class MochaObject {
         this(defaultCallable);
     }
 
+    public MochaObject(boolean addBasicFunctions) {
+        this(defaultCallable, addBasicFunctions);
+    }
+
     public MochaObject(MochaCallable callable) {
         this(callable, true);
     }
