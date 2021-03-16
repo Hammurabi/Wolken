@@ -10,10 +10,11 @@ import java.math.BigInteger;
 public class NetworkParameters {
     private boolean isTestNet;
     private byte    defaultBits[];
+    private long    contractStoreCost;
 
     private BigInteger maximumTarget;
 
-    NetworkParameters(boolean testNet) throws WolkenException {
+    NetworkParameters(boolean testNet, long contractStoreCost) throws WolkenException {
         this.isTestNet = testNet;
 
         if (testNet) {
@@ -24,6 +25,7 @@ public class NetworkParameters {
         }
 
         this.maximumTarget      = ChainMath.targetIntegerFromBits(defaultBits);
+        this.contractStoreCost  = contractStoreCost;
     }
 
     public boolean isTestNet() {
@@ -181,9 +183,15 @@ public class NetworkParameters {
 
     public long getContractStoragePrice(int blockHeight, int length) {
         // 1___________00_000_000_000 is a single coin
-        // a contract should cost less to store every 1 year
-        long yearsSinceEpoch        = blockHeight / blocksPerYear();
-        long maximumAllowedPrice    = 10_0000 / (yearsSinceEpoch + 1);
-        return length * 1000;
+        // a contract should cost less to store every 2 years
+        long perByteStoreCost       = Math.max(25_000L / );
+
+        long yearsSinceEpoch        = blockHeight / (blocksPerYear() / 2);
+
+        // after 74 years the price will be 1
+        long maximumAllowedPrice    = Math.max(1L, getOneCoin() / (1L << (yearsSinceEpoch + 1)));
+
+        // miners are allowed to ask for up to maximumAllowedPrice per byte
+        return length * Math.min(maximumAllowedPrice, contractStoreCost);
     }
 }
