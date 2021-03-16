@@ -95,6 +95,10 @@ public class NetworkParameters {
         return 1___________00_000_000_000L;
     }
 
+    public long getAliasRegistrationCost() {
+        return 5_000L;
+    }
+
     public byte getGenericMainnetAddressPrefix() {
         return 53;
     }
