@@ -3,6 +3,7 @@ package org.wolkenproject.core.script;
 import org.wolkenproject.core.Address;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Transaction;
+import org.wolkenproject.core.script.internal.MochaCallable;
 import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
@@ -72,4 +73,44 @@ public class Contract extends MochaObject {
     private boolean shouldStoreContract() {
         return false;
     }
+
+    public static final class Structure {
+        public static final int
+                m_isDeployed        = 0,
+                m_isDestroyCalled   = 1,
+                m_address           = 2,
+                fn_deploy           = 3,
+                fn_destroy          = 4;
+    }
+
+    public static MochaObject newContract(Address address) {
+        return newContract(address, false, false);
+    }
+
+    public static MochaObject newContract(Address address, boolean isDeployed, boolean isDestroyCalled) {
+        // create a blank object
+        MochaObject contract = MochaObject.createObject();
+
+        // add m_isDeployed
+        contract.addMember(new MochaBool(isDeployed));
+
+        // add m_isDestroyCalled
+        contract.addMember(new MochaBool(isDestroyCalled));
+
+        // add deploy(self)
+
+        // add destroy(self, address)
+
+        return contract;
+    }
+
+    public static MochaCallable DeployFunction =
+        scope -> {
+            MochaObject self = scope.getStack().pop();
+            if (self.getMember(Structure.m_isDeployed).isTrue()) {
+                throw new MochaException("Contract already deployed.");
+            }
+
+            self.setMember(Structure.m_isDeployed, new MochaBool(true));
+        };
 }
