@@ -178,18 +178,4 @@ public class NetworkParameters {
     public Address[] getFoundingAddresses() {
         return new Address[] {};
     }
-
-    public long getContractStoragePrice(int blockHeight, int length) {
-        // 1___________00_000_000_000 is a single coin
-        // a contract should cost less to store every 2 years
-        // long perByteStoreCost       = Math.max(25_000L / );
-
-        long yearsSinceEpoch        = blockHeight / (blocksPerYear() / 2);
-
-        // after 74 years the price will be 1
-        long maximumAllowedPrice    = Math.max(1L, getOneCoin() / (1L << (yearsSinceEpoch + 1)));
-
-        // miners are allowed to ask for up to maximumAllowedPrice per byte
-        return length * Math.min(maximumAllowedPrice, contractStoreCost);
-    }
 }
