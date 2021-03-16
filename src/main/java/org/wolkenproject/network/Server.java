@@ -69,7 +69,15 @@ public class Server implements Runnable {
                     mutex.unlock();
                 }
 
-                node.sendMessage(new VersionMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(Context.getInstance().getNetworkParameters().getVersion(), VersionInformation.Flags.AllServices, System.currentTimeMillis(), getNetAddress(), address, 0)));
+                node.sendMessage(new VersionMessage(
+                        Context.getInstance().getNetworkParameters().getVersion(),
+                        new VersionInformation(
+                                Context.getInstance().getNetworkParameters().getVersion(),
+                                VersionInformation.Flags.AllServices,
+                                System.currentTimeMillis(),
+                                getNetAddress(),
+                                address,
+                                0)));
 
                 if (++ connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections())
                 {
