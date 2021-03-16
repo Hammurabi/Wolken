@@ -30,7 +30,7 @@ public class Opcode {
     }
 
     public Opcode makeCopy() {
-        return new Opcode(name, desc, usage, identifier, vararg, numArgs, callable);
+        return new Opcode(name, desc, usage, identifier, vararg, numArgs, callable, weight);
     }
 
     protected void setIdentifier(int id) {
