@@ -69,14 +69,14 @@ public class VarIntTests {
         byte empty[] = new byte[12];
 
         for (long i : ints) {
-            VarInt.writeCompactUInt32(i, false, outputStream);
+            VarInt.writeCompactUInt64(i, false, outputStream);
             outputStream.write(empty);
         }
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
         for (long i : ints) {
-            Assertions.assertEquals(i, VarInt.readCompactUInt32(false, inputStream));
+            Assertions.assertEquals(i, VarInt.readCompactUInt64(false, inputStream));
             Assertions.assertEquals(inputStream.read(empty), empty.length);
             Assertions.assertTrue(Utils.isEmpty(empty), "array should consist of zeros.");
         }
@@ -93,14 +93,14 @@ public class VarIntTests {
         byte empty[] = new byte[12];
 
         for (long i : ints) {
-            VarInt.writeCompactUInt32(i, true, outputStream);
+            VarInt.writeCompactUInt64(i, true, outputStream);
             outputStream.write(empty);
         }
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
         for (long i : ints) {
-            Assertions.assertEquals(i, VarInt.readCompactUInt32(true, inputStream));
+            Assertions.assertEquals(i, VarInt.readCompactUInt64(true, inputStream));
             Assertions.assertEquals(inputStream.read(empty), empty.length);
             Assertions.assertTrue(Utils.isEmpty(empty), "array should consist of zeros.");
         }
