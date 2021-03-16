@@ -29,6 +29,14 @@ public class Scope {
         this.programCounter = programCounter;
     }
 
+    public void startProcess(long maxSpend) throws InvalidTransactionException, MochaException {
+    }
+
+    public void stopProcesses(int signal) {
+        keepRunning.set(false);
+        interruptSignal.set(signal);
+    }
+
     public Contract getContract() {
         return contract;
     }
@@ -39,11 +47,6 @@ public class Scope {
 
     public ProgramCounter getProgramCounter() {
         return programCounter;
-    }
-
-    public void stopProcesses(int signal) {
-        keepRunning.set(false);
-        interruptSignal.set(signal);
     }
 
 //    public void checkSig() throws MochaException {
