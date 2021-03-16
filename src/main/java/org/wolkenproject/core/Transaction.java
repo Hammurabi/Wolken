@@ -602,11 +602,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public int compareTo(Transaction transaction) {
-            return 0;
-        }
-
-        @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
         }
 
