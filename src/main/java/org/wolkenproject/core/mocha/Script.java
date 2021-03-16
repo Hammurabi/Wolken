@@ -43,30 +43,32 @@ public abstract class Script {
         long maxSpend = transaction.getTransactionFee();
 
         // create a scope
-        Scope scope = new Scope(transaction, contract, stack, programCounter);
-
-        // execute the payload
-        long remaining = scope.startProcess(maxSpend);
-
-        // check if the contract should be stored
-        if (contract.getMember(0)) {
-            // convert contract to a byte array
-            byte serializedContract[] = contract.asByteArray();
-
-            // check the length of the contract
-            long wordSize    = 32;
-            long storageCost = (serializedContract.length / wordSize) + Math.min(serializedContract.length % wordSize, 1) * wordSize;
-
-            if (remaining >= storageCost) {
-                // store the contract
-                Context.getInstance().getDatabase().storeContract(contractAddress, serializedContract);
-                remaining -= storageCost;
-            } else {
-                throw new ContractOutOfFundsExceptions();
-            }
-        }
+//        Scope scope = new Scope(transaction, contract, stack, programCounter);
+//
+//        // execute the payload
+//        long remaining = scope.startProcess(maxSpend);
+//
+//        // check if the contract should be stored
+//        if (contract.getMember(0)) {
+//            // convert contract to a byte array
+//            byte serializedContract[] = contract.asByteArray();
+//
+//            // check the length of the contract
+//            long wordSize    = 32;
+//            long storageCost = (serializedContract.length / wordSize) + Math.min(serializedContract.length % wordSize, 1) * wordSize;
+//
+//            if (remaining >= storageCost) {
+//                // store the contract
+//                Context.getInstance().getDatabase().storeContract(contractAddress, serializedContract);
+//                remaining -= storageCost;
+//            } else {
+//                throw new ContractOutOfFundsExceptions();
+//            }
+//        }
 
         // return the amount spent
-        return maxSpend - remaining;
+//        return maxSpend - remaining;
+
+        return 0;
     }
 }
