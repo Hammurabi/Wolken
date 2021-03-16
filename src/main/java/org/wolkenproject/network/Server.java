@@ -300,4 +300,8 @@ public class Server implements Runnable {
             node.sendMessage(message);
         }
     }
+
+    public byte[] getNonce() {
+        return nonce;
+    }
 }
