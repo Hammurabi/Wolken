@@ -1,6 +1,5 @@
 package org.wolkenproject.utils;
 
-import org.wolkenproject.core.script.internal.MochaObject;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 
@@ -9,7 +8,6 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Set;
 
 public class Utils {
