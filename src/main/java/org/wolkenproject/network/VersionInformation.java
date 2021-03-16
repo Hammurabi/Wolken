@@ -13,10 +13,9 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 
 public class VersionInformation extends SerializableI {
-    public static final class Flags{
+    public static final class Flags {
         public static final long
-            AllServices = 0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111L
-        ;
+                AllServices = 0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111L;
     }
 
     private int version;
@@ -30,16 +29,16 @@ public class VersionInformation extends SerializableI {
     public VersionInformation() throws UnknownHostException {
         this(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0, 0), new NetAddress(InetAddress.getLocalHost(), 0, 0), 0, new byte[20]);
     }
+
     /**
-     * @param version       client version
-     * @param services      bitfield of services provided by this client
-     * @param timestamp     unix timestamp of message creation time
-     * @param sender        sender address
-     * @param receiver      received address
-     * @param blockHeight   current block height
+     * @param version     client version
+     * @param services    bitfield of services provided by this client
+     * @param timestamp   unix timestamp of message creation time
+     * @param sender      sender address
+     * @param receiver    received address
+     * @param blockHeight current block height
      */
-    public VersionInformation(int version, long services, long timestamp, NetAddress sender, NetAddress receiver, int blockHeight, byte nonce[])
-    {
+    public VersionInformation(int version, long services, long timestamp, NetAddress sender, NetAddress receiver, int blockHeight, byte nonce[]) {
         this.version = version;
         this.services = services;
         this.timestamp = timestamp;
@@ -90,33 +89,27 @@ public class VersionInformation extends SerializableI {
         return Context.getInstance().getSerialFactory().getSerialNumber(VersionInformation.class);
     }
 
-    public int getVersion()
-    {
+    public int getVersion() {
         return version;
     }
 
-    public long getServices()
-    {
+    public long getServices() {
         return services;
     }
 
-    public long getTimestamp()
-    {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public NetAddress getSender()
-    {
+    public NetAddress getSender() {
         return sender;
     }
 
-    public NetAddress getReceiver()
-    {
+    public NetAddress getReceiver() {
         return receiver;
     }
 
-    public int getBlockHeight()
-    {
+    public int getBlockHeight() {
         return blockHeight;
     }
 
