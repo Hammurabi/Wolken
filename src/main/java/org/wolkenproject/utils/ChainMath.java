@@ -100,27 +100,16 @@ public class ChainMath {
         return new BigInteger(1, target);
     }
 
-    public static long getReward(long currentHeight) {
-        long height = currentHeight;
-        if (height == 0) {
-            //this number could be used to account for the loss of 0.001575 Sats
-            //            return 100157500000L;
-            height = 1;
-        }
-
-        long numberOfHalvings = height / Context.getInstance().getNetworkParameters().getHalvingRate();
+    public static long getReward(long height) {
+        long numberOfHalvings = (height + 1) / Context.getInstance().getNetworkParameters().getHalvingRate();
 
         if (numberOfHalvings >= 37) {
             return 0;
         }
 
-        BigInteger D = new BigInteger("2").pow((int) numberOfHalvings);
-        long asLong = D.longValue();
+        long d = 1 << numberOfHalvings;
 
-        if (asLong == 0)
-            return 0L;
-
-        return Context.getInstance().getNetworkParameters().getMaxReward() / asLong;
+        return Context.getInstance().getNetworkParameters().getMaxReward() / d;
     }
 
     public static BigInteger getTotalWork(byte[] bits) throws WolkenException {
