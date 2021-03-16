@@ -10,15 +10,15 @@ public class MochaNumber extends MochaObject {
     protected BigInteger    value;
     private boolean         sign; // 0 = unsigned & 1 = signed
 
-    public MochaNumber(String integer, boolean signed) throws MochaException {
+    public MochaNumber(String integer, boolean signed) {
         this(new BigInteger(integer), signed);
     }
 
-    public MochaNumber(long integer, boolean signed) throws MochaException {
+    public MochaNumber(long integer, boolean signed) {
         this(new BigInteger(Long.toString(integer)), integer >= 0 && signed);
     }
 
-    public MochaNumber(BigInteger integer, boolean signed) throws MochaException {
+    public MochaNumber(BigInteger integer, boolean signed) {
         this.value  = integer;
         this.sign   = signed;
         if (integer.bitLength() > 256) {
