@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -182,6 +183,86 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                 dump = new byte[length];
                 checkFullyRead(stream.read(dump), length);
             }
+        }
+
+        @Override
+        public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+            return (Type) new MintTransaction();
+        }
+
+        @Override
+        public int getSerialNumber() {
+            return Context.getInstance().getSerialFactory().getSerialNumber(MintTransaction.class);
+        }
+    }
+
+    public static final class RegisterAliasTransaction extends Transaction {
+        // signature of the sender
+        private Signature signature;
+
+        private RegisterAliasTransaction() {
+            this.signature = new RecoverableSignature();
+        }
+
+        @Override
+        public int getFlags() {
+            return 0;
+        }
+
+        @Override
+        public long getTransactionValue() {
+            return Context.getInstance().getNetworkParameters().getAliasRegistrationCost();
+        }
+
+        @Override
+        public long getTransactionFee() {
+            return 0;
+        }
+
+        @Override
+        public long getMaxUnitCost() {
+            return 0;
+        }
+
+        @Override
+        public byte[] getPayload() {
+            return new byte[0];
+        }
+
+        @Override
+        public boolean verify() {
+            // this is not 100% necessary
+            return ;
+        }
+
+        @Override
+        public Address getSender() throws WolkenException {
+            return Address.fromKey(signature.recover(asByteArray()));
+        }
+
+        @Override
+        public Address getRecipient() {
+            return null;
+        }
+
+        @Override
+        public boolean hasMultipleSenders() {
+            return false;
+        }
+
+        @Override
+        public boolean hasMultipleRecipients() {
+            return false;
+        }
+
+        @Override
+        public void write(OutputStream stream) throws IOException, WolkenException {
+            signature.write(stream);
+        }
+
+        @Override
+        public void read(InputStream stream) throws IOException, WolkenException {
+            signature.read(stream);
         }
 
         @Override
