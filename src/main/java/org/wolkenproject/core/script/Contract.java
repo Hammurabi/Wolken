@@ -43,10 +43,16 @@ public class Contract extends MochaObject {
         Scope scope = new Scope(transaction, contract, stack, programCounter);
 
         // execute the payload
-        scope.startProcess(maxSpend);
+        long remaining = scope.startProcess(maxSpend);
 
         // check if the contract should be stored
         if (contract.shouldStoreContract()) {
+            // convert contract to a byte array
+            byte serializedContract[] = contract.asByteArray();
+
+            // check the length of the contract
+            long price = Context.getInstance().getNetworkParameters().getContractStoragePrice(serializedContract.length);
+
             // store the contract
             Context.getInstance().getDatabase().storeContract(contractAddress, contract);
         }
