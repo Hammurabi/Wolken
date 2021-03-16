@@ -427,4 +427,23 @@ public class Utils {
         System.arraycopy(bytes, srcOffset, result, destOffset, bytesLength);
         return result;
     }
+
+    public static boolean isEmpty(byte[] empty) {
+        for (byte b : empty) {
+            if (b != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static double log2(double x) {
+        return (Math.log(x) / Math.log(2));
+    }
+
+    // return the minimum number of bits required to represent this number
+    public static int numBitsRequired(long x) {
+        return (int) (Math.floor(log2(x + 1)) + 1);
+    }
 }
