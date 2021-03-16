@@ -110,7 +110,7 @@ public class MochaObject {
         return object;
     }
 
-    protected int addMember(MochaObject member) {
+    public int addMember(MochaObject member) {
         int len = members.length;
         members = Arrays.copyOf(members, members.length + 1);
         members[len] = member;
