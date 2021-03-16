@@ -197,6 +197,9 @@ public class Context {
 
         this.blockChain = new BlockChain();
         this.server = new Server();
+
+        getThreadPool().execute(server);
+        getThreadPool().execute(blockChain);
     }
 
     public void shutDown() {
