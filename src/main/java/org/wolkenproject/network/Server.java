@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,11 +22,16 @@ public class Server implements Runnable {
     private Set<Node>           connectedNodes;
     private NetAddress          netAddress;
     private ReentrantLock       mutex;
+    private byte                nonce[];
 
     public Server() throws IOException {
         socket  = ServerSocketChannel.open();
         socket.bind(new InetSocketAddress(Context.getInstance().getNetworkParameters().getPort()));
         mutex   = new ReentrantLock();
+        nonce   = new byte[20];
+
+        // generate a nonce to know when we self connect
+        new SecureRandom().nextBytes(nonce);
 
         socket.configureBlocking(false);
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
