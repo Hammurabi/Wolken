@@ -178,4 +178,12 @@ public class NetworkParameters {
     public Address[] getFoundingAddresses() {
         return new Address[] {};
     }
+
+    public long getContractStoragePrice(int blockHeight, int length) {
+        // 1___________00_000_000_000 is a single coin
+        // a contract should cost less to store every 1 year
+        long yearsSinceEpoch        = blockHeight / blocksPerYear();
+        long maximumAllowedPrice    = 10_0000 / (yearsSinceEpoch + 1);
+        return length * 1000;
+    }
 }
