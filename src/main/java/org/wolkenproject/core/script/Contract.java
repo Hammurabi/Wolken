@@ -101,6 +101,7 @@ public class Contract extends MochaObject {
         contract.addMember(createFunction(DeployFunction));
 
         // add destroy(self, address)
+        contract.addMember(createFunction(DestroyFunction));
 
         return contract;
     }
