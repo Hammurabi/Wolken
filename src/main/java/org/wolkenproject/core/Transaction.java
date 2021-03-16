@@ -67,7 +67,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
     @Override
     public int compareTo(Transaction transaction) {
-        return (getTransactionFee() > transaction.getTransactionFee() ? 1 : -1);
+        return (getMaxUnitCost() > transaction.getMaxUnitCost() ? 1 : -1);
     }
 
     // a transaction that creates a contract
