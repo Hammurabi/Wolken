@@ -86,9 +86,9 @@ public class Context {
         opcodeRegister.registerOp("load", "load an object from an offset.", 3, 2, scope -> scope.getStack().pop().getMember(scope.getProgramCounter().nextUnsignedShort()));
         opcodeRegister.registerOp("store", "store an object to an offset.", 2, 2, scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextUnsignedShort(), scope.getStack().pop()));
 
-        opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, scope -> scope.getStack().pop().subscriptSet((int) scope.getStack().pop().asInt(), scope.getStack().pop()));
-        opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, scope -> scope.getStack().push(scope.getStack().pop().subscriptGet((int) scope.getStack().pop().asInt())));
-        opcodeRegister.registerOp("append", "append an object to an array.", scope -> scope.getStack().pop().append(scope.getStack().pop()));
+        opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, 2, scope -> scope.getStack().pop().subscriptSet((int) scope.getStack().pop().asInt(), scope.getStack().pop()));
+        opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, 2, scope -> scope.getStack().push(scope.getStack().pop().subscriptGet((int) scope.getStack().pop().asInt())));
+        opcodeRegister.registerOp("append", "append an object to an array.", 2, scope -> scope.getStack().pop().append(scope.getStack().pop()));
 
         opcodeRegister.registerOp("pushdata", "push an array of bytes of length (8) into the stack.", true, 1, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextByte()))));
         opcodeRegister.registerOp("pushdata2", "push an array of bytes of length (16) into the stack.", true, 2, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextUnsignedShort()))));
