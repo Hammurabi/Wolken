@@ -24,9 +24,10 @@ public class VersionInformation extends SerializableI {
     private NetAddress sender;
     private NetAddress receiver;
     private int blockHeight;
+    private byte nonce[];
 
     public VersionInformation() throws UnknownHostException {
-        this(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0, 0), new NetAddress(InetAddress.getLocalHost(), 0, 0), 0 );
+        this(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0, 0), new NetAddress(InetAddress.getLocalHost(), 0, 0), 0, new byte[20]);
     }
     /**
      * @param version       client version
@@ -36,7 +37,7 @@ public class VersionInformation extends SerializableI {
      * @param receiver      received address
      * @param blockHeight   current block height
      */
-    public VersionInformation(int version, long services, long timestamp, NetAddress sender, NetAddress receiver, int blockHeight)
+    public VersionInformation(int version, long services, long timestamp, NetAddress sender, NetAddress receiver, int blockHeight, byte nonce[])
     {
         this.version = version;
         this.services = services;
@@ -44,6 +45,7 @@ public class VersionInformation extends SerializableI {
         this.sender = sender;
         this.receiver = receiver;
         this.blockHeight = blockHeight;
+        this.nonce = nonce;
     }
 
     @Override
