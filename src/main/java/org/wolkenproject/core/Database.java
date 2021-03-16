@@ -9,6 +9,7 @@ import org.iq80.leveldb.Options;
 import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.wolkenproject.utils.Utils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -215,6 +216,17 @@ public class Database {
         return null;
     }
 
-    public void storeContract(Address contractAddress, Contract contract) {
+    public void storeContract(Address contractAddress, Contract contract) throws WolkenException {
+        mutex.lock();
+        try {
+            OutputStream outputStream = location.newFile(".contracts").newFile(Base16.encode(contractAddress.getRaw())).openFileOutputStream();
+            contract.write(outputStream);
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException e) {
+            throw new WolkenException(e);
+        } finally {
+            mutex.unlock();
+        }
     }
 }
