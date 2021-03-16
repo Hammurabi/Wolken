@@ -1,21 +1,22 @@
 package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
+import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
+import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -31,6 +32,7 @@ public class Node implements Runnable {
     private int                             errors;
     private ByteBuffer                      buffer;
     private ByteArrayOutputStream           stream;
+    private int                             currentMessageSize;
     private int                             receivedAddresses;
     private VersionInformation              versionMessage;
     private boolean                         isClosed;
@@ -46,6 +48,8 @@ public class Node implements Runnable {
         this.messages       = new ConcurrentLinkedQueue<>();
         this.messageCache   = new MessageCache();
         this.errors         = 0;
+        this.stream         = null;
+        this.currentMessageSize = -1;
 //        this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
 //        this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
         this.firstConnected = System.currentTimeMillis();
@@ -182,16 +186,33 @@ public class Node implements Runnable {
                 return;
             }
 
+            if (stream != null && stream.size() == currentMessageSize) {
+                stream.flush();
+                stream.close();
+
+                // queue the message for processing.
+                finish(stream);
+
+                stream = null;
+                currentMessageSize = -1;
+            }
+
             if (stream == null) {
-                stream = new ByteArrayOutputStream();
+                stream              = new ByteArrayOutputStream();
+                currentMessageSize  = -1;
+                buffer.clear();
             }
 
             byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
 
             int read = socket.read(buffer);
-            long timestamp = System.currentTimeMillis();
 
-            if (read == -1) {
+            long timestamp = System.currentTimeMillis();
+            if (read > 0) {
+                buffer.flip();
+            }
+
+            if (read <= 0) {
                 stream.flush();
                 stream.close();
 
@@ -199,11 +220,19 @@ public class Node implements Runnable {
                 finish(stream);
             } else {
                 // check message header
-                if (stream.size() >= 12) {
-                    byte header[] = stream.toByteArray();
-                    int length = Utils.makeInt(header, 8);
+                if (currentMessageSize == -1 && read >= 4) {
+                    currentMessageSize = buffer.getInt();
 
-                    if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
+                    if (currentMessageSize <= 0) {
+                        errors ++;
+                        messageCache.increaseSpamAverage(0.2);
+                        stream.flush();
+                        stream.close();
+                        // queue the message for processing.
+                        finish(stream);
+                    }
+
+                    if (currentMessageSize > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
                         errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
                         stream = null;
                         close();
@@ -211,9 +240,24 @@ public class Node implements Runnable {
                     }
                 }
 
-                buffer.get(data, 0, read);
-                stream.write(data, 0, read);
-                buffer.clear();
+                if (currentMessageSize > 0) {
+                    while (buffer.remaining() > 0) {
+                        int remaining = buffer.remaining();
+                        buffer.get(data, 0, remaining);
+                        stream.write(data, 0, remaining);
+                    }
+
+                    if (currentMessageSize == stream.size()) {
+                        stream.flush();
+                        stream.close();
+
+                        // queue the message for processing.
+                        finish(stream);
+
+                        stream = null;
+                        currentMessageSize = -1;
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -272,13 +316,23 @@ public class Node implements Runnable {
             while (!messages.isEmpty()) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 Message message = messages.poll();
-                message.write(outputStream);
+                message.serialize(outputStream);
                 outputStream.flush();
                 outputStream.close();
 
                 byte msg[] = outputStream.toByteArray();
                 int offset = 0;
 
+                buffer.clear();
+                buffer.putInt(msg.length);
+                buffer.flip();
+
+                // write the length of the message
+                while (buffer.hasRemaining()) {
+                    socket.write(buffer);
+                }
+
+                // write the actual  message
                 while (offset < msg.length) {
                     int remainder = msg.length - offset;
                     buffer.clear();
