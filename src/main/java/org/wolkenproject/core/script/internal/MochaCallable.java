@@ -5,5 +5,5 @@ import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 
 public interface MochaCallable {
-    void call(Scope scope) throws MochaException, InvalidTransactionException;
+    MochaObject call(Scope scope) throws MochaException, InvalidTransactionException;
 }
