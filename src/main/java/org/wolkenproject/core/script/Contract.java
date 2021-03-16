@@ -13,7 +13,7 @@ public class Contract extends MochaObject {
     }
 
     // create contract from a transaction payload
-    public static final Contract create(Transaction transaction, ProgramCounter programCounter) {
+    public static final Contract create(Transaction transaction, ProgramCounter programCounter, long maxSpend) {
         // create the contract object
         Contract contract = new Contract();
 
@@ -33,6 +33,9 @@ public class Contract extends MochaObject {
 
         // create a scope
         Scope scope = new Scope(transaction, contract, stack, programCounter);
+
+        // execute the payload
+        scope.startProcess();
 
         return contract;
     }
