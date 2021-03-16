@@ -187,8 +187,7 @@ public class Server implements Runnable {
                 boolean shouldDisconnect = false;
                 boolean isSpammy = false;
 
-                if (!node.hasPerformedHandshake() && node.timeSinceConnected() >= Context.getInstance().getNetworkParameters().getHandshakeTimeout())
-                {
+                if (!node.hasPerformedHandshake() && node.timeSinceConnected() >= Context.getInstance().getNetworkParameters().getHandshakeTimeout()) {
                     shouldDisconnect = true;
                 }
 
@@ -203,8 +202,7 @@ public class Server implements Runnable {
 
                 if (isSpammy) {
                     NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
-                    if (address != null)
-                    {
+                    if (address != null) {
                         address.setSpamAverage(node.getSpamAverage());
                     }
                 }
@@ -218,13 +216,10 @@ public class Server implements Runnable {
                     }
                 }
 
-                if (!shouldDisconnect && !isSpammy)
-                {
-                    if (node.getMessageCache().inboundCacheSize() > Context.getInstance().getNetworkParameters().getMaxCacheSize())
-                    {
+                if (!shouldDisconnect && !isSpammy) {
+                    if (node.getMessageCache().inboundCacheSize() > Context.getInstance().getNetworkParameters().getMaxCacheSize()) {
                         NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
-                        if (address != null)
-                        {
+                        if (address != null) {
                             address.setSpamAverage(node.getSpamAverage());
                         }
                         node.getMessageCache().clearInboundCache();
