@@ -67,4 +67,12 @@ public abstract class SerializableI {
             throw new IOException("expected '" + expected + "' bytes but only received '" + result + "'");
         }
     }
+
+    protected int checkNotEOF(int read) throws IOException {
+        if (read < 0) {
+            throw new IOException("end of file reached.");
+        }
+
+        return read;
+    }
 }
