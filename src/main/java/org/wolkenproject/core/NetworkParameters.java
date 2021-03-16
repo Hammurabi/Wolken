@@ -184,7 +184,7 @@ public class NetworkParameters {
     public long getContractStoragePrice(int blockHeight, int length) {
         // 1___________00_000_000_000 is a single coin
         // a contract should cost less to store every 2 years
-        long perByteStoreCost       = Math.max(25_000L / );
+        // long perByteStoreCost       = Math.max(25_000L / );
 
         long yearsSinceEpoch        = blockHeight / (blocksPerYear() / 2);
 
