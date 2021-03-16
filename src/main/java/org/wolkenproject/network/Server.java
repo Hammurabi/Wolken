@@ -79,7 +79,7 @@ public class Server implements Runnable {
                                 System.currentTimeMillis(),
                                 getNetAddress(),
                                 address,
-                                Context.getInstance().getBlockChain().getTip().getHeight(),
+                                Context.getInstance().getBlockChain().getHeight(),
                                 nonce)));
 
                 if (++ connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections())
