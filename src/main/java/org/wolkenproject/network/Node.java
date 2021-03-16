@@ -389,18 +389,13 @@ public class Node implements Runnable {
     @Override
     public String toString() {
         return "Node{" +
-                "socket=" + socket +
-                ", mutex=" + mutex +
-                ", messages=" + messages +
-                ", messageQueue=" + messageQueue +
-                ", expectedResponse=" + expectedResponse +
-                ", respones=" + respones +
-                ", messageCache=" + messageCache +
+                "messages=" + messages.size() +
+                ", messageQueue=" + messageQueue.size() +
+                ", expectedResponse=" + expectedResponse.size() +
+                ", respones=" + respones.size() +
+                ", messageCache=" + messageCache.inboundCacheSize() + messageCache.outboundCacheSize() +
                 ", firstConnected=" + firstConnected +
                 ", errors=" + errors +
-                ", buffer=" + buffer +
-                ", stream=" + stream +
-                ", receivedAddresses=" + receivedAddresses +
                 ", versionMessage=" + versionMessage +
                 ", isClosed=" + isClosed +
                 '}';
