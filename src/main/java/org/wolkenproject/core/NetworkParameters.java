@@ -10,11 +10,10 @@ import java.math.BigInteger;
 public class NetworkParameters {
     private boolean isTestNet;
     private byte    defaultBits[];
-    private long    contractStoreCost;
 
     private BigInteger maximumTarget;
 
-    NetworkParameters(boolean testNet, long contractStoreCost) throws WolkenException {
+    NetworkParameters(boolean testNet) throws WolkenException {
         this.isTestNet = testNet;
 
         if (testNet) {
@@ -25,7 +24,6 @@ public class NetworkParameters {
         }
 
         this.maximumTarget      = ChainMath.targetIntegerFromBits(defaultBits);
-        this.contractStoreCost  = contractStoreCost;
     }
 
     public boolean isTestNet() {
