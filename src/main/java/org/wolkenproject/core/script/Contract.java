@@ -35,7 +35,7 @@ public class Contract extends MochaObject {
         Scope scope = new Scope(transaction, contract, stack, programCounter);
 
         // execute the payload
-        scope.startProcess();
+        scope.startProcess(maxSpend);
 
         return contract;
     }
