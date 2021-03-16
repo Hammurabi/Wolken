@@ -30,15 +30,17 @@ public class Scope {
         this.programCounter = programCounter;
     }
 
-    public void startProcess(long maxSpend) throws InvalidTransactionException, MochaException {
+    public void startProcess(long maxSpend) throws InvalidTransactionException, MochaException, ContractOutOfFundsExceptions {
         while (getProgramCounter().hasNext() && keepRunning.get()) {
-            if (maxSpend <= 0) {
-                throw new ContractOutOfFundsExceptions();
+            Opcode opcode = getProgramCounter().next();
+
+            if (maxSpend >= opcode.getWeight()) {
+                opcode.execute(this);
+                maxSpend -= opcode.getWeight();
+                continue;
             }
 
-            Opcode opcode = getProgramCounter().next();
-            maxSpend -= opcode.getWeight();
-            opcode.execute(this);
+            throw new ContractOutOfFundsExceptions();
         }
     }
 
