@@ -175,7 +175,7 @@ public class NetworkParameters {
         return VersionInformation.Flags.AllServices;
     }
 
-    public Address[] getFoundingAddresses() {
-        return new Address[] {};
+    public Address getFoundingAddresses() {
+        return null;
     }
 }
