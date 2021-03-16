@@ -51,11 +51,15 @@ public class Contract extends MochaObject {
             byte serializedContract[] = contract.asByteArray();
 
             // check the length of the contract
-            long price = Context.getInstance().getNetworkParameters().getContractStoragePrice(serializedContract.length);
+            long storageCost = (serializedContract.length / 32 + serializedContract.length % 32) * transaction.getMaxUnitCost();
 
             // store the contract
             Context.getInstance().getDatabase().storeContract(contractAddress, contract);
         }
+    }
+
+    private byte[] asByteArray() {
+        return new byte[0];
     }
 
     private boolean shouldStoreContract() {
