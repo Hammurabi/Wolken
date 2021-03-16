@@ -116,4 +116,17 @@ public class VersionInformation extends SerializableI {
     public boolean isSelfConnection(byte nonce[]) {
         return Arrays.equals(nonce, this.nonce);
     }
+
+    @Override
+    public String toString() {
+        return "VersionInformation{" +
+                "version=" + version +
+                ", services=" + services +
+                ", timestamp=" + timestamp +
+                ", sender=" + sender +
+                ", receiver=" + receiver +
+                ", blockHeight=" + blockHeight +
+                ", nonce=" + Arrays.toString(nonce) +
+                '}';
+    }
 }
