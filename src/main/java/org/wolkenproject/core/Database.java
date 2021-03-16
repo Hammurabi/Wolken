@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.iq80.leveldb.DB;
+import org.wolkenproject.core.script.Contract;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
@@ -212,5 +213,8 @@ public class Database {
 
     public Address getAddressFromAlias(long alias) {
         return null;
+    }
+
+    public void storeContract(Address contractAddress, Contract contract) {
     }
 }
