@@ -4,6 +4,7 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,9 +27,13 @@ public class VersionMessage extends Message {
     @Override
     public void executePayload(Server server, Node node) {
         node.setVersionInfo(versionInformation);
+        Logger.alert("received version info {i}", versionInformation);
 
         if (!Context.getInstance().getNetworkParameters().isVersionCompatible(versionInformation.getVersion(), Context.getInstance().getNetworkParameters().getVersion())) {
             // send bye message.
+        } else if (versionInformation.isSelfConnection(server.getNonce())) {
+            // this is a self connection, we must terminate it
+            Logger.alert("terminating self connection..");
         } else {
             // send verack
             node.sendMessage(new VerackMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(
