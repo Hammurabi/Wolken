@@ -15,6 +15,7 @@ public class Contract extends MochaObject {
 
         // create the transaction object
         MochaObject transactionObject = new MochaObject();
+        transactionObject.addMember(new MochaBool(transaction.hasMultipleSenders()));
 
 
         // create the stack and populate it
