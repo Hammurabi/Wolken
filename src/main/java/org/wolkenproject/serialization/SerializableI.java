@@ -9,11 +9,9 @@ import org.wolkenproject.utils.VarInt;
 import java.io.*;
 
 public abstract class SerializableI {
-    public void serialize(OutputStream stream) throws IOException {
+    public void serialize(OutputStream stream) throws IOException, WolkenException {
         VarInt.writeCompactUInt32(getSerialNumber(), false, stream);
-        byte content[] = asByteArray();
-        Utils.writeInt(content.length, stream);
-        stream.write(content);
+        write(stream);
     }
 
     public abstract void write(OutputStream stream) throws IOException, WolkenException;
@@ -40,7 +38,7 @@ public abstract class SerializableI {
             outputStream.close();
 
             return outputStream.toByteArray();
-        } catch (IOException e) {
+        } catch (IOException | WolkenException e) {
             return null;
         }
     }
