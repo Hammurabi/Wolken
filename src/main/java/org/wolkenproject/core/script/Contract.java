@@ -50,4 +50,8 @@ public class Contract extends MochaObject {
 
         return null;
     }
+
+    private boolean shouldStoreContract() {
+        return false;
+    }
 }
