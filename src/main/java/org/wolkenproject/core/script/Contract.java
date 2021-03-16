@@ -19,7 +19,7 @@ public class Contract extends MochaObject {
     // 1: any exception thrown will invalidate the contract             (r0)
     // 2: if function returns null, the contract will not be serialized (r1)
     // 3: if function returns null, the contract will not be serialized
-    public static final Contract create(Transaction transaction, ProgramCounter programCounter, long maxSpend) throws MochaException, ContractOutOfFundsExceptions, InvalidTransactionException {
+    public static final void create(Transaction transaction, ProgramCounter programCounter, long maxSpend) throws MochaException, ContractOutOfFundsExceptions, InvalidTransactionException {
         // create the contract object
         Contract contract = new Contract();
 
@@ -45,10 +45,8 @@ public class Contract extends MochaObject {
 
         // check if the contract should be stored
         if (contract.shouldStoreContract()) {
-            return contract;
+            //
         }
-
-        return null;
     }
 
     private boolean shouldStoreContract() {
