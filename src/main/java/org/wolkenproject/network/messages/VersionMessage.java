@@ -37,7 +37,7 @@ public class VersionMessage extends Message {
                     System.currentTimeMillis(),
                     server.getNetAddress(),
                     node.getNetAddress(),
-                    Context.getInstance().getBlockChain().getTip().getHeight(),
+                    Context.getInstance().getBlockChain().getHeight(),
                     server.getNonce()
             )));
         }
