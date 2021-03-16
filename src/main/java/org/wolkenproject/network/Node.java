@@ -385,4 +385,24 @@ public class Node implements Runnable {
             errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
         }
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "socket=" + socket +
+                ", mutex=" + mutex +
+                ", messages=" + messages +
+                ", messageQueue=" + messageQueue +
+                ", expectedResponse=" + expectedResponse +
+                ", respones=" + respones +
+                ", messageCache=" + messageCache +
+                ", firstConnected=" + firstConnected +
+                ", errors=" + errors +
+                ", buffer=" + buffer +
+                ", stream=" + stream +
+                ", receivedAddresses=" + receivedAddresses +
+                ", versionMessage=" + versionMessage +
+                ", isClosed=" + isClosed +
+                '}';
+    }
 }
