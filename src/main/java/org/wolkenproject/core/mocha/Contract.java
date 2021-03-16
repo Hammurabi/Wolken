@@ -114,6 +114,8 @@ public class Contract extends MochaObject {
             }
 
             self.setMember(Structure.m_isDeployed, new MochaBool(true));
+
+            return null;
         };
 
     public static MochaCallable DestroyFunction =
@@ -128,5 +130,7 @@ public class Contract extends MochaObject {
             }
 
             self.setMember(Structure.m_isDeployed, new MochaBool(true));
+
+            return null;
         };
 }
