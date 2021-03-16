@@ -185,8 +185,6 @@ public class VarInt {
                 throw new IOException();
             }
 
-            System.out.println(value + " " + length + " " + Utils.makeInt(Utils.conditionalExpand(4, Utils.concatenate(new byte[] {(byte) value}, remaining))));
-
             return Utils.makeInt(Utils.conditionalExpand(4, Utils.concatenate(new byte[] {(byte) value}, remaining)));
         }
     }
