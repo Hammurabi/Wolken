@@ -23,10 +23,12 @@ public class Server implements Runnable {
     private NetAddress          netAddress;
     private ReentrantLock       mutex;
     private byte                nonce[];
+    private long                upSince;
 
     public Server() throws IOException {
         socket  = ServerSocketChannel.open();
         socket.bind(new InetSocketAddress(Context.getInstance().getNetworkParameters().getPort()));
+        upSince = System.currentTimeMillis();
         mutex   = new ReentrantLock();
         nonce   = new byte[20];
 
@@ -126,10 +128,19 @@ public class Server implements Runnable {
     public void run() {
         // we don't need to start checks right away
         long lastCheck = System.currentTimeMillis();
+        long lastNotif = 0;
+
         while (Context.getInstance().isRunning())
         {
             long currentTime = System.currentTimeMillis();
             Set<Node> connectedNodes = getConnectedNodes();
+
+            if (currentTime - lastNotif >= 10_000) {
+                Logger.alert("server uptime: {s}", System.currentTimeMillis() - upSince);
+                Logger.alert("connected: {s}", connectedNodes.size());
+
+                lastNotif = System.currentTimeMillis();
+            }
 
             if (currentTime - lastCheck >= 30_000)
             {
