@@ -136,8 +136,8 @@ public class Server implements Runnable {
             Set<Node> connectedNodes = getConnectedNodes();
 
             if (currentTime - lastNotif >= 10_000) {
-                Logger.alert("server uptime: {s}", System.currentTimeMillis() - upSince);
-                Logger.alert("connected: {s}", connectedNodes.size());
+                Logger.alert("server uptime: ${ms}", System.currentTimeMillis() - upSince);
+                Logger.alert("connected: ${d}", connectedNodes.size());
 
                 lastNotif = System.currentTimeMillis();
             }
