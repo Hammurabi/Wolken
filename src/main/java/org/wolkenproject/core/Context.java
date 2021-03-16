@@ -2,10 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.core.script.*;
 import org.wolkenproject.core.script.internal.ByteArray;
-import org.wolkenproject.core.script.internal.MochaCryptoSignature;
-import org.wolkenproject.core.script.internal.MochaPublicKey;
 import org.wolkenproject.core.script.internal.MochaNumber;
-import org.wolkenproject.crypto.ec.ECPublicKey;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.WolkenException;
