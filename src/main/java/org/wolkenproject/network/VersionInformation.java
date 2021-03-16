@@ -62,16 +62,22 @@ public class VersionInformation extends SerializableI {
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
         byte buffer[] = new byte[8];
-        stream.read(buffer, 0, 4);
+
+        checkFullyRead(stream.read(buffer, 0, 4), 4);
         this.version = Utils.makeInt(buffer);
-        stream.read(buffer);
+
+        checkFullyRead(stream.read(buffer), 8);
         this.services = Utils.makeLong(buffer);
-        stream.read(buffer);
+
+        checkFullyRead(stream.read(buffer), 8);
         this.timestamp = Utils.makeLong(buffer);
+
         sender = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class), stream);
         receiver = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class), stream);
-        stream.read(buffer, 0, 4);
+
+        checkFullyRead(stream.read(buffer, 0, 4), 4);
         this.blockHeight = Utils.makeInt(buffer);
+
         checkFullyRead(stream.read(nonce), 20);
     }
 
