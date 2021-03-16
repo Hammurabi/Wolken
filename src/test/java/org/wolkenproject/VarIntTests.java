@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class VarIntTests {
     @Test
-    public void testReadWrite() throws IOException {
+    public void testReadWriteLossy32() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         int ints[] = new int[] {
