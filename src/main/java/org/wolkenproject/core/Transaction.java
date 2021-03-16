@@ -1,12 +1,10 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.core.script.Script;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.HashUtil;
-import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
@@ -47,7 +45,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract int getFlags();
     public abstract long getTransactionValue();
     public abstract long getTransactionFee();
-    public abstract long getMaximumPrice();
+    public abstract long getMaxUnitCost();
     public abstract byte[] getPayload();
     public abstract boolean verify() throws WolkenException;
     public abstract Address getSender() throws WolkenException;
@@ -128,7 +126,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public long getMaximumPrice() {
+        public long getMaxUnitCost() {
             return 0;
         }
 
@@ -239,7 +237,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public long getMaximumPrice() {
+        public long getMaxUnitCost() {
             return 0;
         }
 
@@ -354,7 +352,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public long getMaximumPrice() {
+        public long getMaxUnitCost() {
             return 0;
         }
 
@@ -425,16 +423,16 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
     // this is a basic payload transaction (contract creation)
     // transfer value is sent to the contract's account
-    // min size: 1 + 67 + (varint) + payload
-    // avg size: 1 + 77 + (varint) + payload
-    // max size: 1 + 81 + (varint) + payload
+    // min size: 1 + 68 + (varint) + payload
+    // avg size: 1 + 79 + (varint) + payload
+    // max size: 1 + 89 + (varint) + payload
     public static final class PayloadTransaction extends Transaction {
         // value of the transfer
         private long value;
-        // maximum fee that sender is willing to pay
+        // maximum amount that sender is willing to pay
         private long fee;
         // maximum fee that sender is willing to pay
-        private long costPer;
+        private long unitCost;
         // transaction index
         private long nonce;
         // a recoverable ec signature
@@ -470,8 +468,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public long getMaximumPrice() {
-            return ;
+        public long getMaxUnitCost() {
+            return unitCost;
         }
 
         @Override
