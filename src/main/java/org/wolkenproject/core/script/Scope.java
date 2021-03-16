@@ -2,6 +2,7 @@ package org.wolkenproject.core.script;
 
 import org.wolkenproject.core.Transaction;
 import org.wolkenproject.core.script.internal.MochaObject;
+import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.MochaException;
 
@@ -30,6 +31,15 @@ public class Scope {
     }
 
     public void startProcess(long maxSpend) throws InvalidTransactionException, MochaException {
+        while (getProgramCounter().hasNext() && keepRunning.get()) {
+            if (maxSpend <= 0) {
+                throw new ContractOutOfFundsExceptions();
+            }
+
+            Opcode opcode = getProgramCounter().next();
+            maxSpend -= opcode.getWeight();
+            opcode.execute(this);
+        }
     }
 
     public void stopProcesses(int signal) {
