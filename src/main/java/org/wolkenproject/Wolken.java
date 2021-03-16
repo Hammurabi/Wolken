@@ -72,7 +72,7 @@ public class Wolken {
                     throw new WolkenException("invalid address '" + b58 + "' provided.");
                 }
 
-                address[i ++] = new Address(bytes);
+                address[i ++] = Address.fromFormatted(bytes);
             }
         }
 
