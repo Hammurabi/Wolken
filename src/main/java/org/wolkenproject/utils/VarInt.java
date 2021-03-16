@@ -9,7 +9,7 @@ import java.io.OutputStream;
 public class VarInt {
     // write a uint32 to stream, or uint30 if !fullBitsNeeded
     public static void writeCompactUInt32(long integer, boolean preserveAllBits, OutputStream stream) throws IOException {
-        long bits = Long.highestOneBit(integer);
+        long bits = Utils.numBitsRequired(integer);
 
         if (preserveAllBits) {
             if (bits <= 8) {
@@ -57,7 +57,7 @@ public class VarInt {
     }
 
     public static void writeCompactUInt64(long integer, boolean preserveAllBits, OutputStream stream) throws IOException {
-        long bits = Long.highestOneBit(integer);
+        long bits = Utils.numBitsRequired(integer);
 
         if (preserveAllBits) {
             if (bits <= 8) {
@@ -181,7 +181,11 @@ public class VarInt {
             }
 
             byte remaining[] = new byte[length];
-            stream.read(remaining);
+            if (stream.read(remaining) != remaining.length) {
+                throw new IOException();
+            }
+
+            System.out.println(value + " " + length + " " + Utils.makeInt(Utils.conditionalExpand(4, Utils.concatenate(new byte[] {(byte) value}, remaining))));
 
             return Utils.makeInt(Utils.conditionalExpand(4, Utils.concatenate(new byte[] {(byte) value}, remaining)));
         }
