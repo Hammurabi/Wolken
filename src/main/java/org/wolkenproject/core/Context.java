@@ -248,4 +248,8 @@ public class Context {
     public BlockChain getBlockChain() {
         return blockChain;
     }
+
+    public OpcodeRegister getOpcodeRegister() {
+        return opcodeRegister;
+    }
 }
