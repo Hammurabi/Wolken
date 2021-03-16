@@ -3,6 +3,9 @@ package org.wolkenproject.core.script;
 import org.wolkenproject.core.Transaction;
 import org.wolkenproject.core.script.internal.MochaNumber;
 import org.wolkenproject.core.script.internal.MochaObject;
+import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
+import org.wolkenproject.exceptions.InvalidTransactionException;
+import org.wolkenproject.exceptions.MochaException;
 
 public class Contract extends MochaObject {
     public Contract() {
@@ -13,7 +16,10 @@ public class Contract extends MochaObject {
     }
 
     // create contract from a transaction payload
-    public static final Contract create(Transaction transaction, ProgramCounter programCounter, long maxSpend) {
+    // 1: any exception thrown will invalidate the contract             (r0)
+    // 2: if function returns null, the contract will not be serialized (r1)
+    // 3: if function returns null, the contract will not be serialized
+    public static final Contract create(Transaction transaction, ProgramCounter programCounter, long maxSpend) throws MochaException, ContractOutOfFundsExceptions, InvalidTransactionException {
         // create the contract object
         Contract contract = new Contract();
 
