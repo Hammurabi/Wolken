@@ -43,7 +43,7 @@ public class Utils {
         return (short) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
     }
 
-    public static int makeInt(byte b3, byte b2, byte b1, byte b0) {
+    public static int makeInt(int b3, int b2, int b1, int b0) {
         return (((b3       ) << 24) |
                 ((b2 & 0xff) << 16) |
                 ((b1 & 0xff) <<  8) |
