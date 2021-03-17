@@ -1,16 +1,12 @@
 package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
-import org.wolkenproject.encoders.Base16;
-import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
-import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -293,6 +289,7 @@ public class Node implements Runnable {
             return checkSpam(message);
         } catch (IOException | WolkenException e) {
             errors++;
+            e.printStackTrace();
             return null;
         } finally {
             mutex.unlock();
