@@ -106,7 +106,6 @@ public class Server implements Runnable {
                             Context.getInstance().getBlockChain().getHeight(),
                             nonce)));
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
