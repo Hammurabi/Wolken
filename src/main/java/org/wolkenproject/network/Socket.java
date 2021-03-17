@@ -57,4 +57,8 @@ public class Socket {
         isClosed    = true;
         isOpen      = false;
     }
+
+    public SocketAddress getSocketAddress() {
+        return socket.getRemoteSocketAddress();
+    }
 }
