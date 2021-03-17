@@ -2,6 +2,7 @@ package org.wolkenproject;
 
 import org.apache.commons.cli.*;
 import org.wolkenproject.core.*;
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.crypto.CryptoLib;
 import org.wolkenproject.exceptions.WolkenException;
@@ -44,17 +45,6 @@ public class Wolken {
             }
         }
 
-        if (cmd.hasOption("quick_send")) {
-            String qsArgs[] = cmd.getOptionValues("quick_send");
-            if (qsArgs.length != 5) {
-                throw new WolkenException("quicksend expects 5 arguments, '"+qsArgs.length+"' provided.");
-            }
-
-            BasicWallet wallet = new BasicWallet(mainDirectory.newFile(qsArgs[3]));
-            Transaction transaction = Transaction.newTransfer(recipient, amount, fee, wallet.getNonce() + 1);
-            System.exit(0);
-        }
-
         boolean isTestNet = false;
         if (cmd.hasOption("enable_testnet")) {
             String value = cmd.getOptionValue("enable_testnet").toLowerCase();
@@ -67,6 +57,29 @@ public class Wolken {
                 Logger.faterr("provided argument '-enable_testnet " + cmd.getOptionValue("enable_testnet") + "' is invalid.");
                 return;
             }
+        }
+
+        if (cmd.hasOption("quick_sign")) {
+            String qsArgs[] = cmd.getOptionValues("quick_send");
+            if (qsArgs.length != 5) {
+                throw new WolkenException("quicksend expects 5 arguments, '"+qsArgs.length+"' provided.");
+            }
+
+            BasicWallet wallet = new BasicWallet(mainDirectory.newFile(qsArgs[3]));
+
+            if (!Address.isValidAddress(Base58.decode(qsArgs[0]))) {
+                throw new WolkenException("address '" + qsArgs[0] + "' is invalid.");
+            }
+
+            long amount = Long.parseLong(qsArgs[1]);
+            long fee    = Long.parseLong(qsArgs[2]);
+
+            Address recipient = Address.fromFormatted(Base58.decode(qsArgs[0]));
+            Transaction transaction = Transaction.newTransfer(recipient, amount, fee, wallet.getNonce() + 1);
+            transaction = transaction.sign(wallet.getPrivateKey(qsArgs[4].toCharArray()));
+
+            Logger.alert("transaction signed successfully ${t}", Base16.encode(transaction.asSerializedArray()));
+            System.exit(0);
         }
 
         mainDirectory = mainDirectory.newFile("Wolken");
