@@ -28,7 +28,7 @@ public class Node implements Runnable {
     private MessageCache                    messageCache;
     private long                            firstConnected;
     private int                             errors;
-    private ByteBuffer                      buffer;
+//    private ByteBuffer                      buffer;
     private ByteArrayOutputStream           stream;
     private int                             currentMessageSize;
     private int                             receivedAddresses;
@@ -50,7 +50,7 @@ public class Node implements Runnable {
         this.currentMessageSize = -1;
         this.firstConnected = System.currentTimeMillis();
         this.respones       = Collections.synchronizedMap(new HashMap<>());
-        this.buffer         = ByteBuffer.allocate(Context.getInstance().getNetworkParameters().getBufferSize());
+//        this.buffer         = ByteBuffer.allocate(Context.getInstance().getNetworkParameters().getBufferSize());
         this.expectedResponse = new HashMap<>();
     }
 
@@ -195,33 +195,20 @@ public class Node implements Runnable {
             if (stream == null) {
                 stream              = new ByteArrayOutputStream();
                 currentMessageSize  = -1;
-                buffer.clear();
             }
 
             byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
-
-            int read = socket.read(buffer);
+            int read = socket.read(data);
 
             if (read > 0) {
-                buffer.flip();
-            }
+                stream.write(data);
 
-            if (read <= 0) {
-                stream.flush();
-                stream.close();
-
-                // queue the message for processing.
-                finish(stream);
-            } else {
-                // check message header
-                if (currentMessageSize == -1 && read >= 4) {
-                    currentMessageSize = buffer.getInt();
+                if (currentMessageSize == -1 && stream.size() >= 4) {
+                    currentMessageSize = Utils.makeInt(stream.toByteArray());
 
                     if (currentMessageSize <= 0) {
                         errors ++;
                         messageCache.increaseSpamAverage(0.2);
-                        stream.flush();
-                        stream.close();
                         // queue the message for processing.
                         finish(stream);
                     }
@@ -229,29 +216,17 @@ public class Node implements Runnable {
                     if (currentMessageSize > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
                         errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
                         stream = null;
-                        close();
                         throw new WolkenException("message content exceeds the maximum size allowed by the protocol.");
                     }
                 }
+            }
 
-                if (currentMessageSize > 0) {
-                    while (buffer.remaining() > 0) {
-                        int remaining = buffer.remaining();
-                        buffer.get(data, 0, remaining);
-                        stream.write(data, 0, remaining);
-                    }
+            if (stream != null && currentMessageSize > 0 && stream.size() == currentMessageSize) {
+                // queue the message for processing.
+                finish(stream);
 
-                    if (currentMessageSize == stream.size()) {
-                        stream.flush();
-                        stream.close();
-
-                        // queue the message for processing.
-                        finish(stream);
-
-                        stream = null;
-                        currentMessageSize = -1;
-                    }
-                }
+                stream = null;
+                currentMessageSize = -1;
             }
         } catch (WolkenException | IOException e) {
             e.printStackTrace();
