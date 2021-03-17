@@ -203,7 +203,6 @@ public class Node implements Runnable {
 
             int read = socket.read(buffer);
 
-            long timestamp = System.currentTimeMillis();
             if (read > 0) {
                 buffer.flip();
             }
