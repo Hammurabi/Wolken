@@ -324,19 +324,7 @@ public class Node implements Runnable {
     }
 
     public InetAddress getInetAddress() {
-        try {
-            return ((InetSocketAddress)socket.getSocketAddress()).getAddress();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            return InetAddress.getByName("localhost");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return ((InetSocketAddress)socket.getSocketAddress()).getAddress();
     }
 
     public MessageCache getMessageCache()
