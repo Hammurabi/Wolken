@@ -13,6 +13,7 @@ import org.wolkenproject.utils.VarInt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
@@ -669,6 +670,20 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public boolean hasMultipleRecipients() {
             return false;
+        }
+
+        @Override
+        protected void setSignature(Signature signature) throws WolkenException {
+            if (signature instanceof RecoverableSignature) {
+                this.signature = (RecoverableSignature) signature;
+            }
+
+            throw new WolkenException("invalid signature type '" + signature.getClass() + "'.");
+        }
+
+        @Override
+        protected Transaction copyForSignature() {
+            return new PayloadTransaction(value, fee, nonce, Arrays.copyOf(payload, payload.length));
         }
 
         @Override
