@@ -34,7 +34,7 @@ public class Server implements Runnable {
         // generate a nonce to know when we self connect
         new SecureRandom().nextBytes(nonce);
 
-        socket.configureBlocking(false);
+        // listen for incoming connections indefinitely
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
 
         netAddress = Context.getInstance().getIpAddressList().getAddress(InetAddress.getLocalHost());
