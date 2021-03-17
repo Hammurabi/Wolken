@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Node implements Runnable {
-    private SocketChannel                   socket;
+    private Socket                          socket;
     private ReentrantLock                   mutex;
     private Queue<Message>                  messages;
     private Queue<byte[]>                   messageQueue;
@@ -39,7 +39,7 @@ public class Node implements Runnable {
 //        this(new Socket(ip, port));
 //    }
 
-    public Node(SocketChannel socket) throws IOException {
+    public Node(Socket socket) throws IOException {
         this.socket         = socket;
         this.mutex          = new ReentrantLock();
         this.messageQueue   = new ConcurrentLinkedQueue<>();
@@ -48,11 +48,8 @@ public class Node implements Runnable {
         this.errors         = 0;
         this.stream         = null;
         this.currentMessageSize = -1;
-//        this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
-//        this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
         this.firstConnected = System.currentTimeMillis();
         this.respones       = Collections.synchronizedMap(new HashMap<>());
-        this.socket.configureBlocking(false);
         this.buffer         = ByteBuffer.allocate(Context.getInstance().getNetworkParameters().getBufferSize());
         this.expectedResponse = new HashMap<>();
     }
