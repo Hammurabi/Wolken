@@ -60,6 +60,7 @@ public class Context {
         serializationFactory.registerClass(VersionMessage.class, new VersionMessage());
         serializationFactory.registerClass(VerackMessage.class, new VerackMessage());
         serializationFactory.registerClass(VersionInformation.class, new VersionInformation());
+        serializationFactory.registerClass(CheckoutMessage.class, new CheckoutMessage(0));
 
         serializationFactory.registerClass(BlockList.class, new BlockList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(FailedToRespondMessage.class, new FailedToRespondMessage(0, 0, new byte[Message.UniqueIdentifierLength]));
