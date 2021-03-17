@@ -298,27 +298,11 @@ public class Node implements Runnable {
                 byte msg[] = outputStream.toByteArray();
                 int offset = 0;
 
-                buffer.clear();
-                buffer.putInt(msg.length);
-                buffer.flip();
-
                 // write the length of the message
-                while (buffer.hasRemaining()) {
-                    socket.write(buffer);
-                }
+                socket.write(Utils.takeApart(msg.length));
 
                 // write the actual  message
-                while (offset < msg.length) {
-                    int remainder = msg.length - offset;
-                    buffer.clear();
-                    buffer.put(msg, offset, Math.min(Context.getInstance().getNetworkParameters().getBufferSize(), remainder));
-                    buffer.flip();
-                    while (buffer.hasRemaining()) {
-                        int write = socket.write(buffer);
-
-                        offset += write;
-                    }
-                }
+                socket.write(msg);
 
                 // notify the message that it was sent
                 message.onSend(this);
