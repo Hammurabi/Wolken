@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -35,7 +36,7 @@ public class Context {
     private OpcodeRegister opcodeRegister;
     private FileService fileService;
 
-    public Context(FileService service, boolean testNet, Address[] payList) throws WolkenException, IOException {
+    public Context(FileService service, boolean testNet, Address[] payList, Set<InetAddress> forceConnections) throws WolkenException, IOException {
         Context.instance = this;
         this.database = new Database(service.newFile("db"));
         this.networkParameters = new NetworkParameters(testNet);
@@ -197,7 +198,7 @@ public class Context {
         opcodeRegister.registerOp("swap15", "swap two objects (the 1st and 16th) on the stack.", 1, scope -> scope.getStack().swap(1, 16));
 
         this.blockChain = new BlockChain();
-        this.server = new Server();
+        this.server = new Server(forceConnections);
 
         getThreadPool().execute(server);
         getThreadPool().execute(blockChain);
