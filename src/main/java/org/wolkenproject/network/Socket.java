@@ -19,7 +19,7 @@ public class Socket {
     }
 
     public void bind(SocketAddress socketAddress) throws IOException {
-        socket.bind(socketAddress);
+        socket.connect(socketAddress);
         socket.setSoTimeout(5);
         isOpen      = true;
         isClosed    = false;
