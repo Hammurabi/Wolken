@@ -177,7 +177,7 @@ public class Node implements Runnable {
                 return;
             }
 
-            if (!socket.finishConnect()) {
+            if (!socket.isOpen()) {
                 return;
             }
 
