@@ -451,4 +451,12 @@ public class Node implements Runnable {
                 ", isClosed=" + isClosed +
                 '}';
     }
+
+    public VersionInformation getVersionInfo() {
+        return versionMessage;
+    }
+
+    public void increaseErrors(int i) {
+        errors += i;
+    }
 }
