@@ -83,8 +83,8 @@ public class Server implements Runnable {
 
     private void forceConnect(NetAddress address) {
         try {
-            SocketChannel socket = SocketChannel.open();
-            socket.connect(new InetSocketAddress(address.getAddress(), address.getPort()));
+            Socket socket = new Socket();
+            socket.bind(new InetSocketAddress(address.getAddress(), address.getPort()));
 
             Node node = new Node(socket);
             mutex.lock();
