@@ -68,7 +68,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return transaction;
     }
 
-    protected abstract void setSignature(Signature signature);
+    protected abstract void setSignature(Signature signature) throws WolkenException;
 
     protected abstract Transaction copyForSignature();
 
@@ -230,7 +230,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         private RecoverableSignature signature;
 
         private RegisterAliasTransaction() {
-            this.signature = new RecoverableSignature();
+            this(0);
+        }
+
+        private RegisterAliasTransaction(long nonce) {
+            this.nonce      = nonce;
+            this.signature  = new RecoverableSignature();
         }
 
         @Override
@@ -288,6 +293,20 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public boolean hasMultipleRecipients() {
             return false;
+        }
+
+        @Override
+        protected void setSignature(Signature signature) throws WolkenException {
+            if (signature instanceof RecoverableSignature) {
+                this.signature = (RecoverableSignature) signature;
+            }
+
+            throw new WolkenException("invalid signature type '" + signature.getClass() + "'.");
+        }
+
+        @Override
+        protected Transaction copyForSignature() {
+            return new RegisterAliasTransaction(,);
         }
 
         @Override
