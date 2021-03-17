@@ -3,6 +3,7 @@ package org.wolkenproject.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 // this class represents an UNSIGNED variable integer
 // that has a range of 1 - 8 bytes
@@ -169,7 +170,9 @@ public class VarInt {
         if (preserveAllBits) {
             int numBytes = stream.read();
             byte bytes[] = new byte[numBytes + 1];
-            stream.read(bytes);
+            if (stream.read(bytes) != bytes.length) {
+                throw new IOException();
+            }
 
             return Utils.makeInt(Utils.conditionalExpand(4, bytes));
         } else {
@@ -193,21 +196,26 @@ public class VarInt {
         if (preserveAllBits) {
             int numBytes = stream.read();
             byte bytes[] = new byte[numBytes + 1];
-            stream.read(bytes);
+            if (stream.read(bytes) != bytes.length) {
+                throw new IOException();
+            }
 
-            return Utils.makeInt(Utils.conditionalExpand(8, bytes));
+            return Utils.makeInt(Utils.conditionalExpand(4, bytes));
         } else {
             int test    = stream.read();
             int value   = test & 0x1F;
             int length  = test >> 5;
+
             if (length == 0) {
                 return value;
             }
 
             byte remaining[] = new byte[length];
-            stream.read(remaining);
+            if (stream.read(remaining) != remaining.length) {
+                throw new IOException();
+            }
 
-            return Utils.makeInt(Utils.conditionalExpand(8, Utils.concatenate(new byte[] {(byte) value}, remaining)));
+            return Utils.makeLong(Utils.conditionalExpand(8, Utils.concatenate(new byte[] {(byte) value}, remaining)));
         }
     }
 }
