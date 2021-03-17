@@ -46,6 +46,16 @@ public class CheckoutMessage extends Message {
     }
 
     @Override
+    public void onSend(Node node) {
+        super.onSend(node);
+        try {
+            node.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
         VarInt.writeCompactUInt32(reason, false, stream);
     }
