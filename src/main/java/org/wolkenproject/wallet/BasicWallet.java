@@ -86,6 +86,32 @@ public class BasicWallet {
         return null;
     }
 
+    public void incrementNonce() {
+        try {
+            InputStream stream = fileService.openFileInputStream();
+            byte allBytes[] = new byte[149];
+            stream.read(allBytes);
+            stream.close();
+
+            byte nonce[] = Utils.takeApartLong(Utils.makeLong(allBytes, 69) + 1);
+            allBytes[69] = nonce[0];
+            allBytes[70] = nonce[1];
+            allBytes[71] = nonce[2];
+            allBytes[72] = nonce[3];
+            allBytes[73] = nonce[4];
+            allBytes[74] = nonce[5];
+            allBytes[75] = nonce[6];
+            allBytes[76] = nonce[7];
+
+            OutputStream outputStream = fileService.openFileOutputStream();
+            outputStream.write(allBytes);
+            outputStream.flush();
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static BasicWallet generateWallet(FileService service) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidParameterSpecException, InvalidKeySpecException, IOException {
         return generateWallet(service, new char[] {0, 0, 0, 0});
     }
@@ -116,6 +142,9 @@ public class BasicWallet {
             stream.write(result.getIv());
             // must be encrypted (48 bytes)
             stream.write(result.getEncryptionResult());
+
+            stream.flush();
+            stream.close();
 
             return new BasicWallet(publicKey, service);
         }
