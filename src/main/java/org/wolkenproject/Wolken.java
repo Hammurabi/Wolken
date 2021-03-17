@@ -51,6 +51,7 @@ public class Wolken {
             }
 
             BasicWallet wallet = new BasicWallet(mainDirectory.newFile(qsArgs[3]));
+            Transaction transaction = Transaction.newTransfer(recipient, amount, fee, wallet.getNonce() + 1);
             System.exit(0);
         }
 
