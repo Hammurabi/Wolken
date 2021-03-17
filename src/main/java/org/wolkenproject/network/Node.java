@@ -1,9 +1,11 @@
 package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
+import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 
 import java.io.*;
@@ -24,6 +26,7 @@ public class Node implements Runnable {
     private MessageCache                    messageCache;
     private long                            firstConnected;
     private int                             errors;
+    private byte                            readBuffer[];
 //    private ByteBuffer                      buffer;
     private ByteArrayOutputStream           stream;
     private int                             currentMessageSize;
@@ -46,7 +49,7 @@ public class Node implements Runnable {
         this.currentMessageSize = -1;
         this.firstConnected = System.currentTimeMillis();
         this.respones       = Collections.synchronizedMap(new HashMap<>());
-//        this.buffer         = ByteBuffer.allocate(Context.getInstance().getNetworkParameters().getBufferSize());
+        this.readBuffer     = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
         this.expectedResponse = new HashMap<>();
     }
 
@@ -169,10 +172,6 @@ public class Node implements Runnable {
         mutex.lock();
 
         try {
-            if (isClosed) {
-                return;
-            }
-
             if (!socket.isOpen()) {
                 return;
             }
@@ -193,31 +192,37 @@ public class Node implements Runnable {
                 currentMessageSize  = -1;
             }
 
-            byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
-            int read = socket.read(data);
+            // read message size
+            if (currentMessageSize < 0) {
+                byte smallBuffer[] = new byte[4];
+                socket.read(smallBuffer);
 
-            if (read > 0) {
-                stream.write(data);
+                currentMessageSize = Utils.makeInt(smallBuffer);
 
-                if (currentMessageSize == -1 && stream.size() >= 4) {
-                    currentMessageSize = Utils.makeInt(stream.toByteArray());
+                if (currentMessageSize <= 0) {
+                    errors ++;
+                    messageCache.increaseSpamAverage(0.2);
+                    // queue the message for processing.
+                    finish(stream);
+                    currentMessageSize = -1;
+                }
 
-                    if (currentMessageSize <= 0) {
-                        errors ++;
-                        messageCache.increaseSpamAverage(0.2);
-                        // queue the message for processing.
-                        finish(stream);
-                    }
-
-                    if (currentMessageSize > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
-                        errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
-                        stream = null;
-                        throw new WolkenException("message content exceeds the maximum size allowed by the protocol.");
-                    }
+                if (currentMessageSize > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
+                    errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                    stream = null;
+                    currentMessageSize = -1;
+                    throw new WolkenException("message content exceeds the maximum size allowed by the protocol.");
                 }
             }
 
-            if (stream != null && currentMessageSize > 0 && stream.size() == currentMessageSize) {
+            // blocking read (5ms max block)
+            int read = socket.read(readBuffer);
+
+            if (read > 0) {
+                stream.write(readBuffer, 0, read);
+            }
+
+            if (stream != null && stream.size() == currentMessageSize) {
                 // queue the message for processing.
                 finish(stream);
 
@@ -229,6 +234,7 @@ public class Node implements Runnable {
             errors ++;
             if (stream != null) {
                 stream = null;
+                currentMessageSize = -1;
             }
         } finally {
             mutex.unlock();
@@ -253,9 +259,9 @@ public class Node implements Runnable {
 
             byte msg[] = messageQueue.poll();
             ByteArrayInputStream inputStream = new ByteArrayInputStream(msg);
-            Utils.skipBytes(inputStream, 4);
             Message message = Context.getInstance().getSerialFactory().fromStream(inputStream);
             inputStream.close();
+
             return checkSpam(message);
         } catch (IOException | WolkenException e) {
             errors++;
@@ -280,11 +286,11 @@ public class Node implements Runnable {
     {
         mutex.lock();
         try{
-            if (isClosed) {
+            if (!socket.isOpen()) {
                 return;
             }
 
-            while (!messages.isEmpty() && !isClosed) {
+            while (!messages.isEmpty() && socket.isOpen()) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 Message message = messages.poll();
                 message.serialize(outputStream);
@@ -292,7 +298,6 @@ public class Node implements Runnable {
                 outputStream.close();
 
                 byte msg[] = outputStream.toByteArray();
-                int offset = 0;
 
                 // write the length of the message
                 socket.write(Utils.takeApart(msg.length));
@@ -403,5 +408,9 @@ public class Node implements Runnable {
 
     public void increaseErrors(int i) {
         errors += i;
+    }
+
+    public boolean isConnected() {
+        return socket.isOpen();
     }
 }
