@@ -782,6 +782,15 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
+        protected void setSignature(Signature signature) throws WolkenException {
+        }
+
+        @Override
+        protected Transaction copyForSignature() {
+            return null;
+        }
+
+        @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
         }
 
