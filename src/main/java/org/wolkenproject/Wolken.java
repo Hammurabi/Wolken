@@ -5,6 +5,7 @@ import org.wolkenproject.core.*;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.crypto.CryptoLib;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.network.NetAddress;
 import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.Logger;
 import java.io.IOException;
@@ -80,13 +81,14 @@ public class Wolken {
             }
         }
 
-        Set<InetAddress> connectionList = new HashSet<>();
+        Set<NetAddress> connectionList = new HashSet<>();
 
         if (cmd.hasOption("force_connect")) {
             String value = cmd.getOptionValue("force_connect");
             String ips[] = value.substring(1, value.length() - 1).split(",");
-            for (String ip : ips) {
-                connectionList.add(InetAddress.getByName(ip));
+            for (String ipInfo : ips) {
+                String ip[] = ipInfo.split(":");
+                connectionList.add(new NetAddress(InetAddress.getByName(ip[0]), Integer.parseInt(ip[1]), 0));
             }
         }
 
