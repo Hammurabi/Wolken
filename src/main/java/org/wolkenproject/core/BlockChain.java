@@ -60,59 +60,61 @@ public class BlockChain implements Runnable {
                 lastBroadcast = System.currentTimeMillis();
             }
 
-            // pull from suggested block pool
-            BlockIndex block = nextFromPool();
+            if (hasBlocksInPool()) {
+                // pull from suggested block pool
+                BlockIndex block = nextFromPool();
 
-            try {
-                if (getTip() == null) {
-                    Logger.alert("settings new tip" + block);
-                    tip = block;
-                    setBlockIndex(tip.getHeight(), tip);
+                try {
+                    if (getTip() == null) {
+                        Logger.alert("settings new tip" + block);
+                        tip = block;
+                        setBlockIndex(tip.getHeight(), tip);
 
-                    Logger.alert("downloading blocks{"+block.getHeight()+"}");
-                    while (block.getHeight() > 0) {
-                        // request the parent of this block
-                        BlockIndex parent = requestBlock(block.getBlock().getParentHash());
+                        Logger.alert("downloading blocks{"+block.getHeight()+"}");
+                        while (block.getHeight() > 0) {
+                            // request the parent of this block
+                            BlockIndex parent = requestBlock(block.getBlock().getParentHash());
 
-                        // delete the downloaded chain if we cannot find the block
-                        if (parent == null) {
-                            Logger.alert("requested block{"+Base16.encode(block.getBlock().getParentHash())+"} not found.");
-                            Logger.alert("erasing{"+(getTip().getHeight() - block.getHeight())+"} blocks.");
+                            // delete the downloaded chain if we cannot find the block
+                            if (parent == null) {
+                                Logger.alert("requested block{"+Base16.encode(block.getBlock().getParentHash())+"} not found.");
+                                Logger.alert("erasing{"+(getTip().getHeight() - block.getHeight())+"} blocks.");
 
-                            for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
-                                Context.getInstance().getDatabase().deleteBlock(i);
+                                for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
+                                    Context.getInstance().getDatabase().deleteBlock(i);
+                                }
+
+                                tip = null;
+                                break;
                             }
 
-                            tip = null;
-                            break;
+                            block = parent;
+                            setBlockIndex(block.getHeight(), block);
                         }
 
-                        block = parent;
-                        setBlockIndex(block.getHeight(), block);
+                        Logger.alert("downloaded entire chain successfully.");
+                        continue;
                     }
 
-                    Logger.alert("downloaded entire chain successfully.");
-                    continue;
-                }
-
-                if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
-                    // switch to this chain
-                    if (block.getHeight() == tip.getHeight()) {
-                        // if both blocks share the same height, then orphan the current tip.
-                        replaceTip(block);
-                    } else if (block.getHeight() == (tip.getHeight() + 1)) {
-                        // if block is next in line then set as next block.
-                        setNext(block);
-                    } else if (block.getHeight() > tip.getHeight()) {
-                        // if block next but with some blocks missing then we fill the gap.
-                        setNextGapped(block);
-                    } else if (block.getHeight() < tip.getHeight()) {
-                        // if block is earlier then we must roll back the chain.
-                        rollback(block);
+                    if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
+                        // switch to this chain
+                        if (block.getHeight() == tip.getHeight()) {
+                            // if both blocks share the same height, then orphan the current tip.
+                            replaceTip(block);
+                        } else if (block.getHeight() == (tip.getHeight() + 1)) {
+                            // if block is next in line then set as next block.
+                            setNext(block);
+                        } else if (block.getHeight() > tip.getHeight()) {
+                            // if block next but with some blocks missing then we fill the gap.
+                            setNextGapped(block);
+                        } else if (block.getHeight() < tip.getHeight()) {
+                            // if block is earlier then we must roll back the chain.
+                            rollback(block);
+                        }
                     }
+                } catch (WolkenException e) {
+                    e.printStackTrace();
                 }
-            } catch (WolkenException e) {
-                e.printStackTrace();
             }
 
             byte tipHash[] = getTip().getHash();
@@ -217,6 +219,15 @@ public class BlockChain implements Runnable {
         lock.lock();
         try {
             return orphanedBlocks.poll();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private boolean hasBlocksInPool() {
+        lock.lock();
+        try {
+            return !blockPool.isEmpty();
         } finally {
             lock.unlock();
         }
@@ -420,7 +431,7 @@ public class BlockChain implements Runnable {
     }
 
     public BlockIndex makeGenesisBlock() {
-        Block genesis = new Block(new byte[Block.UniqueIdentifierLength], 0);
+        Block genesis = new Block(new byte[Block.UniqueIdentifierLength], Context.getInstance().getNetworkParameters().getDefaultBits());
         genesis.addTransaction(Transaction.newCoinbase("", Context.getInstance().getNetworkParameters().getMaxReward(), Context.getInstance().getNetworkParameters().getFoundingAddresses()));
         genesis.setNonce(0);
         return new BlockIndex(genesis, BigInteger.ZERO, 0);
