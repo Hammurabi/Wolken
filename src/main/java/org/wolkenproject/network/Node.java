@@ -232,7 +232,7 @@ public class Node implements Runnable {
                         errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
                         stream = null;
                         close();
-                        return;
+                        throw new WolkenException("message content exceeds the maximum size allowed by the protocol.");
                     }
                 }
 
@@ -255,7 +255,7 @@ public class Node implements Runnable {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (WolkenException | IOException e) {
             e.printStackTrace();
             errors ++;
             if (stream != null) {
