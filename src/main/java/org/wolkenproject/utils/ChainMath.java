@@ -88,6 +88,7 @@ public class ChainMath {
 
     public static BigInteger targetIntegerFromBits(byte bits[]) throws WolkenException {
         int length      = Byte.toUnsignedInt(bits[0]);
+
         if (length > 32)
             throw new WolkenException("invalid target bits '" + Base16.encode(bits) + "'.");
 
