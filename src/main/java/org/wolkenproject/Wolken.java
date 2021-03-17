@@ -8,6 +8,7 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.NetAddress;
 import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.Logger;
+import org.wolkenproject.wallet.BasicWallet;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -26,8 +27,8 @@ public class Wolken {
         options.addOption("enable_storage", true, "act as a storage node.");
         options.addOption("enable_seeding", false, "act as a seeding node.");
         options.addOption("force_connect", true, "force a connection to an array of {ip:port}.");
-        //-quicksend {to:xxxxxx,amount:12,fee:0.00001,wallet:xxx,pass:yyy}
-        options.addOption("quicksend", true, "quickly make a transaction and sign it.");
+        //-quicksend to amount fee wallet pass
+        options.addOption("quick_send", true, "quickly make a transaction and sign it.");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -41,6 +42,16 @@ public class Wolken {
                 Logger.faterr("provided directory '" + cmd.getOptionValue("dir") + "' does not exist.");
                 return;
             }
+        }
+
+        if (cmd.hasOption("quick_send")) {
+            String qsArgs[] = cmd.getOptionValues("quick_send");
+            if (qsArgs.length != 5) {
+                throw new WolkenException("quicksend expects 5 arguments, '"+qsArgs.length+"' provided.");
+            }
+
+            BasicWallet wallet = new BasicWallet(mainDirectory.newFile(qsArgs[3]));
+            System.exit(0);
         }
 
         boolean isTestNet = false;
