@@ -13,6 +13,7 @@ import org.wolkenproject.utils.VarInt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
@@ -179,6 +180,15 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public boolean hasMultipleRecipients() {
             return false;
+        }
+
+        @Override
+        protected void setSignature(Signature signature) {
+        }
+
+        @Override
+        protected Transaction copyForSignature() {
+            return new MintTransaction(value, Arrays.copyOf(recipient, recipient.length), Arrays.copyOf(dump, dump.length));
         }
 
         @Override
