@@ -544,6 +544,20 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
+        protected void setSignature(Signature signature) throws WolkenException {
+            if (signature instanceof RecoverableSignature) {
+                this.signature = (RecoverableSignature) signature;
+            }
+
+            throw new WolkenException("invalid signature type '" + signature.getClass() + "'.");
+        }
+
+        @Override
+        protected Transaction copyForSignature() {
+            return new BasicTransactionToAlias(alias, value, fee, nonce);
+        }
+
+        @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
             VarInt.writeCompactUInt64(alias, false, stream);
             VarInt.writeCompactUInt64(value, false, stream);
