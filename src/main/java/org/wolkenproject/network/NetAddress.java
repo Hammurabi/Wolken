@@ -13,7 +13,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Objects;
 
-public class NetAddress extends SerializableI implements Serializable, Comparable {
+public class NetAddress extends SerializableI implements Serializable, Comparable<NetAddress> {
     private static final long serialVersionUID = 3738771433856794716L;
     private InetAddress address;
     private int         port;
@@ -70,7 +70,6 @@ public class NetAddress extends SerializableI implements Serializable, Comparabl
     public void write(OutputStream stream) throws IOException {
         byte[] bytes = address.getAddress();
         stream.write(bytes.length);
-        System.out.println(bytes.length);
         stream.write(bytes);
         Utils.writeUnsignedInt16(port, stream);
         Utils.writeLong(services, stream);
@@ -118,7 +117,7 @@ public class NetAddress extends SerializableI implements Serializable, Comparabl
     }
 
     @Override
-    public int compareTo(@org.jetbrains.annotations.NotNull Object o) {
-        return 0;
+    public int compareTo(NetAddress o) {
+        return spamAverage < o.getSpamAverage() ? 1 : -1;
     }
 }
