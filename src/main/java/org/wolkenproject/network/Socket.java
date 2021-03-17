@@ -15,6 +15,9 @@ public class Socket {
         isClosed    = false;
     }
 
+    protected Socket(java.net.Socket socket) {
+    }
+
     public void bind(SocketAddress socketAddress) throws IOException {
         socket.bind(socketAddress);
         socket.setSoTimeout(5);
