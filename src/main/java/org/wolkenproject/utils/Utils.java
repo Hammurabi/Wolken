@@ -3,7 +3,9 @@ package org.wolkenproject.utils;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -445,5 +447,11 @@ public class Utils {
     // return the minimum number of bits required to represent this number
     public static int numBitsRequired(long x) {
         return (int) (Math.floor(log2(x + 1)) + 1);
+    }
+
+    public static void skipBytes(InputStream stream, int numBytes) throws IOException {
+        for (int i = 0; i < numBytes; i ++) {
+            stream.read();
+        }
     }
 }
