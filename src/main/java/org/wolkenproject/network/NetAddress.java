@@ -68,8 +68,9 @@ public class NetAddress extends SerializableI implements Serializable {
 
     @Override
     public void write(OutputStream stream) throws IOException {
-        byte bytes[] = address.getAddress();
+        byte[] bytes = address.getAddress();
         stream.write(bytes.length);
+        System.out.println(bytes.length);
         stream.write(bytes);
         Utils.writeUnsignedInt16(port, stream);
         Utils.writeLong(services, stream);
@@ -77,12 +78,14 @@ public class NetAddress extends SerializableI implements Serializable {
 
     @Override
     public void read(InputStream stream) throws IOException {
-        int length = stream.read();
-        byte bytes[] = new byte[length];
-        stream.read(bytes);
+        int length = checkNotEOF(stream.read());
+        byte[] bytes = new byte[length];
+        checkFullyRead(stream.read(bytes), length);
         address = InetAddress.getByAddress(bytes);
         port    = Utils.makeInt((byte) 0, (byte) 0, (byte) stream.read(), (byte) stream.read());
-        stream.read(bytes, 0, 8);
+
+        byte[] buffer = new byte[8];
+        checkFullyRead(stream.read(buffer), 8);
         services= Utils.makeLong(bytes);
     }
 
