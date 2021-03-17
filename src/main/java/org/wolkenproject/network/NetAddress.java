@@ -13,7 +13,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Objects;
 
-public class NetAddress extends SerializableI implements Serializable {
+public class NetAddress extends SerializableI implements Serializable, Comparable {
     private static final long serialVersionUID = 3738771433856794716L;
     private InetAddress address;
     private int         port;
@@ -115,5 +115,10 @@ public class NetAddress extends SerializableI implements Serializable {
                 ", services=" + services +
                 ", spamAverage=" + spamAverage +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@org.jetbrains.annotations.NotNull Object o) {
+        return 0;
     }
 }
