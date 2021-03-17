@@ -34,6 +34,7 @@ public class VersionMessage extends Message {
         } else if (versionInformation.isSelfConnection(server.getNonce())) {
             // this is a self connection, we must terminate it
             Logger.alert("terminating self connection..");
+            node.sendMessage(new CheckoutMessage(CheckoutMessage.Reason.SelfConnect));
         } else {
             // send verack
             node.sendMessage(new VerackMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(
@@ -45,10 +46,10 @@ public class VersionMessage extends Message {
                     Context.getInstance().getBlockChain().getHeight(),
                     server.getNonce()
             )));
-        }
 
-        Context.getInstance().getIpAddressList().send(node);
-        node.sendMessage(new RequestInv(Context.getInstance().getNetworkParameters().getVersion()));
+            Context.getInstance().getIpAddressList().send(node);
+            node.sendMessage(new RequestInv(Context.getInstance().getNetworkParameters().getVersion()));
+        }
     }
 
     @Override
