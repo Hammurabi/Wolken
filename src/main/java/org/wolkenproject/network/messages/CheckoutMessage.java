@@ -29,6 +29,8 @@ public class CheckoutMessage extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
+        Logger.alert("node ${n} requested to disconnect for reason ${r}", node, reason);
+
         try {
             node.close();
         } catch (IOException e) {
