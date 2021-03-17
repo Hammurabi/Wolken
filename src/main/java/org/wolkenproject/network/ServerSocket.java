@@ -8,7 +8,7 @@ public class ServerSocket {
     private boolean                 isOpen;
 
     public ServerSocket() throws IOException {
-        socket = new java.net.ServerSocket(213);
+        socket = new java.net.ServerSocket();
         isOpen = false;
         socket.setSoTimeout(5);
     }
