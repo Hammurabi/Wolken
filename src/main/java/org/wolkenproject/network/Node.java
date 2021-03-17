@@ -315,7 +315,7 @@ public class Node implements Runnable {
                 return;
             }
 
-            while (!messages.isEmpty()) {
+            while (!messages.isEmpty() && !isClosed) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 Message message = messages.poll();
                 message.serialize(outputStream);
@@ -346,6 +346,9 @@ public class Node implements Runnable {
                         offset += write;
                     }
                 }
+
+                // notify the message that it was sent
+                message.onSend(this);
             }
         } catch (IOException | WolkenException e) {
             e.printStackTrace();
