@@ -1,19 +1,15 @@
 package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
-import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
-import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
@@ -329,7 +325,7 @@ public class Node implements Runnable {
 
     public InetAddress getInetAddress() {
         try {
-            return ((InetSocketAddress) socket.getRemoteAddress()).getAddress();
+            return ((InetSocketAddress)socket.getSocketAddress()).getAddress();
         } catch (IOException e) {
             e.printStackTrace();
         }
