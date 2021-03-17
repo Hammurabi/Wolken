@@ -257,6 +257,7 @@ public class Node implements Runnable {
 
             byte msg[] = messageQueue.poll();
             ByteArrayInputStream inputStream = new ByteArrayInputStream(msg);
+            Utils.skipBytes(inputStream, 4);
             Message message = Context.getInstance().getSerialFactory().fromStream(inputStream);
             inputStream.close();
             return checkSpam(message);
