@@ -10,6 +10,7 @@ import org.wolkenproject.crypto.ec.ECPublicKey;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.HashUtil;
+import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import javax.crypto.BadPaddingException;
@@ -26,11 +27,13 @@ import java.security.spec.InvalidParameterSpecException;
 
 public class BasicWallet {
     private Key         publicKey;
+    private long        nonce;
     private FileService fileService;
 
     public BasicWallet(Key publicKey, FileService service) {
         this.publicKey  = publicKey;
         this.fileService= service;
+        this.nonce      = 0;
     }
 
     public BasicWallet(FileService newFile) throws IOException, WolkenException {
@@ -41,7 +44,9 @@ public class BasicWallet {
         if (read != pub.length) {
             throw new WolkenException("could not read entire public key.");
         }
-
+        byte nonceBytes[] = new byte[8];
+        read = stream.read(nonceBytes);
+        nonce = Utils.makeLong(nonceBytes);
         publicKey = new ECPublicKey(pub);
         stream.close();
     }
@@ -53,12 +58,16 @@ public class BasicWallet {
     public Key getPrivateKey(char password[]) {
         try {
             InputStream stream = fileService.openFileInputStream();
-            int version = VarInt.readCompactUInt32(false, stream);
+            byte versionBytes[] = new byte[4];
+            int read = stream.read(versionBytes);
+            int version = Utils.makeInt(versionBytes);
             byte pub[]  = new byte[65];
-            int read = stream.read(pub);
+            read = stream.read(pub);
             if (read != pub.length) {
                 throw new WolkenException("could not read entire public key.");
             }
+            byte nonceBytes[] = new byte[8];
+            read = stream.read(nonceBytes);
             byte salt[] = new byte[8];
             read = stream.read(salt);
             byte iv[] = new byte[16];
@@ -96,9 +105,11 @@ public class BasicWallet {
             OutputStream stream         = service.openFileOutputStream();
 
             // write a version number
-            VarInt.writeCompactUInt32(1, false, stream);
+            Utils.writeInt(1, stream);
             // does not need to be encrypted (65 bytes)
             stream.write(publicKey.getEncoded());
+            // write the current nonce
+            Utils.writeLong(0, stream);
             // does not need to be secret (8 bytes)
             stream.write(salt);
             // does not need to be secret (16 bytes)
@@ -110,5 +121,9 @@ public class BasicWallet {
         }
 
         return null;
+    }
+
+    public long getNonce() {
+        return nonce;
     }
 }
