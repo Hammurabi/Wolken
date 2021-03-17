@@ -9,7 +9,6 @@ import org.wolkenproject.utils.Logger;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.security.SecureRandom;
@@ -114,7 +113,7 @@ public class Server implements Runnable {
     private void listenForIncomingConnections()
     {
         Logger.alert("listening for inbound connections.");
-        SocketChannel incoming = null;
+        Socket incoming = null;
 
         while (Context.getInstance().isRunning())
         {
