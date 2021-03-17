@@ -324,7 +324,7 @@ public class Node implements Runnable {
     }
 
     public InetAddress getInetAddress() {
-        return ((InetSocketAddress)socket.getSocketAddress()).getAddress();
+        return ((InetSocketAddress) socket.getSocketAddress()).getAddress();
     }
 
     public MessageCache getMessageCache()
@@ -360,13 +360,7 @@ public class Node implements Runnable {
     }
 
     public int getPort() {
-        try {
-            return  ((InetSocketAddress) socket.getRemoteAddress()).getPort();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
+        return  ((InetSocketAddress)socket.getSocketAddress()).getPort();
     }
 
     public long timeSinceConnected()
