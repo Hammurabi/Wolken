@@ -1,5 +1,7 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.crypto.Key;
+import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.WolkenException;
@@ -14,6 +16,7 @@ import java.io.OutputStream;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
+
     public static final class Flags
     {
         public static final int
@@ -53,6 +56,20 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract Address getRecipient();
     public abstract boolean hasMultipleSenders();
     public abstract boolean hasMultipleRecipients();
+
+    public Transaction sign(Keypair keypair) throws WolkenException {
+        // this includes the version bytes
+        byte tx[] = asSerializedArray();
+        Signature signature = keypair.sign(tx);
+        Transaction transaction = copyForSignature();
+        transaction.setSignature(signature);
+
+        return transaction;
+    }
+
+    protected abstract void setSignature(Signature signature);
+
+    protected abstract Transaction copyForSignature();
 
     // multiple recipients and senders might be possible in the future
     public Address[] getSenders() throws WolkenException {
