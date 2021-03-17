@@ -2,6 +2,7 @@ package org.wolkenproject;
 
 import org.apache.commons.cli.*;
 import org.wolkenproject.core.*;
+import org.wolkenproject.crypto.ec.ECKeypair;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.crypto.CryptoLib;
@@ -29,7 +30,8 @@ public class Wolken {
         options.addOption("enable_seeding", false, "act as a seeding node.");
         options.addOption("force_connect", true, "force a connection to an array of {ip:port}.");
         //-quicksend to amount fee wallet pass
-        options.addOption("quick_send", true, "quickly make a transaction and sign it.");
+        options.addOption("quick_sign", true, "quickly make a transaction and sign it.");
+        options.addOption("broadcast_tx", true, "broadcast a transaction to the network.");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -60,7 +62,7 @@ public class Wolken {
         }
 
         if (cmd.hasOption("quick_sign")) {
-            String qsArgs[] = cmd.getOptionValues("quick_send");
+            String qsArgs[] = cmd.getOptionValues("quick_sign");
             if (qsArgs.length != 5) {
                 throw new WolkenException("quicksend expects 5 arguments, '"+qsArgs.length+"' provided.");
             }
@@ -76,7 +78,7 @@ public class Wolken {
 
             Address recipient = Address.fromFormatted(Base58.decode(qsArgs[0]));
             Transaction transaction = Transaction.newTransfer(recipient, amount, fee, wallet.getNonce() + 1);
-            transaction = transaction.sign(wallet.getPrivateKey(qsArgs[4].toCharArray()));
+            transaction = transaction.sign(new ECKeypair(wallet.getPrivateKey(qsArgs[4].toCharArray())));
 
             Logger.alert("transaction signed successfully ${t}", Base16.encode(transaction.asSerializedArray()));
             System.exit(0);
