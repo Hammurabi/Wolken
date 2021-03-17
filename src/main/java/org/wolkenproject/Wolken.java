@@ -26,6 +26,8 @@ public class Wolken {
         options.addOption("enable_storage", true, "act as a storage node.");
         options.addOption("enable_seeding", false, "act as a seeding node.");
         options.addOption("force_connect", true, "force a connection to an array of {ip:port}.");
+        //-quicksend {to:xxxxxx,amount:12,fee:0.00001,wallet:xxx,pass:yyy}
+        options.addOption("quicksend", true, "quickly make a transaction and sign it.");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
