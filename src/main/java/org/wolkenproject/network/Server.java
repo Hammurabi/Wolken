@@ -58,7 +58,7 @@ public class Server implements Runnable {
             int i = connectedNodes.size();
             Logger.alert("attempting to connect to ${a}", address);
 
-            forceConnect(address);
+//            forceConnect(address);
             if (connectedNodes.size() == i) {
                 Logger.alert("failed to connect to ${a}", address);
             }
@@ -150,7 +150,7 @@ public class Server implements Runnable {
             long currentTime = System.currentTimeMillis();
             Set<Node> connectedNodes = getConnectedNodes();
 
-            if (currentTime - lastNotif >= 10_000) {
+            if (currentTime - lastNotif >= 3_000) {
                 Logger.alert("server uptime: ${m}ms", System.currentTimeMillis() - upSince);
                 Logger.alert("connected: ${d}", connectedNodes.size());
                 Logger.alert("list: ${s}", connectedNodes);
@@ -170,6 +170,10 @@ public class Server implements Runnable {
 
             for (Node node : connectedNodes)
             {
+                if (!node.isConnected()) {
+                    continue;
+                }
+
                 CachedMessage message = node.listenForMessage();
 
                 if (message != null) {
