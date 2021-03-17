@@ -5,8 +5,8 @@ import org.wolkenproject.exceptions.MochaException;
 import java.math.BigInteger;
 
 public class MochaNumber extends MochaObject {
-    public static final BigInteger MaxSignedInt     = BigInteger.TWO.pow(255).subtract(BigInteger.ONE);
-    public static final BigInteger MaxUnsignedInt   = BigInteger.TWO.pow(256).subtract(BigInteger.ONE);
+    public static final BigInteger MaxSignedInt     = new BigInteger("2").pow(255).subtract(BigInteger.ONE);
+    public static final BigInteger MaxUnsignedInt   = new BigInteger("2").pow(256).subtract(BigInteger.ONE);
     protected BigInteger    value;
     private boolean         sign; // 0 = unsigned & 1 = signed
 
