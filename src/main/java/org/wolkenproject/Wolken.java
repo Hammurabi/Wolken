@@ -8,6 +8,9 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.Logger;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Wolken {
     public static void main(String args[]) throws ParseException, WolkenException, IOException {
@@ -77,6 +80,16 @@ public class Wolken {
             }
         }
 
-        Context context = new Context(mainDirectory, isTestNet, address);
+        Set<InetAddress> connectionList = new HashSet<>();
+
+        if (cmd.hasOption("force_connect")) {
+            String value = cmd.getOptionValue("force_connect");
+            String ips[] = value.substring(1, value.length() - 1).split(",");
+            for (String ip : ips) {
+                connectionList.add(InetAddress.getByName(ip));
+            }
+        }
+
+        Context context = new Context(mainDirectory, isTestNet, address, connectionList);
     }
 }
