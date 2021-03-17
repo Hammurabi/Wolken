@@ -2,6 +2,7 @@ package org.wolkenproject.network;
 
 import java.io.IOException;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 public class Socket {
@@ -15,7 +16,11 @@ public class Socket {
         isClosed    = false;
     }
 
-    protected Socket(java.net.Socket socket) {
+    protected Socket(java.net.Socket socket) throws SocketException {
+        this.socket = socket;
+        socket.setSoTimeout(5);
+        isOpen      = true;
+        isClosed    = false;
     }
 
     public void bind(SocketAddress socketAddress) throws IOException {
