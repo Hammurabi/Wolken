@@ -31,11 +31,14 @@ public class VersionMessage extends Message {
 
         if (!Context.getInstance().getNetworkParameters().isVersionCompatible(versionInformation.getVersion(), Context.getInstance().getNetworkParameters().getVersion())) {
             // send bye message.
+            Logger.alert("terminating connection.. (incompatible versions)");
+            node.sendMessage(new CheckoutMessage(CheckoutMessage.Reason.SelfConnect));
         } else if (versionInformation.isSelfConnection(server.getNonce())) {
             // this is a self connection, we must terminate it
             Logger.alert("terminating self connection..");
             node.sendMessage(new CheckoutMessage(CheckoutMessage.Reason.SelfConnect));
         } else {
+            Logger.alert("sending verack..");
             // send verack
             node.sendMessage(new VerackMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(
                     Context.getInstance().getNetworkParameters().getVersion(),
