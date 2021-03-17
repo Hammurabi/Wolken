@@ -10,6 +10,7 @@ public class ServerSocket {
     public ServerSocket() throws IOException {
         socket = new java.net.ServerSocket(213);
         isOpen = false;
+        socket.setSoTimeout(5);
     }
 
     public void bind(SocketAddress address) throws IOException {
@@ -29,5 +30,9 @@ public class ServerSocket {
 
     public boolean isOpen() {
         return isOpen;
+    }
+
+    public void close() throws IOException {
+        socket.close();
     }
 }
