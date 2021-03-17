@@ -19,24 +19,6 @@ import java.security.spec.InvalidParameterSpecException;
 import java.security.spec.KeySpec;
 
 public class CryptoUtil {
-    public static final class AESResult {
-        private byte encryptionResult[];
-        private byte iv[];
-
-        public AESResult(byte[] encryptionResult, byte[] iv) {
-            this.encryptionResult = encryptionResult;
-            this.iv = iv;
-        }
-
-        public byte[] getEncryptionResult() {
-            return encryptionResult;
-        }
-
-        public byte[] getIv() {
-            return iv;
-        }
-    }
-
     public static SecretKey generateSecretForAES(char password[], byte salt[]) throws InvalidKeySpecException, NoSuchAlgorithmException {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         KeySpec spec = new PBEKeySpec(password, salt, 65536, 256);
