@@ -54,6 +54,7 @@ public class Socket {
     }
 
     public void close() {
-        isClosed = true;
+        isClosed    = true;
+        isOpen      = false;
     }
 }
