@@ -25,11 +25,12 @@ public class CheckoutMessage extends Message {
 
     public CheckoutMessage(int reason) {
         super(Flags.Notify, Context.getInstance().getNetworkParameters().getVersion());
+        this.reason = reason;
     }
 
     @Override
     public void executePayload(Server server, Node node) {
-        Logger.alert("node ${n} requested to disconnect for reason ${r}", node, reason);
+        Logger.alert("node ${n} requested to disconnect for reason ${r}", node.getInetAddress(), reason);
 
         try {
             node.close();
@@ -38,17 +39,20 @@ public class CheckoutMessage extends Message {
             e.printStackTrace();
         }
 
-        if (reason == Reason.SelfConnect) {
-            if (!node.getVersionInfo().isSelfConnection(server.getNonce())) {
-                node.increaseErrors(1);
-            }
-        }
+        // this check should happen but it's not crucial
+//        if (reason == Reason.SelfConnect) {
+            // there is no version info if "checkout" is sent
+//            if (!node.getVersionInfo().isSelfConnection(server.getNonce())) {
+//                node.increaseErrors(1);
+//            }
+//        }
     }
 
     @Override
     public void onSend(Node node) {
         super.onSend(node);
         try {
+            Logger.alert("connection termination requested ${r}.", reason);
             node.close();
         } catch (IOException e) {
             e.printStackTrace();
