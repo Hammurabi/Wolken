@@ -27,7 +27,7 @@ public class VersionMessage extends Message {
     @Override
     public void executePayload(Server server, Node node) {
         node.setVersionInfo(versionInformation);
-        Logger.alert("received version info {i}", versionInformation);
+        Logger.alert("received version info ${i}", versionInformation);
 
         if (!Context.getInstance().getNetworkParameters().isVersionCompatible(versionInformation.getVersion(), Context.getInstance().getNetworkParameters().getVersion())) {
             // send bye message.
