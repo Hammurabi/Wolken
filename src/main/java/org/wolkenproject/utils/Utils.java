@@ -78,10 +78,15 @@ public class Utils {
     }
 
     public static long makeLong(byte[] trim) {
+        return makeLong(trim, 0);
+    }
+
+    public static long makeLong(byte[] trim, int offset) {
         if (trim.length < 8) {
             trim = concatenate(new byte[8 - trim.length], trim);
         }
-        return makeLong(trim[0], trim[1], trim[2], trim[3], trim[4], trim[5], trim[6], trim[7]);
+
+        return makeLong(trim[offset], trim[offset + 1], trim[offset + 2], trim[offset + 3], trim[offset + 4], trim[offset + 5], trim[offset + 6], trim[offset + 7]);
     }
 
     public static long makeLongUnsafe(byte[] trim) {
