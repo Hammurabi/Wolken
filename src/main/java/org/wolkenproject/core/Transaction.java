@@ -306,7 +306,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         protected Transaction copyForSignature() {
-            return new RegisterAliasTransaction(,);
+            return new RegisterAliasTransaction(nonce);
         }
 
         @Override
