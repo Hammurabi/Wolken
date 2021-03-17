@@ -41,6 +41,10 @@ public abstract class Message extends SerializableI {
 
     public abstract void executePayload(Server server, Node node);
 
+    // called after a message is sent
+    public void onSend(Node node) {
+    }
+
     public void writeHeader(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
