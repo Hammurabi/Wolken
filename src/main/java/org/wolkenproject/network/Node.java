@@ -1,9 +1,11 @@
 package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
+import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 
 import java.io.*;
@@ -309,6 +311,10 @@ public class Node implements Runnable {
     {
         mutex.lock();
         try{
+            if (isClosed) {
+                return;
+            }
+
             while (!messages.isEmpty()) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 Message message = messages.poll();
@@ -335,7 +341,9 @@ public class Node implements Runnable {
                     buffer.put(msg, offset, Math.min(Context.getInstance().getNetworkParameters().getBufferSize(), remainder));
                     buffer.flip();
                     while (buffer.hasRemaining()) {
-                        offset += socket.write(buffer);
+                        int write = socket.write(buffer);
+
+                        offset += write;
                     }
                 }
             }
