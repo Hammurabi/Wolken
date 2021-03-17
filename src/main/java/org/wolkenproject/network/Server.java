@@ -56,6 +56,16 @@ public class Server implements Runnable {
         Logger.alert("establishing outbound connections.");
         int connections = 0;
 
+        for (NetAddress address : forceConnections) {
+            int i = connectedNodes.size();
+            Logger.alert("attempting to connect to ${a}", address);
+
+            forceConnect(address);
+            if (connectedNodes.size() == i) {
+                Logger.alert("failed to connect to ${a}", address);
+            }
+        }
+
         for (NetAddress address : addresses)
         {
             forceConnect(address);
