@@ -180,6 +180,6 @@ public class NetworkParameters {
     }
 
     public Address getFoundingAddresses() {
-        return null;
+        return Address.fromRaw(new byte[20]);
     }
 }
