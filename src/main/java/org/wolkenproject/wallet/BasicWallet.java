@@ -15,10 +15,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -41,6 +38,12 @@ public class BasicWallet {
     }
 
     public Key getPrivateKey(byte password[]) {
+        try {
+            InputStream stream = fileService.openFileInputStream();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -61,9 +64,16 @@ public class BasicWallet {
             AESResult result            = CryptoUtil.aesEncrypt(privateKey, encryptionKey);
 
             OutputStream stream         = service.openFileOutputStream();
+            
+            // write a version number
             VarInt.writeCompactUInt32(1, false, stream);
+            // does not need to be encrypted (65 bytes)
             stream.write(publicKey.getEncoded());
+            // does not need to be secret (8 bytes)
+            stream.write(salt);
+            // does not need to be secret (16 bytes)
             stream.write(result.getIv());
+            // must be encrypted (48 bytes)
             stream.write(result.getEncryptionResult());
 
             return new BasicWallet(publicKey, service);
