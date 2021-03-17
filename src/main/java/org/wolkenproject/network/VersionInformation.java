@@ -4,6 +4,7 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +51,7 @@ public class VersionInformation extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException {
-        Utils.writeInt(version, stream);
+        VarInt.writeCompactUInt32(version, false, stream);
         Utils.writeLong(services, stream);
         Utils.writeLong(timestamp, stream);
         sender.write(stream);
@@ -63,8 +64,7 @@ public class VersionInformation extends SerializableI {
     public void read(InputStream stream) throws IOException, WolkenException {
         byte buffer[] = new byte[8];
 
-        checkFullyRead(stream.read(buffer, 0, 4), 4);
-        this.version = Utils.makeInt(buffer);
+        this.version = VarInt.readCompactUInt32(false, stream);
 
         checkFullyRead(stream.read(buffer), 8);
         this.services = Utils.makeLong(buffer);
@@ -72,8 +72,8 @@ public class VersionInformation extends SerializableI {
         checkFullyRead(stream.read(buffer), 8);
         this.timestamp = Utils.makeLong(buffer);
 
-        sender = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class), stream);
-        receiver = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class), stream);
+        sender      = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class), stream);
+        receiver    = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(NetAddress.class), stream);
 
         checkFullyRead(stream.read(buffer, 0, 4), 4);
         this.blockHeight = Utils.makeInt(buffer);
