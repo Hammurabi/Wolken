@@ -25,7 +25,7 @@ public class Server implements Runnable {
     private byte                nonce[];
     private long                upSince;
 
-    public Server() throws IOException {
+    public Server(Set<NetAddress> forceConnections) throws IOException {
         socket  = ServerSocketChannel.open();
         socket.bind(new InetSocketAddress(Context.getInstance().getNetworkParameters().getPort()));
         upSince = System.currentTimeMillis();
@@ -48,50 +48,58 @@ public class Server implements Runnable {
         Logger.alert("opened port '" + Context.getInstance().getNetworkParameters().getPort() + "' on " + netAddress.getAddress().toString());
 
         connectedNodes = Collections.synchronizedSet(new LinkedHashSet<>());
-        connectToNodes(Context.getInstance().getIpAddressList().getAddresses());
+        connectToNodes(forceConnections, Context.getInstance().getIpAddressList().getAddresses());
     }
 
-    public boolean connectToNodes(Queue<NetAddress> addresses)
+    public boolean connectToNodes(Set<NetAddress> forceConnections, Queue<NetAddress> addresses)
     {
         Logger.alert("establishing outbound connections.");
         int connections = 0;
 
         for (NetAddress address : addresses)
         {
-            try {
-                SocketChannel socket = SocketChannel.open();
-                socket.connect(new InetSocketAddress(address.getAddress(), address.getPort()));
+            forceConnect(address);
 
-                Node node = new Node(socket);
-                mutex.lock();
-                try {
-                    connectedNodes.add(node);
-                    Logger.alert("connected to ${s}", address);
-                } finally {
-                    mutex.unlock();
-                }
-
-                node.sendMessage(new VersionMessage(
-                        Context.getInstance().getNetworkParameters().getVersion(),
-                        new VersionInformation(
-                                Context.getInstance().getNetworkParameters().getVersion(),
-                                VersionInformation.Flags.AllServices,
-                                System.currentTimeMillis(),
-                                getNetAddress(),
-                                address,
-                                Context.getInstance().getBlockChain().getHeight(),
-                                nonce)));
-
-                if (++ connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections())
-                {
-                    return true;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (++ connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections())
+            {
+                return true;
             }
         }
 
         return false;
+    }
+
+    private void forceConnect(InetAddress address, int port) {
+        forceConnect(new NetAddress(address, port, 0));
+    }
+
+    private void forceConnect(NetAddress address) {
+        try {
+            SocketChannel socket = SocketChannel.open();
+            socket.connect(new InetSocketAddress(address.getAddress(), address.getPort()));
+
+            Node node = new Node(socket);
+            mutex.lock();
+            try {
+                connectedNodes.add(node);
+                Logger.alert("connected to ${s}", address);
+            } finally {
+                mutex.unlock();
+            }
+
+            node.sendMessage(new VersionMessage(
+                    Context.getInstance().getNetworkParameters().getVersion(),
+                    new VersionInformation(
+                            Context.getInstance().getNetworkParameters().getVersion(),
+                            VersionInformation.Flags.AllServices,
+                            System.currentTimeMillis(),
+                            getNetAddress(),
+                            address,
+                            Context.getInstance().getBlockChain().getHeight(),
+                            nonce)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void listenForIncomingConnections()
