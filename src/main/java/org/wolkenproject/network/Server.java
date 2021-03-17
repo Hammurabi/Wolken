@@ -9,7 +9,6 @@ import org.wolkenproject.utils.Logger;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -18,7 +17,7 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Server implements Runnable {
-    private ServerSocketChannel socket;
+    private ServerSocket        socket;
     private Set<Node>           connectedNodes;
     private NetAddress          netAddress;
     private ReentrantLock       mutex;
@@ -26,7 +25,7 @@ public class Server implements Runnable {
     private long                upSince;
 
     public Server(Set<NetAddress> forceConnections) throws IOException {
-        socket  = ServerSocketChannel.open();
+        socket  = new ServerSocket();
         socket.bind(new InetSocketAddress(Context.getInstance().getNetworkParameters().getPort()));
         upSince = System.currentTimeMillis();
         mutex   = new ReentrantLock();
