@@ -20,5 +20,6 @@ public class Logger {
         }
 
         System.out.println(msg);
+        System.out.println();
     }
 }
