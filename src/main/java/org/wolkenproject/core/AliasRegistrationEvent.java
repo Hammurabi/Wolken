@@ -10,6 +10,7 @@ public class AliasRegistrationEvent extends Event {
 
     @Override
     public void apply() {
+        Context.getInstance().getDatabase().registerAlias(address, alias);
     }
 
     @Override
