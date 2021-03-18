@@ -30,12 +30,12 @@ public class Block extends BlockHeader {
     }
 
     public final int countLength() {
-        long transactionLength = 0;
+        int transactionLength = 0;
         for (Transaction transaction : transactions) {
             transactionLength += transaction.calculateSize();
         }
 
-        return BlockHeader.Size + VarInt.SizeOfCompactUin32(transactions.size(), false) + transactionLength;
+        return BlockHeader.Size + VarInt.sizeOfCompactUin32(transactions.size(), false) + transactionLength;
     }
 
     /*
