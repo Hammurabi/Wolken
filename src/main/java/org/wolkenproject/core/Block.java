@@ -47,8 +47,8 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     // executes transctions and returns an event list
     public BlockStateChangeResult getStateChange() {
         List<Event> events = new ArrayList<>();
-        Queue<byte[]> txids = new LinkedBlockingQueue<>();
-        Queue<byte[]> txeids = new LinkedBlockingQueue();
+        Queue<byte[]> txids = new LinkedList<>();
+        Queue<byte[]> txeids = new LinkedList<>();
 
         for (Transaction transaction : transactions) {
             List<Event> transactionEvents = transaction.verifyTransaction(this);
