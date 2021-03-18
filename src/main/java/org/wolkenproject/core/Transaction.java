@@ -76,7 +76,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         -rown without being caught then the transacti
         -on is deemed invalid.
      */
-    public abstract List<Event> verifyTransaction(Block block);
+    public abstract List<Event> getStateChange(Block block);
 
     public Transaction sign(Keypair keypair) throws WolkenException {
         // this includes the version bytes
@@ -212,7 +212,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public List<Event> verifyTransaction(Block block) {
+        public List<Event> getStateChange(Block block) {
             long rewardAtBlock = block.getHe
             return ;
         }
