@@ -15,7 +15,7 @@ public class AliasedAccountBalanceUpdateEvent extends Event {
 
     @Override
     public void undo() {
-
+        Context.getInstance().getDatabase().updateAccount(alias, Context.getInstance().getDatabase().getAccount(alias).updateBalance(-value));
     }
 
     @Override
