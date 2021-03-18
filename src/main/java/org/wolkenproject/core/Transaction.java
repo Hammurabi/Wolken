@@ -185,6 +185,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
+        public long calculateSize() {
+            return VarInt.;
+        }
+
+        @Override
         protected void setSignature(Signature signature) {
         }
 
