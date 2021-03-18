@@ -58,6 +58,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract Address getRecipient();
     public abstract boolean hasMultipleSenders();
     public abstract boolean hasMultipleRecipients();
+    public abstract long calculateSize();
 
     public Transaction sign(Keypair keypair) throws WolkenException {
         // this includes the version bytes
