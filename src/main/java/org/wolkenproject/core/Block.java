@@ -50,10 +50,8 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         Queue<byte[]> txeids = new LinkedList<>();
         long accumulatedFees = 0L;
 
-        Iterator<Transaction> transactionIterator = transactions.iterator();
-
-        while (transactionIterator.hasNext()) {
-            accumulatedFees += transactionIterator.next().getTransactionFee();
+        for (Transaction transaction : transactions) {
+            accumulatedFees += transaction.getTransactionFee();
         }
 
         for (Transaction transaction : transactions) {
