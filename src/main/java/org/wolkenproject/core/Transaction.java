@@ -186,7 +186,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public long calculateSize() {
-            return VarInt.sizeOfCompactUin32(getVersion(), false) + recipient.length + dump.length;
+            return VarInt.sizeOfCompactUin32(getVersion(), false) + 20 + dump.length;
         }
 
         @Override
@@ -424,6 +424,15 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public boolean hasMultipleRecipients() {
             return false;
+        }
+
+        @Override
+        public long calculateSize() {
+            return VarInt.sizeOfCompactUin32(getVersion(), false) + 20 +
+                    VarInt.sizeOfCompactUin64(value, false) +
+                    VarInt.sizeOfCompactUin64(fee, false) +
+                    VarInt.sizeOfCompactUin64(nonce, false) +
+                    65;
         }
 
         @Override
