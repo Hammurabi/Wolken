@@ -10,7 +10,6 @@ public class NewAccountEvent extends Event {
     public NewAccountEvent(byte[] address) {
         super();
         this.address    = address;
-        this.account    = account;
     }
 
     @Override
