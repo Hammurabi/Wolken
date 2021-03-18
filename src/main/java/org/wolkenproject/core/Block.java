@@ -59,11 +59,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
             accumulatedFees += transaction.getTransactionFee();
         }
 
-        Iterator<Transaction> iterator  = transactions.iterator();
-
-        while (iterator.hasNext()) {
-            Transaction transaction = iterator.next();
-
+        for (Transaction transaction : transactions) {
             List<Event> transactionEvents = transaction.getStateChange(this, blockHeight);
             events.addAll(transactionEvents);
             txids.add(transaction.getTransactionID());
