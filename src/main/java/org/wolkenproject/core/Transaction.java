@@ -373,8 +373,9 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         public List<Event> getStateChange(Block block, int blockHeight, long fees) throws WolkenException {
             if (stateChangeEvents == null) {
                 stateChangeEvents = new ArrayList<>();
-                createAccountIfDoesNotExist(getSender().getRaw(), stateChangeEvents);
-                stateChangeEvents.add(new AccountBalanceUpdateEvent(recipient, value));
+                Address sender = getSender();
+                createAccountIfDoesNotExist(sender.getRaw(), stateChangeEvents);
+                stateChangeEvents.add(new AliasRegistrationEvent(sender.getRaw()));
             }
             return null;
         }
