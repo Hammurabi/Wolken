@@ -44,13 +44,19 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     }
 
     // executes transctions and returns an event list
-    public BlockStateChangeResult getStateChange() {
+    public BlockStateChangeResult getStateChange(int blockHeight) {
         List<Event> events = new ArrayList<>();
         Queue<byte[]> txids = new LinkedList<>();
         Queue<byte[]> txeids = new LinkedList<>();
 
+        long accumulatedFees = 0L;
+
         for (Transaction transaction : transactions) {
-            List<Event> transactionEvents = transaction.getStateChange(this);
+            accumulatedFees += transaction.getTransactionFee();
+        }
+
+        for (Transaction transaction : transactions) {
+            List<Event> transactionEvents = transaction.getStateChange(this, blockHeight, accumulatedFees);
             events.addAll(transactionEvents);
             txids.add(transaction.getTransactionID());
             transactionEvents.forEach(event -> txeids.add(event.eventId()));
