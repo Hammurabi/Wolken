@@ -14,7 +14,7 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Block extends BlockHeader {
+public class Block extends BlockHeader implements Iterable<Transaction> {
     private static BigInteger LargestHash = BigInteger.ONE.shiftLeft(256);
     public static int UniqueIdentifierLength = 32;
     private Set<Transaction>   transactions;
@@ -135,5 +135,10 @@ public class Block extends BlockHeader {
                 transactions.remove();
             }
         }
+    }
+
+    @Override
+    public Iterator<Transaction> iterator() {
+        return transactions.iterator();
     }
 }
