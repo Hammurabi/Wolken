@@ -63,10 +63,40 @@ public class TransactionPool {
         }
     }
 
+    public void queueBlock(Block block) {
+        for (Transaction transaction : block) {
+            byte txid[] = transaction.getTransactionID();
+            if (transactions.containsKey(txid)) {
+                continue;
+            }
+
+            if (Context.getInstance().getDatabase().checkTransactionExists(txid)) {
+                continue;
+            }
+
+            transactions.add(transaction);
+        }
+    }
+
     public Transaction pollTransaction() {
         mutex.lock();
         try {
-            return transactions.poll();
+            // infinitely loop
+            while (!transactions.isEmpty()) {
+                // poll a transaction
+                Transaction transaction = transactions.poll();
+                byte txid[] = transaction.getTransactionID();
+
+                // if the transaction has already been added to a block then continue
+                if (Context.getInstance().getDatabase().checkTransactionExists(txid)) {
+                    continue;
+                }
+
+                // otherwise return the transaction
+                return transaction;
+            }
+
+            return null;
         } finally {
             mutex.unlock();
         }
