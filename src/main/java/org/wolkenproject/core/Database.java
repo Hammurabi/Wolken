@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.wolkenproject.utils.Utils.concatenate;
+
 public class Database {
     private DB              database;
     private FileService     location;
@@ -22,7 +24,8 @@ public class Database {
     Account                 = Utils.takeApartShort((short) 1),
     ChainTip                = Utils.takeApartShort((short) 2),
     BlockHeader             = Utils.takeApartShort((short) 3),
-    BlockIndex              = Utils.takeApartShort((short) 4);
+    BlockIndex              = Utils.takeApartShort((short) 4),
+    Transaction             = Utils.takeApartShort((short) 5);
 
     public Database(FileService location) throws IOException {
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
@@ -31,7 +34,7 @@ public class Database {
     }
 
     public void setTip(BlockIndex block) {
-        put(ChainTip, Utils.concatenate(Utils.concatenate(block.getHash(), Utils.takeApart(block.getHeight()))));
+        put(ChainTip, concatenate(concatenate(block.getHash(), Utils.takeApart(block.getHeight()))));
     }
 
     public boolean checkBlockExists(byte[] hash) {
@@ -39,7 +42,7 @@ public class Database {
     }
 
     public boolean checkBlockExists(int height) {
-        byte hash[] = get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
+        byte hash[] = get(concatenate(Database.BlockIndex, Utils.takeApart(height)));
 
         return hash != null;
     }
@@ -61,7 +64,7 @@ public class Database {
     }
 
     public void setBlockIndex(int height, BlockIndex block) {
-        put(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)), block.getHash());
+        put(concatenate(Database.BlockIndex, Utils.takeApart(height)), block.getHash());
         mutex.lock();
         try {
             OutputStream outputStream = location.newFile(".chain").newFile(Base16.encode(block.getHash())).openFileOutputStream();
@@ -76,7 +79,7 @@ public class Database {
     }
 
     public BlockIndex findBlock(int height) {
-        byte hash[] = get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
+        byte hash[] = get(concatenate(Database.BlockIndex, Utils.takeApart(height)));
 
         if (hash == null) {
             return null;
@@ -86,7 +89,7 @@ public class Database {
     }
 
     public void deleteBlock(int height) {
-        byte key[]  = Utils.concatenate(Database.BlockIndex, Utils.takeApart(height));
+        byte key[]  = concatenate(Database.BlockIndex, Utils.takeApart(height));
         byte hash[] = get(key);
 
         if (checkBlockExists(hash)) {
@@ -137,7 +140,7 @@ public class Database {
     }
 
     public byte[] findBlockHash(int height) {
-        return get(Utils.concatenate(Database.BlockIndex, Utils.takeApart(height)));
+        return get(concatenate(Database.BlockIndex, Utils.takeApart(height)));
     }
 
     public BlockHeader findBlockHeader(byte[] hash) {
@@ -192,5 +195,6 @@ public class Database {
     }
 
     public boolean checkTransactionExists(byte[] txid) {
+        return get(concatenate(Transaction, txid)) != null;
     }
 }
