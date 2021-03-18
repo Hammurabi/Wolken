@@ -61,6 +61,18 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         return new BlockStateChangeResult(txids, txeids, events);
     }
 
+    // call transaction.verify()
+    // this does not mean that transactions are VALID
+    private boolean verifyTransactions() throws WolkenException {
+        for (Transaction transaction : transactions) {
+            if (!transaction.verify()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public void build() {
         // set the combined merkle root
         setMerkleRoot(getStateChange().getMerkleRoot());
