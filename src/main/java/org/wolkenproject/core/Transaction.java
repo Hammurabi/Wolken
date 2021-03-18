@@ -378,7 +378,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                 stateChangeEvents = new ArrayList<>();
                 Address sender = getSender();
                 createAccountIfDoesNotExist(sender.getRaw(), stateChangeEvents);
-                stateChangeEvents.add(new AliasRegistrationEvent(sender.getRaw()));
+                stateChangeEvents.add(new AliasRegistrationEvent(sender.getRaw(), alias));
             }
 
             return stateChangeEvents;
@@ -395,17 +395,19 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         protected Transaction copyForSignature() {
-            return new RegisterAliasTransaction(nonce);
+            return new RegisterAliasTransaction(nonce, alias);
         }
 
         @Override
         public void write(OutputStream stream) throws IOException, WolkenException {
             signature.write(stream);
+            VarInt.writeCompactUInt64(alias, false, stream);
         }
 
         @Override
         public void read(InputStream stream) throws IOException, WolkenException {
             signature.read(stream);
+            alias = VarInt.readCompactUInt64(false, stream);
         }
 
         @Override
