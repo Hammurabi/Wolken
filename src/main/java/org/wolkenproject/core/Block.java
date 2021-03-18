@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class Block extends BlockHeader implements Iterable<Transaction> {
     private static BigInteger LargestHash = BigInteger.ONE.shiftLeft(256);
@@ -51,7 +50,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         Queue<byte[]> txeids = new LinkedList<>();
 
         for (Transaction transaction : transactions) {
-            List<Event> transactionEvents = transaction.verifyTransaction(this);
+            List<Event> transactionEvents = transaction.getStateChange(this);
             events.addAll(transactionEvents);
             txids.add(transaction.getTransactionID());
             transactionEvents.forEach(event -> txeids.add(event.eventId()));
