@@ -6,6 +6,7 @@ import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.serialization.SerializationFactory;
+import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.VarInt;
 
@@ -216,6 +217,16 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public long calculateSize() {
             return VarInt.sizeOfCompactUin32(getVersion(), false) + 20 + dump.length;
+        }
+
+        @Override
+        public boolean verify(Block block, int blockHeight, long fees) {
+            return value == ( ChainMath.getReward(blockHeight) + fees );
+        }
+
+        @Override
+        public List<Event> getStateChange(Block block, int blockHeight, long fees) {
+            return null;
         }
 
         @Override
