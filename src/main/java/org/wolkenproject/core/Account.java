@@ -70,4 +70,8 @@ public class Account extends SerializableI {
     public boolean hasAlias() {
         return hasAlias;
     }
+
+    public Account addBalance(long value) {
+        return new Account(nonce, balance + value, hasAlias, alias);
+    }
 }
