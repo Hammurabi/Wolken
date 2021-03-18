@@ -4,8 +4,13 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Event;
 
 public class AliasedAccountBalanceUpdateEvent extends Event {
+    private long alias;
+    private long value;
+
     public AliasedAccountBalanceUpdateEvent(long alias, long value) {
         super();
+        this.alias = alias;
+        this.value = value;
     }
 
     @Override
