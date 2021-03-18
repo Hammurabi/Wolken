@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -467,11 +468,13 @@ public class Utils {
         return HashUtil.sha256d(Utils.concatenate(a, b));
     }
 
-    public static byte[] calculateMerkleRoot(Queue<byte[]> hashes) {
+    public static byte[] calculateMerkleRoot(List<byte[]> hashes) {
         while (hashes.size() > 1) {
-            hashes.add(calculateMerkleRoot(hashes.poll(), hashes.poll()));
+            hashes.add(calculateMerkleRoot(hashes.get(0), hashes.get(1)));
+            hashes.remove(0);
+            hashes.remove(1);
         }
 
-        return hashes.poll();
+        return hashes.get(0);
     }
 }
