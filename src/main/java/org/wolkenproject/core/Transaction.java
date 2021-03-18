@@ -638,11 +638,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         public boolean shallowVerify() throws WolkenException {
             // a transfer of 0 with a fee of 0 is not allowed
             return
-                    (getTransactionValue() + getTransactionFee()) != 0 &&
-                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+            (getTransactionValue() + getTransactionFee()) != 0 &&
                     (signature.getR().length == 32) &&
                     (signature.getS().length == 32) &&
-                    getSender() != null;
+                    getSender() != null &&
+                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getBalance()) >= (value + fee);
         }
 
         @Override
@@ -673,6 +674,21 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                     VarInt.sizeOfCompactUin64(fee, false) +
                     VarInt.sizeOfCompactUin64(nonce, false) +
                     65;
+        }
+
+        @Override
+        public boolean verify(Block block, int blockHeight, long fees) {
+            return false;
+        }
+
+        @Override
+        public List<Event> getStateChange(Block block, int blockHeight, long fees) throws WolkenException {
+            if (stateChangeEvents == null) {
+                stateChangeEvents = new ArrayList<>();
+                stateChangeEvents.add(new AliasedAccountBalanceUpdateEvent(alias, value));
+            }
+
+            return stateChangeEvents;
         }
 
         @Override
