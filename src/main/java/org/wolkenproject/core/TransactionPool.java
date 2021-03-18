@@ -64,6 +64,11 @@ public class TransactionPool {
     }
 
     public Transaction pollTransaction() {
-        return transactions.poll();
+        mutex.lock();
+        try {
+            return transactions.poll();
+        } finally {
+            mutex.unlock();
+        }
     }
 }
