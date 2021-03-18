@@ -6,4 +6,19 @@ public class AliasedAccountBalanceUpdateEvent extends Event {
     public AliasedAccountBalanceUpdateEvent(long alias, long value) {
         super();
     }
+
+    @Override
+    public void apply() {
+        
+    }
+
+    @Override
+    public void undo() {
+
+    }
+
+    @Override
+    public byte[] getEventBytes() {
+        return new byte[0];
+    }
 }
