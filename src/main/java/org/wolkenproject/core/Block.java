@@ -99,9 +99,11 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     }
 
     public boolean verify(int blockHeight) throws WolkenException {
+        // shallow transaction checks
         if (!verifyTransactions()) return false;
-
+        // deeper transaction checks
         if (!verifyTransactions(blockHeight)) return false;
+        // merkle tree checks
         if (!Utils.equals(getStateChange(blockHeight).getMerkleRoot(), getMerkleRoot())) return false;
 
         return true;
