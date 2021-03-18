@@ -88,6 +88,14 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
      */
     public abstract List<Event> getStateChange(Block block, int blockHeight, long fees);
 
+    protected void createAccountIfDoesNotExist(byte address[], List<Event> stateChangeEvents) {
+        if (Context.getInstance().getDatabase().checkAccountExists(address)) {
+            return;
+        }
+
+        stateChangeEvents.add(new CreateAccountEvent(address));
+    }
+
     public Transaction sign(Keypair keypair) throws WolkenException {
         // this includes the version bytes
         byte tx[] = asSerializedArray();
