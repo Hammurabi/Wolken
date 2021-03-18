@@ -81,7 +81,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return all the changes this transaction will
         cause to the global state.
      */
-    public abstract List<Event> getStateChange(Block block, int blockHeight);
+    public abstract List<Event> getStateChange(Block block);
 
     public Transaction sign(Keypair keypair) throws WolkenException {
         // this includes the version bytes
