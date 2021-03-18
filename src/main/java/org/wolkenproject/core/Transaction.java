@@ -1,6 +1,5 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.crypto.Key;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
@@ -86,7 +85,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     }
 
     public byte[] getTransactionID() {
-        return HashUtil.sha256d(asByteArray());
+        if (txid == null) {
+            txid = HashUtil.sha256d(asByteArray());
+        }
+
+        return txid;
     }
 
     @Override
