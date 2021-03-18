@@ -12,6 +12,10 @@ import java.math.BigInteger;
 public class ChainMath {
     public static BigInteger x256 = new BigInteger("2").pow(256);
 
+    public static boolean validSolution(byte solution[], int bits) throws WolkenException {
+        return validSolution(solution, Utils.takeApart(bits));
+    }
+
     public static boolean validSolution(byte solution[], byte targetBits[]) throws WolkenException {
         return new BigInteger(1, solution).compareTo(targetIntegerFromBits(targetBits)) < 0;
     }
