@@ -16,7 +16,7 @@ public class AccountBalanceUpdateEvent extends Event {
     @Override
     public void apply() {
         Account account = Context.getInstance().getDatabase().getAccount(recipient);
-        Context.getInstance().getDatabase().updateAccount(recipient, account.getBalance() + value, account.getNonce());
+        Context.getInstance().getDatabase().updateAccount(recipient, account.addBalance(value));
     }
 
     @Override
