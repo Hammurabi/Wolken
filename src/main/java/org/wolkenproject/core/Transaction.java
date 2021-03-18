@@ -38,6 +38,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
     // this is not serialized
     private byte txid[];
+    // this is not serialized
+    private List<Event> stateChangeEvents;
 
     // can be represented by 1 - 4 bytes
     // version = 1 skips flags all-together
