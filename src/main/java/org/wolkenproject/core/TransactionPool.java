@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TransactionPool {
     private PriorityHashQueue<Transaction> transactions;
     private ReentrantLock                   mutex;
-    private static final int                MaximumBlockQueueSize = 1_250_000_000;
+    private static final int                MaximumTransactionQueueSize = 1_250_000_000;
 
     public TransactionPool() {
         transactions    = new PriorityHashQueue<>(Transaction.class);
@@ -61,5 +61,9 @@ public class TransactionPool {
         for (Transaction transaction : transactions) {
             this.transactions.add(transaction);
         }
+    }
+
+    public Transaction pollTransaction() {
+        return transactions.poll();
     }
 }
