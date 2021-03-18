@@ -67,7 +67,8 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     }
 
     public boolean verify() {
-        if (!Utils.equals(calculateMerkleRoot(), getMerkleRoot())) return false;
+        if (!verifyTransactions()) return false;
+        if (!Utils.equals(getStateChange().getMerkleRoot(), getMerkleRoot())) return false;
 
         return true;
     }
