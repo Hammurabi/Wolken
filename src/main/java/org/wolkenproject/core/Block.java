@@ -60,13 +60,10 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         }
 
         Iterator<Transaction> iterator  = transactions.iterator();
-        Transaction coinbase            = iterator.next();
 
         while (iterator.hasNext()) {
             Transaction transaction = iterator.next();
-        }
 
-        for (Transaction transaction : transactions) {
             List<Event> transactionEvents = transaction.getStateChange(this, blockHeight);
             events.addAll(transactionEvents);
             txids.add(transaction.getTransactionID());
