@@ -290,15 +290,18 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public static final class RegisterAliasTransaction extends Transaction {
         // nonce
         private long nonce;
+        // alias
+        private long alias;
         // signature of the sender
         private RecoverableSignature signature;
 
         private RegisterAliasTransaction() {
-            this(0);
+            this(0, 0);
         }
 
-        private RegisterAliasTransaction(long nonce) {
+        private RegisterAliasTransaction(long nonce, long alias) {
             this.nonce      = nonce;
+            this.alias      = alias;
             this.signature  = new RecoverableSignature();
         }
 
