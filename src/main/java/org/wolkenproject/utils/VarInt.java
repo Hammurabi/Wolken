@@ -109,7 +109,7 @@ public class VarInt {
                 stream.write(bytes[4]);
                 stream.write(bytes[5]);
                 stream.write(bytes[6]);
-            } else {
+            } else if (bits <= 64) {
                 stream.write(7);
                 byte bytes[] = Utils.takeApartInt48(integer);
                 stream.write(bytes[0]);
@@ -276,59 +276,26 @@ public class VarInt {
                 return 7;
             } else if (bits <= 56) {
                 return 8;
+            } else if (bits <= 64) {
+                return 9;
             }
         } else {
             if (bits <= 5) {
-                stream.write((int) (integer & 0x1F));
+                return 1;
             } else if (bits <= 13) {
-                byte bytes[] = Utils.takeApartShort(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 1 << 5);
-                stream.write((Byte.toUnsignedInt(bytes[1])));
+                return 2;
             } else if (bits <= 21) {
-                byte bytes[] = Utils.takeApartInt24(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 2 << 5);
-                stream.write((Byte.toUnsignedInt(bytes[1])));
-                stream.write((Byte.toUnsignedInt(bytes[2])));
+                return 3;
             } else if (bits <= 29) {
-                byte bytes[] = Utils.takeApart(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 3 << 5);
-                stream.write((Byte.toUnsignedInt(bytes[1])));
-                stream.write((Byte.toUnsignedInt(bytes[2])));
-                stream.write((Byte.toUnsignedInt(bytes[3])));
+                return 4;
             } else if (bits <= 37) {
-                byte bytes[] = Utils.takeApartInt40(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 4 << 5);
-                stream.write((Byte.toUnsignedInt(bytes[1])));
-                stream.write((Byte.toUnsignedInt(bytes[2])));
-                stream.write((Byte.toUnsignedInt(bytes[3])));
-                stream.write((Byte.toUnsignedInt(bytes[4])));
+                return 5;
             } else if (bits <= 45) {
-                byte bytes[] = Utils.takeApartInt48(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 5 << 5);
-                stream.write((Byte.toUnsignedInt(bytes[1])));
-                stream.write((Byte.toUnsignedInt(bytes[2])));
-                stream.write((Byte.toUnsignedInt(bytes[3])));
-                stream.write((Byte.toUnsignedInt(bytes[4])));
-                stream.write((Byte.toUnsignedInt(bytes[5])));
+                return 6;
             } else if (bits <= 53) {
-                byte bytes[] = Utils.takeApartInt56(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 6 << 5);
-                stream.write((Byte.toUnsignedInt(bytes[1])));
-                stream.write((Byte.toUnsignedInt(bytes[2])));
-                stream.write((Byte.toUnsignedInt(bytes[3])));
-                stream.write((Byte.toUnsignedInt(bytes[4])));
-                stream.write((Byte.toUnsignedInt(bytes[5])));
-                stream.write((Byte.toUnsignedInt(bytes[6])));
+                return 7;
             } else if (bits <= 61) {
-                byte bytes[] = Utils.takeApartLong(integer);
-                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 7 << 5);
-                stream.write((Byte.toUnsignedInt(bytes[1])));
-                stream.write((Byte.toUnsignedInt(bytes[2])));
-                stream.write((Byte.toUnsignedInt(bytes[3])));
-                stream.write((Byte.toUnsignedInt(bytes[4])));
-                stream.write((Byte.toUnsignedInt(bytes[5])));
-                stream.write((Byte.toUnsignedInt(bytes[6])));
-                stream.write((Byte.toUnsignedInt(bytes[7])));
+                return 8;
             }
         }
 
