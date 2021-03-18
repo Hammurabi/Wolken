@@ -26,7 +26,10 @@ public abstract class Miner implements Runnable {
                 // create a block-index
                 BlockIndex parent = Context.getInstance().getBlockChain().getTip();
                 block.setParent(parent.getHash());
-                block.setBits(ChainMath.calculateNewTarget(block, parent.getHeight() + 1))
+                block.setBits(ChainMath.calculateNewTarget(block, parent.getHeight() + 1));
+
+                // build the block and calculate all the remaining elements needed
+                block.build();
             } catch (WolkenException e) {
                 e.printStackTrace();
             }
