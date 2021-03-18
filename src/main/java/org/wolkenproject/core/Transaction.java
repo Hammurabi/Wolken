@@ -87,7 +87,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return all the changes this transaction will
         cause to the global state.
      */
-    public abstract List<Event> getStateChange(Block block, int blockHeight, long fees);
+    public abstract List<Event> getStateChange(Block block, int blockHeight, long fees) throws WolkenException;
 
     protected void createAccountIfDoesNotExist(byte address[], List<Event> stateChangeEvents) {
         if (Context.getInstance().getDatabase().checkAccountExists(address)) {
@@ -370,7 +370,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public List<Event> getStateChange(Block block, int blockHeight, long fees) {
+        public List<Event> getStateChange(Block block, int blockHeight, long fees) throws WolkenException {
+            if (stateChangeEvents == null) {
+                stateChangeEvents = new ArrayList<>();
+                createAccountIfDoesNotExist(getSender().getRaw(), stateChangeEvents);
+                stateChangeEvents.add(new AccountBalanceUpdateEvent(recipient, value));
+            }
             return null;
         }
 
