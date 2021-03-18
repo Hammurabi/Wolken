@@ -482,11 +482,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
             // a transfer of 0 with a fee of 0 is not allowed
             return
                     (getTransactionValue() + getTransactionFee()) != 0 &&
-                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getBalance()) >= (value + fee) &&
                     (signature.getR().length == 32) &&
                     (signature.getS().length == 32) &&
-                    getSender() != null;
+                    getSender() != null &&
+                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getBalance()) >= (value + fee);
+
         }
 
         @Override
