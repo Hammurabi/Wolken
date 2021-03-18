@@ -15,16 +15,17 @@ public abstract class Miner implements Runnable {
     @Override
     public void run() {
         while (Context.getInstance().isRunning()) {
-            // generate a block
             try {
+                // get a reference parent block
+                BlockIndex parent = Context.getInstance().getBlockChain().getTip();
+                // generate a new block
                 Block block = new Block();
                 // mint coins to our address
-                block.addTransaction(Transaction.newCoinbase("", ChainMath.getReward(blockIndex.getHeight()), miningAddress));
+                block.addTransaction(Transaction.newCoinbase("", ChainMath.getReward(parent.getHeight()), miningAddress));
                 // add transactions
                 addTransactions(block);
 
                 // create a block-index
-                BlockIndex parent = Context.getInstance().getBlockChain().getTip();
                 block.setParent(parent.getHash());
                 block.setBits(ChainMath.calculateNewTarget(block, parent.getHeight() + 1));
 
