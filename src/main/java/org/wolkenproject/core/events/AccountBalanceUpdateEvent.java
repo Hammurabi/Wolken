@@ -21,6 +21,8 @@ public class AccountBalanceUpdateEvent extends Event {
 
     @Override
     public void undo() {
+        Account account = Context.getInstance().getDatabase().getAccount(recipient);
+        Context.getInstance().getDatabase().updateAccount(recipient, account.updateBalance(-value));
     }
 
     @Override
