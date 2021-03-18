@@ -56,13 +56,27 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract long getTransactionFee();
     public abstract long getMaxUnitCost();
     public abstract byte[] getPayload();
-    public abstract boolean verify() throws WolkenException;
+    /*
+        shallow checks of the validity of a transactions
+        check the received is valid
+        check the sender is valid
+        check the signature is valid
+        check the sender has funds
+     */
+    public abstract boolean shallowVerify() throws WolkenException;
     public abstract Address getSender() throws WolkenException;
     public abstract Address getRecipient();
     public abstract boolean hasMultipleSenders();
     public abstract boolean hasMultipleRecipients();
     public abstract long calculateSize();
-    public abstract List<Event> execute(Block block);
+    /*
+        deep checks of the validity of a transactions
+        if the transaction contains a payload, the pa
+        -yload would be executed and if errors are th
+        -rown without being caught then the transacti
+        -on is deemed invalid.
+     */
+    public abstract List<Event> verifyTransaction(Block block);
 
     public Transaction sign(Keypair keypair) throws WolkenException {
         // this includes the version bytes
@@ -167,7 +181,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean verify() {
+        public boolean shallowVerify() {
             // this is not 100% necessary
             return dump.length <= 8192;
         }
@@ -279,7 +293,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean verify() throws WolkenException {
+        public boolean shallowVerify() throws WolkenException {
             // this is not 100% necessary
             // a transfer of 0 with a fee of 0 is not allowed
             return
@@ -404,7 +418,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean verify() throws WolkenException {
+        public boolean shallowVerify() throws WolkenException {
             // a transfer of 0 with a fee of 0 is not allowed
             return
                     (getTransactionValue() + getTransactionFee()) != 0 &&
@@ -542,7 +556,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean verify() throws WolkenException {
+        public boolean shallowVerify() throws WolkenException {
             // a transfer of 0 with a fee of 0 is not allowed
             return
                     (getTransactionValue() + getTransactionFee()) != 0 &&
@@ -682,7 +696,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean verify() {
+        public boolean shallowVerify() {
             return false;
         }
 
@@ -807,7 +821,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean verify() {
+        public boolean shallowVerify() {
             return false;
         }
 
