@@ -218,4 +218,30 @@ public class VarInt {
             return Utils.makeLong(Utils.conditionalExpand(8, Utils.concatenate(new byte[] {(byte) value}, remaining)));
         }
     }
+
+    public static int sizeOfCompactUin32(int integer, boolean preserveAllBits) {
+        long bits = Utils.numBitsRequired(integer);
+
+        if (preserveAllBits) {
+            if (bits <= 8) {
+                return 2;
+            } else if (bits <= 16) {
+                return 3;
+            } else if (bits <= 24) {
+                return 4;
+            } else if (bits <= 32) {
+                return 5;
+            }
+        } else {
+            if (bits <= 6) {
+                return 1;
+            } else if (bits <= 14) {
+                return 2;
+            } else if (bits <= 22) {
+                return 3;
+            } else if (bits <= 30) {
+                return 4;
+            }
+        }
+    }
 }
