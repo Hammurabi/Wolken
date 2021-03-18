@@ -48,8 +48,8 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     // executes transctions and returns an event list
     public BlockStateChangeResult getStateChange() {
         List<Event> events = new ArrayList<>();
-        Queue<byte[]> txids = new LinkedQueue();
-        Queue<byte[]> txeids = new LinkedQueue();
+        Queue<byte[]> txids = new LinkedBlockingQueue<>();
+        Queue<byte[]> txeids = new LinkedBlockingQueue();
 
         for (Transaction transaction : transactions) {
             List<Event> transactionEvents = transaction.execute(this);
@@ -58,7 +58,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
             transactionEvents.forEach(event -> txeids.add(event.eventId()));
         }
 
-        return events;
+        return new BlockStateChangeResult(txids, txeids, events);
     }
 
     protected byte[] calculateMerkleRoot() {
