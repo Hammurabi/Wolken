@@ -5,6 +5,7 @@ import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +30,12 @@ public class Block extends BlockHeader {
     }
 
     public final int countLength() {
-        return asByteArray().length;
+        long transactionLength = 0;
+        for (Transaction transaction : transactions) {
+            transactionLength += transaction.calculateSize();
+        }
+
+        return BlockHeader.Size + VarInt.SizeOfCompactUin32(transactions.size(), false) + transactionLength;
     }
 
     /*
