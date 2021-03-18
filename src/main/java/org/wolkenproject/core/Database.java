@@ -198,6 +198,10 @@ public class Database {
         return get(concatenate(Transaction, txid)) != null;
     }
 
+    public boolean checkAccountExists(byte[] address) {
+        return false;
+    }
+
     public void updateAccount(byte[] accountHolder, Account account) {
     }
 }
