@@ -1,7 +1,10 @@
 package org.wolkenproject.core;
 
 public class AliasRegistrationEvent extends Event {
-    public AliasRegistrationEvent(byte[] raw) {
+    private byte    address[];
+    private long    alias;
+
+    public AliasRegistrationEvent(byte[] address, long alias) {
         super();
     }
 
