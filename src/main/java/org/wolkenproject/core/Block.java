@@ -45,6 +45,19 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         return new BlockHeader(getVersion(), getTimestamp(), getParentHash(), getMerkleRoot(), getBits(), getNonce());
     }
 
+    // executes transctions and returns an event list
+    public List<Event> buildEventList(Queue<byte[]> txids, Queue<byte[]> txeids) {
+        List<Event> events = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            List<Event> transactionEvents = transaction.execute(this);
+            events.addAll(transactionEvents);
+            txids.add(transaction.getTransactionID());
+            transactionEvents.forEach(event -> txeids.add(event.eventId()));
+        }
+
+        return events;
+    }
+
     protected byte[] calculateMerkleRoot() {
         Queue<byte[]> txids = new LinkedBlockingQueue<>();
         for (Transaction transaction : transactions) {
@@ -59,10 +72,15 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     }
 
     public void build() {
+        Queue<byte[]> txids = new LinkedBlockingQueue<>();
+        Queue<byte[]> txeids = new LinkedBlockingQueue<>();
+        List<Event> events = buildEventList(txids, txeids);
 
+        byte merkleRootTX[]     = Utils.calculateMerkleRoot(txids);
+        byte merkleRootTXE[]    = Utils.calculateMerkleRoot(txeids);
 
-        byte stateChangeMerkleRoot = calcul
-        setMerkleRoot(calculateMerkleRoot());
+        // set the combined merkle root
+        setMerkleRoot(Utils.calculateMerkleRoot(merkleRootTX, merkleRootTXE));
     }
 
     public boolean verify() {
