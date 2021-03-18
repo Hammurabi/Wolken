@@ -190,4 +190,7 @@ public class Database {
             mutex.unlock();
         }
     }
+
+    public boolean checkTransactionExists(byte[] txid) {
+    }
 }
