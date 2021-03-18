@@ -1,5 +1,7 @@
 package org.wolkenproject.core.events;
 
+import org.wolkenproject.core.Account;
+import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Event;
 import org.wolkenproject.utils.Utils;
 
@@ -13,6 +15,8 @@ public class AccountBalanceUpdateEvent extends Event {
 
     @Override
     public void apply() {
+        Account account = Context.getInstance().getDatabase().getAccount(recipient);
+        Context.getInstance().getDatabase().updateAccount(recipient, account.getBalance() + value, account.getNonce());
     }
 
     @Override
