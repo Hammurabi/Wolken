@@ -483,6 +483,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
             return
                     (getTransactionValue() + getTransactionFee()) != 0 &&
                     (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getBalance()) >= (value + fee) &&
                     (signature.getR().length == 32) &&
                     (signature.getS().length == 32) &&
                     getSender() != null;
