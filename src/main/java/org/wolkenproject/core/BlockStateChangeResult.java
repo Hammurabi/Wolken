@@ -34,11 +34,11 @@ public class BlockStateChangeResult {
         return transactionEventMerkleRoot;
     }
 
-    public List<byte[]> getTransactionIds() {
+    public Queue<byte[]> getTransactionIds() {
         return transactionIds;
     }
 
-    public List<byte[]> getTransactionEventIds() {
+    public Queue<byte[]> getTransactionEventIds() {
         return transactionEventIds;
     }
 
