@@ -207,4 +207,7 @@ public class Database {
 
     public void newAccount(byte[] address) {
     }
+
+    public void registerAlias(byte[] address, long alias) {
+    }
 }
