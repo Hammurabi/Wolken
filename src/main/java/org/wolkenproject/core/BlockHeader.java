@@ -13,6 +13,7 @@ import static org.wolkenproject.utils.HashUtil.sha256d;
 import static org.wolkenproject.utils.Utils.concatenate;
 
 public class BlockHeader extends SerializableI {
+    protected static int Size = 78;
     private int version;
     private int timestamp;
     private byte previousHash[];
