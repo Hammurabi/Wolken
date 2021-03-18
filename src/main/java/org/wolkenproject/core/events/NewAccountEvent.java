@@ -1,18 +1,21 @@
 package org.wolkenproject.core.events;
 
 import org.wolkenproject.core.Account;
+import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Event;
 
 public class NewAccountEvent extends Event {
-    private Account account;
-    
-    public NewAccountEvent(byte[] address, Account account) {
+    private byte    address[];
+
+    public NewAccountEvent(byte[] address) {
         super();
-        this.account = account;
+        this.address    = address;
+        this.account    = account;
     }
 
     @Override
     public void apply() {
+        Context.getInstance().getDatabase().newAccount(address);
     }
 
     @Override
