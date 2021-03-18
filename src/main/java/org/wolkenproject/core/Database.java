@@ -204,4 +204,7 @@ public class Database {
 
     public void updateAccount(byte[] accountHolder, Account account) {
     }
+
+    public void newAccount(byte[] address) {
+    }
 }
