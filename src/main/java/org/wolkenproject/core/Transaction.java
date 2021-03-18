@@ -76,7 +76,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         -rown without being caught then the transacti
         -on is deemed invalid.
      */
-    public abstract List<Event> verify(Block block, int blockHeight, long fees);
+    public abstract boolean verify(Block block, int blockHeight, long fees);
     /*
         return all the changes this transaction will
         cause to the global state.
