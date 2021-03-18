@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
@@ -61,6 +62,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract boolean hasMultipleSenders();
     public abstract boolean hasMultipleRecipients();
     public abstract long calculateSize();
+    public abstract List<Event> execute(Block block);
 
     public Transaction sign(Keypair keypair) throws WolkenException {
         // this includes the version bytes
