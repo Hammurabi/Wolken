@@ -121,4 +121,8 @@ public class BlockHeader extends SerializableI {
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(BlockHeader.class);
     }
+
+    public void setParent(byte[] hash) {
+        this.previousHash = hash;
+    }
 }
