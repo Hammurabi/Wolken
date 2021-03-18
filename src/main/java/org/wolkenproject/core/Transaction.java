@@ -247,12 +247,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public List<Event> getStateChange(Block block) {
-            long rewardAtBlock = block.getHe
-            return ;
-        }
-
-        @Override
         protected void setSignature(Signature signature) {
         }
 
