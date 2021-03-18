@@ -197,4 +197,7 @@ public class Database {
     public boolean checkTransactionExists(byte[] txid) {
         return get(concatenate(Transaction, txid)) != null;
     }
+
+    public void updateAccount(byte[] accountHolder, Account account) {
+    }
 }
