@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     // this is not serialized
     private byte txid[];
     // this is not serialized
-    private List<Event> stateChangeEvents;
+    protected List<Event> stateChangeEvents;
 
     // can be represented by 1 - 4 bytes
     // version = 1 skips flags all-together
@@ -226,7 +227,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public List<Event> getStateChange(Block block, int blockHeight, long fees) {
-            return null;
+            if (stateChangeEvents == null) {
+                stateChangeEvents = new ArrayList<>();
+            }
+
+            return stateChangeEvents;
         }
 
         @Override
