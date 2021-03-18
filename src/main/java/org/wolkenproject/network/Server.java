@@ -118,10 +118,12 @@ public class Server implements Runnable {
         {
             try {
                 incoming = socket.accept();
+                Logger.alert("received connection request from ${n}", incoming.getSocketAddress());
 
                 if (incoming != null) {
                     if (connectedNodes.size() < (Context.getInstance().getNetworkParameters().getMaxAllowedInboundConnections() + Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections()))
                     {
+                        Logger.alert("accepted connection request from ${n}", incoming.getSocketAddress());
                         mutex.lock();
                         try {
                             connectedNodes.add(new Node(incoming));
