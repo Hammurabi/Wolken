@@ -82,9 +82,17 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         setMerkleRoot(getStateChange(blockHeight).getMerkleRoot());
     }
 
-    public boolean verify() throws WolkenException {
+    public boolean verify(int blockHeight) throws WolkenException {
         if (!verifyTransactions()) return false;
-        if (!Utils.equals(getStateChange().getMerkleRoot(), getMerkleRoot())) return false;
+
+        long accumulatedFees = 0L;
+
+        for (Transaction transaction : transactions) {
+            accumulatedFees += transaction.getTransactionFee();
+        }
+
+        if (!verifyTransactions(this, blockHeight, accumulatedFees)) return false;
+        if (!Utils.equals(getStateChange(blockHeight).getMerkleRoot(), getMerkleRoot())) return false;
 
         return true;
     }
