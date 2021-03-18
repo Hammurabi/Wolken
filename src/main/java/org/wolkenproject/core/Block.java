@@ -29,7 +29,7 @@ public class Block extends BlockHeader {
         transactions = new LinkedHashSet<>();
     }
 
-    public final int countLength() {
+    public final int calculateSize() {
         int transactionLength = 0;
         for (Transaction transaction : transactions) {
             transactionLength += transaction.calculateSize();
@@ -123,5 +123,17 @@ public class Block extends BlockHeader {
 
     public int getTransactionCount() {
         return transactions.size();
+    }
+
+    public void removeLastTransaction() {
+        Iterator<Transaction> transactions = this.transactions.iterator();
+        if (transactions.hasNext())
+        {
+            transactions.next();
+
+            if (!transactions.hasNext()) {
+                transactions.remove();
+            }
+        }
     }
 }
