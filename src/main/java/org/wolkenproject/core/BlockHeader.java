@@ -41,6 +41,14 @@ public class BlockHeader extends SerializableI {
         this.merkleRoot = merkleRoot;
     }
 
+    public void setParent(byte[] hash) {
+        this.previousHash = hash;
+    }
+
+    public void setBits(int bits) {
+        this.bits = bits;
+    }
+
     public int getVersion() {
         return version;
     }
@@ -120,9 +128,5 @@ public class BlockHeader extends SerializableI {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(BlockHeader.class);
-    }
-
-    public void setParent(byte[] hash) {
-        this.previousHash = hash;
     }
 }
