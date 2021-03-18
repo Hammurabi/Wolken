@@ -186,7 +186,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public long calculateSize() {
-            return VarInt.;
+            return VarInt.sizeOfCompactUin32(getVersion(), false) + recipient.length + dump.length;
         }
 
         @Override
