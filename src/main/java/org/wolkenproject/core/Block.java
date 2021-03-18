@@ -48,10 +48,22 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         List<Event> events = new ArrayList<>();
         Queue<byte[]> txids = new LinkedList<>();
         Queue<byte[]> txeids = new LinkedList<>();
+
+        if (transactions.isEmpty()) {
+            return new BlockStateChangeResult(txids, txeids, events);
+        }
+
         long accumulatedFees = 0L;
 
         for (Transaction transaction : transactions) {
             accumulatedFees += transaction.getTransactionFee();
+        }
+
+        Iterator<Transaction> iterator  = transactions.iterator();
+        Transaction coinbase            = iterator.next();
+
+        while (iterator.hasNext()) {
+            Transaction transaction = iterator.next();
         }
 
         for (Transaction transaction : transactions) {
