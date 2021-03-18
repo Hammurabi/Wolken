@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.events.AccountBalanceUpdateEvent;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
@@ -229,6 +230,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         public List<Event> getStateChange(Block block, int blockHeight, long fees) {
             if (stateChangeEvents == null) {
                 stateChangeEvents = new ArrayList<>();
+                stateChangeEvents.add(new AccountBalanceUpdateEvent(recipient, value));
             }
 
             return stateChangeEvents;
