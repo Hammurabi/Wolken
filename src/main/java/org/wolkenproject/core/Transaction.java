@@ -529,8 +529,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
             if (stateChangeEvents == null) {
                 stateChangeEvents = new ArrayList<>();
                 Address sender = getSender();
-                createAccountIfDoesNotExist(sender.getRaw(), stateChangeEvents);
-                stateChangeEvents.add(new AliasRegistrationEvent(sender.getRaw(), alias));
+                createAccountIfDoesNotExist(recipient, stateChangeEvents);
+                stateChangeEvents.add(new AccountBalanceUpdateEvent(sender.getRaw(), value));
             }
 
             return stateChangeEvents;
