@@ -59,6 +59,9 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     }
 
     public void build() {
+
+
+        byte stateChangeMerkleRoot = calcul
         setMerkleRoot(calculateMerkleRoot());
     }
 
