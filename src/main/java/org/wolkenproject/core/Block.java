@@ -3,7 +3,6 @@ package org.wolkenproject.core;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.ChainMath;
-import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
@@ -52,7 +51,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         Queue<byte[]> txeids = new LinkedBlockingQueue();
 
         for (Transaction transaction : transactions) {
-            List<Event> transactionEvents = transaction.execute(this);
+            List<Event> transactionEvents = transaction.verifyTransaction(this);
             events.addAll(transactionEvents);
             txids.add(transaction.getTransactionID());
             transactionEvents.forEach(event -> txeids.add(event.eventId()));
@@ -65,7 +64,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     // this does not mean that transactions are VALID
     private boolean verifyTransactions() throws WolkenException {
         for (Transaction transaction : transactions) {
-            if (!transaction.verify()) {
+            if (!transaction.shallowVerify()) {
                 return false;
             }
         }
