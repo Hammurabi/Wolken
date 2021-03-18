@@ -303,6 +303,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
+        public long calculateSize() {
+            return VarInt.sizeOfCompactUin32(getVersion(), false) + recipient.length + dump.length;
+        }
+
+        @Override
         protected void setSignature(Signature signature) throws WolkenException {
             if (signature instanceof RecoverableSignature) {
                 this.signature = (RecoverableSignature) signature;
