@@ -77,6 +77,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         -on is deemed invalid.
      */
     public abstract List<Event> verify(int height, Block block);
+    /*
+        return all the changes this transaction will
+        cause to the global state.
+     */
     public abstract List<Event> getStateChange(Block block);
 
     public Transaction sign(Keypair keypair) throws WolkenException {
