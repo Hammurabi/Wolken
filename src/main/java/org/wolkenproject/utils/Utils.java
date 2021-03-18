@@ -468,13 +468,11 @@ public class Utils {
         return HashUtil.sha256d(Utils.concatenate(a, b));
     }
 
-    public static byte[] calculateMerkleRoot(List<byte[]> hashes) {
+    public static byte[] calculateMerkleRoot(Queue<byte[]> hashes) {
         while (hashes.size() > 1) {
-            hashes.add(calculateMerkleRoot(hashes.get(0), hashes.get(1)));
-            hashes.remove(0);
-            hashes.remove(1);
+            hashes.add(calculateMerkleRoot(hashes.poll(), hashes.poll()));
         }
 
-        return hashes.get(0);
+        return hashes.poll();
     }
 }
