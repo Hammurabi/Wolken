@@ -77,7 +77,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         return true;
     }
 
-    private boolean shallowVerifyTransactions(int blockHeight) throws WolkenException {
+    private boolean verifyTransactions(int blockHeight) throws WolkenException {
         long fees = 0L;
 
         for (Transaction transaction : transactions) {
@@ -102,7 +102,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         // shallow transaction checks
         if (!shallowVerifyTransactions()) return false;
         // deeper transaction checks
-        if (!shallowVerifyTransactions(blockHeight)) return false;
+        if (!verifyTransactions(blockHeight)) return false;
         // merkle tree checks
         if (!Utils.equals(getStateChange(blockHeight).getMerkleRoot(), getMerkleRoot())) return false;
 
