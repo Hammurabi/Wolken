@@ -181,6 +181,12 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     }
 
     public long getFees() {
-        return 0;
+        long fees = 0L;
+        
+        for (Transaction transaction : transactions) {
+            fees += transaction.getTransactionFee();
+        }
+
+        return fees;
     }
 }
