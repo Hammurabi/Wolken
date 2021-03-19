@@ -15,7 +15,8 @@ import java.util.*;
 public class Block extends BlockHeader implements Iterable<Transaction> {
     private static BigInteger LargestHash = BigInteger.ONE.shiftLeft(256);
     public static int UniqueIdentifierLength = 32;
-    private Set<Transaction>   transactions;
+    private Set<Transaction>        transactions;
+    private BlockStateChangeResult  stateChange;
 
     public Block() {
         this(new byte[32], 0);
