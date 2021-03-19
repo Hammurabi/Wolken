@@ -54,7 +54,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
             transactionEvents.forEach(event -> txeids.add(event.eventId()));
         }
 
-        return new BlockStateChangeResult(txids, txeids, events);
+        return blockStateChange.getResult();;
     }
 
     // call transaction.verify()
