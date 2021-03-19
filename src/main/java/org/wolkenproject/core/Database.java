@@ -214,4 +214,7 @@ public class Database {
 
     public void registerAlias(byte[] address, long alias) {
     }
+
+    public void rmvAccount(byte[] address) {
+    }
 }
