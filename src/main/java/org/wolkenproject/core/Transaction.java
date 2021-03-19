@@ -369,15 +369,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public List<Event> getStateChange(Block block, int blockHeight, long fees) throws WolkenException {
-            if (stateChangeEvents == null) {
-                stateChangeEvents = new ArrayList<>();
-                Address sender = getSender();
-                createAccountIfDoesNotExist(sender.getRaw(), stateChangeEvents);
-                stateChangeEvents.add(new AliasRegistrationEvent(sender.getRaw(), alias));
-            }
-
-            return stateChangeEvents;
+        public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
+            Address sender = getSender();
+            createAccountIfDoesNotExist(sender.getRaw(), stateChangeEvents);
+            stateChangeEvents.add(new AliasRegistrationEvent(sender.getRaw(), alias));
         }
 
         @Override
