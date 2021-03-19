@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
