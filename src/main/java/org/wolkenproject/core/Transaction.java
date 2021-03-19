@@ -87,7 +87,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return all the changes this transaction will
         cause to the global state.
      */
-    public abstract List<Event> getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException;
+    public abstract void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException;
 
     protected void createAccountIfDoesNotExist(byte address[], List<Event> stateChangeEvents) {
         if (Context.getInstance().getDatabase().checkAccountExists(address)) {
