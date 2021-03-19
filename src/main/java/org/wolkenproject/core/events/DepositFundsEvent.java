@@ -16,17 +16,17 @@ public class DepositFundsEvent extends Event {
     @Override
     public void apply() {
         Context.getInstance().getDatabase().updateAccount(address,
-                Context.getInstance().getDatabase().getAccount(address).withdraw(amount));
+                Context.getInstance().getDatabase().getAccount(address).deposit(amount));
     }
 
     @Override
     public void undo() {
         Context.getInstance().getDatabase().updateAccount(address,
-                Context.getInstance().getDatabase().getAccount(address).deposit(amount));
+                Context.getInstance().getDatabase().getAccount(address).withdraw(amount));
     }
 
     @Override
     public byte[] getEventBytes() {
-        return Utils.concatenate("Withdraw".getBytes(), address, Utils.takeApartLong(amount));
+        return Utils.concatenate("Deposit".getBytes(), address, Utils.takeApartLong(amount));
     }
 }
