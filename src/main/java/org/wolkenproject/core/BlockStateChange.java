@@ -61,4 +61,8 @@ public class BlockStateChange {
     public BlockStateChangeResult getResult() {
         return new BlockStateChangeResult(transactionIds, transactionEventIds, transactionEvents);
     }
+
+    public void addTransaction(byte[] transactionID) {
+        transactionIds.add(transactionID);
+    }
 }
