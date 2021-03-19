@@ -15,12 +15,16 @@ public class AliasedAccountBalanceUpdateEvent extends Event {
 
     @Override
     public void apply() {
-        Context.getInstance().getDatabase().updateAccount(alias, Context.getInstance().getDatabase().getAccount(alias).updateBalance(value));
+        Context.getInstance().getDatabase().updateAccount(
+                Context.getInstance().getDatabase().getAccountHolder(alias),
+                Context.getInstance().getDatabase().getAccount(alias).updateBalance(value));
     }
 
     @Override
     public void undo() {
-        Context.getInstance().getDatabase().updateAccount(alias, Context.getInstance().getDatabase().getAccount(alias).updateBalance(-value));
+        Context.getInstance().getDatabase().updateAccount(
+                Context.getInstance().getDatabase().getAccountHolder(alias),
+                Context.getInstance().getDatabase().getAccount(alias).updateBalance(-value));
     }
 
     @Override
