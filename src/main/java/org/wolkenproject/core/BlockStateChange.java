@@ -24,7 +24,7 @@ public class BlockStateChange {
 
         for (Event event : transactionEvents) {
             if (event instanceof AliasRegistrationEvent) {
-                if (event.getAlias() == alias) {
+                if (((AliasRegistrationEvent) event).getAlias() == alias) {
                     return true;
                 }
             }
