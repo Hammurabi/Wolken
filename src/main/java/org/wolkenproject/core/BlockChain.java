@@ -22,8 +22,6 @@ public class BlockChain implements Runnable {
     // contains blocks sent from peers.
     private PriorityHashQueue<BlockIndex>   blockPool;
 
-    private ReentrantLock   lock;
-
     public BlockChain() {
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
