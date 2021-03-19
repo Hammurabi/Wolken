@@ -51,6 +51,11 @@ public class BlockStateChange {
         return false;
     }
 
+    public void addEvent(Event event) {
+        transactionEvents.add(event);
+        transactionEventIds.add(event.eventId());
+    }
+
     public void addEvents(List<Event> events) {
         transactionEvents.addAll(events);
         for (Event event : events) {
