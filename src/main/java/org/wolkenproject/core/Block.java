@@ -48,9 +48,8 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         BlockStateChange blockStateChange = new BlockStateChange();
 
         for (Transaction transaction : transactions) {
-            List<Event> transactionEvents = transaction.getStateChange(this, blockHeight, blockStateChange);
+            transaction.getStateChange(this, blockHeight, blockStateChange);
             blockStateChange.addTransaction(transaction.getTransactionID());
-            transactionEvents.forEach(event -> txeids.add(event.eventId()));
         }
 
         return blockStateChange.getResult();
