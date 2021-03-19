@@ -64,7 +64,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract byte[] getPayload();
     /*
         shallow checks of the validity of a transactions
-        check the received is valid
+        check the receiver is valid
         check the sender is valid
         check the signature is valid
         check the sender has funds
