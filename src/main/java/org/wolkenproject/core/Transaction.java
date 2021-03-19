@@ -237,10 +237,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) {
-            stateChangeEvents = new ArrayList<>();
-            createAccountIfDoesNotExist(recipient, stateChangeEvents);
-            stateChangeEvents.add(new AccountBalanceUpdateEvent(recipient, value));
-            stateChange.addEvents();
+            createAccountIfDoesNotExist(recipient, stateChange);
+            stateChange.addEvent(new AccountBalanceUpdateEvent(recipient, value));
         }
 
         @Override
