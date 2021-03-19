@@ -822,7 +822,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void getStateChange(Block block, int blockHeight, long fees) throws WolkenException {
-            return null;
         }
 
         @Override
