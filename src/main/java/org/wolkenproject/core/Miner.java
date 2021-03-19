@@ -5,13 +5,13 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.ChainMath;
 
 public abstract class Miner implements Runnable {
-    private Address miningAddress;
+    private Address         miningAddress;
 
     public Miner(Address miningAddress) {
         this.miningAddress = miningAddress;
     }
 
-    public abstract void mine();
+    public abstract void mine(Block block);
 
     @Override
     public void run() {
@@ -32,11 +32,16 @@ public abstract class Miner implements Runnable {
 
                 // build the block and calculate all the remaining elements needed
                 block.build(parent.getHeight() + 1);
+
+                // mine the block
+                mine(block);
             } catch (WolkenException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    public abstract void clearTasks();
 
     protected void addTransactions(Block block) {
         while (block.calculateSize() < Context.getInstance().getNetworkParameters().getMaxBlockSize()) {
