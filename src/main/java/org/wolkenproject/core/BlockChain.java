@@ -71,7 +71,7 @@ public class BlockChain implements Runnable {
 
                 try {
                     if (getTip() == null) {
-                        Logger.alert("settings new tip" + block);
+                        Logger.alert("setting new tip" + block);
                         tip = block;
                         setBlockIndex(tip.getHeight(), tip);
 
