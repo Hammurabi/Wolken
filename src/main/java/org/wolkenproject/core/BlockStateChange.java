@@ -34,6 +34,11 @@ public class BlockStateChange {
     }
 
     public boolean checkAccountExists(byte address[]) {
+        if (Context.getInstance().getDatabase().checkAccountExists(address)) {
+            return true;
+        }
+
+        return false;
     }
 
     public BlockStateChangeResult getResult() {
