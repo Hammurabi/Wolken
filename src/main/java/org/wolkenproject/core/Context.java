@@ -3,6 +3,7 @@ package org.wolkenproject.core;
 import org.wolkenproject.core.mocha.*;
 import org.wolkenproject.core.mocha.internal.ByteArray;
 import org.wolkenproject.core.mocha.internal.MochaNumber;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.WolkenException;
