@@ -2,6 +2,7 @@ package org.wolkenproject.core.events;
 
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Event;
+import org.wolkenproject.utils.Utils;
 
 public class AliasRegistrationEvent extends Event {
     private byte    address[];
@@ -22,6 +23,6 @@ public class AliasRegistrationEvent extends Event {
 
     @Override
     public byte[] getEventBytes() {
-        return new byte[0];
+        return Utils.concatenate("Alias Registration".getBytes(), address, Utils.takeApartLong(alias));
     }
 }
