@@ -36,6 +36,12 @@ public abstract class AbstractMiner implements Runnable {
 
                 // mine the block
                 mine(block);
+
+                // create a block index
+                BlockIndex index = new BlockIndex(block, parent.getChainWork(), parent.getHeight());
+
+                // submit the block
+                Context.getInstance().getBlockChain().suggest(index);
             } catch (WolkenException e) {
                 e.printStackTrace();
             }
