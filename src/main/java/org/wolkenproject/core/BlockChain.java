@@ -37,7 +37,7 @@ public class BlockChain implements Runnable {
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
         lock            = new ReentrantLock();
-        tip             = Context.getInstance().getDatabase().findTip();
+        tip             = context.getDatabase().findTip();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class BlockChain implements Runnable {
         Logger.alert("attempting to reload chain from last checkpoint.");
         lock.lock();
         try {
-            tip = Context.getInstance().getDatabase().findTip();
+            tip = context.getDatabase().findTip();
             if (tip != null) {
                 Logger.alert("loaded checkpoint successfully" + tip);
             } else {
@@ -59,7 +59,7 @@ public class BlockChain implements Runnable {
             lock.unlock();
         }
 
-        while (Context.getInstance().isRunning()) {
+        while (context.isRunning()) {
             if (System.currentTimeMillis() - lastBroadcast > (5 * 60_000L)) {
                 int blocksToSend = 16384;
                 lastBroadcast = System.currentTimeMillis();
@@ -86,7 +86,7 @@ public class BlockChain implements Runnable {
                                 Logger.alert("erasing{"+(getTip().getHeight() - block.getHeight())+"} blocks.");
 
                                 for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
-                                    Context.getInstance().getDatabase().deleteBlock(i);
+                                    context.getDatabase().deleteBlock(i);
                                 }
 
                                 tip = null;
@@ -131,7 +131,7 @@ public class BlockChain implements Runnable {
                 lastHash = tipHash;
 
                 try {
-                    Context.getInstance().getServer().broadcast(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
+                    context.getServer().broadcast(new Inv(context.getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
                 } catch (WolkenException e) {
                     e.printStackTrace();
                 }
@@ -141,7 +141,7 @@ public class BlockChain implements Runnable {
 
     public BlockHeader findCommonAncestor(BlockIndex block) {
         // request block headers
-        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block.getHash(), 1024, block.getBlock()));
+        Message response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), block.getHash(), 1024, block.getBlock()));
         BlockHeader commonAncestor = null;
 
         if (response != null) {
@@ -166,7 +166,7 @@ public class BlockChain implements Runnable {
 
                 // find older ancestor
                 if (commonAncestor == null) {
-                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
+                    response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
 
                     if (response != null) {
                         headers = response.getPayload();
@@ -265,7 +265,7 @@ public class BlockChain implements Runnable {
     }
 
     private boolean isCommonAncestor(BlockHeader blockHeader) {
-        return Context.getInstance().getDatabase().checkBlockExists(blockHeader.getHashCode());
+        return context.getDatabase().checkBlockExists(blockHeader.getHashCode());
     }
 
     private void replaceTip(BlockIndex block) throws WolkenException {
@@ -289,7 +289,7 @@ public class BlockChain implements Runnable {
 
     private boolean rollbackIntoExistingParent(byte[] parentHash, int height) throws WolkenException {
         // check that the block exists
-        if (Context.getInstance().getDatabase().checkBlockExists(parentHash)) {
+        if (context.getDatabase().checkBlockExists(parentHash)) {
             return true;
         }
 
@@ -300,7 +300,7 @@ public class BlockChain implements Runnable {
             height      --;
             parentHash  = parent.getBlock().getParentHash();
 
-            if (Context.getInstance().getDatabase().checkBlockExists(parentHash) || height == -1) {
+            if (context.getDatabase().checkBlockExists(parentHash) || height == -1) {
                 updateIndices(parent);
                 return true;
             }
@@ -324,20 +324,20 @@ public class BlockChain implements Runnable {
     }
 
     private void setBlockIndex(int height, BlockIndex block) {
-        Context.getInstance().getDatabase().setBlockIndex(height, block);
+        context.getDatabase().setBlockIndex(height, block);
     }
 
     private void replaceBlockIndex(int height, BlockIndex block) {
-        BlockIndex previousIndex = Context.getInstance().getDatabase().findBlock(height);
+        BlockIndex previousIndex = context.getDatabase().findBlock(height);
         if (previousIndex != null) {
             addStale(previousIndex);
         }
 
-        Context.getInstance().getDatabase().setBlockIndex(height, block);
+        context.getDatabase().setBlockIndex(height, block);
     }
 
     private void deleteBlockIndex(int height, boolean orphan) {
-        BlockIndex block = Context.getInstance().getDatabase().findBlock(height);
+        BlockIndex block = context.getDatabase().findBlock(height);
         deleteBlockIndex(block, orphan);
     }
 
@@ -346,12 +346,12 @@ public class BlockChain implements Runnable {
             addStale(block);
         }
 
-        Context.getInstance().getDatabase().deleteBlock(block.getHeight());
+        context.getDatabase().deleteBlock(block.getHeight());
     }
 
     private BlockIndex requestBlock(byte hash[]) {
-        Message request = new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), hash);
-        Message response= Context.getInstance().getServer().broadcastRequest(request);
+        Message request = new RequestBlocks(context.getNetworkParameters().getVersion(), hash);
+        Message response= context.getServer().broadcastRequest(request);
 
         if (response != null && response instanceof BlockList) {
             Collection<BlockIndex> blocks = response.getPayload();
@@ -365,7 +365,7 @@ public class BlockChain implements Runnable {
 
     private void setTip(BlockIndex block) {
         tip = block;
-        Context.getInstance().getDatabase().setTip(block);
+        context.getDatabase().setTip(block);
         replaceBlockIndex(block.getHeight(), block);
     }
 
@@ -375,8 +375,8 @@ public class BlockChain implements Runnable {
             orphanedBlocks.add(block);
 
             // calculate the maximum blocks allowed in the queue.
-            int maximumBlocks   = MaximumOrphanBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
-            int Threshold       = (MaximumOrphanBlockQueueSize / 4) / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int maximumBlocks   = MaximumOrphanBlockQueueSize / context.getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumOrphanBlockQueueSize / 4) / context.getNetworkParameters().getMaxBlockSize();
 
             // remove any blocks that are too far back in the queue.
             if (orphanedBlocks.size() - maximumBlocks > Threshold) {
@@ -393,8 +393,8 @@ public class BlockChain implements Runnable {
             staleBlocks.add(block);
 
             // calculate the maximum blocks allowed in the queue.
-            int maximumBlocks   = MaximumStaleBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
-            int Threshold       = (MaximumStaleBlockQueueSize / 4) / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int maximumBlocks   = MaximumStaleBlockQueueSize / context.getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumStaleBlockQueueSize / 4) / context.getNetworkParameters().getMaxBlockSize();
 
             // remove any blocks that are too far back in the queue.
             if (staleBlocks.size() - maximumBlocks > Threshold) {
@@ -411,8 +411,8 @@ public class BlockChain implements Runnable {
             blockPool.add(block);
 
             // calculate the maximum blocks allowed in the queue.
-            int maximumBlocks   = MaximumPoolBlockQueueSize / Context.getInstance().getNetworkParameters().getMaxBlockSize();
-            int Threshold       = (MaximumPoolBlockQueueSize / 4) / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+            int maximumBlocks   = MaximumPoolBlockQueueSize / context.getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumPoolBlockQueueSize / 4) / context.getNetworkParameters().getMaxBlockSize();
 
             // remove any blocks that are too far back in the queue.
             if (blockPool.size() - maximumBlocks > Threshold) {
@@ -436,8 +436,8 @@ public class BlockChain implements Runnable {
     }
 
     public BlockIndex makeGenesisBlock() {
-        Block genesis = new Block(new byte[Block.UniqueIdentifierLength], Context.getInstance().getNetworkParameters().getDefaultBits());
-        genesis.addTransaction(Transaction.newMintTransaction("", Context.getInstance().getNetworkParameters().getMaxReward(), Context.getInstance().getNetworkParameters().getFoundingAddresses()));
+        Block genesis = new Block(new byte[Block.UniqueIdentifierLength], context.getNetworkParameters().getDefaultBits());
+        genesis.addTransaction(Transaction.newMintTransaction("", context.getNetworkParameters().getMaxReward(), context.getNetworkParameters().getFoundingAddresses()));
         genesis.setNonce(0);
         return new BlockIndex(genesis, BigInteger.ZERO, 0);
     }
