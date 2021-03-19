@@ -23,11 +23,11 @@ public class MintTransaction extends Transaction {
     // can be used as an extra nonce
     private byte dump[];
 
-    private MintTransaction() {
+    protected MintTransaction() {
         this(0, new byte[Address.RawLength], new byte[0]);
     }
 
-    private MintTransaction(long value, byte recipient[], byte dump[]) {
+    protected MintTransaction(long value, byte recipient[], byte dump[]) {
         this.value      = value;
         this.recipient  = recipient;
         this.dump       = dump;
