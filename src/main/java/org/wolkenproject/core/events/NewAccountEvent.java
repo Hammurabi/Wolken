@@ -19,6 +19,7 @@ public class NewAccountEvent extends Event {
 
     @Override
     public void undo() {
+        Context.getInstance().getDatabase().rmvAccount(address);
     }
 
     @Override
