@@ -1,20 +1,16 @@
 package org.wolkenproject.utils;
 
-import org.wolkenproject.core.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class Utils {
     public static final byte[] concatenate(byte[]...arrays)
