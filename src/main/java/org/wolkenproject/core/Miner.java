@@ -15,6 +15,7 @@ public class Miner extends AbstractMiner {
 
         while (!ChainMath.validSolution(hash, header.getBits())) {
             header.setNonce(block.getNonce() + 1);
+            hash            = header.getHashCode();
         }
     }
 }
