@@ -433,7 +433,7 @@ public class BlockChain implements Runnable {
 
     public BlockIndex makeGenesisBlock() {
         Block genesis = new Block(new byte[Block.UniqueIdentifierLength], Context.getInstance().getNetworkParameters().getDefaultBits());
-        genesis.addTransaction(Transaction.newCoinbase("", Context.getInstance().getNetworkParameters().getMaxReward(), Context.getInstance().getNetworkParameters().getFoundingAddresses()));
+        genesis.addTransaction(Transaction.newMintTransaction("", Context.getInstance().getNetworkParameters().getMaxReward(), Context.getInstance().getNetworkParameters().getFoundingAddresses()));
         genesis.setNonce(0);
         return new BlockIndex(genesis, BigInteger.ZERO, 0);
     }
