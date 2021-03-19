@@ -724,6 +724,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     // avg size: 1 + 79 + (varint) + payload
     // max size: 1 + 89 + (varint) + payload
     public static final class PayloadTransaction extends Transaction {
+        // not serialized
+        private List<Event> stateChangeEvents;
         // value of the transfer
         private long value;
         // maximum amount that sender is willing to pay
