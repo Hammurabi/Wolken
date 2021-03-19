@@ -27,6 +27,6 @@ public class AccountBalanceUpdateEvent extends Event {
 
     @Override
     public byte[] getEventBytes() {
-        return Utils.concatenate(recipient, Utils.takeApartLong(value));
+        return Utils.concatenate("Balance Update".getBytes(), recipient, Utils.takeApartLong(value));
     }
 }
