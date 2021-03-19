@@ -21,6 +21,11 @@ public class BlockChain implements Runnable {
     private PriorityHashQueue<BlockIndex>   staleBlocks;
     // contains blocks sent from peers.
     private PriorityHashQueue<BlockIndex>   blockPool;
+    private static final int                MaximumOrphanBlockQueueSize = 250_000_000;
+    private static final int                MaximumStaleBlockQueueSize  = 500_000_000;
+    private static final int                MaximumPoolBlockQueueSize   = 1_250_000_000;
+
+    private ReentrantLock   lock;
 
     public BlockChain() {
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
@@ -130,6 +135,49 @@ public class BlockChain implements Runnable {
         }
     }
 
+    public BlockHeader findCommonAncestor(BlockIndex block) {
+        // request block headers
+        Message response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), block.getHash(), 1024, block.getBlock()));
+        BlockHeader commonAncestor = null;
+
+        if (response != null) {
+            Collection<BlockHeader> headers = response.getPayload();
+
+            while (headers != null) {
+                Iterator<BlockHeader> iterator = headers.iterator();
+
+                BlockHeader header = iterator.next();
+                if (isCommonAncestor(header)) {
+                    commonAncestor = header;
+                }
+
+                // loop headers to find a common ancestor
+                while (iterator.hasNext()) {
+                    header = iterator.next();
+
+                    if (isCommonAncestor(header)) {
+                        commonAncestor = header;
+                    }
+                }
+
+                // find older ancestor
+                if (commonAncestor == null) {
+                    response = Context.getInstance().getServer().broadcastRequest(new RequestHeadersBefore(Context.getInstance().getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
+
+                    if (response != null) {
+                        headers = response.getPayload();
+                    }
+                }
+            }
+        }
+
+        if (commonAncestor != null) {
+            Logger.alert("found common ancestor" + block + " for block" + block);
+        }
+
+        return commonAncestor;
+    }
+
     private void rollback(BlockIndex block) throws WolkenException {
         BlockHeader commonAncestor = findCommonAncestor(block);
 
@@ -210,6 +258,10 @@ public class BlockChain implements Runnable {
         } else {
             addOrphan(block);
         }
+    }
+
+    private boolean isCommonAncestor(BlockHeader blockHeader) {
+        return Context.getInstance().getDatabase().checkBlockExists(blockHeader.getHashCode());
     }
 
     private void replaceTip(BlockIndex block) throws WolkenException {
