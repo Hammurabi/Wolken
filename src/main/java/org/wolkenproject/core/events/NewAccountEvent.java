@@ -26,4 +26,8 @@ public class NewAccountEvent extends Event {
     public byte[] getEventBytes() {
         return Utils.concatenate("Account Registration".getBytes(), address);
     }
+
+    public byte[] getAddress() {
+        return address;
+    }
 }
