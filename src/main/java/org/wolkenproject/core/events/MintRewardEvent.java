@@ -27,6 +27,6 @@ public class MintRewardEvent extends Event {
 
     @Override
     public byte[] getEventBytes() {
-        return Utils.concatenate("Deposit".getBytes(), address, Utils.takeApartLong(amount));
+        return Utils.concatenate("Mint".getBytes(), address, Utils.takeApartLong(amount));
     }
 }
