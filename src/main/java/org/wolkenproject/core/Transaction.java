@@ -370,7 +370,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
             Address sender = getSender();
             createAccountIfDoesNotExist(sender.getRaw(), stateChange);
-            stateChange.addEvent(new AliasRegistrationEvent(sender.getRaw(), alias));
+            stateChange.addEvent(new RegisterAliasEvent(sender.getRaw(), alias));
         }
 
         @Override
