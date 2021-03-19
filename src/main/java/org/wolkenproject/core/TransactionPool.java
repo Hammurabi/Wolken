@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.utils.PriorityHashQueue;
 
 import java.util.*;
