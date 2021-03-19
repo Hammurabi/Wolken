@@ -27,6 +27,6 @@ public class WithdrawFundsEvent extends Event {
 
     @Override
     public byte[] getEventBytes() {
-        return Utils.concatenate("Withdraw".getBytes(), address, Utils.concatenate(amount));
+        return Utils.concatenate("Withdraw".getBytes(), address, Utils.takeApartLong(amount));
     }
 }
