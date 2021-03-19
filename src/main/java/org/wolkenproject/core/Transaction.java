@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.events.*;
+import org.wolkenproject.core.transactions.MintTransaction;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
