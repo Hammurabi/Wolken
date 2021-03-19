@@ -2,7 +2,7 @@ package org.wolkenproject.core.mocha;
 
 import org.wolkenproject.core.Address;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.Transaction;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.core.mocha.internal.MochaNumber;
 import org.wolkenproject.core.mocha.internal.MochaObject;
 import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
