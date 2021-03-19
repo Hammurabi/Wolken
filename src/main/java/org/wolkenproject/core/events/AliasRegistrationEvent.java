@@ -1,4 +1,7 @@
-package org.wolkenproject.core;
+package org.wolkenproject.core.events;
+
+import org.wolkenproject.core.Context;
+import org.wolkenproject.core.Event;
 
 public class AliasRegistrationEvent extends Event {
     private byte    address[];
