@@ -42,8 +42,6 @@ public abstract class Miner implements Runnable {
         }
     }
 
-    public abstract void clearTasks();
-
     protected void addTransactions(Block block) {
         while (block.calculateSize() < Context.getInstance().getNetworkParameters().getMaxBlockSize()) {
             block.addTransaction(Context.getInstance().getTransactionPool().pollTransaction());
