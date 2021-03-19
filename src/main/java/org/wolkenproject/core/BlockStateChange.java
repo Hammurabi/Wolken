@@ -15,6 +15,9 @@ public class BlockStateChange {
         this.transactionEvents      = new LinkedList<>();
     }
 
+    public boolean checkAccountExists(byte address[]) {
+    }
+
     public BlockStateChangeResult getResult() {
         return new BlockStateChangeResult(transactionIds, transactionEventIds, transactionEvents);
     }
