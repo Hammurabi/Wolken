@@ -29,14 +29,14 @@ public class BlockChain implements Runnable {
     // a reference to context
     private Context                         context;
     // a mutex
-    private ReentrantLock                   lock;
+    private ReentrantLock mutex;
 
     public BlockChain(Context context) {
         this.context    = context;
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
-        lock            = new ReentrantLock();
+        mutex = new ReentrantLock();
         tip             = context.getDatabase().findTip();
     }
 
@@ -46,7 +46,7 @@ public class BlockChain implements Runnable {
         byte lastHash[]     = null;
 
         Logger.alert("attempting to reload chain from last checkpoint.");
-        lock.lock();
+        mutex.lock();
         try {
             tip = context.getDatabase().findTip();
             if (tip != null) {
@@ -56,7 +56,7 @@ public class BlockChain implements Runnable {
                 Logger.alert("loaded genesis as checkpoint successfully" + tip);
             }
         } finally {
-            lock.unlock();
+            mutex.unlock();
         }
 
         while (context.isRunning()) {
@@ -148,11 +148,11 @@ public class BlockChain implements Runnable {
     }
 
     private void markInvalid(BlockIndex block) {
-        lock.lock();
+        mutex.lock();
         try {
             invalidBlocks.add(block.getHash());
         } finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
@@ -229,38 +229,38 @@ public class BlockChain implements Runnable {
     }
 
     private boolean hasOrphans() {
-        lock.lock();
+        mutex.lock();
         try {
             return !orphanedBlocks.isEmpty();
         } finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     private BlockIndex nextOrphan() {
-        lock.lock();
+        mutex.lock();
         try {
             return orphanedBlocks.poll();
         } finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     private boolean hasBlocksInPool() {
-        lock.lock();
+        mutex.lock();
         try {
             return !blockPool.isEmpty();
         } finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     private BlockIndex nextFromPool() {
-        lock.lock();
+        mutex.lock();
         try {
             return blockPool.poll();
         } finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
@@ -387,7 +387,7 @@ public class BlockChain implements Runnable {
     }
 
     private void addOrphan(BlockIndex block) {
-        lock.lock();
+        mutex.lock();
         try {
             orphanedBlocks.add(block);
 
@@ -400,12 +400,12 @@ public class BlockChain implements Runnable {
                 trimOrphans(maximumBlocks);
             }
         } finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     private void addStale(BlockIndex block) {
-        lock.lock();
+        mutex.lock();
         try {
             staleBlocks.add(block);
 
@@ -418,12 +418,12 @@ public class BlockChain implements Runnable {
                 trimStales(maximumBlocks);
             }
         } finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     public void pool(BlockIndex block) {
-        lock.lock();
+        mutex.lock();
         try {
             blockPool.add(block);
 
@@ -436,7 +436,7 @@ public class BlockChain implements Runnable {
                 trimPool(maximumBlocks);
             }
         } finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
@@ -460,57 +460,57 @@ public class BlockChain implements Runnable {
     }
 
     public BlockIndex makeBlock() throws WolkenException {
-        lock.lock();
+        mutex.lock();
         try {
             return tip.generateNextBlock();
         }
         finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     public BlockIndex getTip() {
-        lock.lock();
+        mutex.lock();
         try {
             return tip;
         }
         finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     public boolean contains(byte[] hash) {
-        lock.lock();
+        mutex.lock();
         try {
             return orphanedBlocks.containsKey(hash) || staleBlocks.containsKey(hash) || blockPool.containsKey(hash);
         }
         finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     public Queue<BlockIndex> getOrphanedBlocks() {
-        lock.lock();
+        mutex.lock();
         try {
             return new PriorityQueue<>(orphanedBlocks);
         }
         finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     public BlockIndex getBlock(byte[] hash) {
-        lock.lock();
+        mutex.lock();
         try {
             return orphanedBlocks.getByHash(hash);
         }
         finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
     public Set<byte[]> getInv() {
-        lock.lock();
+        mutex.lock();
         try {
             Set<byte[]> hashes = new LinkedHashSet<>();
             BlockIndex index = tip;
@@ -525,7 +525,7 @@ public class BlockChain implements Runnable {
             return hashes;
         }
         finally {
-            lock.unlock();
+            mutex.unlock();
         }
     }
 
