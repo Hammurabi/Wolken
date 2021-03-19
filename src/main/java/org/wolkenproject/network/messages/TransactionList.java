@@ -1,7 +1,7 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.Transaction;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
