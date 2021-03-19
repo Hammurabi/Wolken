@@ -27,7 +27,7 @@ public class BlockChain implements Runnable {
 
     private ReentrantLock   lock;
 
-    public BlockChain() {
+    public BlockChain(Context context) {
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
