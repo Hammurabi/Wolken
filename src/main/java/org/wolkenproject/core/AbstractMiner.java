@@ -2,7 +2,11 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.utils.ChainMath;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public abstract class AbstractMiner implements Runnable {
     private Address         miningAddress;
@@ -42,6 +46,13 @@ public abstract class AbstractMiner implements Runnable {
 
                 // submit the block
                 Context.getInstance().getBlockChain().suggest(index);
+
+                // make a collection
+                Collection<byte[]> list = new ArrayList<>();
+                list.add(index.getHash());
+
+                // broadcast the block
+                Context.getInstance().getServer().broadcast(new Inv(Inv.Type.Block, list));
             } catch (WolkenException e) {
                 e.printStackTrace();
             }
