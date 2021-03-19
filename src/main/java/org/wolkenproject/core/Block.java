@@ -96,6 +96,8 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     public boolean verify(int blockHeight) throws WolkenException {
         // PoW check
         if (!ChainMath.validSolution(getHashCode(), getBits())) return false;
+        // must have at least one transaction
+        if (transactions.isEmpty()) return false;
         // shallow transaction checks
         if (!shallowVerifyTransactions()) return false;
         // deeper transaction checks
