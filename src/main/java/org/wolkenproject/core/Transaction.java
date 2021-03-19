@@ -674,7 +674,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
         @Override
         public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
-            stateChange.addEvent(new AccountBalanceUpdateEvent(getRecipient().getRaw(), value));
+            stateChange.addEvent(new DepositFundsEvent(getRecipient().getRaw(), value));
             stateChange.addEvent(new WithdrawFundsEvent(getSender().getRaw(), value));
         }
 
