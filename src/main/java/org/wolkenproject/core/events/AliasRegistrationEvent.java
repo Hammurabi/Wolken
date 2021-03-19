@@ -25,4 +25,8 @@ public class AliasRegistrationEvent extends Event {
     public byte[] getEventBytes() {
         return Utils.concatenate("Alias Registration".getBytes(), address, Utils.takeApartLong(alias));
     }
+
+    public long getAlias() {
+        return alias;
+    }
 }
