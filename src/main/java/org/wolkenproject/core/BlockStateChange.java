@@ -1,6 +1,6 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.core.events.AliasRegistrationEvent;
+import org.wolkenproject.core.events.RegisterAliasEvent;
 import org.wolkenproject.core.events.NewAccountEvent;
 
 import java.util.Arrays;
@@ -25,8 +25,8 @@ public class BlockStateChange {
         }
 
         for (Event event : transactionEvents) {
-            if (event instanceof AliasRegistrationEvent) {
-                if (((AliasRegistrationEvent) event).getAlias() == alias) {
+            if (event instanceof RegisterAliasEvent) {
+                if (((RegisterAliasEvent) event).getAlias() == alias) {
                     return true;
                 }
             }
