@@ -85,14 +85,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
      */
     public abstract void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException;
 
-    protected void createAccountIfDoesNotExist(byte address[], BlockStateChange stateChange) {
-        if (stateChange.checkAccountExists(address)) {
-            return;
-        }
-
-        stateChange.addEvent(new NewAccountEvent(address));
-    }
-
     public Transaction sign(Keypair keypair) throws WolkenException {
         // this includes the version bytes
         byte tx[] = asSerializedArray();
@@ -138,7 +130,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return new BasicTransaction(recipient.getRaw(), amount, fee, nonce);
     }
 
-    public static Transaction newCoinbase(String msg, long reward, Address addresses) {
+    public static Transaction newMintTransaction(String msg, long reward, Address addresses) {
         return new MintTransaction(reward, addresses.getRaw(), msg.getBytes());
     }
 
