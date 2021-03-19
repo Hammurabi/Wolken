@@ -147,15 +147,6 @@ public class BlockChain implements Runnable {
         }
     }
 
-    private void markInvalid(BlockIndex block) {
-        mutex.lock();
-        try {
-            invalidBlocks.add(block.getHash());
-        } finally {
-            mutex.unlock();
-        }
-    }
-
     public BlockHeader findCommonAncestor(BlockIndex block) {
         // request block headers
         Message response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), block.getHash(), 1024, block.getBlock()));
@@ -417,6 +408,15 @@ public class BlockChain implements Runnable {
             if (staleBlocks.size() - maximumBlocks > Threshold) {
                 trimStales(maximumBlocks);
             }
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    private void markInvalid(BlockIndex block) {
+        mutex.lock();
+        try {
+            invalidBlocks.add(block.getHash());
         } finally {
             mutex.unlock();
         }
