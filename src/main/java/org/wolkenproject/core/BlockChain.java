@@ -32,11 +32,11 @@ public class BlockChain implements Runnable {
     private ReentrantLock                   lock;
 
     public BlockChain(Context context) {
+        this.context    = context;
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
         lock            = new ReentrantLock();
-
         tip             = Context.getInstance().getDatabase().findTip();
     }
 
