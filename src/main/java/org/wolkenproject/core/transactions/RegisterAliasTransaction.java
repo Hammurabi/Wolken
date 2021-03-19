@@ -138,7 +138,7 @@ public class RegisterAliasTransaction extends Transaction {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new MintTransaction();
+        return (Type) new RegisterAliasTransaction();
     }
 
     @Override
