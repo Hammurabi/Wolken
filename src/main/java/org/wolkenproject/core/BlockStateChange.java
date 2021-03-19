@@ -15,6 +15,9 @@ public class BlockStateChange {
         this.transactionEvents      = new LinkedList<>();
     }
 
+    public boolean checkAliasExists(long alias) {
+    }
+
     public boolean checkAccountExists(byte address[]) {
     }
 
