@@ -1,9 +1,6 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.core.events.AliasRegistrationEvent;
-import org.wolkenproject.core.events.DepositFundsEvent;
-import org.wolkenproject.core.events.NewAccountEvent;
-import org.wolkenproject.core.events.WithdrawFundsEvent;
+import org.wolkenproject.core.events.*;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
@@ -237,7 +234,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         @Override
         public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) {
             createAccountIfDoesNotExist(recipient, stateChange);
-            stateChange.addEvent(new AccountBalanceUpdateEvent(recipient, value));
+            stateChange.addEvent(new MintRewardEvent(recipient, value));
         }
 
         @Override
