@@ -45,14 +45,18 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
 
     // executes transctions and returns an event list
     public BlockStateChangeResult getStateChange(int blockHeight) throws WolkenException {
-        BlockStateChange blockStateChange = new BlockStateChange();
+        if (stateChange == null) {
+            BlockStateChange blockStateChange = new BlockStateChange();
 
-        for (Transaction transaction : transactions) {
-            transaction.getStateChange(this, blockHeight, blockStateChange);
-            blockStateChange.addTransaction(transaction.getTransactionID());
+            for (Transaction transaction : transactions) {
+                transaction.getStateChange(this, blockHeight, blockStateChange);
+                blockStateChange.addTransaction(transaction.getTransactionID());
+            }
+
+            stateChange = blockStateChange.getResult();
         }
 
-        return blockStateChange.getResult();
+        return stateChange;
     }
 
     // call transaction.verify()
