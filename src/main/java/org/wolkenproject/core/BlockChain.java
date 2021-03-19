@@ -514,6 +514,10 @@ public class BlockChain implements Runnable {
         }
     }
 
+    public void suggest(BlockIndex block) {
+        pool(block);
+    }
+
     public int getHeight() {
         BlockIndex tip = getTip();
         if (tip != null) {
