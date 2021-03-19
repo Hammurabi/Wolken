@@ -9,6 +9,6 @@ public class BlockStateChange {
     private List<Event>     transactionEvents;
 
     public BlockStateChangeResult getResult() {
-        return new BlockStateChangeResult(txids, txeids, events);
+        return new BlockStateChangeResult(transactionIds, transactionEventIds, transactionEvents);
     }
 }
