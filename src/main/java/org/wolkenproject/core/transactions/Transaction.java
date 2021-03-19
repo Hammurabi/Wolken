@@ -148,7 +148,6 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         factory.registerClass(BasicTransactionToAlias.class, new BasicTransactionToAlias());
         factory.registerClass(RegisterAliasTransaction.class, new RegisterAliasTransaction());
         factory.registerClass(PayloadTransaction.class, new PayloadTransaction());
-//        factory.registerClass(FlaggedTransaction.class, new FlaggedTransaction());
     }
 
     // this is a basic transaction
