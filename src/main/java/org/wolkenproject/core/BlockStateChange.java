@@ -70,4 +70,12 @@ public class BlockStateChange {
     public void addTransaction(byte[] transactionID) {
         transactionIds.add(transactionID);
     }
+
+    public void createAccountIfDoesNotExist(byte address[]) {
+        if (checkAccountExists(address)) {
+            return;
+        }
+
+        addEvent(new NewAccountEvent(address));
+    }
 }
