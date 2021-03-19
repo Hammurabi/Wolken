@@ -13,8 +13,8 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class Block extends BlockHeader implements Iterable<Transaction> {
-    private static BigInteger LargestHash = BigInteger.ONE.shiftLeft(256);
-    public static int UniqueIdentifierLength = 32;
+    private static BigInteger       LargestHash             = BigInteger.ONE.shiftLeft(256);
+    public static int               UniqueIdentifierLength  = 32;
     private Set<Transaction>        transactions;
     private BlockStateChangeResult  stateChange;
 
