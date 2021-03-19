@@ -23,11 +23,7 @@ import java.util.List;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
-
-    // make sure to perform checks for coin > 0
-    // possible attack vector of transfer(-x, address)
-    // as -x < 0 and account.balance > -x
-    .
+    
     public static final class Flags
     {
         public static final int
@@ -488,7 +484,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
             return
                     getTransactionValue() >= 0 &&
                     getTransactionFee() >= 0 &&
-                    (getTransactionValue() + getTransactionFee()) != 0 &&
+                    //possible vulnerability with a+b!=0 using signed integers
+                    (getTransactionValue() + getTransactionFee()) > 0 &&
                     (signature.getR().length == 32) &&
                     (signature.getS().length == 32) &&
                     getSender() != null &&
@@ -645,7 +642,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         public boolean shallowVerify() throws WolkenException {
             // a transfer of 0 with a fee of 0 is not allowed
             return
-            (getTransactionValue() + getTransactionFee()) != 0 &&
+                    getTransactionValue() >= 0 &&
+                    getTransactionFee() >= 0 &&
+                    //possible vulnerability with a+b!=0 using signed integers
+                    (getTransactionValue() + getTransactionFee()) > 0 &&
                     (signature.getR().length == 32) &&
                     (signature.getS().length == 32) &&
                     getSender() != null &&
