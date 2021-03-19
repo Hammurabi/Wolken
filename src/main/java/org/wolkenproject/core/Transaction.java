@@ -235,6 +235,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) {
             createAccountIfDoesNotExist(recipient, stateChange);
             stateChange.addEvent(new MintRewardEvent(recipient, value));
+            stateChange.addEvent(new DepositFeesEvent(recipient, block.getFees()));
         }
 
         @Override
