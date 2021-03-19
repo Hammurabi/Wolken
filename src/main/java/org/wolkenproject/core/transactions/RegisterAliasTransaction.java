@@ -20,7 +20,7 @@ public class RegisterAliasTransaction extends Transaction {
     // signature of the sender
     private RecoverableSignature signature;
 
-    private RegisterAliasTransaction() {
+    protected RegisterAliasTransaction() {
         this(0, 0);
     }
 
