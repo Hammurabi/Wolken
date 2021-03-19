@@ -14,6 +14,11 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
+    protected static final int                MaximumOrphanBlockQueueSize = 250_000_000;
+    protected static final int                MaximumStaleBlockQueueSize  = 500_000_000;
+    protected static final int                MaximumPoolBlockQueueSize   = 1_250_000_000;
+
+    // the current higest block in the chain
     private BlockIndex                      tip;
     // contains blocks that have no parents.
     private PriorityHashQueue<BlockIndex>   orphanedBlocks;
@@ -21,11 +26,10 @@ public class BlockChain implements Runnable {
     private PriorityHashQueue<BlockIndex>   staleBlocks;
     // contains blocks sent from peers.
     private PriorityHashQueue<BlockIndex>   blockPool;
-    private static final int                MaximumOrphanBlockQueueSize = 250_000_000;
-    private static final int                MaximumStaleBlockQueueSize  = 500_000_000;
-    private static final int                MaximumPoolBlockQueueSize   = 1_250_000_000;
-
-    private ReentrantLock   lock;
+    // a reference to context
+    private Context                         context;
+    // a mutex
+    private ReentrantLock                   lock;
 
     public BlockChain(Context context) {
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
