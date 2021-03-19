@@ -1,9 +1,7 @@
 package org.wolkenproject.core.transactions;
 
 import org.wolkenproject.core.*;
-import org.wolkenproject.core.events.DepositFundsEvent;
 import org.wolkenproject.core.events.RegisterAliasEvent;
-import org.wolkenproject.core.events.WithdrawFundsEvent;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.WolkenException;
@@ -13,7 +11,6 @@ import org.wolkenproject.utils.VarInt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 public class RegisterAliasTransaction extends Transaction {
     // nonce
