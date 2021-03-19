@@ -1,6 +1,6 @@
 package org.wolkenproject.core.mocha;
 
-import org.wolkenproject.core.Transaction;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.core.mocha.internal.MochaAddress;
 import org.wolkenproject.core.mocha.internal.MochaObject;
 import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
