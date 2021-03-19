@@ -78,4 +78,8 @@ public class Account extends SerializableI {
     public Account withdraw(long amount) {
         return new Account(nonce, balance - amount, hasAlias, alias);
     }
+
+    public Account deposit(long amount) {
+        return new Account(nonce, balance + value, hasAlias, alias);
+    }
 }
