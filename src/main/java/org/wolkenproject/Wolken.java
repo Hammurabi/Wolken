@@ -2,6 +2,7 @@ package org.wolkenproject;
 
 import org.apache.commons.cli.*;
 import org.wolkenproject.core.*;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.ECKeypair;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
