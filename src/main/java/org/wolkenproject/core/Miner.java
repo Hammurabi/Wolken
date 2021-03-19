@@ -31,7 +31,7 @@ public abstract class Miner implements Runnable {
                 block.setBits(ChainMath.calculateNewTarget(block, parent.getHeight() + 1));
 
                 // build the block and calculate all the remaining elements needed
-                block.build();
+                block.build(parent.getHeight() + 1);
             } catch (WolkenException e) {
                 e.printStackTrace();
             }
