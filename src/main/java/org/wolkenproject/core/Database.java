@@ -202,6 +202,10 @@ public class Database {
         return get(concatenate(Transaction, txid)) != null;
     }
 
+    public boolean checkAccountExists(long alias) {
+        return false;
+    }
+
     public boolean checkAccountExists(byte[] address) {
         return false;
     }
