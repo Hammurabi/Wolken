@@ -16,6 +16,9 @@ public class BlockStateChange {
     }
 
     public boolean checkAliasExists(long alias) {
+        if (Context.getInstance().getDatabase().checkAccountExists(alias)) {
+            return true;
+        }
     }
 
     public boolean checkAccountExists(byte address[]) {
