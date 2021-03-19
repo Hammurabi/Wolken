@@ -44,7 +44,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     }
 
     // executes transctions and returns an event list
-    public BlockStateChangeResult getStateChange(int blockHeight) {
+    public BlockStateChangeResult getStateChange(int blockHeight) throws WolkenException {
         List<Event> events = new ArrayList<>();
         Queue<byte[]> txids = new LinkedList<>();
         Queue<byte[]> txeids = new LinkedList<>();
