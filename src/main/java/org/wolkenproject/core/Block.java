@@ -98,6 +98,8 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         if (!ChainMath.validSolution(getHashCode(), getBits())) return false;
         // must have at least one transaction
         if (transactions.isEmpty()) return false;
+        // first transaction must be a minting transaction
+        if (transactions.iterator().next() instanceof Transaction.MintTransaction == false) return false;
         // shallow transaction checks
         if (!shallowVerifyTransactions()) return false;
         // deeper transaction checks
