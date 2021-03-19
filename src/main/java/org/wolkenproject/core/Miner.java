@@ -22,7 +22,7 @@ public abstract class Miner implements Runnable {
                 // generate a new block
                 Block block = new Block();
                 // mint coins to our address
-                block.addTransaction(Transaction.newCoinbase("", ChainMath.getReward(parent.getHeight()), miningAddress));
+                block.addTransaction(Transaction.newMintTransaction("", ChainMath.getReward(parent.getHeight()), miningAddress));
                 // add transactions
                 addTransactions(block);
 
