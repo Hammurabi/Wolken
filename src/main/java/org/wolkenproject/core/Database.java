@@ -172,6 +172,10 @@ public class Database {
         return null;
     }
 
+    public byte[] getAccountHolder(long alias) {
+        return null;
+    }
+
     public Account getAccount(byte address[]) {
         return null;
     }
