@@ -3,6 +3,7 @@ package org.wolkenproject.core;
 import org.wolkenproject.core.events.AliasRegistrationEvent;
 import org.wolkenproject.core.events.DepositFundsEvent;
 import org.wolkenproject.core.events.NewAccountEvent;
+import org.wolkenproject.core.events.WithdrawFundsEvent;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
@@ -519,7 +520,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
             Address sender = getSender();
             createAccountIfDoesNotExist(recipient, stateChange);
-            stateChange.addEvent(new DepositFundsEvent(sender.getRaw(), value));
+            stateChange.addEvent(new DepositFundsEvent(recipient, value));
+            stateChange.addEvent(new WithdrawFundsEvent(sender.getRaw(), value));
         }
 
         @Override
