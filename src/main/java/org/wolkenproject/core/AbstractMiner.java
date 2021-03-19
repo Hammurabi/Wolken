@@ -4,10 +4,10 @@ import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.ChainMath;
 
-public abstract class Miner implements Runnable {
+public abstract class AbstractMiner implements Runnable {
     private Address         miningAddress;
 
-    public Miner(Address miningAddress) {
+    public AbstractMiner(Address miningAddress) {
         this.miningAddress = miningAddress;
     }
 
