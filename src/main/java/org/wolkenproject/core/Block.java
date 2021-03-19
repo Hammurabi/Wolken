@@ -93,7 +93,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         return true;
     }
 
-    public void build(int blockHeight) {
+    public void build(int blockHeight) throws WolkenException {
         // set the combined merkle root
         setMerkleRoot(getStateChange(blockHeight).getMerkleRoot());
     }
