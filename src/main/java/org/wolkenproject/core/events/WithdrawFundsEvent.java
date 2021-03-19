@@ -8,6 +8,11 @@ public class WithdrawFundsEvent extends Event {
     private byte address[];
     private long amount;
 
+    public WithdrawFundsEvent(byte address[], long amount) {
+        this.address    = address;
+        this.amount     = amount;
+    }
+
     @Override
     public void apply() {
         Context.getInstance().getDatabase().updateAccount(address,
