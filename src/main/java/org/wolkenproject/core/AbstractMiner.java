@@ -11,7 +11,7 @@ public abstract class AbstractMiner implements Runnable {
         this.miningAddress = miningAddress;
     }
 
-    public abstract void mine(Block block);
+    public abstract void mine(Block block) throws WolkenException;
 
     @Override
     public void run() {
