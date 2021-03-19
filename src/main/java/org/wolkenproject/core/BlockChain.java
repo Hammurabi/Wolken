@@ -68,9 +68,13 @@ public class BlockChain implements Runnable {
             if (hasBlocksInPool()) {
                 // pull from suggested block pool
                 BlockIndex block = nextFromPool();
-                if (!block.verify()) {
-                    markInvalid(block);
-                    continue;
+                try {
+                    if (!block.verify()) {
+                        markInvalid(block);
+                        continue;
+                    }
+                } catch (WolkenException e) {
+                    e.printStackTrace();
                 }
 
                 try {
@@ -140,6 +144,15 @@ public class BlockChain implements Runnable {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    private void markInvalid(BlockIndex block) {
+        lock.lock();
+        try {
+            invalidBlocks.add(block.getHash());
+        } finally {
+            lock.unlock();
         }
     }
 
