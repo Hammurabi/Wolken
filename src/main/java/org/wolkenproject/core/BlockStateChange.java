@@ -51,6 +51,13 @@ public class BlockStateChange {
         return false;
     }
 
+    public void addEvents(List<Event> events) {
+        transactionEvents.addAll(events);
+        for (Event event : events) {
+            transactionEventIds.add(event.eventId());
+        }
+    }
+
     public BlockStateChangeResult getResult() {
         return new BlockStateChangeResult(transactionIds, transactionEventIds, transactionEvents);
     }
