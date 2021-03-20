@@ -115,7 +115,6 @@ public class BlockChain implements Runnable {
     public BlockHeader findCommonAncestor(BlockIndex block) {
         // request block headers
         Message response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), block.getHash(), 1024, block.getBlock()));
-        BlockHeader commonAncestor = null;
 
         // we store ancestor hashes here
         Set<byte[]> ancestors = new LinkedHashSet<>();
@@ -128,8 +127,8 @@ public class BlockChain implements Runnable {
 
                 BlockHeader header = iterator.next();
                 if (isCommonAncestor(header)) {
-                    commonAncestor = header;
-                    return commonAncestor;
+                    Logger.alert("found common ancestor" + header + " for block" + block);
+                    return header;
                 } else {
                     if (!header.verifyProofOfWork()) {
                         markInvalid(header.getHashCode());
@@ -148,23 +147,21 @@ public class BlockChain implements Runnable {
                     header = iterator.next();
 
                     if (isCommonAncestor(header)) {
-                        commonAncestor = header;
+                        Logger.alert("found common ancestor" + header + " for block" + block);
+                        return header;
                     }
                 }
 
                 // find older ancestor
-                if (commonAncestor == null) {
-                    response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
+                response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
 
-                    if (response != null) {
-                        headers = response.getPayload();
-                    }
+                if (response != null) {
+                    headers = response.getPayload();
                 }
             }
         }
 
         if (commonAncestor != null) {
-            Logger.alert("found common ancestor" + block + " for block" + block);
         }
 
         return commonAncestor;
