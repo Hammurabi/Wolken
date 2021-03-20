@@ -86,10 +86,20 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
 
     public void recalculateChainWork() throws WolkenException {
         BlockIndex previous = previousBlock();
+
+        BigInteger oldChainWork = chainWork;
+
         if (previous != null) {
             this.chainWork  = previous.getChainWork();
         } else {
             this.chainWork  = BigInteger.ZERO;
+        }
+
+        if (this.chainWork.compareTo(oldChainWork) == 0) {
+            return;
+        } else {
+            // save changes made to the block index
+            Context.getInstance().getDatabase().setBlockIndex(getHeight(), this);
         }
 
         if (hasNext()) {
@@ -110,6 +120,10 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public BlockIndex previousBlock() {
+        if (height == 0) {
+            return null;
+        }
+
         return Context.getInstance().getDatabase().findBlock(getHeight() - 1);
     }
 
