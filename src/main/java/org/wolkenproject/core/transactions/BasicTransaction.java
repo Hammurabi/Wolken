@@ -78,7 +78,6 @@ public class BasicTransaction extends Transaction {
                             (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
                             (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getBalance()) >= (value + fee);
         } catch (WolkenException e) {
-            e.printStackTrace();
         }
 
         return false;
