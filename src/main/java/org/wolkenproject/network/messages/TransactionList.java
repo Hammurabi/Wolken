@@ -3,6 +3,8 @@ package org.wolkenproject.network.messages;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.network.Node;
+import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
 
@@ -19,6 +21,10 @@ public class TransactionList extends ResponseMessage {
     public TransactionList(int version, Collection<Transaction> transactions, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
         this.transactions   = new LinkedHashSet<>(transactions);
+    }
+
+    @Override
+    public void execute(Server server, Node node) {
     }
 
     @Override
