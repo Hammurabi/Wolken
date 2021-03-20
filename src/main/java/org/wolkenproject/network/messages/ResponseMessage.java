@@ -23,7 +23,10 @@ public abstract class ResponseMessage extends Message {
     @Override
     public void executePayload(Server server, Node node) {
         node.receiveResponse(this, requester);
+        execute(server, node);
     }
+
+    public abstract void execute(Server server, Node node);
 
     @Override
     public void writeHeader(OutputStream stream) throws IOException, WolkenException {
