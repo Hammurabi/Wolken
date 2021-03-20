@@ -70,47 +70,12 @@ public class BlockChain implements Runnable {
             if (hasBlocksInPool()) {
                 // pull from suggested block pool
                 BlockIndex block = nextFromPool();
-                try {
-                    if (!block.verify()) {
-                        markInvalid(block);
-                        continue;
-                    }
-                } catch (WolkenException e) {
-                    e.printStackTrace();
+                if (!block.verify()) {
+                    markInvalid(block);
+                    continue;
                 }
 
                 try {
-                    if (getTip() == null) {
-                        Logger.alert("setting new tip" + block);
-                        tip = block;
-                        setBlockIndex(tip.getHeight(), tip);
-
-                        Logger.alert("downloading blocks{"+block.getHeight()+"}");
-                        while (block.getHeight() > 0) {
-                            // request the parent of this block
-                            BlockIndex parent = requestBlock(block.getBlock().getParentHash());
-
-                            // delete the downloaded chain if we cannot find the block
-                            if (parent == null) {
-                                Logger.alert("requested block{"+Base16.encode(block.getBlock().getParentHash())+"} not found.");
-                                Logger.alert("erasing{"+(getTip().getHeight() - block.getHeight())+"} blocks.");
-
-                                for (int i = block.getHeight(); i < getTip().getHeight(); i ++) {
-                                    context.getDatabase().deleteBlock(i);
-                                }
-
-                                tip = null;
-                                break;
-                            }
-
-                            block = parent;
-                            setBlockIndex(block.getHeight(), block);
-                        }
-
-                        Logger.alert("downloaded entire chain successfully.");
-                        continue;
-                    }
-
                     if (block.getChainWork().compareTo(tip.getChainWork()) > 0) {
                         // switch to this chain
                         if (block.getHeight() == tip.getHeight()) {
