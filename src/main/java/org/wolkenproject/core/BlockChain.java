@@ -67,7 +67,7 @@ public class BlockChain implements Runnable {
                 // pull from suggested block pool
                 BlockIndex block = nextFromPool();
                 if (!block.verify()) {
-                    markInvalid(block);
+                    markInvalid(block.getHash());
                     continue;
                 }
 
