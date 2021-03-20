@@ -91,7 +91,7 @@ public class MintTransaction extends Transaction {
 
     @Override
     public boolean verify(Block block, int blockHeight, long fees) {
-        return value == ( ChainMath.getReward(blockHeight) + fees );
+        return value == ( ChainMath.getReward(blockHeight) + block.getFees() );
     }
 
     @Override
