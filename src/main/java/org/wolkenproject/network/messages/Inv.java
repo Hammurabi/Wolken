@@ -121,7 +121,8 @@ public class Inv extends Message {
 
             // request the transactions
             try {
-                CheckedResponse message = node.getResponse(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions), Context.getInstance().getNetworkParameters().getMessageTimeout());
+                CheckedResponse message = node.getResponse(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions),
+                        Context.getInstance().getNetworkParameters().getMessageTimeout());
                 if (message != null) {
                     if (message.noErrors()) {
                         Set<Transaction> transactions = message.getMessage().getPayload();
@@ -137,6 +138,7 @@ public class Inv extends Message {
                     }
                 }
             } catch (WolkenTimeoutException e) {
+                node.increaseErrors(4);
                 e.printStackTrace();
             } catch (WolkenException e) {
                 e.printStackTrace();
