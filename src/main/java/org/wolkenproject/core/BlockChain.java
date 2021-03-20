@@ -505,7 +505,7 @@ public class BlockChain implements Runnable {
     }
 
     private boolean isRejected(byte[] hash) {
-        context.getDatabase().isRejected(hash);
+        return context.getDatabase().isRejected(hash);
     }
 
     public int getHeight() {
