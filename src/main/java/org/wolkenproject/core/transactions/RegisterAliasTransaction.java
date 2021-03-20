@@ -15,18 +15,21 @@ import java.io.OutputStream;
 public class RegisterAliasTransaction extends Transaction {
     // nonce
     private long nonce;
+    // fee to register the alia
+    private long fee;
     // alias
     private long alias;
     // signature of the sender
     private RecoverableSignature signature;
 
     protected RegisterAliasTransaction() {
-        this(0, 0);
+        this(0, 0, 0);
     }
 
-    private RegisterAliasTransaction(long nonce, long alias) {
-        this.nonce = nonce;
-        this.alias = alias;
+    private RegisterAliasTransaction(long nonce, long fee, long alias) {
+        this.nonce  = nonce;
+        this.fee    = fee;
+        this.alias  = alias;
         this.signature = new RecoverableSignature();
     }
 
@@ -42,7 +45,7 @@ public class RegisterAliasTransaction extends Transaction {
 
     @Override
     public long getTransactionFee() {
-        return 0;
+        return fee;
     }
 
     @Override
@@ -60,6 +63,7 @@ public class RegisterAliasTransaction extends Transaction {
         // this is not 100% necessary
         // a transfer of 0 with a fee of 0 is not allowed
         return
+                fee > 0 &&
                 (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
                         (signature.getR().length == 32) &&
                         (signature.getS().length == 32) &&
