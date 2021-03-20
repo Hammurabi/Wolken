@@ -59,16 +59,21 @@ public class RegisterAliasTransaction extends Transaction {
     }
 
     @Override
-    public boolean shallowVerify() throws WolkenException {
+    public boolean shallowVerify() {
         // this is not 100% necessary
         // a transfer of 0 with a fee of 0 is not allowed
-        return
-                fee > 0 &&
-                (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                        (signature.getR().length == 32) &&
-                        (signature.getS().length == 32) &&
-                        getSender() != null &&
-                        !Context.getInstance().getDatabase().getAccount(getSender().getRaw()).hasAlias();
+        try {
+            return
+                    fee > 0 &&
+                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                            (signature.getR().length == 32) &&
+                            (signature.getS().length == 32) &&
+                            getSender() != null &&
+                            !Context.getInstance().getDatabase().getAccount(getSender().getRaw()).hasAlias();
+        } catch (WolkenException e) {
+        }
+
+        return false;
     }
 
     @Override
