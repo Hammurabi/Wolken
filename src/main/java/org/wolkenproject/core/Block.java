@@ -53,7 +53,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
 
             for (Transaction transaction : transactions) {
                 transaction.getStateChange(this, blockHeight, blockStateChange);
-                blockStateChange.addTransaction(transaction.getTransactionID());
+                blockStateChange.addTransaction(transaction.getHash());
             }
 
             stateChange = blockStateChange.getResult();
