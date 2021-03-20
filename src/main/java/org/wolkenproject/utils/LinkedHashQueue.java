@@ -1,9 +1,6 @@
 package org.wolkenproject.utils;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Queue;
+import java.util.*;
 
 public class LinkedHashQueue<T> implements HashQueue<T> {
     private Queue<T>    queue;
@@ -11,11 +8,16 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
 
     @Override
     public boolean containsKey(byte[] hash) {
-        return false;
+        return set.contains(hash);
     }
 
     @Override
     public void removeTails(int newLength) {
+        while (size() > newLength) {
+            // FIFO
+            T element = queue.poll();
+            set.remove(element);
+        }
     }
 
     @Override
