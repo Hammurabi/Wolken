@@ -129,6 +129,15 @@ public class BlockChain implements Runnable {
                 BlockHeader header = iterator.next();
                 if (isCommonAncestor(header)) {
                     commonAncestor = header;
+                } else {
+                    if (!header.verifyProofOfWork()) {
+                        markInvalid(header.getHashCode());
+                        for (byte[] hash : ancestors) {
+                            markInvalid(hash);
+                        }
+                        markInvalid(block.getHash());
+                        return null;
+                    }
                 }
 
                 // loop headers to find a common ancestor
