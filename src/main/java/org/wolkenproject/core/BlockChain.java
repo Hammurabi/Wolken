@@ -15,7 +15,6 @@ public class BlockChain implements Runnable {
     protected static final int                MaximumOrphanBlockQueueSize   = 250_000_000;
     protected static final int                MaximumStaleBlockQueueSize    = 500_000_000;
     protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
-    protected static final int                MaximumRejectedPoolQueueSize  = 134_217_728;
 
     // the current higest block in the chain
     private BlockIndex              tip;
@@ -120,6 +119,9 @@ public class BlockChain implements Runnable {
         // request block headers
         Message response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), block.getHash(), 1024, block.getBlock()));
         BlockHeader commonAncestor = null;
+
+        // we store ancestor hashes here
+        Set<byte[]> ancestors = new LinkedHashSet<>();
 
         if (response != null) {
             Collection<BlockHeader> headers = response.getPayload();
