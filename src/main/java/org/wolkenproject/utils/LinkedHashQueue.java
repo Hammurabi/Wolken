@@ -66,6 +66,11 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
 
     @Override
     public boolean remove(Object o) {
+        if (set.contains(o)) {
+            set.remove(o);
+            return queue.remove(o);
+        }
+
         return false;
     }
 
