@@ -27,12 +27,12 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
 
     @Override
     public int size() {
-        return 0;
+        return queue.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return queue.isEmpty();
     }
 
     @Override
