@@ -15,9 +15,10 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain implements Runnable {
-    protected static final int                MaximumOrphanBlockQueueSize = 250_000_000;
-    protected static final int                MaximumStaleBlockQueueSize  = 500_000_000;
-    protected static final int                MaximumPoolBlockQueueSize   = 1_250_000_000;
+    protected static final int                MaximumOrphanBlockQueueSize   = 250_000_000;
+    protected static final int                MaximumStaleBlockQueueSize    = 500_000_000;
+    protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
+    protected static final int                MaximumRejectedPoolQueueSize  = 134_217_728;
 
     // the current higest block in the chain
     private BlockIndex              tip;
@@ -420,7 +421,15 @@ public class BlockChain implements Runnable {
     private void markInvalid(BlockIndex block) {
         mutex.lock();
         try {
-            invalidBlocks.add(block.getHash());
+            rejectedPool.add(block.getHash());
+
+            // calculate the maximum hashes allowed in the queue
+            int maximumHashes   = MaximumRejectedPoolQueueSize / 32;
+            int threshold       = (MaximumRejectedPoolQueueSize / 4) / 32;
+
+            if (rejectedPool.size() - maximumHashes > threshold) {
+                rejectedPool.removeTails(maximumHashes);
+            }
         } finally {
             mutex.unlock();
         }
