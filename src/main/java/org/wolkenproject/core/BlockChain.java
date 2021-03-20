@@ -1,7 +1,6 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.transactions.Transaction;
-import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.*;
@@ -67,7 +66,7 @@ public class BlockChain implements Runnable {
                 // pull from suggested block pool
                 BlockIndex block = nextFromPool();
                 if (!block.verify()) {
-                    markInvalid(block.getHash());
+                    markRejected(block.getHash());
                     continue;
                 }
 
@@ -131,11 +130,11 @@ public class BlockChain implements Runnable {
                     return header;
                 } else {
                     if (!header.verifyProofOfWork()) {
-                        markInvalid(header.getHashCode());
+                        markRejected(header.getHashCode());
                         for (byte[] hash : ancestors) {
-                            markInvalid(hash);
+                            markRejected(hash);
                         }
-                        markInvalid(block.getHash());
+                        markRejected(block.getHash());
                         return null;
                     }
 
@@ -387,7 +386,7 @@ public class BlockChain implements Runnable {
         }
     }
 
-    private void markInvalid(byte block[]) {
+    private void markRejected(byte block[]) {
         context.getDatabase().markRejected(block);
     }
 
