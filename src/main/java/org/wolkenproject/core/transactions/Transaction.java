@@ -107,7 +107,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return new Address[] { getRecipient() };
     }
 
-    public byte[] getTransactionID() {
+    public byte[] getHash() {
         if (txid == null) {
             txid = HashUtil.sha256d(asByteArray());
         }
