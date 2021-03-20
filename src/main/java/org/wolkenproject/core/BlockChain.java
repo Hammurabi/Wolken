@@ -161,10 +161,7 @@ public class BlockChain implements Runnable {
             }
         }
 
-        if (commonAncestor != null) {
-        }
-
-        return commonAncestor;
+        return null;
     }
 
     private void rollback(BlockIndex block) throws WolkenException {
