@@ -24,7 +24,7 @@ public class BlockChain implements Runnable {
     // contains blocks that have no parents.
     private HashQueue<BlockIndex> orphanedBlocks;
     // contains blocks that were valid pre-fork.
-    private PriorityHashQueue<BlockIndex>   staleBlocks;
+    private HashQueue<BlockIndex>   staleBlocks;
     // contains blocks sent from peers.
     private PriorityHashQueue<BlockIndex>   blockPool;
     // a reference to context
