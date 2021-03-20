@@ -25,7 +25,8 @@ public class Database {
     ChainTip                = Utils.takeApartShort((short) 2),
     BlockHeader             = Utils.takeApartShort((short) 3),
     BlockIndex              = Utils.takeApartShort((short) 4),
-    Transaction             = Utils.takeApartShort((short) 5);
+    Transaction             = Utils.takeApartShort((short) 5),
+    RejectedBlock           = Utils.takeApartShort((short) 6);
 
     public Database(FileService location) throws IOException {
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
@@ -220,5 +221,9 @@ public class Database {
     }
 
     public void rmvAccount(byte[] address) {
+    }
+
+    public void markRejected(byte[] hash) {
+        put(Utils.concatenate(RejectedBlock, hash), new byte[] { 1 });
     }
 }
