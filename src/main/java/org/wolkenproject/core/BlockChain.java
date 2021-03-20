@@ -352,7 +352,7 @@ public class BlockChain implements Runnable {
         Message request = new RequestBlocks(context.getNetworkParameters().getVersion(), hash);
         Message response= context.getServer().broadcastRequest(request);
 
-        if (response != null && response instanceof BlockList) {
+        if (response instanceof BlockList) {
             Collection<BlockIndex> blocks = response.getPayload();
             if (blocks != null && !blocks.isEmpty()) {
                 blocks.iterator().next();
