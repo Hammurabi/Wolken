@@ -118,7 +118,7 @@ public class BasicTransaction extends Transaction {
         Address sender = getSender();
         stateChange.createAccountIfDoesNotExist(recipient);
         stateChange.addEvent(new DepositFundsEvent(recipient, value));
-        stateChange.addEvent(new WithdrawFundsEvent(sender.getRaw(), value));
+        stateChange.addEvent(new WithdrawFundsEvent(sender.getRaw(), value + fee));
     }
 
     @Override
