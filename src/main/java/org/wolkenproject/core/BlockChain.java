@@ -5,10 +5,7 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.*;
-import org.wolkenproject.utils.HashQueue;
-import org.wolkenproject.utils.Logger;
-import org.wolkenproject.utils.PriorityHashQueue;
-import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.*;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -40,7 +37,7 @@ public class BlockChain implements Runnable {
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
-        rejectedPool    = new PriorityHashQueue<>(byte[].class);
+        rejectedPool    = new LinkedHashQueue<>();
         mutex = new ReentrantLock();
         tip             = context.getDatabase().findTip();
     }
