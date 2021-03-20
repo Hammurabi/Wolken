@@ -505,12 +505,7 @@ public class BlockChain implements Runnable {
     }
 
     private boolean isRejected(byte[] hash) {
-        mutex.lock();
-        try {
-            return rejectedPool.contains(hash);
-        } finally {
-            mutex.unlock();
-        }
+        context.getDatabase().isRejected(hash);
     }
 
     public int getHeight() {
