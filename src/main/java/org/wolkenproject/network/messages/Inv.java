@@ -14,10 +14,7 @@ import org.wolkenproject.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Inv extends Message {
     public static class Type
@@ -130,6 +127,10 @@ public class Inv extends Message {
 
                 if (message.noErrors()) {
                     Set<Transaction> transactions = message.getMessage().getPayload();
+                    transactions.removeIf(transaction -> !transaction.shallowVerify());
+                    Iterator<Transaction> iterator= transactions.iterator();
+
+
                     Context.getInstance().getTransactionPool().add(transactions);
 
                     Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Transaction, newTransactions);
