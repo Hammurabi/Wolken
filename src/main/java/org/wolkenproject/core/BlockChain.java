@@ -140,7 +140,7 @@ public class BlockChain implements Runnable {
                         return null;
                     }
 
-                    ancestors.add()
+                    ancestors.add(header.getHashCode());
                 }
 
                 // loop headers to find a common ancestor
