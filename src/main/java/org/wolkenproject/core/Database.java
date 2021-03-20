@@ -226,4 +226,8 @@ public class Database {
     public void markRejected(byte[] hash) {
         put(Utils.concatenate(RejectedBlock, hash), new byte[] { 1 });
     }
+
+    public boolean isRejected(byte[] hash) {
+        return get(Utils.concatenate(RejectedBlock, hash)) != null;
+    }
 }
