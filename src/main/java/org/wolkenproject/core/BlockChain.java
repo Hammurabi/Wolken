@@ -5,6 +5,7 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.*;
+import org.wolkenproject.utils.HashQueue;
 import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.PriorityHashQueue;
 import org.wolkenproject.utils.Utils;
@@ -21,7 +22,7 @@ public class BlockChain implements Runnable {
     // the current higest block in the chain
     private BlockIndex                      tip;
     // contains blocks that have no parents.
-    private PriorityHashQueue<BlockIndex>   orphanedBlocks;
+    private HashQueue<BlockIndex> orphanedBlocks;
     // contains blocks that were valid pre-fork.
     private PriorityHashQueue<BlockIndex>   staleBlocks;
     // contains blocks sent from peers.
