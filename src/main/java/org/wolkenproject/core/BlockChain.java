@@ -26,7 +26,7 @@ public class BlockChain implements Runnable {
     // contains blocks that were valid pre-fork.
     private HashQueue<BlockIndex>   staleBlocks;
     // contains blocks sent from peers.
-    private PriorityHashQueue<BlockIndex>   blockPool;
+    private HashQueue<BlockIndex>   blockPool;
     // a reference to context
     private Context                         context;
     // a mutex
