@@ -37,12 +37,12 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        return set.contains(o);
     }
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return queue.iterator();
     }
 
     @Override
@@ -57,6 +57,10 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
 
     @Override
     public boolean add(T t) {
+        if (!set.contains(t)) {
+            return queue.add(t);
+        }
+
         return false;
     }
 
