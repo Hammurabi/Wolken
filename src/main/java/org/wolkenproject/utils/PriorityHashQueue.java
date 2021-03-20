@@ -142,6 +142,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return queue.peek().element;
     }
 
+    @Override
     public T getByHash(byte[] txid) {
         if (entryMap.containsKey(txid)) {
             return entryMap.get(txid).element;
