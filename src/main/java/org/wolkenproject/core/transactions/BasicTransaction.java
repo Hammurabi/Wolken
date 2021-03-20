@@ -66,17 +66,22 @@ public class BasicTransaction extends Transaction {
     @Override
     public boolean shallowVerify() {
         // a transfer of 0 with a fee of 0 is not allowed
-        return
-                getTransactionValue() >= 0 &&
-                        getTransactionFee() >= 0 &&
-                        //possible vulnerability with a+b!=0 using signed integers
-                        (getTransactionValue() + getTransactionFee()) > 0 &&
-                        (signature.getR().length == 32) &&
-                        (signature.getS().length == 32) &&
-                        getSender() != null &&
-                        (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                        (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getBalance()) >= (value + fee);
+        try {
+            return
+                    getTransactionValue() >= 0 &&
+                            getTransactionFee() >= 0 &&
+                            //possible vulnerability with a+b!=0 using signed integers
+                            (getTransactionValue() + getTransactionFee()) > 0 &&
+                            (signature.getR().length == 32) &&
+                            (signature.getS().length == 32) &&
+                            getSender() != null &&
+                            (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                            (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getBalance()) >= (value + fee);
+        } catch (WolkenException e) {
+            e.printStackTrace();
+        }
 
+        return false;
     }
 
     @Override
