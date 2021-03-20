@@ -96,7 +96,7 @@ public class RequestTransactions extends Message {
 
             int checked = 0;
             for (Transaction transaction : transactions) {
-                if (this.transactions.contains(transaction.getTransactionID())) {
+                if (this.transactions.contains(transaction.getHash())) {
                     checked ++;
                 }
             }
