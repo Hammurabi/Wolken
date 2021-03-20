@@ -129,6 +129,7 @@ public class BlockChain implements Runnable {
                 BlockHeader header = iterator.next();
                 if (isCommonAncestor(header)) {
                     commonAncestor = header;
+                    return commonAncestor;
                 } else {
                     if (!header.verifyProofOfWork()) {
                         markInvalid(header.getHashCode());
@@ -138,6 +139,8 @@ public class BlockChain implements Runnable {
                         markInvalid(block.getHash());
                         return null;
                     }
+
+                    ancestors.add()
                 }
 
                 // loop headers to find a common ancestor
