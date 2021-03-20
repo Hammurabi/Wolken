@@ -177,7 +177,11 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         return HashUtil.hash160(getHash());
     }
 
-    public boolean verify() throws WolkenException {
-        return block.verify(getHeight());
+    public boolean verify() {
+        try {
+            return block.verify(getHeight());
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
