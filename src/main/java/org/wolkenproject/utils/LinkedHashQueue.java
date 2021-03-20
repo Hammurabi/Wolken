@@ -112,16 +112,19 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
 
     @Override
     public T poll() {
-        return null;
+        T element = queue.poll();
+        set.remove(element);
+
+        return element;
     }
 
     @Override
     public T element() {
-        return null;
+        return queue.peek();
     }
 
     @Override
     public T peek() {
-        return null;
+        return queue.peek();
     }
 }
