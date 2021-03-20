@@ -319,15 +319,7 @@ public class BlockChain implements Runnable {
     }
 
     private void updateIndices(BlockIndex index) throws WolkenException {
-        while (true) {
-            index.recalculateChainWork();
-
-            if (!index.hasNext()) {
-                return;
-            }
-
-            index = index.next();
-        }
+        index.recalculateChainWork();
     }
 
     private void setBlockIndex(int height, BlockIndex block) {
