@@ -17,7 +17,7 @@ public class BlockChain implements Runnable {
 
     // the current higest block in the chain
     private BlockIndex              tip;
-    // contains blocks that have no parents.
+    // contains blocks that have no parents or ancestors.
     private HashQueue<BlockIndex>   orphanedBlocks;
     // contains blocks that were valid pre-fork.
     private HashQueue<BlockIndex>   staleBlocks;
