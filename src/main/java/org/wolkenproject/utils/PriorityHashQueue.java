@@ -5,7 +5,7 @@ import org.wolkenproject.serialization.SerializableI;
 import java.io.IOException;
 import java.util.*;
 
-public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implements Queue<T> {
+public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implements HashQueue<T> {
     private Map<byte[], Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
     private Class<T>                tClass;
