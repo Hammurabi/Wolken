@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
@@ -129,5 +130,13 @@ public class BlockHeader extends SerializableI {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(BlockHeader.class);
+    }
+
+    public boolean verifyProofOfWork() {
+        try {
+            return ChainMath.validSolution(getHashCode(), getBits());
+        } catch (WolkenException e) {
+            return false;
+        }
     }
 }
