@@ -1,10 +1,8 @@
 package org.wolkenproject.utils;
 
-import org.wolkenproject.serialization.SerializableI;
-
 import java.util.Queue;
 
-public interface HashQueue<T extends SerializableI & Comparable<T>> extends Queue<T> {
+public interface HashQueue<T> extends Queue<T> {
     boolean containsKey(byte[] hash);
     void removeTails(int newLength);
     T getByHash(byte[] hash);
