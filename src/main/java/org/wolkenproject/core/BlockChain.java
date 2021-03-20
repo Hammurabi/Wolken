@@ -546,7 +546,18 @@ public class BlockChain implements Runnable {
     }
 
     public void suggest(BlockIndex block) {
-        pool(block);
+        if (!isRejected(block.getHash())) {
+            pool(block);
+        }
+    }
+
+    private boolean isRejected(byte[] hash) {
+        mutex.lock();
+        try {
+            return rejectedPool.contains(hash);
+        } finally {
+            mutex.unlock();
+        }
     }
 
     public int getHeight() {
