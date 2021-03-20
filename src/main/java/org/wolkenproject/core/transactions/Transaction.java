@@ -65,7 +65,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         check the signature is valid
         check the sender has funds
      */
-    public abstract boolean shallowVerify() throws WolkenException;
+    public abstract boolean shallowVerify();
     public abstract Address getSender() throws WolkenException;
     public abstract Address getRecipient();
     public abstract boolean hasMultipleSenders();
