@@ -64,7 +64,7 @@ public class BasicTransaction extends Transaction {
     }
 
     @Override
-    public boolean shallowVerify() throws WolkenException {
+    public boolean shallowVerify() {
         // a transfer of 0 with a fee of 0 is not allowed
         return
                 getTransactionValue() >= 0 &&
