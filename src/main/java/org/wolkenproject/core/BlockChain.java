@@ -20,15 +20,17 @@ public class BlockChain implements Runnable {
     protected static final int                MaximumPoolBlockQueueSize   = 1_250_000_000;
 
     // the current higest block in the chain
-    private BlockIndex                      tip;
+    private BlockIndex              tip;
     // contains blocks that have no parents.
-    private HashQueue<BlockIndex> orphanedBlocks;
+    private HashQueue<BlockIndex>   orphanedBlocks;
     // contains blocks that were valid pre-fork.
     private HashQueue<BlockIndex>   staleBlocks;
     // contains blocks sent from peers.
     private HashQueue<BlockIndex>   blockPool;
+    // contains rejected blocks.
+    private HashQueue<BlockIndex>   rejectedPool;
     // a reference to context
-    private Context                         context;
+    private Context                 context;
     // a mutex
     private ReentrantLock mutex;
 
