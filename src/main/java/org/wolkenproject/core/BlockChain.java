@@ -38,7 +38,7 @@ public class BlockChain implements Runnable {
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
         rejectedPool    = new LinkedHashQueue<>();
-        mutex = new ReentrantLock();
+        mutex           = new ReentrantLock();
         tip             = context.getDatabase().findTip();
     }
 
