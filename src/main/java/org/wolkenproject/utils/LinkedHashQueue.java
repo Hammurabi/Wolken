@@ -96,7 +96,8 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
 
     @Override
     public void clear() {
-
+        queue.clear();
+        set.clear();
     }
 
     @Override
