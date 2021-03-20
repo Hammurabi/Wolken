@@ -155,6 +155,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return entryMap.containsKey(hash);
     }
 
+    @Override
     public void removeTails(int newLength) {
         Queue<Entry<T>> newQueue = new PriorityQueue<>(comparator);
 
