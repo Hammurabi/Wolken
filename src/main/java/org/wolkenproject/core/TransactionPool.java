@@ -66,7 +66,7 @@ public class TransactionPool {
 
     public void queueBlock(Block block) {
         for (Transaction transaction : block) {
-            byte txid[] = transaction.getTransactionID();
+            byte txid[] = transaction.getHash();
             if (transactions.containsKey(txid)) {
                 continue;
             }
@@ -86,7 +86,7 @@ public class TransactionPool {
             while (!transactions.isEmpty()) {
                 // poll a transaction
                 Transaction transaction = transactions.poll();
-                byte txid[] = transaction.getTransactionID();
+                byte txid[] = transaction.getHash();
 
                 // if the transaction has already been added to a block then continue
                 if (Context.getInstance().getDatabase().checkTransactionExists(txid)) {
