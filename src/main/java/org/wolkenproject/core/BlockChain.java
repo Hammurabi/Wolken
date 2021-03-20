@@ -28,7 +28,7 @@ public class BlockChain implements Runnable {
     // contains blocks sent from peers.
     private HashQueue<BlockIndex>   blockPool;
     // contains rejected blocks.
-    private HashQueue<BlockIndex>   rejectedPool;
+    private HashQueue<byte[]>       rejectedPool;
     // a reference to context
     private Context                 context;
     // a mutex
@@ -39,6 +39,7 @@ public class BlockChain implements Runnable {
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
+        rejectedPool    = new PriorityHashQueue<>(byte[].class);
         mutex = new ReentrantLock();
         tip             = context.getDatabase().findTip();
     }
