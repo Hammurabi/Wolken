@@ -262,9 +262,17 @@ public class BlockChain implements Runnable {
                 return;
             }
 
-            rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
+            if (!rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1)) {
+                if (!isRejected(block.getBlock().getParentHash())) {
+                    addOrphan(block);
+                } else {
+                    markRejected(block.getHash());
+                }
+            }
         } else {
-            addOrphan(block);
+            if (!isRejected(block.getHash())) {
+                addOrphan(block);
+            }
         }
     }
 
@@ -277,9 +285,10 @@ public class BlockChain implements Runnable {
         // a set containing children of the parent we are looping.
         Set<byte[]> children = new LinkedHashSet<>();
 
-        // we must request it in case it doesn't
+        // we must request it if it doesn't exist
         BlockIndex parent = requestBlock(parentHash);
         while (parent != null) {
+            // if the block is invalid then we reject it and all of it's children
             if (!parent.verify()) {
                 markRejected(parentHash);
                 for (byte[] hash : children) {
@@ -287,6 +296,8 @@ public class BlockChain implements Runnable {
                 }
 
                 return false;
+            } else {
+                children.add(parent.getHash());
             }
 
             replaceBlockIndex(height, parent);
