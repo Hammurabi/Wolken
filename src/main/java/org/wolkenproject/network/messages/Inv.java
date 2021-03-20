@@ -66,7 +66,7 @@ public class Inv extends Message {
         Set<byte[]> result = new HashSet<>();
         for (Transaction transaction : transactions)
         {
-            result.add(transaction.getTransactionID());
+            result.add(transaction.getHash());
         }
 
         return result;
