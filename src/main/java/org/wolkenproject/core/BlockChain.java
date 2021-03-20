@@ -300,7 +300,9 @@ public class BlockChain implements Runnable {
                 children.add(parent.getHash());
             }
 
+            // replace the ancestor
             replaceBlockIndex(height, parent);
+
             height      --;
             parentHash  = parent.getBlock().getParentHash();
 
@@ -309,6 +311,7 @@ public class BlockChain implements Runnable {
                 return true;
             }
 
+            // if we can't find the block then again we have to request it
             parent = requestBlock(parentHash);
         }
 
