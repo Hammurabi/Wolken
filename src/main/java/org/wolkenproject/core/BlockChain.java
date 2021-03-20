@@ -442,10 +442,10 @@ public class BlockChain implements Runnable {
 
             // calculate the maximum blocks allowed in the queue.
             int maximumBlocks   = MaximumPoolBlockQueueSize / context.getNetworkParameters().getMaxBlockSize();
-            int Threshold       = (MaximumPoolBlockQueueSize / 4) / context.getNetworkParameters().getMaxBlockSize();
+            int threshold       = (MaximumPoolBlockQueueSize / 4) / context.getNetworkParameters().getMaxBlockSize();
 
             // remove any blocks that are too far back in the queue.
-            if (blockPool.size() - maximumBlocks > Threshold) {
+            if (blockPool.size() - maximumBlocks > threshold) {
                 trimPool(maximumBlocks);
             }
         } finally {
