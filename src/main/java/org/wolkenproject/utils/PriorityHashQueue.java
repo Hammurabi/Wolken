@@ -150,6 +150,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return null;
     }
 
+    @Override
     public boolean containsKey(byte[] hash) {
         return entryMap.containsKey(hash);
     }
