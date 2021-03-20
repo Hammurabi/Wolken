@@ -128,10 +128,12 @@ public class Inv extends Message {
                 if (message.noErrors()) {
                     Set<Transaction> transactions = message.getMessage().getPayload();
                     transactions.removeIf(transaction -> !transaction.shallowVerify());
-                    Iterator<Transaction> iterator= transactions.iterator();
-
-
                     Context.getInstance().getTransactionPool().add(transactions);
+
+                    Set<byte[]> validTransactions = new LinkedHashSet<>();
+                    for (Transaction transaction : transactions) {
+                        validTransactions.add(transaction.getHash());
+                    }
 
                     Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Transaction, newTransactions);
                     Set<Node> connected = Context.getInstance().getServer().getConnectedNodes();
