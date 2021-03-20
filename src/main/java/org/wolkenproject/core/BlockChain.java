@@ -274,9 +274,21 @@ public class BlockChain implements Runnable {
             return true;
         }
 
+        // a set containing children of the parent we are looping.
+        Set<byte[]> children = new LinkedHashSet<>();
+
         // we must request it in case it doesn't
         BlockIndex parent = requestBlock(parentHash);
         while (parent != null) {
+            if (!parent.verify()) {
+                markRejected(parentHash);
+                for (byte[] hash : children) {
+                    markRejected(hash);
+                }
+
+                return false;
+            }
+
             replaceBlockIndex(height, parent);
             height      --;
             parentHash  = parent.getBlock().getParentHash();
