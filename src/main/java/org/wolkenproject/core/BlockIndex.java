@@ -85,25 +85,35 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public void recalculateChainWork() throws WolkenException {
-        BlockIndex previous = previousBlock();
+        recalculateChainWork(this);
+    }
 
-        BigInteger oldChainWork = chainWork;
+    public static void recalculateChainWork(BlockIndex index) throws WolkenException {
+        while (index != null) {
+            BlockIndex previous = index.previousBlock();
 
-        if (previous != null) {
-            this.chainWork  = previous.getChainWork();
-        } else {
-            this.chainWork  = BigInteger.ZERO;
-        }
+            BigInteger oldChainWork = index.chainWork;
+            BigInteger newChainWork = oldChainWork;
 
-        if (this.chainWork.compareTo(oldChainWork) == 0) {
-            return;
-        } else {
-            // save changes made to the block index
-            Context.getInstance().getDatabase().setBlockIndex(getHeight(), this);
-        }
+            if (previous != null) {
+                newChainWork  = previous.getChainWork();
+            } else {
+                newChainWork  = BigInteger.ZERO;
+            }
 
-        if (hasNext()) {
-            next().recalculateChainWork();
+            if (newChainWork.compareTo(oldChainWork) == 0) {
+                return;
+            } else {
+                // set the new chain work
+                index.chainWork = newChainWork;
+
+                // save changes made to the block index
+                Context.getInstance().getDatabase().setBlockIndex(getHeight(), this);
+            }
+
+            if (index.hasNext()) {
+                index = index.next();
+            }
         }
     }
 
