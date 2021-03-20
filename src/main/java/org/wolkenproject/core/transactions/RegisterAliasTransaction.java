@@ -107,7 +107,7 @@ public class RegisterAliasTransaction extends Transaction {
     @Override
     public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
         Address sender = getSender();
-        createAccountIfDoesNotExist(sender.getRaw(), stateChange);
+        stateChange.createAccountIfDoesNotExist(sender.getRaw());
         stateChange.addEvent(new RegisterAliasEvent(sender.getRaw(), alias));
     }
 
