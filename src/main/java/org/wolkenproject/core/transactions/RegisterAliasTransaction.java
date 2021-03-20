@@ -122,7 +122,7 @@ public class RegisterAliasTransaction extends Transaction {
 
     @Override
     protected Transaction copyForSignature() {
-        return new RegisterAliasTransaction(nonce, alias);
+        return new RegisterAliasTransaction(nonce, fee, alias);
     }
 
     @Override
