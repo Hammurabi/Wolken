@@ -108,7 +108,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
                 index.chainWork = newChainWork;
 
                 // save changes made to the block index
-                Context.getInstance().getDatabase().setBlockIndex(getHeight(), this);
+                Context.getInstance().getDatabase().setBlockIndex(index.getHeight(), index);
             }
 
             if (index.hasNext()) {
