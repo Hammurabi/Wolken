@@ -139,6 +139,8 @@ public class Inv extends Message {
                     for (Node n : connected) {
                         n.sendMessage(inv);
                     }
+                } else {
+                    node.increaseErrors(4);
                 }
             } catch (WolkenTimeoutException e) {
                 node.increaseErrors(4);
