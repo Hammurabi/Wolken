@@ -25,8 +25,6 @@ public class BlockChain implements Runnable {
     // contains blocks sent from peers.
     private HashQueue<BlockIndex>   blockPool;
     // contains rejected blocks.
-    private HashQueue<byte[]>       rejectedPool;
-    // a reference to context
     private Context                 context;
     // a mutex
     private ReentrantLock mutex;
@@ -36,7 +34,6 @@ public class BlockChain implements Runnable {
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
-        rejectedPool    = new LinkedHashQueue<>();
         mutex           = new ReentrantLock();
         tip             = context.getDatabase().findTip();
     }
@@ -384,21 +381,8 @@ public class BlockChain implements Runnable {
         }
     }
 
-    private void markInvalid(BlockIndex block) {
-        mutex.lock();
-        try {
-            rejectedPool.add(block.getHash());
-
-            // calculate the maximum hashes allowed in the queue
-            int maximumHashes   = MaximumRejectedPoolQueueSize / 32;
-            int threshold       = (MaximumRejectedPoolQueueSize / 4) / 32;
-
-            if (rejectedPool.size() - maximumHashes > threshold) {
-                rejectedPool.removeTails(maximumHashes);
-            }
-        } finally {
-            mutex.unlock();
-        }
+    private void markInvalid(byte block[]) {
+        context.getDatabase().markRejected(block);
     }
 
     public void pool(BlockIndex block) {
