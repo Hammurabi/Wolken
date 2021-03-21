@@ -14,4 +14,12 @@ public class Null {
 
         return a;
     }
+
+    public static short[] notNull(short a[]) {
+        if (a == null) {
+            return s_array;
+        }
+
+        return a;
+    }
 }
