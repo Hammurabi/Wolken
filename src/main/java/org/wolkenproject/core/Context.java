@@ -26,7 +26,7 @@ public class Context {
     private static Context instance;
 
     private Database                database;
-    private NetworkParameters networkParameters;
+    private NetworkParameters       networkParameters;
     private ExecutorService threadPool;
     private AtomicBoolean isRunning;
     private IpAddressList ipAddressList;
