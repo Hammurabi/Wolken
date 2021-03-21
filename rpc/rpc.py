@@ -47,30 +47,28 @@ def prase_getblock(command, arguments):
         print("error: 'getblock' command requires second argument to be base16 encoded.")
         pass
 
-    
+
 def new_command(name, value, parse):
     command = Command()
     command.name    = name
     command.value   = value
     command.parse   = parse
     return command
-
-def scan_commands():
-    # get inputs from the command line
-    text        = input(">")
-    # this shouldn't happen
-    if not text:
-        return lambda x : None
-    # parse the command
-    arguments   = text.split(" ")
-    # check the length
-    if len(arguments) > 0:
-        # test against known commands
-        for command in commands_list:
-            if command.name == arguments[0]:
-                return command.parse(arguments)
 def start():
     # enter an infinite loop
     while (True):
         # scan the command line for commands
-        commands = scan_commands()
+        text        = input(">")
+        # this shouldn't happen
+        if not text:
+            return lambda x : None
+        # parse the command
+        arguments   = text.split(" ")
+        # check the length
+        if len(arguments) > 0:
+            # test against known commands
+            for command in commands_list:
+                # if the command name matches the first argument
+                if command.name == arguments[0]:
+                    # attempt to parse the command
+                    command.parse(arguments)
