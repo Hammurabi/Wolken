@@ -6,18 +6,17 @@ import requests
 # gettx         <hash>
 # getbalance    <address>
 
-commands = [ new_command('getblock', getblock_command, prase_getblock ]
+commands = [ new_command('getblock', prase_getblock ]
 
 class Command:
-    pass
-
-def getblock_command(request):
     pass
 
 def prase_getblock(command, arguments):
     if len(arguments < 2):
         print("error: 'getblock' command requires a minimum of two arguments.")
         return None
+
+    
 
     return command.value
 
