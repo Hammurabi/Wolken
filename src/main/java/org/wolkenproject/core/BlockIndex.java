@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.json.JSONObject;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -209,6 +210,6 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         }
     }
 
-    public boolean toJson(boolean txList, boolean evList) {
+    public JSONObject toJson(boolean txList, boolean evList) {
     }
 }
