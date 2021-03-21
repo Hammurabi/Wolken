@@ -41,6 +41,11 @@ public class RpcServer {
         headers.add("Content-Type", "text/html");
     }
 
+    public static void onContentMsg(HttpExchange exchange) throws IOException {
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Content-Type", "text/html");
+    }
+
     public static void onApiMsg(HttpExchange exchange) throws IOException {
         Headers headers = exchange.getResponseHeaders();
         headers.add("Content-Type", "application/json");
