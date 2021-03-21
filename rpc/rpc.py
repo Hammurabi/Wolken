@@ -36,28 +36,6 @@ def is_base58_encoded(text):
                 return True
     return False
 
-def prase_getblock(command, arguments):
-    # check correct amount of arguments exists
-    if len(arguments < 2):
-        print("error: 'getblock' command requires a minimum of two arguments.")
-        pass
-
-    # check that the block-id is base16 encoded
-    if is_base16_encoded(arguments[1]):
-        print("error: 'getblock' command requires second argument to be base16 encoded.")
-        pass
-
-    # getblock <hash>
-    # getblock <hash> includeTx txAsHash includeEv evAsHash format
-    if len(arguments) > 2 && len(arguments) < 7:
-        print("error: 'getblock' command missing arguments.")
-        pass
-def new_command(name, value, parse):
-    command = Command()
-    command.name    = name
-    command.value   = value
-    command.parse   = parse
-    return command
 def start():
     # enter an infinite loop
     while (True):
@@ -76,3 +54,37 @@ def start():
                 if command.name == arguments[0]:
                     # attempt to parse the command
                     command.parse(arguments)
+
+
+
+
+
+
+def prase_getblock(command, arguments):
+    # check correct amount of arguments exists
+    if len(arguments < 2):
+        print("error: 'getblock' command requires a minimum of two arguments.")
+        pass
+
+    # check that the block-id is base16 encoded
+    if is_base16_encoded(arguments[1]):
+        print("error: 'getblock' command requires second argument to be base16 encoded.")
+        pass
+
+    # getblock <hash>
+    # getblock <hash> includeTx txAsHash includeEv evAsHash format
+    if len(arguments) > 2 && len(arguments) < 7:
+        print("error: 'getblock' command missing arguments.")
+        pass
+
+
+def new_command(name, value, parse):
+    command = Command()
+    command.name    = name
+    command.value   = value
+    command.parse   = parse
+    return command
+    
+
+# start the loop
+start()
