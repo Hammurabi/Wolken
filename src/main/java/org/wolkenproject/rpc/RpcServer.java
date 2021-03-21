@@ -110,7 +110,7 @@ public class RpcServer {
     public static void onWalletMsg(HttpExchange exchange) {
     }
 
-    public static final JSONObject readJson(InputStream inputStream) {
+    public static final JSONObject readJson(InputStream inputStream) throws IOException {
         return new JSONObject(readUTF(inputStream));
     }
 
