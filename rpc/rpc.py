@@ -15,6 +15,8 @@ def getblock_command(request):
     pass
 
 def prase_getblock(command, arguments):
+    if len(arguments < 2):
+        
     return command.value
 
 def new_command(name, value, parse):
