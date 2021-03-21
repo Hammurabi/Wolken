@@ -52,8 +52,10 @@ def start():
 
 # define 'set_node' command
 def set_node(command, arguments):
-    print("alert: node set to ('"+arguments[1]+":"+arguments[2]+"')")
-
+    if len(arguments) != 3:
+        print("error: 'set_node' requires two arguments.")
+    else:
+        print("alert: node set to ('"+arguments[1]+":"+arguments[2]+"')")
 # define 'exit' command
 def exit_parse(command, arguments):
     print("alert: terminating process")
