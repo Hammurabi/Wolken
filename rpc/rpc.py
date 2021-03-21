@@ -48,6 +48,9 @@ def start():
                 print("error: command '" + arguments[0] + "' is not a recognized command.")
 
 
+# define 'quit' command
+def quit_parse(command, arguments):
+    print("alert: terminating process")
 # define 'getblock' command
 def getblock_parse(command, arguments):
     # check correct amount of arguments exists
