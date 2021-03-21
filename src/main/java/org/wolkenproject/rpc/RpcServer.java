@@ -32,7 +32,10 @@ public class RpcServer {
         JSONObject message  = readJson(exchange.getRequestBody());
         String blockId      = message.getString("hash");
         boolean txList      = message.getBoolean("transactions");
+        boolean txHash      = message.getBoolean("only-txid");
         boolean evList      = message.getBoolean("events");
+        boolean evHash      = message.getBoolean("only-evid");
+        boolean txEvt       = message.getBoolean("format");
 
         byte blockHash[]    = Base16.decode(blockId);
 
@@ -41,7 +44,7 @@ public class RpcServer {
 
             JSONObject response = new JSONObject();
             response.put("type", "success");
-            response.put("block", block.toJson(txList, evList));
+            response.put("block", block.toJson(txList, txHash, evList, evHash, txEvt));
             sendResponse(200, response, exchange);
         } else {
             JSONObject response = new JSONObject();
