@@ -37,7 +37,7 @@ public class Context {
     private BlockChain              blockChain;
     private OpcodeRegister          opcodeRegister;
     private RpcServer               rpcServer;
-    private FileService fileService;
+    private FileService             fileService;
 
     public Context(FileService service, boolean testNet, Address[] payList, Set<NetAddress> forceConnections) throws WolkenException, IOException {
         Context.instance = this;
