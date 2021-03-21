@@ -2,8 +2,9 @@
 import requests
 
 # valid commands
-# getblock  <hash>
-# gettx     <hash>
+# getblock      <hash>
+# gettx         <hash>
+# getbalance    <address>
 
 def scan_commands():
     # get inputs from the command line
