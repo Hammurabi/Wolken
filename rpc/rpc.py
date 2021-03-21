@@ -6,6 +6,8 @@ import requests
 # gettx         <hash>
 # getbalance    <address>
 
+commands = [ new_command('getblock', lambda a : None) ]
+
 class Command:
     pass
 
