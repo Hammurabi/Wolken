@@ -30,7 +30,7 @@ def is_base58_encoded(text):
 
 def is_valid_ip(ip):
     try:
-        socket.inet_aton(addr)
+        socket.inet_aton(ip)
         return True
     except socket.error:
         return False
@@ -73,6 +73,8 @@ def connect_parse(command, arguments):
         if not arguments[2].isnumeric():
             print("error: 'connect' requires the second argument to be a valid port.")
             pass
+        global ip
+        global port
         ip      = arguments[1]
         port    = arguments[2]
         print("alert: node connection data set to ('"+arguments[1]+":"+arguments[2]+"')")
