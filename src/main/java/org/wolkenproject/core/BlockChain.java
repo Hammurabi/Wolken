@@ -177,7 +177,9 @@ public class BlockChain implements Runnable {
             setTip(currentBlock.previousBlock());
             replaceTip(block);
         } else {
-            addOrphan(block);
+            if (isRejected(block.getHash())) {
+                addOrphan(block);
+            }
         }
     }
 
