@@ -58,6 +58,8 @@ public class RpcServer {
     }
 
     private static final String readUTF(InputStream inputStream) {
+    }
 
+    private static final void sendResponse(int responseCode, JSONObject response) {
     }
 }
