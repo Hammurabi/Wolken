@@ -11,6 +11,9 @@ commands = [ new_command('getblock', lambda a : getblock_command(a), labmda a : 
 class Command:
     pass
 
+def getblock_command(request):
+    pass
+
 def new_command(name, value, parse):
     command = Command()
     command.name    = name
