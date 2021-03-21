@@ -41,6 +41,8 @@ def start():
                 if command.name == arguments[0]:
                     # attempt to parse the command
                     command.parse(arguments)
+                    # inform the program that we have parsed or attempted to parse the command
+                    is_parsed = True
 
 
 # define 'getblock' command
