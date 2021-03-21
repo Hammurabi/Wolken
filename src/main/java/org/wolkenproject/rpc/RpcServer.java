@@ -28,7 +28,7 @@ public class RpcServer {
         server.stop(0);
     }
 
-    public static void onBlockMsg(HttpExchange exchange) {
+    public static void onBlockMsg(HttpExchange exchange) throws IOException {
         JSONObject message  = readJson(exchange.getRequestBody());
         String blockId      = message.getString("hash");
         boolean txList      = message.getBoolean("transactions");
