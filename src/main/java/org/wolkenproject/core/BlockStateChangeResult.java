@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.utils.Utils;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
@@ -44,5 +45,10 @@ public class BlockStateChangeResult implements Iterable<Event> {
 
     public List<Event> getTransactionEvents() {
         return transactionEvents;
+    }
+
+    @Override
+    public Iterator<Event> iterator() {
+        return transactionEvents.iterator();
     }
 }
