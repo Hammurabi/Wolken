@@ -4,7 +4,7 @@ import requests
 import socket
 
 # valid commands
-# connect       <ip> <port>
+# auth       <ip> <port> <user> <password>
 # getblock      <hash>
 # gettx         <hash>
 # getbalance    <address>
@@ -84,6 +84,7 @@ def exit_parse(command, arguments):
 # define 'quit' command
 def quit_parse(command, arguments):
     print("alert: terminating process")
+    requests.get(ip + port + "/quit")
     quit()
 # define 'getblock' command
 def getblock_parse(command, arguments):
