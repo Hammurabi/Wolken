@@ -14,6 +14,8 @@ def scan_commands():
         return lambda x : None
     # parse the command
     arguments   = text.split(" ")
+    # check the length
+    if len(arguments) > 0:
 def start():
     # enter an infinite loop
     while (True):
