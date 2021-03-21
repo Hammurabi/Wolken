@@ -1,5 +1,7 @@
 # import requests to make our lives easier
 import requests
+# import socket to do IP address checks
+import socket
 
 # valid commands
 # connect       <ip> <port>
@@ -58,6 +60,7 @@ def connect_parse(command, arguments):
     if len(arguments) != 3:
         print("error: 'connect' requires two arguments.")
     else:
+        if 
         print("alert: node set to ('"+arguments[1]+":"+arguments[2]+"')")
 # define 'exit' command
 def exit_parse(command, arguments):
