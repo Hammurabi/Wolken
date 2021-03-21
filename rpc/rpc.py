@@ -5,6 +5,7 @@ import requests
 # getblock      <hash>
 # gettx         <hash>
 # getbalance    <address>
+# exit
 # quit
 
 def is_base16_encoded(text):
