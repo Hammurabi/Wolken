@@ -212,6 +212,7 @@ public class Context {
     public void shutDown() {
         isRunning.set(false);
         server.shutdown();
+        rpcServer.stop();
         try {
             ipAddressList.save();
         } catch (IOException e) {
