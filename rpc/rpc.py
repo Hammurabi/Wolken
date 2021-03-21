@@ -7,21 +7,6 @@ import requests
 # getbalance    <address>
 # quit
 
-commands = [ new_command('getblock', prase_getblock) ]
-base16   = ['0', '1', '2', '3', '4', '5', '6', '7',
-            '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
-base58   = ['1', '2', '3', '4', '5', '6', '7', '8',
-            '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
-            'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q',
-            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
-            'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
-            'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p',
-            'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-            'y', 'z']
-
-class Command:
-    pass
-
 def is_base16_encoded(text):
     for c in text.lower():
         for x in base16:
@@ -60,7 +45,7 @@ def start():
 
 
 
-def prase_getblock(command, arguments):
+def getblock_parse(command, arguments):
     # check correct amount of arguments exists
     if len(arguments < 2):
         print("error: 'getblock' command requires a minimum of two arguments.")
@@ -77,14 +62,28 @@ def prase_getblock(command, arguments):
         print("error: 'getblock' command missing arguments.")
         pass
 
+class Command:
+    pass
 
-def new_command(name, value, parse):
+
+def new_command(name, parse):
     command = Command()
     command.name    = name
-    command.value   = value
     command.parse   = parse
     return command
     
+
+commands = [ new_command('getblock', getblock_parse) ]
+base16   = ['0', '1', '2', '3', '4', '5', '6', '7',
+            '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
+base58   = ['1', '2', '3', '4', '5', '6', '7', '8',
+            '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
+            'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q',
+            'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
+            'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+            'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p',
+            'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+            'y', 'z']
 
 # start the loop
 start()
