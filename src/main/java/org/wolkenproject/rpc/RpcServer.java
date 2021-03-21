@@ -67,8 +67,8 @@ public class RpcServer {
 
         byte txHash[]       = Base16.decode(txId);
 
-        if (Context.getInstance().getDatabase().checkBlockExists(blockHash)) {
-            BlockIndex block= Context.getInstance().getDatabase().findBlock(blockHash);
+        if (Context.getInstance().getDatabase().checkTransactionExists(txHash)) {
+            BlockIndex block= Context.getInstance().getDatabase().findTransaction(txHash);
 
             JSONObject response = new JSONObject();
             response.put("type", "success");
