@@ -46,6 +46,8 @@ def prase_getblock(command, arguments):
     if is_base16_encoded(arguments[1]):
         print("error: 'getblock' command requires second argument to be base16 encoded.")
         pass
+
+    
 def new_command(name, value, parse):
     command = Command()
     command.name    = name
