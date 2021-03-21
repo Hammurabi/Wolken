@@ -12,7 +12,6 @@ def scan_commands():
 
     # parse the command
     arguments   = text.split(" ")
-
 def start():
     # enter an infinite loop
     while (True):
