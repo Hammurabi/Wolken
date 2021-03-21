@@ -13,6 +13,7 @@ import socket
 
 ip      = 'localhost'
 port    = '80'
+token   = ''
 
 def is_base16_encoded(text):
     for c in text.lower():
@@ -62,15 +63,15 @@ def start():
                 print("error: command '" + arguments[0] + "' is not a recognized command.")
 
 # define 'connect' command
-def connect_parse(command, arguments):
+def auth_parse(command, arguments):
     if len(arguments) != 3:
-        print("error: 'connect' requires two arguments.")
+        print("error: 'auth' requires two arguments.")
     else:
         if not is_valid_ip(arguments[1]):
-            print("error: 'connect' requires the first argument to be a valid IP address.")
+            print("error: 'auth' requires the first argument to be a valid IP address.")
             pass
         if not arguments[2].isnumeric():
-            print("error: 'connect' requires the second argument to be a valid port.")
+            print("error: 'auth' requires the second argument to be a valid port.")
             pass
         global ip
         global port
