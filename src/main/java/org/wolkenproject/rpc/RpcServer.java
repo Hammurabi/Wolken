@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpServer;
 import org.wolkenproject.core.Context;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 
 public class RpcServer {
@@ -25,11 +26,16 @@ public class RpcServer {
     }
 
     public static void onBlockMsg(HttpExchange exchange) {
+        String blockId = readUTF(exchange.getRequestBody());
     }
 
     public static void onTransactionMsg(HttpExchange exchange) {
     }
 
     public static void onSubmitMsg(HttpExchange exchange) {
+    }
+
+    private static final String readUTF(InputStream inputStream) {
+
     }
 }
