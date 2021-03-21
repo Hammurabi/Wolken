@@ -188,6 +188,7 @@ public class BlockChain implements Runnable {
             setTip(block);
             rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
         } else {
+            markRejected(block.getHash());
             addOrphan(block);
         }
     }
