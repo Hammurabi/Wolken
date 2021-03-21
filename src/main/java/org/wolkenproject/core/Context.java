@@ -200,11 +200,13 @@ public class Context {
         opcodeRegister.registerOp("swap14", "swap two objects (the 1st and 15th) on the stack.", 1, scope -> scope.getStack().swap(1, 15));
         opcodeRegister.registerOp("swap15", "swap two objects (the 1st and 16th) on the stack.", 1, scope -> scope.getStack().swap(1, 16));
 
-        this.blockChain = new BlockChain();
+        this.blockChain = new BlockChain(this);
         this.server = new Server(forceConnections);
 
         getThreadPool().execute(server);
         getThreadPool().execute(blockChain);
+
+        this.rpcServer = new RpcServer();
     }
 
     public void shutDown() {
