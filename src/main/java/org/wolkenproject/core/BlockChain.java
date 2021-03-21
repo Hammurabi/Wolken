@@ -113,7 +113,7 @@ public class BlockChain implements Runnable {
             byte tipHash[] = getTip().getHash();
 
             // everytime the tip hash changes, broadcast it to connected nodes.
-            if (lastHash != null && !Utils.equals(tipHash, lastHash)) {
+            if (!Utils.equals(tipHash, Null.notNull(lastHash))) {
                 Set<byte[]> hashCodes = new LinkedHashSet<>();
                 hashCodes.add(tipHash);
                 lastHash = tipHash;
