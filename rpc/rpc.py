@@ -45,7 +45,7 @@ def start():
                     is_parsed = True
             # send an error if the command was not parsed
             if not is_parsed:
-                print("command '" + arguments[0] + "' is not a recognized command.")
+                print("error: command '" + arguments[0] + "' is not a recognized command.")
 
 
 # define 'getblock' command
