@@ -38,4 +38,12 @@ public class Null {
 
         return a;
     }
+
+    public static long[] notNull(long a[]) {
+        if (a == null) {
+            return l_array;
+        }
+
+        return a;
+    }
 }
