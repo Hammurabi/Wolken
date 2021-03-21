@@ -31,7 +31,7 @@ public class Context {
     private AtomicBoolean           isRunning;
     private IpAddressList           ipAddressList;
     private SerializationFactory    serializationFactory;
-    private TransactionPool transactionPool;
+    private TransactionPool         transactionPool;
     private Server server;
     private Address payList[];
     private BlockChain blockChain;
