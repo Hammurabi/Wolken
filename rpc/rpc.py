@@ -41,7 +41,7 @@ def start():
                     command.parse(arguments)
 
 
-
+# define 'getblock' command
 def getblock_parse(command, arguments):
     # check correct amount of arguments exists
     if len(arguments < 2):
