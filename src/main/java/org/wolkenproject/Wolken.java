@@ -125,6 +125,7 @@ public class Wolken {
 
         Logger.alert("force connections ${l}", connectionList);
 
+        int rpcPort = 5420;
         Context context = new Context(mainDirectory, rpcPort, isTestNet, address, connectionList);
     }
 }
