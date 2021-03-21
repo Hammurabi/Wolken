@@ -16,7 +16,9 @@ def getblock_command(request):
 
 def prase_getblock(command, arguments):
     if len(arguments < 2):
-        
+        print("error: 'getblock' command requires a minimum of two arguments.")
+        return None
+
     return command.value
 
 def new_command(name, value, parse):
