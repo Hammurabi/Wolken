@@ -12,9 +12,11 @@ class Command:
     pass
 
 def prase_getblock(command, arguments):
+    # check correct amount of arguments exists
     if len(arguments < 2):
         print("error: 'getblock' command requires a minimum of two arguments.")
         pass
+
     return command.value
 
 def new_command(name, value, parse):
