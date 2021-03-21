@@ -20,6 +20,7 @@ public class RpcServer {
         server.createContext("/submit", RpcServer::onSubmitMsg);
         server.createContext("/tx", RpcServer::onTransactionMsg);
         server.createContext("/block", RpcServer::onBlockMsg);
+        server.createContext("/wallet", RpcServer::onWalletMsg);
         server.setExecutor(null);
         server.start();
     }
@@ -58,6 +59,9 @@ public class RpcServer {
     }
 
     public static void onSubmitMsg(HttpExchange exchange) {
+    }
+
+    public static void onWalletMsg(HttpExchange exchange) {
     }
 
     public static final JSONObject readJson(InputStream inputStream) {
