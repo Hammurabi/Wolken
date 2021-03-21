@@ -20,6 +20,10 @@ public class RpcServer {
         server.start();
     }
 
+    public void stop() {
+        server.stop(0);
+    }
+
     public static void onBlockMsg(HttpExchange exchange) {
     }
 
