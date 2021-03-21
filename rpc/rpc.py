@@ -6,6 +6,15 @@ import requests
 # gettx         <hash>
 # getbalance    <address>
 
+class Command:
+    pass
+
+def new_command(name, value):
+    command = Command()
+    command.name    = name
+    command.value   = value
+    return command
+
 def scan_commands():
     # get inputs from the command line
     text        = input(">")
