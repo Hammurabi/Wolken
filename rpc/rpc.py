@@ -99,7 +99,8 @@ commands_list = [
                     new_command('set_node', set_node),
                     new_command('exit', exit_parse),
                     new_command('quit', quit_parse),
-                    new_command('getblock', getblock_parse) ]
+                    new_command('getblock', getblock_parse)
+                    ]
 
 # define 'base16' characters
 base16   = ['0', '1', '2', '3', '4', '5', '6', '7',
