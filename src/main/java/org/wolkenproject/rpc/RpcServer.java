@@ -42,6 +42,8 @@ public class RpcServer {
             JSONObject response = new JSONObject();
         } else {
             JSONObject response = new JSONObject();
+            response.put("reason", "could not find requested block");
+            
         }
     }
 
