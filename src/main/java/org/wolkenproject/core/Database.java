@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.iq80.leveldb.DB;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.FileService;
@@ -229,5 +230,9 @@ public class Database {
 
     public boolean isRejected(byte[] hash) {
         return get(Utils.concatenate(RejectedBlock, hash)) != null;
+    }
+
+    public Transaction findTransaction(byte[] txid) {
+        return null;
     }
 }
