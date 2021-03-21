@@ -1,5 +1,7 @@
 package org.wolkenproject.utils;
 
+import org.wolkenproject.exceptions.WolkenException;
+
 public class Null {
     private static final byte[]    b_array = new byte[0];
     private static final short[]   s_array = new short[0];
@@ -47,7 +49,7 @@ public class Null {
         return a;
     }
 
-    public static byte[] notNull(byte a[]) {
+    public static byte[] check(byte a[]) throws WolkenException {
         if (a == null) {
             return b_array;
         }
@@ -55,7 +57,7 @@ public class Null {
         return a;
     }
 
-    public static short[] notNull(short a[]) {
+    public static short[] notNull(short a[]) throws WolkenException {
         if (a == null) {
             return s_array;
         }
@@ -63,7 +65,7 @@ public class Null {
         return a;
     }
 
-    public static char[] notNull(char a[]) {
+    public static char[] notNull(char a[]) throws WolkenException {
         if (a == null) {
             return c_array;
         }
@@ -71,7 +73,7 @@ public class Null {
         return a;
     }
 
-    public static int[] notNull(int a[]) {
+    public static int[] notNull(int a[]) throws WolkenException {
         if (a == null) {
             return i_array;
         }
@@ -79,7 +81,7 @@ public class Null {
         return a;
     }
 
-    public static long[] notNull(long a[]) {
+    public static long[] notNull(long a[]) throws WolkenException {
         if (a == null) {
             return l_array;
         }
