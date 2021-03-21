@@ -208,4 +208,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
             return false;
         }
     }
+
+    public boolean toJson(boolean txList, boolean evList) {
+    }
 }
