@@ -5,6 +5,7 @@ import requests
 # getblock      <hash>
 # gettx         <hash>
 # getbalance    <address>
+# quit
 
 commands = [ new_command('getblock', prase_getblock ]
 
