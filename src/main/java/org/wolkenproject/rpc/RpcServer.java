@@ -27,8 +27,8 @@ public class RpcServer {
         Logger.alert("=============================================");
 
         server = HttpServer.create(new InetSocketAddress(port), 12);
-        server.createContext("/submit", RpcServer::onSubmitMsg);
-        server.createContext("/request", RpcServer::onTransactionMsg);
+        server.createContext("/request/block", RpcServer::onTransactionMsg);
+        server.createContext("/request/transaction", RpcServer::onTransactionMsg);
         server.createContext("/api", RpcServer::onApiMsg);
         server.createContext("/", RpcServer::onIndexMsg);
         server.createContext("/content", RpcServer::onContentMsg);
