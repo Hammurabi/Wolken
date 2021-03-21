@@ -4,7 +4,7 @@ import requests
 import socket
 
 # valid commands
-# auth          <ip> <port> <user> <password>
+# auth          <ip> <port> <user>
 # getblock      <hash>
 # gettx         <hash>
 # getbalance    <address>
@@ -64,7 +64,7 @@ def start():
 
 # define 'connect' command
 def auth_parse(command, arguments):
-    if len(arguments) != 5:
+    if len(arguments) != 3:
         print("error: 'auth' requires two arguments.")
     else:
         if not is_valid_ip(arguments[1]):
@@ -77,6 +77,8 @@ def auth_parse(command, arguments):
         global port
         ip      = arguments[1]
         port    = arguments[2]
+        user    = arguments[3]
+
         print("alert: node connection data set to ('"+arguments[1]+":"+arguments[2]+"')")
 # define 'exit' command
 def exit_parse(command, arguments):
