@@ -66,6 +66,9 @@ public class RpcServer {
 
         byte blockHash[]    = Base16.decode(blockId);
 
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Content-Type", "application/json");
+
         if (Context.getInstance().getDatabase().checkBlockExists(blockHash)) {
             BlockIndex block= Context.getInstance().getDatabase().findBlock(blockHash);
 
