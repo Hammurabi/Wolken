@@ -28,6 +28,13 @@ def is_base58_encoded(text):
                 return True
     return False
 
+def is_legal_ip(ip):
+    try:
+        socket.inet_aton(addr)
+        return True
+    except socket.error:
+        return False
+
 def start():
     # enter an infinite loop
     while (True):
