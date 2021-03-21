@@ -3,6 +3,7 @@ package org.wolkenproject.rpc;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONObject;
+import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class RpcServer {
         String blockId      = message.getString("hash");
         boolean txList      = message.getBoolean("transactions");
         boolean evList      = message.getBoolean("events");
+
     }
 
     public static void onTransactionMsg(HttpExchange exchange) {
