@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpServer;
 import org.json.JSONObject;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.encoders.Base16;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +34,8 @@ public class RpcServer {
         boolean txList      = message.getBoolean("transactions");
         boolean evList      = message.getBoolean("events");
 
+        if (Context.getInstance().getDatabase().checkBlockExists(Base16.decode(blockId))) {
+        }
     }
 
     public static void onTransactionMsg(HttpExchange exchange) {
