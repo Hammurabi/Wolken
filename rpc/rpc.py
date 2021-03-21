@@ -7,6 +7,41 @@ import requests
 # getbalance    <address>
 # quit
 
+def is_base16_encoded(text):
+    for c in text.lower():
+        for x in base16:
+            if c == x:
+                return True
+    return False
+
+def is_base58_encoded(text):
+    for c in text.lower():
+        for x in base58:
+            if c == x:
+                return True
+    return False
+
+def start():
+    # enter an infinite loop
+    while (True):
+        # scan the command line for commands
+        text        = input(">")
+        # this shouldn't happen
+        if not text:
+            return lambda x : None
+        # parse the command
+        arguments   = text.split(" ")
+        # check the length
+        if len(arguments) > 0:
+            # test against known commands
+            for command in commands_list:
+                # if the command name matches the first argument
+                if command.name == arguments[0]:
+                    # attempt to parse the command
+                    command.parse(arguments)
+
+
+
 def getblock_parse(command, arguments):
     # check correct amount of arguments exists
     if len(arguments < 2):
@@ -46,39 +81,6 @@ base58   = ['1', '2', '3', '4', '5', '6', '7', '8',
             'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p',
             'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
             'y', 'z']
-
-def is_base16_encoded(text):
-    for c in text.lower():
-        for x in base16:
-            if c == x:
-                return True
-    return False
-
-def is_base58_encoded(text):
-    for c in text.lower():
-        for x in base58:
-            if c == x:
-                return True
-    return False
-
-def start():
-    # enter an infinite loop
-    while (True):
-        # scan the command line for commands
-        text        = input(">")
-        # this shouldn't happen
-        if not text:
-            return lambda x : None
-        # parse the command
-        arguments   = text.split(" ")
-        # check the length
-        if len(arguments) > 0:
-            # test against known commands
-            for command in commands_list:
-                # if the command name matches the first argument
-                if command.name == arguments[0]:
-                    # attempt to parse the command
-                    command.parse(arguments)
 
 # start the loop
 start()
