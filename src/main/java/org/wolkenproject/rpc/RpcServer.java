@@ -63,5 +63,6 @@ public class RpcServer {
     private static final void sendResponse(int responseCode, JSONObject response, HttpExchange exchange) {
         String actualResponse = response.toString();
         exchange.sendResponseHeaders(responseCode, actualResponse.length());
+        exchange.getResponseBody().write(actualResponse.getBytes());
     }
 }
