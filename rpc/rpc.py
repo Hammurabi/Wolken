@@ -56,7 +56,7 @@ def start():
 # define 'connect' command
 def connect_parse(command, arguments):
     if len(arguments) != 3:
-        print("error: 'set_node' requires two arguments.")
+        print("error: 'connect' requires two arguments.")
     else:
         print("alert: node set to ('"+arguments[1]+":"+arguments[2]+"')")
 # define 'exit' command
@@ -101,7 +101,7 @@ def new_command(name, parse):
 
 # define a basic command list
 commands_list = [   
-                    new_command('set_node', set_node),
+                    new_command('connect', connect_parse),
                     new_command('exit', exit_parse),
                     new_command('quit', quit_parse),
                     new_command('getblock', getblock_parse)
