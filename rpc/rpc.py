@@ -52,7 +52,7 @@ def start():
 
 # define 'set_node' command
 def set_node(command, arguments):
-    print("alert: node set to ('"+arguments[1]+":"+arguments[1]+"')")
+    print("alert: node set to ('"+arguments[1]+":"+arguments[2]+"')")
 
 # define 'exit' command
 def exit_parse(command, arguments):
