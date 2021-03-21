@@ -7,7 +7,7 @@ import requests
 # getbalance    <address>
 # quit
 
-commands = [ new_command('getblock', prase_getblock ]
+commands = [ new_command('getblock', prase_getblock) ]
 base16   = ['0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
 base58   = ['1', '2', '3', '4', '5', '6', '7', '8',
