@@ -29,7 +29,7 @@ public class Context {
     private NetworkParameters       networkParameters;
     private ExecutorService         threadPool;
     private AtomicBoolean           isRunning;
-    private IpAddressList ipAddressList;
+    private IpAddressList           ipAddressList;
     private SerializationFactory serializationFactory;
     private TransactionPool transactionPool;
     private Server server;
