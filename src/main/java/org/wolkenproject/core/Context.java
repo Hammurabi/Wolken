@@ -9,6 +9,7 @@ import org.wolkenproject.exceptions.MochaException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
+import org.wolkenproject.rpc.RpcServer;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
 
@@ -35,6 +36,7 @@ public class Context {
     private Address payList[];
     private BlockChain blockChain;
     private OpcodeRegister opcodeRegister;
+    private RpcServer       rpcServer;
     private FileService fileService;
 
     public Context(FileService service, boolean testNet, Address[] payList, Set<NetAddress> forceConnections) throws WolkenException, IOException {
