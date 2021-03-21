@@ -60,12 +60,15 @@ public class BlockChain implements Runnable {
             if (System.currentTimeMillis() - lastBroadcast > (5 * 60_000L)) {
                 Set<byte[]> hashCodes = new LinkedHashSet<>();
                 BlockIndex tip = getTip();
+                hashCodes.add(tip.getHash());
 
                 for (int i = 0; i < 10; i ++) {
                     BlockIndex parent = tip.previousBlock();
                     if (parent == null) {
                         break;
                     }
+
+                    hashCodes.add(parent.getHash());
                 }
 
                 try {
