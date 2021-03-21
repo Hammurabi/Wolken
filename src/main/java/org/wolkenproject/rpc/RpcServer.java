@@ -2,6 +2,7 @@ package org.wolkenproject.rpc;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 
 import java.io.IOException;
@@ -26,13 +27,17 @@ public class RpcServer {
     }
 
     public static void onBlockMsg(HttpExchange exchange) {
-        String blockId = readUTF(exchange.getRequestBody());
+        String message = readJson(exchange.getRequestBody());
     }
 
     public static void onTransactionMsg(HttpExchange exchange) {
     }
 
     public static void onSubmitMsg(HttpExchange exchange) {
+    }
+
+    public static final JSONObject readJson(InputStream inputStream) {
+        return new JSONObject(readUTF(inputStream));
     }
 
     private static final String readUTF(InputStream inputStream) {
