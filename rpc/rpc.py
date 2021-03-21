@@ -28,6 +28,13 @@ def base16_encoded(text):
             if c == x:
                 return True
     return False
+
+def base58_encoded(text):
+    for c in text.lower():
+        for x in base58:
+            if c == x:
+                return True
+    return False
 def prase_getblock(command, arguments):
     # check correct amount of arguments exists
     if len(arguments < 2):
