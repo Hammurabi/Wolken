@@ -31,10 +31,10 @@ def start():
             return lambda x : None
         # parse the command
         arguments   = text.split(" ")
-        # maintenance variable to keep track of the state
-        is_parsed = False
         # check the length
         if len(arguments) > 0:
+            # maintenance variable to keep track of the state
+            is_parsed = False
             # test against known commands
             for command in commands_list:
                 # if the command name matches the first argument
@@ -43,6 +43,9 @@ def start():
                     command.parse(arguments)
                     # inform the program that we have parsed or attempted to parse the command
                     is_parsed = True
+            # send an error if the command was not parsed
+            if not is_parsed:
+                print("command '" + arguments[0] + "' is not a recognized command.")
 
 
 # define 'getblock' command
