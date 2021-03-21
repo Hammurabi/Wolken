@@ -212,7 +212,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         }
     }
 
-    public JSONObject toJson(boolean txList, boolean evList) {
+    public JSONObject toJson(boolean txList, boolean evList, boolean txEvt) {
         JSONObject block    = new JSONObject();
         JSONObject header   = new JSONObject();
         JSONArray body      = new JSONArray();
