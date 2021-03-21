@@ -39,7 +39,7 @@ public class Context {
     private RpcServer               rpcServer;
     private FileService             fileService;
 
-    public Context(FileService service, boolean testNet, Address[] payList, Set<NetAddress> forceConnections) throws WolkenException, IOException {
+    public Context(FileService service, int rpcPort, boolean testNet, Address[] payList, Set<NetAddress> forceConnections) throws WolkenException, IOException {
         Context.instance = this;
         this.database = new Database(service.newFile("db"));
         this.networkParameters = new NetworkParameters(testNet);
