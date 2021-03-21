@@ -14,8 +14,8 @@ class Command:
 def getblock_command(request):
     pass
 
-def prase_getblock(arguments):
-    pass
+def prase_getblock(command, arguments):
+    return command.value
 
 def new_command(name, value, parse):
     command = Command()
