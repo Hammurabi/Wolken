@@ -73,7 +73,7 @@ public class RpcServer {
 
             JSONObject response = new JSONObject();
             response.put("type", "success");
-            response.put("block", block.toJson(txList, txHash, evList, evHash, txEvt));
+            response.put("transaction", transaction.toJson(evList, evHash));
             sendResponse(200, response, exchange);
         } else {
             JSONObject response = new JSONObject();
