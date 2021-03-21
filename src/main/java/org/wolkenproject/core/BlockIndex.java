@@ -212,6 +212,10 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         }
     }
 
+    private BlockStateChangeResult getStateChange() {
+        return null;
+    }
+
     public JSONObject toJson(boolean txList, boolean evList, boolean txEvt) {
         JSONObject block    = new JSONObject();
         JSONObject header   = new JSONObject();
@@ -238,6 +242,8 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
 
         if (evList) {
             block.put("stateChange", state);
+            for (Event event : getStateChange()) {
+            }
         }
 
         return block;
