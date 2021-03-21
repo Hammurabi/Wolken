@@ -35,7 +35,7 @@ public class Context {
     private Server                  server;
     private Address                 payList[];
     private BlockChain              blockChain;
-    private OpcodeRegister opcodeRegister;
+    private OpcodeRegister          opcodeRegister;
     private RpcServer       rpcServer;
     private FileService fileService;
 
