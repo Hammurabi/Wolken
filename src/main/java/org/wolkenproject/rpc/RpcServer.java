@@ -23,9 +23,8 @@ public class RpcServer {
         Logger.alert("=============================================");
         server = HttpServer.create(new InetSocketAddress(port), 12);
         server.createContext("/submit", RpcServer::onSubmitMsg);
-        server.createContext("/tx", RpcServer::onTransactionMsg);
-        server.createContext("/block", RpcServer::onBlockMsg);
-        server.createContext("/wallet", RpcServer::onWalletMsg);
+        server.createContext("/request", RpcServer::onTransactionMsg);
+        server.createContext("/index", RpcServer::onBlockMsg);
         server.setExecutor(null);
         server.start();
     }
