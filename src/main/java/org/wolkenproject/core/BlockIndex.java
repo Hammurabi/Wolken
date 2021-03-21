@@ -225,5 +225,9 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
 
         block.put("hash", Base16.encode(getHash()));
         block.put("header", header);
+
+        if (txList) {
+            block.put("content", body);
+        }
     }
 }
