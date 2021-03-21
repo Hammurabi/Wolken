@@ -40,6 +40,7 @@ public class RpcServer {
             BlockIndex block= Context.getInstance().getDatabase().findBlock(blockHash);
 
             JSONObject response = new JSONObject();
+        } else {
         }
     }
 
