@@ -49,43 +49,11 @@ public class Null {
         return a;
     }
 
-    public static byte[] check(byte a[]) throws WolkenException {
-        if (a == null) {
-            return b_array;
+    public static <T> T check(T a) throws WolkenException {
+        if (a != null) {
+            return a;
         }
 
-        return a;
-    }
-
-    public static short[] notNull(short a[]) throws WolkenException {
-        if (a == null) {
-            return s_array;
-        }
-
-        return a;
-    }
-
-    public static char[] notNull(char a[]) throws WolkenException {
-        if (a == null) {
-            return c_array;
-        }
-
-        return a;
-    }
-
-    public static int[] notNull(int a[]) throws WolkenException {
-        if (a == null) {
-            return i_array;
-        }
-
-        return a;
-    }
-
-    public static long[] notNull(long a[]) throws WolkenException {
-        if (a == null) {
-            return l_array;
-        }
-
-        return a;
+        throw new WolkenException("provided data is null.");
     }
 }
