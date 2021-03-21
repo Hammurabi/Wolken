@@ -216,7 +216,11 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         return null;
     }
 
-    public JSONObject toJson(boolean txList, boolean txHashesOnly, boolean evList, boolean evHashesOnly, boolean txEvt) {
+    /**
+        @param txList include/exclude transaction list
+        @param txHash include/exclude transaction list
+     **/
+    public JSONObject toJson(boolean txList, boolean txHash, boolean evList, boolean evHash, boolean txEvt) {
         JSONObject block    = new JSONObject();
         JSONObject header   = new JSONObject();
         JSONArray body      = new JSONArray();
