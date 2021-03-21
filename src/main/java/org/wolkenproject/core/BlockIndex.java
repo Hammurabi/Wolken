@@ -248,7 +248,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
             block.put("content", body);
         }
 
-        if (!txHash && evList) {
+        if (!txEvt && evList) {
             int index = 0;
             for (Event event : getStateChange()) {
                 state.put(index ++, event.toJson());
