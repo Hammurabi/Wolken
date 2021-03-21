@@ -43,7 +43,7 @@ public class RpcServer {
         } else {
             JSONObject response = new JSONObject();
             response.put("reason", "could not find requested block");
-            
+            exchange.sendResponseHeaders(420, response.toString().length());
         }
     }
 
