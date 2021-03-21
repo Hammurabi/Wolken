@@ -30,7 +30,7 @@ public class Context {
     private ExecutorService         threadPool;
     private AtomicBoolean           isRunning;
     private IpAddressList           ipAddressList;
-    private SerializationFactory serializationFactory;
+    private SerializationFactory    serializationFactory;
     private TransactionPool transactionPool;
     private Server server;
     private Address payList[];
