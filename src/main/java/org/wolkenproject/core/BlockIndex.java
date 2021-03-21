@@ -212,7 +212,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         }
     }
 
-    private BlockStateChangeResult getStateChange() {
+    public BlockStateChangeResult getStateChange() {
         return null;
     }
 
