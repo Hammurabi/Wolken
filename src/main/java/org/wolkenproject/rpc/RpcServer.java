@@ -41,6 +41,7 @@ public class RpcServer {
 
             JSONObject response = new JSONObject();
             response.put("type", "success");
+            response.put("block", block.toJson(txList, evList));
             sendResponse(200, response, exchange);
         } else {
             JSONObject response = new JSONObject();
