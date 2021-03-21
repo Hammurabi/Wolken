@@ -2,7 +2,7 @@
 import requests
 
 # valid commands
-# set_node      <ip> <port>
+# connect       <ip> <port>
 # getblock      <hash>
 # gettx         <hash>
 # getbalance    <address>
