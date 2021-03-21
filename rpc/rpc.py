@@ -31,6 +31,8 @@ def start():
             return lambda x : None
         # parse the command
         arguments   = text.split(" ")
+        # maintenance variable to keep track of the state
+        is_parsed = False
         # check the length
         if len(arguments) > 0:
             # test against known commands
