@@ -219,6 +219,8 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     /**
         @param txList include/exclude transaction list
         @param txHash if true then transactions will be replaced by their hashes
+        @param evList include/exclude event list
+        @param evHash if true then events will be replaced by their hashes
      **/
     public JSONObject toJson(boolean txList, boolean txHash, boolean evList, boolean evHash, boolean txEvt) {
         JSONObject block    = new JSONObject();
