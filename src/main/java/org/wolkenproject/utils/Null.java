@@ -22,4 +22,12 @@ public class Null {
 
         return a;
     }
+
+    public static char[] notNull(char a[]) {
+        if (a == null) {
+            return c_array;
+        }
+
+        return a;
+    }
 }
