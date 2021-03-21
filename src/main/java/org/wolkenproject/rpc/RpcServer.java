@@ -60,7 +60,7 @@ public class RpcServer {
         }
     }
 
-    public static void onTransactionMsg(HttpExchange exchange) {
+    public static void onTransactionMsg(HttpExchange exchange) throws IOException {
         JSONObject message  = readJson(exchange.getRequestBody());
         String txId         = message.getString("hash");
         boolean evList      = message.getBoolean("events");
