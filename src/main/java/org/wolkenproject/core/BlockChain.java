@@ -58,8 +58,21 @@ public class BlockChain implements Runnable {
 
         while (context.isRunning()) {
             if (System.currentTimeMillis() - lastBroadcast > (5 * 60_000L)) {
-                int blocksToSend = 16384;
-                lastBroadcast = System.currentTimeMillis();
+                Set<byte[]> hashCodes = new LinkedHashSet<>();
+                BlockIndex tip = getTip();
+
+                for (int i = 0; i < 10; i ++) {
+                    BlockIndex parent = tip.previousBlock();
+                    if (parent == null) {
+                        break;
+                    }
+                }
+
+                try {
+                    context.getServer().broadcast(new Inv(context.getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
+                } catch (WolkenException e) {
+                    e.printStackTrace();
+                }
             }
 
             if (hasBlocksInPool()) {
