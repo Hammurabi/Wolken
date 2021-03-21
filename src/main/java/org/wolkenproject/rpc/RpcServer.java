@@ -41,7 +41,6 @@ public class RpcServer {
 
             JSONObject response = new JSONObject();
         } else {
-            JSONObject response = new JSONObject();
         }
     }
 
