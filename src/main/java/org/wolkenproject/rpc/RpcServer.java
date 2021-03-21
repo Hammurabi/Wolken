@@ -35,8 +35,8 @@ public class RpcServer {
         boolean evList      = message.getBoolean("events");
 
         byte blockHash[]    = Base16.decode(blockId);
-        
-        if (Context.getInstance().getDatabase().checkBlockExists()) {
+
+        if (Context.getInstance().getDatabase().checkBlockExists(blockHash)) {
             BlockIndex block= Context.getInstance().getDatabase().findBlock();
         }
     }
