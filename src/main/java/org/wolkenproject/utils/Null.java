@@ -46,4 +46,44 @@ public class Null {
 
         return a;
     }
+
+    public static byte[] notNull(byte a[]) {
+        if (a == null) {
+            return b_array;
+        }
+
+        return a;
+    }
+
+    public static short[] notNull(short a[]) {
+        if (a == null) {
+            return s_array;
+        }
+
+        return a;
+    }
+
+    public static char[] notNull(char a[]) {
+        if (a == null) {
+            return c_array;
+        }
+
+        return a;
+    }
+
+    public static int[] notNull(int a[]) {
+        if (a == null) {
+            return i_array;
+        }
+
+        return a;
+    }
+
+    public static long[] notNull(long a[]) {
+        if (a == null) {
+            return l_array;
+        }
+
+        return a;
+    }
 }
