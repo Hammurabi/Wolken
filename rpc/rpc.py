@@ -61,7 +61,6 @@ def start():
             if not is_parsed:
                 print("error: command '" + arguments[0] + "' is not a recognized command.")
 
-
 # define 'connect' command
 def connect_parse(command, arguments):
     if len(arguments) != 3:
@@ -82,12 +81,10 @@ def connect_parse(command, arguments):
 def exit_parse(command, arguments):
     print("alert: terminating process")
     quit()
-
 # define 'quit' command
 def quit_parse(command, arguments):
     print("alert: terminating process")
     quit()
-
 # define 'getblock' command
 def getblock_parse(command, arguments):
     # check correct amount of arguments exists
