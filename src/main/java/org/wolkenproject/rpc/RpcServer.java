@@ -29,6 +29,7 @@ public class RpcServer {
     public static void onBlockMsg(HttpExchange exchange) {
         JSONObject message  = readJson(exchange.getRequestBody());
         String blockId      = message.getString("hash");
+        boolean txList      = message.getBoolean("transactions");
     }
 
     public static void onTransactionMsg(HttpExchange exchange) {
