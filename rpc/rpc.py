@@ -50,6 +50,10 @@ def start():
                 print("error: command '" + arguments[0] + "' is not a recognized command.")
 
 
+# define 'set_node' command
+def set_node(command, arguments):
+    print("alert: node set to ('"+arguments[1]+":"+arguments[1]+"')")
+
 # define 'exit' command
 def exit_parse(command, arguments):
     print("alert: terminating process")
