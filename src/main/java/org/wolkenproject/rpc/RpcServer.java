@@ -10,8 +10,9 @@ import java.net.InetSocketAddress;
 public class RpcServer {
     private HttpServer  server;
     private Context     context;
+
     public RpcServer(Context context, int port) throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+        server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/submit", RpcServer::onSubmitMsg);
         server.createContext("/tx", RpcServer::onTransactionMsg);
         server.createContext("/block", RpcServer::onBlockMsg);
