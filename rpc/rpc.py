@@ -16,6 +16,10 @@ def scan_commands():
     arguments   = text.split(" ")
     # check the length
     if len(arguments) > 0:
+        # test against known commands
+        for command in commands_list:
+            if command.name == arguments[0]:
+                return command.parse(arguments)
 def start():
     # enter an infinite loop
     while (True):
