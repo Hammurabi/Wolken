@@ -22,27 +22,27 @@ base58   = ['1', '2', '3', '4', '5', '6', '7', '8',
 class Command:
     pass
 
-def base16_encoded(text):
+def is_base16_encoded(text):
     for c in text.lower():
         for x in base16:
             if c == x:
                 return True
     return False
 
-def base58_encoded(text):
+def is_base58_encoded(text):
     for c in text.lower():
         for x in base58:
             if c == x:
                 return True
     return False
-    
+
 def prase_getblock(command, arguments):
     # check correct amount of arguments exists
     if len(arguments < 2):
         print("error: 'getblock' command requires a minimum of two arguments.")
         pass
 
-    # check that 
+    # check that the block-id is base16 encoded
 
 def new_command(name, value, parse):
     command = Command()
