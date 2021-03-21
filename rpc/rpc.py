@@ -35,6 +35,7 @@ def base58_encoded(text):
             if c == x:
                 return True
     return False
+    
 def prase_getblock(command, arguments):
     # check correct amount of arguments exists
     if len(arguments < 2):
