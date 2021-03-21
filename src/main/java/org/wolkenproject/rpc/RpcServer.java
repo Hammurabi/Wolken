@@ -11,20 +11,21 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 
 public class RpcServer {
     private HttpServer  server;
     private Context     context;
-    private FileService directory;
 
-    public RpcServer(Context context, FileService dir, int port) throws IOException {
+    public RpcServer(Context context, int port) throws IOException {
         Logger.alert("=============================================");
         Logger.alert("Starting HTTP server");
         Logger.alert("=============================================");
-        directory = dir;
+
         server = HttpServer.create(new InetSocketAddress(port), 12);
         server.createContext("/submit", RpcServer::onSubmitMsg);
         server.createContext("/request", RpcServer::onTransactionMsg);
@@ -113,7 +114,16 @@ public class RpcServer {
         return new JSONObject(readUTF(inputStream));
     }
 
-    private static final String readUTF(InputStream inputStream) {
+    private static final String readUTF(InputStream inputStream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line = "";
+        StringBuilder builder = new StringBuilder();
+        while (( line = reader.readLine() ) != null ) {
+            builder.append(line).append("\n");
+        }
+
+        reader.close();
+        return builder.toString();
     }
 
     private static final void sendResponse(int responseCode, JSONObject response, HttpExchange exchange) throws IOException {
