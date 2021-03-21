@@ -87,10 +87,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException;
 
     public JSONObject toJson() {
-        return toJson(true);
+        return toJson(true, false);
     }
 
-    public abstract JSONObject toJson(boolean txEvt);
+    public abstract JSONObject toJson(boolean txEvt, boolean evHash);
 
     public Transaction sign(Keypair keypair) throws WolkenException {
         // this includes the version bytes
