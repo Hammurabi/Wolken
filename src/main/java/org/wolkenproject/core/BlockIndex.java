@@ -251,7 +251,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         if (!txEvt && evList) {
             int index = 0;
             for (Event event : getStateChange()) {
-                state.put(index ++, event.toJson());
+                state.put(index ++, evHash ? Base16.encode(event.eventId()) : event.toJson());
             }
             block.put("stateChange", state);
         }
