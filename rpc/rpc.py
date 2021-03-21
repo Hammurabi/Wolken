@@ -64,7 +64,7 @@ def start():
 
 # define 'connect' command
 def auth_parse(command, arguments):
-    if len(arguments) != 3:
+    if len(arguments) != 5:
         print("error: 'auth' requires two arguments.")
     else:
         if not is_valid_ip(arguments[1]):
