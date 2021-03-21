@@ -32,7 +32,7 @@ public class Context {
     private IpAddressList           ipAddressList;
     private SerializationFactory    serializationFactory;
     private TransactionPool         transactionPool;
-    private Server server;
+    private Server                  server;
     private Address payList[];
     private BlockChain blockChain;
     private OpcodeRegister opcodeRegister;
