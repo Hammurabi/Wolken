@@ -229,7 +229,9 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         block.put("header", header);
 
         if (txList) {
+            int index = 0;
             for (Transaction transaction : getBlock()) {
+                body.put(index ++, transaction.toJson());
             }
             block.put("content", body);
         }
