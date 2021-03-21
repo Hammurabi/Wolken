@@ -40,6 +40,11 @@ public class RpcServer {
         headers.add("Content-Type", "text/html");
     }
 
+    public static void onApiMsg(HttpExchange exchange) throws IOException {
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Content-Type", "application/json");
+    }
+
     public static void onBlockMsg(HttpExchange exchange) throws IOException {
         JSONObject message  = readJson(exchange.getRequestBody());
         String blockId      = message.getString("hash");
