@@ -223,6 +223,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         header.put("bits", Base16.encode(Utils.takeApart(getBlock().getBits())));
         header.put("nonce", getBlock().getNonce());
 
+        block.put("hash", Base16.encode(getHash()));
         block.put("header", header);
     }
 }
