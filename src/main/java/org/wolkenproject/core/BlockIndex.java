@@ -219,5 +219,6 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         header.put("timestamp", getBlock().getTimestamp());
         header.put("parentHash", Base16.encode(getBlock().getParentHash()));
         header.put("merkleRoot", Base16.encode(getBlock().getMerkleRoot()));
+        header.put("bits", Base16.encode(Utils.takeApart(getBlock().getBits())));
     }
 }
