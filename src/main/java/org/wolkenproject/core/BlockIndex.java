@@ -216,5 +216,6 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         JSONObject state    = new JSONObject();
 
         header.put("version", getBlock().getVersion());
+        header.put("timestamp", getBlock().getTimestamp());
     }
 }
