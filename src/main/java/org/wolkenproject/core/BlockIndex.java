@@ -222,5 +222,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         header.put("merkleRoot", Base16.encode(getBlock().getMerkleRoot()));
         header.put("bits", Base16.encode(Utils.takeApart(getBlock().getBits())));
         header.put("nonce", getBlock().getNonce());
+
+        block.put("header", header);
     }
 }
