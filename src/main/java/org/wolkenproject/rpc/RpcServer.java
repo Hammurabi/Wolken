@@ -65,7 +65,7 @@ public class RpcServer {
         boolean evList      = message.getBoolean("events");
         boolean evHash      = message.getBoolean("only-evid");
 
-        byte blockHash[]    = Base16.decode(blockId);
+        byte txHash[]       = Base16.decode(txId);
 
         if (Context.getInstance().getDatabase().checkBlockExists(blockHash)) {
             BlockIndex block= Context.getInstance().getDatabase().findBlock(blockHash);
