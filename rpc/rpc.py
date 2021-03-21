@@ -53,8 +53,8 @@ def start():
                 print("error: command '" + arguments[0] + "' is not a recognized command.")
 
 
-# define 'set_node' command
-def set_node(command, arguments):
+# define 'connect' command
+def connect_parse(command, arguments):
     if len(arguments) != 3:
         print("error: 'set_node' requires two arguments.")
     else:
