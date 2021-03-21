@@ -229,5 +229,9 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         if (txList) {
             block.put("content", body);
         }
+
+        if (evList) {
+            block.put("stateChange", state);
+        }
     }
 }
