@@ -67,8 +67,10 @@ def connect_parse(command, arguments):
     if len(arguments) != 3:
         print("error: 'connect' requires two arguments.")
     else:
-        if 
-        print("alert: node set to ('"+arguments[1]+":"+arguments[2]+"')")
+        if not is_valid_ip(arguments[1]):
+            print("error: 'connect' requires the first argument to be a valid IP address.")
+        else:
+            print("alert: node set to ('"+arguments[1]+":"+arguments[2]+"')")
 # define 'exit' command
 def exit_parse(command, arguments):
     print("alert: terminating process")
