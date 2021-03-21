@@ -25,6 +25,7 @@ public class RpcServer {
         server = HttpServer.create(new InetSocketAddress(port), 12);
         server.createContext("/submit", RpcServer::onSubmitMsg);
         server.createContext("/request", RpcServer::onTransactionMsg);
+        server.createContext("/api", RpcServer::onApiMsg);
         server.createContext("/", RpcServer::onIndexMsg);
         server.setExecutor(null);
         server.start();
@@ -36,6 +37,7 @@ public class RpcServer {
 
     public static void onIndexMsg(HttpExchange exchange) throws IOException {
         Headers headers = exchange.getResponseHeaders();
+        headers.add("Content-Type", "text/html");
     }
 
     public static void onBlockMsg(HttpExchange exchange) throws IOException {
