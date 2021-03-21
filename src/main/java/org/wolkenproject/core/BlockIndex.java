@@ -233,5 +233,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         if (evList) {
             block.put("stateChange", state);
         }
+
+        return block;
     }
 }
