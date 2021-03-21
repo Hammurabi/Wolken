@@ -73,7 +73,7 @@ def prase_getblock(command, arguments):
 
     # getblock <hash>
     # getblock <hash> includeTx txAsHash includeEv evAsHash format
-    if len(arguments) > 2 && len(arguments) < 7:
+    if len(arguments) > 2 and len(arguments) < 7:
         print("error: 'getblock' command missing arguments.")
         pass
 
