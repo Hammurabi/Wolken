@@ -30,4 +30,12 @@ public class Null {
 
         return a;
     }
+
+    public static int[] notNull(int a[]) {
+        if (a == null) {
+            return i_array;
+        }
+
+        return a;
+    }
 }
