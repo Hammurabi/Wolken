@@ -27,6 +27,7 @@ public class RpcServer {
         server.createContext("/request", RpcServer::onTransactionMsg);
         server.createContext("/api", RpcServer::onApiMsg);
         server.createContext("/", RpcServer::onIndexMsg);
+        server.createContext("/content", RpcServer::onContentMsg);
         server.setExecutor(null);
         server.start();
     }
