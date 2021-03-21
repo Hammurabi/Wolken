@@ -6,15 +6,16 @@ import requests
 # gettx         <hash>
 # getbalance    <address>
 
-commands = [ new_command('getblock', lambda a : None) ]
+commands = [ new_command('getblock', lambda a : None, ) ]
 
 class Command:
     pass
 
-def new_command(name, value):
+def new_command(name, value, parse):
     command = Command()
     command.name    = name
     command.value   = value
+    command.parse   = parse
     return command
 
 def scan_commands():
