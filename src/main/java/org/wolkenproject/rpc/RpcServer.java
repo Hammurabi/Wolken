@@ -60,7 +60,7 @@ public class RpcServer {
     private static final String readUTF(InputStream inputStream) {
     }
 
-    private static final void sendResponse(int responseCode, JSONObject response, HttpExchange exchange) {
+    private static final void sendResponse(int responseCode, JSONObject response, HttpExchange exchange) throws IOException {
         byte actualResponse[] = response.toString().getBytes();
         exchange.sendResponseHeaders(responseCode, actualResponse.length);
         exchange.getResponseBody().write(actualResponse);
