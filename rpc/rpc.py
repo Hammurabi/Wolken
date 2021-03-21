@@ -70,7 +70,11 @@ def connect_parse(command, arguments):
         if not is_valid_ip(arguments[1]):
             print("error: 'connect' requires the first argument to be a valid IP address.")
             pass
-        ip = int(arguments[1])
+        if not arguments[2].isnumeric():
+            print("error: 'connect' requires the second argument to be a valid port.")
+            pass
+        ip      = arguments[1]
+        port    = arguments[2]
         print("alert: node connection data set to ('"+arguments[1]+":"+arguments[2]+"')")
 # define 'exit' command
 def exit_parse(command, arguments):
