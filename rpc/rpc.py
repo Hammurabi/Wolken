@@ -9,6 +9,9 @@ import requests
 # exit
 # quit
 
+ip      = 'localhost'
+port    = 80
+
 def is_base16_encoded(text):
     for c in text.lower():
         for x in base16:
