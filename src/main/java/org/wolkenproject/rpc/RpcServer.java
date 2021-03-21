@@ -40,11 +40,14 @@ public class RpcServer {
             BlockIndex block= Context.getInstance().getDatabase().findBlock(blockHash);
 
             JSONObject response = new JSONObject();
+            response.put("type", "success");
+            response.put("reason", "could not find requested block");
+            sendResponse(200, response, exchange);
         } else {
             JSONObject response = new JSONObject();
             response.put("type", "fail");
             response.put("reason", "could not find requested block");
-            sendResponse(420, response, exchange);
+            sendResponse(200, response, exchange);
         }
     }
 
