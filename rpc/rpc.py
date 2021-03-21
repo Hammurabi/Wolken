@@ -8,9 +8,10 @@ import requests
 
 def scan_commands():
     # get inputs from the command line
-    text = input(">")
+    text        = input(">")
 
-    # 
+    # parse the command
+    arguments   = text.split(" ")
 
 def start():
     # enter an infinite loop
