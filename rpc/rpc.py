@@ -4,7 +4,7 @@ import requests
 import socket
 
 # valid commands
-# auth       <ip> <port> <user> <password>
+# auth          <ip> <port> <user> <password>
 # getblock      <hash>
 # gettx         <hash>
 # getbalance    <address>
