@@ -12,6 +12,8 @@ class Command:
     pass
 
 def base16_encoded(text):
+    for c in text.lower():
+        if c 
 def prase_getblock(command, arguments):
     # check correct amount of arguments exists
     if len(arguments < 2):
