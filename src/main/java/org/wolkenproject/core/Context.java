@@ -206,7 +206,7 @@ public class Context {
         getThreadPool().execute(server);
         getThreadPool().execute(blockChain);
 
-        this.rpcServer = new RpcServer();
+        this.rpcServer = new RpcServer(this, rpcPort);
     }
 
     public void shutDown() {
