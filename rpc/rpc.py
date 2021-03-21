@@ -121,7 +121,7 @@ def new_command(name, parse):
 
 # define a basic command list
 commands_list = [   
-                    new_command('connect', connect_parse),
+                    new_command('connect', auth_parse),
                     new_command('exit', exit_parse),
                     new_command('quit', quit_parse),
                     new_command('getblock', getblock_parse)
