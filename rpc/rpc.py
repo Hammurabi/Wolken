@@ -28,7 +28,7 @@ def is_base58_encoded(text):
                 return True
     return False
 
-def is_legal_ip(ip):
+def is_valid_ip(ip):
     try:
         socket.inet_aton(addr)
         return True
