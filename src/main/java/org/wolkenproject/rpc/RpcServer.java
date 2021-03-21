@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpServer;
 import org.json.JSONObject;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.utils.Logger;
 
@@ -68,7 +69,7 @@ public class RpcServer {
         byte txHash[]       = Base16.decode(txId);
 
         if (Context.getInstance().getDatabase().checkTransactionExists(txHash)) {
-            BlockIndex block= Context.getInstance().getDatabase().findTransaction(txHash);
+            Transaction transaction = Context.getInstance().getDatabase().findTransaction(txHash);
 
             JSONObject response = new JSONObject();
             response.put("type", "success");
