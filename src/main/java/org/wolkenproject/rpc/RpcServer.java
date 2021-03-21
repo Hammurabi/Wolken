@@ -12,7 +12,7 @@ public class RpcServer {
     private Context     context;
 
     public RpcServer(Context context, int port) throws IOException {
-        server = HttpServer.create(new InetSocketAddress(8000), 0);
+        server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/submit", RpcServer::onSubmitMsg);
         server.createContext("/tx", RpcServer::onTransactionMsg);
         server.createContext("/block", RpcServer::onBlockMsg);
