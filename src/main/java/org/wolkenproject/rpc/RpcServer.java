@@ -8,6 +8,7 @@ import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.Logger;
 
 import java.io.IOException;
@@ -17,11 +18,13 @@ import java.net.InetSocketAddress;
 public class RpcServer {
     private HttpServer  server;
     private Context     context;
+    private FileService directory;
 
-    public RpcServer(Context context, int port) throws IOException {
+    public RpcServer(Context context, FileService dir, int port) throws IOException {
         Logger.alert("=============================================");
         Logger.alert("Starting HTTP server");
         Logger.alert("=============================================");
+        directory = dir;
         server = HttpServer.create(new InetSocketAddress(port), 12);
         server.createContext("/submit", RpcServer::onSubmitMsg);
         server.createContext("/request", RpcServer::onTransactionMsg);
