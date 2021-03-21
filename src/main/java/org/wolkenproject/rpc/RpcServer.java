@@ -1,5 +1,6 @@
 package org.wolkenproject.rpc;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONObject;
@@ -24,13 +25,17 @@ public class RpcServer {
         server = HttpServer.create(new InetSocketAddress(port), 12);
         server.createContext("/submit", RpcServer::onSubmitMsg);
         server.createContext("/request", RpcServer::onTransactionMsg);
-        server.createContext("/index", RpcServer::onBlockMsg);
+        server.createContext("/", RpcServer::onIndexMsg);
         server.setExecutor(null);
         server.start();
     }
 
     public void stop() {
         server.stop(0);
+    }
+
+    public static void onIndexMsg(HttpExchange exchange) throws IOException {
+        Headers headers = exchange.getResponseHeaders();
     }
 
     public static void onBlockMsg(HttpExchange exchange) throws IOException {
