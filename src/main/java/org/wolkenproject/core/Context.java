@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Context {
     private static Context instance;
 
-    private Database database;
+    private Database                database;
     private NetworkParameters networkParameters;
     private ExecutorService threadPool;
     private AtomicBoolean isRunning;
