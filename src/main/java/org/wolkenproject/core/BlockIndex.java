@@ -1,6 +1,8 @@
 package org.wolkenproject.core;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -213,7 +215,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     public JSONObject toJson(boolean txList, boolean evList) {
         JSONObject block    = new JSONObject();
         JSONObject header   = new JSONObject();
-        JSONObject body     = new JSONObject();
+        JSONArray body      = new JSONArray();
         JSONObject state    = new JSONObject();
 
         header.put("version", getBlock().getVersion());
@@ -227,6 +229,8 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         block.put("header", header);
 
         if (txList) {
+            for (Transaction transaction : getBlock()) {
+            }
             block.put("content", body);
         }
 
