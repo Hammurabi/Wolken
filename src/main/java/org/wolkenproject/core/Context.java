@@ -28,7 +28,7 @@ public class Context {
     private Database                database;
     private NetworkParameters       networkParameters;
     private ExecutorService         threadPool;
-    private AtomicBoolean isRunning;
+    private AtomicBoolean           isRunning;
     private IpAddressList ipAddressList;
     private SerializationFactory serializationFactory;
     private TransactionPool transactionPool;
