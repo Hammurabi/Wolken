@@ -60,6 +60,26 @@ public class RpcServer {
     }
 
     public static void onTransactionMsg(HttpExchange exchange) {
+        JSONObject message  = readJson(exchange.getRequestBody());
+        String txId         = message.getString("hash");
+        boolean evList      = message.getBoolean("events");
+        boolean evHash      = message.getBoolean("only-evid");
+
+        byte blockHash[]    = Base16.decode(blockId);
+
+        if (Context.getInstance().getDatabase().checkBlockExists(blockHash)) {
+            BlockIndex block= Context.getInstance().getDatabase().findBlock(blockHash);
+
+            JSONObject response = new JSONObject();
+            response.put("type", "success");
+            response.put("block", block.toJson(txList, txHash, evList, evHash, txEvt));
+            sendResponse(200, response, exchange);
+        } else {
+            JSONObject response = new JSONObject();
+            response.put("type", "fail");
+            response.put("reason", "could not find requested block");
+            sendResponse(200, response, exchange);
+        }
     }
 
     public static void onSubmitMsg(HttpExchange exchange) {
