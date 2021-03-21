@@ -37,7 +37,7 @@ public class RpcServer {
         byte blockHash[]    = Base16.decode(blockId);
 
         if (Context.getInstance().getDatabase().checkBlockExists(blockHash)) {
-            BlockIndex block= Context.getInstance().getDatabase().findBlock();
+            BlockIndex block= Context.getInstance().getDatabase().findBlock(blockHash);
         }
     }
 
