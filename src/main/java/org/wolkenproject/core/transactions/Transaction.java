@@ -1,5 +1,6 @@
 package org.wolkenproject.core.transactions;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.*;
 import org.wolkenproject.core.events.*;
 import org.wolkenproject.crypto.Keypair;
@@ -84,6 +85,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         cause to the global state.
      */
     public abstract void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException;
+
+    public abstract JSONObject toJson();
 
     public Transaction sign(Keypair keypair) throws WolkenException {
         // this includes the version bytes
