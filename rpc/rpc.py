@@ -47,7 +47,11 @@ def prase_getblock(command, arguments):
         print("error: 'getblock' command requires second argument to be base16 encoded.")
         pass
 
-
+    # getblock <hash>
+    # getblock <hash> includeTx txAsHash includeEv evAsHash format
+    if len(arguments) > 2 && len(arguments) < 7:
+        print("error: 'getblock' command missing arguments.")
+        pass
 def new_command(name, value, parse):
     command = Command()
     command.name    = name
