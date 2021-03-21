@@ -79,7 +79,8 @@ def new_command(name, parse):
     
 
 # define a basic command list
-commands_list = [ new_command('getblock', getblock_parse) ]
+commands_list = [   new_command('quit', quit_parse),
+                    new_command('getblock', getblock_parse) ]
 
 # define 'base16' characters
 base16   = ['0', '1', '2', '3', '4', '5', '6', '7',
