@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.utils.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +17,9 @@ public class RpcServer {
     private Context     context;
 
     public RpcServer(Context context, int port) throws IOException {
+        Logger.alert("=============================================");
+        Logger.alert("Starting HTTP server");
+        Logger.alert("=============================================");
         server = HttpServer.create(new InetSocketAddress(port), 12);
         server.createContext("/submit", RpcServer::onSubmitMsg);
         server.createContext("/tx", RpcServer::onTransactionMsg);
