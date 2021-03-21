@@ -51,6 +51,7 @@ def start():
 # define 'quit' command
 def quit_parse(command, arguments):
     print("alert: terminating process")
+    quit()
 # define 'getblock' command
 def getblock_parse(command, arguments):
     # check correct amount of arguments exists
