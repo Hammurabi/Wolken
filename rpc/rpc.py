@@ -12,7 +12,7 @@ import socket
 # quit
 
 ip      = 'localhost'
-port    = 80
+port    = '80'
 
 def is_base16_encoded(text):
     for c in text.lower():
