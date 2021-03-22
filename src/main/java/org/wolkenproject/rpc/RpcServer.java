@@ -37,6 +37,7 @@ public class RpcServer {
     }
 
     protected void onGet(String name, VoidCallable<Messenger> function) {
+        server.createContext("/", httpExchange -> function.call(new Messenger(httpExchange)));
     }
 
     public void stop() {
@@ -44,8 +45,6 @@ public class RpcServer {
     }
 
     public static void listen(HttpExchange exchange) throws IOException {
-        String query    = exchange.getRequestURI().getQuery();
-        String url      = exchange.getRequestURI().toString().replace(query, "");
 
         Messenger message = new Messenger(exchange, url, query);
         traversePath(url);
