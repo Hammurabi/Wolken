@@ -14,6 +14,7 @@ import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.LinkedHashSet;
@@ -266,5 +267,9 @@ public class Context {
 
     public OpcodeRegister getOpcodeRegister() {
         return opcodeRegister;
+    }
+
+    public ResourceManager getResourceManager() {
+        return resourceManager;
     }
 }
