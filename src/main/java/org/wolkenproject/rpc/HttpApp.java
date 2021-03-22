@@ -4,12 +4,13 @@ import com.sun.net.httpserver.HttpServer;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.utils.Logger;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class HttpApp {
     private final HttpServer server;
 
-    protected HttpApp(int port) {
+    protected HttpApp(int port) throws IOException {
         Logger.alert("=============================================");
         Logger.alert("Starting HTTP server");
         Logger.alert("=============================================");
