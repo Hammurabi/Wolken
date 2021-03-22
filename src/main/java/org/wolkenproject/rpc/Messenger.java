@@ -10,10 +10,11 @@ public class Messenger {
     private String          url;
     private String          query;
 
-    public Messenger(HttpExchange exchange, String url, String query) {
+    public Messenger(HttpExchange exchange) {
         this.exchange   = exchange;
-        this.url        = url;
-        this.query      = query;
+
+        query           = exchange.getRequestURI().getQuery();
+        url             = exchange.getRequestURI().toString().replace(query, "");
     }
 
     public void sendFile(InputStream inputStream) {
