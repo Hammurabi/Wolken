@@ -3,6 +3,7 @@ package org.wolkenproject.core.events;
 import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Event;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.utils.Utils;
 
 public class DepositFundsEvent extends Event {
@@ -33,6 +34,6 @@ public class DepositFundsEvent extends Event {
 
     @Override
     public JSONObject toJson() {
-        return new JSONObject();
+        return new JSONObject().put("address", Base58.encode(address)).put("amount", amount);
     }
 }
