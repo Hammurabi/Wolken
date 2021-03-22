@@ -44,23 +44,23 @@ public class Messenger {
 
     public void sendFile(String file) throws IOException {
         if (file.endsWith("json")) {
-            sendFile("application/json", Context.getInstance().getResourceManager().get(file));
+            send("application/json", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("html")) {
-            sendFile("text/html", Context.getInstance().getResourceManager().get(file));
+            send("text/html", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("css")) {
-            sendFile("text/css", Context.getInstance().getResourceManager().get(file));
+            send("text/css", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("png")) {
-            sendFile("image/png", Context.getInstance().getResourceManager().get(file));
+            send("image/png", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("jpg") || file.endsWith("jpeg")) {
-            sendFile("image/jpeg", Context.getInstance().getResourceManager().get(file));
+            send("image/jpeg", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("gif")) {
-            sendFile("image/gif", Context.getInstance().getResourceManager().get(file));
+            send("image/gif", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("js")) {
-            sendFile("text/javascript", Context.getInstance().getResourceManager().get(file));
+            send("text/javascript", Context.getInstance().getResourceManager().get(file));
         }
     }
 
-    public void sendFile(String contentType, InputStream inputStream) {
+    public void send(String contentType, InputStream inputStream) {
         Headers headers = exchange.getResponseHeaders();
         headers.add("Content-Type", contentType);
     }
