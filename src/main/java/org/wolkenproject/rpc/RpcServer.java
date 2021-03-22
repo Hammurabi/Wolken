@@ -41,6 +41,10 @@ public class RpcServer {
 
         String query    = exchange.getRequestURI().getQuery();
         String url      = exchange.getRequestURI().toString();
+        if (url.equals("/")) {
+            // return index
+        }
+
         String surl[]   = url.split("/");
     }
 
