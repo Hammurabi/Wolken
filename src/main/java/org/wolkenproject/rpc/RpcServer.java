@@ -90,6 +90,10 @@ public class RpcServer {
 
             if (request.getBoolean("nodes")) {
                 JSONArray array = new JSONArray();
+                int counter = 0;
+                for (Node node : nodes) {
+                    array.put(counter ++, node.toJson());
+                }
             }
         }
 
