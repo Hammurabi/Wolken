@@ -38,6 +38,7 @@ public class RpcServer {
         onGet("/", response -> response.sendFile("/rpc/index.html"));
         onGet("/home", response -> response.sendFile("/rpc/index.html"));
         onGet("/dashboard", response -> response.sendFile("/rpc/dashboard.html"));
+        onGet("/portfolio", response -> response.sendFile("/rpc/portfolio.html"));
         onGet("/login", response -> response.sendFile("/rpc/login.html"));
         onGet("/api", RpcServer::apiRequest);
         onGet("/content/:filename", response -> response.sendFile("/rpc/${filename}"));
