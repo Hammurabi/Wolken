@@ -17,15 +17,28 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 
 public class RpcServer {
-    private HttpApp             httpApp;
+    private HttpServer          server;
     private Context             context;
     private UrlPath[]           paths;
 
     public RpcServer(Context context, int port) throws IOException {
+        Logger.alert("=============================================");
+        Logger.alert("Starting HTTP server");
+        Logger.alert("=============================================");
+
+        server = HttpServer.create(new InetSocketAddress(port), 12);
+        server.createContext("/", RpcServer::listen);
+        server.setExecutor(null);
+
+        paths = new UrlPath[] {
+                new UrlPath("content", messenger -> messenger.sendFile("text/html", Context.getInstance().getResourceManager().get("/index.html")), new UrlPath[] {
+                }),
+        };
+        server.start();
     }
 
     public void stop() {
-        httpApp.stop(0);
+        server.stop(0);
     }
 
     public static void listen(HttpExchange exchange) throws IOException {
