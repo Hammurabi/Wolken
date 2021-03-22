@@ -50,7 +50,7 @@ public class FailedToRespondMessage extends ResponseMessage {
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(FailedToRespondMessage.class);
     }
-    
+
     @Override
     public void execute(Server server, Node node) {
     }
