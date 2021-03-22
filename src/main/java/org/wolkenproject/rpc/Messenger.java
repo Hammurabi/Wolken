@@ -51,9 +51,14 @@ public class Messenger {
         int index       = 0;
 
         while (matcher.find()) {
-            String query = matcher.group(1);
-            file = matcher.replaceFirst(Utils.toString(arguments[index ++]));
-            matcher = pattern.matcher(msg);
+            String query    = matcher.group(1);
+            String result   = get(query.substring(2, query.length() - 1));
+            if (query.length() == 0) {
+                throw new IOException();
+            }
+
+            file = matcher.replaceFirst(result);
+            matcher = pattern.matcher(file);
         }
 
         if (file.endsWith("json")) {
