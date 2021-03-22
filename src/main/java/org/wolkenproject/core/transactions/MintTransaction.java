@@ -107,7 +107,7 @@ public class MintTransaction extends Transaction {
     @Override
     public JSONObject toJson(boolean txEvt, boolean evHash) {
         JSONObject txHeader = new JSONObject().put("transaction", getClass().getName()).put("version", getVersion());
-        txHeader.put("content", new JSONObject().put("value", value).put("recipient", Base58.encode(recipient)));
+        txHeader.put("content", new JSONObject().put("value", value).put("recipient", Base58.encode(recipient))).put("dump", Base16.encode(dump));
         return txHeader;
     }
 
