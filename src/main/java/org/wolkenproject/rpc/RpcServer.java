@@ -3,11 +3,13 @@ package org.wolkenproject.rpc;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.network.Node;
 import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.VoidCallableThrowsT;
 
@@ -78,9 +80,16 @@ public class RpcServer {
 
         if (request.getString("request").equals("getblock")) {
         } else if (request.getString("request").equals("gettx")) {
-        } else if (request.getString("request").equals("node")) {
+        } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
-            if (request.getBoolean("connection_list")) {
+            Set<Node> nodes = Context.getInstance().getServer().getConnectedNodes();
+
+            if (request.getBoolean("numconnected")) {
+                response.put("numconnected", nodes.size());
+            }
+
+            if (request.getBoolean("nodes")) {
+                JSONArray array = new JSONArray();
             }
         }
 
