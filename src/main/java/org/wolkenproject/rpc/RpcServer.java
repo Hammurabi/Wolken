@@ -68,7 +68,7 @@ public class RpcServer {
     }
 
     public static void apiRequest(Messenger response) {
-        String request[] = response.getQuery().split("&");
+        JSONObject request = response.getFormattedQuery();
 
         response.send("application/json", );
     }
