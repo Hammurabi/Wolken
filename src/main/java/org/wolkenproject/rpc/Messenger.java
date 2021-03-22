@@ -25,6 +25,7 @@ public class Messenger {
         url             = exchange.getRequestURI().toString().replace(query, "");
         if (urlMatcher.contains(":")) {
             String surl[] = url.split("/");
+            String regex[]= urlMatcher.split("/");
         }
         regexMatches    = new HashMap<>();
     }
