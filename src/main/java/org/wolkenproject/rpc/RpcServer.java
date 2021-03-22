@@ -37,12 +37,12 @@ public class RpcServer {
 
     public static void listen(HttpExchange exchange) throws IOException {
         Headers headers = exchange.getResponseHeaders();
-        headers.add("Content-Type", "text/html");
 
         String query    = exchange.getRequestURI().getQuery();
         String url      = exchange.getRequestURI().toString();
         if (url.equals("/")) {
             // return index
+            headers.add("Content-Type", "text/html");
         }
 
         String surl[]   = url.split("/");
