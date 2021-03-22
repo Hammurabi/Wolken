@@ -5,10 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.utils.Utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -80,6 +77,18 @@ public class Messenger {
     public void send(String contentType, InputStream inputStream) throws IOException {
         Headers headers = exchange.getResponseHeaders();
         headers.add("Content-Type", contentType);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte buffer[] = new byte[4096];
+
+        int read = 0;
+        while ( (read = inputStream.read(buffer)) > 0 ) {
+            outputStream.write(buffer, 0, read);
+        }
+
+        outputStream.close();
+        exchange.sendResponseHeaders(200, outputStream.size());
+        exchange.getResponseBody().write(outputStream.toByteArray());
+        exchange.getResponseBody().flush();
     }
 
     public String getQuery() {
