@@ -14,6 +14,37 @@ body {
 .container .formContainer {
     border: 1px solid rgb(81, 104, 136);
     border-radius: 12px;
-    width: 50%;
-    height: 50%;
+    width: 35%;
+    height: 35%;
+    align-items: center;
+    font-size: 13px;
+    color: aliceblue;
+    justify-content: center;
+}
+
+.container .formContainer .form {
+    width: 90%;
+    height: 90%;
+    align-items: center;
+    justify-content: center;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #304252;
+}
+
+.login {
+    background-color: #509fe9;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 80%;
 }
