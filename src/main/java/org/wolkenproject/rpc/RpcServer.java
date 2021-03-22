@@ -2,7 +2,6 @@ package org.wolkenproject.rpc;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONObject;
 import org.wolkenproject.core.BlockIndex;
@@ -10,7 +9,6 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.utils.Logger;
-import org.wolkenproject.utils.VoidCallable;
 import org.wolkenproject.utils.VoidCallableThrowsT;
 
 import java.io.BufferedReader;
@@ -38,6 +36,7 @@ public class RpcServer {
         onGet("/", response -> response.sendFile("/rpc/index.html"));
         onGet("/home", response -> response.sendFile("/rpc/index.html"));
         onGet("/dashboard", response -> response.sendFile("/rpc/dashboard.html"));
+        onGet("/login", response -> response.sendFile("/rpc/login.html"));
         onGet("/content/:filename", response -> response.sendFile("/rpc/${filename}"));
 
         server.createContext("/", exchange -> {
