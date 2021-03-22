@@ -42,7 +42,7 @@ public class Messenger {
         regexMatches    = new HashMap<>();
     }
 
-    public void sendFile(String file) {
+    public void sendFile(String file) throws IOException {
         if (file.endsWith("json")) {
             sendFile("text/html", readUTF(Context.getInstance().getResourceManager().get(file)));
         }
