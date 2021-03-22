@@ -6,6 +6,7 @@ import org.wolkenproject.core.events.DepositFundsEvent;
 import org.wolkenproject.core.events.WithdrawFundsEvent;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -130,6 +131,7 @@ public class BasicTransaction extends Transaction {
     @Override
     public JSONObject toJson(boolean txEvt, boolean evHash) {
         JSONObject txHeader = new JSONObject().put("transaction", getClass().getName()).put("version", getVersion());
+        JSONObject txContent= new JSONObject().put("value", value).put("fee", fee).put("nonce", nonce).put("v", signature.getV()).put("r", Base16.encode(signature.getR())).put("s", Base16.encode(signature.getS()));
         return txHeader;
     }
 
