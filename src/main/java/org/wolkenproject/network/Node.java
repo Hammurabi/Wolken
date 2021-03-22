@@ -423,6 +423,6 @@ public class Node implements Runnable {
         json.put("responses", respones.size());
         json.put("firstconnected", Utils.jsonDate(firstConnected));
 
-        return false;
+        return json;
     }
 }
