@@ -109,7 +109,13 @@ public class Messenger {
         JSONObject request = new JSONObject();
         for (int i = 0; i < requests.length; i ++) {
             String kv[] = requests[i].split("=");
-            request.put(kv[0], kv[1]);
+            if (kv[1].toLowerCase().equals("true") || kv[1].toLowerCase().equals("false")) {
+                request.put(kv[0], Boolean.parseBoolean(kv[1].toLowerCase()));
+            } else if (kv[1].matches("\\d+")) {
+                request.put(kv[0], Long.parseLong(kv[1]));
+            } else {
+                request.put(kv[0], kv[1]);
+            }
         }
 
         return request;
