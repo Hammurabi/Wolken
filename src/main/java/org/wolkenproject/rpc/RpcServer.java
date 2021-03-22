@@ -67,7 +67,8 @@ public class RpcServer {
         return handlers;
     }
 
-    public static void apiRequest(Messenger messenger) {
+    public static void apiRequest(Messenger response) {
+        response.send("application/json", );
     }
 
     protected void onGet(String requestURL, VoidCallableThrowsT<Messenger, IOException> function) {
