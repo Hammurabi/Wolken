@@ -84,7 +84,7 @@ public class RpcServer {
             response.put("response", "success");
             Set<Node> nodes = Context.getInstance().getServer().getConnectedNodes();
 
-            if (request.getBoolean("numconnected")) {
+            if (request.getBoolean("connected")) {
                 response.put("numconnected", nodes.size());
             }
 
