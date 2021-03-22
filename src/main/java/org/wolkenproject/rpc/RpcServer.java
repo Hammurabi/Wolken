@@ -41,7 +41,7 @@ public class RpcServer {
 
         String query    = exchange.getRequestURI().getQuery();
         String url      = exchange.getRequestURI().toString();
-        String surl[]   = url.split("\\/");
+        String surl[]   = url.split("/");
     }
 
     public static void onContentMsg(HttpExchange exchange) throws IOException {
