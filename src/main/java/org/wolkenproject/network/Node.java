@@ -417,11 +417,13 @@ public class Node implements Runnable {
 
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
+        json.put("version", versionMessage.toJson());
         json.put("inetaddress", getNetAddress().toJson());
         json.put("messagequeue", messages.size());
         json.put("responsequeue", expectedResponse.size());
         json.put("responses", respones.size());
         json.put("firstconnected", Utils.jsonDate(firstConnected));
+        json.put("closed", isClosed);
 
         return json;
     }
