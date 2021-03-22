@@ -6,12 +6,14 @@ import org.wolkenproject.utils.VoidCallableThrowsT;
 import java.io.IOException;
 
 public class Request {
-    private String  pattern;
+    private String  patternMatcher;
+    private String  patternURL;
     private boolean mustMatch;
     private VoidCallableThrowsT<Messenger, IOException> function;
 
     public Request(String pattern, boolean mustMatch, VoidCallableThrowsT<Messenger, IOException> function) {
-        this.pattern = pattern;
+        this.patternMatcher = pattern;
+        this.patternURL = Messenger.requestURL(pattern);
         this.mustMatch = mustMatch;
         this.function = function;
     }
@@ -20,15 +22,15 @@ public class Request {
         boolean isMatch = false;
 
         if (mustMatch) {
-            isMatch = pattern.equals(url);
+            isMatch = patternURL.equals(url);
         } else {
-            isMatch = url.startsWith(pattern);
+            isMatch = url.startsWith(patternURL);
         }
 
         return isMatch;
     }
 
-    public void call(HttpExchange exchange, String url) throws IOException {
-        function.call(new Messenger(exchange, url));
+    public void call(HttpExchange exchange, String url, String query) throws IOException {
+        function.call(new Messenger(exchange, url, query, patternMatcher));
     }
 }
