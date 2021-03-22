@@ -7,9 +7,10 @@ public class UrlPath {
     private UrlPath[]                   paths;
     private VoidCallable<Messenger>     onGET;
 
-    public UrlPath(String path, UrlPath paths[]) {
-        this.path = path;
-        this.paths = paths;
+    public UrlPath(String path, UrlPath paths[], VoidCallable<Messenger> onGET) {
+        this.path   = path;
+        this.paths  = paths;
+        this.onGET  = onGET;
     }
 
     public String getPath() {
