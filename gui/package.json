@@ -1,0 +1,16 @@
+{
+  "name": "WolkenCore",
+  "productName": "WolkenCore",
+  "description": "WolkenCore gui wallet",
+  "keywords": [],
+  "main": "./main.js",
+  "version": "1.0.0",
+  "author": "Hammurabi",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "11.2.3"
+  }
+}
