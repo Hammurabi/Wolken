@@ -2,6 +2,7 @@ package org.wolkenproject.rpc;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONObject;
 import org.wolkenproject.core.BlockIndex;
@@ -17,11 +18,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class RpcServer {
     private HttpServer          server;
     private Context             context;
     private UrlPath[]           paths;
+    private Set<Request>        handlers;
 
     public RpcServer(Context context, int port) throws IOException {
         Logger.alert("=============================================");
@@ -29,16 +35,36 @@ public class RpcServer {
         Logger.alert("=============================================");
 
         server = HttpServer.create(new InetSocketAddress(port), 12);
+        handlers = new LinkedHashSet<>();
 
         onGet("/", response -> response.sendFile("/rpc/index.html"));
         onGet("/content/:filename", response -> response.sendFile("/rpc/${filename}"));
+
+        server.createContext("/", exchange -> {
+            String url = exchange.getRequestURI().toString();
+            Set<Request> handlers =Context.getInstance().getRPCServer().getHandlers();
+
+            for (Request request : handlers) {
+                if (request.submit(exchange, url)) {
+                    break;
+                }
+            }
+
+        });
 
         server.setExecutor(null);
         server.start();
     }
 
-    protected void onGet(String requestURL, VoidCallableThrowsT<Messenger, IOException> function) {
-        server.createContext(Messenger.requestURL(requestURL), httpExchange -> function.call(new Messenger(httpExchange, requestURL)));
+    public Set<Request> getHandlers() {
+        return handlers;
+    }
+
+    protected void onGet(String url, VoidCallableThrowsT<Messenger, IOException> function) {
+        String requestURL = Messenger.requestURL(url);
+        boolean mustMatch = requestURL.equals(url);
+
+        handlers.add(new Request(requestURL, mustMatch, function));
     }
 
     public void stop() {
