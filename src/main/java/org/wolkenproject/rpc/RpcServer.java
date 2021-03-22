@@ -44,12 +44,6 @@ public class RpcServer {
         server.stop(0);
     }
 
-    public static void listen(HttpExchange exchange) throws IOException {
-
-        Messenger message = new Messenger(exchange, url, query);
-        traversePath(url);
-    }
-
     private static void traversePath(String url) {
     }
 
