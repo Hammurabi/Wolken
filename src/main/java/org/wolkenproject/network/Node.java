@@ -416,6 +416,13 @@ public class Node implements Runnable {
     }
 
     public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("inetaddress", getNetAddress().toJson());
+        json.put("messagequeue", messages.size());
+        json.put("responsequeue", expectedResponse.size());
+        json.put("responses", respones.size());
+        json.put("firstconnected", Utils.jsonDate(firstConnected));
+
         return false;
     }
 }
