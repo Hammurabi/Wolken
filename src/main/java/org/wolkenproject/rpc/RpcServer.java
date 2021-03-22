@@ -43,16 +43,14 @@ public class RpcServer {
     }
 
     public static void listen(HttpExchange exchange) throws IOException {
-        Headers headers = exchange.getResponseHeaders();
-
         String query    = exchange.getRequestURI().getQuery();
         String url      = exchange.getRequestURI().toString().replace(query, "");
 
         Messenger message = new Messenger(exchange, url, query);
+        traversePath(url);
 
         if (url.equals("/")) {
             // return index
-            headers.add("Content-Type", "text/html");
             sendResponse(200, readUTF(Context.getInstance().getResourceManager().get("/index.html")), exchange);
         } else {
             String surl[]   = url.split("/");
