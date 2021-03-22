@@ -9,6 +9,7 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.utils.Logger;
+import org.wolkenproject.utils.VoidCallable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class RpcServer {
         server.start();
     }
 
-    protected void onGet(String name, Messenger messenger) {
+    protected void onGet(String name, VoidCallable<Messenger> function) {
     }
 
     public void stop() {
