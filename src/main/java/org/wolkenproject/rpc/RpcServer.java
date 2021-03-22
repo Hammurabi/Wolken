@@ -18,9 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class RpcServer {
@@ -38,6 +36,7 @@ public class RpcServer {
         handlers = new LinkedHashSet<>();
 
         onGet("/", response -> response.sendFile("/rpc/index.html"));
+        onGet("/home", response -> response.sendFile("/rpc/index.html"));
         onGet("/content/:filename", response -> response.sendFile("/rpc/${filename}"));
 
         server.createContext("/", exchange -> {
