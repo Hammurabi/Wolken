@@ -39,15 +39,15 @@ public class RpcServer {
         Headers headers = exchange.getResponseHeaders();
 
         String query    = exchange.getRequestURI().getQuery();
-        String url      = exchange.getRequestURI().toString();
+        String url      = exchange.getRequestURI().toString().replace(query, "");
         if (url.equals("/")) {
             // return index
             headers.add("Content-Type", "text/html");
             sendResponse(200, readUTF(Context.getInstance().getResourceManager().get("/index.html")), exchange);
-        } else {
+        } else if (url.equals("/api")else {
             String surl[]   = url.split("/");
             if (surl[0].equals("content")) {
-            } else if (surl[0].equals("")) {
+            } else if (surl[0].equals("api")) {
             }
         }
     }
