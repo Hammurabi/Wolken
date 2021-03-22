@@ -3,7 +3,6 @@ package org.wolkenproject.rpc;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.utils.Utils;
 
 import java.io.*;
 import java.util.HashMap;
