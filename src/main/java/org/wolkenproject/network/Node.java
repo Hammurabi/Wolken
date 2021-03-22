@@ -417,7 +417,7 @@ public class Node implements Runnable {
 
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("versionmessage", versionMessage.toJson());
+        json.put("versionmsg", versionMessage.toJson());
         json.put("inetaddress", getNetAddress().toJson());
         json.put("messagequeue", messages.size());
         json.put("responsequeue", expectedResponse.size());
