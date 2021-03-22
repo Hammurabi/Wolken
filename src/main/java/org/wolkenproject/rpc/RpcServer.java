@@ -37,8 +37,8 @@ public class RpcServer {
         server.start();
     }
 
-    protected void onGet(String name, VoidCallableThrowsT<Messenger, IOException> function) {
-        server.createContext("/", httpExchange -> function.call(new Messenger(httpExchange, name)));
+    protected void onGet(String requestURL, VoidCallableThrowsT<Messenger, IOException> function) {
+        server.createContext("/", httpExchange -> function.call(new Messenger(httpExchange, requestURL)));
     }
 
     public void stop() {
