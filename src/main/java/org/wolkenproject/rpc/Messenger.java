@@ -43,6 +43,11 @@ public class Messenger {
     }
 
     public static String requestURL(String url) {
+        if (url.contains(":")) {
+            return url.substring(0, url.indexOf(":"));
+        }
+
+        return url;
     }
 
     public void sendFile(String file) throws IOException {
