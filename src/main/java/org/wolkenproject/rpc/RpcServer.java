@@ -48,16 +48,9 @@ public class RpcServer {
 
         Messenger message = new Messenger(exchange, url, query);
         traversePath(url);
+    }
 
-        if (url.equals("/")) {
-            // return index
-            sendResponse(200, readUTF(Context.getInstance().getResourceManager().get("/index.html")), exchange);
-        } else {
-            String surl[]   = url.split("/");
-            if (surl[0].equals("content")) {
-            } else if (surl[0].equals("api")) {
-            }
-        }
+    private static void traversePath(String url) {
     }
 
     public static void onContentMsg(HttpExchange exchange) throws IOException {
