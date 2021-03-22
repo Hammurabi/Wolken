@@ -3,6 +3,7 @@ package org.wolkenproject.rpc;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +11,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Messenger {
     private HttpExchange        exchange;
@@ -43,6 +46,16 @@ public class Messenger {
     }
 
     public void sendFile(String file) {
+        Pattern pattern = Pattern.compile("\\$\\{[A-z]+\\}");
+        Matcher matcher = pattern.matcher(file);
+        int index       = 0;
+
+        while (matcher.find()) {
+            String query = matcher.group(1);
+            file = matcher.replaceFirst(Utils.toString(arguments[index ++]));
+            matcher = pattern.matcher(msg);
+        }
+
         if (file.endsWith("json")) {
             send("application/json", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("html")) {
@@ -60,7 +73,7 @@ public class Messenger {
         }
     }
 
-    public void send(String contentType, InputStream inputStream) {
+    public void send(String contentType, InputStream inputStream) throws IOException {
         Headers headers = exchange.getResponseHeaders();
         headers.add("Content-Type", contentType);
     }
