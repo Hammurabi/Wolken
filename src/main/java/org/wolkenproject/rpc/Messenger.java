@@ -13,7 +13,7 @@ public class Messenger {
     private String              query;
     private Map<String, String> regexMatches;
 
-    public Messenger(HttpExchange exchange) {
+    public Messenger(HttpExchange exchange, String name) {
         this.exchange   = exchange;
 
         query           = exchange.getRequestURI().getQuery();
