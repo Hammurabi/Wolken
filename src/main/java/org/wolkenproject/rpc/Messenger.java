@@ -2,6 +2,7 @@ package org.wolkenproject.rpc;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 
 import java.io.*;
@@ -101,6 +102,18 @@ public class Messenger {
 
     public String getQuery() {
         return query;
+    }
+
+    public JSONObject getFormattedQuery() {
+        String requests[] = getQuery().split("&");
+        JSONObject request = new JSONObject();
+
+        for (int i = 0; i < request.length(); i ++) {
+            String kv[] = requests[i].split("=");
+            request.put(kv[0], kv[1]);
+        }
+
+        return request;
     }
 
     public String getUrl() {
