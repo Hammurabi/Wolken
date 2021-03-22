@@ -17,8 +17,8 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 
 public class RpcServer {
-    private HttpServer  server;
-    private Context     context;
+    private HttpServer          server;
+    private Context             context;
 
     public RpcServer(Context context, int port) throws IOException {
         Logger.alert("=============================================");
@@ -43,6 +43,7 @@ public class RpcServer {
         if (url.equals("/")) {
             // return index
             headers.add("Content-Type", "text/html");
+            sendResponse(200, readUTF(Context.getInstance().getResourceManager().get("/index.html")), exchange);
         }
 
         String surl[]   = url.split("/");
@@ -133,7 +134,11 @@ public class RpcServer {
     }
 
     private static final void sendResponse(int responseCode, JSONObject response, HttpExchange exchange) throws IOException {
-        byte actualResponse[] = response.toString().getBytes();
+        sendResponse(responseCode, response.toString(), exchange);
+    }
+
+    private static final void sendResponse(int responseCode, String response, HttpExchange exchange) throws IOException {
+        byte actualResponse[] = response.getBytes();
         exchange.sendResponseHeaders(responseCode, actualResponse.length);
         exchange.getResponseBody().write(actualResponse);
     }
