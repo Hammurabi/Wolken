@@ -23,6 +23,7 @@ public class Messenger {
         }
 
         url             = exchange.getRequestURI().toString().replace(query, "");
+
         if (urlMatcher.contains(":")) {
             String surl[] = url.split("/");
             String regex[]= urlMatcher.split("/");
@@ -33,10 +34,11 @@ public class Messenger {
                 }
             }
         }
+
         regexMatches    = new HashMap<>();
     }
 
-    public void sendFile(InputStream inputStream) {
+    public void sendFile(String file) {
         sendFile("text/html", inputStream);
     }
 
