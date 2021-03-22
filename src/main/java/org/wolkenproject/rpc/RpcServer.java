@@ -10,6 +10,7 @@ import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.VoidCallable;
+import org.wolkenproject.utils.VoidCallableThrowsT;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class RpcServer {
         server.start();
     }
 
-    protected void onGet(String name, VoidCallable<Messenger> function) {
+    protected void onGet(String name, VoidCallableThrowsT<Messenger, IOException> function) {
         server.createContext("/", httpExchange -> function.call(new Messenger(httpExchange, name)));
     }
 
