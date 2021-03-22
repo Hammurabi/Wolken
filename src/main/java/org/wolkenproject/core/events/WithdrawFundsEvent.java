@@ -1,5 +1,6 @@
 package org.wolkenproject.core.events;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Event;
 import org.wolkenproject.utils.Utils;
@@ -28,5 +29,10 @@ public class WithdrawFundsEvent extends Event {
     @Override
     public byte[] getEventBytes() {
         return Utils.concatenate("Withdraw".getBytes(), address, Utils.takeApartLong(amount));
+    }
+
+    @Override
+    public JSONObject toJson() {
+        return null;
     }
 }
