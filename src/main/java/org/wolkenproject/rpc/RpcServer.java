@@ -75,12 +75,13 @@ public class RpcServer {
     public static void apiRequest(Messenger msg) throws IOException {
         JSONObject request = msg.getFormattedQuery();
         JSONObject response= new JSONObject();
-        response.put("response", "success");
 
         if (request.getString("request").equals("getblock")) {
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("node")) {
             response.put("response", "success");
+            if (request.getBoolean("connection_list")) {
+            }
         }
 
         msg.send("application/json", response.toString().getBytes());
