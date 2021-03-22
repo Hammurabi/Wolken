@@ -84,16 +84,17 @@ public class RpcServer {
             response.put("response", "success");
             Set<Node> nodes = Context.getInstance().getServer().getConnectedNodes();
 
-            if (request.getBoolean("connected")) {
+            if (request.has("connected") && request.getBoolean("connected")) {
                 response.put("numconnected", nodes.size());
             }
 
-            if (request.getBoolean("nodes")) {
+            if (request.has("nodes") && request.getBoolean("nodes")) {
                 JSONArray array = new JSONArray();
                 int counter = 0;
                 for (Node node : nodes) {
                     array.put(counter ++, node.toJson());
                 }
+                response.put("nodes", array);
             }
         }
 
