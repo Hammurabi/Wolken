@@ -1,5 +1,6 @@
 package org.wolkenproject.core.transactions;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.*;
 import org.wolkenproject.core.events.RegisterAliasEvent;
 import org.wolkenproject.crypto.Signature;
@@ -114,6 +115,11 @@ public class RegisterAliasTransaction extends Transaction {
         Address sender = getSender();
         stateChange.createAccountIfDoesNotExist(sender.getRaw());
         stateChange.addEvent(new RegisterAliasEvent(sender.getRaw(), alias));
+    }
+
+    @Override
+    public JSONObject toJson(boolean txEvt, boolean evHash) {
+        return null;
     }
 
     @Override
