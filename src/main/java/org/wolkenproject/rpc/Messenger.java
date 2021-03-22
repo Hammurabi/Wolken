@@ -87,8 +87,14 @@ public class Messenger {
         }
 
         outputStream.close();
-        exchange.sendResponseHeaders(200, outputStream.size());
-        exchange.getResponseBody().write(outputStream.toByteArray());
+        send(contentType, outputStream.toByteArray());
+    }
+
+    public void send(String contentType, byte response[]) throws IOException {
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Content-Type", contentType);
+        exchange.sendResponseHeaders(200, response.length);
+        exchange.getResponseBody().write(response);
         exchange.getResponseBody().flush();
         exchange.close();
     }
