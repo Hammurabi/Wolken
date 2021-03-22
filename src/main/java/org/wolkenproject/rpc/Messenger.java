@@ -44,7 +44,7 @@ public class Messenger {
 
     public void sendFile(String file) throws IOException {
         if (file.endsWith("json")) {
-            sendFile("application/json", readUTF(Context.getInstance().getResourceManager().get(file)));
+            sendFile("application/json", Context.getInstance().getResourceManager().get(file));
         }
     }
 
