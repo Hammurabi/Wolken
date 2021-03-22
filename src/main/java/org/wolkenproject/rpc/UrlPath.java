@@ -13,6 +13,10 @@ public class UrlPath {
         this.onGET  = onGET;
     }
 
+    public void get(Messenger messenger) {
+        onGET.call(messenger);
+    }
+
     public String getPath() {
         return path;
     }
