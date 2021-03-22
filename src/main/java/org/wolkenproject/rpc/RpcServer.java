@@ -19,7 +19,7 @@ import java.net.InetSocketAddress;
 public class RpcServer {
     private HttpServer          server;
     private Context             context;
-    private UrlPath             paths;
+    private UrlPath[]           paths;
 
     public RpcServer(Context context, int port) throws IOException {
         Logger.alert("=============================================");
