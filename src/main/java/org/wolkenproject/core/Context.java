@@ -53,6 +53,7 @@ public class Context {
         this.payList = payList;
         this.fileService = service;
         this.opcodeRegister = new OpcodeRegister();
+        this.resourceManager = new ResourceManager();
 
         Transaction.register(serializationFactory);
         serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
