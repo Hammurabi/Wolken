@@ -45,7 +45,8 @@ public class RpcServer {
             Set<Request> handlers =Context.getInstance().getRPCServer().getHandlers();
 
             for (Request request : handlers) {
-                if (request.submit(exchange, url)) {
+                if (request.submit(url)) {
+                    request.call(exchange, url);
                     break;
                 }
             }
