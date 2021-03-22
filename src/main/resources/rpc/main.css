@@ -3,3 +3,10 @@ body {
     background-color: rgb(37, 47, 61);
     font-family: Arial;
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
