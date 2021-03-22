@@ -1,7 +1,9 @@
 package org.wolkenproject.core.events;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Event;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.utils.Utils;
 
 public class MintRewardEvent extends Event {
@@ -28,5 +30,10 @@ public class MintRewardEvent extends Event {
     @Override
     public byte[] getEventBytes() {
         return Utils.concatenate("Mint".getBytes(), address, Utils.takeApartLong(amount));
+    }
+
+    @Override
+    public JSONObject toJson() {
+        return new JSONObject().put("event", this.getClass().getName()).put("address", Base58.encode(address)).put("amount", amount);
     }
 }
