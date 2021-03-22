@@ -45,8 +45,6 @@ public class RpcServer {
             headers.add("Content-Type", "text/html");
             sendResponse(200, readUTF(Context.getInstance().getResourceManager().get("/index.html")), exchange);
         }
-
-        String surl[]   = url.split("/");
     }
 
     public static void onContentMsg(HttpExchange exchange) throws IOException {
