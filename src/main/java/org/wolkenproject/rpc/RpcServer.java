@@ -48,7 +48,12 @@ public class RpcServer {
                 query = "";
             }
 
-            String url             = exchange.getRequestURI().toString().replace(query, "");
+            String url             = exchange.getRequestURI().toString();
+
+            if (!query.isEmpty()) {
+                url = url.replace(query, "");
+                url = url.substring(0, url.length() - 1);
+            }
 
             for (Request request : handlers) {
                 if (request.submit(url)) {
@@ -70,10 +75,12 @@ public class RpcServer {
     public static void apiRequest(Messenger msg) throws IOException {
         JSONObject request = msg.getFormattedQuery();
         JSONObject response= new JSONObject();
+        response.put("response", "success");
 
         if (request.getString("request").equals("getblock")) {
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("node")) {
+            response.put("response", "success");
         }
 
         msg.send("application/json", response.toString().getBytes());
