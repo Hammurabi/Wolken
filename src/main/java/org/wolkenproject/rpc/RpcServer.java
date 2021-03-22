@@ -31,7 +31,8 @@ public class RpcServer {
         server.setExecutor(null);
 
         paths = new UrlPath[] {
-                new UrlPath("content", new UrlPath[] {}),
+                new UrlPath("content", new UrlPath[] {
+                }),
                 new UrlPath("api", new UrlPath[] {}),
         };
         server.start();
