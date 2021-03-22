@@ -41,12 +41,18 @@ public class RpcServer {
         onGet("/content/:filename", response -> response.sendFile("/rpc/${filename}"));
 
         server.createContext("/", exchange -> {
-            String url = exchange.getRequestURI().toString();
             Set<Request> handlers =Context.getInstance().getRPCServer().getHandlers();
+            String query           = exchange.getRequestURI().getQuery();
+
+            if (query == null) {
+                query = "";
+            }
+
+            String url             = exchange.getRequestURI().toString().replace(query, "");
 
             for (Request request : handlers) {
                 if (request.submit(url)) {
-                    request.call(exchange, url);
+                    request.call(exchange, url, query);
                     break;
                 }
             }
@@ -63,7 +69,6 @@ public class RpcServer {
 
     protected void onGet(String requestURL, VoidCallableThrowsT<Messenger, IOException> function) {
         boolean mustMatch = !requestURL.contains(":");
-        requestURL = Messenger.requestURL(requestURL);
 
         handlers.add(new Request(requestURL, mustMatch, function));
     }
