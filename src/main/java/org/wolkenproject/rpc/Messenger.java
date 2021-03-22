@@ -97,6 +97,7 @@ public class Messenger {
         exchange.sendResponseHeaders(200, outputStream.size());
         exchange.getResponseBody().write(outputStream.toByteArray());
         exchange.getResponseBody().flush();
+        exchange.close();
     }
 
     public String getQuery() {
