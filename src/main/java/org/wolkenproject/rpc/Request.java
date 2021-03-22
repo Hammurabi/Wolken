@@ -18,6 +18,7 @@ public class Request {
 
     public boolean submit(HttpExchange exchange, String url) throws IOException {
         boolean isMatch = false;
+        
         if (mustMatch) {
             isMatch = pattern.equals(url);
         } else {
