@@ -107,8 +107,7 @@ public class Messenger {
     public JSONObject getFormattedQuery() {
         String requests[] = getQuery().split("&");
         JSONObject request = new JSONObject();
-
-        for (int i = 0; i < request.length(); i ++) {
+        for (int i = 0; i < requests.length; i ++) {
             String kv[] = requests[i].split("=");
             request.put(kv[0], kv[1]);
         }
