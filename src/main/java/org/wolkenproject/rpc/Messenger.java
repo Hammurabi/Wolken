@@ -1,5 +1,6 @@
 package org.wolkenproject.rpc;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.InputStream;
@@ -20,5 +21,7 @@ public class Messenger {
     }
 
     public void sendFile(String contentType, InputStream inputStream) {
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Content-Type", contentType);
     }
 }
