@@ -14,6 +14,7 @@ public class Messenger {
         this.exchange   = exchange;
 
         query           = exchange.getRequestURI().getQuery();
+
         if (query == null) {
             query = "";
         }
