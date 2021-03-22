@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import com.sun.net.httpserver.HttpHandler;
 import org.wolkenproject.core.mocha.*;
 import org.wolkenproject.core.mocha.internal.ByteArray;
 import org.wolkenproject.core.mocha.internal.MochaNumber;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -273,5 +275,9 @@ public class Context {
 
     public ResourceManager getResourceManager() {
         return resourceManager;
+    }
+
+    public RpcServer getRPCServer() {
+        return rpcServer;
     }
 }
