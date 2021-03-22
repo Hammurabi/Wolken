@@ -1,5 +1,6 @@
 package org.wolkenproject.network;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
@@ -412,5 +413,9 @@ public class Node implements Runnable {
 
     public boolean isConnected() {
         return socket.isOpen();
+    }
+
+    public JSONObject toJson() {
+        return false;
     }
 }
