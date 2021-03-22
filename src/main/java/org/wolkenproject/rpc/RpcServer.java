@@ -8,7 +8,6 @@ import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
-import org.wolkenproject.utils.FileService;
 import org.wolkenproject.utils.Logger;
 
 import java.io.BufferedReader;
@@ -27,11 +26,7 @@ public class RpcServer {
         Logger.alert("=============================================");
 
         server = HttpServer.create(new InetSocketAddress(port), 12);
-        server.createContext("/request/block", RpcServer::onBlockMsg);
-        server.createContext("/request/transaction", RpcServer::onTransactionMsg);
-        server.createContext("/api", RpcServer::onApiMsg);
-        server.createContext("/", RpcServer::onIndexMsg);
-        server.createContext("/content", RpcServer::onContentMsg);
+        server.createContext("/", RpcServer::listen);
         server.setExecutor(null);
         server.start();
     }
@@ -40,9 +35,11 @@ public class RpcServer {
         server.stop(0);
     }
 
-    public static void onIndexMsg(HttpExchange exchange) throws IOException {
+    public static void listen(HttpExchange exchange) throws IOException {
         Headers headers = exchange.getResponseHeaders();
         headers.add("Content-Type", "text/html");
+
+        String query = exchange.getRequestURI().getQuery();
     }
 
     public static void onContentMsg(HttpExchange exchange) throws IOException {
