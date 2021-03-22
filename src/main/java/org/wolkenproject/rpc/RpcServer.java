@@ -39,7 +39,8 @@ public class RpcServer {
         Headers headers = exchange.getResponseHeaders();
         headers.add("Content-Type", "text/html");
 
-        String query = exchange.getRequestURI().getQuery();
+        String query    = exchange.getRequestURI().getQuery();
+        String url      = exchange.getRequestURI().toString();
     }
 
     public static void onContentMsg(HttpExchange exchange) throws IOException {
