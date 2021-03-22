@@ -45,7 +45,6 @@ public class RpcServer {
             // return index
             headers.add("Content-Type", "text/html");
             sendResponse(200, readUTF(Context.getInstance().getResourceManager().get("/index.html")), exchange);
-        } else if (url.equals("/api") {
         } else {
             String surl[]   = url.split("/");
             if (surl[0].equals("content")) {
