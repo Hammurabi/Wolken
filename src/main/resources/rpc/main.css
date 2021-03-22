@@ -16,10 +16,12 @@ body {
     border-radius: 12px;
     width: 35%;
     height: 35%;
+    display: flex;
     align-items: center;
     font-size: 13px;
     color: aliceblue;
     justify-content: center;
+    position: relative;
 }
 
 .container .formContainer .form {
@@ -27,6 +29,7 @@ body {
     height: 90%;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 input[type=text], input[type=password] {
@@ -37,6 +40,7 @@ input[type=text], input[type=password] {
     border: 1px solid #ccc;
     border-radius: 3px;
     background-color: #304252;
+    position: relative;
 }
 
 .login {
@@ -46,5 +50,7 @@ input[type=text], input[type=password] {
     margin: 8px 0;
     border: none;
     cursor: pointer;
+    position: relative;
     width: 80%;
+    left: 10%;
 }
