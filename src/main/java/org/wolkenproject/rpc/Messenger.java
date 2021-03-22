@@ -13,7 +13,7 @@ public class Messenger {
     private String              query;
     private Map<String, String> regexMatches;
 
-    public Messenger(HttpExchange exchange, String name) {
+    public Messenger(HttpExchange exchange, String urlMatcher) {
         this.exchange   = exchange;
 
         query           = exchange.getRequestURI().getQuery();
@@ -23,6 +23,8 @@ public class Messenger {
         }
 
         url             = exchange.getRequestURI().toString().replace(query, "");
+        if (urlMatcher.contains(":")) {
+        }
         regexMatches    = new HashMap<>();
     }
 
