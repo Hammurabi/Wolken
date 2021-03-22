@@ -1,5 +1,6 @@
 package org.wolkenproject.utils;
 
+import org.json.JSONObject;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 
@@ -9,6 +10,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Queue;
 import java.util.Set;
 
@@ -470,5 +472,29 @@ public class Utils {
         }
 
         return hashes.poll();
+    }
+
+    public static JSONObject jsonDate(long ms) {
+        final String daysOfWeek[] = {
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+        };
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(ms);
+        JSONObject jsonDate = new JSONObject();
+        jsonDate.put("year", calendar.get(Calendar.YEAR));
+        jsonDate.put("month", calendar.get(Calendar.MONTH));
+        jsonDate.put("day", calendar.get(Calendar.DAY_OF_MONTH));
+        jsonDate.put("dow", daysOfWeek[calendar.get(Calendar.DAY_OF_WEEK)]);
+        jsonDate.put("hour", calendar.get(Calendar.HOUR_OF_DAY));
+        jsonDate.put("minute", calendar.get(Calendar.MINUTE));
+        jsonDate.put("second", calendar.get(Calendar.SECOND));
+        jsonDate.put("millisecond", ms);
+        return jsonDate;
     }
 }
