@@ -37,6 +37,7 @@ public class RpcServer {
 
         onGet("/", response -> response.sendFile("/rpc/index.html"));
         onGet("/home", response -> response.sendFile("/rpc/index.html"));
+        onGet("/dashboard", response -> response.sendFile("/rpc/dashboard.html"));
         onGet("/content/:filename", response -> response.sendFile("/rpc/${filename}"));
 
         server.createContext("/", exchange -> {
