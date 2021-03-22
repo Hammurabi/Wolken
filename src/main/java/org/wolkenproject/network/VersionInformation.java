@@ -1,5 +1,6 @@
 package org.wolkenproject.network;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -134,5 +135,11 @@ public class VersionInformation extends SerializableI {
                 ", blockHeight=" + blockHeight +
                 ", nonce=" + Arrays.toString(nonce) +
                 '}';
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        return json;
     }
 }
