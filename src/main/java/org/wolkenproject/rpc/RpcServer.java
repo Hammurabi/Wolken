@@ -36,6 +36,9 @@ public class RpcServer {
         server.start();
     }
 
+    protected void onGet(String name, Messenger messenger) {
+    }
+
     public void stop() {
         server.stop(0);
     }
