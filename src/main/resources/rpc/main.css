@@ -15,7 +15,6 @@ body {
     border: 1px solid rgb(81, 104, 136);
     border-radius: 12px;
     width: 35%;
-    height: 35%;
     display: flex;
     align-items: center;
     font-size: 13px;
@@ -25,8 +24,9 @@ body {
 }
 
 .container .formContainer .form {
+    margin-top: 12px;
+    margin-bottom: 12px;
     width: 90%;
-    height: 90%;
     align-items: center;
     justify-content: center;
     position: relative;
@@ -53,4 +53,8 @@ input[type=text], input[type=password] {
     position: relative;
     width: 80%;
     left: 10%;
+}
+
+.login:hover {
+    background-color: #69a7e0;
 }
