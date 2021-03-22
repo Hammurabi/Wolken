@@ -20,6 +20,5 @@ public class Messenger {
     }
 
     public void sendFile(String contentType, InputStream inputStream) {
-        ;
     }
 }
