@@ -26,6 +26,9 @@ public class Messenger {
         if (urlMatcher.contains(":")) {
             String surl[] = url.split("/");
             String regex[]= urlMatcher.split("/");
+
+            for (int i = 0; i < regex.length; i ++) {
+            }
         }
         regexMatches    = new HashMap<>();
     }
