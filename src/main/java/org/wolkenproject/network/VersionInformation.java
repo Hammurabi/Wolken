@@ -2,6 +2,7 @@ package org.wolkenproject.network;
 
 import org.json.JSONObject;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
@@ -139,7 +140,11 @@ public class VersionInformation extends SerializableI {
 
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
+        json.put("version", version);
+        json.put("services", services);
+        json.put("timestamp", Utils.jsonDate(timestamp));
+        json.put("blockHeight", blockHeight);
+        json.put("nonce", Base16.encode(nonce));
         return json;
     }
 }
