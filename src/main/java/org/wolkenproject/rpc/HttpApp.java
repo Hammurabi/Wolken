@@ -7,7 +7,7 @@ import org.wolkenproject.utils.Logger;
 import java.net.InetSocketAddress;
 
 public class HttpApp {
-    protected HttpApp() {
+    protected HttpApp(int port) {
         Logger.alert("=============================================");
         Logger.alert("Starting HTTP server");
         Logger.alert("=============================================");
