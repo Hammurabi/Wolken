@@ -17,16 +17,12 @@ public class Messenger {
     private String              query;
     private Map<String, String> regexMatches;
 
-    public Messenger(HttpExchange exchange, String urlMatcher) {
+    public Messenger(HttpExchange exchange, String url, String query, String urlMatcher) {
         this.exchange   = exchange;
+        this.url        = url;
+        this.query      = query;
 
-        query           = exchange.getRequestURI().getQuery();
-
-        if (query == null) {
-            query = "";
-        }
-
-        url             = exchange.getRequestURI().toString().replace(query, "");
+        regexMatches    = new HashMap<>();
 
         if (urlMatcher.contains(":")) {
             String surl[] = url.split("/");
@@ -38,8 +34,6 @@ public class Messenger {
                 }
             }
         }
-
-        regexMatches    = new HashMap<>();
     }
 
     public static String requestURL(String url) {
@@ -55,9 +49,9 @@ public class Messenger {
         Matcher matcher = pattern.matcher(file);
 
         while (matcher.find()) {
-            String query    = matcher.group(1);
+            String query    = matcher.group(0);
             String result   = get(query.substring(2, query.length() - 1));
-            if (query.isEmpty()) {
+            if (result.isEmpty()) {
                 throw new IOException();
             }
 
