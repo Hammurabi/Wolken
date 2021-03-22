@@ -32,7 +32,7 @@ body {
     position: relative;
 }
 
-input[type=text], input[type=password] {
+.login-input {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -41,6 +41,9 @@ input[type=text], input[type=password] {
     border-radius: 3px;
     background-color: #304252;
     position: relative;
+}
+
+.login-input:hover {
 }
 
 .login {
