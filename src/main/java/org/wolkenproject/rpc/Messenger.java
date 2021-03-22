@@ -43,7 +43,11 @@ public class Messenger {
         return url;
     }
 
-    public String get(String filename) {
-        return null;
+    public String get(String query) {
+        if (regexMatches.containsKey(query)) {
+            return regexMatches.get(query);
+        }
+
+        return "";
     }
 }
