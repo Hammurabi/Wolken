@@ -4,11 +4,14 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Messenger {
-    private HttpExchange    exchange;
-    private String          url;
-    private String          query;
+    private HttpExchange        exchange;
+    private String              url;
+    private String              query;
+    private Map<String, String> regexMatches;
 
     public Messenger(HttpExchange exchange) {
         this.exchange   = exchange;
@@ -20,6 +23,7 @@ public class Messenger {
         }
 
         url             = exchange.getRequestURI().toString().replace(query, "");
+        regexMatches    = new HashMap<>();
     }
 
     public void sendFile(InputStream inputStream) {
@@ -37,5 +41,9 @@ public class Messenger {
 
     public String getUrl() {
         return url;
+    }
+
+    public String get(String filename) {
+        return null;
     }
 }
