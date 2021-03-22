@@ -17,7 +17,7 @@ public class Messenger {
         if (query == null) {
             query = "";
         }
-        
+
         url             = exchange.getRequestURI().toString().replace(query, "");
     }
 
@@ -28,6 +28,10 @@ public class Messenger {
     public void sendFile(String contentType, InputStream inputStream) {
         Headers headers = exchange.getResponseHeaders();
         headers.add("Content-Type", contentType);
+    }
+
+    public String getQuery() {
+        return query;
     }
 
     public String getUrl() {
