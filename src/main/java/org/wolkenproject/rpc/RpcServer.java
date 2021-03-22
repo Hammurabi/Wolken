@@ -31,7 +31,7 @@ public class RpcServer {
         server.setExecutor(null);
 
         paths = new UrlPath[] {
-                new UrlPath("content", msg -> {}, new UrlPath[] {
+                new UrlPath("content", messenger -> messenger.sendFile("text/html", Context.getInstance().getResourceManager().get("/index.html")), new UrlPath[] {
                 }),
                 new UrlPath("api", new UrlPath[] {}),
         };
