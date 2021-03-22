@@ -67,10 +67,16 @@ public class RpcServer {
         return handlers;
     }
 
-    public static void apiRequest(Messenger response) {
-        JSONObject request = response.getFormattedQuery();
+    public static void apiRequest(Messenger msg) throws IOException {
+        JSONObject request = msg.getFormattedQuery();
+        JSONObject response= new JSONObject();
 
-        response.send("application/json", );
+        if (request.getString("request").equals("getblock")) {
+        } else if (request.getString("request").equals("gettx")) {
+        } else if (request.getString("request").equals("node")) {
+        }
+
+        msg.send("application/json", response.toString().getBytes());
     }
 
     protected void onGet(String requestURL, VoidCallableThrowsT<Messenger, IOException> function) {
