@@ -20,4 +20,8 @@ public class UrlPath {
     public UrlPath[] getPaths() {
         return paths;
     }
+
+    public VoidCallable<Messenger> getOnGET() {
+        return onGET;
+    }
 }
