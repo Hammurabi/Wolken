@@ -30,7 +30,7 @@ public class RpcServer {
         server = HttpServer.create(new InetSocketAddress(port), 12);
 
         onGet("/", response -> response.sendFile("text/html", Context.getInstance().getResourceManager().get("/index.html")));
-        onGet("content/index.html", response -> response.sendFile("text/html", Context.getInstance().getResourceManager().get("/index.html")));
+        onGet("content/:filename:.html", response -> response.sendFile("text/html", Context.getInstance().getResourceManager().get("/" + response.get("filename") + ".html")));
 
         server.setExecutor(null);
         server.start();
