@@ -28,12 +28,11 @@ public class RpcServer {
         Logger.alert("=============================================");
 
         server = HttpServer.create(new InetSocketAddress(port), 12);
-        server.createContext("/", RpcServer::listen);
-        server.setExecutor(null);
 
         onGet("/", response -> response.sendFile("text/html", Context.getInstance().getResourceManager().get("/index.html"));
         onGet("content/index.html", response -> response.sendFile("text/html", Context.getInstance().getResourceManager().get("/index.html"));
 
+        server.setExecutor(null);
         server.start();
     }
 
