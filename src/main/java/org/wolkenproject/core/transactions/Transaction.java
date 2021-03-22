@@ -428,6 +428,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
+        public JSONObject toJson(boolean txEvt, boolean evHash) {
+            return null;
+        }
+
+        @Override
         protected void setSignature(Signature signature) throws WolkenException {
             if (signature instanceof RecoverableSignature) {
                 this.signature = (RecoverableSignature) signature;
