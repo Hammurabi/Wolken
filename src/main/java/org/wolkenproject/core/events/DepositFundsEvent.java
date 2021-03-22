@@ -33,6 +33,6 @@ public class DepositFundsEvent extends Event {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        return new JSONObject();
     }
 }
