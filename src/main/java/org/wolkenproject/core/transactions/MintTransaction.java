@@ -1,9 +1,12 @@
 package org.wolkenproject.core.transactions;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.*;
 import org.wolkenproject.core.events.DepositFeesEvent;
 import org.wolkenproject.core.events.MintRewardEvent;
 import org.wolkenproject.crypto.Signature;
+import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.ChainMath;
@@ -99,6 +102,13 @@ public class MintTransaction extends Transaction {
         stateChange.createAccountIfDoesNotExist(recipient);
         stateChange.addEvent(new MintRewardEvent(recipient, value));
         stateChange.addEvent(new DepositFeesEvent(recipient, block.getFees()));
+    }
+
+    @Override
+    public JSONObject toJson(boolean txEvt, boolean evHash) {
+        JSONObject txHeader = new JSONObject().put("transaction", getClass().getName()).put("version", getVersion());
+        txHeader.put("content", new JSONObject().put("value", value).put("recipient", Base58.encode(recipient)));
+        return txHeader;
     }
 
     @Override
