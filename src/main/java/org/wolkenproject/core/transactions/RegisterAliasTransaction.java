@@ -5,6 +5,8 @@ import org.wolkenproject.core.*;
 import org.wolkenproject.core.events.RegisterAliasEvent;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
+import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.VarInt;
@@ -119,7 +121,9 @@ public class RegisterAliasTransaction extends Transaction {
 
     @Override
     public JSONObject toJson(boolean txEvt, boolean evHash) {
-        return null;
+        JSONObject txHeader = new JSONObject().put("transaction", getClass().getName()).put("version", getVersion());
+        txHeader.put("content", new JSONObject().put("nonce", nonce).put("fee", fee).put("alias", alias).put("v", signature.getV()).put("r", Base16.encode(signature.getR())).put("s", Base16.encode(signature.getS())));
+        return txHeader;
     }
 
     @Override
