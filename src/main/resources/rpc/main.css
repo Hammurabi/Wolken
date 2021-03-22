@@ -14,7 +14,7 @@ body {
 .container .formContainer {
     border: 1px solid rgb(81, 104, 136);
     border-radius: 12px;
-    width: 35%;
+    width: 360px;
     display: flex;
     align-items: center;
     font-size: 13px;
