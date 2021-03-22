@@ -47,7 +47,9 @@ public class Messenger {
             sendFile("application/json", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("html")) {
             sendFile("text/html", Context.getInstance().getResourceManager().get(file));
-        } else
+        } else if (file.endsWith("css")) {
+            sendFile("text/css", Context.getInstance().getResourceManager().get(file));
+        }
     }
 
     public void sendFile(String contentType, InputStream inputStream) {
