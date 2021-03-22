@@ -51,7 +51,7 @@ public class Messenger {
             sendFile("text/css", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("png")) {
             sendFile("image/png", Context.getInstance().getResourceManager().get(file));
-        } else if (file.endsWith("jpg")) {
+        } else if (file.endsWith("jpg") || file.endsWith("jpeg")) {
             sendFile("image/jpeg", Context.getInstance().getResourceManager().get(file));
         } else if (file.endsWith("js")) {
             sendFile("text/javascript", Context.getInstance().getResourceManager().get(file));
