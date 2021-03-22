@@ -2,6 +2,7 @@ package org.wolkenproject.rpc;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import org.wolkenproject.core.Context;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class Messenger {
 
     public void sendFile(String file) {
         if (file.endsWith("json")) {
-            sendFile("text/html", );
+            sendFile("text/html", readUTF(Context.getInstance().getResourceManager().get(file)));
         }
     }
 
