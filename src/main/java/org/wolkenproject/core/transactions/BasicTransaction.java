@@ -1,10 +1,12 @@
 package org.wolkenproject.core.transactions;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.*;
 import org.wolkenproject.core.events.DepositFundsEvent;
 import org.wolkenproject.core.events.WithdrawFundsEvent;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.VarInt;
@@ -123,6 +125,12 @@ public class BasicTransaction extends Transaction {
         stateChange.createAccountIfDoesNotExist(recipient);
         stateChange.addEvent(new DepositFundsEvent(recipient, value));
         stateChange.addEvent(new WithdrawFundsEvent(sender.getRaw(), value + fee));
+    }
+
+    @Override
+    public JSONObject toJson(boolean txEvt, boolean evHash) {
+        JSONObject txHeader = new JSONObject().put("transaction", getClass().getName()).put("version", getVersion());
+        return txHeader;
     }
 
     @Override
