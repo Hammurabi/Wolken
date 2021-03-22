@@ -490,7 +490,7 @@ public class Utils {
         jsonDate.put("year", calendar.get(Calendar.YEAR));
         jsonDate.put("month", calendar.get(Calendar.MONTH));
         jsonDate.put("day", calendar.get(Calendar.DAY_OF_MONTH));
-        jsonDate.put("dow", daysOfWeek[calendar.get(Calendar.DAY_OF_WEEK)]);
+        jsonDate.put("dow", daysOfWeek[calendar.get(Calendar.DAY_OF_WEEK) - 1]);
         jsonDate.put("hour", calendar.get(Calendar.HOUR_OF_DAY));
         jsonDate.put("minute", calendar.get(Calendar.MINUTE));
         jsonDate.put("second", calendar.get(Calendar.SECOND));
