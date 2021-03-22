@@ -16,7 +16,7 @@ public class Request {
         this.function = function;
     }
 
-    public boolean submit(HttpExchange exchange, String url) throws IOException {
+    public boolean submit(String url) {
         boolean isMatch = false;
 
         if (mustMatch) {
@@ -25,10 +25,10 @@ public class Request {
             isMatch = url.startsWith(pattern);
         }
 
-        if (isMatch) {
-            function.call(new Messenger(exchange, url));
-        }
-
         return isMatch;
+    }
+
+    public void call(HttpExchange exchange, String url) throws IOException {
+        function.call(new Messenger(exchange, url));
     }
 }
