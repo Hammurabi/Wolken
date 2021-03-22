@@ -62,7 +62,7 @@ public class RpcServer {
     }
 
     protected void onGet(String requestURL, VoidCallableThrowsT<Messenger, IOException> function) {
-        boolean mustMatch = requestURL.contains(":");
+        boolean mustMatch = !requestURL.contains(":");
         requestURL = Messenger.requestURL(requestURL);
 
         handlers.add(new Request(requestURL, mustMatch, function));
