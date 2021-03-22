@@ -25,4 +25,8 @@ public class Messenger {
         Headers headers = exchange.getResponseHeaders();
         headers.add("Content-Type", contentType);
     }
+
+    public String getUrl() {
+        return url;
+    }
 }
