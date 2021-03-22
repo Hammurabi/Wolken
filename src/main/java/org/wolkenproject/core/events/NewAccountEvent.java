@@ -3,6 +3,7 @@ package org.wolkenproject.core.events;
 import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Event;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.utils.Utils;
 
 public class NewAccountEvent extends Event {
@@ -30,7 +31,7 @@ public class NewAccountEvent extends Event {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        return new JSONObject().put("event", this.getClass().getName()).put("address", Base58.encode(address));
     }
 
     public byte[] getAddress() {
