@@ -1,5 +1,6 @@
 package org.wolkenproject.network;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -119,5 +120,12 @@ public class NetAddress extends SerializableI implements Serializable, Comparabl
     @Override
     public int compareTo(NetAddress o) {
         return spamAverage < o.getSpamAverage() ? 1 : -1;
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("ip", address.toString());
+        json.put("port", port);
+        return json;
     }
 }
