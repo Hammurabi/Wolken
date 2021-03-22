@@ -3,7 +3,10 @@ package org.wolkenproject.rpc;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +42,9 @@ public class Messenger {
     }
 
     public void sendFile(String file) {
-        sendFile("text/html", inputStream);
+        if (file.endsWith("json")) {
+            sendFile("text/html", );
+        }
     }
 
     public void sendFile(String contentType, InputStream inputStream) {
@@ -61,5 +66,17 @@ public class Messenger {
         }
 
         return "";
+    }
+
+    private static final String readUTF(InputStream inputStream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line = "";
+        StringBuilder builder = new StringBuilder();
+        while (( line = reader.readLine() ) != null ) {
+            builder.append(line).append("\n");
+        }
+
+        reader.close();
+        return builder.toString();
     }
 }
