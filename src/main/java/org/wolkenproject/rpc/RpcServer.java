@@ -29,6 +29,10 @@ public class RpcServer {
         server = HttpServer.create(new InetSocketAddress(port), 12);
         server.createContext("/", RpcServer::listen);
         server.setExecutor(null);
+
+        paths = new UrlPath[] {
+
+        };
         server.start();
     }
 
@@ -146,5 +150,9 @@ public class RpcServer {
         byte actualResponse[] = response.getBytes();
         exchange.sendResponseHeaders(responseCode, actualResponse.length);
         exchange.getResponseBody().write(actualResponse);
+    }
+
+    public UrlPath[] getPaths() {
+        return paths;
     }
 }
