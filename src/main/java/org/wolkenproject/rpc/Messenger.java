@@ -45,7 +45,7 @@ public class Messenger {
         regexMatches    = new HashMap<>();
     }
 
-    public void sendFile(String file) {
+    public void sendFile(String file) throws IOException {
         Pattern pattern = Pattern.compile("\\$\\{[A-z]+\\}");
         Matcher matcher = pattern.matcher(file);
         int index       = 0;
