@@ -48,7 +48,7 @@ public class RpcServer {
         String query    = exchange.getRequestURI().getQuery();
         String url      = exchange.getRequestURI().toString().replace(query, "");
 
-        HttpMessage message = new HttpMessage(exchange, url, query);
+        Messenger message = new Messenger(exchange, url, query);
 
         if (url.equals("/")) {
             // return index
