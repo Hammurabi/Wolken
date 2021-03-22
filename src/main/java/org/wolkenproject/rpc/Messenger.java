@@ -48,8 +48,6 @@ public class Messenger {
     public void sendFile(String file) throws IOException {
         Pattern pattern = Pattern.compile("\\$\\{[A-z]+\\}");
         Matcher matcher = pattern.matcher(file);
-        int index       = 0;
-
         while (matcher.find()) {
             String query    = matcher.group(1);
             String result   = get(query.substring(2, query.length() - 1));
