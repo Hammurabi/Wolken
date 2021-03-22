@@ -37,6 +37,7 @@ public class RpcServer {
         onGet("/home", response -> response.sendFile("/rpc/index.html"));
         onGet("/dashboard", response -> response.sendFile("/rpc/dashboard.html"));
         onGet("/login", response -> response.sendFile("/rpc/login.html"));
+        onGet("/api", RpcServer::apiRequest);
         onGet("/content/:filename", response -> response.sendFile("/rpc/${filename}"));
 
         server.createContext("/", exchange -> {
@@ -64,6 +65,9 @@ public class RpcServer {
 
     public Set<Request> getHandlers() {
         return handlers;
+    }
+
+    public static void apiRequest(Messenger messenger) {
     }
 
     protected void onGet(String requestURL, VoidCallableThrowsT<Messenger, IOException> function) {
