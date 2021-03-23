@@ -4,7 +4,7 @@ import requests
 import util
 
 # valid commands
-# auth          <ip> <port> <user>
+# node          <ip> <port>
 # getblock      <hash>
 # gettx         <hash>
 # getbalance    <address>
@@ -42,21 +42,20 @@ def start():
                 print("error: command '" + arguments[0] + "' is not a recognized command.")
 
 # define 'connect' command
-def auth_parse(command, arguments):
+def node_parse(command, arguments):
     if len(arguments) != 3:
         print("error: 'auth' requires two arguments.")
     else:
         if not util.is_valid_ip(arguments[1]):
-            print("error: 'auth' requires the first argument to be a valid IP address.")
+            print("error: 'node' requires the first argument to be a valid IP address.")
             pass
         if not arguments[2].isnumeric():
-            print("error: 'auth' requires the second argument to be a valid port.")
+            print("error: 'node' requires the second argument to be a valid port.")
             pass
         global ip
         global port
         ip      = arguments[1]
         port    = arguments[2]
-        user    = arguments[3]
 
         print("alert: node connection data set to ('"+arguments[1]+":"+arguments[2]+"')")
 # define 'exit' command
