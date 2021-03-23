@@ -3,3 +3,5 @@ class rpc_connection:
         self.ip      = 'localhost'
         self.port    = '12560'
         self.token   = ''
+    def sendRequest(request, arguments):
+        pass
