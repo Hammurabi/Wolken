@@ -8,4 +8,5 @@ import cmd_node
 
 # registers all commands to the command manager
 def register_all(cmdManager):
+    # this command sets the node ip and port
     cmdManager.register('setnode', cmd_node.parse)
