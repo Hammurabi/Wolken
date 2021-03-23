@@ -11,7 +11,7 @@ def parse(cmd, arguments, connection):
         name    = arguments[1]
         nonce   = arguments[2]
 
-        response = connection.send_request('setnoncewallet', {'name':name, 'nonce':nonce})
+        response = connection.send_request(cmd.name, {'name':name, 'nonce':nonce})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
