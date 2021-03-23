@@ -116,7 +116,9 @@ public class RpcServer {
     }
 
     public void stop() {
+        Logger.alert("stopping rpc server.");
         server.stop(0);
+        Logger.alert("rpc server stopped.");
     }
 
     private static void traversePath(String url) {
