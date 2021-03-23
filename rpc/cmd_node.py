@@ -13,10 +13,9 @@ def parse(command, arguments, connection):
         if not arguments[2].isnumeric():
             print("error: '%s' requires the second argument to be a valid port.", command.name)
             pass
-        global ip
-        global port
-        ip      = arguments[1]
-        port    = arguments[2]
+
+        connection.ip   = arguments[1]
+        connection.port = arguments[2]
 
         print("alert: node connection data set to ('"+arguments[1]+":"+arguments[2]+"')")
 
