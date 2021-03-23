@@ -2,6 +2,8 @@
 import requests
 # import socket to do IP address checks
 import util
+# import connection
+import rpc_connection
 
 # define a basic command class
 class Command:
