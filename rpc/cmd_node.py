@@ -11,7 +11,7 @@ def parse(command, arguments, connection):
             print("error: '%s' requires the first argument to be a valid IP address.", command.name)
             pass
         if not arguments[2].isnumeric():
-            print("error: 'node' requires the second argument to be a valid port.")
+            print("error: '%s' requires the second argument to be a valid port.", command.name)
             pass
         global ip
         global port
