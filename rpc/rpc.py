@@ -67,10 +67,6 @@ def getblock_parse(command, arguments):
         print("error: 'getblock' command missing arguments.")
         pass
 
-# define a basic command class
-class Command:
-    pass
-
 # define a basic command object constructor
 def new_command(name, parse):
     command = Command()
