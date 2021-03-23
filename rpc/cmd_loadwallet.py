@@ -11,7 +11,7 @@ def parse(cmd, arguments, connection):
         timeout     = arguments[1]
         password    = getpass('password>')
 
-        response = connection.send_request(cmd.name, {'timeout':timeout, 'password':password})
+        response = connection.send_request(cmd.name, {'name':name})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
