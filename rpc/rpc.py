@@ -12,7 +12,7 @@ import util
 # quit
 
 ip      = 'localhost'
-port    = '80'
+port    = '12560'
 token   = ''
 
 def start():
