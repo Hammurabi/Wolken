@@ -7,4 +7,6 @@ import commands
 
 # registers all commands to the command manager
 def register_all(cmdManager):
-    
+    register_node(cmdManager)
+    register_getblock(cmdManager)
+    register_gettx(cmdManager)
