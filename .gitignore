@@ -28,3 +28,4 @@ target/*
 tools/*
 .DS_Store
 gui/package.json
+*.pyc
