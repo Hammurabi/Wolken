@@ -3,7 +3,7 @@ import commands
 
 
 # define 'node' command
-def parse(command, arguments):
+def parse(command, arguments, connection):
     if len(arguments) != 3:
         print("error: 'auth' requires two arguments.")
     else:
