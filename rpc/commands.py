@@ -30,7 +30,7 @@ class CommandsManager:
             # maintenance variable to keep track of the state
             is_parsed = False
             # test against known commands
-            for command in commands_list:
+            for command in self.commands:
                 # if the command name matches the first argument
                 if command.name == arguments[0]:
                     # attempt to parse the command
