@@ -28,7 +28,7 @@ def start():
         text        = input(">")
         # this shouldn't happen
         if not text:
-            return lambda x : None
+            continue
         # split the command
         arguments   = text.split(" ")
         # parse the command
