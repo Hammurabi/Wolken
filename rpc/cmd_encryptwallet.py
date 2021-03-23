@@ -4,7 +4,7 @@ import commands
 from getpass import getpass
 
 
-# define 'createwallet' command
+# define 'encryptwallet' command
 def parse(cmd, arguments, connection):
     if len(arguments) != 2 and len(arguments) != 3:
         print("error: '"+cmd.name+"' requires atleast one argument.")
