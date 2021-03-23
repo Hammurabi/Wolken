@@ -8,4 +8,4 @@ import cmd_node
 
 # registers all commands to the command manager
 def register_all(cmdManager):
-    cmdManager.register(cmd_node)
+    cmdManager.register('node', cmd_node.parse)
