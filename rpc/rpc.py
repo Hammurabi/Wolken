@@ -46,7 +46,7 @@ def auth_parse(command, arguments):
     if len(arguments) != 3:
         print("error: 'auth' requires two arguments.")
     else:
-        if not is_valid_ip(arguments[1]):
+        if not util.is_valid_ip(arguments[1]):
             print("error: 'auth' requires the first argument to be a valid IP address.")
             pass
         if not arguments[2].isnumeric():
@@ -76,7 +76,7 @@ def getblock_parse(command, arguments):
         pass
 
     # check that the block-id is base16 encoded
-    if is_base16_encoded(arguments[1]):
+    if util.is_base16_encoded(arguments[1]):
         print("error: 'getblock' command requires second argument to be base16 encoded.")
         pass
 
