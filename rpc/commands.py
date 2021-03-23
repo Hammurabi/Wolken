@@ -5,4 +5,6 @@ import util
 
 class CommandsManager:
     def __init__(self):
-        commands = []
+        self.commands = []
+    def register(self, command):
+        self.commands.append(command)
