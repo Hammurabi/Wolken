@@ -9,3 +9,22 @@ class CommandsManager:
     def register(self, command):
         self.commands.append(command)
     def parse(self, arguments):
+        # check the length
+        if len(arguments) > 0:
+            # maintenance variable to keep track of the state
+            is_parsed = False
+            # test against known commands
+            for command in commands_list:
+                # if the command name matches the first argument
+                if command.name == arguments[0]:
+                    # attempt to parse the command
+                    command.parse(command, arguments)
+                    # inform the program that we have parsed or attempted to parse the command
+                    is_parsed = True
+            # send an error if the command was not parsed
+            if not is_parsed:
+                print("error: command '" + arguments[0] + "' is not a recognized command.")
+            # return is_parsed to inform the caller whether this operation succeeded or not
+            return is_parsed
+        else:
+            return False
