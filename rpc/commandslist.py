@@ -32,5 +32,5 @@ def register_all(cmdManager):
     # to copy the json dump around as the private key
     # will be encrypted.
     cmdManager.register('dumpwallet', cmd_dumpwallet.parse)
-    # this command changes the encryption password of a wallet (name, oldpswd, newpswd)
+    # this command changes the encryption password of a wallet (name)
     cmdManager.register('newpasswallet', cmd_newpasswallet.parse)
