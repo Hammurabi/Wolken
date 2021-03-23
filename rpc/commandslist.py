@@ -11,6 +11,7 @@ import cmd_createwallet
 import cmd_encryptwallet
 import cmd_dumpwallet
 import cmd_newpasswallet
+import cmd_setnoncewallet
 
 # registers all commands to the command manager
 def register_all(cmdManager):
@@ -34,3 +35,5 @@ def register_all(cmdManager):
     cmdManager.register('dumpwallet', cmd_dumpwallet.parse)
     # this command changes the encryption password of a wallet (name)
     cmdManager.register('newpasswallet', cmd_newpasswallet.parse)
+    # this command changes the saved nonce in the wallet (name, nonce)
+    cmdManager.register('setnoncewallet', cmd_setnoncewallet.parse)
