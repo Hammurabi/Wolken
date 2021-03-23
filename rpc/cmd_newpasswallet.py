@@ -3,7 +3,6 @@ import commands
 # password helper
 from getpass import getpass
 
-
 # define 'newpasswallet' command
 def parse(cmd, arguments, connection):
     if len(arguments) != 3:
