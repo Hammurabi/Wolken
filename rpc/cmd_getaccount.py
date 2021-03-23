@@ -10,7 +10,7 @@ def parse(cmd, arguments, connection):
     else:
         address  = arguments[1]
 
-        response = connection.send_request('setnoncewallet', {'name':name, 'nonce':nonce})
+        response = connection.send_request('setnoncewallet', {'address':address})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
