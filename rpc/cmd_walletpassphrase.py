@@ -5,13 +5,13 @@ from getpass import getpass
 
 # define 'walletpassphrase' command
 def parse(cmd, arguments, connection):
-    if len(arguments) != 1:
-        print("error: '"+cmd.name+"' does not take arguments.")
+    if len(arguments) != 2:
+        print("error: '"+cmd.name+"' requires one argument.")
     else:
-        old     = getpass('old password>')
-        new     = getpass('new password>')
+        timeout     = arguments[1]
+        password    = getpass('password>')
 
-        response = connection.send_request('walletpassphrase', {'name':name, 'old':old, 'new':new})
+        response = connection.send_request('walletpassphrase', {'timeout':timeout, 'password':password})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
