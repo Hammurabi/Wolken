@@ -10,7 +10,10 @@ def parse(cmd, arguments, connection):
     else:
         name    = arguments[1]
 
-        response = connection.send_request('newpasswallet', {'name':name})
+        old     = getpass('old password>')
+        new     = getpass('new password>')
+        
+        response = connection.send_request('newpasswallet', {'name':name, 'old':old, 'new':new})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
