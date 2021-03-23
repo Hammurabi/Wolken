@@ -14,6 +14,7 @@ import cmd_walletpassphrasechange
 import cmd_walletpassphrase
 import cmd_setnoncewallet
 import cmd_loadwallet
+import cmd_getaccount
 
 # registers all commands to the command manager
 def register_all(cmdManager):
@@ -35,11 +36,11 @@ def register_all(cmdManager):
     # to copy the json dump around as the private key
     # will be encrypted.
     cmdManager.register('dumpwallet', cmd_dumpwallet.parse)
-    # this command changes the encryption password of the loaded wallet
+    # this command changes the encryption password of a wallet (name)
     cmdManager.register('walletpassphrasechange', cmd_walletpassphrasechange.parse)
     # this command sets the encryption password of the loaded wallet (timeout)
     cmdManager.register('walletpassphrase', cmd_walletpassphrase.parse)
-    # this command changes the saved nonce in the wallet (name, nonce)
+    # this command changes the saved nonce in the wallet (nonce)
     cmdManager.register('setnoncewallet', cmd_setnoncewallet.parse)
     # this command loads a wallet from file to memory (name)
     cmdManager.register('loadwallet', cmd_loadwallet.parse)
