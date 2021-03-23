@@ -2,6 +2,8 @@
 import util
 # import commands
 import commands
+# import commands
+import commandslist
 # import connection
 import rpc_connection
 
