@@ -1,5 +1,7 @@
 # import socket to do IP address checks
 import util
+# import commands
+import commands
 
 # valid commands
 # node          <ip> <port>
