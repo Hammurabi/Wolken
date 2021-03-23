@@ -5,6 +5,7 @@ import util
 # import commands
 import commands
 import cmd_node
+import cmd_quit
 
 # registers all commands to the command manager
 def register_all(cmdManager):
@@ -13,4 +14,4 @@ def register_all(cmdManager):
     # this command exists the rpc client but does not affect the server
     cmdManager.register('quit', cmd_quit.parse)
     # this command exists the rpc client and sends a 'terminate' signal to the server
-    cmdManager.register('close', cmd_quit.parse)
+    cmdManager.register('close', cmd_close.parse)
