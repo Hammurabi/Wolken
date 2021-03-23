@@ -10,3 +10,5 @@ import cmd_node
 def register_all(cmdManager):
     # this command sets the node ip and port
     cmdManager.register('setnode', cmd_node.parse)
+    # this command exists the rpc client but does not affect the server
+    cmdManager.register('quit', cmd_quit.parse)
