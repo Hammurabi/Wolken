@@ -60,14 +60,6 @@ def getblock_parse(command, arguments):
         print("error: 'getblock' command missing arguments.")
         pass
     
-# define a basic command list
-commands_list = [   
-                    new_command('node', node_parse),
-                    new_command('exit', exit_parse),
-                    new_command('quit', quit_parse),
-                    new_command('getblock', getblock_parse)
-                    ]
-
 # define 'base16' characters
 base16   = ['0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
