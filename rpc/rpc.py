@@ -2,6 +2,8 @@
 import util
 # import commands
 import commands
+# import connection
+import rpc_connection
 
 # valid commands
 # node          <ip> <port>
