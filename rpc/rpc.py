@@ -12,6 +12,8 @@ import commands
 # quit
 
 def start():
+    # setup the initial connection
+    connection = rpc_connection.rpc_connection()
     # create a command manager
     cmdManager = commands.CommandsManager()
     # register all our commands
