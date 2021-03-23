@@ -8,4 +8,5 @@ class rpc_connection:
         self.port    = '12560'
         self.token   = ''
     def sendRequest(request, arguments):
+        url = self.ip + ":" + self.port + "/" + query
         pass
