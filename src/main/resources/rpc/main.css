@@ -18,6 +18,7 @@ body {
     background: #dbf0ff;
     border-radius: 36px;
     width: 420px;
+    height: 100%;
     display: flex;
     align-items: center;
     font-size: 13px;
