@@ -19,3 +19,4 @@ def node_parse(command, arguments):
         port    = arguments[2]
 
         print("alert: node connection data set to ('"+arguments[1]+":"+arguments[2]+"')")
+
