@@ -11,12 +11,18 @@ body {
     height: 100%;
 }
 
-.container .portfolio .balance {
+.fixed {
+}
+
+.toolbar {
+    position: fixed;
+    width: 100%;
+    height: 200px;
+    background: #509fe9;
 }
 
 .container .portfolio {
-    background: #dbf0ff;
-    border-radius: 36px;
+    background: #e9f6ff;
     width: 499px;
     height: 100%;
     display: flex;
@@ -28,6 +34,7 @@ body {
 }
 
 .container .portfolio .balance {
+    position: fixed;
     background-color: rgb(48, 95, 236);
     border-radius: 24px;
     width: 499px;
@@ -41,9 +48,13 @@ body {
     transform: translateY(-237%);
 }
 
+.container .portfolio .t-container {
+    position: fixed;
+    background-color: rgb(48, 95, 236);
+    color: aliceblue;
+}
+
 .container .portfolio .balance h4 {
-    transform: translateY(-150%);
-    position: relative;
 }
 
 .container .portfolio .balance h4 span {
