@@ -14,6 +14,7 @@ port    = '12560'
 token   = ''
 
 def start():
+    # create a command manager
     # enter an infinite loop
     while (True):
         # scan the command line for commands
