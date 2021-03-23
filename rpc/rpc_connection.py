@@ -10,12 +10,12 @@ class rpc_connection:
         self.port    = '12560'
         self.token   = ''
     def send_request(self, request, arguments):
-        url = self.ip + ":" + self.port + "/api?" + package_query(requests, arguments)
-        return to_json(requests.get(url, allow_redirects=True))
+        url = self.ip + ":" + self.port + "/api?" + self.package_query(request, arguments)
+        return self.to_json(requests.get(url, allow_redirects=True))
     def to_json(self, response):
         return json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
     def package_query(self, request, arguments):
         query = 'request=' + request
-        for argument in arguments:
-            query = query + "&" + argument[0] + "=" + argument[1]
+        for key in arguments:
+            query = query + "&" + key + "=" + arguments[key]
         return query
