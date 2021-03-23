@@ -12,3 +12,5 @@ def register_all(cmdManager):
     cmdManager.register('setnode', cmd_node.parse)
     # this command exists the rpc client but does not affect the server
     cmdManager.register('quit', cmd_quit.parse)
+    # this command exists the rpc client and sends a 'terminate' signal to the server
+    cmdManager.register('close', cmd_quit.parse)
