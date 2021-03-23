@@ -34,10 +34,10 @@ def register_all(cmdManager):
     # to copy the json dump around as the private key
     # will be encrypted.
     cmdManager.register('dumpwallet', cmd_dumpwallet.parse)
-    # this command changes the encryption password of a wallet (name)
+    # this command changes the encryption password of the loaded wallet
     cmdManager.register('newpasswallet', cmd_newpasswallet.parse)
     # this command changes the saved nonce in the wallet (name, nonce)
     cmdManager.register('setnoncewallet', cmd_setnoncewallet.parse)
-    # this command loads a wallet from file to memory 
+    # this command loads a wallet from file to memory (name)
     cmdManager.register('loadwallet', cmd_loadwallet.parse)
 
