@@ -20,12 +20,15 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RpcServer {
     private HttpServer          server;
     private Context             context;
     private UrlPath[]           paths;
     private Set<Request>        handlers;
+    private ExecutorService     executor;
 
     public RpcServer(Context context, int port) throws IOException {
         Logger.alert("=============================================");
@@ -67,7 +70,8 @@ public class RpcServer {
 
         });
 
-        server.setExecutor(null);
+        executor = Executors.newCachedThreadPool();
+        server.setExecutor(executor);
         server.start();
     }
 
@@ -118,6 +122,7 @@ public class RpcServer {
     public void stop() {
         Logger.alert("stopping rpc server.");
         server.stop(0);
+        executor.shutdownNow();
         Logger.alert("rpc server stopped.");
     }
 
