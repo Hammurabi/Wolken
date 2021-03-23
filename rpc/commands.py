@@ -3,6 +3,13 @@ import requests
 # import socket to do IP address checks
 import util
 
+# define a basic command class
+class Command:
+    pass
+
+# define the commandsmanager class
+# this class will keep track of
+# commands and argument parsing
 class CommandsManager:
     def __init__(self):
         self.commands = []
