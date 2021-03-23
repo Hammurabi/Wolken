@@ -7,6 +7,13 @@ import util
 class Command:
     pass
 
+# define a basic command object constructor
+def new_command(name, parse):
+    command = Command()
+    command.name    = name
+    command.parse   = parse
+    return command
+
 # define the commandsmanager class
 # this class will keep track of
 # commands and argument parsing
