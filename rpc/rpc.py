@@ -23,22 +23,6 @@ def start():
             return lambda x : None
         # parse the command
         arguments   = text.split(" ")
-        # check the length
-        if len(arguments) > 0:
-            # maintenance variable to keep track of the state
-            is_parsed = False
-            # test against known commands
-            for command in commands_list:
-                # if the command name matches the first argument
-                if command.name == arguments[0]:
-                    # attempt to parse the command
-                    command.parse(command, arguments)
-                    # inform the program that we have parsed or attempted to parse the command
-                    is_parsed = True
-            # send an error if the command was not parsed
-            if not is_parsed:
-                print("error: command '" + arguments[0] + "' is not a recognized command.")
-
 # define 'connect' command
 def node_parse(command, arguments):
     if len(arguments) != 3:
