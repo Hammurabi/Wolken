@@ -10,7 +10,7 @@ class rpc_connection:
         self.port    = '12560'
         self.token   = ''
     def sendRequest(request, arguments):
-        url = self.ip + ":" + self.port + "/" + query
+        url = self.ip + ":" + self.port + "/" + packageQuery(requests, arguments)
         return toJson(requests.get(url, allow_redirects=True))
     def toJson(response):
         return json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
