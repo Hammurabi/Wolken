@@ -30,6 +30,7 @@ def start():
         # split the command
         arguments   = text.split(" ")
         # parse the command
+        cmdManager.parse(arguments, connection)
 # define 'exit' command
 def exit_parse(command, arguments):
     print("alert: terminating process")
