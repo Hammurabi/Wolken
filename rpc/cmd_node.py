@@ -3,15 +3,15 @@ import commands
 
 
 # define 'node' command
-def parse(command, arguments, connection):
+def parse(cmd, arguments, connection):
     if len(arguments) != 3:
-        print("error: '%s' requires two arguments.", command.name)
+        print("error: '"+cmd.name+"' requires two arguments.")
     else:
         if not util.is_valid_ip(arguments[1]):
-            print("error: '%s' requires the first argument to be a valid IP address.", command.name)
+            print("error: '"+cmd.name+"' requires the first argument to be a valid IP address.")
             pass
         if not arguments[2].isnumeric():
-            print("error: '%s' requires the second argument to be a valid port.", command.name)
+            print("error: '"+cmd.name+"' requires the second argument to be a valid port.")
             pass
 
         connection.ip   = arguments[1]
