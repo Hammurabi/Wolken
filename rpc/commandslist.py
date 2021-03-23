@@ -9,6 +9,7 @@ import cmd_quit
 import cmd_close
 import cmd_createwallet
 import cmd_encryptwallet
+import cmd_dumpwallet
 
 # registers all commands to the command manager
 def register_all(cmdManager):
@@ -29,4 +30,4 @@ def register_all(cmdManager):
     # Note: if the wallet is encrypted, then it's safe
     # to copy the json dump around as the private key
     # will be encrypted.
-    cmdManager.register('dumpwallet', cmd_encryptwallet.parse)
+    cmdManager.register('dumpwallet', cmd_dumpwallet.parse)
