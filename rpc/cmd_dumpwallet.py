@@ -11,7 +11,7 @@ def parse(cmd, arguments, connection):
     else:
         name    = arguments[1]
 
-        response = connection.send_request('dumpwallet', {'name':name})
+        response = connection.send_request(cmd.name, {'name':name})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
