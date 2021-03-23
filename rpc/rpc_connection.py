@@ -14,6 +14,5 @@ class rpc_connection:
         return toJson(requests.get(url, allow_redirects=True))
     def toJson(response):
         return json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
-        pass
     def packageQuery(request, arguments):
         pass
