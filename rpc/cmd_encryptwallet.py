@@ -6,18 +6,11 @@ from getpass import getpass
 
 # define 'encryptwallet' command
 def parse(cmd, arguments, connection):
-    if len(arguments) != 2 and len(arguments) != 3:
-        print("error: '"+cmd.name+"' requires atleast one argument.")
+    if len(arguments) != 2:
+        print("error: '"+cmd.name+"' requires one argument.")
     else:
-        name    = arguments[1]
-
-        encrypt = False
-        if len(arguments) == 3:
-            encrypt = arguments[2].lower() == 'true'
-
-        password = ''        
-        if encrypt:
-            password = getpass('password>')
+        name     = arguments[1]
+        password = getpass('password>')
         
         response = connection.send_request('createwallet', {'name', name, 'encrypt', encrypt, 'password':password})
         print("alert: server responded with '"+response.response+"'.")
