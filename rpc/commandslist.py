@@ -11,6 +11,7 @@ import cmd_createwallet
 import cmd_encryptwallet
 import cmd_dumpwallet
 import cmd_newpasswallet
+import cmd_setnoncewallet
 import cmd_loadwallet
 
 # registers all commands to the command manager
