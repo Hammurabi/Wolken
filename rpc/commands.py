@@ -8,3 +8,4 @@ class CommandsManager:
         self.commands = []
     def register(self, command):
         self.commands.append(command)
+    def parse(self, arguments):
