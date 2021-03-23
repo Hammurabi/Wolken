@@ -10,3 +10,5 @@ class rpc_connection:
     def sendRequest(request, arguments):
         url = self.ip + ":" + self.port + "/" + query
         return toJson(requests.get(url, allow_redirects=True))
+    def toJson(response):
+        pass
