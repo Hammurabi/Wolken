@@ -17,6 +17,7 @@ import cmd_loadwallet
 import cmd_getaccount
 import cmd_walletfromdump
 import cmd_signtransaction
+import cmd_broadcasttransaction
 
 # registers all commands to the command manager
 def register_all(cmdManager):
@@ -53,5 +54,5 @@ def register_all(cmdManager):
     # this command signs a transaction using the loaded wallet (transaction)
     cmdManager.register('signtransaction', cmd_signtransaction.parse)
     # this command broadcasts a transaction to the network (transaction)
-    cmdManager.register('broadcasttransaction', cmd_signtransaction.parse)
+    cmdManager.register('broadcasttransaction', cmd_broadcasttransaction.parse)
 
