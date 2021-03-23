@@ -25,9 +25,6 @@ class CommandsManager:
     def register(self, name, parser):
         self.commands.append(new_command(name, parser))
     def parse(self, arguments, connection):
-        # return false if arguments are None
-        if arguments == None:
-            return False
         # check the length
         if len(arguments) > 0:
             # maintenance variable to keep track of the state
