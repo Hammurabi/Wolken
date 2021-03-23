@@ -11,7 +11,7 @@ def parse(cmd, arguments, connection):
     else:
         password = getpass('password>')
         response = connection.send_request('close', {'password':password})
-        print("alert: server responded with '"+response.response"'.")
+        print("alert: server responded with '"+response.response+"'.")
         print("alert: closing down client.")
         quit(0)
 
