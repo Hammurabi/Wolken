@@ -5,7 +5,7 @@ import commands
 # define 'node' command
 def parse(command, arguments, connection):
     if len(arguments) != 3:
-        print("error: 'auth' requires two arguments.")
+        print("error: '%s' requires two arguments.", command.name)
     else:
         if not util.is_valid_ip(arguments[1]):
             print("error: 'node' requires the first argument to be a valid IP address.")
