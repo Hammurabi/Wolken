@@ -34,7 +34,7 @@ class CommandsManager:
                 # if the command name matches the first argument
                 if command.name == arguments[0]:
                     # attempt to parse the command
-                    command.parse(command, arguments)
+                    command.parse(command, arguments, connection)
                     # inform the program that we have parsed or attempted to parse the command
                     is_parsed = True
             # send an error if the command was not parsed
