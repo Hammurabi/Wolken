@@ -11,7 +11,7 @@ class Command:
 
 # define a basic command object constructor
 def new_command(name, parse):
-    command = Command()
+    command         = Command()
     command.name    = name
     command.parse   = parse
     return command
