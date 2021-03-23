@@ -52,4 +52,6 @@ def register_all(cmdManager):
     cmdManager.register('walletfromdump', cmd_walletfromdump.parse)
     # this command signs a transaction using the loaded wallet (transaction)
     cmdManager.register('signtransaction', cmd_signtransaction.parse)
+    # this command broadcasts a transaction to the network (transaction)
+    cmdManager.register('broadcasttransaction', cmd_signtransaction.parse)
 
