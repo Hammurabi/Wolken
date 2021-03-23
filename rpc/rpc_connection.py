@@ -1,5 +1,7 @@
 # import requests to make our lives easier
 import requests
+import json
+from types import SimpleNamespace
 
 # define a 'connection' class to hold all the connection information
 class rpc_connection:
@@ -11,4 +13,5 @@ class rpc_connection:
         url = self.ip + ":" + self.port + "/" + query
         return toJson(requests.get(url, allow_redirects=True))
     def toJson(response):
+        
         pass
