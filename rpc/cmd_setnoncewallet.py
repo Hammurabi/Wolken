@@ -9,6 +9,7 @@ def parse(cmd, arguments, connection):
         print("error: '"+cmd.name+"' requires two arguments.")
     else:
         name    = arguments[1]
+        nonce   = arguments[2]
 
         response = connection.send_request('setnoncewallet', {'name':name, 'old':old, 'new':new})
         print("alert: server responded with '"+response.response+"'.")
