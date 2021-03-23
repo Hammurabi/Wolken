@@ -12,7 +12,11 @@ def parse(cmd, arguments, connection):
         encrypt = False
         if len(arguments) == 3:
             encrypt = arguments[2].lower() == 'true'
-        password = getpass('password>')
+
+        password = ''        
+        if encrypt:
+            password = getpass('password>')
+        
         response = connection.send_request('close', {'password':password})
         print("alert: server responded with '"+response.response+"'.")
         print("alert: closing down client.")
