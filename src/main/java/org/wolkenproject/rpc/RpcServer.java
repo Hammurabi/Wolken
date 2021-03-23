@@ -20,12 +20,15 @@ import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RpcServer {
     private HttpServer          server;
     private Context             context;
     private UrlPath[]           paths;
     private Set<Request>        handlers;
+    private ExecutorService     executor;
 
     public RpcServer(Context context, int port) throws IOException {
         Logger.alert("=============================================");
@@ -67,7 +70,8 @@ public class RpcServer {
 
         });
 
-        server.setExecutor(null);
+        executor = Executors.newCachedThreadPool();
+        server.setExecutor(executor);
         server.start();
     }
 
@@ -79,7 +83,14 @@ public class RpcServer {
         JSONObject request = msg.getFormattedQuery();
         JSONObject response= new JSONObject();
 
-        if (request.getString("request").equals("getblock")) {
+        if (request.getString("request").equals("close")) {
+            String password = request.getString("password");
+            response.put("response", "success");
+            msg.send("application/json", response.toString().getBytes());
+            Context.getInstance().shutDown();
+            return;
+        }
+        else if (request.getString("request").equals("getblock")) {
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
@@ -109,7 +120,10 @@ public class RpcServer {
     }
 
     public void stop() {
+        Logger.alert("stopping rpc server.");
         server.stop(0);
+        executor.shutdownNow();
+        Logger.alert("rpc server stopped.");
     }
 
     private static void traversePath(String url) {

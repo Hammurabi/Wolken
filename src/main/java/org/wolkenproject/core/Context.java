@@ -223,6 +223,8 @@ public class Context {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        threadPool.shutdownNow();
     }
 
     public Database getDatabase() {

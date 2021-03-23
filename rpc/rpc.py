@@ -2,6 +2,10 @@
 import util
 # import commands
 import commands
+# import commands
+import commandslist
+# import connection
+import rpc_connection
 
 # valid commands
 # node          <ip> <port>
@@ -11,11 +15,9 @@ import commands
 # exit
 # quit
 
-ip      = 'localhost'
-port    = '12560'
-token   = ''
-
 def start():
+    # setup the initial connection
+    connection = rpc_connection.rpc_connection()
     # create a command manager
     cmdManager = commands.CommandsManager()
     # register all our commands
@@ -26,26 +28,12 @@ def start():
         text        = input(">")
         # this shouldn't happen
         if not text:
-            return lambda x : None
-        # parse the command
+            continue
+        # split the command
         arguments   = text.split(" ")
-# define 'connect' command
-def node_parse(command, arguments):
-    if len(arguments) != 3:
-        print("error: 'auth' requires two arguments.")
-    else:
-        if not util.is_valid_ip(arguments[1]):
-            print("error: 'node' requires the first argument to be a valid IP address.")
-            pass
-        if not arguments[2].isnumeric():
-            print("error: 'node' requires the second argument to be a valid port.")
-            pass
-        global ip
-        global port
-        ip      = arguments[1]
-        port    = arguments[2]
+        # parse the command
+        cmdManager.parse(arguments, connection)
 
-        print("alert: node connection data set to ('"+arguments[1]+":"+arguments[2]+"')")
 # define 'exit' command
 def exit_parse(command, arguments):
     print("alert: terminating process")
@@ -72,23 +60,7 @@ def getblock_parse(command, arguments):
     if len(arguments) > 2 and len(arguments) < 7:
         print("error: 'getblock' command missing arguments.")
         pass
-
-# define a basic command object constructor
-def new_command(name, parse):
-    command = Command()
-    command.name    = name
-    command.parse   = parse
-    return command
     
-
-# define a basic command list
-commands_list = [   
-                    new_command('node', node_parse),
-                    new_command('exit', exit_parse),
-                    new_command('quit', quit_parse),
-                    new_command('getblock', getblock_parse)
-                    ]
-
 # define 'base16' characters
 base16   = ['0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
