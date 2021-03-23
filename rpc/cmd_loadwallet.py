@@ -8,8 +8,7 @@ def parse(cmd, arguments, connection):
     if len(arguments) != 2:
         print("error: '"+cmd.name+"' requires one argument.")
     else:
-        timeout     = arguments[1]
-        password    = getpass('password>')
+        name     = arguments[1]
 
         response = connection.send_request(cmd.name, {'name':name})
         print("alert: server responded with '"+response.response+"'.")
