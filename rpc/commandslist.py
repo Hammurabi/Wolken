@@ -10,7 +10,7 @@ import cmd_close
 import cmd_createwallet
 import cmd_encryptwallet
 import cmd_dumpwallet
-import cmd_newpasswallet
+import cmd_walletpassphrasechange
 import cmd_setnoncewallet
 import cmd_loadwallet
 
@@ -35,7 +35,7 @@ def register_all(cmdManager):
     # will be encrypted.
     cmdManager.register('dumpwallet', cmd_dumpwallet.parse)
     # this command changes the encryption password of the loaded wallet
-    cmdManager.register('newpasswallet', cmd_newpasswallet.parse)
+    cmdManager.register('walletpassphrasechange', cmd_walletpassphrasechange.parse)
     # this command changes the saved nonce in the wallet (name, nonce)
     cmdManager.register('setnoncewallet', cmd_setnoncewallet.parse)
     # this command loads a wallet from file to memory (name)
