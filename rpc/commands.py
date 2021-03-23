@@ -22,7 +22,7 @@ class CommandsManager:
         self.commands = []
     def register(self, command):
         self.commands.append(command)
-    def parse(self, arguments):
+    def parse(self, arguments, connection):
         # check the length
         if len(arguments) > 0:
             # maintenance variable to keep track of the state
