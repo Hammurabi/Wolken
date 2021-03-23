@@ -9,6 +9,7 @@ class rpc_connection:
         self.ip      = 'localhost'
         self.port    = '12560'
         self.token   = ''
+        self.scheme  = 'http'
     def send_request(self, request, arguments):
         url = self.ip + ":" + self.port + "/api?" + self.package_query(request, arguments)
         return self.to_json(requests.get(url, allow_redirects=True))
