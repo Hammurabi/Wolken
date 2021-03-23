@@ -20,5 +20,7 @@ def register_all(cmdManager):
 
     # wallet commands
 
-    # this command generates a new wallet
+    # this command generates a new wallet (name, (optional)encrypt)
     cmdManager.register('createwallet', cmd_createwallet.parse)
+    # this command encrypts wallet (name)
+    cmdManager.register('encryptwallet', cmd_createwallet.parse)
