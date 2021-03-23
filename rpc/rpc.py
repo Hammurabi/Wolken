@@ -17,6 +17,7 @@ token   = ''
 
 def start():
     # create a command manager
+    cmdManager = commands.CommandsManager()
     # enter an infinite loop
     while (True):
         # scan the command line for commands
