@@ -6,8 +6,8 @@ from getpass import getpass
 
 # define 'createwallet' command
 def parse(cmd, arguments, connection):
-    if len(arguments) != 1:
-        print("error: '"+cmd.name+"' requires only one argument.")
+    if len(arguments) != 2:
+        print("error: '"+cmd.name+"' requires two argument.")
     else:
         password = getpass('password>')
         response = connection.send_request('close', {'password':password})
