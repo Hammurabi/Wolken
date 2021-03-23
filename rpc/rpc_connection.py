@@ -16,5 +16,6 @@ class rpc_connection:
         return json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
     def packageQuery(request, arguments):
         query = 'request=' + request
-
+        for argument in arguments:
+            query = query + "&" + argument[0] + "=" + argument[1]
         return query
