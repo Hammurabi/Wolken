@@ -1,7 +1,7 @@
 # import requests to make our lives easier
 import requests
 # import socket to do IP address checks
-import socket
+import util
 
 # valid commands
 # auth          <ip> <port> <user>
@@ -14,27 +14,6 @@ import socket
 ip      = 'localhost'
 port    = '80'
 token   = ''
-
-def is_base16_encoded(text):
-    for c in text.lower():
-        for x in base16:
-            if c == x:
-                return True
-    return False
-
-def is_base58_encoded(text):
-    for c in text.lower():
-        for x in base58:
-            if c == x:
-                return True
-    return False
-
-def is_valid_ip(ip):
-    try:
-        socket.inet_aton(ip)
-        return True
-    except socket.error:
-        return False
 
 def start():
     # enter an infinite loop
