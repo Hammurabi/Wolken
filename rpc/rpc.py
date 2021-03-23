@@ -27,8 +27,9 @@ def start():
         # this shouldn't happen
         if not text:
             return lambda x : None
-        # parse the command
+        # split the command
         arguments   = text.split(" ")
+        # parse the command
 # define 'exit' command
 def exit_parse(command, arguments):
     print("alert: terminating process")
