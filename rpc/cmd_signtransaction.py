@@ -17,5 +17,6 @@ def parse(cmd, arguments, connection):
         else:
             print("---------------------------------")
             print("transaction signed successfully")
+            print(response.transaction)
             print("---------------------------------")
 
