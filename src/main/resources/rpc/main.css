@@ -17,7 +17,7 @@ body {
 .container .portfolio {
     background: #dbf0ff;
     border-radius: 36px;
-    width: 420px;
+    width: 499px;
     height: 100%;
     display: flex;
     align-items: center;
@@ -30,15 +30,15 @@ body {
 .container .portfolio .balance {
     background-color: rgb(48, 95, 236);
     border-radius: 24px;
-    width: 420px;
-    height: 100px;
+    width: 499px;
+    height: 200px;
     display: flex;
     align-items: center;
     font-size: 13px;
     color: aliceblue;
     position: relative;
 
-    transform: translateY(-50%);
+    transform: translateY(-237%);
 }
 
 .container .portfolio .balance h4 {
