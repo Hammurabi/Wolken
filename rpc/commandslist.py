@@ -8,6 +8,7 @@ import cmd_node
 import cmd_quit
 import cmd_close
 import cmd_createwallet
+import cmd_encryptwallet
 
 # registers all commands to the command manager
 def register_all(cmdManager):
