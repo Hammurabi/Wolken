@@ -80,7 +80,11 @@ public class RpcServer {
         JSONObject response= new JSONObject();
 
         if (request.getString("request").equals("close")) {
-
+            String password = request.getString("password");
+            response.put("response", "success");
+            msg.send("application/json", response.toString().getBytes());
+            Context.getInstance().shutDown();
+            return;
         }
         else if (request.getString("request").equals("getblock")) {
         } else if (request.getString("request").equals("gettx")) {
