@@ -11,6 +11,44 @@ body {
     height: 100%;
 }
 
+.container .portfolio .balance {
+}
+
+.container .portfolio {
+    background: #dbf0ff;
+    border-radius: 36px;
+    width: 420px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: aliceblue;
+    justify-content: center;
+    position: relative;
+}
+
+.container .portfolio .balance {
+    background-color: rgb(48, 95, 236);
+    border-radius: 24px;
+    width: 420px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: aliceblue;
+    position: relative;
+
+    transform: translateY(-50%);
+}
+
+.container .portfolio .balance h4 {
+    transform: translateY(-150%);
+    position: relative;
+}
+
+.container .portfolio .balance h4 span {
+    padding-left: 20px;
+}
+
 .container .formContainer {
     border: 1px solid rgb(81, 104, 136);
     border-radius: 12px;
