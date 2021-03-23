@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import static org.wolkenproject.utils.HashUtil.sha256d;
 import static org.wolkenproject.utils.Utils.concatenate;
 
 public class BlockHeader extends SerializableI {
+    protected static int Size = 78;
     private int version;
     private int timestamp;
     private byte previousHash[];
@@ -35,6 +37,18 @@ public class BlockHeader extends SerializableI {
 
     public void setNonce(int nonce) {
         this.nonce = nonce;
+    }
+
+    protected void setMerkleRoot(byte[] merkleRoot) {
+        this.merkleRoot = merkleRoot;
+    }
+
+    public void setParent(byte[] hash) {
+        this.previousHash = hash;
+    }
+
+    public void setBits(int bits) {
+        this.bits = bits;
     }
 
     public int getVersion() {
@@ -116,5 +130,13 @@ public class BlockHeader extends SerializableI {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(BlockHeader.class);
+    }
+
+    public boolean verifyProofOfWork() {
+        try {
+            return ChainMath.validSolution(getHashCode(), getBits());
+        } catch (WolkenException e) {
+            return false;
+        }
     }
 }

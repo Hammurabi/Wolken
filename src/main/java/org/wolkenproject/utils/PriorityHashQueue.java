@@ -5,7 +5,7 @@ import org.wolkenproject.serialization.SerializableI;
 import java.io.IOException;
 import java.util.*;
 
-public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implements Queue<T> {
+public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implements HashQueue<T> {
     private Map<byte[], Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
     private Class<T>                tClass;
@@ -142,6 +142,7 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return queue.peek().element;
     }
 
+    @Override
     public T getByHash(byte[] txid) {
         if (entryMap.containsKey(txid)) {
             return entryMap.get(txid).element;
@@ -150,10 +151,12 @@ public class PriorityHashQueue<T extends SerializableI & Comparable<T>> implemen
         return null;
     }
 
+    @Override
     public boolean containsKey(byte[] hash) {
         return entryMap.containsKey(hash);
     }
 
+    @Override
     public void removeTails(int newLength) {
         Queue<Entry<T>> newQueue = new PriorityQueue<>(comparator);
 

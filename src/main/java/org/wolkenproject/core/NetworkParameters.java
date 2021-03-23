@@ -4,12 +4,13 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.VersionInformation;
 import org.wolkenproject.utils.ChainMath;
+import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
 
 public class NetworkParameters {
     private boolean isTestNet;
-    private byte    defaultBits[];
+    private int     defaultBits;
 
     private BigInteger maximumTarget;
 
@@ -17,10 +18,10 @@ public class NetworkParameters {
         this.isTestNet = testNet;
 
         if (testNet) {
-            defaultBits = Base16.decode("1e00ffff");
+            defaultBits = Utils.makeInt(Base16.decode("1e00ffff"));
         }
         else {
-            defaultBits = Base16.decode("1d00ffff");
+            defaultBits = Utils.makeInt(Base16.decode("1d00ffff"));
         }
 
         this.maximumTarget      = ChainMath.targetIntegerFromBits(defaultBits);
@@ -46,7 +47,7 @@ public class NetworkParameters {
         return 12;
     }
 
-    public byte[] getDefaultBits() {
+    public int getDefaultBits() {
         return defaultBits;
     }
 
@@ -87,12 +88,16 @@ public class NetworkParameters {
      * Term: 37 halvings or roughly 148 years.
      *
      */
-    public long getMaxResources() {
+    public long getMaxCoin() {
         return 21_000_000__00_000_000_000L;
     }
 
     public long getOneCoin() {
         return 1___________00_000_000_000L;
+    }
+
+    public long getAliasRegistrationCost() {
+        return 5_000L;
     }
 
     public byte getGenericMainnetAddressPrefix() {
@@ -175,7 +180,7 @@ public class NetworkParameters {
         return VersionInformation.Flags.AllServices;
     }
 
-    public Address[] getFoundingAddresses() {
-        return new Address[] {};
+    public Address getFoundingAddresses() {
+        return Address.fromRaw(new byte[20]);
     }
 }

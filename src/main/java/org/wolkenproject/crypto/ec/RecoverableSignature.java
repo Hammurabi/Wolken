@@ -58,9 +58,9 @@ public class RecoverableSignature extends Signature {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
-        stream.read(v);
-        stream.read(r);
-        stream.read(s);
+        checkFullyRead(stream.read(v), 1);
+        checkFullyRead(stream.read(r), 32);
+        checkFullyRead(stream.read(s), 32);
     }
 
     @Override

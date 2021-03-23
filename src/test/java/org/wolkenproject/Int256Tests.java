@@ -64,7 +64,7 @@ public class Int256Tests {
             }
         }
         {
-            BigInteger a        = BigInteger.TWO.pow(32);
+            BigInteger a        = new BigInteger("2").pow(32);
             for (int i = 0; i < 32_000; i ++) {
                 BigInteger b    = a.multiply(new BigInteger(Integer.toString(i)));
 

@@ -4,15 +4,14 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.*;
 
 public abstract class SerializableI {
-    public void serialize(OutputStream stream) throws IOException {
-        Utils.writeInt(getSerialNumber(), stream);
-        byte content[] = asByteArray();
-        Utils.writeInt(content.length, stream);
-        stream.write(content);
+    public void serialize(OutputStream stream) throws IOException, WolkenException {
+        VarInt.writeCompactUInt32(getSerialNumber(), false, stream);
+        write(stream);
     }
 
     public abstract void write(OutputStream stream) throws IOException, WolkenException;
@@ -39,7 +38,7 @@ public abstract class SerializableI {
             outputStream.close();
 
             return outputStream.toByteArray();
-        } catch (IOException e) {
+        } catch (IOException | WolkenException e) {
             return null;
         }
     }
@@ -60,4 +59,18 @@ public abstract class SerializableI {
     }
 
     public abstract int getSerialNumber();
+
+    protected void checkFullyRead(int result, int expected) throws IOException {
+        if (result != expected) {
+            throw new IOException("expected '" + expected + "' bytes but only received '" + result + "'");
+        }
+    }
+
+    protected int checkNotEOF(int read) throws IOException {
+        if (read < 0) {
+            throw new IOException("end of file reached.");
+        }
+
+        return read;
+    }
 }

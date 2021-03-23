@@ -4,6 +4,8 @@ import org.wolkenproject.core.Block;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
+import org.wolkenproject.network.Node;
+import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 
 import java.io.IOException;
@@ -49,5 +51,9 @@ public class FoundCommonAncestor extends ResponseMessage {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(FoundCommonAncestor.class);
+    }
+
+    @Override
+    public void execute(Server server, Node node) {
     }
 }

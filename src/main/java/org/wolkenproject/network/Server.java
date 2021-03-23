@@ -9,25 +9,31 @@ import org.wolkenproject.utils.Logger;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Server implements Runnable {
-    private ServerSocketChannel socket;
+    private ServerSocket        socket;
     private Set<Node>           connectedNodes;
     private NetAddress          netAddress;
     private ReentrantLock       mutex;
+    private byte                nonce[];
+    private long                upSince;
 
-    public Server() throws IOException {
-        socket  = ServerSocketChannel.open();
+    public Server(Set<NetAddress> forceConnections) throws IOException {
+        socket  = new ServerSocket();
         socket.bind(new InetSocketAddress(Context.getInstance().getNetworkParameters().getPort()));
+        upSince = System.currentTimeMillis();
         mutex   = new ReentrantLock();
+        nonce   = new byte[20];
 
-        socket.configureBlocking(false);
+        // generate a nonce to know when we self connect
+        new SecureRandom().nextBytes(nonce);
+
+        // listen for incoming connections indefinitely
         Context.getInstance().getThreadPool().execute(this::listenForIncomingConnections);
 
         netAddress = Context.getInstance().getIpAddressList().getAddress(InetAddress.getLocalHost());
@@ -40,56 +46,84 @@ public class Server implements Runnable {
         Logger.alert("opened port '" + Context.getInstance().getNetworkParameters().getPort() + "' on " + netAddress.getAddress().toString());
 
         connectedNodes = Collections.synchronizedSet(new LinkedHashSet<>());
-        connectToNodes(Context.getInstance().getIpAddressList().getAddresses());
+        connectToNodes(forceConnections, Context.getInstance().getIpAddressList().getAddresses());
     }
 
-    public boolean connectToNodes(Queue<NetAddress> addresses)
+    public boolean connectToNodes(Set<NetAddress> forceConnections, Queue<NetAddress> addresses)
     {
         Logger.alert("establishing outbound connections.");
         int connections = 0;
 
+        for (NetAddress address : forceConnections) {
+            int i = connectedNodes.size();
+            Logger.alert("attempting to connect to ${a}", address);
+
+//            forceConnect(address);
+            if (connectedNodes.size() == i) {
+                Logger.alert("failed to connect to ${a}", address);
+            }
+        }
+
         for (NetAddress address : addresses)
         {
-            try {
-                SocketChannel socket = SocketChannel.open();
-                socket.connect(new InetSocketAddress(address.getAddress(), address.getPort()));
+            forceConnect(address);
 
-                Node node = new Node(socket);
-                mutex.lock();
-                try {
-                    connectedNodes.add(node);
-                    Logger.alert("connected to ${s}", address);
-                } finally {
-                    mutex.unlock();
-                }
-
-                node.sendMessage(new VersionMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(Context.getInstance().getNetworkParameters().getVersion(), VersionInformation.Flags.AllServices, System.currentTimeMillis(), getNetAddress(), address, 0)));
-
-                if (++ connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections())
-                {
-                    return true;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (++ connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections())
+            {
+                return true;
             }
         }
 
         return false;
     }
 
+    private void forceConnect(InetAddress address, int port) {
+        forceConnect(new NetAddress(address, port, 0));
+    }
+
+    private void forceConnect(NetAddress address) {
+        try {
+            Socket socket = new Socket();
+            socket.bind(new InetSocketAddress(address.getAddress(), address.getPort()));
+
+            Node node = new Node(socket);
+            mutex.lock();
+            try {
+                connectedNodes.add(node);
+                Logger.alert("connected to ${s}", address);
+            } finally {
+                mutex.unlock();
+            }
+
+            node.sendMessage(new VersionMessage(
+                    Context.getInstance().getNetworkParameters().getVersion(),
+                    new VersionInformation(
+                            Context.getInstance().getNetworkParameters().getVersion(),
+                            VersionInformation.Flags.AllServices,
+                            System.currentTimeMillis(),
+                            getNetAddress(),
+                            address,
+                            Context.getInstance().getBlockChain().getHeight(),
+                            nonce)));
+        } catch (IOException e) {
+        }
+    }
+
     private void listenForIncomingConnections()
     {
         Logger.alert("listening for inbound connections.");
-        SocketChannel incoming = null;
+        Socket incoming = null;
 
         while (Context.getInstance().isRunning())
         {
             try {
                 incoming = socket.accept();
+                Logger.alert("received connection request from ${n}", incoming.getSocketAddress());
 
                 if (incoming != null) {
                     if (connectedNodes.size() < (Context.getInstance().getNetworkParameters().getMaxAllowedInboundConnections() + Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections()))
                     {
+                        Logger.alert("accepted connection request from ${n}", incoming.getSocketAddress());
                         mutex.lock();
                         try {
                             connectedNodes.add(new Node(incoming));
@@ -111,10 +145,20 @@ public class Server implements Runnable {
     public void run() {
         // we don't need to start checks right away
         long lastCheck = System.currentTimeMillis();
+        long lastNotif = 0;
+
         while (Context.getInstance().isRunning())
         {
             long currentTime = System.currentTimeMillis();
             Set<Node> connectedNodes = getConnectedNodes();
+
+            if (currentTime - lastNotif >= 3_000) {
+                Logger.alert("server uptime: ${m}ms", System.currentTimeMillis() - upSince);
+                Logger.alert("connected: ${d}", connectedNodes.size());
+                Logger.alert("list: ${s}", connectedNodes);
+
+                lastNotif = System.currentTimeMillis();
+            }
 
             if (currentTime - lastCheck >= 30_000)
             {
@@ -128,6 +172,10 @@ public class Server implements Runnable {
 
             for (Node node : connectedNodes)
             {
+                if (!node.isConnected()) {
+                    continue;
+                }
+
                 CachedMessage message = node.listenForMessage();
 
                 if (message != null) {
@@ -160,8 +208,7 @@ public class Server implements Runnable {
                 boolean shouldDisconnect = false;
                 boolean isSpammy = false;
 
-                if (node.timeSinceConnected() >= Context.getInstance().getNetworkParameters().getHandshakeTimeout() && !node.hasPerformedHandshake())
-                {
+                if (!node.hasPerformedHandshake() && node.timeSinceConnected() >= Context.getInstance().getNetworkParameters().getHandshakeTimeout()) {
                     shouldDisconnect = true;
                 }
 
@@ -176,8 +223,7 @@ public class Server implements Runnable {
 
                 if (isSpammy) {
                     NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
-                    if (address != null)
-                    {
+                    if (address != null) {
                         address.setSpamAverage(node.getSpamAverage());
                     }
                 }
@@ -191,13 +237,10 @@ public class Server implements Runnable {
                     }
                 }
 
-                if (!shouldDisconnect && !isSpammy)
-                {
-                    if (node.getMessageCache().inboundCacheSize() > Context.getInstance().getNetworkParameters().getMaxCacheSize())
-                    {
+                if (!shouldDisconnect && !isSpammy) {
+                    if (node.getMessageCache().inboundCacheSize() > Context.getInstance().getNetworkParameters().getMaxCacheSize()) {
                         NetAddress address = Context.getInstance().getIpAddressList().getAddress(node.getInetAddress());
-                        if (address != null)
-                        {
+                        if (address != null) {
                             address.setSpamAverage(node.getSpamAverage());
                         }
                         node.getMessageCache().clearInboundCache();
@@ -273,5 +316,9 @@ public class Server implements Runnable {
         for (Node node : connectedNodes) {
             node.sendMessage(message);
         }
+    }
+
+    public byte[] getNonce() {
+        return nonce;
     }
 }

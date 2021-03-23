@@ -3,7 +3,7 @@ package org.wolkenproject.network.messages;
 import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.TransactionI;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.*;
@@ -14,10 +14,7 @@ import org.wolkenproject.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Inv extends Message {
     public static class Type
@@ -31,6 +28,10 @@ public class Inv extends Message {
     private Set<byte[]> list;
     private int         type;
 
+    public Inv(int type, Collection<byte[]> list) throws WolkenException {
+        this(Context.getInstance().getNetworkParameters().getVersion(), type, list);
+    }
+
     public Inv(int version, int type, Collection<byte[]> list) throws WolkenException {
         super(version, Flags.Notify);
         this.list = new LinkedHashSet<>(list);
@@ -42,7 +43,7 @@ public class Inv extends Message {
                 requiredLength = Block.UniqueIdentifierLength;
                 break;
             case Type.Transaction:
-                requiredLength = TransactionI.UniqueIdentifierLength;
+                requiredLength = Transaction.UniqueIdentifierLength;
                 break;
         }
 
@@ -60,12 +61,12 @@ public class Inv extends Message {
         }
     }
 
-    public static Set<byte[]> convert(Collection<TransactionI> transactions)
+    public static Set<byte[]> convert(Collection<Transaction> transactions)
     {
         Set<byte[]> result = new HashSet<>();
-        for (TransactionI transaction : transactions)
+        for (Transaction transaction : transactions)
         {
-            result.add(transaction.getTransactionID());
+            result.add(transaction.getHash());
         }
 
         return result;
@@ -117,22 +118,35 @@ public class Inv extends Message {
 
             // request the transactions
             try {
-                CheckedResponse message = node.getResponse(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions), Context.getInstance().getNetworkParameters().getMessageTimeout());
-                if (message != null) {
-                    if (message.noErrors()) {
-                        Set<TransactionI> transactions = message.getMessage().getPayload();
-                        Context.getInstance().getTransactionPool().add(transactions);
+                CheckedResponse message = node.getResponse(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions),
+                        Context.getInstance().getNetworkParameters().getMessageTimeout());
+                if (message == null) {
+                    node.increaseErrors(4);
+                    return;
+                }
 
-                        Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Transaction, newTransactions);
-                        Set<Node> connected = Context.getInstance().getServer().getConnectedNodes();
-                        connected.remove(node);
+                if (message.noErrors()) {
+                    Set<Transaction> transactions = message.getMessage().getPayload();
+                    transactions.removeIf(transaction -> !transaction.shallowVerify());
+                    Context.getInstance().getTransactionPool().add(transactions);
 
-                        for (Node n : connected) {
-                            n.sendMessage(inv);
-                        }
+                    Set<byte[]> validTransactions = new LinkedHashSet<>();
+                    for (Transaction transaction : transactions) {
+                        validTransactions.add(transaction.getHash());
                     }
+
+                    Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Transaction, newTransactions);
+                    Set<Node> connected = Context.getInstance().getServer().getConnectedNodes();
+                    connected.remove(node);
+
+                    for (Node n : connected) {
+                        n.sendMessage(inv);
+                    }
+                } else {
+                    node.increaseErrors(4);
                 }
             } catch (WolkenTimeoutException e) {
+                node.increaseErrors(4);
                 e.printStackTrace();
             } catch (WolkenException e) {
                 e.printStackTrace();
@@ -167,7 +181,7 @@ public class Inv extends Message {
                 requiredLength = Block.UniqueIdentifierLength;
                 break;
             case Type.Transaction:
-                requiredLength = TransactionI.UniqueIdentifierLength;
+                requiredLength = Transaction.UniqueIdentifierLength;
                 break;
         }
 

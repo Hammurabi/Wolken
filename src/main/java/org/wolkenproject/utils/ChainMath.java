@@ -12,6 +12,10 @@ import java.math.BigInteger;
 public class ChainMath {
     public static BigInteger x256 = new BigInteger("2").pow(256);
 
+    public static boolean validSolution(byte solution[], int bits) throws WolkenException {
+        return validSolution(solution, Utils.takeApart(bits));
+    }
+
     public static boolean validSolution(byte solution[], byte targetBits[]) throws WolkenException {
         return new BigInteger(1, solution).compareTo(targetIntegerFromBits(targetBits)) < 0;
     }
@@ -88,6 +92,7 @@ public class ChainMath {
 
     public static BigInteger targetIntegerFromBits(byte bits[]) throws WolkenException {
         int length      = Byte.toUnsignedInt(bits[0]);
+
         if (length > 32)
             throw new WolkenException("invalid target bits '" + Base16.encode(bits) + "'.");
 
@@ -100,27 +105,16 @@ public class ChainMath {
         return new BigInteger(1, target);
     }
 
-    public static long getReward(long currentHeight) {
-        long height = currentHeight;
-        if (height == 0) {
-            //this number could be used to account for the loss of 0.001575 Sats
-            //            return 100157500000L;
-            height = 1;
-        }
-
-        long numberOfHalvings = height / Context.getInstance().getNetworkParameters().getHalvingRate();
+    public static long getReward(long height) {
+        long numberOfHalvings = (height + 1) / Context.getInstance().getNetworkParameters().getHalvingRate();
 
         if (numberOfHalvings >= 37) {
             return 0;
         }
 
-        BigInteger D = new BigInteger("2").pow((int) numberOfHalvings);
-        long asLong = D.longValue();
+        long d = 1 << numberOfHalvings;
 
-        if (asLong == 0)
-            return 0L;
-
-        return Context.getInstance().getNetworkParameters().getMaxReward() / asLong;
+        return Context.getInstance().getNetworkParameters().getMaxReward() / d;
     }
 
     public static BigInteger getTotalWork(byte[] bits) throws WolkenException {
@@ -132,7 +126,11 @@ public class ChainMath {
     }
 
     public static int calculateNewTarget(BlockIndex block) throws WolkenException {
-        int currentBlockHeight = block.getHeight();
+        return calculateNewTarget(block.getBlock(), block.getHeight());
+    }
+
+    public static int calculateNewTarget(Block block, int height) throws WolkenException {
+        int currentBlockHeight = height;
 
         if (shouldRecalcNextWork(currentBlockHeight)) {
             BlockIndex earliest = null;
@@ -146,15 +144,15 @@ public class ChainMath {
             return generateTargetBits(block, earliest);
         }
 
-        return block.getBlock().getBits();
+        return block.getBits();
     }
 
-    private static int generateTargetBits(BlockIndex latest, BlockIndex earliest) throws WolkenException {
+    private static int generateTargetBits(Block latest, BlockIndex earliest) throws WolkenException {
         //calculate the target time for 1800 blocks.
         long timePerDiffChange  = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
-        long averageNetworkTime = latest.getBlock().getTimestamp() - earliest.getBlock().getTimestamp();
+        long averageNetworkTime = latest.getTimestamp() - earliest.getBlock().getTimestamp();
 
-        return generateTargetBits(averageNetworkTime, timePerDiffChange, latest.getBlock().getBits());
+        return generateTargetBits(averageNetworkTime, timePerDiffChange, latest.getBits());
     }
 
 

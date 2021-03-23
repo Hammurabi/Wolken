@@ -1,5 +1,6 @@
 package org.wolkenproject.network;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -13,7 +14,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Objects;
 
-public class NetAddress extends SerializableI implements Serializable {
+public class NetAddress extends SerializableI implements Serializable, Comparable<NetAddress> {
     private static final long serialVersionUID = 3738771433856794716L;
     private InetAddress address;
     private int         port;
@@ -68,7 +69,7 @@ public class NetAddress extends SerializableI implements Serializable {
 
     @Override
     public void write(OutputStream stream) throws IOException {
-        byte bytes[] = address.getAddress();
+        byte[] bytes = address.getAddress();
         stream.write(bytes.length);
         stream.write(bytes);
         Utils.writeUnsignedInt16(port, stream);
@@ -77,12 +78,14 @@ public class NetAddress extends SerializableI implements Serializable {
 
     @Override
     public void read(InputStream stream) throws IOException {
-        int length = stream.read();
-        byte bytes[] = new byte[length];
-        stream.read(bytes);
+        int length = checkNotEOF(stream.read());
+        byte[] bytes = new byte[length];
+        checkFullyRead(stream.read(bytes), length);
         address = InetAddress.getByAddress(bytes);
         port    = Utils.makeInt((byte) 0, (byte) 0, (byte) stream.read(), (byte) stream.read());
-        stream.read(bytes, 0, 8);
+
+        byte[] buffer = new byte[8];
+        checkFullyRead(stream.read(buffer), 8);
         services= Utils.makeLong(bytes);
     }
 
@@ -112,5 +115,17 @@ public class NetAddress extends SerializableI implements Serializable {
                 ", services=" + services +
                 ", spamAverage=" + spamAverage +
                 '}';
+    }
+
+    @Override
+    public int compareTo(NetAddress o) {
+        return spamAverage < o.getSpamAverage() ? 1 : -1;
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("ip", address.toString());
+        json.put("port", port);
+        return json;
     }
 }

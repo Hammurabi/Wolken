@@ -4,6 +4,7 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,7 @@ public class VersionMessage extends Message {
     private VersionInformation versionInformation;
 
     public VersionMessage() throws UnknownHostException {
-        this(0, new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0, 0), new NetAddress(InetAddress.getLocalHost(), 0, 0), 0 ));
+        this(0, new VersionInformation(0, 0, 0, new NetAddress(InetAddress.getLocalHost(), 0, 0), new NetAddress(InetAddress.getLocalHost(), 0, 0), 0, new byte[20]));
     }
 
     public VersionMessage(int version, VersionInformation versionInformation) {
@@ -26,10 +27,18 @@ public class VersionMessage extends Message {
     @Override
     public void executePayload(Server server, Node node) {
         node.setVersionInfo(versionInformation);
+        Logger.alert("received version info ${i}", versionInformation);
 
         if (!Context.getInstance().getNetworkParameters().isVersionCompatible(versionInformation.getVersion(), Context.getInstance().getNetworkParameters().getVersion())) {
             // send bye message.
+            Logger.alert("terminating connection.. (incompatible versions)");
+            node.sendMessage(new CheckoutMessage(CheckoutMessage.Reason.SelfConnect));
+        } else if (versionInformation.isSelfConnection(server.getNonce())) {
+            // this is a self connection, we must terminate it
+            Logger.alert("terminating self connection..");
+            node.sendMessage(new CheckoutMessage(CheckoutMessage.Reason.SelfConnect));
         } else {
+            Logger.alert("sending verack..");
             // send verack
             node.sendMessage(new VerackMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(
                     Context.getInstance().getNetworkParameters().getVersion(),
@@ -37,12 +46,13 @@ public class VersionMessage extends Message {
                     System.currentTimeMillis(),
                     server.getNetAddress(),
                     node.getNetAddress(),
-                    0
+                    Context.getInstance().getBlockChain().getHeight(),
+                    server.getNonce()
             )));
-        }
 
-        Context.getInstance().getIpAddressList().send(node);
-        node.sendMessage(new RequestInv(Context.getInstance().getNetworkParameters().getVersion()));
+            Context.getInstance().getIpAddressList().send(node);
+            node.sendMessage(new RequestInv(Context.getInstance().getNetworkParameters().getVersion()));
+        }
     }
 
     @Override

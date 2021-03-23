@@ -41,10 +41,13 @@ public abstract class Message extends SerializableI {
 
     public abstract void executePayload(Server server, Node node);
 
+    // called after a message is sent
+    public void onSend(Node node) {
+    }
+
     public void writeHeader(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(version, stream);
         Utils.writeInt(flags, stream);
-//        Utils.writeLong(nonce, stream);
         stream.flush();
     }
 
@@ -54,34 +57,17 @@ public abstract class Message extends SerializableI {
         version = Utils.makeInt(buffer);
         stream.read(buffer, 4, 4);
         flags = Utils.makeInt(buffer);
-//        stream.read(buffer);
-//        nonce = Utils.makeLong(buffer);
     }
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         writeHeader(stream);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        writeContents(byteArrayOutputStream);
-        byteArrayOutputStream.flush();
-        byteArrayOutputStream.close();
-
-        byte bytes[] = byteArrayOutputStream.toByteArray();
-        Utils.writeInt(bytes.length, stream);
-
-        stream.write(bytes);
+        writeContents(stream);
     }
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
         readHeader(stream);
-        byte buffer[] = new byte[4];
-        stream.read(buffer);
-        int length = Utils.makeInt(buffer);
-        if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize())
-        {
-            throw new WolkenException("message content exceeds the maximum size allowed by the protocol.");
-        }
         readContents(stream);
     }
 

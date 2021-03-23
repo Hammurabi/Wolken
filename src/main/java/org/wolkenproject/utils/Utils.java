@@ -1,15 +1,17 @@
 package org.wolkenproject.utils;
 
-import org.wolkenproject.core.script.internal.MochaObject;
+import org.json.JSONObject;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.Calendar;
+import java.util.Queue;
 import java.util.Set;
 
 public class Utils {
@@ -45,7 +47,7 @@ public class Utils {
         return (short) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
     }
 
-    public static int makeInt(byte b3, byte b2, byte b1, byte b0) {
+    public static int makeInt(int b3, int b2, int b1, int b0) {
         return (((b3       ) << 24) |
                 ((b2 & 0xff) << 16) |
                 ((b1 & 0xff) <<  8) |
@@ -78,10 +80,15 @@ public class Utils {
     }
 
     public static long makeLong(byte[] trim) {
+        return makeLong(trim, 0);
+    }
+
+    public static long makeLong(byte[] trim, int offset) {
         if (trim.length < 8) {
             trim = concatenate(new byte[8 - trim.length], trim);
         }
-        return makeLong(trim[0], trim[1], trim[2], trim[3], trim[4], trim[5], trim[6], trim[7]);
+
+        return makeLong(trim[offset], trim[offset + 1], trim[offset + 2], trim[offset + 3], trim[offset + 4], trim[offset + 5], trim[offset + 6], trim[offset + 7]);
     }
 
     public static long makeLongUnsafe(byte[] trim) {
@@ -156,13 +163,13 @@ public class Utils {
         return buf;
     }
 
-    public static byte[] takeApartShort(short integer) {
+    public static byte[] takeApartShort(long integer) {
         return new byte[] {
                 (byte) ((integer >> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
-    public static byte[] takeApartChar(char integer) {
+    public static byte[] takeApartChar(long integer) {
         return new byte[] {
                 (byte) ((integer >> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
@@ -192,6 +199,39 @@ public class Utils {
     {
         return new byte[] {
                 (byte) ((integer >> 56) & 0xFF),
+                (byte) ((integer >> 48) & 0xFF),
+                (byte) ((integer >> 40) & 0xFF),
+                (byte) ((integer >> 32) & 0xFF),
+                (byte) ((integer >> 24) & 0xFF),
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
+
+    public static byte[] takeApartInt40(long integer)
+    {
+        return new byte[] {
+                (byte) ((integer >> 32) & 0xFF),
+                (byte) ((integer >> 24) & 0xFF),
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
+
+    public static byte[] takeApartInt48(long integer)
+    {
+        return new byte[] {
+                (byte) ((integer >> 40) & 0xFF),
+                (byte) ((integer >> 32) & 0xFF),
+                (byte) ((integer >> 24) & 0xFF),
+                (byte) ((integer >> 16) & 0xFF),
+                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer) & 0xFF)};
+    }
+
+    public static byte[] takeApartInt56(long integer)
+    {
+        return new byte[] {
                 (byte) ((integer >> 48) & 0xFF),
                 (byte) ((integer >> 40) & 0xFF),
                 (byte) ((integer >> 32) & 0xFF),
@@ -281,6 +321,14 @@ public class Utils {
 
     public static int timestampInSeconds() {
         return (int) (System.currentTimeMillis() / 1000) - 1048035600;
+    }
+
+    public static byte[] conditionalExpand(int newLength, byte[] bytes) {
+        if (newLength == bytes.length) {
+            return bytes;
+        }
+
+        return concatenate(new byte[newLength - bytes.length], bytes);
     }
 
     public static byte[] pad(int padCount, byte[] bytes) {
@@ -387,5 +435,66 @@ public class Utils {
         int destOffset = length - bytesLength;
         System.arraycopy(bytes, srcOffset, result, destOffset, bytesLength);
         return result;
+    }
+
+    public static boolean isEmpty(byte[] empty) {
+        for (byte b : empty) {
+            if (b != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static double log2(double x) {
+        return (Math.log(x) / Math.log(2));
+    }
+
+    // return the minimum number of bits required to represent this number
+    public static int numBitsRequired(long x) {
+        return (int) (Math.floor(log2(x + 1)) + 1);
+    }
+
+    public static void skipBytes(InputStream stream, int numBytes) throws IOException {
+        for (int i = 0; i < numBytes; i ++) {
+            stream.read();
+        }
+    }
+
+    public static byte[] calculateMerkleRoot(byte a[], byte b[]) {
+        return HashUtil.sha256d(Utils.concatenate(a, b));
+    }
+
+    public static byte[] calculateMerkleRoot(Queue<byte[]> hashes) {
+        while (hashes.size() > 1) {
+            hashes.add(calculateMerkleRoot(hashes.poll(), hashes.poll()));
+        }
+
+        return hashes.poll();
+    }
+
+    public static JSONObject jsonDate(long ms) {
+        final String daysOfWeek[] = {
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+        };
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(ms);
+        JSONObject jsonDate = new JSONObject();
+        jsonDate.put("year", calendar.get(Calendar.YEAR));
+        jsonDate.put("month", calendar.get(Calendar.MONTH));
+        jsonDate.put("day", calendar.get(Calendar.DAY_OF_MONTH));
+        jsonDate.put("dow", daysOfWeek[calendar.get(Calendar.DAY_OF_WEEK) - 1]);
+        jsonDate.put("hour", calendar.get(Calendar.HOUR_OF_DAY));
+        jsonDate.put("minute", calendar.get(Calendar.MINUTE));
+        jsonDate.put("second", calendar.get(Calendar.SECOND));
+        jsonDate.put("millisecond", ms);
+        return jsonDate;
     }
 }

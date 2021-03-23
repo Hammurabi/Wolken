@@ -26,3 +26,6 @@ hs_err_pid*
 .idea/*
 target/*
 tools/*
+.DS_Store
+gui/package.json
+*.pyc

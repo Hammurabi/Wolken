@@ -34,13 +34,13 @@ public class IpAddressList {
     }
 
     public void send(Node node) {
-        Queue<byte[]> addresses = new PriorityBlockingQueue<>(this.addresses.keySet());
+        Queue<NetAddress> addresses = new PriorityBlockingQueue<>(this.addresses.values());
         int sent = 0;
 
         while (!addresses.isEmpty()) {
             Set<NetAddress> list    = new LinkedHashSet<>();
             for (int i = 0; i < 1024; i ++) {
-                list.add(this.addresses.get(addresses.poll()));
+                list.add(addresses.poll());
 
                 if (addresses.isEmpty()) {
                     break;

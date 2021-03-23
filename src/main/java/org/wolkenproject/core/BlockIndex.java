@@ -1,5 +1,8 @@
 package org.wolkenproject.core;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
@@ -49,7 +52,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
 
     public BlockIndex generateNextBlock() throws WolkenException {
         int bits                = ChainMath.calculateNewTarget(this);
-        return new BlockIndex(new Block(block.getHashCode(), bits), getChainWork(), height + 1);
+        return new BlockIndex(new Block(getHash(), bits), getChainWork(), height + 1);
     }
 
     @Override
@@ -85,15 +88,35 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public void recalculateChainWork() throws WolkenException {
-        BlockIndex previous = previousBlock();
-        if (previous != null) {
-            this.chainWork  = previous.getChainWork();
-        } else {
-            this.chainWork  = BigInteger.ZERO;
-        }
+        recalculateChainWork(this);
+    }
 
-        if (hasNext()) {
-            next().recalculateChainWork();
+    public static void recalculateChainWork(BlockIndex index) throws WolkenException {
+        while (index != null) {
+            BlockIndex previous = index.previousBlock();
+
+            BigInteger oldChainWork = index.chainWork;
+            BigInteger newChainWork = oldChainWork;
+
+            if (previous != null) {
+                newChainWork  = previous.getChainWork();
+            } else {
+                newChainWork  = BigInteger.ZERO;
+            }
+
+            if (newChainWork.compareTo(oldChainWork) == 0) {
+                return;
+            } else {
+                // set the new chain work
+                index.chainWork = newChainWork;
+
+                // save changes made to the block index
+                Context.getInstance().getDatabase().setBlockIndex(index.getHeight(), index);
+            }
+
+            if (index.hasNext()) {
+                index = index.next();
+            }
         }
     }
 
@@ -110,6 +133,10 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public BlockIndex previousBlock() {
+        if (height == 0) {
+            return null;
+        }
+
         return Context.getInstance().getDatabase().findBlock(getHeight() - 1);
     }
 
@@ -175,5 +202,60 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     @Override
     public byte[] checksum() {
         return HashUtil.hash160(getHash());
+    }
+
+    public boolean verify() {
+        try {
+            return block.verify(getHeight());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public BlockStateChangeResult getStateChange() {
+        return null;
+    }
+
+    /**
+        @param txList include/exclude transaction list
+        @param txHash if true then transactions will be replaced by their hashes
+        @param evList include/exclude event list
+        @param evHash if true then events will be replaced by their hashes
+        @param txEvt if true then events will be included with their parent transaction,
+                      otherwise they will be included in the 'state change'
+     **/
+    public JSONObject toJson(boolean txList, boolean txHash, boolean evList, boolean evHash, boolean txEvt) {
+        JSONObject block    = new JSONObject();
+        JSONObject header   = new JSONObject();
+        JSONArray body      = new JSONArray();
+        JSONArray state     = new JSONArray();
+
+        header.put("version", getBlock().getVersion());
+        header.put("timestamp", getBlock().getTimestamp());
+        header.put("parentHash", Base16.encode(getBlock().getParentHash()));
+        header.put("merkleRoot", Base16.encode(getBlock().getMerkleRoot()));
+        header.put("bits", Base16.encode(Utils.takeApart(getBlock().getBits())));
+        header.put("nonce", getBlock().getNonce());
+
+        block.put("hash", Base16.encode(getHash()));
+        block.put("header", header);
+
+        if (txList) {
+            int index = 0;
+            for (Transaction transaction : getBlock()) {
+                body.put(index ++, txHash ? Base16.encode(transaction.getHash()) : transaction.toJson(txEvt, evHash));
+            }
+            block.put("content", body);
+        }
+
+        if (!txEvt && evList) {
+            int index = 0;
+            for (Event event : getStateChange()) {
+                state.put(index ++, evHash ? Base16.encode(event.eventId()) : event.toJson());
+            }
+            block.put("stateChange", state);
+        }
+
+        return block;
     }
 }

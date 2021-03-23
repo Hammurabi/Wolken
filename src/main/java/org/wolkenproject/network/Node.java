@@ -1,26 +1,24 @@
 package org.wolkenproject.network;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
+import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Node implements Runnable {
-    private SocketChannel                   socket;
+    private Socket                          socket;
     private ReentrantLock                   mutex;
     private Queue<Message>                  messages;
     private Queue<byte[]>                   messageQueue;
@@ -29,28 +27,30 @@ public class Node implements Runnable {
     private MessageCache                    messageCache;
     private long                            firstConnected;
     private int                             errors;
-    private ByteBuffer                      buffer;
+    private byte                            readBuffer[];
+//    private ByteBuffer                      buffer;
     private ByteArrayOutputStream           stream;
+    private int                             currentMessageSize;
     private int                             receivedAddresses;
     private VersionInformation              versionMessage;
+    private boolean                         isClosed;
 
 //    public Node(String ip, int port) throws IOException {
 //        this(new Socket(ip, port));
 //    }
 
-    public Node(SocketChannel socket) throws IOException {
+    public Node(Socket socket) throws IOException {
         this.socket         = socket;
         this.mutex          = new ReentrantLock();
         this.messageQueue   = new ConcurrentLinkedQueue<>();
         this.messages       = new ConcurrentLinkedQueue<>();
         this.messageCache   = new MessageCache();
         this.errors         = 0;
-//        this.inputStream    = new BufferedInputStream(socket.getInputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
-//        this.outputStream   = new BufferedOutputStream(socket.getOutputStream(), Context.getInstance().getNetworkParameters().getBufferSize());
+        this.stream         = null;
+        this.currentMessageSize = -1;
         this.firstConnected = System.currentTimeMillis();
         this.respones       = Collections.synchronizedMap(new HashMap<>());
-        this.socket.configureBlocking(false);
-        this.buffer         = ByteBuffer.allocate(Context.getInstance().getNetworkParameters().getBufferSize());
+        this.readBuffer     = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
         this.expectedResponse = new HashMap<>();
     }
 
@@ -173,48 +173,69 @@ public class Node implements Runnable {
         mutex.lock();
 
         try {
-            if (!socket.finishConnect()) {
+            if (!socket.isOpen()) {
                 return;
             }
 
-            if (stream == null) {
-                stream = new ByteArrayOutputStream();
-            }
-
-            byte data[] = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
-
-            int read = socket.read(buffer);
-            long timestamp = System.currentTimeMillis();
-
-            if (read == -1) {
+            if (stream != null && stream.size() == currentMessageSize) {
                 stream.flush();
                 stream.close();
 
                 // queue the message for processing.
                 finish(stream);
-            } else {
-                // check message header
-                if (stream.size() >= 12) {
-                    byte header[] = stream.toByteArray();
-                    int length = Utils.makeInt(header, 8);
 
-                    if (length > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
-                        errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
-                        stream = null;
-                        close();
-                        return;
-                    }
+                stream = null;
+                currentMessageSize = -1;
+            }
+
+            if (stream == null) {
+                stream              = new ByteArrayOutputStream();
+                currentMessageSize  = -1;
+            }
+
+            // read message size
+            if (currentMessageSize < 0) {
+                byte smallBuffer[] = new byte[4];
+                socket.read(smallBuffer);
+
+                currentMessageSize = Utils.makeInt(smallBuffer);
+
+                if (currentMessageSize <= 0) {
+                    errors ++;
+                    messageCache.increaseSpamAverage(0.2);
+                    // queue the message for processing.
+                    finish(stream);
+                    currentMessageSize = -1;
                 }
 
-                buffer.get(data, 0, read);
-                stream.write(data, 0, read);
-                buffer.clear();
+                if (currentMessageSize > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
+                    errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                    stream = null;
+                    currentMessageSize = -1;
+                    throw new WolkenException("message content exceeds the maximum size allowed by the protocol.");
+                }
             }
-        } catch (IOException e) {
+
+            // blocking read (5ms max block)
+            int read = socket.read(readBuffer);
+
+            if (read > 0) {
+                stream.write(readBuffer, 0, read);
+            }
+
+            if (stream != null && stream.size() == currentMessageSize) {
+                // queue the message for processing.
+                finish(stream);
+
+                stream = null;
+                currentMessageSize = -1;
+            }
+        } catch (WolkenException | IOException e) {
             e.printStackTrace();
             errors ++;
             if (stream != null) {
                 stream = null;
+                currentMessageSize = -1;
             }
         } finally {
             mutex.unlock();
@@ -241,9 +262,11 @@ public class Node implements Runnable {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(msg);
             Message message = Context.getInstance().getSerialFactory().fromStream(inputStream);
             inputStream.close();
+
             return checkSpam(message);
         } catch (IOException | WolkenException e) {
             errors++;
+            e.printStackTrace();
             return null;
         } finally {
             mutex.unlock();
@@ -264,24 +287,27 @@ public class Node implements Runnable {
     {
         mutex.lock();
         try{
-            while (!messages.isEmpty()) {
+            if (!socket.isOpen()) {
+                return;
+            }
+
+            while (!messages.isEmpty() && socket.isOpen()) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 Message message = messages.poll();
-                message.write(outputStream);
+                message.serialize(outputStream);
                 outputStream.flush();
                 outputStream.close();
 
                 byte msg[] = outputStream.toByteArray();
-                int offset = 0;
 
-                while (offset < msg.length) {
-                    buffer.clear();
-                    buffer.put(msg, offset, Context.getInstance().getNetworkParameters().getBufferSize());
-                    buffer.flip();
-                    while (buffer.hasRemaining()) {
-                        offset += socket.write(buffer);
-                    }
-                }
+                // write the length of the message
+                socket.write(Utils.takeApart(msg.length));
+
+                // write the actual  message
+                socket.write(msg);
+
+                // notify the message that it was sent
+                message.onSend(this);
             }
         } catch (IOException | WolkenException e) {
             e.printStackTrace();
@@ -291,6 +317,7 @@ public class Node implements Runnable {
     }
 
     public void close() throws IOException {
+        isClosed = true;
         socket.close();
     }
 
@@ -303,19 +330,7 @@ public class Node implements Runnable {
     }
 
     public InetAddress getInetAddress() {
-        try {
-            return ((InetSocketAddress) socket.getRemoteAddress()).getAddress();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            return InetAddress.getByName("localhost");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return ((InetSocketAddress) socket.getSocketAddress()).getAddress();
     }
 
     public MessageCache getMessageCache()
@@ -351,13 +366,7 @@ public class Node implements Runnable {
     }
 
     public int getPort() {
-        try {
-            return  ((InetSocketAddress) socket.getRemoteAddress()).getPort();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
+        return  ((InetSocketAddress)socket.getSocketAddress()).getPort();
     }
 
     public long timeSinceConnected()
@@ -377,5 +386,49 @@ public class Node implements Runnable {
         if (receivedAddresses > 1024) {
             errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "messages=" + messages.size() +
+                ", messageQueue=" + messageQueue.size() +
+                ", expectedResponse=" + expectedResponse.size() +
+                ", respones=" + respones.size() +
+                ", messageCache=" + messageCache.inboundCacheSize() + messageCache.outboundCacheSize() +
+                ", firstConnected=" + firstConnected +
+                ", errors=" + errors +
+                ", versionMessage=" + versionMessage +
+                ", isClosed=" + isClosed +
+                '}';
+    }
+
+    public VersionInformation getVersionInfo() {
+        return versionMessage;
+    }
+
+    public void increaseErrors(int i) {
+        errors += i;
+    }
+
+    public boolean isConnected() {
+        return socket.isOpen();
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        if (versionMessage != null) {
+            json.put("versionmsg", versionMessage.toJson());
+        } else {
+            json.put("versionmsg", "null");
+        }
+        json.put("inetaddress", getNetAddress().toJson());
+        json.put("messagequeue", messages.size());
+        json.put("responsequeue", expectedResponse.size());
+        json.put("responses", respones.size());
+        json.put("firstconnected", Utils.jsonDate(firstConnected));
+        json.put("closed", isClosed);
+
+        return json;
     }
 }

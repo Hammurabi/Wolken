@@ -2,9 +2,9 @@ package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.TransactionI;
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.network.ResponseMetadata;
+import org.wolkenproject.network.Node;
+import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
 
@@ -62,5 +62,9 @@ public class BlockList extends ResponseMessage {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(BlockList.class);
+    }
+
+    @Override
+    public void execute(Server server, Node node) {
     }
 }

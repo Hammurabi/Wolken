@@ -1,5 +1,6 @@
 package org.wolkenproject.network;
 
+import org.wolkenproject.network.messages.CheckoutMessage;
 import org.wolkenproject.network.messages.VerackMessage;
 import org.wolkenproject.network.messages.VersionMessage;
 
@@ -23,6 +24,6 @@ public class CachedMessage {
     }
 
     public boolean isHandshake() {
-        return message instanceof VersionMessage || message instanceof VerackMessage;
+        return message instanceof VersionMessage || message instanceof VerackMessage || message instanceof CheckoutMessage;
     }
 }
