@@ -22,8 +22,8 @@ def new_command(name, parse):
 class CommandsManager:
     def __init__(self):
         self.commands = []
-    def register(self, command):
-        self.commands.append(command)
+    def register(self, name, parser):
+        self.commands.append(new_command(name, parser))
     def parse(self, arguments, connection):
         # check the length
         if len(arguments) > 0:
