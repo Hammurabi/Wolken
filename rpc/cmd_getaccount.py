@@ -5,11 +5,10 @@ from getpass import getpass
 
 # define 'getaccount' command
 def parse(cmd, arguments, connection):
-    if len(arguments) != 3:
-        print("error: '"+cmd.name+"' requires two arguments.")
+    if len(arguments) != 2:
+        print("error: '"+cmd.name+"' requires one argument.")
     else:
-        name    = arguments[1]
-        nonce   = arguments[2]
+        address  = arguments[1]
 
         response = connection.send_request('setnoncewallet', {'name':name, 'nonce':nonce})
         print("alert: server responded with '"+response.response+"'.")
