@@ -23,4 +23,8 @@ def parse(cmd, arguments, connection):
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
+        else:
+            print("---------------------------------")
+            print(response.account)
+            print("---------------------------------")
 
