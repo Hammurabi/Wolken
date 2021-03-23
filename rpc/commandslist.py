@@ -25,3 +25,8 @@ def register_all(cmdManager):
     cmdManager.register('createwallet', cmd_createwallet.parse)
     # this command encrypts wallet (name)
     cmdManager.register('encryptwallet', cmd_encryptwallet.parse)
+    # this command prints the raw wallet data (name)
+    # Note: if the wallet is encrypted, then it's safe
+    # to copy the json dump around as the private key
+    # will be encrypted.
+    cmdManager.register('dumpwallet', cmd_encryptwallet.parse)
