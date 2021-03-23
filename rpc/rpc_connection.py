@@ -9,4 +9,4 @@ class rpc_connection:
         self.token   = ''
     def sendRequest(request, arguments):
         url = self.ip + ":" + self.port + "/" + query
-        pass
+        return toJson(requests.get(url, allow_redirects=True))
