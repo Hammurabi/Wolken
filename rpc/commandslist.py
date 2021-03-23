@@ -5,5 +5,6 @@ import util
 # import commands
 import commands
 
+# registers all commands to the command manager
 def register_all(cmdManager):
     
