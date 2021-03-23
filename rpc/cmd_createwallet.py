@@ -9,6 +9,8 @@ def parse(cmd, arguments, connection):
     if len(arguments) != 2 and len(arguments) != 3:
         print("error: '"+cmd.name+"' requires atleast one argument.")
     else:
+        name    = arguments[1]
+
         encrypt = False
         if len(arguments) == 3:
             encrypt = arguments[2].lower() == 'true'
@@ -19,6 +21,4 @@ def parse(cmd, arguments, connection):
         
         response = connection.send_request('createwallet', {'encrypt', encrypt, 'password':password})
         print("alert: server responded with '"+response.response+"'.")
-        print("alert: closing down client.")
-        quit(0)
 
