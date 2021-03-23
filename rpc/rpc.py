@@ -72,13 +72,6 @@ def getblock_parse(command, arguments):
     if len(arguments) > 2 and len(arguments) < 7:
         print("error: 'getblock' command missing arguments.")
         pass
-
-# define a basic command object constructor
-def new_command(name, parse):
-    command = Command()
-    command.name    = name
-    command.parse   = parse
-    return command
     
 
 # define a basic command list
