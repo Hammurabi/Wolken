@@ -3,17 +3,14 @@ import commands
 # password helper
 from getpass import getpass
 
-# define 'newpasswallet' command
+# define 'setnoncewallet' command
 def parse(cmd, arguments, connection):
-    if len(arguments) != 2:
-        print("error: '"+cmd.name+"' requires one argument.")
+    if len(arguments) != 3:
+        print("error: '"+cmd.name+"' requires two arguments.")
     else:
         name    = arguments[1]
 
-        old     = getpass('old password>')
-        new     = getpass('new password>')
-
-        response = connection.send_request('newpasswallet', {'name':name, 'old':old, 'new':new})
+        response = connection.send_request('setnoncewallet', {'name':name, 'old':old, 'new':new})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
