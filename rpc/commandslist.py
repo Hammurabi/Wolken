@@ -16,6 +16,7 @@ import cmd_setnoncewallet
 import cmd_loadwallet
 import cmd_getaccount
 import cmd_walletfromdump
+import cmd_signtransaction
 
 # registers all commands to the command manager
 def register_all(cmdManager):
@@ -49,4 +50,6 @@ def register_all(cmdManager):
     cmdManager.register('getaccount', cmd_getaccount.parse)
     # this command creates a wallet from dump (dump)
     cmdManager.register('walletfromdump', cmd_walletfromdump.parse)
+    # this command signs a transaction using the loaded wallet (transaction)
+    cmdManager.register('signtransaction', cmd_signtransaction.parse)
 
