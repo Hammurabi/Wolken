@@ -10,8 +10,7 @@ def parse(cmd, arguments, connection):
         print("error: '"+cmd.name+"' requires only one argument.")
     else:
         password = getpass('password>')
-        args     = {'password':password}
-        response = connection.send_request('close', args)
+        response = connection.send_request('close', {'password':password})
         print("alert: server responded with '"+response.response+"'.")
         print("alert: closing down client.")
         quit(0)
