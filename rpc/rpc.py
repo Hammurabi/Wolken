@@ -11,10 +11,6 @@ import commands
 # exit
 # quit
 
-ip      = 'localhost'
-port    = '12560'
-token   = ''
-
 def start():
     # create a command manager
     cmdManager = commands.CommandsManager()
