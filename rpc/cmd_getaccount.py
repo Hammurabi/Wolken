@@ -3,7 +3,7 @@ import commands
 # password helper
 from getpass import getpass
 
-# define 'setnoncewallet' command
+# define 'getaccount' command
 def parse(cmd, arguments, connection):
     if len(arguments) != 3:
         print("error: '"+cmd.name+"' requires two arguments.")
