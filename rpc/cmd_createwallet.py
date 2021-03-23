@@ -19,6 +19,8 @@ def parse(cmd, arguments, connection):
         if encrypt:
             password = getpass('password>')
         
-        response = connection.send_request('createwallet', {'encrypt', encrypt, 'password':password})
+        response = connection.send_request('createwallet', {'name', name, 'encrypt', encrypt, 'password':password})
         print("alert: server responded with '"+response.response+"'.")
+        if response.response == 'failed':
+            print("reason: " + response.reason)
 
