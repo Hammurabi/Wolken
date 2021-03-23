@@ -6,6 +6,7 @@ import util
 import commands
 import cmd_node
 import cmd_quit
+import cmd_close
 
 # registers all commands to the command manager
 def register_all(cmdManager):
