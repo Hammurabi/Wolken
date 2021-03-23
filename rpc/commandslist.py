@@ -45,6 +45,8 @@ def register_all(cmdManager):
     cmdManager.register('setnoncewallet', cmd_setnoncewallet.parse)
     # this command loads a wallet from file to memory (name)
     cmdManager.register('loadwallet', cmd_loadwallet.parse)
-    # this command creates a wallet from dump
-    cmdManager.register('walletfromdump', cmd_loadwallet.parse)
+    # this command returns the account associated with an address (address)
+    cmdManager.register('getaccount', cmd_getaccount.parse)
+    # this command creates a wallet from dump (dump)
+    cmdManager.register('walletfromdump', cmd_walletfromdump.parse)
 
