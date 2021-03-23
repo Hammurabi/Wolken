@@ -18,6 +18,8 @@ token   = ''
 def start():
     # create a command manager
     cmdManager = commands.CommandsManager()
+    # register all our commands
+    commandslist.register_all(cmdManager)
     # enter an infinite loop
     while (True):
         # scan the command line for commands
