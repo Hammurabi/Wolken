@@ -105,4 +105,8 @@ public class Wallet {
 
         return json;
     }
+
+    public byte[] asByteArray() {
+        return Utils.concatenate(Utils.takeApartLong(1), privateKey, publicKey.getEncoded(), Utils.takeApartLong(nonce));
+    }
 }
