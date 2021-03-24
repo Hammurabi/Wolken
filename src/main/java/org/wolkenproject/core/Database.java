@@ -245,4 +245,8 @@ public class Database {
     public void storeWallet(Wallet wallet) {
         put(Utils.concatenate(WalletPrefix, wallet.getName().getBytes()), wallet.asByteArray());
     }
+
+    public Wallet getWallet(String name) {
+        return new Wallet(name, get(Utils.concatenate(WalletPrefix, name.getBytes())));
+    }
 }
