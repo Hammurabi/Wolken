@@ -49,6 +49,9 @@ public class Wallet {
         if (json.has("nonce")) {
             throw new WolkenException("wallet requires the attribute 'nonce' to be present.");
         }
+        if (!Base16.isEncoded(json.getString("private"))) {
+            throw new WolkenException("wallet requires the attribute 'private' to be base16 encoded.");
+        }
 
 
         this.name       = json.getString("name");
