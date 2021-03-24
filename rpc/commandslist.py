@@ -59,3 +59,7 @@ def register_all(cmdManager):
     # this command retrieves a transaction using it's hash (txid)
     cmdManager.register('gettransaction', cmd_gettransaction.parse)
 
+    # mining commands
+    # this command broadcasts a block to the network (block)
+    cmdManager.register('broadcastblock', cmd_gettransaction.parse)
+
