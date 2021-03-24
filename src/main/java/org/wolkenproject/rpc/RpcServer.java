@@ -135,7 +135,8 @@ public class RpcServer {
                 Wallet wallet = Context.getInstance().getDatabase().getWallet(name);
                 if (wallet.isEncrypted()) {
                     response.put("response", "failed");
-                    response.put("reason", "wallet '" + name + "' does not exist.");
+                    response.put("reason", "wallet is already encrypted, use 'walletpassphrasechange' to change the passphrase.");
+                } else {
                 }
             }
         } else if (request.getString("request").equals("gettx")) {
