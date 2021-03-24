@@ -162,11 +162,9 @@ public class Wallet {
         try {
             byte privateKey[] = CryptoUtil.aesDecrypt(enc, CryptoUtil.generateSecretForAES(password, salt), iv);
 
-            return new Wallet()
+            return new Wallet(name, encrypt(newPass, privateKey), publicKey, address, nonce);
         } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new WolkenException(e);
         }
-
-        return null;
     }
 }
