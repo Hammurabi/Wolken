@@ -35,6 +35,10 @@ public class Wallet {
         this.nonce = nonce;
     }
 
+    public Wallet(String name, char[] pass) {
+        
+    }
+
     public Keypair getKeypairForSigning(char password[]) throws WolkenException {
         byte privateBytes[] = privateKey;
         if (password != null) {
