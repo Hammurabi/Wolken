@@ -189,7 +189,7 @@ public class Database {
 
     public Account findAccount(byte address[]) {
         byte data[] = get(Utils.concatenate(AccountPrefix, address));
-        
+
         if (data != null) {
             InputStream inputStream = new ByteArrayInputStream(data);
             Account account = new Account();
@@ -237,7 +237,8 @@ public class Database {
         return false;
     }
 
-    public void updateAccount(byte[] accountHolder, Account account) {
+    public void storeAccount(byte[] accountHolder, Account account) {
+
     }
 
     public void newAccount(byte[] address) {
