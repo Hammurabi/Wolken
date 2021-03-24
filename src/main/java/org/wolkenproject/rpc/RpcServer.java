@@ -97,6 +97,15 @@ public class RpcServer {
         server.start();
     }
 
+    private void maintain() {
+        if (getPassphrase() != null) {
+            long now = System.currentTimeMillis();
+            if (now - getPassphraseTimestamp() > getPassphraseTimeout()) {
+                setPassphrase(null, 0);
+            }
+        }
+    }
+
     public Set<Request> getHandlers() {
         return handlers;
     }
