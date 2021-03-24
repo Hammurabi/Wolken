@@ -178,6 +178,12 @@ public class RpcServer {
                     response.put("reason", e.getMessage());
                 }
             }
+        } else if (requestType.equals("walletpassphrase")) {
+            String password  = request.getString("password");
+            long timeout     = request.getLong("timeout");
+
+            Context.getInstance().getRPCServer().setPassphrase(password.getBytes(), timeout);
+            response.put("response", "success");
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
@@ -198,6 +204,9 @@ public class RpcServer {
         }
 
         msg.send("application/json", response.toString().getBytes());
+    }
+
+    private void setPassphrase(byte[] passphrase, long timeout) {
     }
 
     protected void onGet(String requestURL, VoidCallableThrowsT<Messenger, IOException> function) {
