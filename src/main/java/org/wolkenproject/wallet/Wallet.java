@@ -131,7 +131,23 @@ public class Wallet {
         return getPrivateKey().length != 32;
     }
 
-    public Wallet encrypt(byte[] pass) {
+    public static byte[] encrypt(byte pass[], byte key[]) throws WolkenException {
+        byte privKey[]      = key;
+        try {
+            byte salt[]         = CryptoUtil.makeSalt();
+            char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
+            SecretKey secretKey = CryptoUtil.generateSecretForAES(password, salt);
+            AESResult result    = CryptoUtil.aesEncrypt(key, secretKey);
+
+            privKey             = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return privKey;
+    }
+
+    public Wallet encrypt(byte[] pass) throws WolkenException {
         byte privKey[]      = privateKey;
         try {
             byte salt[]         = CryptoUtil.makeSalt();
@@ -141,7 +157,7 @@ public class Wallet {
 
             privKey             = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new WolkenException(e);
         }
 
         return new Wallet(name, privKey, publicKey, address, nonce);
@@ -159,7 +175,9 @@ public class Wallet {
         byte enc[]  = Utils.trim(privateKey, 24, 48);
 
         try {
-            privateBytes = CryptoUtil.aesDecrypt(enc, CryptoUtil.generateSecretForAES(password, salt), iv);
+            byte privateKey[] = CryptoUtil.aesDecrypt(enc, CryptoUtil.generateSecretForAES(password, salt), iv);
+
+            return new Wallet()
         } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new WolkenException(e);
         }
