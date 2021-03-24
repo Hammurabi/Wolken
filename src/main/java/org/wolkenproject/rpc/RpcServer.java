@@ -95,6 +95,12 @@ public class RpcServer {
                 response.put("response", "failed");
                 response.put("reason", "'createwallet' command requires an argument 'name'.");
             } else {
+                String name = request.getString("name");
+                if (Context.getInstance().getDatabase().checkWalletExists(name)) {
+                    response.put("response", "failed");
+                    response.put("reason", "a wallet with the name '" + name + "' already exists.");
+                } else {
+                }
             }
         }
         else if (request.getString("request").equals("createwallet")) {
