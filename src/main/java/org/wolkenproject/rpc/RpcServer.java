@@ -235,6 +235,9 @@ public class RpcServer {
 
             try {
                 Transaction tx          = Transaction.fromJson(transaction);
+                Wallet wallet           = Context.getInstance().getRPCServer().wallet;
+                if (wallet != null) {
+                }
             } catch (WolkenException e) {
                 response.put("response", "failed");
                 response.put("reason", e.getMessage());
