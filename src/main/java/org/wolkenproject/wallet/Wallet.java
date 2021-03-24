@@ -48,12 +48,16 @@ public class Wallet {
         this.name = name;
         byte salt[] = CryptoUtil.makeSalt();
         try {
-            char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
-            SecretKey secretKey = CryptoUtil.generateSecretForAES(password, salt);
             Key privKey         = new ECPrivateKey();
-            AESResult result    = CryptoUtil.aesEncrypt(privKey.getEncoded(), secretKey);
+            if (pass == null) {
+                this.privateKey = privKey.getEncoded();
+            } else {
+                char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
+                SecretKey secretKey = CryptoUtil.generateSecretForAES(password, salt);
+                AESResult result    = CryptoUtil.aesEncrypt(privKey.getEncoded(), secretKey);
 
-            this.privateKey     = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
+                this.privateKey     = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
+            }
             this.publicKey      = ECKeypair.publicKeyFromPrivate(privKey.asInteger());
             this.address        = Address.fromKey(publicKey);
         } catch (InvalidKeySpecException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidParameterSpecException e) {
