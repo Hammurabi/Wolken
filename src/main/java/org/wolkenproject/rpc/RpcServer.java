@@ -200,7 +200,8 @@ public class RpcServer {
             } else if (!Address.isValidAddress(Base58.decode(encodedAddress))) {
                 response.put("response", "failed");
                 response.put("reason", "address '" + encodedAddress + "' is not valid.");
-            } else if (!Context.getInstance().getDatabase().checkAccountExists(address.getRaw())) {
+            }
+            else if (!Context.getInstance().getDatabase().checkAccountExists((address = Address.fromFormatted(Base58.decode(encodedAddress))).getRaw())) {
                 response.put("response", "failed");
                 response.put("reason", "address '" + encodedAddress + "' does not exist.");
             } else {
