@@ -21,7 +21,7 @@ class rpc_connection:
         except:
             return rpc_noconnection('failed to send request to server.'), ''
     def post_request(self, request, arguments):
-        url = self.scheme + "://" + self.ip + ":" + self.port + "/submit"
+        url = self.scheme + "://" + self.ip + ":" + self.port + "/submit?request" + request
         try:
             return self.to_json(requests.post(url, arguments))
         except:
