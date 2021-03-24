@@ -28,6 +28,12 @@ class rpc_connection:
             return self.to_json(requests.post(url, arguments))
         except:
             return rpc_noconnection('failed to send request to server.'), ''
+    def pipe_request(self, request, arguments, data, data_type='bin'):
+        url = self.scheme + "://" + self.ip + ":" + self.port + "/api?dtype=" + data_type + "&" + package_query(request, arguments)
+        try:
+            return self.to_json(requests.post(url, arguments))
+        except:
+            return rpc_noconnection('failed to send request to server.'), ''
     def to_json(self, response):
         obj     = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
         dump    = ''
