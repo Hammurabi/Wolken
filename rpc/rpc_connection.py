@@ -14,7 +14,12 @@ class rpc_connection:
         url = self.scheme + "://" + self.ip + ":" + self.port + "/api?" + self.package_query(request, arguments)
         return self.to_json(requests.get(url, allow_redirects=True))
     def to_json(self, response):
-        return json.loads(response.text)
+        obj     = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
+        dump    = ''
+        if obj.content != None:
+            dump= json.dumps(json.loads(response.text)['content'], indent=4)
+
+        return obj, dump
     def package_query(self, request, arguments):
         query = 'request=' + request
         for key in arguments:
