@@ -13,6 +13,7 @@ import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;
+import java.util.Arrays;
 
 public class ECPrivateKey extends Key {
     private final byte key[];
@@ -48,6 +49,11 @@ public class ECPrivateKey extends Key {
     @Override
     public Key getDecompressed() throws WolkenException {
         return this;
+    }
+
+    @Override
+    public boolean equals(Key other) {
+        return Arrays.equals(getEncoded(), other.getEncoded());
     }
 
     public static byte[] generateValidKey() {
