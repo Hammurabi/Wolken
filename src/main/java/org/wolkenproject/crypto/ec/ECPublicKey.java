@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 
 public class ECPublicKey extends Key {
     private final byte key[];
@@ -86,5 +87,10 @@ public class ECPublicKey extends Key {
         } catch (InvalidKeySpecException e) {
             throw new WolkenException(e);
         }
+    }
+
+    @Override
+    public boolean equals(Key other) {
+        return Arrays.equals(getEncoded(), other.getEncoded());
     }
 }
