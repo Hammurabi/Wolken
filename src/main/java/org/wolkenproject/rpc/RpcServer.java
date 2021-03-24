@@ -322,7 +322,6 @@ public class RpcServer {
                     response.put("content", transaction.toJson());
                 }
             }
-        } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
             Set<Node> nodes = Context.getInstance().getServer().getConnectedNodes();
