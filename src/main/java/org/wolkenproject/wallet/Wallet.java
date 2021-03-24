@@ -122,4 +122,8 @@ public class Wallet {
     public byte[] asByteArray() {
         return Utils.concatenate(Utils.takeApart(1), privateKey, publicKey.getEncoded(), Utils.takeApartLong(nonce));
     }
+
+    public boolean isEncrypted() {
+        return getPrivateKey().length != 32;
+    }
 }
