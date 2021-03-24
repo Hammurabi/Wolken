@@ -124,7 +124,8 @@ public class RpcServer {
                 }
             }
         }
-        else if (requestType.equals("createwallet")) {
+        else if (requestType.equals("encryptwallet")) {
+            
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
