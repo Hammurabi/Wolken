@@ -11,6 +11,7 @@ def parse(cmd, arguments, connection):
     else:
         name     = arguments[1]
         password = getpass('password>')
+        confirm  = getpass('confirm>')
         
         response, content = connection.send_request(cmd.name, {'name':name, 'password':password})
         print("alert: server responded with '"+response.response+"'.")
