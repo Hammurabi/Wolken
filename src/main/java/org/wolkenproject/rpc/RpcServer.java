@@ -9,6 +9,7 @@ import org.wolkenproject.core.Address;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
+import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
@@ -235,8 +236,10 @@ public class RpcServer {
 
             try {
                 Transaction tx          = Transaction.fromJson(transaction);
-                Wallet wallet           = Context.getInstance().getRPCServer().wallet;
+                Wallet wallet           = Context.getInstance().getRPCServer().getWallet();
                 if (wallet != null) {
+                    Keypair keypair     = wallet.getKeypairForSigning(Context.getInstance().getRPCServer().getPassphrase());
+                    Transaction signed  = tx.sign(keypair);
                 }
             } catch (WolkenException e) {
                 response.put("response", "failed");
