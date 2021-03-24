@@ -15,13 +15,15 @@ class rpc_connection:
         self.token   = ''
         self.scheme  = 'http'
     def send_request(self, request, arguments):
-        url = self.scheme + "://" + self.ip + ":" + self.port + "/api?" + self.package_query(request, arguments)
-        try:
-            return self.to_json(requests.get(url, allow_redirects=True))
-        except:
-            return rpc_noconnection('failed to send request to server.'), ''
-    def post_request(self, request, arguments):
-        url = self.scheme + "://" + self.ip + ":" + self.port + "/submit?request=" + request
+        # url = self.scheme + "://" + self.ip + ":" + self.port + "/api/get?" + self.package_query(request, arguments)
+        # try:
+        #     return self.to_json(requests.get(url, allow_redirects=True))
+        # except:
+        #     return rpc_noconnection('failed to send request to server.'), ''
+        arguments['request'] = request
+        return self.post_request(arguments)
+    def post_request(self, arguments):
+        url = self.scheme + "://" + self.ip + ":" + self.port + "/api"
         try:
             return self.to_json(requests.post(url, arguments))
         except:
