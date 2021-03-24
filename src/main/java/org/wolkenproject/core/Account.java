@@ -15,6 +15,10 @@ public class Account extends SerializableI {
     private boolean hasAlias;
     private long    alias;
 
+    public Account() {
+        this(0, 0, false, 0);
+    }
+
     public Account(long nonce, long balance, boolean hasAlias, long alias) {
         this.nonce      = nonce;
         this.balance    = balance;
