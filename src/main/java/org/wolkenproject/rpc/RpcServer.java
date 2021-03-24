@@ -194,9 +194,9 @@ public class RpcServer {
             String encodedAddress   = request.getString("address");
             Address address         = null;
 
-            if (!Address.isValidAddress(Base58.decode(encodedAddress))) {
+            if (!Base58.isEncoded(encodedAddress)) {
                 response.put("response", "failed");
-                response.put("reason", "address '" + encodedAddress + "' is not valid.");
+                response.put("reason", "provided address '" + encodedAddress + "' is not base58 encoded.");
             } else if (!Address.isValidAddress(Base58.decode(encodedAddress))) {
                 response.put("response", "failed");
                 response.put("reason", "address '" + encodedAddress + "' is not valid.");
