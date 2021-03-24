@@ -18,6 +18,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -162,6 +163,9 @@ public class Wallet {
         try {
             byte privateKey[] = CryptoUtil.aesDecrypt(enc, CryptoUtil.generateSecretForAES(password, salt), iv);
 
+            if (!publicKey.equals(ECKeypair.publicKeyFromPrivate(new BigInteger(1, privateKey)))) {
+                throw new WolkenException("incorrect decryption key provided for wallet '" + name + "'.");
+            }
             return new Wallet(name, encrypt(newPass, privateKey), publicKey, address, nonce);
         } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new WolkenException(e);
