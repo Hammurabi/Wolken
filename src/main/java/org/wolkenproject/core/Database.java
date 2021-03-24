@@ -227,11 +227,11 @@ public class Database {
     }
 
     public void markRejected(byte[] hash) {
-        put(Utils.concatenate(RejectedBlock, hash), new byte[] { 1 });
+        put(Utils.concatenate(RejectedBlockPrefix, hash), new byte[] { 1 });
     }
 
     public boolean isRejected(byte[] hash) {
-        return get(Utils.concatenate(RejectedBlock, hash)) != null;
+        return get(Utils.concatenate(RejectedBlockPrefix, hash)) != null;
     }
 
     public Transaction findTransaction(byte[] txid) {
