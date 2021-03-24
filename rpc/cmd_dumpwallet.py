@@ -18,5 +18,5 @@ def parse(cmd, arguments, connection):
             print("reason: " + response.reason)
         else:
             print("---------------------------------")
-            print(json.dumps(response.response, indent=4))
+            print(json.dumps(response.content, indent=4))
             print("---------------------------------")
