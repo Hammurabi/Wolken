@@ -39,8 +39,7 @@ public class Wallet {
             byte enc[]  = Utils.trim(privateBytes, 24, 48);
 
             try {
-                byte key[] = CryptoUtil.aesDecrypt(enc, CryptoUtil.generateSecretForAES(password, salt), iv);
-                
+                privateBytes = CryptoUtil.aesDecrypt(enc, CryptoUtil.generateSecretForAES(password, salt), iv);
             } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
                 throw new WolkenException(e);
             }
