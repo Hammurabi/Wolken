@@ -16,7 +16,7 @@ def parse(cmd, arguments, connection):
         if len(arguments) == 3:
             encrypt = arguments[2].lower() == 'true'
 
-        password = ''        
+        password = 'None'        
         if encrypt:
             password = getpass('password>')
             password2 = getpass('confirm>')
