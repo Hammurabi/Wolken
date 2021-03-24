@@ -313,6 +313,8 @@ public class RpcServer {
                 }
 
                 if (transaction == null) {
+                    response.put("response", "failed");
+                    response.put("reason", "could not find transaction '"+txid+"'.");
                 } else {
                 }
             }
