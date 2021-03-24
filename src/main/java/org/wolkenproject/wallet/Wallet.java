@@ -107,8 +107,8 @@ public class Wallet {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", name);
-        json.put("privatekey", Base16.encode(privateKey));
-        json.put("publickey", Base16.encode(publicKey.getEncoded()));
+        json.put("private", Base16.encode(privateKey));
+        json.put("public", Base16.encode(publicKey.getEncoded()));
         json.put("address", Base58.encode(address.getFormatted()));
         json.put("nonce", nonce);
 
