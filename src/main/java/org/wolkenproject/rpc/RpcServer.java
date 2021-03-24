@@ -112,6 +112,7 @@ public class RpcServer {
                     try {
                         Wallet wallet = new Wallet(name, pass);
                         Context.getInstance().getDatabase().storeWallet(wallet);
+                        response.put("content", wallet.toJson());
                     } catch (WolkenException e) {
                         response.put("response", "failed");
                         response.put("reason", e.getMessage());
