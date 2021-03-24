@@ -179,6 +179,7 @@ public class Database {
     }
 
     public void newAccount(byte[] address) {
+        put(Utils.concatenate(AccountPrefix, address), new Account().asByteArray());
     }
 
     public void registerAlias(byte[] address, long alias) {
