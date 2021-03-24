@@ -18,5 +18,5 @@ class rpc_connection:
     def package_query(self, request, arguments):
         query = 'request=' + request
         for key in arguments:
-            query = query + "&" + key + "=" + arguments[key]
+            query = query + '&' + str(key) + '=' + str(arguments[key])
         return query
