@@ -205,6 +205,10 @@ public class RpcServer {
                 }
             }
         } else if (requestType.equals("walletpassphrase")) {
+            long timeout    = request.getLong("timeout");
+            String password = request.getString("password");
+            Context.getInstance().getRPCServer().setPassphrase(password.getBytes(), timeout);
+            response.put("response", "success");
         } else if (requestType.equals("loadwallet")) {
             String name = request.getString("name");
 
