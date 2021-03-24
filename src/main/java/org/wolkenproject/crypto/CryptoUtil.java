@@ -64,4 +64,11 @@ public class CryptoUtil {
 
         return e.processBlock(messageBytes, 0, messageBytes.length);
     }
+
+    public static byte[] makeSalt() {
+        byte salt[] = new byte[8];
+        new SecureRandom().nextBytes(salt);
+
+        return salt;
+    }
 }
