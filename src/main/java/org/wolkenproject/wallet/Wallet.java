@@ -128,6 +128,18 @@ public class Wallet {
     }
 
     public Wallet encrypt(byte[] pass) {
-        return null;
+        byte privKey[]      = privateKey;
+        try {
+            byte salt[]         = CryptoUtil.makeSalt();
+            char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
+            SecretKey secretKey = CryptoUtil.generateSecretForAES(password, salt);
+            AESResult result    = CryptoUtil.aesEncrypt(privateKey, secretKey);
+            
+            privKey             = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new Wallet(name, privKey, publicKey, address, nonce);
     }
 }
