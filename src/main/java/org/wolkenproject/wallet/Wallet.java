@@ -40,6 +40,9 @@ public class Wallet {
         if (json.has("private")) {
             throw new WolkenException("wallet requires the attribute 'private' to be present.");
         }
+        if (json.has("public")) {
+            throw new WolkenException("wallet requires the attribute 'public' to be present.");
+        }
     }
 
     public static Wallet fromBytes(String name, byte array[]) {
