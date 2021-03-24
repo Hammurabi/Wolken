@@ -38,6 +38,7 @@ public class RpcServer {
     private ExecutorService     executor;
     private Wallet              wallet;
     private byte                passphrase[];
+    private long                passphraseTimeout;
     private long                passphraseTimestamp;
     private ReentrantLock       mutex;
 
@@ -300,7 +301,9 @@ public class RpcServer {
                 // of the array to random bytes we can ensure that
                 // the data has been removed safely.
                 new Random().nextBytes(this.passphrase);
-                this.passphrase = passphrase;
+                this.passphrase             = passphrase;
+                this.passphraseTimeout      = timeout;
+                this.passphraseTimestamp    = System.currentTimeMillis();
             }
         } finally {
             mutex.unlock();
