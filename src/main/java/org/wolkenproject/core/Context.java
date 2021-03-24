@@ -212,7 +212,11 @@ public class Context {
         getThreadPool().execute(blockChain);
 
         this.rpcServer = new RpcServer(this, rpcPort);
-        Runtime.getRuntime().addShutdownHook(new Thread(()->{ if (Context.getInstance().isRunning()) Context.getInstance().shutDown(); }));
+        Runtime.getRuntime().addShutdownHook(new Thread(()->{
+            if (Context.getInstance().isRunning()) {
+                Context.getInstance().shutDown();
+            }
+        }));
     }
 
     public void shutDown() {
