@@ -23,7 +23,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public static int UniqueIdentifierLength = 32;
 
     public static Transaction fromJson(JSONObject transaction) throws WolkenException {
-        return null;
+        throw new WolkenException("could not convert to a transaction.");
     }
 
     public static final class Flags
