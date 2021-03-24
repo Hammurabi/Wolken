@@ -8,6 +8,7 @@ import org.wolkenproject.crypto.Key;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.ec.ECKeypair;
 import org.wolkenproject.crypto.ec.ECPrivateKey;
+import org.wolkenproject.crypto.ec.ECPublicKey;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
@@ -29,6 +30,14 @@ public class Wallet {
     private final Key     publicKey;
     private final Address address;
     private long          nonce;
+
+    public Wallet(String name, byte array[]) {
+        this.name = name;
+        this.privateKey = Utils.trim(array, 4, 48);
+        this.publicKey  = new ECPublicKey(Utils.trim(array, 52, 65));
+        this.address    = Address.fromKey(publicKey);
+        this.nonce      = Utils.makeLong(array, 52);
+    }
 
     public Wallet(String name, byte[] privateKey, Key publicKey, Address address, long nonce) {
         this.name = name;
@@ -107,6 +116,6 @@ public class Wallet {
     }
 
     public byte[] asByteArray() {
-        return Utils.concatenate(Utils.takeApartLong(1), privateKey, publicKey.getEncoded(), Utils.takeApartLong(nonce));
+        return Utils.concatenate(Utils.takeApart(1), privateKey, publicKey.getEncoded(), Utils.takeApartLong(nonce));
     }
 }
