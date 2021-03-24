@@ -279,13 +279,7 @@ public class RpcServer {
 
             try {
                 Transaction tx          = Transaction.fromJson(transaction);
-                Wallet wallet           = Context.getInstance().getRPCServer().getWallet();
-                if (wallet != null) {
-                    Keypair keypair     = wallet.getKeypairForSigning(Context.getInstance().getRPCServer().getPassphrase());
-                    Transaction signed  = tx.sign(keypair);
-                    response.put("response", "success");
-                    response.put("content", signed.toJson());
-                }
+                response.put("response", "success");
             } catch (WolkenException e) {
                 response.put("response", "failed");
                 response.put("reason", e.getMessage());
