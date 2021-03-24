@@ -184,6 +184,12 @@ public class RpcServer {
 
             Context.getInstance().getRPCServer().setPassphrase(password.getBytes(), timeout);
             response.put("response", "success");
+        } else if (requestType.equals("loadwallet")) {
+            String password  = request.getString("password");
+            long timeout     = request.getLong("timeout");
+
+            Context.getInstance().getRPCServer().setPassphrase(password.getBytes(), timeout);
+            response.put("response", "success");
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
