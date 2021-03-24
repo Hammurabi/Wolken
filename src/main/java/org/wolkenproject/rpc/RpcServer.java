@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.wolkenproject.core.Address;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
@@ -183,6 +184,16 @@ public class RpcServer {
             String name = request.getString("name");
 
             if (!Context.getInstance().getDatabase().checkWalletExists(name)) {
+                response.put("response", "failed");
+                response.put("reason", "wallet '" + name + "' does not exist.");
+            } else {
+                Context.getInstance().getRPCServer().setWallet(Context.getInstance().getDatabase().getWallet(name));
+            }
+        }  else if (requestType.equals("getaccount")) {
+            String name = request.getString("address");
+            Address address = null;
+
+            if (!Context.getInstance().getDatabase().checkAccountExists(name)) {
                 response.put("response", "failed");
                 response.put("reason", "wallet '" + name + "' does not exist.");
             } else {
