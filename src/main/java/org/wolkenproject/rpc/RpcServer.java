@@ -212,6 +212,7 @@ public class RpcServer {
 
             try {
                 Wallet wallet           = new Wallet(dump);
+                
                 if (Context.getInstance().getDatabase().checkWalletExists(wallet.getName())) {
                     Wallet other        = Context.getInstance().getDatabase().getWallet(wallet.getName());
 
