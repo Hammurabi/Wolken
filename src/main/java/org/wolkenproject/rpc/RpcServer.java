@@ -305,24 +305,7 @@ public class RpcServer {
                 response.put("response", "failed");
                 response.put("reason", "expected 'txid' to be base16 encoded.");
             } else {
-
-            }
-            try {
-                Transaction tx          = Transaction.fromJson(transaction);
-                if (!tx.shallowVerify()) {
-                    response.put("response", "failed");
-                    response.put("reason", "invalid transaction.");
-                } else {
-                    Context.getInstance().getTransactionPool().add(tx);
-                    Set<byte[]> hash = new LinkedHashSet<>();
-                    hash.add(tx.getHash());
-                    Message message = new Inv(Inv.Type.Transaction, hash);
-
-                    Context.getInstance().getServer().broadcast(message);
-                    response.put("response", "success");
-                    response.put("content", "transaction broadcast to '" + Context.getInstance().getServer().getConnectedNodes().size() + "' peers.");
-                }
-            } catch (WolkenException e) {
+                byte hash[]             = Base16.decode(txid);
             }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
