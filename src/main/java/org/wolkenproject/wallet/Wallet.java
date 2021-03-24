@@ -49,6 +49,13 @@ public class Wallet {
         if (json.has("nonce")) {
             throw new WolkenException("wallet requires the attribute 'nonce' to be present.");
         }
+
+
+        this.name       = json.getString("name");
+        this.privateKey = Base16.decode(json.getString("private"));
+        this.publicKey  = new ECPublicKey(Base16.decode(json.getString("public")));
+        this.address    = Address.fromFormatted(Base16.decode(json.getString("address")));
+        this.nonce      = json.getLong("nonce");
     }
 
     public static Wallet fromBytes(String name, byte array[]) {
