@@ -71,4 +71,11 @@ public class CryptoUtil {
 
         return salt;
     }
+
+    public static byte[] makeSecureBytes(int length) {
+        byte bytes[] = new byte[length];
+        new SecureRandom().nextBytes(bytes);
+
+        return bytes;
+    }
 }
