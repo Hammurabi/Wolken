@@ -309,6 +309,7 @@ public class RpcServer {
                 Transaction transaction = null;
 
                 if (Context.getInstance().getDatabase().checkTransactionExists(hash)) {
+                    transaction = Context.getInstance().getDatabase().findTransaction(hash);
                 } else if (Context.getInstance().getTransactionPool().contains(hash)) {
                 }
 
