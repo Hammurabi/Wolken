@@ -104,7 +104,8 @@ public class RpcServer {
                 } else {
                     response.put("response", "success");
                     String password = request.getString("password");
-                    char pass[]     = password.toCharArray();
+                    byte pass[]     = password.getBytes();
+                    
                     if (password.isEmpty()) {
                         pass        = null;
                     }
