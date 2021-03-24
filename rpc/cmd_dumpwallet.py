@@ -1,5 +1,6 @@
 # import commands
 import commands
+import json
 # password helper
 from getpass import getpass
 
@@ -17,5 +18,5 @@ def parse(cmd, arguments, connection):
             print("reason: " + response.reason)
         else:
             print("---------------------------------")
-            print(response.dump)
+            print(json.dumps(response.response, indent=4))
             print("---------------------------------")
