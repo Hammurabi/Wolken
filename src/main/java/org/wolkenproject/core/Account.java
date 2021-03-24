@@ -76,6 +76,10 @@ public class Account extends SerializableI {
         return hasAlias;
     }
 
+    public long getAlias() {
+        return alias;
+    }
+
     public Account updateBalance(long balance) {
         return new Account(nonce, balance, hasAlias, alias);
     }
