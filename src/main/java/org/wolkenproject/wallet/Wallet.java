@@ -1,5 +1,6 @@
 package org.wolkenproject.wallet;
 
+import org.json.JSONObject;
 import org.wolkenproject.core.Address;
 import org.wolkenproject.crypto.CryptoUtil;
 import org.wolkenproject.crypto.Key;
@@ -71,5 +72,8 @@ public class Wallet {
 
     public void setNonce(int nonce) {
         this.nonce = nonce;
+    }
+
+    public JSONObject toJson() {
     }
 }
