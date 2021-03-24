@@ -58,9 +58,13 @@ public class TransactionPool {
         }
     }
 
+    public void add(Transaction transaction) {
+        transactions.add(transaction);
+    }
+
     public void add(Set<Transaction> transactions) {
         for (Transaction transaction : transactions) {
-            this.transactions.add(transaction);
+            add(transaction);
         }
     }
 
