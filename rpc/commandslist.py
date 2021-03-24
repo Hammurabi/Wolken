@@ -19,6 +19,7 @@ import cmd_walletfromdump
 import cmd_signtransaction
 import cmd_broadcasttransaction
 import cmd_gettransaction
+import cmd_broadcastblock
 
 # registers all commands to the command manager
 def register_all(cmdManager):
