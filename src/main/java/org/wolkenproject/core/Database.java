@@ -24,12 +24,13 @@ public class Database {
 
     private final static byte[]
     AccountPrefix           = Utils.takeApartShort((short) 1),
-    ChainTipPrefix          = Utils.takeApartShort((short) 2),
-    BlockHeaderPrefix       = Utils.takeApartShort((short) 3),
-    BlockIndexPrefix        = Utils.takeApartShort((short) 4),
-    TransactionPrefix       = Utils.takeApartShort((short) 5),
-    RejectedBlockPrefix     = Utils.takeApartShort((short) 6),
-    WalletPrefix            = Utils.takeApartShort((short) 7);
+    AliasPrefix             = Utils.takeApartShort((short) 2),
+    ChainTipPrefix          = Utils.takeApartShort((short) 3),
+    BlockHeaderPrefix       = Utils.takeApartShort((short) 4),
+    BlockIndexPrefix        = Utils.takeApartShort((short) 5),
+    TransactionPrefix       = Utils.takeApartShort((short) 6),
+    RejectedBlockPrefix     = Utils.takeApartShort((short) 7),
+    WalletPrefix            = Utils.takeApartShort((short) 8);
 
     public Database(FileService location) throws IOException {
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
@@ -172,15 +173,16 @@ public class Database {
         return null;
     }
 
-    public Account getAccount(long alias) {
+    public Account findAccount(long alias) {
         return null;
     }
 
-    public byte[] getAccountHolder(long alias) {
-        return null;
+    public byte[] findAccountHolder(long alias) {
+        return get(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)));
     }
 
-    public Account getAccount(byte address[]) {
+    public Account findAccount(byte address[]) {
+
         return null;
     }
 
