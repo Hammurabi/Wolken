@@ -6,7 +6,6 @@ import org.wolkenproject.core.events.RegisterAliasEvent;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.encoders.Base16;
-import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.VarInt;
@@ -68,11 +67,11 @@ public class RegisterAliasTransaction extends Transaction {
         try {
             return
                     fee > 0 &&
-                    (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                    (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
                             (signature.getR().length == 32) &&
                             (signature.getS().length == 32) &&
                             getSender() != null &&
-                            !Context.getInstance().getDatabase().getAccount(getSender().getRaw()).hasAlias();
+                            !Context.getInstance().getDatabase().findAccount(getSender().getRaw()).hasAlias();
         } catch (WolkenException e) {
         }
 
