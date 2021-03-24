@@ -32,7 +32,7 @@ public class Wallet {
     private final Address address;
     private long          nonce;
 
-    public Wallet(String dump) {
+    public Wallet(String dump) throws WolkenException {
         JSONObject json = new JSONObject(dump);
         if (json.has("name")) {
             throw new WolkenException("wallet requires the attribute 'name' to be present.");
