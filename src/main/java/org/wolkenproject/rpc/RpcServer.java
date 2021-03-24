@@ -240,6 +240,8 @@ public class RpcServer {
                 if (wallet != null) {
                     Keypair keypair     = wallet.getKeypairForSigning(Context.getInstance().getRPCServer().getPassphrase());
                     Transaction signed  = tx.sign(keypair);
+                    response.put("response", "success");
+                    response.put("content", signed.toJson());
                 }
             } catch (WolkenException e) {
                 response.put("response", "failed");
