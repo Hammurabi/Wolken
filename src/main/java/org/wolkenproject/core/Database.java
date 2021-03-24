@@ -186,9 +186,6 @@ public class Database {
         put(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)), address);
     }
 
-    public void rmvAccount(byte[] address) {
-    }
-
     public Account findAccount(long alias) {
         byte address[] = findAccountHolder(alias);
         if (address != null) {
