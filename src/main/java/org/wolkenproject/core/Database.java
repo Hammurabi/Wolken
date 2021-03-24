@@ -174,6 +174,19 @@ public class Database {
         return null;
     }
 
+    public void storeAccount(byte[] address, Account account) {
+        put(Utils.concatenate(AccountPrefix, address), account.asByteArray());
+    }
+
+    public void newAccount(byte[] address) {
+    }
+
+    public void registerAlias(byte[] address, long alias) {
+    }
+
+    public void rmvAccount(byte[] address) {
+    }
+
     public Account findAccount(long alias) {
         byte address[] = findAccountHolder(alias);
         if (address != null) {
@@ -235,19 +248,6 @@ public class Database {
 
     public boolean checkAccountExists(byte[] address) {
         return false;
-    }
-
-    public void storeAccount(byte[] accountHolder, Account account) {
-
-    }
-
-    public void newAccount(byte[] address) {
-    }
-
-    public void registerAlias(byte[] address, long alias) {
-    }
-
-    public void rmvAccount(byte[] address) {
     }
 
     public void markRejected(byte[] hash) {
