@@ -31,12 +31,9 @@ public class Wallet {
     private final Address address;
     private long          nonce;
 
-    public Wallet(String name, byte array[]) {
-        this.name = name;
-        this.privateKey = Utils.trim(array, 4, 48);
-        this.publicKey  = new ECPublicKey(Utils.trim(array, 52, 65));
-        this.address    = Address.fromKey(publicKey);
-        this.nonce      = Utils.makeLong(array, 52);
+    public static Wallet fromBytes(String name, byte array[]) {
+        Key publicKey = new ECPublicKey(Utils.trim(array, 52, 65));
+        return new Wallet(name, Utils.trim(array, 4, 48), publicKey, Address.fromKey(publicKey), Utils.makeLong(array, 52));
     }
 
     public Wallet(String name, byte[] privateKey, Key publicKey, Address address, long nonce) {
