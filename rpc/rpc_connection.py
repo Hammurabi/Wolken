@@ -3,6 +3,10 @@ import requests
 import json
 from types import SimpleNamespace
 
+class rpc_noconnection:
+    def __init__(self, reason):
+        self.response = 'failed'
+        self.reason   = reason
 # define a 'connection' class to hold all the connection information
 class rpc_connection:
     def __init__(self):
@@ -12,7 +16,10 @@ class rpc_connection:
         self.scheme  = 'http'
     def send_request(self, request, arguments):
         url = self.scheme + "://" + self.ip + ":" + self.port + "/api?" + self.package_query(request, arguments)
-        return self.to_json(requests.get(url, allow_redirects=True))
+        try:
+            return self.to_json(requests.get(url, allow_redirects=True))
+        except:
+            return 
     def to_json(self, response):
         obj     = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
         dump    = ''
