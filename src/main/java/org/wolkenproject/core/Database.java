@@ -189,6 +189,7 @@ public class Database {
 
     public Account findAccount(byte address[]) {
         byte data[] = get(Utils.concatenate(AccountPrefix, address));
+        
         if (data != null) {
             InputStream inputStream = new ByteArrayInputStream(data);
             Account account = new Account();
