@@ -13,6 +13,10 @@ public class ECPrivateKey extends Key {
         this.key = key;
     }
 
+    public static Key create() {
+        return null;
+    }
+
     @Override
     public BigInteger asInteger() {
         return new BigInteger(1, key);
