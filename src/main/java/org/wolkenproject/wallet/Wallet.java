@@ -147,9 +147,21 @@ public class Wallet {
         return new Wallet(name, privKey, publicKey, address, nonce);
     }
 
-    public Wallet changePassphrase(String old, String neu) throws WolkenException {
+    public Wallet changePassphrase(byte oldPass[], byte newPass[]) throws WolkenException {
         if (!isEncrypted()) {
             throw new WolkenException("wallet '"+name+"' is not encrypted.");
+        }
+
+        char password[]     = Utils.makeChars(CryptoUtil.expand(old, 48));
+
+        byte salt[] = Utils.trim(privateKey, 0, 8);
+        byte iv[]   = Utils.trim(privateKey, 8, 16);
+        byte enc[]  = Utils.trim(privateKey, 24, 48);
+
+        try {
+            privateBytes = CryptoUtil.aesDecrypt(enc, CryptoUtil.generateSecretForAES(password, salt), iv);
+        } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new WolkenException(e);
         }
 
         return null;
