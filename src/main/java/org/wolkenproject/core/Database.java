@@ -8,6 +8,7 @@ import org.wolkenproject.utils.FileService;
 import org.iq80.leveldb.Options;
 import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.wallet.Wallet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -234,5 +235,8 @@ public class Database {
 
     public Transaction findTransaction(byte[] txid) {
         return null;
+    }
+
+    public void storeWallet(Wallet wallet) {
     }
 }
