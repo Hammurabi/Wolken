@@ -179,16 +179,15 @@ public class RpcServer {
                 }
             }
         } else if (requestType.equals("walletpassphrase")) {
+        } else if (requestType.equals("loadwallet")) {
             String name = request.getString("name");
 
             if (!Context.getInstance().getDatabase().checkWalletExists(name)) {
                 response.put("response", "failed");
                 response.put("reason", "wallet '" + name + "' does not exist.");
             } else {
-                Context.getInstance().getRPCServer().setWallet(Context.getInstance().getDatabase().getWallet(name))
+                Context.getInstance().getRPCServer().setWallet(Context.getInstance().getDatabase().getWallet(name));
             }
-        } else if (requestType.equals("loadwallet")) {
-            response.put("response", "success");
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
