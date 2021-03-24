@@ -146,4 +146,8 @@ public class Wallet {
 
         return new Wallet(name, privKey, publicKey, address, nonce);
     }
+
+    public Wallet changePassphrase(String old, String neu) throws WolkenException {
+        return null;
+    }
 }
