@@ -136,7 +136,12 @@ public class RpcServer {
                     response.put("response", "failed");
                     response.put("reason", "wallet is already encrypted, use 'walletpassphrasechange' to change the passphrase.");
                 } else {
-                    wallet = wallet.encrypt(pass.getBytes());
+                    try {
+                        wallet = wallet.encrypt(pass.getBytes());
+                    } catch (WolkenException e) {
+                        response.put("response", "failed");
+                        response.put("reason", e.getMessage());
+                    }
                     Context.getInstance().getDatabase().storeWallet(wallet);
                     response.put("response", "success");
                 }
