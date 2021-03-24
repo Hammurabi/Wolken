@@ -12,11 +12,11 @@ def parse(cmd, arguments, connection):
     else:
         name    = arguments[1]
 
-        response = connection.send_request(cmd.name, {'name':name})
+        response, content = connection.send_request(cmd.name, {'name':name})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
         else:
             print("---------------------------------")
-            print(json.dumps(response.content, indent=4))
+            print(content)
             print("---------------------------------")
