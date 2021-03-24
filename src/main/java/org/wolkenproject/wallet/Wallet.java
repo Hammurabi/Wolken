@@ -2,6 +2,7 @@ package org.wolkenproject.wallet;
 
 import org.json.JSONObject;
 import org.wolkenproject.core.Address;
+import org.wolkenproject.crypto.AESResult;
 import org.wolkenproject.crypto.CryptoUtil;
 import org.wolkenproject.crypto.Key;
 import org.wolkenproject.crypto.Keypair;
@@ -20,6 +21,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 
 public class Wallet {
     private final String  name;
@@ -41,8 +43,8 @@ public class Wallet {
         byte salt[] = CryptoUtil.makeSalt();
         try {
             SecretKey secretKey = CryptoUtil.generateSecretForAES(pass, salt);
-            byte enc            = CryptoUtil.aesEncrypt(ECPrivateKey.create().getEncoded(), secretKey);
-        } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
+            AESResult result    = CryptoUtil.aesEncrypt(ECPrivateKey.create().getEncoded(), secretKey);
+        } catch (InvalidKeySpecException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidParameterSpecException e) {
             throw new WolkenException(e);
         }
     }
