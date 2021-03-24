@@ -10,7 +10,7 @@ def parse(cmd, arguments, connection):
     else:
         transaction = arguments[1]
 
-        response    = connection.post_request(cmd.name, {'transaction':transaction})
+        response    = connection.post_request(cmd.name, {})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
