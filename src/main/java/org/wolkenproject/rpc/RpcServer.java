@@ -212,7 +212,7 @@ public class RpcServer {
 
             try {
                 Wallet wallet           = new Wallet(dump);
-                
+
                 if (Context.getInstance().getDatabase().checkWalletExists(wallet.getName())) {
                     Wallet other        = Context.getInstance().getDatabase().getWallet(wallet.getName());
 
@@ -226,6 +226,15 @@ public class RpcServer {
                 } else {
                     response.put("response", "success");
                 }
+            } catch (WolkenException e) {
+                response.put("response", "failed");
+                response.put("reason", e.getMessage());
+            }
+        } else if (requestType.equals("signtransaction")) {
+            JSONObject transaction      = request.getJSONObject("transaction");
+
+            try {
+                Transaction tx          = Transaction.fromJson(transaction);
             } catch (WolkenException e) {
                 response.put("response", "failed");
                 response.put("reason", e.getMessage());
