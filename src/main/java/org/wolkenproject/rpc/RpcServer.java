@@ -190,7 +190,7 @@ public class RpcServer {
             } else {
                 Context.getInstance().getRPCServer().setWallet(Context.getInstance().getDatabase().getWallet(name));
             }
-        }  else if (requestType.equals("getaccount")) {
+        } else if (requestType.equals("getaccount")) {
             String encodedAddress   = request.getString("address");
             Address address         = null;
 
@@ -206,6 +206,28 @@ public class RpcServer {
             } else {
                 response.put("response", "success");
                 response.put("content", Context.getInstance().getDatabase().findAccount(address.getRaw()).toJson());
+            }
+        } else if (requestType.equals("walletfromdump")) {
+            String dump             = request.getString("dump");
+
+            try {
+                Wallet wallet           = new Wallet(dump);
+                if (Context.getInstance().getDatabase().checkWalletExists(wallet.getName())) {
+                    Wallet other        = Context.getInstance().getDatabase().getWallet(wallet.getName());
+
+                    if (wallet.equals(other)) {
+                        response.put("response", "failed");
+                        response.put("reason", "wallet already exists.");
+                    } else {
+                        response.put("response", "failed");
+                        response.put("reason", "another wawllet with the name '" + wallet.getName() + "' already exists.");
+                    }
+                } else {
+                    response.put("response", "success");
+                }
+            } catch (WolkenException e) {
+                response.put("response", "failed");
+                response.put("reason", e.getMessage());
             }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
