@@ -59,6 +59,7 @@ public class RpcServer {
         onGet("/portfolio", response -> response.sendFile("/rpc/portfolio.html"));
         onGet("/login", response -> response.sendFile("/rpc/login.html"));
         onGet("/api", RpcServer::apiRequest);
+        onGet("/submit", msg->System.out.println(msg.getQuery() + " " + msg.getBodyUTF()));
         onGet("/content/:filename", response -> response.sendFile("/rpc/${filename}"));
 
         server.createContext("/", exchange -> {
