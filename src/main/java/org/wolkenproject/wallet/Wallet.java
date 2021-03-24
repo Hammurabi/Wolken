@@ -166,7 +166,7 @@ public class Wallet {
             if (!publicKey.equals(ECKeypair.publicKeyFromPrivate(new BigInteger(1, privateKey)))) {
                 throw new WolkenException("incorrect decryption key provided for wallet '" + name + "'.");
             }
-            
+
             return new Wallet(name, encrypt(newPass, privateKey), publicKey, address, nonce);
         } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new WolkenException(e);
