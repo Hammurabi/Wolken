@@ -77,4 +77,8 @@ public class Address {
                 "raw=" + Base58.encode(raw) +
                 '}';
     }
+
+    public byte[] getFormatted() {
+        return Utils.concatenate(new byte[] {(byte) prefix}, raw, checksum);
+    }
 }

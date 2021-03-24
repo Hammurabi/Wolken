@@ -58,16 +58,25 @@ public class TransactionPool {
         }
     }
 
+    public void add(Transaction transaction) {
+        mutex.lock();
+        try {
+            transactions.add(transaction);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
     public void add(Set<Transaction> transactions) {
         for (Transaction transaction : transactions) {
-            this.transactions.add(transaction);
+            add(transaction);
         }
     }
 
     public void queueBlock(Block block) {
         for (Transaction transaction : block) {
             byte txid[] = transaction.getHash();
-            if (transactions.containsKey(txid)) {
+            if (contains(txid)) {
                 continue;
             }
 
@@ -75,7 +84,7 @@ public class TransactionPool {
                 continue;
             }
 
-            transactions.add(transaction);
+            add(transaction);
         }
     }
 

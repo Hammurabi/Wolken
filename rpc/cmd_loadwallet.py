@@ -13,5 +13,5 @@ def parse(cmd, arguments, connection):
         response = connection.send_request(cmd.name, {'name':name})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
-            print("reason: " + response.reason)
+            print("reason: " + response.content)
 

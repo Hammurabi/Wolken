@@ -1,5 +1,6 @@
 # import commands
 import commands
+import json
 # password helper
 from getpass import getpass
 
@@ -15,16 +16,20 @@ def parse(cmd, arguments, connection):
         if len(arguments) == 3:
             encrypt = arguments[2].lower() == 'true'
 
-        password = ''        
+        password = 'None'        
         if encrypt:
             password = getpass('password>')
+            password2 = getpass('confirm>')
+            if password != password2:
+                print('error: please make sure you typed the same password.')
+                return
         
-        response = connection.send_request(cmd.name, {'name':name, 'encrypt':encrypt, 'password':password})
+        response, content = connection.send_request(cmd.name, {'name':name, 'encrypt':encrypt, 'password':password})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
         else:
             print("---------------------------------")
-            print(response.account)
+            print(content)
             print("---------------------------------")
 

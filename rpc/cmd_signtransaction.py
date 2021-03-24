@@ -1,6 +1,7 @@
 # import commands
 import commands
 # password helper
+import json
 from getpass import getpass
 
 # define 'signtransaction' command
@@ -16,7 +17,6 @@ def parse(cmd, arguments, connection):
             print("reason: " + response.reason)
         else:
             print("---------------------------------")
-            print("transaction signed successfully")
-            print(response.transaction)
+            print(json.dumps(response.content, indent=4))
             print("---------------------------------")
 

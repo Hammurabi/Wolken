@@ -4,15 +4,19 @@ import org.bouncycastle.crypto.AsymmetricBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.RSAEngine;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
+import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.util.PrivateKeyFactory;
 import org.bouncycastle.crypto.util.PublicKeyFactory;
+import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Tuple;
+import org.wolkenproject.utils.Utils;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
@@ -63,5 +67,33 @@ public class CryptoUtil {
         e.init(false, privateKey);
 
         return e.processBlock(messageBytes, 0, messageBytes.length);
+    }
+
+    public static byte[] makeSalt() {
+        byte salt[] = new byte[8];
+        new SecureRandom().nextBytes(salt);
+
+        return salt;
+    }
+
+    public static byte[] makeSecureBytes(int length) {
+        byte bytes[] = new byte[length];
+        new SecureRandom().nextBytes(bytes);
+
+        return bytes;
+    }
+
+    public static byte[] expand(byte[] bytes, int length) {
+        byte newBytes[] = null;
+
+        if (length <= 20) {
+            newBytes = HashUtil.ripemd160(bytes);
+        } else if (length <= 32) {
+            newBytes = HashUtil.sha256(bytes);
+        } else if (length <= 64) {
+            newBytes = HashUtil.sha512(bytes);
+        }
+
+        return Utils.trim(newBytes, 0, length);
     }
 }

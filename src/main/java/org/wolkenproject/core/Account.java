@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.json.JSONObject;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.VarInt;
@@ -13,6 +14,10 @@ public class Account extends SerializableI {
     private long    balance;
     private boolean hasAlias;
     private long    alias;
+
+    public Account() {
+        this(0, 0, false, 0);
+    }
 
     public Account(long nonce, long balance, boolean hasAlias, long alias) {
         this.nonce      = nonce;
@@ -71,6 +76,10 @@ public class Account extends SerializableI {
         return hasAlias;
     }
 
+    public long getAlias() {
+        return alias;
+    }
+
     public Account updateBalance(long balance) {
         return new Account(nonce, balance, hasAlias, alias);
     }
@@ -81,5 +90,14 @@ public class Account extends SerializableI {
 
     public Account deposit(long amount) {
         return new Account(nonce, balance + amount, hasAlias, alias);
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject().put("nonce", nonce).put("balance", balance);
+        if (hasAlias) {
+            json.put("alias", alias);
+        }
+
+        return json;
     }
 }

@@ -15,4 +15,6 @@ public abstract class Key {
     public abstract Key getCompressed() throws WolkenException;
     // should return a decompressed version of this key
     public abstract Key getDecompressed() throws WolkenException;
+    // should return true only if the two keys match
+    public abstract boolean equals(Key other);
 }

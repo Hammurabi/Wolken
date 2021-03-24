@@ -8,7 +8,9 @@ import org.wolkenproject.utils.FileService;
 import org.iq80.leveldb.Options;
 import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.wallet.Wallet;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,12 +24,14 @@ public class Database {
     private ReentrantLock   mutex;
 
     private final static byte[]
-    Account                 = Utils.takeApartShort((short) 1),
-    ChainTip                = Utils.takeApartShort((short) 2),
-    BlockHeader             = Utils.takeApartShort((short) 3),
-    BlockIndex              = Utils.takeApartShort((short) 4),
-    Transaction             = Utils.takeApartShort((short) 5),
-    RejectedBlock           = Utils.takeApartShort((short) 6);
+    AccountPrefix           = Utils.takeApartShort((short) 1),
+    AliasPrefix             = Utils.takeApartShort((short) 2),
+    ChainTipPrefix          = Utils.takeApartShort((short) 3),
+    BlockHeaderPrefix       = Utils.takeApartShort((short) 4),
+    BlockIndexPrefix        = Utils.takeApartShort((short) 5),
+    TransactionPrefix       = Utils.takeApartShort((short) 6),
+    RejectedBlockPrefix     = Utils.takeApartShort((short) 7),
+    WalletPrefix            = Utils.takeApartShort((short) 8);
 
     public Database(FileService location) throws IOException {
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
@@ -36,7 +40,7 @@ public class Database {
     }
 
     public void setTip(BlockIndex block) {
-        put(ChainTip, concatenate(concatenate(block.getHash(), Utils.takeApart(block.getHeight()))));
+        put(ChainTipPrefix, concatenate(concatenate(block.getHash(), Utils.takeApart(block.getHeight()))));
     }
 
     public boolean checkBlockExists(byte[] hash) {
@@ -44,7 +48,7 @@ public class Database {
     }
 
     public boolean checkBlockExists(int height) {
-        byte hash[] = get(concatenate(Database.BlockIndex, Utils.takeApart(height)));
+        byte hash[] = get(concatenate(BlockIndexPrefix, Utils.takeApart(height)));
 
         return hash != null;
     }
@@ -66,7 +70,7 @@ public class Database {
     }
 
     public void setBlockIndex(int height, BlockIndex block) {
-        put(concatenate(Database.BlockIndex, Utils.takeApart(height)), block.getHash());
+        put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), block.getHash());
         mutex.lock();
         try {
             OutputStream outputStream = location.newFile(".chain").newFile(Base16.encode(block.getHash())).openFileOutputStream();
@@ -81,7 +85,7 @@ public class Database {
     }
 
     public BlockIndex findBlock(int height) {
-        byte hash[] = get(concatenate(Database.BlockIndex, Utils.takeApart(height)));
+        byte hash[] = get(concatenate(BlockIndexPrefix, Utils.takeApart(height)));
 
         if (hash == null) {
             return null;
@@ -91,7 +95,7 @@ public class Database {
     }
 
     public void deleteBlock(int height) {
-        byte key[]  = concatenate(Database.BlockIndex, Utils.takeApart(height));
+        byte key[]  = concatenate(BlockIndexPrefix, Utils.takeApart(height));
         byte hash[] = get(key);
 
         if (checkBlockExists(hash)) {
@@ -132,7 +136,7 @@ public class Database {
     }
 
     public BlockIndex findTip() {
-        byte tip[] = get(ChainTip);
+        byte tip[] = get(ChainTipPrefix);
 
         if (tip != null) {
             return findBlock(Utils.trim(tip, 0, 32));
@@ -142,7 +146,7 @@ public class Database {
     }
 
     public byte[] findBlockHash(int height) {
-        return get(concatenate(Database.BlockIndex, Utils.takeApart(height)));
+        return get(concatenate(BlockIndexPrefix, Utils.takeApart(height)));
     }
 
     public BlockHeader findBlockHeader(byte[] hash) {
@@ -170,15 +174,56 @@ public class Database {
         return null;
     }
 
-    public Account getAccount(long alias) {
+    public void storeAccount(byte[] address, Account account) {
+        put(Utils.concatenate(AccountPrefix, address), account.asByteArray());
+    }
+
+    public void newAccount(byte[] address) {
+        put(Utils.concatenate(AccountPrefix, address), new Account().asByteArray());
+    }
+
+    public void registerAlias(byte[] address, long alias) {
+        put(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)), address);
+    }
+
+    public void removeAccount(byte[] address) {
+        Account account = findAccount(address);
+        remove(Utils.concatenate(AccountPrefix, address));
+        if (account != null && account.hasAlias()) {
+            remove(Utils.concatenate(AliasPrefix, Utils.takeApartLong(account.getAlias())));
+        }
+    }
+
+    public Account findAccount(long alias) {
+        byte address[] = findAccountHolder(alias);
+        if (address != null) {
+            return findAccount(address);
+        }
+
         return null;
     }
 
-    public byte[] getAccountHolder(long alias) {
-        return null;
+    public byte[] findAccountHolder(long alias) {
+        return get(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)));
     }
 
-    public Account getAccount(byte address[]) {
+    public Account findAccount(byte address[]) {
+        byte data[] = get(Utils.concatenate(AccountPrefix, address));
+
+        if (data != null) {
+            InputStream inputStream = new ByteArrayInputStream(data);
+            Account account = new Account();
+            try {
+                account.read(inputStream);
+                inputStream.close();
+            } catch (IOException | WolkenException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            return account;
+        }
+
         return null;
     }
 
@@ -201,7 +246,7 @@ public class Database {
     }
 
     public boolean checkTransactionExists(byte[] txid) {
-        return get(concatenate(Transaction, txid)) != null;
+        return get(concatenate(TransactionPrefix, txid)) != null;
     }
 
     public boolean checkAccountExists(long alias) {
@@ -212,27 +257,27 @@ public class Database {
         return false;
     }
 
-    public void updateAccount(byte[] accountHolder, Account account) {
-    }
-
-    public void newAccount(byte[] address) {
-    }
-
-    public void registerAlias(byte[] address, long alias) {
-    }
-
-    public void rmvAccount(byte[] address) {
-    }
-
     public void markRejected(byte[] hash) {
-        put(Utils.concatenate(RejectedBlock, hash), new byte[] { 1 });
+        put(Utils.concatenate(RejectedBlockPrefix, hash), new byte[] { 1 });
     }
 
     public boolean isRejected(byte[] hash) {
-        return get(Utils.concatenate(RejectedBlock, hash)) != null;
+        return get(Utils.concatenate(RejectedBlockPrefix, hash)) != null;
     }
 
     public Transaction findTransaction(byte[] txid) {
         return null;
+    }
+
+    public boolean checkWalletExists(String name) {
+        return get(Utils.concatenate(WalletPrefix, name.getBytes())) != null;
+    }
+
+    public void storeWallet(Wallet wallet) {
+        put(Utils.concatenate(WalletPrefix, wallet.getName().getBytes()), wallet.asByteArray());
+    }
+
+    public Wallet getWallet(String name) {
+        return Wallet.fromBytes(name, get(Utils.concatenate(WalletPrefix, name.getBytes())));
     }
 }
