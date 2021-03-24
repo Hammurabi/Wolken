@@ -12,6 +12,7 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.network.Node;
 import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.VoidCallableThrowsT;
+import org.wolkenproject.wallet.Wallet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -102,8 +103,12 @@ public class RpcServer {
                 } else {
                     response.put("response", "success");
                     String password = request.getString("password");
+                    char pass[]     = password.toCharArray();
                     if (password.isEmpty()) {
+                        pass        = null;
                     }
+
+                    Wallet wallet = new Wallet(name, pass);
                 }
             }
         }
