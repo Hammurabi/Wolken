@@ -283,6 +283,7 @@ public class RpcServer {
                     response.put("response", "failed");
                     response.put("reason", "invalid transaction.");
                 } else {
+                    Context.getInstance().getTransactionPool().add(tx);
                     response.put("response", "success");
                     response.put("content", "transaction broadcasted to '" + Context.getInstance().getServer().getConnectedNodes().size() + "' peers.");
                 }
