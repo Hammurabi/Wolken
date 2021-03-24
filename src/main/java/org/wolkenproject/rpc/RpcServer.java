@@ -299,8 +299,14 @@ public class RpcServer {
                 response.put("reason", e.getMessage());
             }
         } else if (requestType.equals("gettransaction")) {
-            JSONObject transaction      = request.getJSONObject("transaction");
+            String txid                 = request.getString("txid");
 
+            if (!Base16.isEncoded(txid)) {
+                response.put("response", "failed");
+                response.put("reason", "expected 'txid' to be base16 encoded.");
+            } else {
+
+            }
             try {
                 Transaction tx          = Transaction.fromJson(transaction);
                 if (!tx.shallowVerify()) {
@@ -317,8 +323,6 @@ public class RpcServer {
                     response.put("content", "transaction broadcast to '" + Context.getInstance().getServer().getConnectedNodes().size() + "' peers.");
                 }
             } catch (WolkenException e) {
-                response.put("response", "failed");
-                response.put("reason", e.getMessage());
             }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
