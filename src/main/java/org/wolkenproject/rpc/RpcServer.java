@@ -91,6 +91,9 @@ public class RpcServer {
             Context.getInstance().shutDown();
             return;
         } else if (requestType.equals("createwallet")) {
+            if (!request.has("name")) {
+            } else {
+            }
         }
         else if (request.getString("request").equals("createwallet")) {
         } else if (request.getString("request").equals("gettx")) {
