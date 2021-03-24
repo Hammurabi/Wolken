@@ -58,6 +58,9 @@ public class Wallet {
         if (!Base16.isEncoded(json.getString("address"))) {
             throw new WolkenException("wallet requires the attribute 'address' to be base16 encoded.");
         }
+        if (!Address.isValidAddress(Base16.decode(json.getString("address")))) {
+            throw new WolkenException("wallet requires the attribute 'address' to be a valid address.");
+        }
 
 
         this.name       = json.getString("name");
