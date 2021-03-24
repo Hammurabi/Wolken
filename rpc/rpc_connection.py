@@ -20,6 +20,12 @@ class rpc_connection:
             return self.to_json(requests.get(url, allow_redirects=True))
         except:
             return rpc_noconnection('failed to send request to server.'), ''
+    def post_request(self, request, arguments):
+        url = self.scheme + "://" + self.ip + ":" + self.port + "/api?" + self.package_query(request, arguments)
+        try:
+            return self.to_json(requests.get(url, allow_redirects=True))
+        except:
+            return rpc_noconnection('failed to send request to server.'), ''
     def to_json(self, response):
         obj     = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
         dump    = ''
