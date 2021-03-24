@@ -298,6 +298,28 @@ public class RpcServer {
                 response.put("response", "failed");
                 response.put("reason", e.getMessage());
             }
+        } else if (requestType.equals("gettransaction")) {
+            JSONObject transaction      = request.getJSONObject("transaction");
+
+            try {
+                Transaction tx          = Transaction.fromJson(transaction);
+                if (!tx.shallowVerify()) {
+                    response.put("response", "failed");
+                    response.put("reason", "invalid transaction.");
+                } else {
+                    Context.getInstance().getTransactionPool().add(tx);
+                    Set<byte[]> hash = new LinkedHashSet<>();
+                    hash.add(tx.getHash());
+                    Message message = new Inv(Inv.Type.Transaction, hash);
+
+                    Context.getInstance().getServer().broadcast(message);
+                    response.put("response", "success");
+                    response.put("content", "transaction broadcast to '" + Context.getInstance().getServer().getConnectedNodes().size() + "' peers.");
+                }
+            } catch (WolkenException e) {
+                response.put("response", "failed");
+                response.put("reason", e.getMessage());
+            }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
