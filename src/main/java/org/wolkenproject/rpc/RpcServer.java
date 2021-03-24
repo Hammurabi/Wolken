@@ -139,6 +139,7 @@ public class RpcServer {
                 } else {
                     wallet = wallet.encrypt(pass.getBytes());
                     Context.getInstance().getDatabase().storeWallet(wallet);
+                    response.put("response", "success");
                 }
             }
         } else if (request.getString("request").equals("gettx")) {
