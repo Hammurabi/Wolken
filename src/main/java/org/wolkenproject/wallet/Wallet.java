@@ -148,19 +148,7 @@ public class Wallet {
     }
 
     public Wallet encrypt(byte[] pass) throws WolkenException {
-        byte privKey[]      = privateKey;
-        try {
-            byte salt[]         = CryptoUtil.makeSalt();
-            char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
-            SecretKey secretKey = CryptoUtil.generateSecretForAES(password, salt);
-            AESResult result    = CryptoUtil.aesEncrypt(privateKey, secretKey);
-
-            privKey             = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
-        } catch (Exception e) {
-            throw new WolkenException(e);
-        }
-
-        return new Wallet(name, privKey, publicKey, address, nonce);
+        return new Wallet(name, encrypt(pass, privKey), publicKey, address, nonce);
     }
 
     public Wallet changePassphrase(byte oldPass[], byte newPass[]) throws WolkenException {
