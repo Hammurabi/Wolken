@@ -12,7 +12,7 @@ def parse(cmd, arguments, connection):
         old     = getpass('old password>')
         new     = getpass('new password>')
         confirm = getpass('confirm new>')
-        if password != password2:
+        if new != confirm:
             print('error: please make sure you typed the same password.')
             return
 
