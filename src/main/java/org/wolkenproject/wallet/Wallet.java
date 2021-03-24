@@ -53,6 +53,14 @@ public class Wallet {
         return name;
     }
 
+    public byte[] getPrivateKey() {
+        return privateKey;
+    }
+
+    public Key getPublicKey() {
+        return publicKey;
+    }
+
     public Address getAddress() {
         return address;
     }
