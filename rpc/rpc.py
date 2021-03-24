@@ -8,13 +8,6 @@ import commandslist
 import rpc_connection
 
 # valid commands
-# node          <ip> <port>
-# getblock      <hash>
-# gettx         <hash>
-# getbalance    <address>
-# exit
-# quit
-
 def start():
     # setup the initial connection
     connection = rpc_connection.rpc_connection()
