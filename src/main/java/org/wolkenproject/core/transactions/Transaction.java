@@ -216,8 +216,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                         (signature.getR().length == 32) &&
                         (signature.getS().length == 32) &&
                         getSender() != null &&
-                        (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                        (Context.getInstance().getDatabase().getAccount(getSender().getRaw()).getBalance()) >= (value + fee);
+                        (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                        (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getBalance()) >= (value + fee);
             } catch (WolkenException e) {
                 e.printStackTrace();
             }
