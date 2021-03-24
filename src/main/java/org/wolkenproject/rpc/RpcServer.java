@@ -279,7 +279,11 @@ public class RpcServer {
 
             try {
                 Transaction tx          = Transaction.fromJson(transaction);
-                response.put("response", "success");
+                if (!tx.shallowVerify()) {
+                    response.put("response", "failed");
+                } else {
+                    response.put("response", "success");
+                }
             } catch (WolkenException e) {
                 response.put("response", "failed");
                 response.put("reason", e.getMessage());
