@@ -32,8 +32,12 @@ public class Wallet {
     private long          nonce;
 
     public static Wallet fromBytes(String name, byte array[]) {
-        Key publicKey = new ECPublicKey(Utils.trim(array, 52, 65));
-        return new Wallet(name, Utils.trim(array, 4, 48), publicKey, Address.fromKey(publicKey), Utils.makeLong(array, 52));
+        boolean isEncrypted = array[4] == 1;
+        int privKeyLen      = isEncrypted ? 72 : 32;
+
+        Key publicKey = new ECPublicKey(Utils.trim(array, 5 + privKeyLen, 65));
+
+        return new Wallet(name, Utils.trim(array, 5, privKeyLen), publicKey, Address.fromKey(publicKey), Utils.makeLong(array, 5 + privKeyLen + 65));
     }
 
     public Wallet(String name, byte[] privateKey, Key publicKey, Address address, long nonce) {
