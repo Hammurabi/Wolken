@@ -10,6 +10,7 @@ import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.wallet.Wallet;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -187,6 +188,21 @@ public class Database {
     }
 
     public Account findAccount(byte address[]) {
+        byte data[] = get(Utils.concatenate(AccountPrefix, address));
+        if (data != null) {
+            InputStream inputStream = new ByteArrayInputStream(data);
+            Account account = new Account();
+            try {
+                account.read(inputStream);
+                inputStream.close();
+            } catch (IOException | WolkenException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            return account;
+        }
+
         return null;
     }
 
