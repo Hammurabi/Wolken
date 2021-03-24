@@ -152,6 +152,27 @@ public class RpcServer {
                 response.put("response", "success");
                 response.put("content", wallet.toJson());
             }
+        } else if (requestType.equals("walletpassphrasechange")) {
+            String name = request.getString("name");
+            String old  = request.getString("old");
+            String neu  = request.getString("new");
+
+            if (!Context.getInstance().getDatabase().checkWalletExists(name)) {
+                response.put("response", "failed");
+                response.put("reason", "wallet '" + name + "' does not exist.");
+            } else {
+                Wallet wallet   = Context.getInstance().getDatabase().getWallet(name);
+                try {
+                    wallet          = wallet.changePassphrase(old, neu);
+                    response.put("response", "success");
+                    response.put("content", wallet.toJson());
+                    Context.getInstance().getDatabase().storeWallet(wallet);
+                }
+                catch (WolkenException e) {
+                    response.put("response", "failed");
+                    response.put("reason", e.getMessage());
+                }
+            }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
