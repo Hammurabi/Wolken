@@ -36,7 +36,9 @@ public class Wallet {
     }
 
     public Wallet(String name, char[] pass) {
-        
+        this.name = name;
+        byte salt[] = CryptoUtil.makeSalt();
+        CryptoUtil.generateSecretForAES(pass, )
     }
 
     public Keypair getKeypairForSigning(char password[]) throws WolkenException {
