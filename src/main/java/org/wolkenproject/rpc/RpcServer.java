@@ -306,6 +306,10 @@ public class RpcServer {
                 response.put("reason", "expected 'txid' to be base16 encoded.");
             } else {
                 byte hash[]             = Base16.decode(txid);
+                Transaction transaction = null;
+
+                if (Context.getInstance().getDatabase().checkTransactionExists(hash)) {
+                }
             }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
