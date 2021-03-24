@@ -68,4 +68,8 @@ public class Wallet {
     public long getNonce() {
         return nonce;
     }
+
+    public void setNonce(int nonce) {
+        this.nonce = nonce;
+    }
 }
