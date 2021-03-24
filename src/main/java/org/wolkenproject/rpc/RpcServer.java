@@ -84,6 +84,15 @@ public class RpcServer {
         });
 
         executor = Executors.newCachedThreadPool();
+        executor.execute(() -> {
+            while (Context.getInstance().isRunning()) {
+                Context.getInstance().getRPCServer().maintain();
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                }
+            }
+        });
         server.setExecutor(executor);
         server.start();
     }
