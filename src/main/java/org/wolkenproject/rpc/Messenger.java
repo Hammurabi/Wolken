@@ -144,4 +144,8 @@ public class Messenger {
         reader.close();
         return builder.toString();
     }
+
+    public String getBodyUTF() throws IOException {
+        return readUTF(exchange.getRequestBody());
+    }
 }
