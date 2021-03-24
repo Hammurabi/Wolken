@@ -3,6 +3,7 @@ package org.wolkenproject.crypto.ec;
 import org.wolkenproject.crypto.CryptoUtil;
 import org.wolkenproject.crypto.Key;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
 import java.math.BigInteger;
@@ -11,7 +12,7 @@ public class ECPrivateKey extends Key {
     private final byte key[];
 
     public ECPrivateKey() {
-        this(CryptoUtil.makeSecureBytes(32));
+        this(HashUtil.sha256(CryptoUtil.makeSecureBytes(1024)));
     }
 
     public ECPrivateKey(byte key[]) {
