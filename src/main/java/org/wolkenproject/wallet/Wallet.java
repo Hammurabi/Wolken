@@ -62,17 +62,19 @@ public class Wallet {
     }
 
     public Keypair getKeypairForSigning(byte pass[]) throws WolkenException {
-        char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
-
         byte privateBytes[] = privateKey;
-        byte salt[] = Utils.trim(privateBytes, 0, 8);
-        byte iv[]   = Utils.trim(privateBytes, 8, 16);
-        byte enc[]  = Utils.trim(privateBytes, 24, 48);
+        if (pass != null) {
+            char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
 
-        try {
-            privateBytes = CryptoUtil.aesDecrypt(enc, CryptoUtil.generateSecretForAES(password, salt), iv);
-        } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
-            throw new WolkenException(e);
+            byte salt[] = Utils.trim(privateBytes, 0, 8);
+            byte iv[]   = Utils.trim(privateBytes, 8, 16);
+            byte enc[]  = Utils.trim(privateBytes, 24, 48);
+
+            try {
+                privateBytes = CryptoUtil.aesDecrypt(enc, CryptoUtil.generateSecretForAES(password, salt), iv);
+            } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
+                throw new WolkenException(e);
+            }
         }
 
         return new ECKeypair(new ECPrivateKey(privateBytes), publicKey);
