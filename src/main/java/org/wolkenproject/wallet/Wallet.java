@@ -61,6 +61,9 @@ public class Wallet {
         if (!Address.isValidAddress(Base16.decode(json.getString("address")))) {
             throw new WolkenException("wallet requires the attribute 'address' to be a valid address.");
         }
+        if (!json.get("nonce").toString().matches("\\d+")) {
+            throw new WolkenException("wallet requires the attribute 'nonce' to be a valid unsigned integer.");
+        }
 
 
         this.name       = json.getString("name");
