@@ -100,7 +100,7 @@ public class RpcServer {
     private void maintain() {
         if (getPassphrase() != null) {
             long now = System.currentTimeMillis();
-            if (now - getPassphraseTimestamp() > getPassphraseTimeout()) {
+            if (now - getPassphraseTimestamp() >= getPassphraseTimeout()) {
                 setPassphrase(null, 0);
             }
         }
@@ -296,6 +296,24 @@ public class RpcServer {
         mutex.lock();
         try {
             return passphrase;
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    private long getPassphraseTimeout() {
+        mutex.lock();
+        try {
+            return passphraseTimeout;
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    private long getPassphraseTimestamp() {
+        mutex.lock();
+        try {
+            return passphraseTimestamp;
         } finally {
             mutex.unlock();
         }
