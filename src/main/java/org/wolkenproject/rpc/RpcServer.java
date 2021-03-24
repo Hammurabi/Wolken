@@ -274,6 +274,15 @@ public class RpcServer {
         msg.send("application/json", response.toString().getBytes());
     }
 
+    private byte[] getPassphrase() {
+        mutex.lock();
+        try {
+            return passphrase;
+        } finally {
+            mutex.unlock();
+        }
+    }
+
     private Wallet getWallet() {
         mutex.lock();
         try {
