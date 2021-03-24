@@ -19,6 +19,10 @@ def parse(cmd, arguments, connection):
         password = ''        
         if encrypt:
             password = getpass('password>')
+            password2 = getpass('confirm>')
+            if password != password2:
+                print('error: please make sure you typed the same password.')
+                return
         
         response = connection.send_request(cmd.name, {'name':name, 'encrypt':encrypt, 'password':password})
         print("alert: server responded with '"+response.response+"'.")
