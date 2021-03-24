@@ -134,7 +134,7 @@ public class Wallet {
             char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
             SecretKey secretKey = CryptoUtil.generateSecretForAES(password, salt);
             AESResult result    = CryptoUtil.aesEncrypt(privateKey, secretKey);
-            
+
             privKey             = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
         } catch (Exception e) {
             e.printStackTrace();
