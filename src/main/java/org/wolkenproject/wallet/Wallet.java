@@ -46,6 +46,9 @@ public class Wallet {
         if (json.has("address")) {
             throw new WolkenException("wallet requires the attribute 'address' to be present.");
         }
+        if (json.has("nonce")) {
+            throw new WolkenException("wallet requires the attribute 'nonce' to be present.");
+        }
     }
 
     public static Wallet fromBytes(String name, byte array[]) {
