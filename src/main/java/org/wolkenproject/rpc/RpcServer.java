@@ -82,6 +82,7 @@ public class RpcServer {
     public static void apiRequest(Messenger msg) throws IOException {
         JSONObject request = msg.getFormattedQuery();
         JSONObject response= new JSONObject();
+        String requestType = request.getString("request");
 
         if (request.getString("request").equals("close")) {
             String password = request.getString("password");
@@ -89,6 +90,7 @@ public class RpcServer {
             msg.send("application/json", response.toString().getBytes());
             Context.getInstance().shutDown();
             return;
+        } else if (requestType.equals("createwallet")) {
         }
         else if (request.getString("request").equals("createwallet")) {
         } else if (request.getString("request").equals("gettx")) {
