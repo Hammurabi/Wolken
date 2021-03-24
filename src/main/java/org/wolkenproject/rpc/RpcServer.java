@@ -280,7 +280,8 @@ public class RpcServer {
             try {
                 Transaction tx          = Transaction.fromJson(transaction);
                 if (!tx.shallowVerify()) {
-                    response.put("response", "invalid transaction.");
+                    response.put("response", "failed");
+                    response.put("reason", "invalid transaction.");
                 } else {
                     response.put("response", "success");
                     response.put("content", "transaction broadcasted to '" + Context.getInstance().getServer().getConnectedNodes().size() + "' peers.");
