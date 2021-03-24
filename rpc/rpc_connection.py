@@ -16,10 +16,8 @@ class rpc_connection:
     def to_json(self, response):
         obj     = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
         dump    = ''
-
         if hasattr(obj, 'content'):
             dump= json.dumps(json.loads(response.text)['content'], indent=4)
-
         return obj, dump
     def package_query(self, request, arguments):
         query = 'request=' + request
