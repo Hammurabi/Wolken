@@ -273,6 +273,7 @@ public class Utils {
         for (int i = 0; i < chars.length; i ++) {
             chars[i] = charBuffer.getChar();
         }
+
         return chars;
     }
 
