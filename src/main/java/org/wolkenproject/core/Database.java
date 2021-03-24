@@ -186,6 +186,14 @@ public class Database {
         put(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)), address);
     }
 
+    public void removeAccount(byte[] address) {
+        Account account = findAccount(address);
+        remove(Utils.concatenate(AccountPrefix, address));
+        if (account != null && account.hasAlias()) {
+            remove(Utils.concatenate(AliasPrefix, Utils.takeApartLong(account.getAlias())));
+        }
+    }
+
     public Account findAccount(long alias) {
         byte address[] = findAccountHolder(alias);
         if (address != null) {
