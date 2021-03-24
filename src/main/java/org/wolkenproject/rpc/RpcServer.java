@@ -103,10 +103,11 @@ public class RpcServer {
                     response.put("reason", "a wallet with the name '" + name + "' already exists.");
                 } else {
                     response.put("response", "success");
-                    byte pass[]     = null;
+                    String password = request.getString("password");
+                    byte pass[]     = password.getBytes();
 
-                    if (request.has("password")) {
-                        pass        = request.getString("password").getBytes();
+                    if (request.getBoolean("encrypt")) {
+                        pass        = null;
                     }
 
                     try {
