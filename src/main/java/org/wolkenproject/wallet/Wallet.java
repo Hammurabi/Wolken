@@ -141,7 +141,7 @@ public class Wallet {
 
             privKey             = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new WolkenException(e);
         }
 
         return privKey;
