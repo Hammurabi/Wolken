@@ -44,11 +44,12 @@ public class Wallet {
         this.nonce = nonce;
     }
 
-    public Wallet(String name, char[] pass) throws WolkenException {
+    public Wallet(String name, byte[] pass) throws WolkenException {
         this.name = name;
         byte salt[] = CryptoUtil.makeSalt();
         try {
-            SecretKey secretKey = CryptoUtil.generateSecretForAES(pass, salt);
+            char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
+            SecretKey secretKey = CryptoUtil.generateSecretForAES(, salt);
             Key privKey         = new ECPrivateKey();
             AESResult result    = CryptoUtil.aesEncrypt(privKey.getEncoded(), secretKey);
 
