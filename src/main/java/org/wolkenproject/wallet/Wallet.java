@@ -152,7 +152,7 @@ public class Wallet {
             throw new WolkenException("wallet '"+name+"' is not encrypted.");
         }
 
-        char password[]     = Utils.makeChars(CryptoUtil.expand(old, 48));
+        char password[]     = Utils.makeChars(CryptoUtil.expand(oldPass, 48));
 
         byte salt[] = Utils.trim(privateKey, 0, 8);
         byte iv[]   = Utils.trim(privateKey, 8, 16);
