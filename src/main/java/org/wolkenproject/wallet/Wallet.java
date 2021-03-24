@@ -148,6 +148,10 @@ public class Wallet {
     }
 
     public Wallet changePassphrase(String old, String neu) throws WolkenException {
+        if (!isEncrypted()) {
+            throw new WolkenException("wallet '"+name+"' is not encrypted.");
+        }
+
         return null;
     }
 }
