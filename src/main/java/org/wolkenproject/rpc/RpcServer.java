@@ -106,7 +106,7 @@ public class RpcServer {
                     String password = request.getString("password");
                     byte pass[]     = password.getBytes();
 
-                    if (request.getBoolean("encrypt")) {
+                    if (!request.getBoolean("encrypt")) {
                         pass        = null;
                     }
 
