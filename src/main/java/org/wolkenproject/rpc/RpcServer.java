@@ -9,6 +9,7 @@ import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Node;
 import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.VoidCallableThrowsT;
@@ -108,7 +109,12 @@ public class RpcServer {
                         pass        = null;
                     }
 
-                    Wallet wallet = new Wallet(name, pass);
+                    try {
+                        Wallet wallet = new Wallet(name, pass);
+                    } catch (WolkenException e) {
+                        response.put("response", "failed");
+                        response.put("reason", e.getMessage());
+                    }
                 }
             }
         }
