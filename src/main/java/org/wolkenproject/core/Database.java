@@ -238,6 +238,10 @@ public class Database {
         return null;
     }
 
+    public boolean checkWalletExists(String name) {
+        return get(Utils.concatenate(WalletPrefix, name.getBytes())) != null;
+    }
+
     public void storeWallet(Wallet wallet) {
         put(Utils.concatenate(WalletPrefix, wallet.getName().getBytes()), wallet.asByteArray());
     }
