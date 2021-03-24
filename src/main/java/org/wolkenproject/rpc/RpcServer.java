@@ -90,7 +90,7 @@ public class RpcServer {
             Context.getInstance().shutDown();
             return;
         }
-        else if (request.getString("request").equals("getblock")) {
+        else if (request.getString("request").equals("createwallet")) {
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
