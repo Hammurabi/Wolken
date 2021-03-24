@@ -132,19 +132,16 @@ public class Wallet {
     }
 
     public static byte[] encrypt(byte pass[], byte key[]) throws WolkenException {
-        byte privKey[]      = key;
         try {
             byte salt[]         = CryptoUtil.makeSalt();
             char password[]     = Utils.makeChars(CryptoUtil.expand(pass, 48));
             SecretKey secretKey = CryptoUtil.generateSecretForAES(password, salt);
             AESResult result    = CryptoUtil.aesEncrypt(key, secretKey);
 
-            privKey             = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
+            return Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
         } catch (Exception e) {
             throw new WolkenException(e);
         }
-
-        return privKey;
     }
 
     public Wallet encrypt(byte[] pass) throws WolkenException {
