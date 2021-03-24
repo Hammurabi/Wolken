@@ -18,13 +18,13 @@ public class MintRewardEvent extends Event {
     @Override
     public void apply() {
         Context.getInstance().getDatabase().updateAccount(address,
-                Context.getInstance().getDatabase().getAccount(address).deposit(amount));
+                Context.getInstance().getDatabase().findAccount(address).deposit(amount));
     }
 
     @Override
     public void undo() {
         Context.getInstance().getDatabase().updateAccount(address,
-                Context.getInstance().getDatabase().getAccount(address).withdraw(amount));
+                Context.getInstance().getDatabase().findAccount(address).withdraw(amount));
     }
 
     @Override
