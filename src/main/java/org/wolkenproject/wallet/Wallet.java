@@ -48,6 +48,7 @@ public class Wallet {
 
             this.privateKey     = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
             this.publicKey      = ECKeypair.publicKeyFromPrivate(privKey.asInteger());
+            this.address        = Address.fromKey(publicKey);
         } catch (InvalidKeySpecException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidParameterSpecException e) {
             throw new WolkenException(e);
         }
