@@ -316,6 +316,8 @@ public class RpcServer {
                     response.put("response", "failed");
                     response.put("reason", "could not find transaction '"+txid+"'.");
                 } else {
+                    response.put("response", "success");
+                    response.put("content", transaction.toJson());
                 }
             }
         } else if (request.getString("request").equals("gettx")) {
