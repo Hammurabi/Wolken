@@ -19,12 +19,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 public class Wallet {
+    private final String  name;
     private final byte    privateKey[];
     private final Key     publicKey;
     private final Address address;
     private long          nonce;
 
-    public Wallet(byte[] privateKey, Key publicKey, Address address, long nonce) {
+    public Wallet(String name, byte[] privateKey, Key publicKey, Address address, long nonce) {
+        this.name = name;
         this.privateKey = privateKey;
         this.publicKey = publicKey;
         this.address = address;
