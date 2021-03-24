@@ -10,6 +10,7 @@ import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Node;
 import org.wolkenproject.utils.Logger;
@@ -190,12 +191,14 @@ public class RpcServer {
                 Context.getInstance().getRPCServer().setWallet(Context.getInstance().getDatabase().getWallet(name));
             }
         }  else if (requestType.equals("getaccount")) {
-            String name = request.getString("address");
-            Address address = null;
+            String encodedAddress   = request.getString("address");
+            Address address         = null;
 
-            if (!Context.getInstance().getDatabase().checkAccountExists(name)) {
+            if (!Address.isValidAddress(Base58.decode(encodedAddress))) {
+
+            } else if (!Context.getInstance().getDatabase().checkAccountExists(address.getRaw())) {
                 response.put("response", "failed");
-                response.put("reason", "wallet '" + name + "' does not exist.");
+                response.put("reason", "wallet '" + encodedAddress + "' does not exist.");
             } else {
                 Context.getInstance().getRPCServer().setWallet(Context.getInstance().getDatabase().getWallet(name));
             }
