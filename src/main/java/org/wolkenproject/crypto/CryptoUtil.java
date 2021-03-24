@@ -9,6 +9,7 @@ import org.bouncycastle.crypto.util.PrivateKeyFactory;
 import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Tuple;
+import org.wolkenproject.utils.Utils;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -80,5 +81,19 @@ public class CryptoUtil {
         new SecureRandom().nextBytes(bytes);
 
         return bytes;
+    }
+
+    public static byte[] expand(byte[] bytes, int length) {
+        byte newBytes[] = null;
+
+        if (length <= 20) {
+            newBytes = HashUtil.ripemd160(bytes);
+        } else if (length <= 32) {
+            newBytes = HashUtil.sha256(bytes);
+        } else if (length <= 64) {
+            newBytes = HashUtil.sha512(bytes);
+        }
+
+        return Utils.trim(newBytes, 0, length);
     }
 }
