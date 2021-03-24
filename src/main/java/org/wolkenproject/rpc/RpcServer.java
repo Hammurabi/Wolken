@@ -13,7 +13,9 @@ import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.VoidCallableThrowsT;
 import org.wolkenproject.wallet.Wallet;
@@ -284,6 +286,11 @@ public class RpcServer {
                     response.put("reason", "invalid transaction.");
                 } else {
                     Context.getInstance().getTransactionPool().add(tx);
+                    Set<byte[]> hash = new LinkedHashSet<>();
+                    hash.add(tx.getHash());
+                    Message message = new Inv(Inv.Type.Transaction, hash);
+
+                    Context.getInstance().getServer().broadcast(message);
                     response.put("response", "success");
                     response.put("content", "transaction broadcasted to '" + Context.getInstance().getServer().getConnectedNodes().size() + "' peers.");
                 }
