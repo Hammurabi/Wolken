@@ -126,4 +126,8 @@ public class Wallet {
     public boolean isEncrypted() {
         return getPrivateKey().length != 32;
     }
+
+    public Wallet encrypt(byte[] pass) {
+        return null;
+    }
 }
