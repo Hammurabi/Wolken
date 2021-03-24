@@ -211,6 +211,10 @@ public class RpcServer {
         msg.send("application/json", response.toString().getBytes());
     }
 
+    private void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
     private void setPassphrase(byte[] passphrase, long timeout) {
     }
 
