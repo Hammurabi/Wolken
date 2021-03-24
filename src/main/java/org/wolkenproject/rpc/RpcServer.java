@@ -137,6 +137,8 @@ public class RpcServer {
                     response.put("response", "failed");
                     response.put("reason", "wallet is already encrypted, use 'walletpassphrasechange' to change the passphrase.");
                 } else {
+                    wallet = wallet.encrypt(pass.getBytes());
+                    Context.getInstance().getDatabase().storeWallet(wallet);
                 }
             }
         } else if (request.getString("request").equals("gettx")) {
