@@ -82,4 +82,8 @@ public class Account extends SerializableI {
     public Account deposit(long amount) {
         return new Account(nonce, balance + amount, hasAlias, alias);
     }
+
+    public boolean toJson() {
+        return false;
+    }
 }
