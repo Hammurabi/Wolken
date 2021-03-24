@@ -31,6 +31,9 @@ public class RpcServer {
     private UrlPath[]           paths;
     private Set<Request>        handlers;
     private ExecutorService     executor;
+    private Wallet              wallet;
+    private byte                passphrase[];
+    private long                passphraseTimestamp;
 
     public RpcServer(Context context, int port) throws IOException {
         Logger.alert("=============================================");
