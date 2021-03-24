@@ -15,6 +15,7 @@ import org.wolkenproject.utils.Utils;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -35,10 +36,15 @@ public class Wallet {
         this.nonce = nonce;
     }
 
-    public Wallet(String name, char[] pass) {
+    public Wallet(String name, char[] pass) throws WolkenException {
         this.name = name;
         byte salt[] = CryptoUtil.makeSalt();
-        CryptoUtil.generateSecretForAES(pass, )
+        try {
+            SecretKey secretKey = CryptoUtil.generateSecretForAES(pass, salt);
+            byte enc            = CryptoUtil.aesEncrypt(ECPrivateKey.create().getEncoded(), secretKey);
+        } catch (InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new WolkenException(e);
+        }
     }
 
     public Keypair getKeypairForSigning(char password[]) throws WolkenException {
