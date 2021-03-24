@@ -48,4 +48,16 @@ public class Wallet {
 
         return new ECKeypair(new ECPrivateKey(privateBytes), publicKey);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public long getNonce() {
+        return nonce;
+    }
 }
