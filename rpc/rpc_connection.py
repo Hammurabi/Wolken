@@ -16,7 +16,8 @@ class rpc_connection:
     def to_json(self, response):
         obj     = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
         dump    = ''
-        if obj.content != None:
+        
+        if hasattr(obj, 'content') != None:
             dump= json.dumps(json.loads(response.text)['content'], indent=4)
 
         return obj, dump
