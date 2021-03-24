@@ -150,7 +150,7 @@ public class RpcServer {
             } else {
                 Wallet wallet = Context.getInstance().getDatabase().getWallet(name);
                 response.put("response", "success");
-                response.put("content", wallet);
+                response.put("content", wallet.toJson());
             }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
