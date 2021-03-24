@@ -204,7 +204,8 @@ public class RpcServer {
                 response.put("response", "failed");
                 response.put("reason", "address '" + encodedAddress + "' does not exist.");
             } else {
-                Context.getInstance().getRPCServer().setWallet(Context.getInstance().getDatabase().getWallet(name));
+                response.put("response", "success");
+                response.put("content", Context.getInstance().getDatabase().getAccount(address.getRaw()).toJson());
             }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
