@@ -52,6 +52,9 @@ public class Wallet {
         if (!Base16.isEncoded(json.getString("private"))) {
             throw new WolkenException("wallet requires the attribute 'private' to be base16 encoded.");
         }
+        if (!Base16.isEncoded(json.getString("public"))) {
+            throw new WolkenException("wallet requires the attribute 'public' to be base16 encoded.");
+        }
 
 
         this.name       = json.getString("name");
