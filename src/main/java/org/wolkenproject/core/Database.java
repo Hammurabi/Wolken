@@ -28,7 +28,8 @@ public class Database {
     BlockHeader             = Utils.takeApartShort((short) 3),
     BlockIndex              = Utils.takeApartShort((short) 4),
     Transaction             = Utils.takeApartShort((short) 5),
-    RejectedBlock           = Utils.takeApartShort((short) 6);
+    RejectedBlock           = Utils.takeApartShort((short) 6),
+    WalletPrefix            = Utils.takeApartShort((short) 7);
 
     public Database(FileService location) throws IOException {
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
@@ -238,5 +239,6 @@ public class Database {
     }
 
     public void storeWallet(Wallet wallet) {
+        put(Utils.concatenate(WalletPrefix, wallet.getName().getBytes()), wallet.asByteArray());
     }
 }
