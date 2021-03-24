@@ -5,11 +5,13 @@ from getpass import getpass
 
 # define 'walletpassphrasechange' command
 def parse(cmd, arguments, connection):
-    if len(arguments) != 1:
-        print("error: '"+cmd.name+"' does not take arguments.")
+    if len(arguments) != 2:
+        print("error: '"+cmd.name+"' requires one argument.")
     else:
+        name    = arguments[1]
         old     = getpass('old password>')
         new     = getpass('new password>')
+        confirm = getpass('confirm new>')
 
         response, content = connection.send_request(cmd.name, {'name':name, 'old':old, 'new':new})
         print("alert: server responded with '"+response.response+"'.")
