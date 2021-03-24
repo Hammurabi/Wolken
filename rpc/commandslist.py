@@ -61,5 +61,5 @@ def register_all(cmdManager):
 
     # mining commands
     # this command broadcasts a block to the network (block)
-    cmdManager.register('broadcastblock', cmd_gettransaction.parse)
+    cmdManager.register('broadcastblock', cmd_broadcastblock.parse)
 
