@@ -22,6 +22,10 @@ import java.util.List;
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
 
+    public static Transaction fromJson(JSONObject transaction) {
+        return null;
+    }
+
     public static final class Flags
     {
         public static final int
