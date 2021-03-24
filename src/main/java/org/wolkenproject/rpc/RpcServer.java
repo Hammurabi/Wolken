@@ -123,8 +123,7 @@ public class RpcServer {
                     }
                 }
             }
-        }
-        else if (requestType.equals("encryptwallet")) {
+        } else if (requestType.equals("encryptwallet")) {
             String name = request.getString("name");
             String pass = request.getString("password");
 
@@ -141,6 +140,17 @@ public class RpcServer {
                     Context.getInstance().getDatabase().storeWallet(wallet);
                     response.put("response", "success");
                 }
+            }
+        } else if (requestType.equals("dumpwallet")) {
+            String name = request.getString("name");
+
+            if (!Context.getInstance().getDatabase().checkWalletExists(name)) {
+                response.put("response", "failed");
+                response.put("reason", "wallet '" + name + "' does not exist.");
+            } else {
+                Wallet wallet = Context.getInstance().getDatabase().getWallet(name);
+                response.put("response", "success");
+                response.put("content", wallet);
             }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
