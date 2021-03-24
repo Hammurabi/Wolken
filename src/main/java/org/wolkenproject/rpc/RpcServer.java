@@ -125,7 +125,19 @@ public class RpcServer {
             }
         }
         else if (requestType.equals("encryptwallet")) {
-            
+            String name = request.getString("name");
+            String pass = request.getString("password");
+
+            if (!Context.getInstance().getDatabase().checkWalletExists(name)) {
+                response.put("response", "failed");
+                response.put("reason", "wallet '" + name + "' does not exist.");
+            } else {
+                Wallet wallet = Context.getInstance().getDatabase().getWallet(name);
+                if (wallet.isEncrypted()) {
+                    response.put("response", "failed");
+                    response.put("reason", "wallet '" + name + "' does not exist.");
+                }
+            }
         } else if (request.getString("request").equals("gettx")) {
         } else if (request.getString("request").equals("server")) {
             response.put("response", "success");
