@@ -174,6 +174,11 @@ public class Database {
     }
 
     public Account findAccount(long alias) {
+        byte address[] = findAccountHolder(alias);
+        if (address != null) {
+            return findAccount(address);
+        }
+
         return null;
     }
 
@@ -182,7 +187,6 @@ public class Database {
     }
 
     public Account findAccount(byte address[]) {
-
         return null;
     }
 
