@@ -203,7 +203,7 @@ public class Database {
     }
 
     public boolean checkTransactionExists(byte[] txid) {
-        return get(concatenate(Transaction, txid)) != null;
+        return get(concatenate(TransactionPrefix, txid)) != null;
     }
 
     public boolean checkAccountExists(long alias) {
