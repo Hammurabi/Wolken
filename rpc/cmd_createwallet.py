@@ -24,12 +24,12 @@ def parse(cmd, arguments, connection):
                 print('error: please make sure you typed the same password.')
                 return
         
-        response = connection.send_request(cmd.name, {'name':name, 'encrypt':encrypt, 'password':password})
+        response, content = connection.send_request(cmd.name, {'name':name, 'encrypt':encrypt, 'password':password})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
         else:
             print("---------------------------------")
-            print(json.dumps(response.content, indent=4))
+            print(content)
             print("---------------------------------")
 
