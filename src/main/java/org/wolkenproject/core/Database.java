@@ -183,6 +183,7 @@ public class Database {
     }
 
     public void registerAlias(byte[] address, long alias) {
+        put(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)), address);
     }
 
     public void rmvAccount(byte[] address) {
