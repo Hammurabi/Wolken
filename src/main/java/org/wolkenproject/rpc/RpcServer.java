@@ -24,9 +24,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.util.LinkedHashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class RpcServer {
     private HttpServer          server;
@@ -37,14 +39,16 @@ public class RpcServer {
     private Wallet              wallet;
     private byte                passphrase[];
     private long                passphraseTimestamp;
+    private ReentrantLock       mutex;
 
     public RpcServer(Context context, int port) throws IOException {
         Logger.alert("=============================================");
         Logger.alert("Starting HTTP server");
         Logger.alert("=============================================");
 
-        server = HttpServer.create(new InetSocketAddress(port), 12);
-        handlers = new LinkedHashSet<>();
+        server      = HttpServer.create(new InetSocketAddress(port), 12);
+        handlers    = new LinkedHashSet<>();
+        mutex       = new ReentrantLock();
 
         onGet("/", response -> response.sendFile("/rpc/index.html"));
         onGet("/home", response -> response.sendFile("/rpc/index.html"));
@@ -269,11 +273,38 @@ public class RpcServer {
         msg.send("application/json", response.toString().getBytes());
     }
 
+    private Wallet getWallet() {
+        mutex.lock();
+        try {
+            return wallet;
+        } finally {
+            mutex.unlock();
+        }
+    }
+
     private void setWallet(Wallet wallet) {
-        this.wallet = wallet;
+        mutex.lock();
+        try {
+            this.wallet = wallet;
+        } finally {
+            mutex.unlock();
+        }
     }
 
     private void setPassphrase(byte[] passphrase, long timeout) {
+        mutex.lock();
+        try {
+            if (this.passphrase != null) {
+                // objects remain in memory until the garbage
+                // collector removes them by setting the contents
+                // of the array to random bytes we can ensure that
+                // the data has been removed safely.
+                new Random().nextBytes(this.passphrase);
+                this.passphrase = passphrase;
+            }
+        } finally {
+            mutex.unlock();
+        }
     }
 
     protected void onGet(String requestURL, VoidCallableThrowsT<Messenger, IOException> function) {
