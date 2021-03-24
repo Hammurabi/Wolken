@@ -32,6 +32,13 @@ public class Wallet {
     private final Address address;
     private long          nonce;
 
+    public Wallet(String dump) {
+        JSONObject json = new JSONObject(dump);
+        if (json.has("name")) {
+            throw new WolkenException("wallet requires the attribute 'name' to be present.");
+        }
+    }
+
     public static Wallet fromBytes(String name, byte array[]) {
         boolean isEncrypted = array[4] == 1;
         int privKeyLen      = isEncrypted ? 72 : 32;
