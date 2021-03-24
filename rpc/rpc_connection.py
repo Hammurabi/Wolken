@@ -19,7 +19,7 @@ class rpc_connection:
         try:
             return self.to_json(requests.get(url, allow_redirects=True))
         except:
-            return 
+            return rpc_noconnection('failed to send request to server.'), ''
     def to_json(self, response):
         obj     = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
         dump    = ''
