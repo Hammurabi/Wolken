@@ -100,6 +100,10 @@ public class RpcServer {
                     response.put("response", "failed");
                     response.put("reason", "a wallet with the name '" + name + "' already exists.");
                 } else {
+                    response.put("response", "success");
+                    String password = request.getString("password");
+                    if (password.isEmpty()) {
+                    }
                 }
             }
         }
