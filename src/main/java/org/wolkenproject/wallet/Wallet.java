@@ -43,9 +43,11 @@ public class Wallet {
         byte salt[] = CryptoUtil.makeSalt();
         try {
             SecretKey secretKey = CryptoUtil.generateSecretForAES(pass, salt);
-            AESResult result    = CryptoUtil.aesEncrypt(new ECPrivateKey().getEncoded(), secretKey);
+            Key privKey         = new ECPrivateKey();
+            AESResult result    = CryptoUtil.aesEncrypt(privKey.getEncoded(), secretKey);
 
             this.privateKey     = Utils.concatenate(salt, result.getIv(), result.getEncryptionResult());
+            this.publicKey      = ECKeypair.publicKeyFromPrivate(privKey.asInteger());
         } catch (InvalidKeySpecException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidParameterSpecException e) {
             throw new WolkenException(e);
         }
