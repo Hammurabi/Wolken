@@ -148,7 +148,7 @@ public class Wallet {
     }
 
     public Wallet encrypt(byte[] pass) throws WolkenException {
-        return new Wallet(name, encrypt(pass, privKey), publicKey, address, nonce);
+        return new Wallet(name, encrypt(pass, privateKey), publicKey, address, nonce);
     }
 
     public Wallet changePassphrase(byte oldPass[], byte newPass[]) throws WolkenException {
