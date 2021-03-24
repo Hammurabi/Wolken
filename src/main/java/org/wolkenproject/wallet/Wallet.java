@@ -120,7 +120,7 @@ public class Wallet {
     }
 
     public byte[] asByteArray() {
-        return Utils.concatenate(Utils.takeApart(1), privateKey, publicKey.getEncoded(), Utils.takeApartLong(nonce));
+        return Utils.concatenate(Utils.takeApart(1), new byte[] {(byte) (isEncrypted() ? 1 : 0)}, privateKey, publicKey.getEncoded(), Utils.takeApartLong(nonce));
     }
 
     public boolean isEncrypted() {
