@@ -163,7 +163,7 @@ public class RpcServer {
             } else {
                 Wallet wallet   = Context.getInstance().getDatabase().getWallet(name);
                 try {
-                    wallet          = wallet.changePassphrase(old, neu);
+                    wallet          = wallet.changePassphrase(old.getBytes(), neu.getBytes());
                     response.put("response", "success");
                     response.put("content", wallet.toJson());
                     Context.getInstance().getDatabase().storeWallet(wallet);
