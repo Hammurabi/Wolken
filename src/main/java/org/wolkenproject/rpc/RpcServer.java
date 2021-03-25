@@ -362,7 +362,9 @@ public class RpcServer {
     private void submitNonce(long nonce) {
         mutex.lock();
         try {
-            nextBlock = Context.getInstance().getBlockChain().createNextBlock();
+            if (nextBlock == null) {
+                throw new WolkenException("no block currently being mined.");
+            }
         } finally {
             mutex.unlock();
         }
