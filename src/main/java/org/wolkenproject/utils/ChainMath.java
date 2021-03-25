@@ -17,7 +17,7 @@ public class ChainMath {
     }
 
     public static boolean validSolution(byte solution[], byte targetBits[]) throws WolkenException {
-        return new BigInteger(1, solution).compareTo(targetIntegerFromBits(targetBits)) < 0;
+        return new BigInteger(1, solution).compareTo(new BigInteger(1, targetBytesFromBits(targetBits))) < 0;
     }
 
     public static boolean lessThan(byte a[], byte b[]) {
@@ -88,6 +88,16 @@ public class ChainMath {
 
     public static BigInteger targetIntegerFromBits(int bits) throws WolkenException {
         return targetIntegerFromBits(Utils.takeApart(bits));
+    }
+
+    public static byte[] targetBytesFromBits(byte[] bits) {
+        byte target[]   = new byte[32];
+        int offset      = 32 - Byte.toUnsignedInt(bits[0]);
+        target[offset + 0]  = bits[1];
+        target[offset + 1]  = bits[2];
+        target[offset + 2]  = bits[3];
+
+        return target;
     }
 
     public static BigInteger targetIntegerFromBits(byte bits[]) throws WolkenException {
