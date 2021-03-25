@@ -34,6 +34,7 @@ public class Database {
     WalletPrefix            = Utils.takeApartShort((short) 8);
 
     public Database(FileService location) throws IOException {
+        location.newFile(".chain").makeDirectories();
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
         this.location = location;
         mutex   = new ReentrantLock();
