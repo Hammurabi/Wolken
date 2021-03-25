@@ -9,9 +9,9 @@ def parse(cmd, arguments, connection):
     if len(arguments) != 2:
         print("error: '"+cmd.name+"' requires one argument.")
     else:
-        transaction = arguments[1]
+        nonce = arguments[1]
 
-        response, result    = connection.send_request(cmd.name, {'txid':transaction})
+        response, result    = connection.send_request(cmd.name, {'nonce':nonce})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
