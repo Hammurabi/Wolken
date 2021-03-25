@@ -3,9 +3,9 @@ package org.wolkenproject.rpc;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wolkenproject.core.Address;
+import org.wolkenproject.core.BlockHeader;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.Transaction;
@@ -14,9 +14,10 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
-import org.wolkenproject.network.Node;
 import org.wolkenproject.network.messages.Inv;
+import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.Logger;
+import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VoidCallableThrowsT;
 import org.wolkenproject.wallet.Wallet;
 
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
@@ -124,7 +126,10 @@ public class RpcServer {
 
         if (query.getString("dtype").equals("text")) {
             request = Messenger.format(msg.getBodyUTF());
-            requestType = request.getString("request");
+            requestType = request.getString("request").trim();
+        } else if (msg.isJson()) {
+            request = new JSONObject(msg.getBodyUTF());
+            requestType = request.getString("request").trim();
         } else if (query.getString("dtype").equals("binary")) {
             binary = msg.getBodyBinary();
             request = query;
@@ -340,17 +345,41 @@ public class RpcServer {
             response.put("reason", "this command is not yet implemented.");
         } else if (requestType.equals("createnextblock")) {
             try {
-                Context.getInstance().getRPCServer().createNextBlock();
+                Transaction mint      = null;
+                BlockIndex blockIndex = Context.getInstance().getRPCServer().createNextBlock();
+                if (request.getBoolean("custom_mint")) {
+                    mint              = Transaction.fromJson(request.getJSONObject("mint"));
+                } else {
+                    String miner      = request.getString("miner");
+                    if (!Base58.isEncoded(miner)) {
+                        throw new WolkenException("expected 'miner' to be base58 encoded.");
+                    }
+                    if (!Address.isValidAddress(Base58.decode(miner))) {
+                        throw new WolkenException("expected 'miner' to be a valid address.");
+                    }
+                    String dmsg       = "";
+                    if (request.has("msg")) {
+                        dmsg          = request.getString("msg");
+                    }
+                    mint              = Transaction.newMintTransaction(dmsg, ChainMath.getReward(blockIndex.getHeight()), Address.fromFormatted(Base58.decode(miner)));
+                }
+                blockIndex.getBlock().addTransaction(mint);
+                blockIndex.build();
                 response.put("response", "success");
+                BlockHeader header    = blockIndex.getBlock().getBlockHeader();
+                JSONObject jsonHeader = header.toJson();
+                jsonHeader.put("raw", Base16.encode(header.asByteArray()));
+                response.put("content", jsonHeader);
             } catch (WolkenException e) {
                 response.put("response", "failed");
                 response.put("reason", e.getMessage());
             }
         } else if (requestType.equals("submitnonce")) {
             try {
-                Context.getInstance().getRPCServer().submitNonce(response.getLong("nonce"));
+                System.out.println("started");
+                Context.getInstance().getRPCServer().submitNonce(request.getInt("nonce"));
                 response.put("response", "success");
-            } catch (WolkenException e) {
+            } catch (Exception e) {
                 response.put("response", "failed");
                 response.put("reason", e.getMessage());
             }
@@ -359,29 +388,35 @@ public class RpcServer {
         msg.send("application/json", response.toString().getBytes());
     }
 
-    private void submitNonce(long nonce) throws WolkenException {
+    private void submitNonce(int nonce) throws WolkenException {
         mutex.lock();
         try {
             if (nextBlock == null) {
                 throw new WolkenException("no block currently being mined.");
             }
 
-            nextBlock.getBlock().setNonce((int) nonce);
+            nextBlock.getBlock().setNonce(nonce);
+
             if (!nextBlock.getBlock().verifyProofOfWork()) {
+                System.out.println("submitted '" + Integer.toUnsignedLong(nonce) + "'.");
+                System.out.println(Arrays.toString(nextBlock.getBlock().getBlockHeader().asByteArray()));
+                System.out.println(Base16.encode(nextBlock.getBlock().getBlockHeader().getHashCode()));
                 throw new WolkenException("invalid proof of work.");
             }
 
             // suggest the block
             Context.getInstance().getBlockChain().suggest(nextBlock);
+            Logger.alert("work '"+ Base16.encode(nextBlock.calcHash()) + "' submitted");
         } finally {
             mutex.unlock();
         }
     }
 
-    private void createNextBlock() throws WolkenException {
+    private BlockIndex createNextBlock() throws WolkenException {
         mutex.lock();
         try {
             nextBlock = Context.getInstance().getBlockChain().createNextBlock();
+            return nextBlock;
         } finally {
             mutex.unlock();
         }
