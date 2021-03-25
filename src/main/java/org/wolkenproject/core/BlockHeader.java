@@ -1,24 +1,26 @@
 package org.wolkenproject.core;
 
+import org.json.JSONObject;
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
-import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.Utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.util.Arrays;
 
 import static org.wolkenproject.utils.HashUtil.sha256d;
-import static org.wolkenproject.utils.Utils.concatenate;
 
 public class BlockHeader extends SerializableI {
-    protected static int Size = 78;
+    protected static int Size = 80;
     private int version;
-    private int timestamp;
     private byte previousHash[];
     private byte merkleRoot[];
+    private int timestamp;
     private int bits;
     private int nonce;
 
@@ -76,17 +78,16 @@ public class BlockHeader extends SerializableI {
     }
 
     public byte[] getHeaderBytes() {
-        return concatenate(getBytesWithoutNonce(), Utils.takeApart(nonce));
-    }
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            writeBlockHeader(outputStream);
+            outputStream.flush();
+            outputStream.close();
 
-    public byte[] getBytesWithoutNonce() {
-        return concatenate(
-                Utils.takeApart(version),
-                Utils.takeApartLong(timestamp),
-                previousHash,
-                merkleRoot,
-                Utils.takeApart(bits)
-        );
+            return outputStream.toByteArray();
+        } catch (IOException | WolkenException e) {
+            return null;
+        }
     }
 
     public byte[] getHashCode() {
@@ -99,11 +100,15 @@ public class BlockHeader extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        writeBlockHeader(stream);
+    }
+
+    public void writeBlockHeader(OutputStream stream) throws IOException, WolkenException {
         Utils.writeInt(version, stream);
         Utils.writeInt(timestamp, stream);
         stream.write(previousHash);
         stream.write(merkleRoot);
-        stream.write(bits);
+        Utils.writeInt(bits, stream);
         Utils.writeInt(nonce, stream);
     }
 
@@ -133,10 +138,32 @@ public class BlockHeader extends SerializableI {
     }
 
     public boolean verifyProofOfWork() {
-        try {
-            return ChainMath.validSolution(getHashCode(), getBits());
-        } catch (WolkenException e) {
-            return false;
-        }
+        byte hash[] = getHashCode();
+        byte bits[] = targetFromBits(Utils.takeApart(this.bits));
+        BigInteger result = new BigInteger(1, hash);
+        BigInteger target = new BigInteger(1, bits);
+        System.out.println(Base16.encode(hash));
+        System.out.println(Base16.encode(bits));
+        return result.compareTo(target) < 0;
+    }
+
+    public static byte[] targetFromBits(byte[] bits) {
+        byte target[]   = new byte[32];
+        int offset      = 32 - Byte.toUnsignedInt(bits[0]);
+        target[offset + 0]  = bits[1];
+        target[offset + 1]  = bits[2];
+        target[offset + 2]  = bits[3];
+
+        return target;
+    }
+
+    public JSONObject toJson() {
+        return new JSONObject()
+                .put("version", version)
+                .put("parent", Base16.encode(previousHash))
+                .put("merkleRoot", Base16.encode(merkleRoot))
+                .put("timestamp", timestamp)
+                .put("bits", bits)
+                .put("nonce", nonce);
     }
 }
