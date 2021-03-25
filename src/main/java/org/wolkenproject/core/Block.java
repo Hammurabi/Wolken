@@ -26,7 +26,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
 
     public Block(byte previousHash[], int bits)
     {
-        super(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], bits, 0);
+        super(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], bits, new byte[4]);
         transactions = new LinkedHashSet<>();
     }
 
