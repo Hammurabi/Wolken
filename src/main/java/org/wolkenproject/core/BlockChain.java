@@ -559,4 +559,8 @@ public class BlockChain implements Runnable {
 
         return 0;
     }
+
+    public BlockIndex createNextBlock() throws WolkenException {
+        return getTip().generateNextBlock();
+    }
 }
