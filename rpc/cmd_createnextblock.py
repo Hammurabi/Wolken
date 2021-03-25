@@ -4,7 +4,7 @@ import commands
 import json
 from getpass import getpass
 
-# define 'gettransaction' command
+# define 'createnextblock' command
 def parse(cmd, arguments, connection):
     if len(arguments) != 2:
         print("error: '"+cmd.name+"' requires one argument.")
