@@ -341,10 +341,12 @@ public class RpcServer {
             Context.getInstance().getRPCServer().createNextBlock();
             response.put("response", "success");
         } else if (requestType.equals("submitnonce")) {
-            if (Context.getInstance().getRPCServer().submitNonce(response.getLong("nonce"))) {
+            try {
+                Context.getInstance().getRPCServer().submitNonce(response.getLong("nonce"));
                 response.put("response", "success");
-            } else {
-
+            } catch (WolkenException e) {
+                response.put("response", "failed");
+                response.put("reason", e.getMessage());
             }
         }
 
