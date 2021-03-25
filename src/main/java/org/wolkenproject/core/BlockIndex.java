@@ -258,4 +258,13 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
 
         return block;
     }
+
+    public void build() throws WolkenException {
+        getBlock().build(getHeight());
+    }
+
+    public byte[] calcHash() {
+        hash = getBlock().getHashCode();
+        return hash;
+    }
 }
