@@ -11,12 +11,12 @@ def parse(cmd, arguments, connection):
     else:
         transaction = arguments[1]
 
-        response, content    = connection.send_request(cmd.name, {'txid':transaction})
+        response, tx    = connection.send_request(cmd.name, {'txid':transaction})
         print("alert: server responded with '"+response.response+"'.")
         if response.response == 'failed':
             print("reason: " + response.reason)
         else:
             print("---------------------------------")
-            print(content)
+            print(tx)
             print("---------------------------------")
 
