@@ -365,6 +365,11 @@ public class RpcServer {
             if (nextBlock == null) {
                 throw new WolkenException("no block currently being mined.");
             }
+
+            nextBlock.getBlock().setNonce((int) nonce);
+            if (!nextBlock.checkPoW()) {
+                throw new WolkenException("invalid proof of work.");
+            }
         } finally {
             mutex.unlock();
         }
