@@ -125,6 +125,7 @@ public class RpcServer {
             request = Messenger.format(msg.getBodyUTF());
             requestType = request.getString("request");
         } else if (query.getString("dtype").equals("binary")) {
+            binary = msg.getBodyBinary();
         }
 
         if (requestType.equals("close")) {
