@@ -115,6 +115,11 @@ public class RpcServer {
 
     public static void apiRequest(Messenger msg) throws IOException {
         JSONObject request = msg.getFormattedQuery();
+
+        if (msg.isBinary()) {
+
+        }
+
         JSONObject response= new JSONObject();
         String requestType = request.getString("request");
 
