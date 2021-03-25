@@ -1,7 +1,5 @@
 @echo off
 
-pip install requests
-
 rem set the active directory
 cd /D "%~dp0"
 
@@ -9,6 +7,8 @@ rem download python if it does not exist
 python --version 2>NUL
 if errorlevel 1 goto errorNoPython
 echo python is installed
+
+pip install requests
 
 java -version 2>NUL
 if errorlevel 1 goto errorNoJava
