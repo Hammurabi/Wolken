@@ -125,7 +125,6 @@ public class RpcServer {
             request = Messenger.format(msg.getBodyUTF());
             requestType = request.getString("request");
         } else {
-
         }
 
         if (requestType.equals("close")) {
