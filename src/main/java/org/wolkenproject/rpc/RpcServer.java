@@ -341,6 +341,11 @@ public class RpcServer {
             Context.getInstance().getRPCServer().createNextBlock();
             response.put("response", "success");
         } else if (requestType.equals("submitnonce")) {
+            if (Context.getInstance().getRPCServer().submitNonce(response.getLong("nonce"))) {
+                response.put("response", "success");
+            } else {
+
+            }
         }
 
         msg.send("application/json", response.toString().getBytes());
