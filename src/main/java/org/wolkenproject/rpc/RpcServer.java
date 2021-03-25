@@ -116,14 +116,14 @@ public class RpcServer {
     public static void apiRequest(Messenger msg) throws IOException {
         JSONObject request = msg.getFormattedQuery();
 
-        if (msg.isBinary()) {
-
-        }
-
         JSONObject response= new JSONObject();
         String requestType = request.getString("request");
 
-        if (request.getString("request").equals("close")) {
+        if (msg.isBinary()) {
+        } else {
+        }
+
+        if (requestType.equals("close")) {
             String password = request.getString("password");
             response.put("response", "success");
             msg.send("application/json", response.toString().getBytes());
