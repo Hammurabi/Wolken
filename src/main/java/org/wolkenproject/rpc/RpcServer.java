@@ -367,7 +367,7 @@ public class RpcServer {
             }
 
             nextBlock.getBlock().setNonce((int) nonce);
-            if (!nextBlock.checkPoW()) {
+            if (!nextBlock.getBlock().verifyProofOfWork()) {
                 throw new WolkenException("invalid proof of work.");
             }
         } finally {
