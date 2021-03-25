@@ -334,7 +334,8 @@ public class RpcServer {
                     response.put("content", transaction.toJson());
                 }
             }
-        } else if (requestType.equals("server")) {
+        } else if (requestType.equals("broadcastblock")) {
+            
         }
 
         msg.send("application/json", response.toString().getBytes());
