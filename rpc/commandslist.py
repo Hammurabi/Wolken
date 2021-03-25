@@ -64,6 +64,8 @@ def register_all(cmdManager):
     # mining commands
     # this command broadcasts a block to the network (block)
     cmdManager.register('broadcastblock', cmd_broadcastblock.parse)
-    # this command generates the next block and sends the header back for mining
+    # this command generates the next block and sends the header back for mining (address)
     cmdManager.register('createnextblock', cmd_createnextblock.parse)
+    # this command submits the nonce to the server and checks for valid proof of work then broadcasts the block (nonce)
+    cmdManager.register('submitnonce', cmd_submitnonce.parse)
 
