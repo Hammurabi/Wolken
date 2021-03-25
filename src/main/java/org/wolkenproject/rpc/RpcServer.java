@@ -353,6 +353,15 @@ public class RpcServer {
         msg.send("application/json", response.toString().getBytes());
     }
 
+    private void createNextBlock() throws WolkenException {
+        mutex.lock();
+        try {
+            nextBlock = Context.getInstance().getBlockChain().createNextBlock();
+        } finally {
+            mutex.unlock();
+        }
+    }
+
     private byte[] getPassphrase() {
         mutex.lock();
         try {
