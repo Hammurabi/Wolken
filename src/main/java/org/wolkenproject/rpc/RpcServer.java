@@ -135,8 +135,7 @@ public class RpcServer {
             msg.send("application/json", response.toString().getBytes());
             Context.getInstance().shutDown();
             return;
-        } else if (requestType.equals("createwallet")) {
-        } else if (requestType.equals("createwallet")) {
+        }else if (requestType.equals("createwallet")) {
             if (!request.has("name")) {
                 response.put("response", "failed");
                 response.put("reason", "'createwallet' command requires an argument 'name'.");
@@ -336,21 +335,6 @@ public class RpcServer {
                 }
             }
         } else if (requestType.equals("server")) {
-            response.put("response", "success");
-            Set<Node> nodes = Context.getInstance().getServer().getConnectedNodes();
-
-            if (request.has("connected") && request.getBoolean("connected")) {
-                response.put("numconnected", nodes.size());
-            }
-
-            if (request.has("nodes") && request.getBoolean("nodes")) {
-                JSONArray array = new JSONArray();
-                int counter = 0;
-                for (Node node : nodes) {
-                    array.put(counter ++, node.toJson());
-                }
-                response.put("nodes", array);
-            }
         }
 
         msg.send("application/json", response.toString().getBytes());
