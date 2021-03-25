@@ -1,5 +1,7 @@
 @echo off
 
+pip install requests
+
 rem set the active directory
 cd /D "%~dp0"
 
