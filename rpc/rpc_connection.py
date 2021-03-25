@@ -31,7 +31,7 @@ class rpc_connection:
     def pipe_request(self, request, arguments, data, data_type='bin'):
         url = self.scheme + "://" + self.ip + ":" + self.port + "/api?dtype=" + data_type + "&" + package_query(request, arguments)
         try:
-            return self.to_json(requests.post(url, arguments))
+            return self.to_json(requests.post(url, arguments, headers={'Content-Type': 'application/octet-stream'}))
         except:
             return rpc_noconnection('failed to send request to server.'), ''
     def to_json(self, response):
