@@ -175,4 +175,8 @@ public class Messenger {
         outputStream.close();
         return outputStream.toByteArray();
     }
+
+    public String getContentType() {
+        return exchange.getRequestHeaders().get("Content-Type").get(0);
+    }
 }
