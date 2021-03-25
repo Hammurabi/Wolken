@@ -377,7 +377,7 @@ public class RpcServer {
         } else if (requestType.equals("submitnonce")) {
             try {
                 System.out.println("started");
-                Context.getInstance().getRPCServer().submitNonce(request.getInt("nonce"));
+                Context.getInstance().getRPCServer().submitNonce(Base16.decode(request.getString("nonce")));
                 response.put("response", "success");
             } catch (Exception e) {
                 response.put("response", "failed");
@@ -388,17 +388,17 @@ public class RpcServer {
         msg.send("application/json", response.toString().getBytes());
     }
 
-    private void submitNonce(int nonce) throws WolkenException {
+    private void submitNonce(byte[] nonce) throws WolkenException {
         mutex.lock();
         try {
             if (nextBlock == null) {
                 throw new WolkenException("no block currently being mined.");
             }
 
-            nextBlock.getBlock().setNonce(nonce);
+            nextBlock.getBlock().setNonce(Utils.makeInt(nonce));
 
             if (!nextBlock.getBlock().verifyProofOfWork()) {
-                System.out.println("submitted '" + Integer.toUnsignedLong(nonce) + "'.");
+                System.out.println("submitted '" + Integer.toUnsignedLong(nextBlock.getBlock().getNonce()) + "'.");
                 System.out.println(Arrays.toString(nextBlock.getBlock().getBlockHeader().asByteArray()));
                 System.out.println(Base16.encode(nextBlock.getBlock().getBlockHeader().getHashCode()));
                 throw new WolkenException("invalid proof of work.");
