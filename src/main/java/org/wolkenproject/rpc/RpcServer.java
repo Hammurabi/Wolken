@@ -338,11 +338,9 @@ public class RpcServer {
             response.put("response", "failed");
             response.put("reason", "this command is not yet implemented.");
         } else if (requestType.equals("createnextblock")) {
-            response.put("response", "failed");
-            response.put("reason", "this command is not yet implemented.");
+            Context.getInstance().getRPCServer().createNextBlock();
+            response.put("response", "success");
         } else if (requestType.equals("submitnonce")) {
-            response.put("response", "failed");
-            response.put("reason", "this command is not yet implemented.");
         }
 
         msg.send("application/json", response.toString().getBytes());
