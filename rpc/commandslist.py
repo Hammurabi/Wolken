@@ -63,4 +63,6 @@ def register_all(cmdManager):
     # mining commands
     # this command broadcasts a block to the network (block)
     cmdManager.register('broadcastblock', cmd_broadcastblock.parse)
+    # this command generates the next block and sends the header back for mining
+    cmdManager.register('createnextblock', cmd_createnextblock.parse)
 
