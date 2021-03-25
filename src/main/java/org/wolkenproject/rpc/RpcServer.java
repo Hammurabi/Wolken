@@ -126,6 +126,7 @@ public class RpcServer {
             requestType = request.getString("request");
         } else if (query.getString("dtype").equals("binary")) {
             binary = msg.getBodyBinary();
+            request = query;
         }
 
         if (requestType.equals("close")) {
