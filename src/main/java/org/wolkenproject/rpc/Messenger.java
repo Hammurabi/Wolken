@@ -160,4 +160,17 @@ public class Messenger {
     public boolean isJson() {
         return exchange.getRequestHeaders().get("Content-Type").get(0).equals("application/json");
     }
+
+    public byte[] getBodyBinary() throws IOException {
+        byte buffer[] = new byte[1024];
+        int read = 0;
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        while ( (exchange.getRequestBody().read(buffer)) > 0 ) {
+            outputStream.write(buffer, 0, read);
+        }
+
+        return outputStream.toByteArray();
+    }
 }
