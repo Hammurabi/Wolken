@@ -148,4 +148,12 @@ public class Messenger {
     public String getBodyUTF() throws IOException {
         return readUTF(exchange.getRequestBody());
     }
+
+    public boolean isBinary() {
+        return exchange.getRequestHeaders().get("Content-Type").get(0).equals("application/octet-stream");
+    }
+
+    public boolean isJson() {
+        return exchange.getRequestHeaders().get("Content-Type").get(0).equals("application/json");
+    }
 }
