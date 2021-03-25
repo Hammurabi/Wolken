@@ -6,8 +6,8 @@ from getpass import getpass
 
 # define 'createnextblock' command
 def parse(cmd, arguments, connection):
-    if len(arguments) != 2:
-        print("error: '"+cmd.name+"' requires one argument.")
+    if len(arguments) != 1:
+        print("error: '"+cmd.name+"' does not require any arguments.")
     else:
         response, header    = connection.send_request(cmd.name, {})
         print("alert: server responded with '"+response.response+"'.")
