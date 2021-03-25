@@ -171,6 +171,8 @@ public class Messenger {
             outputStream.write(buffer, 0, read);
         }
 
+        // this isn't necessary as of this moment.
+        outputStream.close();
         return outputStream.toByteArray();
     }
 }
