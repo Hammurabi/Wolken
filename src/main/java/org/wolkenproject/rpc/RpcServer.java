@@ -370,6 +370,9 @@ public class RpcServer {
             if (!nextBlock.getBlock().verifyProofOfWork()) {
                 throw new WolkenException("invalid proof of work.");
             }
+
+            // suggest the block
+            Context.getInstance().getBlockChain().suggest(nextBlock);
         } finally {
             mutex.unlock();
         }
