@@ -136,6 +136,7 @@ public class RpcServer {
             Context.getInstance().shutDown();
             return;
         } else if (requestType.equals("createwallet")) {
+        } else if (requestType.equals("createwallet")) {
             if (!request.has("name")) {
                 response.put("response", "failed");
                 response.put("reason", "'createwallet' command requires an argument 'name'.");
