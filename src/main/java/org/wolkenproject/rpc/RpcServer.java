@@ -43,6 +43,7 @@ public class RpcServer {
     private long                passphraseTimeout;
     private long                passphraseTimestamp;
     private ReentrantLock       mutex;
+    private BlockIndex          nextBlock;
 
     public RpcServer(Context context, int port) throws IOException {
         Logger.alert("=============================================");
