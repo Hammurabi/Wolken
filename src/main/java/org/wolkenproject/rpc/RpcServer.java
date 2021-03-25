@@ -114,13 +114,14 @@ public class RpcServer {
     }
 
     public static void apiRequest(Messenger msg) throws IOException {
-        JSONObject request = msg.getFormattedQuery();
+        JSONObject query = msg.getFormattedQuery();
 
         JSONObject response= new JSONObject();
-        String requestType = request.getString("request");
+        String requestType = "";
 
         if (msg.isBinary()) {
         } else {
+
         }
 
         if (requestType.equals("close")) {
@@ -328,7 +329,7 @@ public class RpcServer {
                     response.put("content", transaction.toJson());
                 }
             }
-        } else if (request.getString("request").equals("server")) {
+        } else if (requestType.equals("server")) {
             response.put("response", "success");
             Set<Node> nodes = Context.getInstance().getServer().getConnectedNodes();
 
