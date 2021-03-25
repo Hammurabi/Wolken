@@ -359,7 +359,7 @@ public class RpcServer {
         msg.send("application/json", response.toString().getBytes());
     }
 
-    private void submitNonce(long nonce) {
+    private void submitNonce(long nonce) throws WolkenException {
         mutex.lock();
         try {
             if (nextBlock == null) {
