@@ -337,6 +337,12 @@ public class RpcServer {
         } else if (requestType.equals("broadcastblock")) {
             response.put("response", "failed");
             response.put("reason", "this command is not yet implemented.");
+        } else if (requestType.equals("broadcastblock")) {
+            response.put("response", "failed");
+            response.put("reason", "this command is not yet implemented.");
+        } else if (requestType.equals("broadcastblock")) {
+            response.put("response", "failed");
+            response.put("reason", "this command is not yet implemented.");
         }
 
         msg.send("application/json", response.toString().getBytes());
