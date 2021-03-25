@@ -119,11 +119,13 @@ public class RpcServer {
 
         JSONObject response= new JSONObject();
         String requestType = "";
+        byte binary[] = null;
 
         if (query.getString("dtype").equals("text")) {
             request = Messenger.format(msg.getBodyUTF());
             requestType = request.getString("request");
         } else {
+
         }
 
         if (requestType.equals("close")) {
