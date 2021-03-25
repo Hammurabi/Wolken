@@ -339,8 +339,13 @@ public class RpcServer {
             response.put("response", "failed");
             response.put("reason", "this command is not yet implemented.");
         } else if (requestType.equals("createnextblock")) {
-            Context.getInstance().getRPCServer().createNextBlock();
-            response.put("response", "success");
+            try {
+                Context.getInstance().getRPCServer().createNextBlock();
+                response.put("response", "success");
+            } catch (WolkenException e) {
+                response.put("response", "failed");
+                response.put("reason", e.getMessage());
+            }
         } else if (requestType.equals("submitnonce")) {
             try {
                 Context.getInstance().getRPCServer().submitNonce(response.getLong("nonce"));
