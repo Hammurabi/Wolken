@@ -122,6 +122,7 @@ public class RpcServer {
 
         if (query.getString("dtype").equals("text")) {
             request = Messenger.format(msg.getBodyUTF());
+            requestType = request.getString("request");
         } else {
         }
 
