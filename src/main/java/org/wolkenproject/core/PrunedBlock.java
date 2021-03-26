@@ -22,7 +22,7 @@ public class PrunedBlock {
         return events;
     }
 
-    public void containsTransaction(byte transactionId[]) {
-        return;transactions.contains(transactionId);
+    public boolean containsTransaction(byte transactionId[]) {
+        return transactions.contains(transactionId);
     }
 }
