@@ -346,17 +346,13 @@ public class BlockChain implements Runnable {
         index.recalculateChainWork();
     }
 
-    private void setBlockIndex(int height, BlockIndex block) {
-        context.getDatabase().storeBlockIndex(height, block);
-    }
-
     private void replaceBlockIndex(int height, BlockIndex block) {
         BlockIndex previousIndex = context.getDatabase().findBlock(height);
         if (previousIndex != null) {
             addStale(previousIndex);
         }
 
-        context.getDatabase().storeBlockIndex(height, block);
+        context.getDatabase().storeBlock(height, block);
     }
 
     private void deleteBlockIndex(int height, boolean orphan) {
