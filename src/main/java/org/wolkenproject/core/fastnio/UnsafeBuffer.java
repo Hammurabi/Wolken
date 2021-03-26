@@ -3,10 +3,10 @@ package org.wolkenproject.core.fastnio;
 import org.wolkenproject.utils.Utils;
 
 class UnsafeBuffer extends Buffer {
-    private final byte[] buffer;
+    private final long buffer;
 
     UnsafeBuffer(int size) {
-        this.buffer = new byte[size];
+        this.buffer = UnsafeInstance.allocateMemory(size);
         setPosition(0);
     }
 
