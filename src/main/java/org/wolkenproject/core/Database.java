@@ -92,7 +92,7 @@ public class Database {
         }
     }
 
-    private void storeTransaction(byte[] hash, Transaction transaction) {
+    public void storeTransaction(byte[] hash, Transaction transaction) {
     }
 
     public BlockIndex findBlock(byte[] hash) {
