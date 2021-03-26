@@ -7,6 +7,7 @@ import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 
 public abstract class SerializableI {
     public void serialize(OutputStream stream) throws IOException, WolkenException {
@@ -18,7 +19,7 @@ public abstract class SerializableI {
     public abstract void read(InputStream stream) throws IOException, WolkenException;
 
     public <T> T fromBytes(byte bytes[]) {
-        
+        read(ByteBuffer.wrap(bytes));
         return (T) this;
     }
 
