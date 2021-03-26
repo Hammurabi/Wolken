@@ -45,6 +45,9 @@ class HeapBuffer extends Buffer {
 
     @Override
     public void get(int offset, byte[] out) {
+        for (int i = 0; i < out.length; i ++) {
+            out[i] = (byte) get(offset + i);
+        }
     }
 
     @Override
