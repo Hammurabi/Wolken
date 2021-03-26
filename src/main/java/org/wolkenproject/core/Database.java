@@ -29,10 +29,11 @@ public class Database {
     AliasPrefix             = Utils.takeApartShort((short) 2),
     ChainTipPrefix          = Utils.takeApartShort((short) 3),
     BlockHeaderPrefix       = Utils.takeApartShort((short) 4),
-    BlockIndexPrefix        = Utils.takeApartShort((short) 5),
-    TransactionPrefix       = Utils.takeApartShort((short) 6),
-    RejectedBlockPrefix     = Utils.takeApartShort((short) 7),
-    WalletPrefix            = Utils.takeApartShort((short) 8);
+    BlockContentPrefix      = Utils.takeApartShort((short) 5),
+    BlockIndexPrefix        = Utils.takeApartShort((short) 6),
+    TransactionPrefix       = Utils.takeApartShort((short) 7),
+    RejectedBlockPrefix     = Utils.takeApartShort((short) 8),
+    WalletPrefix            = Utils.takeApartShort((short) 9);
 
     public Database(FileService location) throws IOException {
         location.newFile(".chain").makeDirectories();
@@ -55,6 +56,10 @@ public class Database {
         return hash != null;
     }
 
+    public void storeHeader(byte hash[], BlockHeader header) {
+        put(Utils.concatenate(BlockHeaderPrefix, hash), header);
+    }
+
     public BlockHeader findHeader(byte[] hash) {
         byte header[] = get(Utils.concatenate(BlockHeaderPrefix, hash));
         if (header == null) {
@@ -70,8 +75,9 @@ public class Database {
         return null;
     }
 
-    public void storeHeader(byte hash[], BlockHeader header) {
-        put(Utils.concatenate(BlockHeaderPrefix, hash), header);
+    public void storeBlock(byte hash[], Block block) {
+        storeHeader(hash, block.getBlockHeader());
+        put(Utils.concatenate(BlockPre, hash), block);
     }
 
     public BlockIndex findBlock(byte[] hash) {
