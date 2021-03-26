@@ -189,7 +189,7 @@ public class VarInt {
         } else {
             int test    = stream.read();
             int value   = test & 0x3F;
-            int length  = test >> 6;
+            int length  = test >>> 6;
             if (length == 0) {
                 return value;
             }
@@ -215,7 +215,7 @@ public class VarInt {
         } else {
             int test    = stream.read();
             int value   = test & 0x1F;
-            int length  = test >> 5;
+            int length  = test >>> 5;
 
             if (length == 0) {
                 return value;
