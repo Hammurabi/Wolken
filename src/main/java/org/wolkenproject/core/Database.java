@@ -187,31 +187,6 @@ public class Database {
         return new BlockStore(bytes);
     }
 
-    private boolean writeToFile(int blockFile, Set<Transaction> transactions, BlockStateChangeResult stateChange) {
-        FileService blockFileService = blocks.newFile("block_" + blockFile);
-        mutex.lock();
-        try {
-            byte bStore[] = Utils.concatenate(BlockFile, Utils.takeApart(blockFile));
-            if (bStore == null) {
-                return false;
-            }
-
-            BlockStore blockStore = new BlockStore(bStore);
-            RandomAccessFile randomAccessFile = blockFileService.randomAccess();
-            randomAccessFile.seek(blockStore.getIndex());
-
-            Context.getInstance().getCompressionEngine();
-            randomAccessFile.write();
-
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            mutex.unlock();
-        }
-    }
-
     private boolean checkBlockFileExists(int blockFile) {
         return blocks.newFile("block_" + blockFile).exists();
     }
