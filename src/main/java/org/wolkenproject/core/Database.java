@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.iq80.leveldb.DB;
+import org.wolkenproject.core.fastnio.Buffer;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
@@ -29,6 +30,7 @@ public class Database {
     AliasPrefix             = new byte[] { 'A' },
     ChainTipPrefix          = new byte[] { 'q' },
     BlockPrefix             = new byte[] { 'b' },
+    BlockIndexPrefix        = new byte[] { 'i' },
     BlockFile               = new byte[] { 'f' },
     TransactionPrefix       = new byte[] { 't' };
 
@@ -146,18 +148,32 @@ public class Database {
         }
     }
 
-    public void storeBlockIndex(int height, BlockIndex block) {
+    public void storeBlock(int height, BlockIndex block) {
+        // store the info that block of height 'height' is block of hash 'hash'.
         put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), block.getHash());
-        mutex.lock();
-        try {
-            OutputStream outputStream = location.newFile(".chain").newFile(Base16.encode(block.getHash())).openFileOutputStream();
-            block.write(outputStream);
-            outputStream.flush();
-            outputStream.close();
-        } catch (IOException | WolkenException e) {
-            e.printStackTrace();
-        } finally {
-            mutex.unlock();
+
+        // 80 bytes representing the block header.
+        byte header[] = block.getBlock().getHeaderBytes();
+
+        // 28 bytes representing the height, number of transactions, number of events total value, and total fees.
+        byte metadt[] = Utils.concatenate(
+                            Utils.takeApart(height),
+                            Utils.takeApart(block.getBlock().getTransactionCount()),
+                            Utils.takeApart(block.getBlock().getEventCount()),
+                            Utils.takeApartLong(block.getBlock().getTotalValue()),
+                            Utils.takeApartLong(block.getBlock().getFees()));
+
+        // store the header along with the height and number of transactions and number of events.
+        put(concatenate(BlockPrefix, block.getHash()), Utils.concatenate(header, metadt));
+
+        // find the block file
+        int blockFile = height / 512;
+
+        // if the block file exists then we write the block body to it otherwise we create a new blockfile
+        if (checkBlockFileExists(blockFile)) {
+            writeToFile(blockFile, block.getBlock().getTransactions(), block.getStateChange());
+        } else {
+            makeFile(blockFile, block.getBlock().getTransactions(), block.getStateChange());
         }
     }
 
