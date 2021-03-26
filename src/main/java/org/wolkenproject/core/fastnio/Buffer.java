@@ -32,11 +32,84 @@ public abstract class Buffer {
         this.position = position;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
     public void flip() {
         setPosition(0);
     }
 
     public abstract int getLength();
+
+    public void put(int value) {
+        put(value, position ++);
+    }
+
+    public void put(byte value[]) {
+        put(position, value);
+        setPosition(getPosition() + value.length);
+    }
+
+    public void putShort(int value) {
+        putShort(position, value);
+        setPosition(getPosition() + 2);
+    }
+
+    public void putChar(int value) {
+        putChar(position, value);
+        setPosition(getPosition() + 2);
+    }
+
+    public void putInt(int value) {
+        putInt(position, value);
+        setPosition(getPosition() + 4);
+    }
+
+    public void putLong(long value) {
+        putLong(position, value);
+        setPosition(getPosition() + 8);
+    }
+
+    public int get() {
+        return get(position ++);
+    }
+
+    public void get(byte out[]) {
+        get(position, out);
+        setPosition(getPosition() + out.length);
+    }
+
+    public int getShort() {
+        try {
+            return getShort(position);
+        } finally {
+            setPosition(getPosition() + 2);
+        }
+    }
+    public int getChar() {
+        try {
+            return getChar(position);
+        } finally {
+            setPosition(getPosition() + 2);
+        }
+    }
+
+    public int getInt() {
+        try {
+            return getInt(position);
+        } finally {
+            setPosition(getPosition() + 4);
+        }
+    }
+    
+    public long getLong() {
+        try {
+            return getLong(position);
+        } finally {
+            setPosition(getPosition() + 8);
+        }
+    }
 
     public abstract void put(int offset, int value);
     public abstract void put(int offset, byte value[]);
