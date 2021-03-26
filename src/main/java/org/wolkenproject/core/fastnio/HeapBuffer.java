@@ -7,6 +7,7 @@ class HeapBuffer extends Buffer {
 
     HeapBuffer(int size) {
         this.buffer = new byte[size];
+        setPosition(0);
     }
 
     @Override
@@ -28,34 +29,34 @@ class HeapBuffer extends Buffer {
 
     @Override
     public void putShort(int offset, int value) {
-        buffer[offset] = (byte) (value >> 8 & 0xFF);
-        buffer[offset + 1] = (byte) (value & 0xFF);
+        buffer[offset]      = (byte) (value >> 8 & 0xFF);
+        buffer[offset + 1]  = (byte) (value & 0xFF);
     }
 
     @Override
     public void putChar(int offset, int value) {
-        buffer[offset] = (byte) (value >> 8 & 0xFF);
-        buffer[offset + 1] = (byte) (value & 0xFF);
+        buffer[offset]      = (byte) (value >> 8 & 0xFF);
+        buffer[offset + 1]  = (byte) (value & 0xFF);
     }
 
     @Override
     public void putInt(int offset, int value) {
-        buffer[offset] = (byte) (value >> 24 & 0xFF);
-        buffer[offset + 1] = (byte) (value >> 16& 0xFF);
-        buffer[offset + 2] = (byte) (value >> 8 & 0xFF);
-        buffer[offset + 3] = (byte) (value & 0xFF);
+        buffer[offset]      = (byte) (value >> 24 & 0xFF);
+        buffer[offset + 1]  = (byte) (value >> 16& 0xFF);
+        buffer[offset + 2]  = (byte) (value >> 8 & 0xFF);
+        buffer[offset + 3]  = (byte) (value & 0xFF);
     }
 
     @Override
     public void putLong(int offset, long value) {
-        buffer[offset] = (byte) (value >> 56 & 0xFF);
-        buffer[offset + 1] = (byte) (value >> 48 & 0xFF);
-        buffer[offset + 2] = (byte) (value >> 40 & 0xFF);
-        buffer[offset + 3] = (byte) (value >> 32 & 0xFF);
-        buffer[offset + 4] = (byte) (value >> 24 & 0xFF);
-        buffer[offset + 5] = (byte) (value >> 16 & 0xFF);
-        buffer[offset + 6] = (byte) (value >> 8 & 0xFF);
-        buffer[offset + 7] = (byte) (value & 0xFF);
+        buffer[offset]      = (byte) (value >> 56 & 0xFF);
+        buffer[offset + 1]  = (byte) (value >> 48 & 0xFF);
+        buffer[offset + 2]  = (byte) (value >> 40 & 0xFF);
+        buffer[offset + 3]  = (byte) (value >> 32 & 0xFF);
+        buffer[offset + 4]  = (byte) (value >> 24 & 0xFF);
+        buffer[offset + 5]  = (byte) (value >> 16 & 0xFF);
+        buffer[offset + 6]  = (byte) (value >> 8 & 0xFF);
+        buffer[offset + 7]  = (byte) (value & 0xFF);
     }
 
     @Override
