@@ -21,11 +21,11 @@ public abstract class Buffer {
     }
 
     public static Buffer createBuffer(int length) {
-        return null;
+        return new HeapBuffer(length);
     }
 
     public static Buffer createUnsafeBuffer(int length) {
-        return null;
+        return new UnsafeBuffer(length);
     }
 
     public void setPosition(int position) {
