@@ -142,8 +142,6 @@ public class BlockHeader extends SerializableI {
         byte bits[] = targetFromBits(Utils.takeApart(this.bits));
         BigInteger result = new BigInteger(1, hash);
         BigInteger target = new BigInteger(1, bits);
-        System.out.println(Base16.encode(hash));
-        System.out.println(Base16.encode(bits));
         return result.compareTo(target) < 0;
     }
 
