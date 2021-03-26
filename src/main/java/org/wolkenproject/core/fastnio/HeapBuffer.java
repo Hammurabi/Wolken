@@ -8,6 +8,11 @@ class HeapBuffer extends Buffer {
     }
 
     @Override
+    public int getLength() {
+        return buffer.length;
+    }
+
+    @Override
     public void put(int offset, int value) {
     }
 
