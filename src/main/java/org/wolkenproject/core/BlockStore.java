@@ -22,15 +22,15 @@ public class BlockStore {
         this.data.putInt(8, highestBlock);
         this.data.putInt(12, lowestTimestampBlock);
         this.data.putInt(16, highestTimestampBlock);
-        this.data.putShort(20, index);
+        this.data.putInt(20, index);
     }
 
     public int getBlockLocation(int block) {
-        return data.getInt(block * 8 + 22);
+        return data.getInt(block * 8 + 24);
     }
 
     public int getBlockSize(int block) {
-        return data.getInt(block * 8 + 26);
+        return data.getInt(block * 8 + 28);
     }
 
     public boolean hasSpaceRemaining(int length) {
@@ -58,6 +58,6 @@ public class BlockStore {
     }
 
     public int getIndex() {
-        return data.getShort(20);
+        return data.getInt(20);
     }
 }
