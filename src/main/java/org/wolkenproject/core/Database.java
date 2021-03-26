@@ -177,6 +177,10 @@ public class Database {
         }
     }
 
+    private boolean checkBlockFileExists(int blockFile) {
+        return blocks.newFile("block_" + blockFile).exists();
+    }
+
     public BlockIndex findBlock(int height) {
         byte hash[] = get(concatenate(BlockIndexPrefix, Utils.takeApart(height)));
 
