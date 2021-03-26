@@ -4,6 +4,7 @@ import org.iq80.leveldb.DB;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.FileService;
 import org.iq80.leveldb.Options;
 import org.iq80.leveldb.impl.Iq80DBFactory;
@@ -67,6 +68,10 @@ public class Database {
         }
 
         return null;
+    }
+
+    public void storeHeader(byte hash[], BlockHeader header) {
+        put(Utils.concatenate(BlockHeaderPrefix, hash), header);
     }
 
     public BlockIndex findBlock(byte[] hash) {
@@ -137,6 +142,15 @@ public class Database {
         mutex.lock();
         try {
             database.put(k, v);
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public void put(byte[] k, SerializableI v) {
+        mutex.lock();
+        try {
+            database.put(k, v.asByteArray());
         } finally {
             mutex.unlock();
         }
