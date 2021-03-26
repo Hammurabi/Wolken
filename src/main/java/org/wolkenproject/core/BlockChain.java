@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.transactions.Transaction;
+import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.*;
@@ -104,6 +105,9 @@ public class BlockChain implements Runnable {
                             // if block is earlier then we must roll back the chain.
                             rollback(block);
                         }
+
+                        Logger.alert("current chain height ${h}", getTip().getHeight());
+                        Logger.alert("best block currently set to ${b}", Base16.encode(getTip().getHash()));
                     }
                 } catch (WolkenException e) {
                     e.printStackTrace();
