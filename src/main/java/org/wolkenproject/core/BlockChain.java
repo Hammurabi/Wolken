@@ -347,7 +347,7 @@ public class BlockChain implements Runnable {
     }
 
     private void setBlockIndex(int height, BlockIndex block) {
-        context.getDatabase().setBlockIndex(height, block);
+        context.getDatabase().storeBlockIndex(height, block);
     }
 
     private void replaceBlockIndex(int height, BlockIndex block) {
@@ -356,7 +356,7 @@ public class BlockChain implements Runnable {
             addStale(previousIndex);
         }
 
-        context.getDatabase().setBlockIndex(height, block);
+        context.getDatabase().storeBlockIndex(height, block);
     }
 
     private void deleteBlockIndex(int height, boolean orphan) {
