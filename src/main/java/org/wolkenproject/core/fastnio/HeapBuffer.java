@@ -6,7 +6,11 @@ class HeapBuffer extends Buffer {
     private final byte[] buffer;
 
     HeapBuffer(int size) {
-        this.buffer = new byte[size];
+        this(new byte[size]);
+    }
+
+    HeapBuffer(byte buffer[]) {
+        this.buffer = buffer;
         setPosition(0);
     }
 
