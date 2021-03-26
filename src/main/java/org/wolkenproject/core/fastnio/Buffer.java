@@ -20,6 +20,10 @@ public abstract class Buffer {
         return null;
     }
 
+    public static Buffer wrap(byte array[]) {
+        return new HeapBuffer(array);
+    }
+
     public static Buffer createBuffer(int length) {
         return new HeapBuffer(length);
     }
