@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.ContentHandler;
 import java.util.*;
+import java.util.zip.DeflaterOutputStream;
 
 public class Block extends BlockHeader implements Iterable<Transaction> {
     private static BigInteger       LargestHash             = BigInteger.ONE.shiftLeft(256);
@@ -230,5 +231,10 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
 
     public byte[] getSerializedEvents() throws IOException, WolkenException {
         return null;
+    }
+
+    public void write(OutputStream outputStream, boolean writeLocally) throws IOException, WolkenException {
+        write(outputStream);
+        // start writing events
     }
 }
