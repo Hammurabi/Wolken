@@ -36,6 +36,8 @@ public abstract class Buffer {
         setPosition(0);
     }
 
+    public abstract int getLength();
+
     public abstract void put(int offset, int value);
     public abstract void put(int offset, byte value[]);
     public abstract void putShort(int offset, int value);
