@@ -17,6 +17,9 @@ public abstract class SerializableI {
     public abstract void write(OutputStream stream) throws IOException, WolkenException;
     public abstract void read(InputStream stream) throws IOException, WolkenException;
 
+    public void fromBytes(byte bytes[]) {
+    }
+
     public byte[] asByteArray() {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
