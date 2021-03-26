@@ -18,6 +18,8 @@ public abstract class SerializableI {
     public abstract void read(InputStream stream) throws IOException, WolkenException;
 
     public <T> T fromBytes(byte bytes[]) {
+        
+        return (T) this;
     }
 
     public byte[] asByteArray() {
