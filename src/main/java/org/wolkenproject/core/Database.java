@@ -97,16 +97,22 @@ public class Database {
         put(Utils.concatenate(TransactionPrefix, hash), transaction.asSerializedArray());
     }
 
-    public Transaction findTransaction(byte[] hash) throws IOException, WolkenException {
+    public Transaction findTransaction(byte[] hash) {
         byte bytes[] = get(Utils.concatenate(TransactionPrefix, hash));
 
         if (bytes == null) {
             return null;
         }
 
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+            
+            return Context.getInstance().getSerialFactory().fromStream(inputStream);
+        } catch (WolkenException | IOException e) {
+            e.printStackTrace();
+        }
 
-        return Context.getInstance().getSerialFactory().fromStream(inputStream);
+        return null;
     }
 
     public BlockIndex findBlock(byte[] hash) {
