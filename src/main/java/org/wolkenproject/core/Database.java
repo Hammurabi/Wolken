@@ -14,6 +14,7 @@ import org.wolkenproject.wallet.Wallet;
 
 import java.io.*;
 import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static org.wolkenproject.utils.Utils.concatenate;
@@ -174,6 +175,40 @@ public class Database {
             writeToFile(blockFile, block.getBlock().getTransactions(), block.getStateChange());
         } else {
             makeFile(blockFile, block.getBlock().getTransactions(), block.getStateChange());
+        }
+    }
+
+    private BlockStore findBlockStore(int blockStore) {
+        byte bytes[] = get(Utils.concatenate(BlockFile, Utils.takeApart(blockStore)));
+        if (bytes == null) {
+            return null;
+        }
+
+        return new BlockStore(bytes);
+    }
+
+    private boolean writeToFile(int blockFile, Set<Transaction> transactions, BlockStateChangeResult stateChange) {
+        FileService blockFileService = blocks.newFile("block_" + blockFile);
+        mutex.lock();
+        try {
+            byte bStore[] = Utils.concatenate(BlockFile, Utils.takeApart(blockFile));
+            if (bStore == null) {
+                return false;
+            }
+
+            BlockStore blockStore = new BlockStore(bStore);
+            RandomAccessFile randomAccessFile = blockFileService.randomAccess();
+            randomAccessFile.seek(blockStore.getIndex());
+
+            Context.getInstance().getCompressionEngine();
+            randomAccessFile.write();
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            mutex.unlock();
         }
     }
 
