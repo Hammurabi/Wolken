@@ -97,6 +97,18 @@ public class Database {
         put(Utils.concatenate(TransactionPrefix, hash), transaction.asSerializedArray());
     }
 
+    public Transaction findTransaction(byte[] hash) throws IOException, WolkenException {
+        byte bytes[] = get(Utils.concatenate(TransactionPrefix, hash));
+
+        if (bytes == null) {
+            return null;
+        }
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+
+        return Context.getInstance().getSerialFactory().fromStream(inputStream);
+    }
+
     public BlockIndex findBlock(byte[] hash) {
         mutex.lock();
         try {
@@ -316,10 +328,6 @@ public class Database {
 
     public boolean isRejected(byte[] hash) {
         return get(Utils.concatenate(RejectedBlockPrefix, hash)) != null;
-    }
-
-    public Transaction findTransaction(byte[] txid) {
-        return null;
     }
 
     public boolean checkWalletExists(String name) {
