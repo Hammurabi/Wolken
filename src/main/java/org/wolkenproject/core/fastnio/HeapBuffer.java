@@ -16,10 +16,14 @@ class HeapBuffer extends Buffer {
 
     @Override
     public void put(int offset, int value) {
+        buffer[offset] = (byte) value;
     }
 
     @Override
     public void put(int offset, byte[] value) {
+        for (int i = 0; i < value.length; i ++) {
+            put(offset + i, value[i]);
+        }
     }
 
     @Override
