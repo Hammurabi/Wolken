@@ -20,6 +20,8 @@ import static org.wolkenproject.utils.Utils.concatenate;
 public class Database {
     private DB              database;
     private FileService     location;
+    private FileService     blocks;
+    private FileService     events;
     private ReentrantLock   mutex;
 
     private final static byte[]
@@ -34,7 +36,17 @@ public class Database {
     WalletPrefix            = Utils.takeApartShort((short) 9);
 
     public Database(FileService location) throws IOException {
-        location.newFile(".chain").makeDirectories();
+        this.blocks = location.newFile(".chain").newFile("blocks");
+        this.events = location.newFile(".chain").newFile("events");
+
+        if (!blocks.exists()) {
+            blocks.makeDirectories();
+        }
+
+        if (!events.exists()) {
+            blocks.makeDirectories();
+        }
+        
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
         this.location = location;
         mutex   = new ReentrantLock();
@@ -131,7 +143,7 @@ public class Database {
         }
     }
 
-    public void setBlockIndex(int height, BlockIndex block) {
+    public void storeBlockIndex(int height, BlockIndex block) {
         put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), block.getHash());
         mutex.lock();
         try {
