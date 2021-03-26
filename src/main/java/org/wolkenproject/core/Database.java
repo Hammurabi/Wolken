@@ -74,13 +74,25 @@ public class Database {
     }
 
     public void storeBlock(byte hash[], Block block) throws IOException {
+        // store the block header
         storeHeader(hash, block.getBlockHeader());
+
+        // write the transaction hashes to byte array
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         for (byte h[] : block.getPrunedTransactions()) {
             outputStream.write(h);
         }
 
+        // store the transaction hashes as part of this block
         put(Utils.concatenate(BlockPrunedTxPrefix, hash), outputStream.toByteArray());
+
+        // store the actual transactions associated with this block
+        for (Transaction transaction : block) {
+            storeTransaction(transaction.getHash(), transaction);
+        }
+    }
+
+    private void storeTransaction(byte[] hash, Transaction transaction) {
     }
 
     public BlockIndex findBlock(byte[] hash) {
