@@ -1,5 +1,7 @@
 package org.wolkenproject.utils;
 
+import org.wolkenproject.serialization.SerializableI;
+
 import java.io.*;
 import java.util.zip.DeflaterInputStream;
 import java.util.zip.DeflaterOutputStream;
@@ -213,5 +215,9 @@ public class FileService {
 
     public FileReader openFileReader() throws FileNotFoundException {
         return new FileReader(file());
+    }
+
+    public RandomAccessFile randomAccess() throws FileNotFoundException {
+        return new RandomAccessFile(file(), "rw");
     }
 }
