@@ -54,6 +54,15 @@ public class Database {
         return hash != null;
     }
 
+    public BlockHeader findHeader(byte[] hash) {
+        byte header[] = get(Utils.concatenate(BlockHeaderPrefix, hash));
+        if (header == null) {
+            return null;
+        }
+
+        return new BlockHeader().fromBytes(header);
+    }
+
     public BlockIndex findBlock(byte[] hash) {
         mutex.lock();
         try {
