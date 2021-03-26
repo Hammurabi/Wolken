@@ -197,7 +197,7 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         return fees;
     }
 
-    public PrunedTransactions getPrunedTransactions() {
+    public Set<byte[]> getPrunedTransactions() {
         Set<byte[]> pruned = new LinkedHashSet<>();
         for (Transaction transaction : transactions) {
             pruned.add(transaction.getHash());
