@@ -151,7 +151,7 @@ public class Database {
 
     public void storeBlock(int height, BlockIndex block) {
         // store the info that block of height 'height' is block of hash 'hash'.
-        put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), block.getHash());
+        byte hash[]   = block.getHash();
 
         // 80 bytes representing the block header.
         byte header[] = block.getBlock().getHeaderBytes();
@@ -167,15 +167,11 @@ public class Database {
         // store the header along with the height and number of transactions and number of events.
         put(concatenate(BlockPrefix, block.getHash()), Utils.concatenate(header, metadt));
 
-        // find the block file
-        int blockFile = height / 512;
+        // get transactions
+        byte transactions[] = block.getBlock().getSerializedTransactions();
 
-        // if the block file exists then we write the block body to it otherwise we create a new blockfile
-        if (checkBlockFileExists(blockFile)) {
-            writeToFile(blockFile, block.getBlock().getTransactions(), block.getStateChange());
-        } else {
-            makeFile(blockFile, block.getBlock().getTransactions(), block.getStateChange());
-        }
+        // get events
+        byte events[]       = block.getBlock().getSerializedTransactions();
     }
 
     private BlockStore findBlockStore(int blockStore) {
