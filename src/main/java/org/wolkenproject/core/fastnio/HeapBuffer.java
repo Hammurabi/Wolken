@@ -28,14 +28,22 @@ class HeapBuffer extends Buffer {
 
     @Override
     public void putShort(int offset, int value) {
+        buffer[offset] = (byte) (value >> 8 & 0xFF);
+        buffer[offset + 1] = (byte) (value & 0xFF);
     }
 
     @Override
     public void putChar(int offset, int value) {
+        buffer[offset] = (byte) (value >> 8 & 0xFF);
+        buffer[offset + 1] = (byte) (value & 0xFF);
     }
 
     @Override
     public void putInt(int offset, int value) {
+        buffer[offset] = (byte) (value >> 24 & 0xFF);
+        buffer[offset + 1] = (byte) (value >> 16& 0xFF);
+        buffer[offset + 2] = (byte) (value >> 8 & 0xFF);
+        buffer[offset + 3] = (byte) (value & 0xFF);
     }
 
     @Override
