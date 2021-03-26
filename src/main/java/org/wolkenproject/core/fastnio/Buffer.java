@@ -40,6 +40,10 @@ public abstract class Buffer {
         setPosition(0);
     }
 
+    public int remaining() {
+        return getLength() - getPosition();
+    }
+
     public abstract int getLength();
 
     public void put(int value) {
