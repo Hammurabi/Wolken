@@ -1,5 +1,7 @@
 package org.wolkenproject.core.fastnio;
 
+import org.wolkenproject.utils.Utils;
+
 class HeapBuffer extends Buffer {
     private final byte[] buffer;
 
@@ -38,7 +40,7 @@ class HeapBuffer extends Buffer {
 
     @Override
     public int get(int offset) {
-        return 0;
+        return buffer[offset];
     }
 
     @Override
@@ -47,21 +49,21 @@ class HeapBuffer extends Buffer {
 
     @Override
     public int getShort(int offset) {
-        return 0;
+        return Utils.makeShort(buffer[offset], buffer[offset + 1]);
     }
 
     @Override
     public int getChar(int offset) {
-        return 0;
+        return Utils.makeChar(buffer[offset], buffer[offset + 1]);
     }
 
     @Override
     public int getInt(int offset) {
-        return 0;
+        return Utils.makeInt(buffer, offset);
     }
 
     @Override
     public long getLong(int offset) {
-        return 0;
+        return Utils.makeLong(buffer, offset);
     }
 }
