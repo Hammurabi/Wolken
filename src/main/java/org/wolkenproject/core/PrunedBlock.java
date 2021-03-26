@@ -21,4 +21,8 @@ public class PrunedBlock {
     public Set<byte[]> getEvents() {
         return events;
     }
+
+    public void containsTransaction(byte transactionId[]) {
+        return;transactions.contains(transactionId);
+    }
 }
