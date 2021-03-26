@@ -4,20 +4,22 @@ import org.wolkenproject.utils.Utils;
 
 class UnsafeBuffer extends Buffer {
     private final long buffer;
+    private final long length;
 
     UnsafeBuffer(int size) {
         this.buffer = UnsafeInstance.allocateMemory(size);
+        this.length = size;
         setPosition(0);
     }
 
     @Override
     public int getLength() {
-        return buffer.length;
+        return (int) length;
     }
 
     @Override
     public void put(int offset, int value) {
-        buffer[offset] = (byte) value;
+         UnsafeInstance.putByte(offset + buffer, (byte) value);
     }
 
     @Override
@@ -29,34 +31,22 @@ class UnsafeBuffer extends Buffer {
 
     @Override
     public void putShort(int offset, int value) {
-        buffer[offset]      = (byte) ((value >> 8) & 0xFF);
-        buffer[offset + 1]  = (byte) (value & 0xFF);
+        UnsafeInstance.putShort(offset + buffer, (short) value);
     }
 
     @Override
     public void putChar(int offset, int value) {
-        buffer[offset]      = (byte) ((value >> 8) & 0xFF);
-        buffer[offset + 1]  = (byte) (value & 0xFF);
+        UnsafeInstance.putShort(offset + buffer, (char) value);
     }
 
     @Override
     public void putInt(int offset, int value) {
-        buffer[offset]      = (byte) ((value >> 24) & 0xFF);
-        buffer[offset + 1]  = (byte) ((value >> 16) & 0xFF);
-        buffer[offset + 2]  = (byte) ((value >> 8 ) & 0xFF);
-        buffer[offset + 3]  = (byte) (value & 0xFF);
+        UnsafeInstance.putInt(offset + buffer, value);
     }
 
     @Override
     public void putLong(int offset, long value) {
-        buffer[offset]      = (byte) ((value >> 56) & 0xFF);
-        buffer[offset + 1]  = (byte) ((value >> 48) & 0xFF);
-        buffer[offset + 2]  = (byte) ((value >> 40) & 0xFF);
-        buffer[offset + 3]  = (byte) ((value >> 32) & 0xFF);
-        buffer[offset + 4]  = (byte) ((value >> 24) & 0xFF);
-        buffer[offset + 5]  = (byte) ((value >> 16) & 0xFF);
-        buffer[offset + 6]  = (byte) ((value >> 8 ) & 0xFF);
-        buffer[offset + 7]  = (byte) (value & 0xFF);
+        UnsafeInstance.putLong(offset + buffer, value);
     }
 
     @Override
