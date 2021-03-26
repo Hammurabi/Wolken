@@ -54,6 +54,29 @@ public class Database {
         return hash != null;
     }
 
+    public void storeTransaction(byte[] hash, Transaction transaction) {
+        // store the transaction as SERIALIZED byte array to include the serial version number (MAGIC)
+        put(Utils.concatenate(TransactionPrefix, hash), transaction.asSerializedArray());
+    }
+
+    public Transaction findTransaction(byte[] hash) {
+        byte bytes[] = get(Utils.concatenate(TransactionPrefix, hash));
+
+        if (bytes == null) {
+            return null;
+        }
+
+        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+
+            return Context.getInstance().getSerialFactory().fromStream(inputStream);
+        } catch (WolkenException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void storeHeader(byte hash[], BlockHeader header) {
         put(Utils.concatenate(BlockHeaderPrefix, hash), header);
     }
@@ -90,29 +113,6 @@ public class Database {
         for (Transaction transaction : block) {
             storeTransaction(transaction.getHash(), transaction);
         }
-    }
-
-    public void storeTransaction(byte[] hash, Transaction transaction) {
-        // store the transaction as SERIALIZED byte array to include the serial version number (MAGIC)
-        put(Utils.concatenate(TransactionPrefix, hash), transaction.asSerializedArray());
-    }
-
-    public Transaction findTransaction(byte[] hash) {
-        byte bytes[] = get(Utils.concatenate(TransactionPrefix, hash));
-
-        if (bytes == null) {
-            return null;
-        }
-
-        try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-            
-            return Context.getInstance().getSerialFactory().fromStream(inputStream);
-        } catch (WolkenException | IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     public BlockIndex findBlock(byte[] hash) {
