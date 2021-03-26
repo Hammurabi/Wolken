@@ -8,6 +8,7 @@ import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -216,5 +217,18 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
 
     public Set<Transaction> getTransactions() {
         return transactions;
+    }
+
+    public byte[] getSerializedTransactions() throws IOException, WolkenException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        for (Transaction transaction : transactions) {
+            transaction.serialize(outputStream);
+        }
+
+        return outputStream.toByteArray();
+    }
+
+    public byte[] getSerializedEvents() throws IOException, WolkenException {
+        return null;
     }
 }
