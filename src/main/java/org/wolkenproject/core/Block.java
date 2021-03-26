@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.net.ContentHandler;
 import java.util.*;
 
 public class Block extends BlockHeader implements Iterable<Transaction> {
@@ -194,5 +195,9 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         }
 
         return fees;
+    }
+
+    public PrunedBlock getPruned() {
+        return null;
     }
 }
