@@ -93,6 +93,8 @@ public class Database {
     }
 
     public void storeTransaction(byte[] hash, Transaction transaction) {
+        // store the transaction as SERIALIZED byte array to include the serial version number (MAGIC)
+        put(Utils.concatenate(TransactionPrefix, hash), transaction.asSerializedArray());
     }
 
     public BlockIndex findBlock(byte[] hash) {
