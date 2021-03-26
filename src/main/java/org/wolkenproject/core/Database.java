@@ -11,10 +11,8 @@ import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.wallet.Wallet;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.Collection;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static org.wolkenproject.utils.Utils.concatenate;
@@ -29,7 +27,7 @@ public class Database {
     AliasPrefix             = Utils.takeApartShort((short) 2),
     ChainTipPrefix          = Utils.takeApartShort((short) 3),
     BlockHeaderPrefix       = Utils.takeApartShort((short) 4),
-    BlockContentPrefix      = Utils.takeApartShort((short) 5),
+    BlockPrunedTxPrefix     = Utils.takeApartShort((short) 5),
     BlockIndexPrefix        = Utils.takeApartShort((short) 6),
     TransactionPrefix       = Utils.takeApartShort((short) 7),
     RejectedBlockPrefix     = Utils.takeApartShort((short) 8),
@@ -75,9 +73,14 @@ public class Database {
         return null;
     }
 
-    public void storeBlock(byte hash[], Block block) {
+    public void storeBlock(byte hash[], Block block) throws IOException {
         storeHeader(hash, block.getBlockHeader());
-        put(Utils.concatenate(BlockContentPrefix, hash), block.getPrunedTransactions());
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        for (byte h[] : block.getPrunedTransactions()) {
+            outputStream.write(h);
+        }
+
+        put(Utils.concatenate(BlockPrunedTxPrefix, hash), outputStream.toByteArray());
     }
 
     public BlockIndex findBlock(byte[] hash) {
