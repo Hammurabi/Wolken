@@ -25,4 +25,8 @@ public class PrunedBlock {
     public boolean containsTransaction(byte transactionId[]) {
         return transactions.contains(transactionId);
     }
+
+    public boolean containsEvent(byte eventId[]) {
+        return events.contains(eventId);
+    }
 }
