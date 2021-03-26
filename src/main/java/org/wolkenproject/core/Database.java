@@ -1,7 +1,6 @@
 package org.wolkenproject.core;
 
 import org.iq80.leveldb.DB;
-import org.wolkenproject.core.fastnio.Buffer;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
@@ -13,9 +12,9 @@ import org.wolkenproject.utils.Utils;
 import org.wolkenproject.wallet.Wallet;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 
 import static org.wolkenproject.utils.Utils.concatenate;
 
@@ -31,6 +30,7 @@ public class Database {
     AliasPrefix             = new byte[] { 'A' },
     ChainTipPrefix          = new byte[] { 'q' },
     BlockPrefix             = new byte[] { 'b' },
+    CompressedBlockPrefix = new byte[] { 's' },
     BlockIndexPrefix        = new byte[] { 'i' },
     BlockFile               = new byte[] { 'f' },
     TransactionPrefix       = new byte[] { 't' };
@@ -164,18 +164,24 @@ public class Database {
                             Utils.takeApartLong(block.getBlock().getTotalValue()),
                             Utils.takeApartLong(block.getBlock().getFees()));
 
-        // store the header along with the height and number of transactions and number of events.
-        put(concatenate(BlockPrefix, block.getHash()), Utils.concatenate(header, metadt));
-
         try {
-            // get transactions
-            byte transactions[] = block.getBlock().getSerializedTransactions();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            // we serialize the block into a deflater output stream with BEST_COMPRESSION, which is slow
+            // but according to benchmarks, it should take around 7ms per block to deflate, and around 14ms
+            // to inflate.
+            DeflaterOutputStream outputStream = new DeflaterOutputStream(byteArrayOutputStream, new Deflater(Deflater.BEST_COMPRESSION));
 
-            // get events
-            byte events[] = block.getBlock().getSerializedTransactions();
+            // write the block (LOCALLY) to the output stream.
+            block.getBlock().write(outputStream, true);
 
             // store the info that block of height 'height' is block of hash 'hash'.
             put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), hash);
+
+            // store the header along with the height and number of transactions and number of events.
+            put(concatenate(BlockPrefix, hash), Utils.concatenate(header, metadt));
+
+            // store the actual compressed block data.
+            put(concatenate(CompressedBlockPrefix, hash), byteArrayOutputStream.toByteArray());
         } catch (WolkenException | IOException e) {
             e.printStackTrace();
         }
