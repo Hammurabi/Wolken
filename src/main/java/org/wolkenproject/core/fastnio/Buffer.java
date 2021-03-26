@@ -102,7 +102,7 @@ public abstract class Buffer {
             setPosition(getPosition() + 4);
         }
     }
-    
+
     public long getLong() {
         try {
             return getLong(position);
