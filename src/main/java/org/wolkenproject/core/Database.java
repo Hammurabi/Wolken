@@ -60,7 +60,13 @@ public class Database {
             return null;
         }
 
-        return new BlockHeader().fromBytes(header);
+        try {
+            return new BlockHeader().fromBytes(header);
+        } catch (WolkenException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public BlockIndex findBlock(byte[] hash) {
