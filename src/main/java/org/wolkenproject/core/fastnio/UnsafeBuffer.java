@@ -51,7 +51,7 @@ class UnsafeBuffer extends Buffer {
 
     @Override
     public int get(int offset) {
-        return buffer[offset];
+        return UnsafeInstance.getByte(offset + buffer);
     }
 
     @Override
@@ -63,21 +63,21 @@ class UnsafeBuffer extends Buffer {
 
     @Override
     public int getShort(int offset) {
-        return Utils.makeShort(buffer[offset], buffer[offset + 1]);
+        return UnsafeInstance.getShort(offset + buffer);
     }
 
     @Override
     public int getChar(int offset) {
-        return Utils.makeChar(buffer[offset], buffer[offset + 1]);
+        return UnsafeInstance.getChar(offset + buffer);
     }
 
     @Override
     public int getInt(int offset) {
-        return Utils.makeInt(buffer, offset);
+        return UnsafeInstance.getInt(offset + buffer);
     }
 
     @Override
     public long getLong(int offset) {
-        return Utils.makeLong(buffer, offset);
+        return UnsafeInstance.getLong(offset + buffer);
     }
 }
