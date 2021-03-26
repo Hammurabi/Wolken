@@ -150,7 +150,7 @@ public class Database {
     }
 
     public void storeBlock(int height, BlockIndex block) {
-        // store the info that block of height 'height' is block of hash 'hash'.
+        // get a reference of the hash since we will keep reusing it.
         byte hash[]   = block.getHash();
 
         // 80 bytes representing the block header.
@@ -167,11 +167,18 @@ public class Database {
         // store the header along with the height and number of transactions and number of events.
         put(concatenate(BlockPrefix, block.getHash()), Utils.concatenate(header, metadt));
 
-        // get transactions
-        byte transactions[] = block.getBlock().getSerializedTransactions();
+        try {
+            // get transactions
+            byte transactions[] = block.getBlock().getSerializedTransactions();
 
-        // get events
-        byte events[]       = block.getBlock().getSerializedTransactions();
+            // get events
+            byte events[] = block.getBlock().getSerializedTransactions();
+
+            // store the info that block of height 'height' is block of hash 'hash'.
+            put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), hash);
+        } catch (WolkenException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private BlockStore findBlockStore(int blockStore) {
