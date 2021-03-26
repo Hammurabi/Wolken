@@ -131,17 +131,17 @@ public class Utils {
     public static byte[] int24(int i)
     {
         return new byte[] {
-                (byte) ((i >> 16) & 0xFF),
-                (byte) ((i >>  8) & 0xFF),
+                (byte) ((i >>> 16) & 0xFF),
+                (byte) ((i >>>  8) & 0xFF),
                 (byte) ((i) & 0xFF)};
     }
 
     public static byte[] appendIntegerToBytes(byte data[], int integer)
     {
         return concatenate(data, new byte[] {
-                (byte) ((integer >> 24) & 0xFF),
-                (byte) ((integer >> 16) & 0xFF),
-                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer >>> 24) & 0xFF),
+                (byte) ((integer >>> 16) & 0xFF),
+                (byte) ((integer >>> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)});
     }
 
@@ -169,79 +169,79 @@ public class Utils {
 
     public static byte[] takeApartShort(long integer) {
         return new byte[] {
-                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer >>> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
     public static byte[] takeApartChar(long integer) {
         return new byte[] {
-                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer >>> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
     public static byte[] takeApart(long integer) {
         return new byte[] {
-                (byte) ((integer >> 24) & 0xFF),
-                (byte) ((integer >> 16) & 0xFF),
-                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer >>> 24) & 0xFF),
+                (byte) ((integer >>> 16) & 0xFF),
+                (byte) ((integer >>> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
     public static byte[] appendLongToBytes(byte[] data, long integer) {
         return concatenate(data, new byte[] {
-                (byte) ((integer >> 56) & 0xFF),
-                (byte) ((integer >> 48) & 0xFF),
-                (byte) ((integer >> 40) & 0xFF),
-                (byte) ((integer >> 32) & 0xFF),
-                (byte) ((integer >> 24) & 0xFF),
-                (byte) ((integer >> 16) & 0xFF),
-                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer >>> 56) & 0xFF),
+                (byte) ((integer >>> 48) & 0xFF),
+                (byte) ((integer >>> 40) & 0xFF),
+                (byte) ((integer >>> 32) & 0xFF),
+                (byte) ((integer >>> 24) & 0xFF),
+                (byte) ((integer >>> 16) & 0xFF),
+                (byte) ((integer >>>  8) & 0xFF),
                 (byte) ((integer) & 0xFF)});
     }
 
     public static byte[] takeApartLong(long integer)
     {
         return new byte[] {
-                (byte) ((integer >> 56) & 0xFF),
-                (byte) ((integer >> 48) & 0xFF),
-                (byte) ((integer >> 40) & 0xFF),
-                (byte) ((integer >> 32) & 0xFF),
-                (byte) ((integer >> 24) & 0xFF),
-                (byte) ((integer >> 16) & 0xFF),
-                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer >>> 56) & 0xFF),
+                (byte) ((integer >>> 48) & 0xFF),
+                (byte) ((integer >>> 40) & 0xFF),
+                (byte) ((integer >>> 32) & 0xFF),
+                (byte) ((integer >>> 24) & 0xFF),
+                (byte) ((integer >>> 16) & 0xFF),
+                (byte) ((integer >>>  8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
     public static byte[] takeApartInt40(long integer)
     {
         return new byte[] {
-                (byte) ((integer >> 32) & 0xFF),
-                (byte) ((integer >> 24) & 0xFF),
-                (byte) ((integer >> 16) & 0xFF),
-                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer >>> 32) & 0xFF),
+                (byte) ((integer >>> 24) & 0xFF),
+                (byte) ((integer >>> 16) & 0xFF),
+                (byte) ((integer >>>  8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
     public static byte[] takeApartInt48(long integer)
     {
         return new byte[] {
-                (byte) ((integer >> 40) & 0xFF),
-                (byte) ((integer >> 32) & 0xFF),
-                (byte) ((integer >> 24) & 0xFF),
-                (byte) ((integer >> 16) & 0xFF),
-                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer >>> 40) & 0xFF),
+                (byte) ((integer >>> 32) & 0xFF),
+                (byte) ((integer >>> 24) & 0xFF),
+                (byte) ((integer >>> 16) & 0xFF),
+                (byte) ((integer >>>  8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
     public static byte[] takeApartInt56(long integer)
     {
         return new byte[] {
-                (byte) ((integer >> 48) & 0xFF),
-                (byte) ((integer >> 40) & 0xFF),
-                (byte) ((integer >> 32) & 0xFF),
-                (byte) ((integer >> 24) & 0xFF),
-                (byte) ((integer >> 16) & 0xFF),
-                (byte) ((integer >>  8) & 0xFF),
+                (byte) ((integer >>> 48) & 0xFF),
+                (byte) ((integer >>> 40) & 0xFF),
+                (byte) ((integer >>> 32) & 0xFF),
+                (byte) ((integer >>> 24) & 0xFF),
+                (byte) ((integer >>> 16) & 0xFF),
+                (byte) ((integer >>>  8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
@@ -302,25 +302,25 @@ public class Utils {
     }
 
     public static void writeInt(int integer, OutputStream stream) throws IOException {
-        stream.write((byte) ((integer >> 24) & 0xFF));
-        stream.write((byte) ((integer >> 16) & 0xFF));
-        stream.write((byte) ((integer >> 8) & 0xFF));
+        stream.write((byte) ((integer >>> 24) & 0xFF));
+        stream.write((byte) ((integer >>> 16) & 0xFF));
+        stream.write((byte) ((integer >>> 8) & 0xFF));
         stream.write((byte) ((integer) & 0xFF));
     }
 
     public static void writeLong(long integer, OutputStream stream) throws IOException {
-        stream.write((byte) ((integer >> 56) & 0xFF));
-        stream.write((byte) ((integer >> 48) & 0xFF));
-        stream.write((byte) ((integer >> 40) & 0xFF));
-        stream.write((byte) ((integer >> 32) & 0xFF));
-        stream.write((byte) ((integer >> 24) & 0xFF));
-        stream.write((byte) ((integer >> 16) & 0xFF));
-        stream.write((byte) ((integer >>  8) & 0xFF));
+        stream.write((byte) ((integer >>> 56) & 0xFF));
+        stream.write((byte) ((integer >>> 48) & 0xFF));
+        stream.write((byte) ((integer >>> 40) & 0xFF));
+        stream.write((byte) ((integer >>> 32) & 0xFF));
+        stream.write((byte) ((integer >>> 24) & 0xFF));
+        stream.write((byte) ((integer >>> 16) & 0xFF));
+        stream.write((byte) ((integer >>>  8) & 0xFF));
         stream.write((byte) ((integer) & 0xFF));
     }
 
     public static void writeUnsignedInt16(int integer, OutputStream stream) throws IOException {
-        stream.write((byte) ((integer >> 8) & 0xFF));
+        stream.write((byte) ((integer >>> 8) & 0xFF));
         stream.write((byte) ((integer) & 0xFF));
     }
 
@@ -350,7 +350,7 @@ public class Utils {
 
     public static int getBit(long byt, int position)
     {
-        return (int) ((byt >> position) & 1);
+        return (int) ((byt >>> position) & 1);
     }
 
     public static int setBit(int byt, int position)
@@ -406,8 +406,8 @@ public class Utils {
 
     public static byte[] takeApartInt24(long integer) {
         return new byte[] {
-                (byte) ((integer >> 16) & 0xFF),
-                (byte) ((integer >> 8) & 0xFF),
+                (byte) ((integer >>> 16) & 0xFF),
+                (byte) ((integer >>> 8) & 0xFF),
                 (byte) ((integer) & 0xFF)};
     }
 
