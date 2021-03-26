@@ -42,6 +42,7 @@ public class Context {
     private ResourceManager         resourceManager;
     private RpcServer               rpcServer;
     private FileService             fileService;
+    private CompressionEngine       compressionEngine;
 
     public Context(FileService service, int rpcPort, boolean testNet, Address[] payList, Set<NetAddress> forceConnections) throws WolkenException, IOException {
         Context.instance = this;
@@ -56,6 +57,7 @@ public class Context {
         this.fileService = service;
         this.opcodeRegister = new OpcodeRegister();
         this.resourceManager = new ResourceManager();
+        this.compressionEngine = new CompressionEngine();
 
         Transaction.register(serializationFactory);
         serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
@@ -286,5 +288,9 @@ public class Context {
 
     public RpcServer getRPCServer() {
         return rpcServer;
+    }
+
+    public CompressionEngine getCompressionEngine() {
+        return compressionEngine;
     }
 }
