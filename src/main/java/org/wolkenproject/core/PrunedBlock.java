@@ -1,6 +1,5 @@
 package org.wolkenproject.core;
 
-import java.util.List;
 import java.util.Set;
 
 public class PrunedBlock {
