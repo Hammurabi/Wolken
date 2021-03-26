@@ -77,7 +77,7 @@ public class Database {
 
     public void storeBlock(byte hash[], Block block) {
         storeHeader(hash, block.getBlockHeader());
-        put(Utils.concatenate(BlockContentPrefix, hash), block);
+        put(Utils.concatenate(BlockContentPrefix, hash), block.getPruned().getContent());
     }
 
     public BlockIndex findBlock(byte[] hash) {
