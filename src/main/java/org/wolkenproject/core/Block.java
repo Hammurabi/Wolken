@@ -205,4 +205,16 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
 
         return pruned;
     }
+
+    public int getEventCount() {
+        return 0;
+    }
+
+    public long getTotalValue() {
+        return 0;
+    }
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
 }
