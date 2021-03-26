@@ -25,15 +25,18 @@ public class Database {
     private ReentrantLock   mutex;
 
     private final static byte[]
-    AccountPrefix           = Utils.takeApartShort((short) 1),
-    AliasPrefix             = Utils.takeApartShort((short) 2),
-    ChainTipPrefix          = Utils.takeApartShort((short) 3),
-    BlockHeaderPrefix       = Utils.takeApartShort((short) 4),
-    BlockPrunedTxPrefix     = Utils.takeApartShort((short) 5),
-    BlockIndexPrefix        = Utils.takeApartShort((short) 6),
-    TransactionPrefix       = Utils.takeApartShort((short) 7),
-    RejectedBlockPrefix     = Utils.takeApartShort((short) 8),
-    WalletPrefix            = Utils.takeApartShort((short) 9);
+    AccountPrefix           = new byte[] { 'a' },
+    AliasPrefix             = new byte[] { 'A' },
+    ChainTipPrefix          = new byte[] { 'q' },
+    BlockPrefix             = new byte[] { 'b' },
+    BlockFile               = new byte[] { 'f' },
+    TransactionPrefix       = new byte[] { 't' };
+
+//    BlockPrunedTxPrefix     = new byte[] { 'a' },
+//    BlockIndexPrefix        = new byte[] { 'a' },
+//    TransactionPrefix       = new byte[] { 'a' },
+//    RejectedBlockPrefix     = new byte[] { 'a' },
+//    WalletPrefix            = new byte[] { 'a' };
 
     public Database(FileService location) throws IOException {
         this.blocks = location.newFile(".chain").newFile("blocks");
@@ -46,7 +49,7 @@ public class Database {
         if (!events.exists()) {
             blocks.makeDirectories();
         }
-        
+
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
         this.location = location;
         mutex   = new ReentrantLock();
