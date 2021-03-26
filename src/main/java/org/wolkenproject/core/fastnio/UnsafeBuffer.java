@@ -36,7 +36,7 @@ class UnsafeBuffer extends Buffer {
 
     @Override
     public void putChar(int offset, int value) {
-        UnsafeInstance.putShort(offset + buffer, (char) value);
+        UnsafeInstance.putChar(offset + buffer, (char) value);
     }
 
     @Override
