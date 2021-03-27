@@ -42,10 +42,16 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
                     // decimal value
                     if (value.contains(".")) {
+                        txValue         = coinFromDecimalString(value);
+                    } else {
+                        txValue         = Long.parseLong(value);
                     }
 
                     // decimal value
                     if (fee.contains(".")) {
+                        txFee           = coinFromDecimalString(fee);
+                    } else {
+                        txFee           = Long.parseLong(fee);
                     }
 
                     // has signature
