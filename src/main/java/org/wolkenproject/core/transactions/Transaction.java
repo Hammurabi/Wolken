@@ -28,6 +28,10 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
             if (transaction.has("name") && transaction.has("version")) {
                 String name = transaction.getString("name");
                 int version = transaction.getInt("version");
+
+                if (name.equals("BasicTransaction")) {
+                    JSONObject content = transaction.getJSONObject("content");
+                }
             }
         }
 
