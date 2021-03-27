@@ -72,9 +72,13 @@ public class Database {
         return hash != null;
     }
 
-    public void storeTransaction(byte[] hash, Transaction transaction) {
-        // store the transaction as SERIALIZED byte array to include the serial version number (MAGIC)
-        put(Utils.concatenate(TransactionPrefix, hash), transaction.asSerializedArray());
+    public void storeTransaction(byte[] hash, Transaction transaction, int block) {
+        // store the transaction metadata
+        put(Utils.concatenate(TransactionPrefix, hash), Utils.concatenate(
+                                                                Utils.takeApart(transaction.getVersion()),
+                                                                Utils.takeApart(transaction.getTransactionValue()),
+                                                                Utils.takeApart(transaction.getTransactionFee()),
+                                                                Utils.takeApart(block)));
     }
 
     public Transaction findTransaction(byte[] hash) {
@@ -95,25 +99,6 @@ public class Database {
         return null;
     }
 
-    public void storeHeader(byte hash[], BlockHeader header) {
-        put(Utils.concatenate(BlockHeaderPrefix, hash), header);
-    }
-
-    public BlockHeader findHeader(byte[] hash) {
-        byte header[] = get(Utils.concatenate(BlockHeaderPrefix, hash));
-        if (header == null) {
-            return null;
-        }
-
-        try {
-            return new BlockHeader().fromBytes(header);
-        } catch (WolkenException | IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public void storeBlock(byte hash[], Block block) throws IOException {
         // store the block header
         storeHeader(hash, block.getBlockHeader());
@@ -126,11 +111,6 @@ public class Database {
 
         // store the transaction hashes as part of this block
         put(Utils.concatenate(BlockPrunedTxPrefix, hash), outputStream.toByteArray());
-
-        // store the actual transactions associated with this block
-        for (Transaction transaction : block) {
-            storeTransaction(transaction.getHash(), transaction);
-        }
     }
 
     public BlockIndex findBlock(byte[] hash) {
@@ -174,6 +154,11 @@ public class Database {
 
             // write the block (LOCALLY) to the output stream.
             block.getBlock().write(outputStream, true);
+
+            // store the actual transactions associated with this block
+            for (Transaction transaction : block.getBlock()) {
+                storeTransaction(transaction.getHash(), transaction);
+            }
 
             // store the info that block of height 'height' is block of hash 'hash'.
             put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), hash);
