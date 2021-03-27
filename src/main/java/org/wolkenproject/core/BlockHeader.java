@@ -16,7 +16,7 @@ import java.util.Arrays;
 import static org.wolkenproject.utils.HashUtil.sha256d;
 
 public class BlockHeader extends SerializableI {
-    protected static int Size = 80;
+    public static int Size = 80;
     private int version;
     private byte previousHash[];
     private byte merkleRoot[];
