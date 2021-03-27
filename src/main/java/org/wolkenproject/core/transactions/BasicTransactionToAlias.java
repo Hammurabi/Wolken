@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-
 // this is a basic transaction
 // min size: 1 + 69
 // avg size: 1 + 82
@@ -151,7 +150,7 @@ public class BasicTransactionToAlias extends Transaction {
 
     @Override
     protected Transaction copyForSignature() {
-        return new Transaction.BasicTransactionToAlias(alias, value, fee, nonce);
+        return new BasicTransactionToAlias(alias, value, fee, nonce);
     }
 
     @Override
@@ -179,6 +178,6 @@ public class BasicTransactionToAlias extends Transaction {
 
     @Override
     public int getSerialNumber() {
-        return Context.getInstance().getSerialFactory().getSerialNumber(Transaction.BasicTransactionToAlias.class);
+        return Context.getInstance().getSerialFactory().getSerialNumber(BasicTransactionToAlias.class);
     }
 }
