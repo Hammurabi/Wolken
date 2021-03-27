@@ -309,10 +309,6 @@ public class Database {
         put(Utils.concatenate(AccountPrefix, address), new Account().asByteArray());
     }
 
-    public void registerAlias(byte[] address, long alias) {
-        put(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)), address);
-    }
-
     public void removeAccount(byte[] address) {
         Account account = findAccount(address);
         remove(Utils.concatenate(AccountPrefix, address));
@@ -402,5 +398,13 @@ public class Database {
 
     public Wallet getWallet(String name) {
         return Wallet.fromBytes(name, get(Utils.concatenate(WalletPrefix, name.getBytes())));
+    }
+
+    public void registerAlias(byte[] address, long alias) {
+        put(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)), address);
+    }
+
+    public void removeAlias(long alias) {
+        remove(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)));
     }
 }
