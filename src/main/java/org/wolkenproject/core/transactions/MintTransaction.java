@@ -138,6 +138,8 @@ public class MintTransaction extends Transaction {
         if (length > 0) {
             dump = new byte[length];
             checkFullyRead(stream.read(dump), length);
+        } else {
+            dump = new byte[0];
         }
     }
 
