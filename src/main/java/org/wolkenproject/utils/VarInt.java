@@ -344,6 +344,8 @@ public class VarInt {
             int length      = SerializableI.checkNotEOF(stream.read());
             byte bytes[]    = new byte[length];
             SerializableI.checkFullyRead(stream.read(bytes), length);
+
+            return new BigInteger(1, bytes);
         } else {
             int firstByte   = SerializableI.checkNotEOF(stream.read());
             int length      = firstByte >>> 5;
