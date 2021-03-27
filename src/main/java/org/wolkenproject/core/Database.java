@@ -136,7 +136,10 @@ public class Database {
             DeflaterOutputStream outputStream = new DeflaterOutputStream(byteArrayOutputStream, new Deflater(Deflater.BEST_COMPRESSION));
 
             // write the block (LOCALLY) to the output stream.
-            block.getBlock().write(outputStream, true);
+            block.getPruned().write(outputStream);
+
+            outputStream.flush();
+            outputStream.close();
 
             // store the info that block of height 'height' is block of hash 'hash'.
             put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), hash);
@@ -145,7 +148,7 @@ public class Database {
             put(concatenate(BlockPrefix, hash), Utils.concatenate(header, metadt));
 
             // store the actual compressed block data.
-            put(concatenate(PrunedBlockPrefix, hash), block.getPruned().toByteArray());
+            put(concatenate(PrunedBlockPrefix, hash), byteArrayOutputStream.toByteArray());
         } catch (WolkenException | IOException e) {
             e.printStackTrace();
         }
