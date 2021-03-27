@@ -6,7 +6,6 @@ import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
-import org.wolkenproject.utils.BitOutputStream;
 import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
@@ -273,7 +272,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         return hash;
     }
 
-    public BitOutputStream getPruned() {
+    public PrunedBlock getPruned() throws WolkenException {
         return getBlock().getPruned();
     }
 }
