@@ -48,13 +48,19 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                         throw new WolkenException("'recipient' expected to be base58 encoded.");
                     }
 
+                    Address address = null;
+
                     if (recipientBytes.length != 20) {
                         if (!Address.isValidAddress(recipientBytes)) {
                             throw new WolkenException("'recipient' expected to be a valid address.");
                         } else {
-                            recipientBytes = Address.fromFormatted(recipientBytes).getRaw();
+                            address = Address.fromFormatted(recipientBytes);
                         }
+                    } else {
+                        address = Address.fromRaw(recipientBytes);
                     }
+
+                    Transaction txn = newTransfer(address, value, fee, nonce);
 
                     // has signature
                     if (content.has("v") && content.has("r") && content.has("s")) {
@@ -62,6 +68,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                         String r            = content.getString("r");
                         String s            = content.getString("s");
                     }
+
+                    return txn;
                 }
             }
         }
