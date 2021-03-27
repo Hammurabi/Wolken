@@ -8,6 +8,8 @@ import org.wolkenproject.utils.VarInt;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 
 public abstract class SerializableI {
     // this function gets called when the Serializable object is serialized locally
@@ -43,6 +45,20 @@ public abstract class SerializableI {
             outputStream.close();
 
             return outputStream.toByteArray();
+        } catch (IOException | WolkenException e) {
+            return null;
+        }
+    }
+
+    public byte[] asByteArray(int compressionLevel) {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            DeflaterOutputStream outputStream = new DeflaterOutputStream(byteArrayOutputStream, new Deflater(compressionLevel));
+            write(outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            return byteArrayOutputStream.toByteArray();
         } catch (IOException | WolkenException e) {
             return null;
         }
