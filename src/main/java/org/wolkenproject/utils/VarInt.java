@@ -339,7 +339,7 @@ public class VarInt {
         }
     }
 
-    public static BigInteger readCompactUint256(BigInteger integer, boolean preserveAllBits, InputStream stream) throws WolkenException, IOException {
+    public static BigInteger readCompactUint256(boolean preserveAllBits, InputStream stream) throws WolkenException, IOException {
         if (preserveAllBits) {
             int length      = SerializableI.checkNotEOF(stream.read());
             byte bytes[]    = new byte[length];
