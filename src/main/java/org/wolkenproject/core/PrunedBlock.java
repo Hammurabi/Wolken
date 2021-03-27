@@ -41,6 +41,7 @@ public class PrunedBlock extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        blockHeader.write(stream);
         VarInt.writeCompactUInt32(transactions.size(), false, stream);
         VarInt.writeCompactUInt32(events.size(), false, stream);
         for (byte[] transaction : transactions) {
@@ -53,6 +54,7 @@ public class PrunedBlock extends SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        blockHeader.read(stream);
         int numTransactions = VarInt.readCompactUInt32(false, stream);
         int numEvents       = VarInt.readCompactUInt32(false, stream);
         byte buffer[]       = new byte[32];
