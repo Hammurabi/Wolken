@@ -112,6 +112,9 @@ public class Database {
         }
     }
 
+    public void storePrunedBlock(int height, BlockIndex block) {
+    }
+
     public void storeBlock(int height, BlockIndex block) {
         // get a reference of the hash since we will keep reusing it.
         byte hash[]   = block.getHash();
