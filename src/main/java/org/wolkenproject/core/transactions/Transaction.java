@@ -6,6 +6,8 @@ import org.wolkenproject.core.events.*;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
+import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.serialization.SerializationFactory;
@@ -30,7 +32,18 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                 int version = transaction.getInt("version");
 
                 if (name.equals("BasicTransaction")) {
-                    JSONObject content = transaction.getJSONObject("content");
+                    JSONObject content  = transaction.getJSONObject("content");
+                    String recipient    = content.getString("recipient");
+                    String value        = content.getString("value");
+                    String fee          = content.getString("fee");
+                    long nonce          = content.getLong("value");
+
+                    // has signature
+                    if (content.has("v") && content.has("r") && content.has("s")) {
+                        String v            = content.getString("v");
+                        String r            = content.getString("r");
+                        String s            = content.getString("s");
+                    }
                 }
             }
         }
