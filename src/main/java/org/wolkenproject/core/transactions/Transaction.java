@@ -26,6 +26,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         if (transaction != null) {
             // check for the header information
             if (transaction.has("name") && transaction.has("version")) {
+                String name = transaction.getString("name");
+                int version = transaction.getInt("version");
             }
         }
 
