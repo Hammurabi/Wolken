@@ -11,7 +11,7 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class PrunedBlock implements SerializableI {
+public class PrunedBlock extends SerializableI {
     private final BlockHeader           blockHeader;
     private final Collection<byte[]>    transactions;
     private final Collection<byte[]>    events;
