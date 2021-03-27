@@ -4,6 +4,7 @@ import org.wolkenproject.core.transactions.MintTransaction;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.BitOutputStream;
 import org.wolkenproject.utils.ChainMath;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
@@ -236,5 +237,9 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
     public void write(OutputStream outputStream, boolean writeLocally) throws IOException, WolkenException {
         write(outputStream);
         // start writing events
+    }
+
+    public PrunedBlock getPruned() {
+        return null;
     }
 }
