@@ -30,16 +30,16 @@ public class Database {
     AliasPrefix             = new byte[] { 'A' },
     ChainTipPrefix          = new byte[] { 'q' },
     BlockPrefix             = new byte[] { 'b' },
-    CompressedBlockPrefix = new byte[] { 's' },
+    CompressedBlockPrefix   = new byte[] { 's' },
     BlockIndexPrefix        = new byte[] { 'i' },
     BlockFile               = new byte[] { 'f' },
-    TransactionPrefix       = new byte[] { 't' };
+    TransactionPrefix       = new byte[] { 't' },
+    RejectedBlockPrefix     = new byte[] { 'r' },
+    WalletPrefix            = new byte[] { 'w' };
 
 //    BlockPrunedTxPrefix     = new byte[] { 'a' },
 //    BlockIndexPrefix        = new byte[] { 'a' },
 //    TransactionPrefix       = new byte[] { 'a' },
-//    RejectedBlockPrefix     = new byte[] { 'a' },
-//    WalletPrefix            = new byte[] { 'a' };
 
     public Database(FileService location) throws IOException {
         this.blocks = location.newFile(".chain").newFile("blocks");
