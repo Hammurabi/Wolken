@@ -1,24 +1,24 @@
 package org.wolkenproject.core.fastnio;
 
-import jdk.internal.misc.Unsafe;
+//import jdk.internal.misc.Unsafe;
 
-import java.lang.reflect.Field;
+//import java.lang.reflect.Field;
 
 public abstract class Buffer {
-    static final Unsafe UnsafeInstance = getUnsafe();
+//    static final Unsafe UnsafeInstance = getUnsafe();
     private int position;
 
-    private static final Unsafe getUnsafe() {
-        try {
-            Field f = Unsafe.class.getDeclaredField("theUnsafe");
-            f.setAccessible(true);
-            return  (Unsafe) f.get(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
+//    private static final Unsafe getUnsafe() {
+//        try {
+//            Field f = Unsafe.class.getDeclaredField("theUnsafe");
+//            f.setAccessible(true);
+//            return  (Unsafe) f.get(null);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
 
     public static Buffer wrap(byte array[]) {
         return new HeapBuffer(array);
