@@ -31,8 +31,8 @@ public class RecoverableSignature extends Signature {
         this((byte) 0, new byte[32], new byte[32]);
     }
 
-    public RecoverableSignature(byte v, byte[] r, byte[] s) {
-        this.v = new byte[] { v };
+    public RecoverableSignature(int v, byte[] r, byte[] s) {
+        this.v = new byte[] {(byte) v};
         this.r = r;
         this.s = s;
     }
