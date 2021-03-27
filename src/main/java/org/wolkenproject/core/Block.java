@@ -239,7 +239,15 @@ public class Block extends BlockHeader implements Iterable<Transaction> {
         // start writing events
     }
 
-    public PrunedBlock getPruned() {
-        return null;
+    public BlockStateChangeResult getStateChange() throws WolkenException {
+        if (stateChange == null) {
+            throw new WolkenException("state change has not been built.");
+        }
+
+        return stateChange;
+    }
+
+    public PrunedBlock getPruned() throws WolkenException {
+        return new PrunedBlock(getBlockHeader(), getStateChange().getTransactionIds(), getStateChange().getTransactionEventIds());
     }
 }
