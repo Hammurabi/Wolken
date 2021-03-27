@@ -91,14 +91,14 @@ public class RecoverableSignature extends Signature {
         Assertions.assertTrue(r != null && r.length == 32, "r must be 32 bytes in length");
         Assertions.assertTrue(s != null && s.length == 32, "s must be 32 bytes in length");
 
-        int header = v[0] & 0xFF;
+        int header = Byte.toUnsignedInt(v[0]) & 0xFF;
 
-        if (header < 27 || header > 34) {
+        if (header < 53 || header > 128) {
             throw new WolkenException("header byte out of range: " + header);
         }
 
         ECSig sig = new ECSig(new BigInteger(1, r), new BigInteger(1, s));
-        Key result = CryptoLib.recoverFromSignature(v[0] - 27, sig, HashUtil.sha256d(originalMessage));
+        Key result = CryptoLib.recoverFromSignature(v[0] - 53, sig, HashUtil.sha256d(originalMessage));
 
         if (result == null) {
             throw new WolkenException("could not recover public key.");
