@@ -189,10 +189,6 @@ public class Database {
         byte key[]  = concatenate(BlockIndexPrefix, Utils.takeApart(height));
         byte hash[] = get(key);
 
-        if (checkBlockExists(hash)) {
-            location.newFile(".chain").newFile(Base16.encode(hash)).delete();
-        }
-
         if (hash != null) {
             remove(key);
             remove(concatenate(BlockPrefix, hash));
