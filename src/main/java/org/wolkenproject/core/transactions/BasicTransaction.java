@@ -130,7 +130,7 @@ public class BasicTransaction extends Transaction {
 
     @Override
     public JSONObject toJson(boolean txEvt, boolean evHash) {
-        JSONObject txHeader = new JSONObject().put("type", getClass().getName()).put("version", getVersion());
+        JSONObject txHeader = new JSONObject().put("name", getClass().getName()).put("version", getVersion());
         txHeader.put("content", new JSONObject().put("recipient", Base58.encode(recipient))).put("value", value).put("fee", fee).put("nonce", nonce).put("v", signature.getV()).put("r", Base16.encode(signature.getR())).put("s", Base16.encode(signature.getS()));
         return txHeader;
     }
