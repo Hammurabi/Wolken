@@ -38,6 +38,24 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                     long fee            = content.getLong("fee");
                     long nonce          = content.getLong("nonce");
 
+                    byte recipientBytes[] = null;
+
+                    if (Base16.isEncoded(recipient)) {
+                        recipientBytes  = Base16.decode(recipient);
+                    } else if (Base58.isEncoded(recipient)) {
+                        recipientBytes  = Base58.decode(recipient);
+                    } else {
+                        throw new WolkenException("'recipient' expected to be base58 encoded.");
+                    }
+
+                    if (recipientBytes.length != 20) {
+                        if (!Address.isValidAddress(recipientBytes)) {
+                            throw new WolkenException("'recipient' expected to be a valid address.");
+                        } else {
+                            recipientBytes = Address.fromFormatted(recipientBytes).getRaw();
+                        }
+                    }
+
                     // has signature
                     if (content.has("v") && content.has("r") && content.has("s")) {
                         String v            = content.getString("v");
