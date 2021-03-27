@@ -3,10 +3,12 @@ package org.wolkenproject.core;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class PrunedBlock implements SerializableI {
@@ -38,8 +40,8 @@ public class PrunedBlock implements SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
-        Utils.writeInt(transactions.size(), stream);
-        Utils.writeInt(events.size(), stream);
+        VarInt.writeCompactUInt32(transactions.size(), false, stream);
+        VarInt.writeCompactUInt32(events.size(), false, stream);
         for (byte[] transaction : transactions) {
             stream.write(transaction);
         }
@@ -50,6 +52,19 @@ public class PrunedBlock implements SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        int numTransactions = VarInt.readCompactUInt32(false, stream);
+        int numEvents       = VarInt.readCompactUInt32(false, stream);
+        byte buffer[]       = new byte[32];
+
+        for (int i = 0; i < numTransactions; i ++) {
+            checkFullyRead(stream.read(buffer), buffer.length);
+            transactions.add(Arrays.copyOf(buffer, 32));
+        }
+
+        for (int i = 0; i < numEvents; i ++) {
+            checkFullyRead(stream.read(buffer), buffer.length);
+            events.add(Arrays.copyOf(buffer, 32));
+        }
     }
 
     @Override
