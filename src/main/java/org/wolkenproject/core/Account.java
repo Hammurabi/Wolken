@@ -88,6 +88,10 @@ public class Account extends SerializableI {
         return new Account(nonce, balance - amount, hasAlias, alias);
     }
 
+    public Account undoWithdraw(long amount) {
+        return new Account(nonce, balance + amount, hasAlias, alias);
+    }
+
     public Account undoDeposit(long amount) {
         return new Account(nonce, balance - amount, hasAlias, alias);
     }
