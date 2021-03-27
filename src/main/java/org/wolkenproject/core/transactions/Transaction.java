@@ -73,6 +73,25 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                     }
 
                     return txn;
+                } else if (name.equals("RegisterAliasTransaction")) {
+                    JSONObject content  = transaction.getJSONObject("content");
+                    long nonce          = content.getLong("nonce");
+                    long fee            = content.getLong("fee");
+                    long alias          = content.getLong("alias");
+
+                    Transaction txn = newAliasRegistration(nonce, fee, alias);
+
+                    // has signature
+                    if (content.has("v") && content.has("r") && content.has("s")) {
+                        int v               = content.getInt("v");
+                        String r            = content.getString("r");
+                        String s            = content.getString("s");
+
+                        RecoverableSignature signature = new RecoverableSignature(v, Base16.decode(r), Base16.decode(s));
+                        txn.setSignature(signature);
+                    }
+
+                    return txn;
                 }
             }
         }
@@ -193,6 +212,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     // a purely monetary transaction
     public static Transaction newTransfer(Address recipient, long amount, long fee, long nonce) {
         return new BasicTransaction(recipient.getRaw(), amount, fee, nonce);
+    }
+
+    // a purely monetary transaction
+    public static Transaction newAliasRegistration(long nonce, long fee, long alias) {
+        return new RegisterAliasTransaction(nonce, fee, alias);
     }
 
     public static Transaction newMintTransaction(String msg, long reward, Address addresses) {
