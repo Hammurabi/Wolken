@@ -141,6 +141,9 @@ public class Database {
             // write the block (LOCALLY) to the output stream.
             block.getBlock().write(outputStream, true);
 
+            outputStream.flush();
+            outputStream.close();
+
 //            // store the actual transactions associated with this block
 //            for (Transaction transaction : block.getBlock()) {
 //                storeTransaction(transaction.getHash(), transaction, block.getHeight());
@@ -192,8 +195,9 @@ public class Database {
 
         if (hash != null) {
             remove(key);
+            remove(concatenate(BlockPrefix, hash));
+            remove(concatenate(CompressedBlockPrefix, hash));
         }
-
     }
 
     public byte[] get(byte[] k) {
