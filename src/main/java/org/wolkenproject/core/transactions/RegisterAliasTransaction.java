@@ -28,7 +28,7 @@ public class RegisterAliasTransaction extends Transaction {
         this(0, 0, 0);
     }
 
-    private RegisterAliasTransaction(long nonce, long fee, long alias) {
+    protected RegisterAliasTransaction(long nonce, long fee, long alias) {
         this.nonce  = nonce;
         this.fee    = fee;
         this.alias  = alias;
