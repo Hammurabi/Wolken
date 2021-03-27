@@ -29,7 +29,8 @@ public abstract class Buffer {
     }
 
     public static Buffer createUnsafeBuffer(int length) {
-        return new UnsafeBuffer(length);
+//        return new UnsafeBuffer(length);
+        return null;
     }
 
     public void setPosition(int position) {
