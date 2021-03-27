@@ -24,7 +24,7 @@ public class DepositFundsEvent extends Event {
     @Override
     public void undo() {
         Context.getInstance().getDatabase().storeAccount(address,
-                Context.getInstance().getDatabase().findAccount(address).withdraw(amount));
+                Context.getInstance().getDatabase().findAccount(address).undoDeposit(amount));
     }
 
     @Override
