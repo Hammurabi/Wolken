@@ -143,7 +143,7 @@ public class Database {
 
             // store the actual transactions associated with this block
             for (Transaction transaction : block.getBlock()) {
-                storeTransaction(transaction.getHash(), transaction);
+                storeTransaction(transaction.getHash(), transaction, block.getHeight());
             }
 
             // store the info that block of height 'height' is block of hash 'hash'.
