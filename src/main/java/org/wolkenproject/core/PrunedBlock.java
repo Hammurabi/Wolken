@@ -1,7 +1,12 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.Utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
 
 public class PrunedBlock implements SerializableI {
@@ -29,5 +34,31 @@ public class PrunedBlock implements SerializableI {
 
     public boolean containsEvent(byte eventId[]) {
         return events.contains(eventId);
+    }
+
+    @Override
+    public void write(OutputStream stream) throws IOException, WolkenException {
+        Utils.writeInt(transactions.size(), stream);
+        Utils.writeInt(events.size(), stream);
+        for (byte[] transaction : transactions) {
+            stream.write(transaction);
+        }
+        for (byte[] event : events) {
+            stream.write(event);
+        }
+    }
+
+    @Override
+    public void read(InputStream stream) throws IOException, WolkenException {
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return null;
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return 0;
     }
 }
