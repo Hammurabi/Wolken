@@ -24,7 +24,7 @@ public class MintRewardEvent extends Event {
     @Override
     public void undo() {
         Context.getInstance().getDatabase().storeAccount(address,
-                Context.getInstance().getDatabase().findAccount(address).withdraw(amount));
+                Context.getInstance().getDatabase().findAccount(address).undoDeposit(amount));
     }
 
     @Override
@@ -34,6 +34,6 @@ public class MintRewardEvent extends Event {
 
     @Override
     public JSONObject toJson() {
-        return new JSONObject().put("event", this.getClass().getName()).put("address", Base58.encode(address)).put("amount", amount);
+        return new JSONObject().put("type", this.getClass().getName()).put("address", Base58.encode(address)).put("amount", amount);
     }
 }
