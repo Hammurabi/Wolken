@@ -1,8 +1,12 @@
 package org.wolkenproject.utils;
 
+import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.serialization.SerializableI;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.util.Arrays;
 
 // this class represents an UNSIGNED variable integer
@@ -300,5 +304,84 @@ public class VarInt {
         }
 
         return 0;
+    }
+
+    // writes an unsigned 256 bit integer to stream
+    // when preserveAllBits is true, then the resulting
+    // integer will only be 251 bits in length as 5 bits
+    // will be used to encode the length of the integer.
+    public static void writeCompactUint256(BigInteger integer, boolean preserveAllBits, OutputStream stream) throws WolkenException, IOException {
+        byte bytes[]    = integer.toByteArray();
+        int drop = 0;
+        for (int i = 0; i < bytes.length; i ++) {
+            if (bytes[i] == 0) {
+                drop ++;
+            }
+        }
+
+        if (drop > 0) {
+            byte temp[] = new byte[bytes.length - drop];
+            System.arraycopy(bytes, drop, temp, 0, temp.length);
+            bytes = temp;
+        }
+
+        if (bytes.length > 32) {
+            throw new WolkenException("writeCompactUint32 only allows up to  2^256 bits.");
+        }
+
+        int length = bytes.length;
+        if (preserveAllBits) {
+            stream.write(length);
+            stream.write(bytes);
+        } else {
+            bytes[0] = (byte) (bytes[0] & 0x7 | (length - 1) << 5);
+            stream.write(bytes);
+        }
+    }
+
+    public static BigInteger readCompactUint256(BigInteger integer, boolean preserveAllBits, InputStream stream) throws WolkenException, IOException {
+        if (preserveAllBits) {
+            int length      = SerializableI.checkNotEOF(stream.read());
+            byte bytes[]    = new byte[length];
+            SerializableI.checkFullyRead(stream.read(bytes), length);
+        } else {
+            int firstByte   = SerializableI.checkNotEOF(stream.read());
+            int length      = firstByte >>> 5;
+            if (length > 0) {
+                byte bytes[]    = new byte[length + 1];
+                SerializableI.checkFullyRead(stream.read(bytes, 1, length), length);
+
+                bytes[0]        = (byte) (firstByte & 0x7);
+                return new BigInteger(1, bytes);
+            } else {
+                return new BigInteger(1, new byte[] { (byte) (firstByte & 0x7) });
+            }
+        }
+    }
+
+    public static int sizeOfCompactUint256(BigInteger integer, boolean preserveAllBits) {
+        byte bytes[]    = integer.toByteArray();
+        int drop = 0;
+        for (int i = 0; i < bytes.length; i ++) {
+            if (bytes[i] == 0) {
+                drop ++;
+            }
+        }
+
+        if (drop > 0) {
+            byte temp[] = new byte[bytes.length - drop];
+            System.arraycopy(bytes, drop, temp, 0, temp.length);
+            bytes = temp;
+        }
+
+        if (bytes.length > 32) {
+            return 0;
+        }
+
+        if (preserveAllBits) {
+            return bytes.length + 1;
+        } else {
+            return bytes.length;
+        }
     }
 }
