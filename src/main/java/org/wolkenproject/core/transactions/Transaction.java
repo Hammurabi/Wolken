@@ -34,25 +34,9 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
                 if (name.equals("BasicTransaction")) {
                     JSONObject content  = transaction.getJSONObject("content");
                     String recipient    = content.getString("recipient");
-                    String value        = content.getString("value");
-                    String fee          = content.getString("fee");
-                    long txValue        = 0L;
-                    long txFee          = 0L;
-                    long nonce          = content.getLong("value");
-
-                    // decimal value
-                    if (value.contains(".")) {
-                        txValue         = coinFromDecimalString(value);
-                    } else {
-                        txValue         = Long.parseLong(value);
-                    }
-
-                    // decimal value
-                    if (fee.contains(".")) {
-                        txFee           = coinFromDecimalString(fee);
-                    } else {
-                        txFee           = Long.parseLong(fee);
-                    }
+                    long value          = content.getLong("value");
+                    long fee            = content.getLong("fee");
+                    long nonce          = content.getLong("nonce");
 
                     // has signature
                     if (content.has("v") && content.has("r") && content.has("s")) {
