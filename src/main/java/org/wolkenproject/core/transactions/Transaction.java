@@ -24,8 +24,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
     public static Transaction fromJson(JSONObject transaction) throws WolkenException {
         if (transaction != null) {
+            // check for the header information
+            if (transaction.has("name") && transaction.has("version")) {
+            }
         }
-        
+
         throw new WolkenException("could not convert to a transaction.");
     }
 
