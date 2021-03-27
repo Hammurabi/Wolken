@@ -2,7 +2,6 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
-import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
@@ -10,13 +9,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class PrunedBlock extends SerializableI {
     private final BlockHeader           blockHeader;
     private final Collection<byte[]>    transactions;
     private final Collection<byte[]>    events;
 
-    public PrunedBlock(BlockHeader blockHeader, Collection<byte[]> transactions, Collection<byte[]> events) {
+    public PrunedBlock(BlockHeader blockHeader, Queue<byte[]> transactions, Queue<byte[]> events) {
         this.blockHeader = blockHeader;
         this.transactions = transactions;
         this.events = events;
@@ -69,7 +70,7 @@ public class PrunedBlock extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return null;
+        return (Type) new PrunedBlock(new BlockHeader(), new LinkedList<>(), new LinkedList<>());
     }
 
     @Override
