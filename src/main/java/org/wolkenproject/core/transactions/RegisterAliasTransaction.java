@@ -68,10 +68,11 @@ public class RegisterAliasTransaction extends Transaction {
             return
                     fee > 0 &&
                     (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                            (signature.getR().length == 32) &&
-                            (signature.getS().length == 32) &&
-                            getSender() != null &&
-                            !Context.getInstance().getDatabase().findAccount(getSender().getRaw()).hasAlias();
+                    !Context.getInstance().getDatabase().checkAccountExists(alias) &&
+                    (signature.getR().length == 32) &&
+                    (signature.getS().length == 32) &&
+                    getSender() != null &&
+                    !Context.getInstance().getDatabase().findAccount(getSender().getRaw()).hasAlias();
         } catch (WolkenException e) {
         }
 
@@ -102,8 +103,8 @@ public class RegisterAliasTransaction extends Transaction {
     public long calculateSize() {
         return
                 VarInt.sizeOfCompactUin32(getVersion(), false) +
-                        VarInt.sizeOfCompactUin64(nonce, false) +
-                        VarInt.sizeOfCompactUin64(alias, false) + 65;
+                VarInt.sizeOfCompactUin64(nonce, false) +
+                VarInt.sizeOfCompactUin64(alias, false) + 65;
     }
 
     @Override
@@ -120,7 +121,7 @@ public class RegisterAliasTransaction extends Transaction {
 
     @Override
     public JSONObject toJson(boolean txEvt, boolean evHash) {
-        JSONObject txHeader = new JSONObject().put("transaction", getClass().getName()).put("version", getVersion());
+        JSONObject txHeader = new JSONObject().put("name", getClass().getName()).put("version", getVersion());
         txHeader.put("content", new JSONObject().put("nonce", nonce).put("fee", fee).put("alias", alias).put("v", signature.getV()).put("r", Base16.encode(signature.getR())).put("s", Base16.encode(signature.getS())));
         return txHeader;
     }
