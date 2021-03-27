@@ -21,6 +21,7 @@ public class RegisterAliasEvent extends Event {
 
     @Override
     public void undo() {
+        Context.getInstance().getDatabase().removeAlias(alias);
     }
 
     @Override
