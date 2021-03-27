@@ -59,7 +59,7 @@ public class ECKeypair extends Keypair {
             throw new WolkenException("Could not construct a recoverable key.");
         }
 
-        int headerByte = recId + 27;
+        int headerByte = recId + 53;
 
         // 1 header + 32 bytes for R + 32 bytes for S
         byte[] r = toBytesPadded(sig.getR(), 32);
