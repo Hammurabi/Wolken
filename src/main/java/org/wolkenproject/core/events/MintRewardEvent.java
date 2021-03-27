@@ -34,6 +34,6 @@ public class MintRewardEvent extends Event {
 
     @Override
     public JSONObject toJson() {
-        return new JSONObject().put("type", this.getClass().getName()).put("address", Base58.encode(address)).put("amount", amount);
+        return new JSONObject().put("event", this.getClass().getName()).put("address", Base58.encode(address)).put("amount", amount);
     }
 }
