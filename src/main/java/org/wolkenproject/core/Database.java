@@ -113,6 +113,42 @@ public class Database {
     }
 
     public void storePrunedBlock(int height, BlockIndex block) {
+        // get a reference of the hash since we will keep reusing it.
+        byte hash[]   = block.getHash();
+
+        // 80 bytes representing the block header.
+        byte header[] = block.getBlock().getHeaderBytes();
+
+        // 28 bytes representing the height, number of transactions, number of events total value, and total fees.
+        byte metadt[] = Utils.concatenate(
+                Utils.takeApart(height),
+                Utils.takeApart(block.getBlock().getTransactionCount()),
+                Utils.takeApart(block.getBlock().getEventCount()),
+                Utils.takeApartLong(block.getBlock().getTotalValue()),
+                Utils.takeApartLong(block.getBlock().getFees())
+        );
+
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            // we serialize the block into a deflater output stream with BEST_COMPRESSION, which is slow
+            // but according to benchmarks, it should take around 7ms per block to deflate, and around 14ms
+            // to inflate.
+            DeflaterOutputStream outputStream = new DeflaterOutputStream(byteArrayOutputStream, new Deflater(Deflater.BEST_COMPRESSION));
+
+            // write the block (LOCALLY) to the output stream.
+            block.getBlock().write(outputStream, true);
+
+            // store the info that block of height 'height' is block of hash 'hash'.
+            put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), hash);
+
+            // store the header along with the height and number of transactions and number of events.
+            put(concatenate(BlockPrefix, hash), Utils.concatenate(header, metadt));
+
+            // store the actual compressed block data.
+            put(concatenate(PrunedBlockPrefix, hash), block.getPruned().toByteArray());
+        } catch (WolkenException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void storeBlock(int height, BlockIndex block) {
