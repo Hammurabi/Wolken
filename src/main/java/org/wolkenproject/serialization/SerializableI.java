@@ -10,8 +10,19 @@ import java.io.*;
 import java.nio.ByteBuffer;
 
 public abstract class SerializableI {
+    // this function gets called when the Serializable object is serialized locally
     public void serialize(OutputStream stream) throws IOException, WolkenException {
         VarInt.writeCompactUInt32(getSerialNumber(), false, stream);
+        write(stream);
+    }
+
+    // this function gets called when the Serializable object is sent over network
+    public void serializeOverNetwork(OutputStream stream) throws IOException, WolkenException {
+        serialize(stream);
+    }
+
+    // this function gets called when the Serializable object is sent over network
+    public void sendOverNetwork(OutputStream stream) throws IOException, WolkenException {
         write(stream);
     }
 
