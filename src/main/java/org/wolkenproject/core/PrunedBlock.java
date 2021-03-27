@@ -1,9 +1,10 @@
 package org.wolkenproject.core;
 
-import java.util.Collection;
-import java.util.Set;
+import org.wolkenproject.serialization.SerializableI;
 
-public class PrunedBlock {
+import java.util.Collection;
+
+public class PrunedBlock implements SerializableI {
     private final BlockHeader           blockHeader;
     private final Collection<byte[]>    transactions;
     private final Collection<byte[]>    events;
