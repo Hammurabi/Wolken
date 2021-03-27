@@ -64,9 +64,12 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
 
                     // has signature
                     if (content.has("v") && content.has("r") && content.has("s")) {
-                        String v            = content.getString("v");
+                        int v               = content.getInt("v");
                         String r            = content.getString("r");
                         String s            = content.getString("s");
+
+                        RecoverableSignature signature = new RecoverableSignature(v, Base16.decode(r), Base16.decode(s));
+                        txn.setSignature(signature);
                     }
 
                     return txn;
