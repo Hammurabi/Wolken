@@ -129,17 +129,8 @@ public class Database {
         );
 
         try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            // we serialize the block into a deflater output stream with BEST_COMPRESSION, which is slow
-            // but according to benchmarks, it should take around 7ms per block to deflate, and around 14ms
-            // to inflate.
-            DeflaterOutputStream outputStream = new DeflaterOutputStream(byteArrayOutputStream, new Deflater(Deflater.BEST_COMPRESSION));
-
-            // write the block (LOCALLY) to the output stream.
-            block.getPruned().write(outputStream);
-
-            outputStream.flush();
-            outputStream.close();
+            // get the raw uncompressed block as byte array.
+            byte pruned[] = block.getPruned().asByteArray();
 
             // store the info that block of height 'height' is block of hash 'hash'.
             put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), hash);
@@ -148,8 +139,8 @@ public class Database {
             put(concatenate(BlockPrefix, hash), Utils.concatenate(header, metadt));
 
             // store the actual compressed block data.
-            put(concatenate(PrunedBlockPrefix, hash), byteArrayOutputStream.toByteArray());
-        } catch (WolkenException | IOException e) {
+            put(concatenate(PrunedBlockPrefix, hash), pruned);
+        } catch (WolkenException e) {
             e.printStackTrace();
         }
     }
