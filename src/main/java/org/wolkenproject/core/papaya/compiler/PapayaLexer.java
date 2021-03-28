@@ -63,10 +63,13 @@ public class PapayaLexer {
         tokenType.put("\\d+\\.", TokenType.DecimalNumber);
         tokenType.put("\\.\\d+", TokenType.DecimalNumber);
         tokenType.put("([A-z]|\\_)+\\d*", TokenType.Identifier);
+        tokenType.put("\\!", TokenType.LogicalNotSymbol);
+        tokenType.put("\\=", TokenType.AssignmentSymbol);
         tokenType.put("\\+", TokenType.AddSymbol);
         tokenType.put("\\-", TokenType.SubSymbol);
         tokenType.put("\\*", TokenType.MulSymbol);
         tokenType.put("\\/", TokenType.DivSymbol);
+        tokenType.put("\\=\\=", TokenType.EqualsSymbol);
 //        tokenType.put("N([A-z]|[1|2|3|4|5|6|7|8|9])+", TokenType.Base58String);
 
         return tokenType;
