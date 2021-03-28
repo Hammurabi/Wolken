@@ -39,4 +39,7 @@ public enum TokenType {
     OrEqualsSymbol,
 
     NotSymbol,
+
+    LogicalAndSymbol,
+    LogicalOrSymbol,
 }
