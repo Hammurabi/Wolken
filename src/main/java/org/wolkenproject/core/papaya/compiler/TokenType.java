@@ -20,4 +20,11 @@ public enum TokenType {
     SubSymbol,
     MulSymbol,
     DivSymbol,
+    ModSymbol,
+
+    XorSymbol,
+    AndSymbol,
+    OrSymbol,
+
+    NotSymbol,
 }
