@@ -11,6 +11,11 @@ public class PapayaLexer {
         char            lastChar= '\0';
 
         for (char character : data.toCharArray()) {
+            if (lastChar == '\0') {
+            } else {
+            }
+
+            lastChar = character;
         }
     }
 }
