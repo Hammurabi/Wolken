@@ -8,6 +8,7 @@ import org.wolkenproject.utils.VarInt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 
 public class Account extends SerializableI {
     private long    nonce;
@@ -107,5 +108,9 @@ public class Account extends SerializableI {
         }
 
         return json;
+    }
+
+    public BigInteger getBalanceForToken(byte[] uuid) {
+        return BigInteger.ZERO;
     }
 }
