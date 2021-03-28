@@ -11,4 +11,9 @@ public enum TokenType {
     GenericAddress,
     ContractAddress,
     Identifier,
+
+    AddSymbol,
+    SubSymbol,
+    MulSymbol,
+    DivSymbol,
 }
