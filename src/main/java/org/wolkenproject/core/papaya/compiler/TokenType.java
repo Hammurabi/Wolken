@@ -4,8 +4,7 @@ public enum TokenType {
     IntegerNumber,
     DecimalNumber,
     AsciiString,
-    Base16String,
-    Base58String,
+    ByteString,
     GenericAddress,
     ContractAddress,
 }
