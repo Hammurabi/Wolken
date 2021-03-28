@@ -94,6 +94,7 @@ public class PapayaLexer {
         tokenType.put("\\>\\>\\>", TokenType.UnsignedRightShiftSymbol);
         tokenType.put("\\>\\>", TokenType.RightShiftSymbol);
         tokenType.put("\\<\\<", TokenType.LeftShiftSymbol);
+        
 //        tokenType.put("N([A-z]|[1|2|3|4|5|6|7|8|9])+", TokenType.Base58String);
 
         return tokenType;
