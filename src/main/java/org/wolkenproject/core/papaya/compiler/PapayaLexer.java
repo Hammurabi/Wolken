@@ -12,7 +12,7 @@ public class PapayaLexer {
         this.typeMap = typeMap;
     }
 
-    public TokenStream ingest(String data) {
+    public TokenStream ingest(String data) throws WolkenException {
         TokenStream tokenStream = new TokenStream();
 
         StringBuilder   builder = new StringBuilder();
@@ -25,7 +25,7 @@ public class PapayaLexer {
 
             if (character == '\n') {
                 if (builder.length() != 0) {
-                    tokenStream.add(builder, line, offset);
+                    tokenStream.add(getToken(builder, line, offset, typeMap));
                     builder = new StringBuilder();
                 }
 
@@ -34,7 +34,7 @@ public class PapayaLexer {
 
             if (character == ' ') {
                 if (builder.length() != 0) {
-                    tokenStream.add(builder, line, offset);
+                    tokenStream.add(getToken(builder, line, offset, typeMap));
                     builder = new StringBuilder();
                 }
             }
