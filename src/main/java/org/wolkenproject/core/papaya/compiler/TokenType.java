@@ -12,6 +12,10 @@ public enum TokenType {
     ContractAddress,
     Identifier,
 
+    LogicalNotSymbol,
+    AssignmentSymbol,
+    EqualsSymbol,
+
     AddSymbol,
     SubSymbol,
     MulSymbol,
