@@ -63,6 +63,7 @@ public class PapayaLexer {
         tokenType.put("\\d+\\.", TokenType.DecimalNumber);
         tokenType.put("\\.\\d+", TokenType.DecimalNumber);
         tokenType.put("([A-z]|\\_)+\\d*", TokenType.Identifier);
+
         tokenType.put("\\!", TokenType.LogicalNotSymbol);
         tokenType.put("\\=", TokenType.AssignmentSymbol);
         tokenType.put("\\+", TokenType.AddSymbol);
@@ -74,9 +75,16 @@ public class PapayaLexer {
         tokenType.put("&", TokenType.AndSymbol);
         tokenType.put("|", TokenType.OrSymbol);
 
-
+        tokenType.put("\\!\\=", TokenType.LogicalNotEqualsSymbol);
         tokenType.put("\\=\\=", TokenType.EqualsSymbol);
-
+        tokenType.put("\\+\\=", TokenType.AddEqualsSymbol);
+        tokenType.put("\\-\\=", TokenType.SubEqualsSymbol);
+        tokenType.put("\\*\\=", TokenType.MulEqualsSymbol);
+        tokenType.put("\\/\\=", TokenType.DivEqualsSymbol);
+        tokenType.put("\\%\\=", TokenType.ModEqualsSymbol);
+        tokenType.put("^\\=", TokenType.XorEqualsSymbol);
+        tokenType.put("&\\=", TokenType.AndEqualsSymbol);
+        tokenType.put("|\\=", TokenType.OrEqualsSymbol);
 
         tokenType.put("~", TokenType.NotSymbol);
 //        tokenType.put("N([A-z]|[1|2|3|4|5|6|7|8|9])+", TokenType.Base58String);
