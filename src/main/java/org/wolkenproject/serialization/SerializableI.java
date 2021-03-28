@@ -94,13 +94,13 @@ public abstract class SerializableI {
 
     public abstract int getSerialNumber();
 
-    protected void checkFullyRead(int result, int expected) throws IOException {
+    public static void checkFullyRead(int result, int expected) throws IOException {
         if (result != expected) {
             throw new IOException("expected '" + expected + "' bytes but only received '" + result + "'");
         }
     }
 
-    protected int checkNotEOF(int read) throws IOException {
+    public static int checkNotEOF(int read) throws IOException {
         if (read < 0) {
             throw new IOException("end of file reached.");
         }
