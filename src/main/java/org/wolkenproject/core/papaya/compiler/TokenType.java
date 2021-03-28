@@ -48,5 +48,7 @@ public enum TokenType {
 
     UnsignedRightShiftSymbol,
     RightShiftSymbol,
-    LeftShiftSymbol
+    LeftShiftSymbol,
+
+    MemberAccessSymbol,
 }
