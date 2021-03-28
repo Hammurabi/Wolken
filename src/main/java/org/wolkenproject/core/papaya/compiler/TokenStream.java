@@ -4,6 +4,7 @@ import org.wolkenproject.exceptions.WolkenException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TokenStream {
     private List<Token> tokenList;
@@ -12,15 +13,6 @@ public class TokenStream {
         this.tokenList = new ArrayList<>();
     }
 
-    public void add(StringBuilder builder, int line, int offset) throws WolkenException {
-        TokenType type = TokenType.None;
-        String string = builder.toString();
-
-        if (string.matches("\\d+")) {
-        } else if (string.matches("([A-z]|\\_)+\\d*")) {
-        }
-        
-        Token token = new Token(builder.toString(), type, line, offset);
-        tokenList.add(token);
+    public void add(StringBuilder builder, int line, int offset, Map<String, TokenType> typeMap) throws WolkenException {
     }
 }
