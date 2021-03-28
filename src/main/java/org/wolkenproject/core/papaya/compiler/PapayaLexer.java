@@ -47,17 +47,11 @@ public class PapayaLexer {
 
         for (String regex : typeMap.keySet()) {
             if (string.matches(regex)) {
-
+                return new Token(string, typeMap.get(regex), line, offset);
             }
         }
 
-        if (typeMap.containsKey(string)) {
-
-        } else {
-            throw new WolkenException("")
-        }
-
-        return new Token(string, type, line, offset);
+        throw new WolkenException("could not create token for string '" + string + "'.");
     }
 
     public static Map<String, TokenType> getTokenTypes() {
