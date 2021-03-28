@@ -51,4 +51,6 @@ public enum TokenType {
     LeftShiftSymbol,
 
     MemberAccessSymbol,
+    StaticMemberAccessSymbol,
+    LambdaSymbol,
 }
