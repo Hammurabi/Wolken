@@ -69,7 +69,16 @@ public class PapayaLexer {
         tokenType.put("\\-", TokenType.SubSymbol);
         tokenType.put("\\*", TokenType.MulSymbol);
         tokenType.put("\\/", TokenType.DivSymbol);
+        tokenType.put("\\%", TokenType.ModSymbol);
+        tokenType.put("^", TokenType.XorSymbol);
+        tokenType.put("&", TokenType.AndSymbol);
+        tokenType.put("|", TokenType.OrSymbol);
+
+
         tokenType.put("\\=\\=", TokenType.EqualsSymbol);
+
+
+        tokenType.put("~", TokenType.NotSymbol);
 //        tokenType.put("N([A-z]|[1|2|3|4|5|6|7|8|9])+", TokenType.Base58String);
 
         return tokenType;
