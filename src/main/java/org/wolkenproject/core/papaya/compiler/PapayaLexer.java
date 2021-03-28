@@ -1,8 +1,16 @@
 package org.wolkenproject.core.papaya.compiler;
 
-import org.wolkenproject.core.assets.Token;
+import static org.wolkenproject.core.papaya.compiler.TokenType.None;
 
 public class PapayaLexer {
-    public Iterator<Token> ingest(String data) {
+    public TokenStream ingest(String data) {
+        TokenStream tokenStream = new TokenStream();
+
+        StringBuilder   builder = new StringBuilder();
+        TokenType       type    = None;
+        char            lastChar= '\0';
+
+        for (char character : data.toCharArray()) {
+        }
     }
 }
