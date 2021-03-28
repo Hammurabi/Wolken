@@ -58,7 +58,7 @@ public class PapayaLexer {
         Map<String, TokenType> tokenType = new HashMap<>();
         tokenType.put("\\d+", TokenType.IntegerNumber);
         tokenType.put("[0][b][0-1]+", TokenType.IntegerNumber);
-        tokenType.put("0x[\\d|(a|b|c|d|e|f)]+", TokenType.Base16String);
+        tokenType.put("0x[\\d|(a|b|c|d|e|f|A|B|C|D|E|F)]+", TokenType.Base16String);
         tokenType.put("\\d+\\.\\d+", TokenType.DecimalNumber);
         tokenType.put("\\d+\\.", TokenType.DecimalNumber);
         tokenType.put("\\.\\d+", TokenType.DecimalNumber);
