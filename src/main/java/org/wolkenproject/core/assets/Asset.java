@@ -10,12 +10,13 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 
 public abstract class Asset extends SerializableI {
+    public final static int UniqueIdentifierLength = 20;
     // 20 byte unique identifier (hash160 of constructor contract/transaction).
-    private final byte uuid[];
+    private final byte          uuid[];
 
     // default constructor
     public Asset(byte uuid[]) {
-        this.uuid = uuid;
+        this.uuid       = uuid;
     }
 
     public byte[] getUUID() {
