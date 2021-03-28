@@ -1,9 +1,8 @@
 package org.wolkenproject.core;
 
-import com.sun.net.httpserver.HttpHandler;
-import org.wolkenproject.core.mocha.*;
-import org.wolkenproject.core.mocha.internal.ByteArray;
-import org.wolkenproject.core.mocha.internal.MochaNumber;
+import org.wolkenproject.core.papaya.*;
+import org.wolkenproject.core.papaya.internal.ByteArray;
+import org.wolkenproject.core.papaya.internal.MochaNumber;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.MochaException;
@@ -15,11 +14,9 @@ import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
