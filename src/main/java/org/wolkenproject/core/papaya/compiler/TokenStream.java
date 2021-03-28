@@ -14,8 +14,13 @@ public class TokenStream {
 
     public void add(StringBuilder builder, int line, int offset) throws WolkenException {
         TokenType type = TokenType.None;
-        Token token = new Token(builder.toString(), type, line, offset);
+        String string = builder.toString();
 
+        if (string.matches("\\d+")) {
+        } else if (string.matches("([A-z]|\\_)+\\d*")) {
+        }
+        
+        Token token = new Token(builder.toString(), type, line, offset);
         tokenList.add(token);
     }
 }
