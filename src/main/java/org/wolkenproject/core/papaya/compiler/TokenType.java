@@ -14,7 +14,6 @@ public enum TokenType {
 
     LogicalNotSymbol,
     AssignmentSymbol,
-    EqualsSymbol,
 
     AddSymbol,
     SubSymbol,
@@ -25,6 +24,19 @@ public enum TokenType {
     XorSymbol,
     AndSymbol,
     OrSymbol,
+
+    LogicalNotEqualsSymbol,
+    EqualsSymbol,
+
+    AddEqualsSymbol,
+    SubEqualsSymbol,
+    MulEqualsSymbol,
+    DivEqualsSymbol,
+    ModEqualsSymbol,
+
+    XorEqualsSymbol,
+    AndEqualsSymbol,
+    OrEqualsSymbol,
 
     NotSymbol,
 }
