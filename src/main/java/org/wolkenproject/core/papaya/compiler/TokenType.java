@@ -43,6 +43,9 @@ public enum TokenType {
     LogicalAndSymbol,
     LogicalOrSymbol,
 
+    LogicalAndEqualsSymbol,
+    LogicalOrEqualsSymbol,
+
     UnsignedRightShiftSymbol,
     RightShiftSymbol,
     LeftShiftSymbol
