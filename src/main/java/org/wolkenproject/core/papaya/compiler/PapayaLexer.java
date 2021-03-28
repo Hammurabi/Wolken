@@ -87,6 +87,10 @@ public class PapayaLexer {
         tokenType.put("|\\=", TokenType.OrEqualsSymbol);
 
         tokenType.put("~", TokenType.NotSymbol);
+        tokenType.put("and", TokenType.LogicalAndSymbol);
+        tokenType.put("\\&\\&", TokenType.LogicalAndSymbol);
+        tokenType.put("or", TokenType.LogicalOrSymbol);
+        tokenType.put("\\|\\|", TokenType.LogicalOrSymbol);
 //        tokenType.put("N([A-z]|[1|2|3|4|5|6|7|8|9])+", TokenType.Base58String);
 
         return tokenType;
