@@ -2,7 +2,6 @@ package org.wolkenproject.core.papaya.compiler;
 
 import org.wolkenproject.exceptions.WolkenException;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -101,6 +100,8 @@ public class PapayaParser {
         Set<PapayaStatement> statements = new LinkedHashSet<>();
 
         while (stream.hasNext()) {
+            if (stream.matches(Identifier, Identifier)) { // field declaration
+            } else if (stream.matches(Identifier, ColonEqualsSymbol))
         }
 
         return statements;
