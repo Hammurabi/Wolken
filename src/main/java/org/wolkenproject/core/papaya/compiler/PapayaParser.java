@@ -89,7 +89,6 @@ public class PapayaParser {
                     assignment = statements.iterator().next();
                 }
 
-
                 PapayaField field = new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
 
                 structure.addField(name.getTokenValue(), field);
