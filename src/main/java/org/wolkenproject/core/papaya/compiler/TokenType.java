@@ -80,4 +80,6 @@ public enum TokenType {
     ModuleKeyword,
     ClassKeyword,
     StructKeyword,
+    IncrementSymbol,
+    DecrementSymbol,
 }
