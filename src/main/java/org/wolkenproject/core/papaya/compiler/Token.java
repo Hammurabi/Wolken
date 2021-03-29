@@ -38,4 +38,8 @@ public class Token {
                 ", offset=" + offset +
                 '}';
     }
+
+    public LineInfo getLineInfo() {
+        return new LineInfo(line, offset);
+    }
 }
