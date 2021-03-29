@@ -50,8 +50,11 @@ public class PapayaLexer {
                 }
             }
 
+            builder.append(character);
             lastChar = character;
         }
+
+        return tokenStream;
     }
 
     private static Token getToken(StringBuilder builder, int line, int offset, Map<String, TokenType> typeMap) throws WolkenException {
