@@ -93,6 +93,14 @@ public class PapayaParser {
     }
 
     private PapayaStatement parseLefthand(TokenStream stream) throws WolkenException {
+        while (stream.hasNext()) {
+            if (stream.matches(Identifier, Identifier)) {               // field declaration
+            } else if (stream.matches(Identifier, ColonEqualsSymbol)) { // quick field declaration
+            } else {
+                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in function scope.");
+            }
+        }
+
         return null;
     }
 
