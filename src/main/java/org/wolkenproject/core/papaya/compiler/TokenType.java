@@ -86,5 +86,5 @@ public enum TokenType {
 
     IncrementSymbol,
     DecrementSymbol,
-    SemiColonEqualsSymbol,
+    ColonEqualsSymbol,
 }
