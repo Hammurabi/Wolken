@@ -28,8 +28,11 @@ public class PapayaParser {
                 // get a new token stream containing all the body tokens.
                 TokenStream body= getTokensFollowing(LeftBraceSymbol, stream);
 
-                // create a structure
+                // create a structure.
                 PapayaStructure structure = new PapayaStructure(name.getTokenValue(), StructureType.ContractType, keyword.getLineInfo());
+
+                // parse the body into the structure.
+                parseStructure(structure, body);
 
                 // add the structure to the ABI
                 abi.addStructure(name.getTokenValue(), structure);
@@ -44,6 +47,9 @@ public class PapayaParser {
         }
 
         return null;
+    }
+
+    private void parseStructure(PapayaStructure structure, TokenStream body) {
     }
 
     private TokenStream getTokensFollowing(TokenType opener, TokenStream stream) throws WolkenException {
