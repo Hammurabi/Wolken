@@ -8,4 +8,12 @@ public class LineInfo {
         this.line = line;
         this.offset = offset;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "line=" + line +
+                ", offset=" + offset +
+                '}';
+    }
 }
