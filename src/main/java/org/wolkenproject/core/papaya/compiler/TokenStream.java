@@ -32,6 +32,10 @@ public class TokenStream {
         return tokenList.get(index ++);
     }
 
+    public Token peek() {
+        return tokenList.get(index);
+    }
+
     public Token previous() {
         return tokenList.get(index - 1);
     }
