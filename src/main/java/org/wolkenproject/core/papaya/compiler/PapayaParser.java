@@ -104,9 +104,8 @@ public class PapayaParser {
         Set<PapayaStatement> statements = new LinkedHashSet<>();
 
         while (stream.hasNext()) {
-            if (stream.matches(Identifier, Identifier)) {               // field declaration
-            } else if (stream.matches(Identifier, ColonEqualsSymbol)) { // quick field declaration
-            }
+            PapayaStatement statement = parseLefthand(stream);
+            statements.add(statement);
         }
 
         return statements;
