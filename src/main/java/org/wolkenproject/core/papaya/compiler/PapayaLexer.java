@@ -98,8 +98,10 @@ public class PapayaLexer {
         tokenType.put("\\<\\<", TokenType.LeftShiftSymbol);
 
         tokenType.put("\\.", TokenType.MemberAccessSymbol);
-        tokenType.put(",", TokenType.CommaSymbol);
-        tokenType.put("#", TokenType.HashTagSymbol);
+        tokenType.put("\\.\\.", TokenType.DoubleDotSymbol);
+        tokenType.put("\\,", TokenType.CommaSymbol);
+        tokenType.put("\\#", TokenType.HashTagSymbol);
+        tokenType.put("\\;", TokenType.SemiColonSymbol);
         tokenType.put("\\:\\:", TokenType.StaticMemberAccessSymbol);
         tokenType.put("\\=\\>", TokenType.LambdaSymbol);
 
