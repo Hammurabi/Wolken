@@ -1,6 +1,7 @@
 package org.wolkenproject.core.papaya.compiler;
 
-import org.wolkenproject.core.papaya.compiler.statements.NewFieldStatement;
+import org.wolkenproject.core.papaya.compiler.statements.FieldDeclarationStatement;
+import org.wolkenproject.core.papaya.compiler.statements.FunctionCallStatement;
 import org.wolkenproject.exceptions.WolkenException;
 
 import java.util.LinkedHashSet;
@@ -94,8 +95,18 @@ public class PapayaParser {
     }
 
     private PapayaStatement parseLefthand(TokenStream stream) throws WolkenException {
+        return parse(stream, false);
+    }
+
+    private PapayaStatement parseRighthand(TokenStream stream) throws WolkenException {
+        return parse(stream, true);
+    }
+
+    private PapayaStatement parse(TokenStream stream, boolean righthand) throws WolkenException {
+        boolean lefthand = !righthand;
+
         while (stream.hasNext()) {
-            if (stream.matches(Identifier, Identifier)) {               // field declaration
+            if (lefthand && stream.matches(Identifier, Identifier)) {               // field declaration
                 Token type              = stream.next();
                 Token name              = stream.next();
                 PapayaStatement assignment   = null;
@@ -107,7 +118,7 @@ public class PapayaParser {
                 }
 
                 PapayaField field = new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
-                return new NewFieldStatement(field, assignment);
+                return new FieldDeclarationStatement(field, assignment);
             } else if (stream.matches(Identifier, ColonEqualsSymbol)) { // quick field declaration
                 Token name                  = stream.next();
                 Token assignmentOperator    = stream.next();
@@ -119,21 +130,13 @@ public class PapayaParser {
                 }
 
                 PapayaField field = new PapayaField(name.getTokenValue(), "?", name.getLineInfo(), assignment);
-                return new NewFieldStatement(field, assignment);
+                return new FieldDeclarationStatement(field, assignment);
             } else if (stream.matches(Identifier, LeftParenthesisSymbol)) { // call function
-            } else if (stream.matches(IncrementSymbol)) {               // prefix ++
-            } else if (stream.matches(DecrementSymbol)) {               // prefix --
-            } else {
-                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in function scope.");
-            }
-        }
+                Token name                      = stream.next();
+                TokenStream argumentStream      = getTokensFollowing(LeftParenthesisSymbol, stream, "expected an '(' at line: " + name.getLine() + ".");
+                Set<PapayaStatement> arguments  = parseFunctionBody(argumentStream);
 
-        return null;
-    }
-
-    private PapayaStatement parseRighthand(TokenStream stream) throws WolkenException {
-        while (stream.hasNext()) {
-            if (stream.matches(Identifier, LeftParenthesisSymbol)) {    // call function
+                return new FunctionCallStatement(name.getTokenValue(), arguments, name.getLineInfo());
             } else if (stream.matches(IncrementSymbol)) {               // prefix ++
             } else if (stream.matches(DecrementSymbol)) {               // prefix --
             } else {
