@@ -39,4 +39,8 @@ public class PapayaStructure {
     public LineInfo getLineInfo() {
         return lineInfo;
     }
+
+    public void compile(CompiledScript script) {
+
+    }
 }
