@@ -15,8 +15,7 @@ public class PapayaCompiler extends Compiler {
 
     @Override
     public CompiledScript compile(String text, JSONObject compilerArguments) throws WolkenException {
-        Token root = parser.ingest(lexer.ingest(text));
-
-        return null;
+        PapayaApplication application = parser.ingest(lexer.ingest(text));
+        return application.compile();
     }
 }
