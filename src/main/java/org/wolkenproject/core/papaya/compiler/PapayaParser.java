@@ -113,7 +113,9 @@ public class PapayaParser {
 
         while (stream.hasNext()) {
             PapayaStatement statement = parseLefthand(stream);
-            statements.add(statement);
+            if (statement != null) {
+                statements.add(statement);
+            }
         }
 
         return statements;
