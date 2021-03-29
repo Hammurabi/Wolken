@@ -1,24 +1,37 @@
 package org.wolkenproject.core.papaya.compiler;
 
-public class PapayaStatement {
-    private final PapayaStatement left;
-    private final PapayaStatement right;
+import java.util.ArrayList;
+import java.util.List;
 
-    public PapayaStatement(PapayaStatement left, PapayaStatement right) {
-        this.left   = left;
-        this.right  = right;
+public class PapayaStatement {
+    private final static StatementCompiler DefaultCompiler = scope -> {};
+    private final List<PapayaStatement> children;
+    private final LineInfo              lineInfo;
+    private final StatementCompiler     compiler;
+
+    public PapayaStatement(LineInfo lineInfo) {
+        this(DefaultCompiler, lineInfo);
+    }
+
+    public PapayaStatement(StatementCompiler compiler, LineInfo lineInfo) {
+        this.children = new ArrayList<>();
+        this.lineInfo = lineInfo;
+        this.compiler = compiler;
     }
 
     public void compile(CompilationScope scope) {
-        left.compile(scope);
-        right.compile(scope);
+        compiler.compile(scope);
+        for (PapayaStatement statement : children) {
+            statement.compile(scope);
+        }
     }
 
-    public PapayaStatement getLeft() {
-        return left;
+    public LineInfo getLineInfo() {
+        return lineInfo;
     }
 
-    public PapayaStatement getRight() {
-        return right;
+    public PapayaStatement addChild(PapayaStatement papayaStatement) {
+        children.add(papayaStatement);
+        return this;
     }
 }
