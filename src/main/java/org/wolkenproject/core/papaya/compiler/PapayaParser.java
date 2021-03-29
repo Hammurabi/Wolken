@@ -10,7 +10,7 @@ public class PapayaParser {
     }
 
     private PapayaApplication parseABI(TokenStream stream) throws WolkenException {
-        PapayaApplication abi = new PapayaApplication();
+        PapayaApplication app = new PapayaApplication();
 
         while (stream.hasNext()) {
             if (stream.matches(ContractKeyword, Identifier)) { // contact declaration
@@ -35,7 +35,7 @@ public class PapayaParser {
                 parseStructure(structure, body);
 
                 // add the structure to the ABI
-                abi.addStructure(name.getTokenValue(), structure);
+                app.addStructure(name.getTokenValue(), structure);
             } else if (stream.matches(ClassKeyword, Identifier)) { // class declaration
             } else if (stream.matches(StructKeyword, Identifier)) { // struct declaration
             } else {
