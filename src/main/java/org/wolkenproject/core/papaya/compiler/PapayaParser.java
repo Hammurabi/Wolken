@@ -5,12 +5,12 @@ import org.wolkenproject.exceptions.WolkenException;
 import static org.wolkenproject.core.papaya.compiler.TokenType.*;
 
 public class PapayaParser {
-    public ApplicationBinaryInterface ingest(TokenStream stream) throws WolkenException {
+    public PapayaApplication ingest(TokenStream stream) throws WolkenException {
         return parseABI(stream);
     }
 
-    private ApplicationBinaryInterface parseABI(TokenStream stream) throws WolkenException {
-        ApplicationBinaryInterface abi = new ApplicationBinaryInterface();
+    private PapayaApplication parseABI(TokenStream stream) throws WolkenException {
+        PapayaApplication abi = new PapayaApplication();
 
         while (stream.hasNext()) {
             if (stream.matches(ContractKeyword, Identifier)) { // contact declaration
