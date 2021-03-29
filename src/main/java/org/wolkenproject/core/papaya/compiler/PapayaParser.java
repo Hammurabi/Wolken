@@ -13,9 +13,24 @@ public class PapayaParser {
         PapayaApplication app = new PapayaApplication();
 
         while (stream.hasNext()) {
-            if (stream.matches(ContractKeyword, Identifier)) { // contact declaration
+            // contract, class, or struct declaration.
+            if (stream.matches(ContractKeyword, Identifier) || stream.matches(ClassKeyword, Identifier) || stream.matches(StructKeyword, Identifier)) {
                 Token keyword   = stream.next();
                 Token name      = stream.next();
+
+                StructureType type = StructureType.ContractType;
+
+                switch (name.getTokenType()) {
+                    case ContractKeyword:
+                        type = StructureType.ContractType;
+                        break;
+                    case ClassKeyword:
+                        type = StructureType.ClassType;
+                        break;
+                    case StructKeyword:
+                        type = StructureType.StructType;
+                        break;
+                }
 
                 // check for inheritance.
                 if (stream.matches(ExtendsKeyword) || stream.matches(ImplementsKeyword)) {
@@ -36,8 +51,6 @@ public class PapayaParser {
 
                 // add the structure to the ABI
                 app.addStructure(name.getTokenValue(), structure);
-            } else if (stream.matches(ClassKeyword, Identifier)) { // class declaration
-            } else if (stream.matches(StructKeyword, Identifier)) { // struct declaration
             } else {
                 throw new WolkenException("cannot parse unknown pattern '" + stream + "' in global scope.");
             }
