@@ -13,4 +13,9 @@ public class TokenStream {
     public void add(Token token) {
         tokenList.add(token);
     }
+
+    @Override
+    public String toString() {
+        return tokenList.toString();
+    }
 }
