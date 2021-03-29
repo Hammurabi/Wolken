@@ -129,7 +129,6 @@ public class PapayaParser {
                     }
                 }
 
-
                 fields.add(new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment));
             } else {
                 throw new WolkenException("cannot parse unknown pattern '" + stream + "' in function () scope.");
