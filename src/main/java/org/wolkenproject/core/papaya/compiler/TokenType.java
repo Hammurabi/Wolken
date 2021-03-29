@@ -5,6 +5,7 @@ public enum TokenType {
     IntegerNumber,
     BinaryString,
     Base16String,
+    AsciiChar,
     DecimalNumber,
     AsciiString,
     ByteString,
