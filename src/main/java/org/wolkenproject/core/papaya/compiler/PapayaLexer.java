@@ -2,64 +2,208 @@ package org.wolkenproject.core.papaya.compiler;
 
 import org.wolkenproject.exceptions.WolkenException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class PapayaLexer {
-    private final Map<String, TokenType> typeMap;
+    private static final char EOF = '\0';
+    private static final char END = '\n';
+    private static final char WTS = ' ';
+    private static final char TAB = '\t';
+
+    private final Map<String, TokenType>    typeMap;
+    private final Set<Character>            symbolSet;
+    private final Set<Character>            stackableSymbolSet;
+
 
     public PapayaLexer(Map<String, TokenType> typeMap) {
         this.typeMap = typeMap;
+        this.symbolSet = new HashSet<>();
+        this.stackableSymbolSet = new HashSet<>();
+        symbolSet.add('+');
+        symbolSet.add('-');
+        symbolSet.add('*');
+        symbolSet.add('/');
+        symbolSet.add('=');
+        symbolSet.add('!');
+        symbolSet.add('%');
+        symbolSet.add('^');
+        symbolSet.add('&');
+        symbolSet.add('<');
+        symbolSet.add('>');
+        symbolSet.add('|');
+        symbolSet.add('.');
+        symbolSet.add('\\');
+        stackableSymbolSet.addAll(symbolSet);
+
+        symbolSet.add('~');
+        symbolSet.add(',');
+        symbolSet.add('$');
+        symbolSet.add('#');
+        symbolSet.add('@');
+        symbolSet.add('?');
+        symbolSet.add('(');
+        symbolSet.add(')');
+        symbolSet.add('[');
+        symbolSet.add(']');
+        symbolSet.add('{');
+        symbolSet.add('}');
     }
 
-    public TokenStream ingest(String data) throws WolkenException {
+    public TokenStream ingest(String program) throws WolkenException {
+        List<TokenBuilder> builderList = new ArrayList<>();
         TokenStream tokenStream = new TokenStream();
 
         StringBuilder   builder = new StringBuilder();
         char            lastChar= '\0';
-        int             line    = 1;
-        int             offset  = 0;
 
-        int             numQuotes       = 0;
-        int             numSingleQuotes = 0;
+        boolean isString = false;
+        int line = 1;
+        int offset = 0;
+        int whitespace = 0;
 
-        for (char character : data.toCharArray()) {
-            offset ++;
+        TokenBuilder token = null;
+        TokenBuilder prevs = null;
 
-            if (character == '\n') {
-                if (builder.length() != 0) {
-                    tokenStream.add(getToken(builder, line, offset, typeMap));
-                    builder = new StringBuilder();
-                }
+        for (int i = 0; i < program.length(); i ++) {
 
-                offset = 1;
+            char current = program.charAt(i);
+            char last = i > 0 ? program.charAt(i - 1) : '\0';
+            char next = i < program.length() - 1 ? program.charAt(i + 1) : '\0';
+
+            if (current == END)
+            {
+                builderList.add(token);
+                builderList.add(new TokenBuilder());
+                prevs = token;
+                token = null;
+                offset = 0;
+                whitespace = 0;
+                line++;
+                continue;
+            } else if (current == WTS && !(token != null && (token.toString().startsWith("\"") || token.toString().startsWith("\'"))))
+            {
+                whitespace++;
+                builderList.add(token);
+                offset ++;
+                prevs = token;
+                token = null;
+                continue;
+            } else if (current == TAB && !(token != null && (token.toString().startsWith("\"") || token.toString().startsWith("\'"))))
+            {
+                whitespace += 4;
+                offset += 4;
+                builderList.add(token);
+                prevs = token;
+                token = null;
+                continue;
             }
 
-            if (character == ' ') {
-                if (builder.length() != 0) {
-                    tokenStream.add(getToken(builder, line, offset, typeMap));
-                    builder = new StringBuilder();
+            boolean separator   = symbolSet.contains(current);
+            boolean wasnull     = token == null;
+
+            if (token == null) {
+                token = new TokenBuilder("", line, offset, whitespace);
+            }
+
+            isString = (token.toString().startsWith("\"") || token.toString().startsWith("\'"));
+
+            if (isString || (wasnull && (current == '"' || current == '\'')))
+            {
+                if (current == '"' || current == '\'' || separator)
+                {
+                    if (last == '\\') token.append(current);
+                    else if (token.toString().startsWith(current + ""))
+                    {
+                        token.append(current);
+                        builderList.add(token);
+                        prevs = token;
+                        token = null;
+                    } else token.append(current);
+                } else token.append(current);
+
+                offset++;
+                continue;
+            } else if (separator)
+            {
+                builderList.add(token);
+                token = new TokenBuilder("" + current, line, offset, whitespace);
+                builderList.add(token);
+                prevs = token;
+                token = null;
+            } else token.append(current);
+
+            offset++;
+        }
+
+        Iterator<TokenBuilder> iterator = builderList.iterator();
+        while (iterator.hasNext()) {
+            TokenBuilder tokenBuilder = nextBuilder(iterator);
+            if (tokenBuilder == null) {
+                continue;
+            }
+
+            if (tokenBuilder.isSymbol(stackableSymbolSet)) {
+                while (iterator.hasNext()) {
+                    TokenBuilder toke = nextBuilder(iterator);
+                    if (toke != null) {
+                        if (!toke.isSymbol(stackableSymbolSet)) {
+                            break;
+                        }
+
+                        tokenBuilder.append(toke.toString());
+                    }
                 }
             }
 
-            if ((character == '\'' || character == '"') && lastChar == '\\') {
-            } else if ((character == '\'' && builder.toString().startsWith("'")) || (character == '"' && builder.toString().startsWith("\""))) {
-                if (builder.length() != 0) {
-                    tokenStream.add(getToken(builder, line, offset, typeMap));
-                    builder = new StringBuilder();
-                }
-            }
-
-            builder.append(character);
-            lastChar = character;
+            tokenStream.add(getToken(tokenBuilder.toString(), tokenBuilder.getLine(), tokenBuilder.getOffset(), typeMap));
         }
 
         return tokenStream;
     }
 
-    private static Token getToken(StringBuilder builder, int line, int offset, Map<String, TokenType> typeMap) throws WolkenException {
-        String string = builder.toString();
+    private static TokenBuilder nextBuilder(Iterator<TokenBuilder> iterator) {
+        while (iterator.hasNext()) {
+            TokenBuilder tokenBuilder = iterator.next();
+            if (tokenBuilder == null) {
+                continue;
+            }
 
+            if (tokenBuilder.isEmpty()) {
+                continue;
+            }
+
+            return tokenBuilder;
+        }
+
+        return null;
+    }
+
+    private String escape(char character) throws WolkenException {
+        switch (character) {
+            case 'n':
+                return "\n";
+            case 't':
+                return "\t";
+            case '0':
+                return "\0";
+            case '\'':
+                return "'";
+            case '"':
+                return "\"";
+            default:
+                throw new WolkenException("escaping invalid character '" + character + "'.");
+        }
+    }
+
+    private boolean isSymbol(char character) {
+        return symbolSet.contains(character);
+    }
+
+    private boolean isString(String string) {
+        return string.startsWith("'") || string.startsWith("\"");
+    }
+
+    private static Token getToken(String string, int line, int offset, Map<String, TokenType> typeMap) throws WolkenException {
         if ((string.startsWith("'") && string.endsWith("'")) || (string.startsWith("\"") && string.endsWith("\""))) {
             String str = "";
             if (string.length() > 2) {
@@ -75,11 +219,11 @@ public class PapayaLexer {
             }
         }
 
-        throw new WolkenException("could not create token for string '" + string + "'.");
+        throw new WolkenException("could not create token for string '" + string + "'" + "at line: " + line + " offset: " + offset + ".");
     }
 
     public static Map<String, TokenType> getTokenTypes() {
-        Map<String, TokenType> tokenType = new HashMap<>();
+        Map<String, TokenType> tokenType = new LinkedHashMap<>();
 
         // keywords
         tokenType.put("for", TokenType.ForKeyword);
