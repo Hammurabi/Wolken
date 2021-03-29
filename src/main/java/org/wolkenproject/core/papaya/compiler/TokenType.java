@@ -20,6 +20,7 @@ public enum TokenType {
     MulSymbol,
     DivSymbol,
     ModSymbol,
+    PowSymbol,
 
     XorSymbol,
     AndSymbol,
@@ -33,6 +34,7 @@ public enum TokenType {
     MulEqualsSymbol,
     DivEqualsSymbol,
     ModEqualsSymbol,
+    PowEqualsSymbol,
 
     XorEqualsSymbol,
     AndEqualsSymbol,
