@@ -3,6 +3,7 @@ package org.wolkenproject.core.papaya.compiler;
 import org.wolkenproject.exceptions.WolkenException;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static org.wolkenproject.core.papaya.compiler.TokenType.*;
@@ -103,7 +104,37 @@ public class PapayaParser {
     }
 
     private Set<PapayaField> parseFunctionArguments(TokenStream stream) throws WolkenException {
-        return null;
+        boolean hasDefaultValue = false;
+        Set<PapayaField> fields = new LinkedHashSet<>();
+
+        while (stream.hasNext()) {
+            if (stream.matches(Identifier, Identifier)) { // field declaration
+                Token type              = stream.next();
+                Token name              = stream.next();
+                PapayaStatement assignment   = null;
+
+                if (stream.matches(AssignmentSymbol)) {
+                    Token assignmentOperator = stream.next();
+                    TokenStream assignmentTokens = getTokensTilEOL(assignmentOperator.getLine(), stream);
+                    Set<PapayaStatement> statements = parseFunctionBody(assignmentTokens);
+                    if (statements.isEmpty()) {
+                        throw new WolkenException("expected value " + assignmentOperator.getLineInfo() + ".");
+                    }
+
+                    assignment = statements.iterator().next();
+                    hasDefaultValue = true;
+                } else {
+                    if (hasDefaultValue) {
+                        throw new WolkenException("expected value an '=' " + name.getLineInfo() + ".");
+                    }
+                }
+
+
+                fields.add(new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment));
+            } else {
+                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in structure scope.");
+            }
+        }
     }
 
     private TokenStream getTokensTilEOL(int currentLine, TokenStream stream) {
