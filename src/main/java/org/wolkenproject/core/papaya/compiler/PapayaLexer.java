@@ -39,6 +39,9 @@ public class PapayaLexer {
                 }
             }
 
+            if (character == '\'' && builder.length() != 0) {
+            }
+
             lastChar = character;
         }
     }
