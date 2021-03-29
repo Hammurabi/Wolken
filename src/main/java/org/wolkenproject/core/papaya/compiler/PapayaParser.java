@@ -2,6 +2,7 @@ package org.wolkenproject.core.papaya.compiler;
 
 import org.wolkenproject.exceptions.WolkenException;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.wolkenproject.core.papaya.compiler.TokenType.*;
@@ -66,13 +67,31 @@ public class PapayaParser {
                 TokenStream arguments   = getTokensFollowing(LeftParenthesisSymbol, stream, "expected an '(' at line: " + keyword.getLine() + ".");
                 TokenStream body        = getTokensFollowing(LeftBraceSymbol, stream, "expected an '{' at line: " + keyword.getLine() + ".");
 
-                Set<PapayaField> parsedArguments        = parseFunctionArguments(stream);
-                Set<PapayaStatement> parsedStatements   = parseFunctionBody(stream);
+                Set<PapayaField> parsedArguments        = parseFunctionArguments(arguments);
+                Set<PapayaStatement> parsedStatements   = parseFunctionBody(body);
                 PapayaFunction function = new PapayaFunction(name.getTokenValue(), parsedArguments, parsedStatements, keyword.getLineInfo());
 
                 structure.addFunction(name.getTokenValue(), function);
             } else if (stream.matches(Identifier, Identifier)) { // field declaration
-            } else if (stream.matches(Identifier, SemiColonEqualsSymbol)) { // local field declaration a:=b
+                Token type              = stream.next();
+                Token name              = stream.next();
+                PapayaStatement assignment   = null;
+
+                if (stream.matches(AssignmentSymbol)) {
+                    Token assignmentOperator = stream.next();
+                    TokenStream assignmentTokens = getTokensTilEOL(assignmentOperator.getLine(), stream);
+                    Set<PapayaStatement> statements = parseFunctionBody(assignmentTokens);
+                    if (statements.isEmpty()) {
+                        throw new WolkenException("expected value " + assignmentOperator.getLineInfo() + ".");
+                    }
+
+                    assignment = statements.iterator().next();
+                }
+
+
+                PapayaField field = new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
+
+                structure.addField(name.getTokenValue(), field);
             } else {
                 throw new WolkenException("cannot parse unknown pattern '" + stream + "' in structure scope.");
             }
