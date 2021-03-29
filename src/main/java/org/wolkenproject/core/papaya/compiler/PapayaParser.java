@@ -70,6 +70,20 @@ public class PapayaParser {
         }
     }
 
+    private TokenStream getTokensTilEOL(int currentLine, TokenStream stream) {
+        TokenStream result = new TokenStream();
+
+        while (stream.hasNext()) {
+            if (stream.peek().getLine() != currentLine) {
+                break;
+            }
+
+            result.add(stream.next());
+        }
+
+        return result;
+    }
+
     private TokenStream getTokensFollowing(TokenType opener, TokenStream stream) throws WolkenException {
         TokenStream result  = new TokenStream();
         TokenType closer    = None;
