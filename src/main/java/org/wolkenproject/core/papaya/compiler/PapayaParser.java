@@ -1,5 +1,6 @@
 package org.wolkenproject.core.papaya.compiler;
 
+import org.wolkenproject.core.papaya.compiler.statements.NewFieldStatement;
 import org.wolkenproject.exceptions.WolkenException;
 
 import java.util.LinkedHashSet;
@@ -95,7 +96,33 @@ public class PapayaParser {
     private PapayaStatement parseLefthand(TokenStream stream) throws WolkenException {
         while (stream.hasNext()) {
             if (stream.matches(Identifier, Identifier)) {               // field declaration
+                Token type              = stream.next();
+                Token name              = stream.next();
+                PapayaStatement assignment   = null;
+
+                if (stream.matches(AssignmentSymbol)) {
+                    Token assignmentOperator = stream.next();
+                    TokenStream assignmentTokens = getTokensTilEOL(assignmentOperator.getLine(), stream);
+                    assignment = parseRighthand(assignmentTokens);
+                }
+
+                PapayaField field = new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
+                return new NewFieldStatement(field, assignment);
             } else if (stream.matches(Identifier, ColonEqualsSymbol)) { // quick field declaration
+                Token name                  = stream.next();
+                Token assignmentOperator    = stream.next();
+
+                PapayaStatement assignment  = parseRighthand(getTokensTilEOL(assignmentOperator.getLine(), stream));
+
+                if (assignment == null) {
+                    throw new WolkenException("expected a valid after ':=' at "+assignmentOperator.getLineInfo()+".");
+                }
+
+                PapayaField field = new PapayaField(name.getTokenValue(), "?", name.getLineInfo(), assignment);
+                return new NewFieldStatement(field, assignment);
+            } else if (stream.matches(Identifier, LeftParenthesisSymbol)) { // call function
+            } else if (stream.matches(IncrementSymbol)) {               // prefix ++
+            } else if (stream.matches(DecrementSymbol)) {               // prefix --
             } else {
                 throw new WolkenException("cannot parse unknown pattern '" + stream + "' in function scope.");
             }
@@ -105,6 +132,15 @@ public class PapayaParser {
     }
 
     private PapayaStatement parseRighthand(TokenStream stream) throws WolkenException {
+        while (stream.hasNext()) {
+            if (stream.matches(Identifier, LeftParenthesisSymbol)) {    // call function
+            } else if (stream.matches(IncrementSymbol)) {               // prefix ++
+            } else if (stream.matches(DecrementSymbol)) {               // prefix --
+            } else {
+                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in function scope.");
+            }
+        }
+
         return null;
     }
 
