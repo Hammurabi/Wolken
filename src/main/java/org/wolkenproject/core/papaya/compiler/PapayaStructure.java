@@ -7,11 +7,13 @@ import java.util.Map;
 
 public class PapayaStructure {
     private final StructureType                 structureType;
+    private final String                        name;
     private final Map<String, PapayaField>      fieldMap;
     private final Map<String, PapayaFunction>   functionMap;
     private final LineInfo                      lineInfo;
 
-    public PapayaStructure(StructureType structureType, LineInfo lineInfo) {
+    public PapayaStructure(String name, StructureType structureType, LineInfo lineInfo) {
+        this.name           = name;
         this.structureType  = structureType;
         this.fieldMap       = new LinkedHashMap<>();
         this.functionMap    = new LinkedHashMap<>();
