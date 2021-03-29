@@ -236,6 +236,8 @@ public class PapayaLexer {
         tokenType.put("fn", TokenType.FunctionKeyword);
         tokenType.put("contract", TokenType.ContractKeyword);
         tokenType.put("module", TokenType.ModuleKeyword);
+        tokenType.put("extends", TokenType.ExtendsKeyword);
+        tokenType.put("implements", TokenType.ImplementsKeyword);
         tokenType.put("class", TokenType.ClassKeyword);
         tokenType.put("struct", TokenType.StructKeyword);
         tokenType.put("and", TokenType.LogicalAndSymbol);
