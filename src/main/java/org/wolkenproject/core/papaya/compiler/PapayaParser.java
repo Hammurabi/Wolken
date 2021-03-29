@@ -92,6 +92,10 @@ public class PapayaParser {
         }
     }
 
+    private PapayaStatement parseLefthand(TokenStream stream) throws WolkenException {
+        return null;
+    }
+
     private PapayaStatement parseRighthand(TokenStream stream) throws WolkenException {
         return null;
     }
