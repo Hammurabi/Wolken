@@ -38,6 +38,8 @@ public class PapayaLexer {
                     builder = new StringBuilder();
                 }
             }
+
+            lastChar = character;
         }
     }
 
