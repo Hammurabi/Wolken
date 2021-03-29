@@ -39,7 +39,7 @@ public class PapayaParser {
             } else if (stream.matches(ClassKeyword, Identifier)) { // class declaration
             } else if (stream.matches(StructKeyword, Identifier)) { // struct declaration
             } else {
-                throw new WolkenException("cannot parse unknown pattern '" + stream + "'.");
+                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in global scope.");
             }
         }
 
@@ -52,7 +52,7 @@ public class PapayaParser {
             } else if (stream.matches(Identifier, Identifier)) { // field declaration
             } else if (stream.matches(Identifier, SemiColonEqualsSymbol)) { // local field declaration a:=b
             } else {
-                throw new WolkenException("cannot parse unknown pattern '" + stream + "'.");
+                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in structure scope.");
             }
         }
     }
