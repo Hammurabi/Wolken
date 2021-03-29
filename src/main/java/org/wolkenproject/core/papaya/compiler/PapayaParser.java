@@ -5,7 +5,7 @@ import org.wolkenproject.exceptions.WolkenException;
 import static org.wolkenproject.core.papaya.compiler.TokenType.*;
 
 public class PapayaParser {
-    public Token ingest(TokenStream stream) throws WolkenException {
+    public ApplicationBinaryInterface ingest(TokenStream stream) throws WolkenException {
         return parseABI(stream);
     }
 
