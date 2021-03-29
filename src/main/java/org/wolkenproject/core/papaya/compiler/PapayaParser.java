@@ -38,9 +38,6 @@ public class PapayaParser {
                 abi.addStructure(name.getTokenValue(), structure);
             } else if (stream.matches(ClassKeyword, Identifier)) { // class declaration
             } else if (stream.matches(StructKeyword, Identifier)) { // struct declaration
-            } else if (stream.matches(FunctionKeyword, Identifier)) { // function declaration
-            } else if (stream.matches(Identifier, Identifier)) { // field declaration
-            } else if (stream.matches(Identifier, SemiColonEqualsSymbol)) { // local field declaration a:=b
             } else {
                 throw new WolkenException("cannot parse unknown pattern '" + stream + "'.");
             }
