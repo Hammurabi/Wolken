@@ -9,11 +9,13 @@ public class PapayaStructure {
     private final StructureType                 structureType;
     private final Map<String, PapayaField>      fieldMap;
     private final Map<String, PapayaFunction>   functionMap;
+    private final LineInfo                      lineInfo;
 
-    public PapayaStructure(StructureType structureType) {
+    public PapayaStructure(StructureType structureType, LineInfo lineInfo) {
         this.structureType  = structureType;
         this.fieldMap       = new LinkedHashMap<>();
         this.functionMap    = new LinkedHashMap<>();
+        this.lineInfo       = lineInfo;
     }
 
     public void addField(String name, PapayaField field) throws WolkenException {
@@ -30,5 +32,9 @@ public class PapayaStructure {
         }
 
         functionMap.put(name, function);
+    }
+
+    public LineInfo getLineInfo() {
+        return lineInfo;
     }
 }
