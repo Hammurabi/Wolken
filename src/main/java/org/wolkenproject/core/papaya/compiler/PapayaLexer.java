@@ -294,7 +294,7 @@ public class PapayaLexer {
         tokenType.put("\\#", TokenType.HashTagSymbol);
         tokenType.put("\\;", TokenType.SemiColonSymbol);
         tokenType.put("\\:\\:", TokenType.StaticMemberAccessSymbol);
-        tokenType.put("\\:\\=", TokenType.SemiColonEqualsSymbol);
+        tokenType.put("\\:\\=", TokenType.ColonEqualsSymbol);
         tokenType.put("\\=\\>", TokenType.LambdaSymbol);
 
         tokenType.put("\\<", TokenType.LessThanSymbol);
