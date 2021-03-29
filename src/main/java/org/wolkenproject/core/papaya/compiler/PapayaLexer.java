@@ -20,6 +20,9 @@ public class PapayaLexer {
         int             line    = 1;
         int             offset  = 0;
 
+        int             numQuotes       = 0;
+        int             numSingleQuotes = 0;
+
         for (char character : data.toCharArray()) {
             offset ++;
 
@@ -39,7 +42,11 @@ public class PapayaLexer {
                 }
             }
 
-            if (character == '\'' && builder.length() != 0) {
+            if (character == '\'' && builder.toString().startsWith("'")) {
+                if (builder.length() != 0) {
+                    tokenStream.add(getToken(builder, line, offset, typeMap));
+                    builder = new StringBuilder();
+                }
             }
 
             lastChar = character;
@@ -47,8 +54,16 @@ public class PapayaLexer {
     }
 
     private static Token getToken(StringBuilder builder, int line, int offset, Map<String, TokenType> typeMap) throws WolkenException {
-        TokenType type = TokenType.None;
         String string = builder.toString();
+
+        if (string.startsWith("'") && string.endsWith("'") || string.startsWith("\"") && string.endsWith("\"")) {
+            String str = "";
+            if (string.length() > 2) {
+                str = string.substring(1, string.length() - 1);
+            }
+
+            return new Token(str, TokenType.AsciiString, line, offset);
+        }
 
         for (String regex : typeMap.keySet()) {
             if (string.matches(regex)) {
