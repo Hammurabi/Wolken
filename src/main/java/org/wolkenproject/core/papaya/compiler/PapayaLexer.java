@@ -42,7 +42,7 @@ public class PapayaLexer {
                 }
             }
 
-            if (character == '\'' && builder.toString().startsWith("'")) {
+            if (character == '\'' && builder.toString().startsWith("'") || character == '"' && builder.toString().startsWith("\"")) {
                 if (builder.length() != 0) {
                     tokenStream.add(getToken(builder, line, offset, typeMap));
                     builder = new StringBuilder();
