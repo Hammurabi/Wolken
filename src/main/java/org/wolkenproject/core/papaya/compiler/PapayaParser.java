@@ -10,6 +10,8 @@ public class PapayaParser {
     }
 
     private ApplicationBinaryInterface parseABI(TokenStream stream) throws WolkenException {
+        ApplicationBinaryInterface abi = new ApplicationBinaryInterface();
+
         while (stream.hasNext()) {
             if (stream.matches(ContractKeyword, Identifier)) { // contact declaration
                 Token keyword   = stream.next();
@@ -26,7 +28,11 @@ public class PapayaParser {
                 // get a new token stream containing all the body tokens.
                 TokenStream body= getTokensFollowing(LeftBraceSymbol, stream);
 
-                // parse the body
+                // create a structure
+                PapayaStructure structure = new PapayaStructure(name.getTokenValue(), StructureType.ContractType, keyword.getLineInfo());
+
+                // add the structure to the ABI
+                abi.addStructure(name.getTokenValue(), structure);
             } else if (stream.matches(ClassKeyword, Identifier)) { // class declaration
             } else if (stream.matches(StructKeyword, Identifier)) { // struct declaration
             } else if (stream.matches(FunctionKeyword, Identifier)) { // function declaration
