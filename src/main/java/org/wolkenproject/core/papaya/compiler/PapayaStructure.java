@@ -20,7 +20,7 @@ public class PapayaStructure {
 
     public void addField(String name, PapayaField field) throws WolkenException {
         if (fieldMap.containsKey(name)) {
-            throw new WolkenException("redeclaration of field '" + name + "' {"+field+"}.");
+            throw new WolkenException("redeclaration of field '" + name + "' {"+field.getLineInfo()+"}.");
         }
 
         fieldMap.put(name, field);
@@ -28,7 +28,7 @@ public class PapayaStructure {
 
     public void addFunction(String name, PapayaFunction function) throws WolkenException {
         if (fieldMap.containsKey(name)) {
-            throw new WolkenException("redeclaration of function '" + name + "' {"+function+"}.");
+            throw new WolkenException("redeclaration of function '" + name + "' {"+function.getLineInfo()+"}.");
         }
 
         functionMap.put(name, function);
