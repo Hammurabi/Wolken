@@ -2,6 +2,8 @@ package org.wolkenproject.core.papaya.compiler;
 
 import org.wolkenproject.exceptions.WolkenException;
 
+import java.util.Set;
+
 import static org.wolkenproject.core.papaya.compiler.TokenType.*;
 
 public class PapayaParser {
@@ -64,8 +66,10 @@ public class PapayaParser {
                 TokenStream arguments   = getTokensFollowing(LeftParenthesisSymbol, stream, "expected an '(' at line: " + keyword.getLine() + ".");
                 TokenStream body        = getTokensFollowing(LeftBraceSymbol, stream, "expected an '{' at line: " + keyword.getLine() + ".");
 
-                PapayaFunction function = new PapayaFunction(name.getTokenValue(), parsedArguments, parsedBody, keyword.getLineInfo());
-                
+                Set<PapayaField> parsedArguments        = parseFunctionArguments(stream);
+                Set<PapayaStatement> parsedStatements   = parseFunctionBody(stream);
+                PapayaFunction function = new PapayaFunction(name.getTokenValue(), parsedArguments, parsedStatements, keyword.getLineInfo());
+
                 structure.addFunction(name.getTokenValue(), function);
             } else if (stream.matches(Identifier, Identifier)) { // field declaration
             } else if (stream.matches(Identifier, SemiColonEqualsSymbol)) { // local field declaration a:=b
@@ -73,6 +77,14 @@ public class PapayaParser {
                 throw new WolkenException("cannot parse unknown pattern '" + stream + "' in structure scope.");
             }
         }
+    }
+
+    private Set<PapayaStatement> parseFunctionBody(TokenStream stream) throws WolkenException {
+        return null;
+    }
+
+    private Set<PapayaField> parseFunctionArguments(TokenStream stream) throws WolkenException {
+        return null;
     }
 
     private TokenStream getTokensTilEOL(int currentLine, TokenStream stream) {
