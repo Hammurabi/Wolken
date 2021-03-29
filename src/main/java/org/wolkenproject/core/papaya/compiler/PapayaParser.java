@@ -46,7 +46,15 @@ public class PapayaParser {
         return null;
     }
 
-    private void parseStructure(PapayaStructure structure, TokenStream body) {
+    private void parseStructure(PapayaStructure structure, TokenStream stream) throws WolkenException {
+        while (stream.hasNext()) {
+            if (stream.matches(FunctionKeyword, Identifier)) { // function declaration
+            } else if (stream.matches(Identifier, Identifier)) { // field declaration
+            } else if (stream.matches(Identifier, SemiColonEqualsSymbol)) { // local field declaration a:=b
+            } else {
+                throw new WolkenException("cannot parse unknown pattern '" + stream + "'.");
+            }
+        }
     }
 
     private TokenStream getTokensFollowing(TokenType opener, TokenStream stream) throws WolkenException {
