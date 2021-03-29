@@ -81,12 +81,7 @@ public class PapayaParser {
                 if (stream.matches(AssignmentSymbol)) {
                     Token assignmentOperator = stream.next();
                     TokenStream assignmentTokens = getTokensTilEOL(assignmentOperator.getLine(), stream);
-                    Set<PapayaStatement> statements = parseFunctionBody(assignmentTokens);
-                    if (statements.isEmpty()) {
-                        throw new WolkenException("expected value " + assignmentOperator.getLineInfo() + ".");
-                    }
-
-                    assignment = statements.iterator().next();
+                    assignment = parseRighthand(assignmentTokens);
                 }
 
                 PapayaField field = new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
@@ -124,12 +119,7 @@ public class PapayaParser {
                 if (stream.matches(AssignmentSymbol)) {
                     Token assignmentOperator = stream.next();
                     TokenStream assignmentTokens = getTokensTilEOL(assignmentOperator.getLine(), stream);
-                    Set<PapayaStatement> statements = parseFunctionBody(assignmentTokens);
-                    if (statements.isEmpty()) {
-                        throw new WolkenException("expected value " + assignmentOperator.getLineInfo() + ".");
-                    }
-
-                    assignment = statements.iterator().next();
+                    assignment = parseRighthand(assignmentTokens);
                     hasDefaultValue = true;
                 } else {
                     if (hasDefaultValue) {
