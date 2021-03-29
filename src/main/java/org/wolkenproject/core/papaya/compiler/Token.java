@@ -21,6 +21,14 @@ public class Token {
         return tokenType;
     }
 
+    public int getLine() {
+        return line;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
     @Override
     public String toString() {
         return "{" +
