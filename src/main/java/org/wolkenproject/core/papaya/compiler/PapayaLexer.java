@@ -80,6 +80,9 @@ public class PapayaLexer {
         tokenType.put("\\d+\\.", TokenType.DecimalNumber);
         tokenType.put("\\.\\d+", TokenType.DecimalNumber);
 
+        tokenType.put("\\+\\+", TokenType.IncrementSymbol);
+        tokenType.put("\\-\\-", TokenType.DecrementSymbol);
+
         tokenType.put("\\!", TokenType.LogicalNotSymbol);
         tokenType.put("\\=", TokenType.AssignmentSymbol);
         tokenType.put("\\+", TokenType.AddSymbol);
@@ -87,6 +90,7 @@ public class PapayaLexer {
         tokenType.put("\\*", TokenType.MulSymbol);
         tokenType.put("\\/", TokenType.DivSymbol);
         tokenType.put("\\%", TokenType.ModSymbol);
+        tokenType.put("\\*\\*", TokenType.PowSymbol);
         tokenType.put("^", TokenType.XorSymbol);
         tokenType.put("&", TokenType.AndSymbol);
         tokenType.put("|", TokenType.OrSymbol);
@@ -98,6 +102,7 @@ public class PapayaLexer {
         tokenType.put("\\*\\=", TokenType.MulEqualsSymbol);
         tokenType.put("\\/\\=", TokenType.DivEqualsSymbol);
         tokenType.put("\\%\\=", TokenType.ModEqualsSymbol);
+        tokenType.put("\\*\\*\\=", TokenType.PowEqualsSymbol);
         tokenType.put("^\\=", TokenType.XorEqualsSymbol);
         tokenType.put("&\\=", TokenType.AndEqualsSymbol);
         tokenType.put("|\\=", TokenType.OrEqualsSymbol);
