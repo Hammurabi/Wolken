@@ -6,10 +6,10 @@ import static org.wolkenproject.core.papaya.compiler.TokenType.*;
 
 public class PapayaParser {
     public Token ingest(TokenStream stream) throws WolkenException {
-        return recursive(stream);
+        return parseABI(stream);
     }
 
-    private Token recursive(TokenStream stream) throws WolkenException {
+    private ApplicationBinaryInterface parseABI(TokenStream stream) throws WolkenException {
         while (stream.hasNext()) {
             if (stream.matches(ContractKeyword, Identifier)) { // contact declaration
                 Token keyword   = stream.next();
@@ -25,6 +25,8 @@ public class PapayaParser {
 
                 // get a new token stream containing all the body tokens.
                 TokenStream body= getTokensFollowing(LeftBraceSymbol, stream);
+
+                // parse the body
             } else if (stream.matches(ClassKeyword, Identifier)) { // class declaration
             } else if (stream.matches(StructKeyword, Identifier)) { // struct declaration
             } else if (stream.matches(FunctionKeyword, Identifier)) { // function declaration
