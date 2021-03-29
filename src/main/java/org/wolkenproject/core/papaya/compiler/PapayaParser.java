@@ -100,9 +100,12 @@ public class PapayaParser {
     }
 
     private Set<PapayaStatement> parseFunctionBody(TokenStream stream) throws WolkenException {
-        Set<PapayaStatement> statementss = new LinkedHashSet<>();
-        
-        return null;
+        Set<PapayaStatement> statements = new LinkedHashSet<>();
+
+        while (stream.hasNext()) {
+        }
+
+        return statements;
     }
 
     private Set<PapayaField> parseFunctionArguments(TokenStream stream) throws WolkenException {
