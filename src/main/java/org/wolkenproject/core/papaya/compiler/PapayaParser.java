@@ -135,6 +135,8 @@ public class PapayaParser {
                 throw new WolkenException("cannot parse unknown pattern '" + stream + "' in function () scope.");
             }
         }
+
+        return fields;
     }
 
     private TokenStream getTokensTilEOL(int currentLine, TokenStream stream) {
