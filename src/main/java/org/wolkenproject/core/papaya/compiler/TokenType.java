@@ -83,4 +83,5 @@ public enum TokenType {
     StructKeyword,
     IncrementSymbol,
     DecrementSymbol,
+    SemiColonEqualsSymbol,
 }
