@@ -15,7 +15,7 @@ public class ApplicationBinaryInterface {
 
     public void addStructure(String name, PapayaStructure structure) throws WolkenException {
         if (structureMap.containsKey(name)) {
-            throw new WolkenException("redeclaration of structure '" + name + "' {"+structure+"}.");
+            throw new WolkenException("redeclaration of structure '" + name + "' {"+structure.getLineInfo()+"}.");
         }
 
         structureMap.put(name, structure);
