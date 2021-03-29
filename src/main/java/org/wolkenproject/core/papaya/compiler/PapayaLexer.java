@@ -56,13 +56,29 @@ public class PapayaLexer {
 
     public static Map<String, TokenType> getTokenTypes() {
         Map<String, TokenType> tokenType = new HashMap<>();
+
+        // keywords
+        tokenType.put("for", TokenType.ForKeyword);
+        tokenType.put("while", TokenType.WhileKeyword);
+        tokenType.put("break", TokenType.BreakKeyword);
+        tokenType.put("continue", TokenType.ContinueKeyword);
+        tokenType.put("pass", TokenType.PassKeyword);
+        tokenType.put("return", TokenType.ReturnKeyword);
+        tokenType.put("fn", TokenType.FunctionKeyword);
+        tokenType.put("contract", TokenType.ContractKeyword);
+        tokenType.put("module", TokenType.ModuleKeyword);
+        tokenType.put("class", TokenType.ClassKeyword);
+        tokenType.put("struct", TokenType.StructKeyword);
+        tokenType.put("and", TokenType.LogicalAndSymbol);
+        tokenType.put("or", TokenType.LogicalOrSymbol);
+
+        // other
         tokenType.put("\\d+", TokenType.IntegerNumber);
         tokenType.put("[0][b][0-1]+", TokenType.IntegerNumber);
         tokenType.put("0x[\\d|(a|b|c|d|e|f|A|B|C|D|E|F)]+", TokenType.Base16String);
         tokenType.put("\\d+\\.\\d+", TokenType.DecimalNumber);
         tokenType.put("\\d+\\.", TokenType.DecimalNumber);
         tokenType.put("\\.\\d+", TokenType.DecimalNumber);
-        tokenType.put("([A-z]|\\_)+\\d*", TokenType.Identifier);
 
         tokenType.put("\\!", TokenType.LogicalNotSymbol);
         tokenType.put("\\=", TokenType.AssignmentSymbol);
@@ -87,10 +103,8 @@ public class PapayaLexer {
         tokenType.put("|\\=", TokenType.OrEqualsSymbol);
 
         tokenType.put("~", TokenType.NotSymbol);
-        tokenType.put("and", TokenType.LogicalAndSymbol);
         tokenType.put("\\&\\&", TokenType.LogicalAndSymbol);
         tokenType.put("\\&\\&\\=", TokenType.LogicalAndEqualsSymbol);
-        tokenType.put("or", TokenType.LogicalOrSymbol);
         tokenType.put("\\|\\|", TokenType.LogicalOrSymbol);
         tokenType.put("\\|\\|\\=", TokenType.LogicalOrEqualsSymbol);
         tokenType.put("\\>\\>\\>", TokenType.UnsignedRightShiftSymbol);
@@ -119,6 +133,9 @@ public class PapayaLexer {
 
         tokenType.put("\\{", TokenType.LeftBraceSymbol);
         tokenType.put("\\}", TokenType.RightBraceSymbol);
+
+        // we leave the identifier regex for the end.
+        tokenType.put("([A-z]|\\_)+\\d*", TokenType.Identifier);
 
 
 //        tokenType.put("N([A-z]|[1|2|3|4|5|6|7|8|9])+", TokenType.Base58String);
