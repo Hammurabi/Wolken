@@ -5,11 +5,11 @@ import org.wolkenproject.exceptions.WolkenException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ApplicationBinaryInterface {
+public class PapayaApplication {
     // this contains structures in order of declaration
     private final Map<String, PapayaStructure> structureMap;
 
-    public ApplicationBinaryInterface() {
+    public PapayaApplication() {
         this.structureMap = new LinkedHashMap<>();
     }
 
