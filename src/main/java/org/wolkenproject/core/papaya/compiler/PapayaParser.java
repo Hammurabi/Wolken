@@ -63,6 +63,10 @@ public class PapayaParser {
 
                 TokenStream arguments   = getTokensFollowing(LeftParenthesisSymbol, stream, "expected an '(' at line: " + keyword.getLine() + ".");
                 TokenStream body        = getTokensFollowing(LeftBraceSymbol, stream, "expected an '{' at line: " + keyword.getLine() + ".");
+
+                PapayaFunction function = new PapayaFunction(name.getTokenValue(), parsedArguments, parsedBody, keyword.getLineInfo());
+                
+                structure.addFunction(name.getTokenValue(), function);
             } else if (stream.matches(Identifier, Identifier)) { // field declaration
             } else if (stream.matches(Identifier, SemiColonEqualsSymbol)) { // local field declaration a:=b
             } else {
