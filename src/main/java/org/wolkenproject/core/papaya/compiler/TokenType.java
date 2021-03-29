@@ -81,6 +81,9 @@ public enum TokenType {
     ModuleKeyword,
     ClassKeyword,
     StructKeyword,
+    ExtendsKeyword,
+    ImplementsKeyword,
+
     IncrementSymbol,
     DecrementSymbol,
     SemiColonEqualsSymbol,
