@@ -36,12 +36,8 @@ public class PapayaParser {
                 if (stream.matches(ExtendsKeyword) || stream.matches(ImplementsKeyword)) {
                 }
 
-                if (!stream.matches(LeftBraceSymbol)) {
-                    throw new WolkenException("expected an '{' at line: " + keyword.getLine() + ".");
-                }
-
                 // get a new token stream containing all the body tokens.
-                TokenStream body= getTokensFollowing(LeftBraceSymbol, stream);
+                TokenStream body= getTokensFollowing(LeftBraceSymbol, stream, "expected an '{' at line: " + keyword.getLine() + ".");
 
                 // create a structure.
                 PapayaStructure structure = new PapayaStructure(name.getTokenValue(), StructureType.ContractType, keyword.getLineInfo());
@@ -61,7 +57,12 @@ public class PapayaParser {
 
     private void parseStructure(PapayaStructure structure, TokenStream stream) throws WolkenException {
         while (stream.hasNext()) {
-            if (stream.matches(FunctionKeyword, Identifier)) { // function declaration
+            if (stream.matches(FunctionKeyword, Identifier, LeftParenthesisSymbol)) { // function declaration
+                Token keyword           = stream.next();
+                Token name              = stream.next();
+
+                TokenStream arguments   = getTokensFollowing(LeftParenthesisSymbol, stream, "expected an '(' at line: " + keyword.getLine() + ".");
+                TokenStream body        = getTokensFollowing(LeftBraceSymbol, stream, "expected an '{' at line: " + keyword.getLine() + ".");
             } else if (stream.matches(Identifier, Identifier)) { // field declaration
             } else if (stream.matches(Identifier, SemiColonEqualsSymbol)) { // local field declaration a:=b
             } else {
@@ -84,9 +85,17 @@ public class PapayaParser {
         return result;
     }
 
-    private TokenStream getTokensFollowing(TokenType opener, TokenStream stream) throws WolkenException {
+    private TokenStream getTokensFollowing(TokenType opener, TokenStream stream, String error) throws WolkenException {
         TokenStream result  = new TokenStream();
         TokenType closer    = None;
+
+        if (!stream.matches(opener)) {
+            throw new WolkenException(error);
+        }
+
+        // skip the opener symbol.
+        stream.next();
+
         switch (opener) {
             case LeftParenthesisSymbol:
                 closer = RightParenthesisSymbol;
