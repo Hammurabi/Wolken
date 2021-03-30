@@ -9,6 +9,14 @@ public class LineInfo {
         this.offset = offset;
     }
 
+    public int getLine() {
+        return line;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
     @Override
     public String toString() {
         return "{" +
