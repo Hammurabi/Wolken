@@ -1,5 +1,6 @@
 package org.wolkenproject.core.papaya.compiler;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
