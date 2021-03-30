@@ -1,6 +1,7 @@
 package org.wolkenproject.core.papaya.compiler;
 
 import org.wolkenproject.core.Context;
+import org.wolkenproject.core.papaya.AccessModifier;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.VarInt;
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class PapayaApplication extends SerializableI {
     // this contains structures in order of declaration
@@ -57,27 +59,38 @@ public class PapayaApplication extends SerializableI {
         VarInt.writeCompactUInt32(structureMap.size(), false, stream);
         // write all the structures into the stream.
         for (PapayaStructure structure : structureMap.values()) {
-            byte name[] = structure.getName().getBytes();
-
-            // write the structure name.
-            VarInt.writeCompactUInt32(name.length, false, stream);
-            stream.write(name);
+            // write the structure identifier.
+            VarInt.writeCompactUint128(structure.getIdentifierInt(), false, stream);
 
             // write the structure type.
             StructureType.write(structure.getStructureType(), stream);
 
+            Set<PapayaMember> members       = structure.getMembers();
+            Set<PapayaFunction> functions   = structure.getFunctions();
+
+            //write the number of members to expect.
+            VarInt.writeCompactUInt32(members.size(), false, stream);
+            //write the number of functions to expect.
+            VarInt.writeCompactUInt32(functions.size(), false, stream);
+
             // write all the structure fields.
-            for (PapayaField field : structure.getFieldMap().values()) {
-                byte fieldName[] = field.getName().getBytes();
-                byte fieldType[] = field.getTypeName().getBytes();
+            for (PapayaMember member : members) {
+                // write the identifier to the stream.
+                VarInt.writeCompactUint128(member.getIdentifierInt(), false, stream);
+                // write the access modifier to the stream.
+                AccessModifier.write(member.getAccessModifier(), stream);
+            }
 
-                // write the field name.
-                VarInt.writeCompactUInt32(fieldName.length, false, stream);
-                stream.write(fieldName);
+            // write the function opcodes.
+            for (PapayaFunction function : functions) {
+                // get the function's bytecode.
+                byte byteCode[] = function.getByteCode();
 
-                // write the field type.
-                VarInt.writeCompactUInt32(fieldType.length, false, stream);
-                stream.write(fieldType);
+                // write the bytecode length.
+                VarInt.writeCompactUInt32(byteCode.length, false, stream);
+
+                // write the bytecode.
+                stream.write(byteCode);
             }
         }
     }
