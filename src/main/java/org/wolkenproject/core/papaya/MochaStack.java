@@ -1,6 +1,6 @@
 package org.wolkenproject.core.papaya;
 
-import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.PapayaException;
 
 import java.util.Stack;
 
@@ -19,41 +19,41 @@ public class MochaStack<T> {
         stack.push(element);
     }
 
-    public T peek() throws MochaException {
+    public T peek() throws PapayaException {
         if (isEmpty()) {
-            throw new MochaException("EmptyStackException caught");
+            throw new PapayaException("EmptyStackException caught");
         }
 
         return stack.peek();
     }
 
-    public T pop() throws MochaException {
+    public T pop() throws PapayaException {
         if (isEmpty()) {
-            throw new MochaException("EmptyStackException caught");
+            throw new PapayaException("EmptyStackException caught");
         }
 
         return stack.pop();
     }
 
-    public void dup() throws MochaException {
+    public void dup() throws PapayaException {
         if (isEmpty()) {
-            throw new MochaException("EmptyStackException caught");
+            throw new PapayaException("EmptyStackException caught");
         }
 
         stack.push(stack.peek());
     }
 
-    public void dup(int element) throws MochaException {
+    public void dup(int element) throws PapayaException {
         int index = stack.size() - element;
 
         if (index < 0) {
-            throw new MochaException("EmptyStackException caught");
+            throw new PapayaException("EmptyStackException caught");
         }
 
         stack.push(stack.get(stack.size() - element));
     }
 
-    public MochaStack<T> rot() throws MochaException {
+    public MochaStack<T> rot() throws PapayaException {
         swap(1, 2);
 
         return this;
@@ -62,12 +62,12 @@ public class MochaStack<T> {
     public void rot(int index) {
     }
 
-    public void swap(int i, int j) throws MochaException {
+    public void swap(int i, int j) throws PapayaException {
         int a = stack.size() - i;
         int b = stack.size() - j;
 
         if (a < 0 || b < 0) {
-            throw new MochaException("EmptyStackException caught");
+            throw new PapayaException("EmptyStackException caught");
         }
 
         T temp = stack.get(stack.size() - a);
