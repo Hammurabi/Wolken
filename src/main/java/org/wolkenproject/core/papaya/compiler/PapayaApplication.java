@@ -1,11 +1,12 @@
 package org.wolkenproject.core.papaya.compiler;
 
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.serialization.SerializableI;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class PapayaApplication {
+public class PapayaApplication extends SerializableI {
     // this contains structures in order of declaration
     private final Map<String, PapayaStructure> structureMap;
 
@@ -22,7 +23,7 @@ public class PapayaApplication {
     }
 
     public CompiledScript compile() throws WolkenException {
-        CompiledScript compiledScript = new CompiledScript();
+        CompiledScript compiledScript = new CompiledScript(this);
 
         for (PapayaStructure structure : structureMap.values()) {
             structure.compile(compiledScript);
