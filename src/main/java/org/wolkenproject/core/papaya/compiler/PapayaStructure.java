@@ -7,6 +7,7 @@ import org.wolkenproject.core.papaya.PapayaReadOnlyWrapper;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -78,7 +79,13 @@ public class PapayaStructure {
         return lineInfo;
     }
 
-    public void compile(CompiledScript script) throws WolkenException {
+    public void compile(PapayaApplication application) throws WolkenException {
+        for (PapayaFunction function : getFunctions()) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            CompilationScope compilationScope = new CompilationScope(outputStream, application);
+            function.getStatement().compile(compilationScope);
+            function.setByteCode(outputStream.toByteArray());
+        }
     }
 
     public Set<PapayaField> getFields() {
