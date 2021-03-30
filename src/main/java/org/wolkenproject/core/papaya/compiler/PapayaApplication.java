@@ -3,17 +3,15 @@ package org.wolkenproject.core.papaya.compiler;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.papaya.AccessModifier;
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class PapayaApplication extends SerializableI {
+public class PapayaApplication {
     // this contains structures in order of declaration
     private final Map<String, PapayaStructure>  structureMap;
     private final int                           version;
@@ -49,7 +47,6 @@ public class PapayaApplication extends SerializableI {
         return structureMap.get(name).getLength(this);
     }
 
-    @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         // write a header that contains informations about the application.
 
@@ -57,6 +54,7 @@ public class PapayaApplication extends SerializableI {
         VarInt.writeCompactUInt32(version, false, stream);
         // write the amount of structures.
         VarInt.writeCompactUInt32(structureMap.size(), false, stream);
+
         // write all the structures into the stream.
         for (PapayaStructure structure : structureMap.values()) {
             // write the structure identifier.
@@ -93,19 +91,5 @@ public class PapayaApplication extends SerializableI {
                 stream.write(byteCode);
             }
         }
-    }
-
-    @Override
-    public void read(InputStream stream) throws IOException, WolkenException {
-    }
-
-    @Override
-    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new PapayaApplication();
-    }
-
-    @Override
-    public int getSerialNumber() {
-        return Context.getInstance().getSerialFactory().getSerialNumber(PapayaApplication.class);
     }
 }
