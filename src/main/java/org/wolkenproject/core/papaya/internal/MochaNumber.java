@@ -1,6 +1,6 @@
 package org.wolkenproject.core.papaya.internal;
 
-import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.PapayaException;
 
 import java.math.BigInteger;
 
@@ -32,13 +32,13 @@ public class MochaNumber extends MochaObject {
         return value.compareTo(BigInteger.ZERO) != 0;
     }
 
-    public MochaObject do_add(MochaNumber other) throws MochaException {
+    public MochaObject do_add(MochaNumber other) throws PapayaException {
         BigInteger result   = value.add(other.value);
 
         return new MochaNumber(result, sign || other.sign);
     }
 
-    public MochaObject do_sub(MochaNumber other) throws MochaException {
+    public MochaObject do_sub(MochaNumber other) throws PapayaException {
         BigInteger result   = value.subtract(other.value);
         boolean nSign       = sign || other.sign;
 
@@ -50,7 +50,7 @@ public class MochaNumber extends MochaObject {
         return new MochaNumber(result, nSign);
     }
 
-    public MochaObject do_mul(MochaNumber other) throws MochaException {
+    public MochaObject do_mul(MochaNumber other) throws PapayaException {
         BigInteger result   = value.multiply(other.value);
         boolean nSign       = sign || other.sign;
 
@@ -62,7 +62,7 @@ public class MochaNumber extends MochaObject {
         return new MochaNumber(result, nSign);
     }
 
-    public MochaObject do_div(MochaNumber other) throws MochaException {
+    public MochaObject do_div(MochaNumber other) throws PapayaException {
         BigInteger result   = value.divide(other.value);
         boolean nSign       = sign || other.sign;
 
@@ -74,7 +74,7 @@ public class MochaNumber extends MochaObject {
         return new MochaNumber(result, nSign);
     }
 
-    public MochaObject do_mod(MochaNumber other) throws MochaException {
+    public MochaObject do_mod(MochaNumber other) throws PapayaException {
         BigInteger result   = value.mod(other.value);
         boolean nSign       = sign || other.sign;
 
@@ -86,7 +86,7 @@ public class MochaNumber extends MochaObject {
         return new MochaNumber(result, nSign);
     }
 
-    public MochaObject do_shiftRight(MochaNumber other) throws MochaException {
+    public MochaObject do_shiftRight(MochaNumber other) throws PapayaException {
         BigInteger result   = value.shiftRight(other.value.intValue());
         boolean nSign       = sign || other.sign;
 
@@ -98,7 +98,7 @@ public class MochaNumber extends MochaObject {
         return new MochaNumber(result, nSign);
     }
 
-    public MochaObject do_shiftLeft(MochaNumber other) throws MochaException {
+    public MochaObject do_shiftLeft(MochaNumber other) throws PapayaException {
         BigInteger result   = value.shiftLeft(other.value.intValue());
         boolean nSign       = sign || other.sign;
 
@@ -111,47 +111,47 @@ public class MochaNumber extends MochaObject {
     }
 
     @Override
-    public MochaObject add(MochaObject other) throws MochaException {
+    public MochaObject add(MochaObject other) throws PapayaException {
         if (other instanceof MochaNumber) {
             do_add((MochaNumber) other);
         }
 
-        throw new MochaException("cannot perform 'add' on object of type 'Number' and '"+other.getClass().getName()+"' ");
+        throw new PapayaException("cannot perform 'add' on object of type 'Number' and '"+other.getClass().getName()+"' ");
     }
 
     @Override
-    public MochaObject sub(MochaObject other) throws MochaException {
+    public MochaObject sub(MochaObject other) throws PapayaException {
         if (other instanceof MochaNumber) {
             do_sub((MochaNumber) other);
         }
 
-        throw new MochaException("cannot perform 'sub' on object of type 'Number' and '"+other.getClass().getName()+"' ");
+        throw new PapayaException("cannot perform 'sub' on object of type 'Number' and '"+other.getClass().getName()+"' ");
     }
 
     @Override
-    public MochaObject mul(MochaObject other) throws MochaException {
+    public MochaObject mul(MochaObject other) throws PapayaException {
         if (other instanceof MochaNumber) {
             do_mul((MochaNumber) other);
         }
 
-        throw new MochaException("cannot perform 'mul' on object of type 'Number' and '"+other.getClass().getName()+"' ");
+        throw new PapayaException("cannot perform 'mul' on object of type 'Number' and '"+other.getClass().getName()+"' ");
     }
 
     @Override
-    public MochaObject div(MochaObject other) throws MochaException {
+    public MochaObject div(MochaObject other) throws PapayaException {
         if (other instanceof MochaNumber) {
             do_div((MochaNumber) other);
         }
 
-        throw new MochaException("cannot perform 'div' on object of type 'Number' and '"+other.getClass().getName()+"' ");
+        throw new PapayaException("cannot perform 'div' on object of type 'Number' and '"+other.getClass().getName()+"' ");
     }
 
     @Override
-    public MochaObject mod(MochaObject other) throws MochaException {
+    public MochaObject mod(MochaObject other) throws PapayaException {
         if (other instanceof MochaNumber) {
             do_mod((MochaNumber) other);
         }
 
-        throw new MochaException("cannot perform 'mod' on object of type 'Number' and '"+other.getClass().getName()+"' ");
+        throw new PapayaException("cannot perform 'mod' on object of type 'Number' and '"+other.getClass().getName()+"' ");
     }
 }
