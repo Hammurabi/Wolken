@@ -1,6 +1,5 @@
 package org.wolkenproject.core.papaya.compiler;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +27,12 @@ public class PapayaStatement {
     }
 
     public LineInfo getLineInfo() {
+        if (lineInfo.getLine() == -1) {
+            if (!children.isEmpty()) {
+                return children.get(0).getLineInfo();
+            }
+        }
+
         return lineInfo;
     }
 
