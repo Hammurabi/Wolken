@@ -1,6 +1,7 @@
 package org.wolkenproject.core.papaya;
 
 import org.wolkenproject.core.papaya.compiler.PapayaStructure;
+import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
 
 import java.util.Map;
@@ -29,7 +30,7 @@ public class PapayaObject {
      */
     private Map<Integer, PapayaObject> members;
 
-    public void setMember(int memberId, PapayaObject member, Stack<PapayaStructure> stackTrace) {
+    public void setMember(int memberId, PapayaObject member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
         structure.checkWriteAccess(memberId, stackTrace);
         members.put(memberId, member);
     }
