@@ -3,7 +3,7 @@ package org.wolkenproject.core.papaya;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.exceptions.InvalidTransactionException;
-import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VoidCallableThrowsTY;
@@ -24,7 +24,7 @@ public class OpcodeRegister {
         opcodeSet = new LinkedHashSet<>();
     }
 
-    public byte[] parse(String asm) throws MochaException, IOException {
+    public byte[] parse(String asm) throws PapayaException, IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         String data[] = asm.replaceAll("\n", " ").replaceAll("\\s+", " ").split(" ");
@@ -37,7 +37,7 @@ public class OpcodeRegister {
 
             if (opcode.hasVarargs()) {
                 if (!iterator.hasNext()) {
-                    throw new MochaException("Reached EOF but expected argument(s) for '" + opName + "'.");
+                    throw new PapayaException("Reached EOF but expected argument(s) for '" + opName + "'.");
                 }
 
                 byte array[]    = null;
@@ -66,7 +66,7 @@ public class OpcodeRegister {
                 } else if (Base16.isEncoded(argument)) {  // base 16 value
                     array = Base16.decode(argument);
                 } else {
-                    throw new MochaException("Unknown format format for string '" + argument + "'.");
+                    throw new PapayaException("Unknown format format for string '" + argument + "'.");
                 }
 
                 byte length[] = null;
@@ -74,21 +74,21 @@ public class OpcodeRegister {
                 switch (opcode.getNumArgs()) {
                     case 1:
                         if (array.length > 255) {
-                            throw new MochaException("Opcode '" + opName + "' takes maximum length argument(s) of '" + opcode.getNumArgs() + "'.");
+                            throw new PapayaException("Opcode '" + opName + "' takes maximum length argument(s) of '" + opcode.getNumArgs() + "'.");
                         }
 
                         length = new byte[] { (byte) array.length };
                         break;
                     case 2:
                         if (array.length > 65535) {
-                            throw new MochaException("Opcode '" + opName + "' takes maximum length argument(s) of '" + opcode.getNumArgs() + "'.");
+                            throw new PapayaException("Opcode '" + opName + "' takes maximum length argument(s) of '" + opcode.getNumArgs() + "'.");
                         }
 
                         length = Utils.takeApartChar((char) array.length);
                         break;
                     case 3:
                         if (array.length > 16777215) {
-                            throw new MochaException("Opcode '" + opName + "' takes maximum length argument(s) of '" + opcode.getNumArgs() + "'.");
+                            throw new PapayaException("Opcode '" + opName + "' takes maximum length argument(s) of '" + opcode.getNumArgs() + "'.");
                         }
 
                         length = Utils.takeApartInt24((char) array.length);
@@ -97,7 +97,7 @@ public class OpcodeRegister {
                         length = Utils.takeApart((char) array.length);
                         break;
                     default:
-                        throw new MochaException("Unsupported vararg size not in range of '1' to '4'.");
+                        throw new PapayaException("Unsupported vararg size not in range of '1' to '4'.");
                 }
 
                 outputStream.write(length);
@@ -121,7 +121,7 @@ public class OpcodeRegister {
                         } else if (arg <= Long.MAX_VALUE && opcode.getNumArgs() == 8) {
                             array = Utils.takeApartLong(arg);
                         } else {
-                            throw new MochaException("Opcode '" + opName + "' takes '" + opcode.getNumArgs() + "' argument(s).");
+                            throw new PapayaException("Opcode '" + opName + "' takes '" + opcode.getNumArgs() + "' argument(s).");
                         }
                     } else {
                         array = new BigInteger(argument).toByteArray();
@@ -131,11 +131,11 @@ public class OpcodeRegister {
                 } else if (Base16.isEncoded(argument)) {  // base 16 value
                     array = Base16.decode(argument);
                 } else {
-                    throw new MochaException("Unknown format format for string '" + argument + "'.");
+                    throw new PapayaException("Unknown format format for string '" + argument + "'.");
                 }
 
                 if (array.length != opcode.getNumArgs()) {
-                    throw new MochaException("Opcode '" + opName + "' takes '" + opcode.getNumArgs() + "' argument(s).");
+                    throw new PapayaException("Opcode '" + opName + "' takes '" + opcode.getNumArgs() + "' argument(s).");
                 }
 
                 outputStream.write(array);
@@ -148,15 +148,15 @@ public class OpcodeRegister {
     }
 
     // register an opcode into the vm
-    public OpcodeRegister registerOp(String name, String description, long weight, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
+    public OpcodeRegister registerOp(String name, String description, long weight, VoidCallableThrowsTY<Scope, PapayaException, InvalidTransactionException> callable) {
         return registerOp(name, description, 0, weight, callable);
     }
 
-    public OpcodeRegister registerOp(String name, String description, int numArgs, long weight, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
+    public OpcodeRegister registerOp(String name, String description, int numArgs, long weight, VoidCallableThrowsTY<Scope, PapayaException, InvalidTransactionException> callable) {
         return registerOp(name, description, false, numArgs, weight, callable);
     }
 
-    public OpcodeRegister registerOp(String name, String description, boolean vararg, int numArgs, long weight, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable) {
+    public OpcodeRegister registerOp(String name, String description, boolean vararg, int numArgs, long weight, VoidCallableThrowsTY<Scope, PapayaException, InvalidTransactionException> callable) {
         Opcode opcode = new Opcode(name, description, "", opcodeSet.size(), vararg, numArgs, callable, weight);
         opcodeNameMap.put(name, opcode);
         opcodeMap.put(opcode.getIdentifier(), opcode);
