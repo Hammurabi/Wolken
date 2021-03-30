@@ -29,14 +29,10 @@ public class PapayaApplication {
         structureMap.put(name, structure);
     }
 
-    public CompiledScript compile() throws WolkenException {
-        CompiledScript compiledScript = new CompiledScript(this);
-
+    public void compile() throws WolkenException {
         for (PapayaStructure structure : structureMap.values()) {
-            structure.compile(compiledScript);
+            structure.compile(this);
         }
-
-        return compiledScript;
     }
 
     public int getStructureLength(String name, LineInfo lineInfo) throws WolkenException {
