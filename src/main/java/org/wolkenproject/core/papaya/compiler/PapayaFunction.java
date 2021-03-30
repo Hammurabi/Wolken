@@ -1,18 +1,24 @@
 package org.wolkenproject.core.papaya.compiler;
 
+import org.wolkenproject.core.papaya.AccessModifier;
+
+import java.io.OutputStream;
 import java.util.Set;
 
-public class PapayaFunction {
+public class PapayaFunction extends PapayaMember {
     private final String                name;
     private final Set<PapayaField>      arguments;
-    private final Set<PapayaStatement>  statementSet;
+    private final PapayaStatement       statement;
+    private byte                        byteCode[];
     private final LineInfo              lineInfo;
 
-    public PapayaFunction(String name, Set<PapayaField> arguments, Set<PapayaStatement> statementSet, LineInfo lineInfo) {
+    public PapayaFunction(AccessModifier accessModifier, String name, Set<PapayaField> arguments, PapayaStatement statement, LineInfo lineInfo) {
+        super(accessModifier, name);
         this.name = name;
         this.arguments = arguments;
-        this.statementSet = statementSet;
+        this.statement = statement;
         this.lineInfo = lineInfo;
+        this.byteCode = new byte[0];
     }
 
     public LineInfo getLineInfo() {
@@ -27,7 +33,11 @@ public class PapayaFunction {
         return arguments;
     }
 
-    public Set<PapayaStatement> getStatementSet() {
-        return statementSet;
+    public PapayaStatement getStatement() {
+        return statement;
+    }
+
+    public byte[] getByteCode() {
+        return byteCode;
     }
 }
