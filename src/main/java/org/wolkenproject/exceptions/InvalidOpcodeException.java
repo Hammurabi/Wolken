@@ -1,6 +1,6 @@
 package org.wolkenproject.exceptions;
 
-public class InvalidOpcodeException extends MochaException {
+public class InvalidOpcodeException extends PapayaException {
     public InvalidOpcodeException(String msg) {
         super(msg);
     }
