@@ -78,8 +78,6 @@ public class PapayaApplication extends SerializableI {
                 // write the field type.
                 VarInt.writeCompactUInt32(fieldType.length, false, stream);
                 stream.write(fieldType);
-
-                field.getValueAssignment().compile();
             }
         }
     }
