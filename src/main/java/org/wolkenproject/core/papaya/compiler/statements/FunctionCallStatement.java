@@ -6,7 +6,7 @@ import org.wolkenproject.core.papaya.compiler.PapayaStatement;
 import java.util.Set;
 
 public class FunctionCallStatement extends PapayaStatement {
-    public FunctionCallStatement(String tokenValue, Set<PapayaStatement> arguments, LineInfo lineInfo) {
+    public FunctionCallStatement(String tokenValue, PapayaStatement arguments, LineInfo lineInfo) {
         super(scope -> scope.memberCall(tokenValue, arguments), lineInfo);
     }
 }
