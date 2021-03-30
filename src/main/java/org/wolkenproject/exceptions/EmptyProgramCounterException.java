@@ -1,6 +1,6 @@
 package org.wolkenproject.exceptions;
 
-public class EmptyProgramCounterException extends MochaException {
+public class EmptyProgramCounterException extends PapayaException {
     public EmptyProgramCounterException() {
         super("");
     }
