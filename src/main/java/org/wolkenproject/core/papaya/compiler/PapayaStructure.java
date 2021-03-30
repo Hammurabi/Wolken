@@ -2,48 +2,76 @@ package org.wolkenproject.core.papaya.compiler;
 
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.papaya.AccessModifier;
+import org.wolkenproject.core.papaya.PapayaObject;
+import org.wolkenproject.core.papaya.PapayaReadOnlyWrapper;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.math.BigInteger;
+import java.util.*;
 
 public class PapayaStructure {
     public static final int                     Alignment = 32;
     private final byte                          identifier[];
     private final StructureType                 structureType;
     private final String                        name;
-    private final Map<String, PapayaField>      fieldMap;
-    private final Map<String, PapayaFunction>   functionMap;
+    private final Set<PapayaMember>             members;
     private final LineInfo                      lineInfo;
     private long                                structureLength;
 
     public PapayaStructure(String name, StructureType structureType, LineInfo lineInfo) {
         this.name           = name;
         this.structureType  = structureType;
-        this.fieldMap       = new LinkedHashMap<>();
-        this.functionMap    = new LinkedHashMap<>();
+        this.members        = new LinkedHashSet<>();
         this.lineInfo       = lineInfo;
         this.identifier     = new byte[20];
     }
 
     public void addField(String name, PapayaField field) throws WolkenException {
-        if (fieldMap.containsKey(name)) {
+        if (containsMember(name)) {
             throw new WolkenException("redeclaration of field '" + name + "' "+field.getLineInfo()+".");
         }
 
-        field.setPosition(fieldMap.size());
-        fieldMap.put(name, field);
+        field.setIdentifier(members.size());
+        members.add(field);
     }
 
     public void addFunction(String name, PapayaFunction function) throws WolkenException {
-        if (fieldMap.containsKey(name)) {
+        if (containsMember(name)) {
             throw new WolkenException("redeclaration of function '" + name + "' "+function.getLineInfo()+".");
         }
 
-        functionMap.put(name, function);
+        function.setIdentifier(members.size());
+        members.add(function);
+    }
+
+    public void addMember(String name, PapayaMember member) throws WolkenException {
+        if (containsMember(name)) {
+            throw new WolkenException("redeclaration of member '" + name + "'.");
+        }
+
+        member.setIdentifier(members.size());
+        members.add(member);
+    }
+
+    public boolean containsMember(String name) {
+        for (PapayaMember member : members) {
+            if (member.getName().equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean containsMemberId(byte id[]) {
+        for (PapayaMember member : members) {
+            if (Arrays.equals(member.getIdentifier(), id)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public LineInfo getLineInfo() {
@@ -53,12 +81,26 @@ public class PapayaStructure {
     public void compile(CompiledScript script) throws WolkenException {
     }
 
-    public Map<String, PapayaField> getFieldMap() {
-        return fieldMap;
+    public Set<PapayaField> getFields() {
+        Set<PapayaField> functions = new LinkedHashSet<>();
+        for (PapayaMember member : getMembers()) {
+            if (member instanceof PapayaField) {
+                functions.add((PapayaField) member);
+            }
+        }
+
+        return functions;
     }
 
-    public Map<String, PapayaFunction> getFunctionMap() {
-        return functionMap;
+    public Set<PapayaFunction> getFunctions() {
+        Set<PapayaFunction> functions = new LinkedHashSet<>();
+        for (PapayaMember member : getMembers()) {
+            if (member instanceof PapayaFunction) {
+                functions.add((PapayaFunction) member);
+            }
+        }
+
+        return functions;
     }
 
     public void checkWriteAccess(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
@@ -78,6 +120,32 @@ public class PapayaStructure {
                     break;
             }
         }
+    }
+
+    public PapayaObject checkMemberAccess(PapayaObject member, int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+        AccessModifier modifier = getMember(memberId).getAccessModifier();
+        // if it is read only, then we return a wrapper object.
+        if (modifier == AccessModifier.PublicAccess) {
+            return member;
+        }
+
+        if (modifier == AccessModifier.ReadOnly) {
+            return new PapayaReadOnlyWrapper(member);
+        }
+
+        if (!Arrays.equals(stackTrace.peek().getIdentifier(), getIdentifier())) {
+            switch (modifier) {
+                case PrivateAccess:
+                    throw new PapayaIllegalAccessException();
+                case ProtectedAccess:
+                    if (!stackTrace.peek().isChildOf(this)) {
+                        throw new PapayaIllegalAccessException();
+                    }
+                    break;
+            }
+        }
+
+        return new PapayaReadOnlyWrapper(member);
     }
 
     public void checkReadAccess(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
@@ -192,5 +260,13 @@ public class PapayaStructure {
 
     public String getName() {
         return name;
+    }
+
+    public Set<PapayaMember> getMembers() {
+        return members;
+    }
+
+    public BigInteger getIdentifierInt() {
+        return new BigInteger(1, getIdentifier());
     }
 }
