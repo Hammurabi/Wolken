@@ -65,6 +65,10 @@ public class PapayaApplication extends SerializableI {
 
             // write the structure type.
             StructureType.write(structure.getStructureType(), stream);
+
+            // write all the structure fields.
+            for (PapayaField field : structure.getFieldMap().values()) {
+            }
         }
     }
 
