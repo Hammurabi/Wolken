@@ -1,8 +1,9 @@
 package org.wolkenproject.core.papaya.compiler;
 
+import org.wolkenproject.core.papaya.AccessModifier;
 import org.wolkenproject.core.papaya.compiler.statements.FieldDeclarationStatement;
 import org.wolkenproject.core.papaya.compiler.statements.FunctionCallStatement;
-import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.exceptions.PapayaException;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -10,11 +11,11 @@ import java.util.Set;
 import static org.wolkenproject.core.papaya.compiler.TokenType.*;
 
 public class PapayaParser {
-    public PapayaApplication ingest(TokenStream stream) throws WolkenException {
+    public PapayaApplication ingest(TokenStream stream) throws PapayaException {
         return parseABI(stream);
     }
 
-    private PapayaApplication parseABI(TokenStream stream) throws WolkenException {
+    private PapayaApplication parseABI(TokenStream stream) throws PapayaException {
         PapayaApplication app = new PapayaApplication();
 
         while (stream.hasNext()) {
@@ -53,15 +54,26 @@ public class PapayaParser {
                 // add the structure to the ABI
                 app.addStructure(name.getTokenValue(), structure);
             } else {
-                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in global scope.");
+                throw new PapayaException("cannot parse unknown pattern '" + stream + "' in global scope.");
             }
         }
 
         return null;
     }
 
-    private void parseStructure(PapayaStructure structure, TokenStream stream) throws WolkenException {
+    private void parseStructure(PapayaStructure structure, TokenStream stream) throws PapayaException {
+        AccessModifier modifier = AccessModifier.None;
+
         while (stream.hasNext()) {
+            if (stream.matches(ModifierKeyword)) {
+                Token next = stream.next();
+                if (modifier != AccessModifier.None) {
+                    throw new PapayaException("modifier already set to '" + modifier + "' at " + next.getLineInfo() + ".");
+                }
+
+                modifier = AccessModifier.valueOf(next.getTokenValue());
+            }
+
             if (stream.matches(FunctionKeyword, Identifier, LeftParenthesisSymbol)) { // function declaration
                 Token keyword           = stream.next();
                 Token name              = stream.next();
@@ -70,8 +82,9 @@ public class PapayaParser {
                 TokenStream body        = getTokensFollowing(LeftBraceSymbol, stream, "expected an '{' at line: " + keyword.getLine() + ".");
 
                 Set<PapayaField> parsedArguments        = parseFunctionArguments(arguments);
-                Set<PapayaStatement> parsedStatements   = parseFunctionBody(body);
-                PapayaFunction function = new PapayaFunction(name.getTokenValue(), parsedArguments, parsedStatements, keyword.getLineInfo());
+                PapayaStatement parsedStatements        = parseFunctionBody(body);
+                PapayaFunction function = new PapayaFunction(modifier, name.getTokenValue(), parsedArguments, parsedStatements, keyword.getLineInfo());
+                modifier = AccessModifier.None;
 
                 structure.addFunction(name.getTokenValue(), function);
             } else if (stream.matches(Identifier, Identifier)) { // field declaration
@@ -85,28 +98,39 @@ public class PapayaParser {
                     assignment = parseRighthand(assignmentTokens);
                 }
 
-                PapayaField field = new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
+                PapayaField field = new PapayaField(modifier, name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
+                modifier = AccessModifier.None;
 
                 structure.addField(name.getTokenValue(), field);
             } else {
-                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in structure scope.");
+                throw new PapayaException("cannot parse unknown pattern '" + stream + "' in structure scope.");
             }
         }
     }
 
-    private PapayaStatement parseLefthand(TokenStream stream) throws WolkenException {
+    private PapayaStatement parseLefthand(TokenStream stream) throws PapayaException {
         return parse(stream, false);
     }
 
-    private PapayaStatement parseRighthand(TokenStream stream) throws WolkenException {
+    private PapayaStatement parseRighthand(TokenStream stream) throws PapayaException {
         return parse(stream, true);
     }
 
-    private PapayaStatement parse(TokenStream stream, boolean righthand) throws WolkenException {
+    private PapayaStatement parse(TokenStream stream, boolean righthand) throws PapayaException {
         boolean lefthand = !righthand;
+        AccessModifier modifier = AccessModifier.None;
 
         while (stream.hasNext()) {
-            if (lefthand && stream.matches(Identifier, Identifier)) {               // field declaration
+            if (lefthand && stream.matches(ModifierKeyword)) {
+                Token next = stream.next();
+                if (modifier != AccessModifier.None) {
+                    throw new PapayaException("modifier already set to '" + modifier + "' at " + next.getLineInfo() + ".");
+                }
+
+                modifier = AccessModifier.valueOf(next.getTokenValue());
+            }
+
+            if (lefthand && stream.matches(Identifier, Identifier)) { // field declaration
                 Token type              = stream.next();
                 Token name              = stream.next();
                 PapayaStatement assignment   = null;
@@ -117,7 +141,8 @@ public class PapayaParser {
                     assignment = parseRighthand(assignmentTokens);
                 }
 
-                PapayaField field = new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
+                PapayaField field = new PapayaField(modifier, name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
+                modifier = AccessModifier.None;
                 return new FieldDeclarationStatement(field, assignment);
             } else if (stream.matches(Identifier, ColonEqualsSymbol)) { // quick field declaration
                 Token name                  = stream.next();
@@ -126,45 +151,57 @@ public class PapayaParser {
                 PapayaStatement assignment  = parseRighthand(getTokensTilEOL(assignmentOperator.getLine(), stream));
 
                 if (assignment == null) {
-                    throw new WolkenException("expected a valid after ':=' at "+assignmentOperator.getLineInfo()+".");
+                    throw new PapayaException("expected a valid after ':=' at "+assignmentOperator.getLineInfo()+".");
                 }
 
-                PapayaField field = new PapayaField(name.getTokenValue(), "?", name.getLineInfo(), assignment);
+                PapayaField field = new PapayaField(modifier, name.getTokenValue(), "?", name.getLineInfo(), assignment);
+                modifier = AccessModifier.None;
                 return new FieldDeclarationStatement(field, assignment);
             } else if (stream.matches(Identifier, LeftParenthesisSymbol)) { // call function
                 Token name                      = stream.next();
                 TokenStream argumentStream      = getTokensFollowing(LeftParenthesisSymbol, stream, "expected an '(' at line: " + name.getLine() + ".");
-                Set<PapayaStatement> arguments  = parseFunctionBody(argumentStream);
+                PapayaStatement arguments       = parseFunctionBody(argumentStream);
 
                 return new FunctionCallStatement(name.getTokenValue(), arguments, name.getLineInfo());
             } else if (stream.matches(IncrementSymbol)) {               // prefix ++
             } else if (stream.matches(DecrementSymbol)) {               // prefix --
             } else {
-                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in function scope.");
+                throw new PapayaException("cannot parse unknown pattern '" + stream + "' in function scope.");
             }
         }
 
         return null;
     }
 
-    private Set<PapayaStatement> parseFunctionBody(TokenStream stream) throws WolkenException {
-        Set<PapayaStatement> statements = new LinkedHashSet<>();
+    private PapayaStatement parseFunctionBody(TokenStream stream) throws PapayaException {
+        PapayaStatement statements = new PapayaStatement(new LineInfo(-1, -1));
 
         while (stream.hasNext()) {
             PapayaStatement statement = parseLefthand(stream);
             if (statement != null) {
-                statements.add(statement);
+                statements.addChild(statement);
             }
         }
 
         return statements;
     }
 
-    private Set<PapayaField> parseFunctionArguments(TokenStream stream) throws WolkenException {
+    private Set<PapayaField> parseFunctionArguments(TokenStream stream) throws PapayaException {
         boolean hasDefaultValue = false;
         Set<PapayaField> fields = new LinkedHashSet<>();
+        AccessModifier modifier = AccessModifier.None;
 
         while (stream.hasNext()) {
+            if (stream.matches(ModifierKeyword)) {
+                Token next = stream.next();
+                if (modifier != AccessModifier.None) {
+                    throw new PapayaException("modifier already set to '" + modifier + "' at " + next.getLineInfo() + ".");
+                }
+
+                modifier = AccessModifier.valueOf(next.getTokenValue());
+            }
+
+
             if (stream.matches(Identifier, Identifier)) { // field declaration
                 Token type              = stream.next();
                 Token name              = stream.next();
@@ -177,13 +214,14 @@ public class PapayaParser {
                     hasDefaultValue = true;
                 } else {
                     if (hasDefaultValue) {
-                        throw new WolkenException("expected value an '=' " + name.getLineInfo() + ".");
+                        throw new PapayaException("expected value an '=' " + name.getLineInfo() + ".");
                     }
                 }
 
-                fields.add(new PapayaField(name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment));
+                fields.add(new PapayaField(modifier, name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment));
+                modifier = AccessModifier.None;
             } else {
-                throw new WolkenException("cannot parse unknown pattern '" + stream + "' in function () scope.");
+                throw new PapayaException("cannot parse unknown pattern '" + stream + "' in function () scope.");
             }
         }
 
@@ -204,12 +242,12 @@ public class PapayaParser {
         return result;
     }
 
-    private TokenStream getTokensFollowing(TokenType opener, TokenStream stream, String error) throws WolkenException {
+    private TokenStream getTokensFollowing(TokenType opener, TokenStream stream, String error) throws PapayaException {
         TokenStream result  = new TokenStream();
         TokenType closer    = None;
 
         if (!stream.matches(opener)) {
-            throw new WolkenException(error);
+            throw new PapayaException(error);
         }
 
         // skip the opener symbol.
@@ -226,7 +264,7 @@ public class PapayaParser {
                 closer = RightBracketSymbol;
                 break;
             default:
-                throw new WolkenException("invalid usage of token '" + opener + "' is never closed.");
+                throw new PapayaException("invalid usage of token '" + opener + "' is never closed.");
         }
 
         int numOpened = 1;
@@ -247,6 +285,6 @@ public class PapayaParser {
             }
         }
 
-        throw new WolkenException("token '" + opener + "' is never closed.");
+        throw new PapayaException("token '" + opener + "' is never closed.");
     }
 }
