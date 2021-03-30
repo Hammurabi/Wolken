@@ -27,7 +27,7 @@ public class RegisterAsset extends Transaction {
     private RecoverableSignature signature;
 
     protected RegisterAsset() {
-        this(0, 0, new Asset(new byte[20], BigInteger.ONE));
+        this(0, 0, null);
     }
 
     protected RegisterAsset(long nonce, long fee, Asset asset) {
@@ -70,7 +70,6 @@ public class RegisterAsset extends Transaction {
             return
                     fee > 0 &&
                     (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                    !Context.getInstance().getDatabase().checkAccountExists(alias) &&
                     (signature.getR().length == 32) &&
                     (signature.getS().length == 32) &&
                     getSender() != null &&
@@ -105,8 +104,7 @@ public class RegisterAsset extends Transaction {
     public long calculateSize() {
         return
                 VarInt.sizeOfCompactUin32(getVersion(), false) +
-                VarInt.sizeOfCompactUin64(nonce, false) +
-                VarInt.sizeOfCompactUin64(alias, false) + 65;
+                VarInt.sizeOfCompactUin64(nonce, false) + 65;
     }
 
     @Override
@@ -118,13 +116,12 @@ public class RegisterAsset extends Transaction {
     public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
         Address sender = getSender();
         stateChange.createAccountIfDoesNotExist(sender.getRaw());
-        stateChange.addEvent(new RegisterAliasEvent(sender.getRaw(), alias));
     }
 
     @Override
     public JSONObject toJson(boolean txEvt, boolean evHash) {
         JSONObject txHeader = new JSONObject().put("name", getClass().getName()).put("version", getVersion());
-        txHeader.put("content", new JSONObject().put("nonce", nonce).put("fee", fee).put("alias", alias).put("v", signature.getV()).put("r", Base16.encode(signature.getR())).put("s", Base16.encode(signature.getS())));
+        txHeader.put("content", new JSONObject().put("nonce", nonce).put("fee", fee).put("v", signature.getV()).put("r", Base16.encode(signature.getR())).put("s", Base16.encode(signature.getS())));
         return txHeader;
     }
 
@@ -139,19 +136,17 @@ public class RegisterAsset extends Transaction {
 
     @Override
     protected Transaction copyForSignature() {
-        return new RegisterAsset(nonce, fee, alias);
+        return new RegisterAsset(nonce, fee, asset);
     }
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         signature.write(stream);
-        VarInt.writeCompactUInt64(alias, false, stream);
     }
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
         signature.read(stream);
-        alias = VarInt.readCompactUInt64(false, stream);
     }
 
     @Override
