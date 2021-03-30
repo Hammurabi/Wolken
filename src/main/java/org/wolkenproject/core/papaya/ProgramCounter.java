@@ -2,7 +2,7 @@ package org.wolkenproject.core.papaya;
 
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.EmptyProgramCounterException;
-import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
 import org.wolkenproject.utils.Utils;
 
@@ -94,15 +94,15 @@ public class ProgramCounter {
         return program.hasRemaining();
     }
 
-    public void jump(int jumpLoc) throws MochaException {
+    public void jump(int jumpLoc) throws PapayaException {
         if (program.capacity() < jumpLoc) {
-            throw new MochaException("invalid jump location.");
+            throw new PapayaException("invalid jump location.");
         }
 
         program.position(jumpLoc);
     }
 
-    public String hexDump() throws MochaException {
+    public String hexDump() throws PapayaException {
         StringBuilder builder   = new StringBuilder();
         int lineLength = 0;
 
@@ -145,7 +145,7 @@ public class ProgramCounter {
                         length = nextInt();
                         break;
                     default:
-                        throw new MochaException("Opcode corrupt.");
+                        throw new PapayaException("Opcode corrupt.");
                 }
 
                 String hex = Base16.encode(next(length));
