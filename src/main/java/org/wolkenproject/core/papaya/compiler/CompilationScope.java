@@ -1,11 +1,21 @@
 package org.wolkenproject.core.papaya.compiler;
 
-import java.util.Set;
+import java.io.OutputStream;
 
 public class CompilationScope {
-    public void newField(PapayaField field, PapayaStatement assignment) {
+    private final OutputStream        stream;
+    private final PapayaApplication   application;
+
+    public CompilationScope(OutputStream stream, PapayaApplication application) {
+        this.stream = stream;
+        this.application = application;
     }
 
-    public void memberCall(String function, Set<PapayaStatement> arguments) {
+    public OutputStream getStream() {
+        return stream;
+    }
+
+    public PapayaApplication getApplication() {
+        return application;
     }
 }
