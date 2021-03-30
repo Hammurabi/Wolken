@@ -40,4 +40,8 @@ public class PapayaFunction extends PapayaMember {
     public byte[] getByteCode() {
         return byteCode;
     }
+
+    public void setByteCode(byte[] byteArray) {
+        byteCode = byteArray;
+    }
 }
