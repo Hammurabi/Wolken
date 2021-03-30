@@ -54,7 +54,7 @@ public class PapayaApplication extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return new PapayaApplication();
+        return (Type) new PapayaApplication();
     }
 
     @Override
