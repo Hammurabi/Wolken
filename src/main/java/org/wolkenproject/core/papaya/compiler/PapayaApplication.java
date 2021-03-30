@@ -2,7 +2,6 @@ package org.wolkenproject.core.papaya.compiler;
 
 import org.wolkenproject.exceptions.WolkenException;
 
-import java.io.ByteArrayOutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public class PapayaApplication {
         structureMap.put(name, structure);
     }
 
-    public CompiledScript compile() {
+    public CompiledScript compile() throws WolkenException {
         CompiledScript compiledScript = new CompiledScript();
 
         for (PapayaStructure structure : structureMap.values()) {
@@ -30,5 +29,13 @@ public class PapayaApplication {
         }
 
         return compiledScript;
+    }
+
+    public int getStructureLength(String name, LineInfo lineInfo) throws WolkenException {
+        if (!structureMap.containsKey(name)) {
+            throw new WolkenException("reference to undefined type '" + name + "' at " + lineInfo + ".");
+        }
+
+        return structureMap.get(name).getLength(this);
     }
 }
