@@ -1,7 +1,7 @@
 package org.wolkenproject.core.papaya;
 
 import org.wolkenproject.exceptions.InvalidTransactionException;
-import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.utils.VoidCallableThrowsTY;
 
 public class Opcode {
@@ -11,10 +11,10 @@ public class Opcode {
     private int             identifier;
     private int             numArgs;
     private boolean         vararg;
-    private VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable;
+    private VoidCallableThrowsTY<Scope, PapayaException, InvalidTransactionException> callable;
     private long            weight;
 
-    public Opcode(String name, String desc, String usage, int identifier, boolean vararg, int numArgs, VoidCallableThrowsTY<Scope, MochaException, InvalidTransactionException> callable, long weight) {
+    public Opcode(String name, String desc, String usage, int identifier, boolean vararg, int numArgs, VoidCallableThrowsTY<Scope, PapayaException, InvalidTransactionException> callable, long weight) {
         this.name = name;
         this.desc = desc;
         this.usage= usage;
@@ -25,7 +25,7 @@ public class Opcode {
         this.weight = weight;
     }
 
-    public void execute(Scope scope) throws MochaException, InvalidTransactionException {
+    public void execute(Scope scope) throws PapayaException, InvalidTransactionException {
         callable.call(scope);
     }
 
