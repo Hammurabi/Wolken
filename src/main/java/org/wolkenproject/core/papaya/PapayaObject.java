@@ -35,7 +35,7 @@ public class PapayaObject {
         members.put(memberId, member);
     }
 
-    public PapayaObject getMember(int memberId, PapayaObject member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+    public PapayaObject getMember(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
         structure.checkReadAccess(memberId, stackTrace);
         return members.get(memberId);
     }
