@@ -415,7 +415,7 @@ public class VarInt {
             stream.write(length);
             stream.write(bytes);
         } else {
-            bytes[0] = (byte) (bytes[0] & 0x7 | (length - 1) << 5);
+            bytes[0] = (byte) (bytes[0] & 0x7 | (length - 1) << 3);
             stream.write(bytes);
         }
     }
@@ -429,7 +429,7 @@ public class VarInt {
             return new BigInteger(1, bytes);
         } else {
             int firstByte   = SerializableI.checkNotEOF(stream.read());
-            int length      = firstByte >>> 5;
+            int length      = firstByte >>> 3;
             if (length > 0) {
                 byte bytes[]    = new byte[length + 1];
                 SerializableI.checkFullyRead(stream.read(bytes, 1, length), length);
