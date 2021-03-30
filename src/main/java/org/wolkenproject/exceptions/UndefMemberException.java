@@ -1,6 +1,6 @@
 package org.wolkenproject.exceptions;
 
-public class UndefMemberException extends MochaException {
+public class UndefMemberException extends PapayaException {
     public UndefMemberException(String msg) {
         super(msg);
     }
