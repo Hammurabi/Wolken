@@ -62,6 +62,9 @@ public class PapayaApplication extends SerializableI {
             // write the structure name.
             VarInt.writeCompactUInt32(name.length, false, stream);
             stream.write(name);
+
+            // write the structure type.
+            StructureType.write(structure.getStructureType(), stream);
         }
     }
 
