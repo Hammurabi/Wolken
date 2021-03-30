@@ -3,13 +3,17 @@ package org.wolkenproject.core.papaya.compiler;
 import org.wolkenproject.core.papaya.AccessModifier;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.serialization.SerializableI;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Stack;
 
-public class PapayaStructure {
+public class PapayaStructure extends SerializableI {
     public static final int                     Alignment = 32;
     private final byte                          identifier[];
     private final StructureType                 structureType;
@@ -175,5 +179,23 @@ public class PapayaStructure {
         }
 
         return length;
+    }
+
+    @Override
+    public void write(OutputStream stream) throws IOException, WolkenException {
+    }
+
+    @Override
+    public void read(InputStream stream) throws IOException, WolkenException {
+    }
+
+    @Override
+    public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
+        return null;
+    }
+
+    @Override
+    public int getSerialNumber() {
+        return 0;
     }
 }
