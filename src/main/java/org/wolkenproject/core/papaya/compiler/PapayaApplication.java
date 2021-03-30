@@ -50,7 +50,15 @@ public class PapayaApplication extends SerializableI {
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         // write a header that contains informations about the application.
+
+        // we first write a compacted uint29 containing the bytecode version.
         VarInt.writeCompactUInt32(version, false, stream);
+        // write the amount of structures.
+        VarInt.writeCompactUInt32(structureMap.size(), false, stream);
+        // write all the structures into the stream.
+        for (PapayaStructure structure : structureMap.values()) {
+            structure.write(stream);
+        }
     }
 
     @Override
