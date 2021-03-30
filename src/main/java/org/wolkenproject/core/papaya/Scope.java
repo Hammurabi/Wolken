@@ -5,7 +5,7 @@ import org.wolkenproject.core.papaya.internal.MochaAddress;
 import org.wolkenproject.core.papaya.internal.MochaObject;
 import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
 import org.wolkenproject.exceptions.InvalidTransactionException;
-import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.PapayaException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,7 +31,7 @@ public class Scope {
         this.programCounter = programCounter;
     }
 
-    public long startProcess(long availableFee) throws InvalidTransactionException, MochaException, ContractOutOfFundsExceptions {
+    public long startProcess(long availableFee) throws InvalidTransactionException, PapayaException, ContractOutOfFundsExceptions {
         while (getProgramCounter().hasNext() && keepRunning.get()) {
             Opcode opcode = getProgramCounter().next();
 
@@ -79,7 +79,7 @@ public class Scope {
 //        getStack().push(((MochaPublicKey) publicKey).checkSignature((MochaCryptoSignature) signature, signatureData));
 //    }
 
-    public void verify() throws InvalidTransactionException, MochaException {
+    public void verify() throws InvalidTransactionException, PapayaException {
         if (!getStack().pop().isTrue()) {
             throw new InvalidTransactionException();
         }
@@ -89,13 +89,13 @@ public class Scope {
         return null;
     }
 
-    public void destroyContract() throws MochaException {
+    public void destroyContract() throws PapayaException {
         // this is the address that we will send any remaining funds to
         MochaObject address = getStack().pop();
 
         if (address instanceof MochaAddress) {
         }
 
-        throw new MochaException("invalid address provided.");
+        throw new PapayaException("invalid address provided.");
     }
 }
