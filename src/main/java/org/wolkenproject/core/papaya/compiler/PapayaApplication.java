@@ -57,7 +57,11 @@ public class PapayaApplication extends SerializableI {
         VarInt.writeCompactUInt32(structureMap.size(), false, stream);
         // write all the structures into the stream.
         for (PapayaStructure structure : structureMap.values()) {
-            structure.write(stream);
+            byte name[] = structure.getName().getBytes();
+
+            // write the structure name.
+            VarInt.writeCompactUInt32(name.length, false, stream);
+            stream.write(name);
         }
     }
 
