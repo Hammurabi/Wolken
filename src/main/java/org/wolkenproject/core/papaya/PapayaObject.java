@@ -28,19 +28,15 @@ public class PapayaObject {
         ie: object.member = .. ===> object.map(hash('member')) = ..
         this allows us to DYNAMICALLY add members to an object.
      */
-    private Map<Integer, PapayaObject> members;
+    private Map<Integer, PapayaHandler> members;
 
-    public void setMember(int memberId, PapayaObject member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+    public void setMember(int memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
         structure.checkWriteAccess(memberId, stackTrace);
         members.put(memberId, member);
     }
 
-    public PapayaObject getMember(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+    public PapayaHandler getMember(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
         structure.checkReadAccess(memberId, stackTrace);
-        return members.get(memberId);
-    }
-
-    public PapayaObject getMemberReference(int memberId) {
         return members.get(memberId);
     }
 
