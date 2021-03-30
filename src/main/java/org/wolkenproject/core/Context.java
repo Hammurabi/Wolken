@@ -5,7 +5,7 @@ import org.wolkenproject.core.papaya.internal.ByteArray;
 import org.wolkenproject.core.papaya.internal.MochaNumber;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
-import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
@@ -136,20 +136,20 @@ public class Context {
         opcodeRegister.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, 1, scope -> scope.getStack().push(new MochaNumber(new BigInteger(1, scope.getProgramCounter().next(32)), false)));
 
         opcodeRegister.registerOp("fconst", "push a float of size '32' (unsigned).", 4, 1, scope -> {
-            throw new MochaException("float is not supported at the moment.");
+            throw new PapayaException("float is not supported at the moment.");
         });
         opcodeRegister.registerOp("fconst64", "push a float of size '64' (unsigned).", 8, 1, scope -> {
-            throw new MochaException("float is not supported at the moment.");
+            throw new PapayaException("float is not supported at the moment.");
         });
         opcodeRegister.registerOp("fconst256", "push a float of size '256' (unsigned).", 32, 1, scope -> {
-            throw new MochaException("float is not supported at the moment.");
+            throw new PapayaException("float is not supported at the moment.");
         });
 
         opcodeRegister.registerOp("aconst200", "push an address of size '200'.", 25, 1, scope -> {
-            throw new MochaException("address is not supported at the moment.");
+            throw new PapayaException("address is not supported at the moment.");
         });
         opcodeRegister.registerOp("aconst256", "push a hash of size '256'.", 32, 1, scope -> {
-            throw new MochaException("hash256 is not supported at the moment.");
+            throw new PapayaException("hash256 is not supported at the moment.");
         });
 //        opcodeRegister.registerOp("ecpub", "push a public key of size '264' (compressed).", 33, scope -> scope.getStack().push(new MochaPublicKey(new ECPublicKey(scope.getProgramCounter().next(33)))));
 //        opcodeRegister.registerOp("ecsig", "push a signature of size '~'.", 73, scope -> scope.getStack().push(new MochaCryptoSignature(new RecoverableSignature((byte) scope.getProgramCounter().nextByte(), scope.getProgramCounter().next(32), scope.getProgramCounter().next(32)))));
