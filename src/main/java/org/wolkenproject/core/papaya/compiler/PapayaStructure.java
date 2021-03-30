@@ -60,8 +60,25 @@ public class PapayaStructure {
 
         if (!Arrays.equals(stackTrace.peek().getIdentifier(), getIdentifier())) {
             switch (modifier) {
-                case PublicAccess:
-                    return;
+                case PrivateAccess:
+                    throw new PapayaIllegalAccessException();
+                case ProtectedAccess:
+                    if (!stackTrace.peek().isChildOf(this)) {
+                        throw new PapayaIllegalAccessException();
+                    }
+                    break;
+            }
+        }
+    }
+
+    public void checkReadAccess(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+        AccessModifier modifier = getMember(memberId).getAccessModifier();
+        if (modifier == AccessModifier.ReadOnly || modifier == AccessModifier.PublicAccess) {
+            return;
+        }
+
+        if (!Arrays.equals(stackTrace.peek().getIdentifier(), getIdentifier())) {
+            switch (modifier) {
                 case PrivateAccess:
                     throw new PapayaIllegalAccessException();
                 case ProtectedAccess:
