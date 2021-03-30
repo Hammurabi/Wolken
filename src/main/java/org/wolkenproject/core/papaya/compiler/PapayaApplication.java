@@ -3,6 +3,7 @@ package org.wolkenproject.core.papaya.compiler;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,10 +13,12 @@ import java.util.Map;
 
 public class PapayaApplication extends SerializableI {
     // this contains structures in order of declaration
-    private final Map<String, PapayaStructure> structureMap;
+    private final Map<String, PapayaStructure>  structureMap;
+    private final int                           version;
 
     public PapayaApplication() {
-        this.structureMap = new LinkedHashMap<>();
+        this.structureMap   = new LinkedHashMap<>();
+        this.version        = 1;
     }
 
     public void addStructure(String name, PapayaStructure structure) throws WolkenException {
@@ -46,6 +49,8 @@ public class PapayaApplication extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        // write a header that contains informations about the application.
+        VarInt.writeCompactUInt32(version, false, stream);
     }
 
     @Override
