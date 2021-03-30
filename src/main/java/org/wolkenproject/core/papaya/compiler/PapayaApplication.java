@@ -1,6 +1,5 @@
 package org.wolkenproject.core.papaya.compiler;
 
-import org.wolkenproject.core.Context;
 import org.wolkenproject.core.papaya.AccessModifier;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.VarInt;
@@ -12,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class PapayaApplication {
+    private static final byte                   HeaderBytes[] = "Papaya Compact Application".getBytes();
     // this contains structures in order of declaration
     private final Map<String, PapayaStructure>  structureMap;
     private final int                           version;
