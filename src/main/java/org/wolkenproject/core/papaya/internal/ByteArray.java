@@ -1,6 +1,6 @@
 package org.wolkenproject.core.papaya.internal;
 
-import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.PapayaException;
 
 public class ByteArray extends MochaObject {
     private byte array[];
@@ -10,18 +10,18 @@ public class ByteArray extends MochaObject {
     }
 
     @Override
-    public MochaObject subscriptGet(int index) throws MochaException {
+    public MochaObject subscriptGet(int index) throws PapayaException {
         if (index >= array.length || index < 0) {
-            throw new MochaException("accessing element '" + index + "' from array of size '" + array.length + "'.");
+            throw new PapayaException("accessing element '" + index + "' from array of size '" + array.length + "'.");
         }
 
         return new MochaNumber(Byte.toUnsignedInt(array[index]), false);
     }
 
     @Override
-    public MochaObject subscriptSet(int index, MochaObject object) throws MochaException {
+    public MochaObject subscriptSet(int index, MochaObject object) throws PapayaException {
         if (index >= array.length || index < 0) {
-            throw new MochaException("accessing element '" + index + "' from array of size '" + array.length + "'.");
+            throw new PapayaException("accessing element '" + index + "' from array of size '" + array.length + "'.");
         }
 
         if (object == null) {
