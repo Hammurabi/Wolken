@@ -68,6 +68,18 @@ public class PapayaApplication extends SerializableI {
 
             // write all the structure fields.
             for (PapayaField field : structure.getFieldMap().values()) {
+                byte fieldName[] = field.getName().getBytes();
+                byte fieldType[] = field.getTypeName().getBytes();
+
+                // write the field name.
+                VarInt.writeCompactUInt32(fieldName.length, false, stream);
+                stream.write(fieldName);
+
+                // write the field type.
+                VarInt.writeCompactUInt32(fieldType.length, false, stream);
+                stream.write(fieldType);
+
+                field.getValueAssignment().compile();
             }
         }
     }
