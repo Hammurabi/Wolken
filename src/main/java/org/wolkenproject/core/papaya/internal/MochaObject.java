@@ -2,7 +2,7 @@ package org.wolkenproject.core.papaya.internal;
 
 import org.wolkenproject.core.papaya.Scope;
 import org.wolkenproject.exceptions.InvalidTransactionException;
-import org.wolkenproject.exceptions.MochaException;
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefMemberException;
 import org.wolkenproject.utils.Utils;
 
@@ -134,20 +134,20 @@ public class MochaObject {
         return callable != null;
     }
 
-    public final MochaObject call(Scope scope) throws MochaException, InvalidTransactionException {
+    public final MochaObject call(Scope scope) throws PapayaException, InvalidTransactionException {
         return callable.call(scope);
     }
 
-    public MochaObject add(MochaObject other) throws MochaException { return this; }
-    public MochaObject sub(MochaObject other) throws MochaException { return this; }
-    public MochaObject mul(MochaObject other) throws MochaException { return this; }
-    public MochaObject div(MochaObject other) throws MochaException { return this; }
-    public MochaObject mod(MochaObject other) throws MochaException { return this; }
-    public MochaObject shiftRight(MochaObject other) throws MochaException { return this; }
-    public MochaObject shiftLeft(MochaObject other) throws MochaException { return this; }
-    public MochaObject arithmeticShift(MochaObject other) throws MochaException { return this; }
+    public MochaObject add(MochaObject other) throws PapayaException { return this; }
+    public MochaObject sub(MochaObject other) throws PapayaException { return this; }
+    public MochaObject mul(MochaObject other) throws PapayaException { return this; }
+    public MochaObject div(MochaObject other) throws PapayaException { return this; }
+    public MochaObject mod(MochaObject other) throws PapayaException { return this; }
+    public MochaObject shiftRight(MochaObject other) throws PapayaException { return this; }
+    public MochaObject shiftLeft(MochaObject other) throws PapayaException { return this; }
+    public MochaObject arithmeticShift(MochaObject other) throws PapayaException { return this; }
     // equals (x==y)
-    public MochaObject equal(MochaObject other) throws MochaException { return this; }
+    public MochaObject equal(MochaObject other) throws PapayaException { return this; }
     // and (x&y)
     public MochaObject and(MochaObject other) { return this; }
     // or (x|y)
@@ -162,9 +162,9 @@ public class MochaObject {
     public MochaObject length() { return null;//new MochaNumber(members.length, false);
     }
     // access an element of array
-    public MochaObject subscriptGet(int index) throws MochaException { return this; }
+    public MochaObject subscriptGet(int index) throws PapayaException { return this; }
     // access an element of array
-    public MochaObject subscriptSet(int index, MochaObject object) throws MochaException { return this; }
+    public MochaObject subscriptSet(int index, MochaObject object) throws PapayaException { return this; }
     // get the shape of an array
     public MochaObject shape() { return this; }
     // reshape an array
@@ -174,17 +174,17 @@ public class MochaObject {
     // add an element to the front
     public MochaObject prepend(MochaObject object) { addMemberToFront(object); return this; }
     // pop the last element
-    public MochaObject pop() throws MochaException {
+    public MochaObject pop() throws PapayaException {
         if (members.length > 0) {
             MochaObject last = members[members.length - 1];
             members = new MochaObject[members.length - 1];
             return last;
         }
 
-        throw new MochaException("cannot pop() from empty array.");
+        throw new PapayaException("cannot pop() from empty array.");
     }
     // poll the first element
-    public MochaObject poll() throws MochaException {
+    public MochaObject poll() throws PapayaException {
         if (members.length > 0) {
             MochaObject first = members[0];
             MochaObject temp[] = members;
@@ -197,7 +197,7 @@ public class MochaObject {
             return first;
         }
 
-        throw new MochaException("cannot poll() from empty array.");
+        throw new PapayaException("cannot poll() from empty array.");
     }
     // return the integer representation of this object
     public long asInt() {
