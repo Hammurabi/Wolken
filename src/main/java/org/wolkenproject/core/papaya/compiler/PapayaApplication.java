@@ -1,6 +1,7 @@
 package org.wolkenproject.core.papaya.compiler;
 
 import org.wolkenproject.core.papaya.AccessModifier;
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.VarInt;
 
@@ -21,9 +22,9 @@ public class PapayaApplication {
         this.version        = 1;
     }
 
-    public void addStructure(String name, PapayaStructure structure) throws WolkenException {
+    public void addStructure(String name, PapayaStructure structure) throws PapayaException {
         if (structureMap.containsKey(name)) {
-            throw new WolkenException("redeclaration of structure '" + name + "' {"+structure.getLineInfo()+"}.");
+            throw new PapayaException("redeclaration of structure '" + name + "' {"+structure.getLineInfo()+"}.");
         }
 
         structureMap.put(name, structure);
