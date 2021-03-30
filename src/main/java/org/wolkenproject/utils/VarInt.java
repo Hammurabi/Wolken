@@ -310,7 +310,7 @@ public class VarInt {
     // when preserveAllBits is true, then the resulting
     // integer will only be 251 bits in length as 5 bits
     // will be used to encode the length of the integer.
-    public static void writeCompactUint256(BigInteger integer, boolean preserveAllBits, OutputStream stream) throws WolkenException, IOException {
+    public static void writeCompactUint128(BigInteger integer, boolean preserveAllBits, OutputStream stream) throws WolkenException, IOException {
         byte bytes[]    = integer.toByteArray();
         int drop = 0;
         for (int i = 0; i < bytes.length; i ++) {
@@ -325,8 +325,8 @@ public class VarInt {
             bytes = temp;
         }
 
-        if (bytes.length > 32) {
-            throw new WolkenException("writeCompactUint32 only allows up to  2^256 bits.");
+        if (bytes.length > 16) {
+            throw new WolkenException("writeCompactUint32 only allows up to  2^128 bits.");
         }
 
         int length = bytes.length;
@@ -334,12 +334,12 @@ public class VarInt {
             stream.write(length);
             stream.write(bytes);
         } else {
-            bytes[0] = (byte) (bytes[0] & 0x7 | (length - 1) << 5);
+            bytes[0] = (byte) (bytes[0] & 0xF | (length - 1) << 4);
             stream.write(bytes);
         }
     }
 
-    public static BigInteger readCompactUint256(boolean preserveAllBits, InputStream stream) throws WolkenException, IOException {
+    public static BigInteger readCompactUint128(boolean preserveAllBits, InputStream stream) throws WolkenException, IOException {
         if (preserveAllBits) {
             int length      = SerializableI.checkNotEOF(stream.read());
             byte bytes[]    = new byte[length];
@@ -348,15 +348,15 @@ public class VarInt {
             return new BigInteger(1, bytes);
         } else {
             int firstByte   = SerializableI.checkNotEOF(stream.read());
-            int length      = firstByte >>> 5;
+            int length      = firstByte >>> 4;
             if (length > 0) {
                 byte bytes[]    = new byte[length + 1];
                 SerializableI.checkFullyRead(stream.read(bytes, 1, length), length);
 
-                bytes[0]        = (byte) (firstByte & 0x7);
+                bytes[0]        = (byte) (firstByte & 0xF);
                 return new BigInteger(1, bytes);
             } else {
-                return new BigInteger(1, new byte[] { (byte) (firstByte & 0x7) });
+                return new BigInteger(1, new byte[] { (byte) (firstByte & 0xF) });
             }
         }
     }
