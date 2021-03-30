@@ -1,6 +1,6 @@
 package org.wolkenproject.exceptions;
 
-public class UndefOpcodeException extends MochaException {
+public class UndefOpcodeException extends PapayaException {
     public UndefOpcodeException(String op) {
         super("Undefined OpCode '" + op + "'.");
     }
