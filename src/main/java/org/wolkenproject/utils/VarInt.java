@@ -326,7 +326,7 @@ public class VarInt {
         }
 
         if (bytes.length > 16) {
-            throw new WolkenException("writeCompactUint32 only allows up to  2^128 bits.");
+            throw new WolkenException("writeCompactUint128 only allows up to  2^128 bits.");
         }
 
         int length = bytes.length;
