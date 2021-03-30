@@ -1,5 +1,6 @@
 package org.wolkenproject.core.papaya.compiler;
 
+import org.wolkenproject.core.Context;
 import org.wolkenproject.core.papaya.AccessModifier;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
@@ -196,6 +197,6 @@ public class PapayaStructure extends SerializableI {
 
     @Override
     public int getSerialNumber() {
-        return 0;
+        return Context.getInstance().getSerialFactory().getSerialNumber(PapayaStructure.class);
     }
 }
