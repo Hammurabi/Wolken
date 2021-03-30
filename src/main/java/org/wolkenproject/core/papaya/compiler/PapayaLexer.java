@@ -234,14 +234,19 @@ public class PapayaLexer {
         tokenType.put("pass", TokenType.PassKeyword);
         tokenType.put("return", TokenType.ReturnKeyword);
         tokenType.put("fn", TokenType.FunctionKeyword);
-        tokenType.put("contract", TokenType.ContractKeyword);
         tokenType.put("module", TokenType.ModuleKeyword);
-        tokenType.put("extends", TokenType.ExtendsKeyword);
-        tokenType.put("implements", TokenType.ImplementsKeyword);
+        tokenType.put("contract", TokenType.ContractKeyword);
         tokenType.put("class", TokenType.ClassKeyword);
         tokenType.put("struct", TokenType.StructKeyword);
+        tokenType.put("extends", TokenType.ExtendsKeyword);
+        tokenType.put("implements", TokenType.ImplementsKeyword);
         tokenType.put("and", TokenType.LogicalAndSymbol);
         tokenType.put("or", TokenType.LogicalOrSymbol);
+
+        tokenType.put("public", TokenType.ModifierKeyword);
+        tokenType.put("private", TokenType.ModifierKeyword);
+        tokenType.put("protected", TokenType.ModifierKeyword);
+        tokenType.put("readonly", TokenType.ModifierKeyword);
 
         // other
         tokenType.put("\\d+", TokenType.IntegerNumber);
