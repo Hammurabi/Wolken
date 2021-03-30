@@ -4,6 +4,7 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.core.papaya.AccessModifier;
 import org.wolkenproject.core.papaya.PapayaObject;
 import org.wolkenproject.core.papaya.PapayaReadOnlyWrapper;
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
 
@@ -28,27 +29,27 @@ public class PapayaStructure {
         this.identifier     = new byte[20];
     }
 
-    public void addField(String name, PapayaField field) throws WolkenException {
+    public void addField(String name, PapayaField field) throws PapayaException {
         if (containsMember(name)) {
-            throw new WolkenException("redeclaration of field '" + name + "' "+field.getLineInfo()+".");
+            throw new PapayaException("redeclaration of field '" + name + "' "+field.getLineInfo()+".");
         }
 
         field.setIdentifier(members.size());
         members.add(field);
     }
 
-    public void addFunction(String name, PapayaFunction function) throws WolkenException {
+    public void addFunction(String name, PapayaFunction function) throws PapayaException {
         if (containsMember(name)) {
-            throw new WolkenException("redeclaration of function '" + name + "' "+function.getLineInfo()+".");
+            throw new PapayaException("redeclaration of function '" + name + "' "+function.getLineInfo()+".");
         }
 
         function.setIdentifier(members.size());
         members.add(function);
     }
 
-    public void addMember(String name, PapayaMember member) throws WolkenException {
+    public void addMember(String name, PapayaMember member) throws PapayaException {
         if (containsMember(name)) {
-            throw new WolkenException("redeclaration of member '" + name + "'.");
+            throw new PapayaException("redeclaration of member '" + name + "'.");
         }
 
         member.setIdentifier(members.size());
@@ -197,7 +198,7 @@ public class PapayaStructure {
     public int getLength(PapayaApplication application) throws WolkenException {
         int length = 0;
 
-        for (PapayaField field : fieldMap.values()) {
+        for (PapayaField field : getFields()) {
             int paddedLength = length;
 
             if (length % Alignment != 0) {
