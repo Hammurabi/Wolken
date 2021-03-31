@@ -1,11 +1,11 @@
 package org.wolkenproject.papaya.compiler;
 
-import org.wolkenproject.papaya.AccessModifier;
-import org.wolkenproject.papaya.PapayaObject;
-import org.wolkenproject.papaya.PapayaReadOnlyWrapper;
+import org.wolkenproject.papaya.runtime.PapayaObject;
+import org.wolkenproject.papaya.runtime.PapayaReadOnlyWrapper;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.papaya.runtime.PapayaHandler;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
@@ -110,8 +110,8 @@ public class PapayaStructure {
         return functions;
     }
 
-    public void checkWriteAccess(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
-        AccessModifier modifier = getMember(memberId).getAccessModifier();
+    public void checkWriteAccess(PapayaMember member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+        AccessModifier modifier = member.getAccessModifier();
         if (modifier == AccessModifier.ReadOnly) {
             throw new PapayaIllegalAccessException();
         }
@@ -129,15 +129,13 @@ public class PapayaStructure {
         }
     }
 
-    public PapayaObject checkMemberAccess(PapayaObject member, int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
-        AccessModifier modifier = getMember(memberId).getAccessModifier();
+    public PapayaHandler checkMemberAccess(PapayaMember classMember, PapayaObject member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+        AccessModifier modifier = classMember.getAccessModifier();
         // if it is read only, then we return a wrapper object.
         if (modifier == AccessModifier.PublicAccess) {
-            return member;
-        }
-
-        if (modifier == AccessModifier.ReadOnly) {
-            return new PapayaReadOnlyWrapper(member);
+            return PapayaHandler.doNothingHandler(member);
+        } else if (modifier == AccessModifier.ReadOnly) {
+            return PapayaHandler.readOnlyHandler(member);
         }
 
         if (!Arrays.equals(stackTrace.peek().getIdentifier(), getIdentifier())) {
@@ -152,11 +150,11 @@ public class PapayaStructure {
             }
         }
 
-        return new PapayaReadOnlyWrapper(member);
+        return PapayaHandler.doNothingHandler(member);
     }
 
-    public void checkReadAccess(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
-        AccessModifier modifier = getMember(memberId).getAccessModifier();
+    public void checkReadAccess(PapayaMember member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+        AccessModifier modifier = member.getAccessModifier();
         if (modifier == AccessModifier.ReadOnly || modifier == AccessModifier.PublicAccess) {
             return;
         }
@@ -186,7 +184,13 @@ public class PapayaStructure {
         return false;
     }
 
-    private PapayaMember getMember(int memberId) {
+    public PapayaMember getMember(byte memberId[]) {
+        for (PapayaMember member : members) {
+            if (Arrays.equals(member.getIdentifier(), memberId)) {
+                return member;
+            }
+        }
+
         return null;
     }
 
