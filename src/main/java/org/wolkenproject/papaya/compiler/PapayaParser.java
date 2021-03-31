@@ -40,6 +40,7 @@ public class PapayaParser {
 
                 // check for inheritance.
                 if (stream.matches(ExtendsKeyword) || stream.matches(ImplementsKeyword)) {
+                    throw new PapayaException("inheritance is not allowed.");
                 }
 
                 // get a new token stream containing all the body tokens.
@@ -83,7 +84,7 @@ public class PapayaParser {
 
                 Set<PapayaField> parsedArguments        = parseFunctionArguments(arguments);
                 PapayaStatement parsedStatements        = parseFunctionBody(body);
-                PapayaFunction function = new PapayaFunction(modifier, name.getTokenValue(), parsedArguments, parsedStatements, keyword.getLineInfo());
+                PapayaFunction function                 = new PapayaFunction(modifier, name.getTokenValue(), parsedArguments, parsedStatements, keyword.getLineInfo());
                 modifier = AccessModifier.None;
 
                 structure.addFunction(name.getTokenValue(), function);
