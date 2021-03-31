@@ -1,6 +1,6 @@
 package org.wolkenproject.papaya.internal;
 
-import org.wolkenproject.papaya.Scope;
+import org.wolkenproject.papaya.runtime.Scope;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefMemberException;
