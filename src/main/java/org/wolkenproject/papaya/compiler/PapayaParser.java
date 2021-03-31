@@ -119,7 +119,7 @@ public class PapayaParser {
         return parse(stream, true);
     }
 
-    private PapayaStatement parse(TokenStream stream, boolean righthand) throws PapayaException {
+    private Token parse(TokenStream stream, boolean righthand) throws PapayaException {
         boolean lefthand = !righthand;
         AccessModifier modifier = AccessModifier.None;
 
@@ -136,17 +136,27 @@ public class PapayaParser {
             if (lefthand && stream.matches(Identifier, Identifier)) { // field declaration
                 Token type              = stream.next();
                 Token name              = stream.next();
-                PapayaStatement assignment   = null;
+                Token assignment        = null;
 
                 if (stream.matches(AssignmentSymbol)) {
                     Token assignmentOperator = stream.next();
                     TokenStream assignmentTokens = getTokensTilEOL(assignmentOperator.getLine(), stream);
-                    assignment = parseRighthand(assignmentTokens);
+                    List<Token> tokens = fullParse(assignmentTokens, true);
+                    if (tokens != null && !tokens.isEmpty()) {
+                        assignment = new Token("", AssignmentStatement, assignmentOperator.getLineInfo());
+                    }
                 }
 
-                PapayaField field = new PapayaField(modifier, name.getTokenValue(), type.getTokenValue(), type.getLineInfo(), assignment);
+                Token declaration = new Token("", FieldDeclaration, type.getLineInfo());
+                if (assignment != null) {
+                    declaration.add(assignment);
+                }
+
+                Token mod = new Token(modifier.name(), ModifierKeyword, type.getLineInfo());
+                declaration.add(mod);
                 modifier = AccessModifier.None;
-                return new FieldDeclarationStatement(field, assignment);
+
+                return declaration;
             } else if (lefthand && stream.matches(Identifier, ColonEqualsSymbol)) { // quick field declaration
                 Token name                  = stream.next();
                 Token assignmentOperator    = stream.next();
@@ -183,16 +193,24 @@ public class PapayaParser {
             } else if (stream.matches(LeftParenthesisSymbol)) { // (
                 Token token = new Token("", Parenthesis, stream.peek().getLineInfo());
 
-                PapayaStatement statement = new PapayaStatement(stream.peek().getLineInfo());
                 TokenStream parenthesis = getTokensFollowing(LeftParenthesisSymbol, stream, "expected an '(' at line: " + stream.peek().getLine() + ".");
                 token.addChildren(fullParse(parenthesis, righthand));
 
-                return parsed;
-            } else if (stream.matches(LeftBraceSymbol)) { // (
-                TokenStream parenthesis = getTokensFollowing(LeftBraceSymbol, stream, "expected an '{' at line: " + stream.peek().getLine() + ".");
-                PapayaStatement parsed  = parse(parenthesis, righthand);
+                return token;
+            } else if (stream.matches(LeftBraceSymbol)) { // {
+                Token token = new Token("", Braces, stream.peek().getLineInfo());
 
-                return parsed;
+                TokenStream parenthesis = getTokensFollowing(LeftBraceSymbol, stream, "expected an '{' at line: " + stream.peek().getLine() + ".");
+                token.addChildren(fullParse(parenthesis, righthand));
+
+                return token;
+            } else if (stream.matches(LeftBracketSymbol)) { // [
+                Token token = new Token("", Brackets, stream.peek().getLineInfo());
+
+                TokenStream parenthesis = getTokensFollowing(LeftBracketSymbol, stream, "expected an '[' at line: " + stream.peek().getLine() + ".");
+                token.addChildren(fullParse(parenthesis, righthand));
+
+                return token;
             } else {
                 throw new PapayaException("cannot parse unknown pattern '" + stream + "' in function scope.");
             }
