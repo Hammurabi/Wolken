@@ -1,4 +1,4 @@
-package org.wolkenproject.core.papaya;
+package org.wolkenproject.papaya;
 
 import org.wolkenproject.core.Address;
 import org.wolkenproject.core.transactions.Transaction;
