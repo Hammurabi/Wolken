@@ -6,15 +6,17 @@ import java.util.List;
 public class Token {
     private final String    tokenValue;
     private final TokenType tokenType;
-    private final int       line;
-    private final int       offset;
+    private final LineInfo  lineInfo;
     private final List<Token> children;
 
     public Token(String value, TokenType type, int line, int offset) {
+        this(value, type, new LineInfo(line, offset));
+    }
+
+    public Token(String value, TokenType type, LineInfo lineInfo) {
         this.tokenValue = value;
         this.tokenType  = type;
-        this.line       = line;
-        this.offset     = offset;
+        this.lineInfo = lineInfo;
         this.children   = new ArrayList<>();
     }
 
@@ -27,11 +29,11 @@ public class Token {
     }
 
     public int getLine() {
-        return line;
+        return lineInfo.getLine();
     }
 
     public int getOffset() {
-        return offset;
+        return lineInfo.getOffset();
     }
 
     public void add(Token token) {
@@ -43,12 +45,11 @@ public class Token {
         return "{" +
                 "'" + tokenValue + '\'' +
                 ", " + tokenType +
-                ", line=" + line +
-                ", offset=" + offset +
+                ", lineInfo=" + lineInfo +
                 '}';
     }
 
     public LineInfo getLineInfo() {
-        return new LineInfo(line, offset);
+        return lineInfo;
     }
 }
