@@ -1,6 +1,5 @@
 package org.wolkenproject.papaya.compiler;
 
-import org.wolkenproject.papaya.AccessModifier;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.VarInt;
