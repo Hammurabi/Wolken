@@ -1,16 +1,21 @@
 package org.wolkenproject.papaya.compiler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Token {
     private final String    tokenValue;
     private final TokenType tokenType;
     private final int       line;
     private final int       offset;
+    private final List<Token> children;
 
     public Token(String value, TokenType type, int line, int offset) {
         this.tokenValue = value;
         this.tokenType  = type;
         this.line       = line;
         this.offset     = offset;
+        this.children   = new ArrayList<>();
     }
 
     public String getTokenValue() {
@@ -27,6 +32,10 @@ public class Token {
 
     public int getOffset() {
         return offset;
+    }
+
+    public void add(Token token) {
+        children.add(token);
     }
 
     @Override
