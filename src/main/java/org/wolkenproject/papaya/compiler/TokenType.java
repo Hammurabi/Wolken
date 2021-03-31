@@ -88,4 +88,11 @@ public enum TokenType {
     IncrementSymbol,
     DecrementSymbol,
     ColonEqualsSymbol,
+
+
+
+
+    Parenthesis,
+    Braces,
+    Brackets,
 }
