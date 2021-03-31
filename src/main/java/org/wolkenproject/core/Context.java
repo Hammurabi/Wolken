@@ -1,6 +1,5 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.papaya.*;
 import org.wolkenproject.papaya.internal.ByteArray;
 import org.wolkenproject.papaya.internal.MochaNumber;
 import org.wolkenproject.core.transactions.Transaction;
@@ -9,6 +8,7 @@ import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
+import org.wolkenproject.papaya.runtime.OpcodeRegister;
 import org.wolkenproject.rpc.RpcServer;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
@@ -35,7 +35,7 @@ public class Context {
     private Server                  server;
     private Address                 payList[];
     private BlockChain              blockChain;
-    private OpcodeRegister          opcodeRegister;
+    private OpcodeRegister opcodeRegister;
     private ResourceManager         resourceManager;
     private RpcServer               rpcServer;
     private FileService             fileService;
