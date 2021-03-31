@@ -1,8 +1,8 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.core.papaya.*;
-import org.wolkenproject.core.papaya.internal.ByteArray;
-import org.wolkenproject.core.papaya.internal.MochaNumber;
+import org.wolkenproject.papaya.*;
+import org.wolkenproject.papaya.internal.ByteArray;
+import org.wolkenproject.papaya.internal.MochaNumber;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.PapayaException;
