@@ -95,4 +95,7 @@ public enum TokenType {
     Parenthesis,
     Braces,
     Brackets,
+
+    FieldDeclaration,
+    AssignmentStatement,
 }
