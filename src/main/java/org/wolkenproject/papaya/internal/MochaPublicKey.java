@@ -1,6 +1,5 @@
 package org.wolkenproject.papaya.internal;
 
-import org.wolkenproject.papaya.MochaBool;
 import org.wolkenproject.crypto.Key;
 
 public class MochaPublicKey extends MochaObject {
