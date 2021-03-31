@@ -52,4 +52,8 @@ public class Token {
     public LineInfo getLineInfo() {
         return lineInfo;
     }
+
+    public void addChildren(List<Token> tokens) {
+        children.addAll(tokens);
+    }
 }
