@@ -93,7 +93,7 @@ public class PapayaParser {
             } else if (stream.matches(Identifier, Identifier)) { // field declaration
                 Token type              = stream.next();
                 Token name              = stream.next();
-                PapayaStatement assignment   = null;
+                Token assignment        = null;
 
                 if (stream.matches(AssignmentSymbol)) {
                     Token assignmentOperator = stream.next();
@@ -111,11 +111,11 @@ public class PapayaParser {
         }
     }
 
-    private PapayaStatement parseLefthand(TokenStream stream) throws PapayaException {
+    private Token parseLefthand(TokenStream stream) throws PapayaException {
         return parse(stream, false);
     }
 
-    private PapayaStatement parseRighthand(TokenStream stream) throws PapayaException {
+    private Token parseRighthand(TokenStream stream) throws PapayaException {
         return parse(stream, true);
     }
 
@@ -161,7 +161,7 @@ public class PapayaParser {
                 Token name                  = stream.next();
                 Token assignmentOperator    = stream.next();
 
-                PapayaStatement assignment  = parseRighthand(getTokensTilEOL(assignmentOperator.getLine(), stream));
+                Token assignment            = parseRighthand(getTokensTilEOL(assignmentOperator.getLine(), stream));
 
                 if (assignment == null) {
                     throw new PapayaException("expected a valid after ':=' at "+assignmentOperator.getLineInfo()+".");
@@ -179,7 +179,7 @@ public class PapayaParser {
             } else if (stream.matches(Identifier, AssignmentSymbol)) { // assignment of value
                 Token name                  = stream.next();
                 Token assignmentOperator    = stream.next();
-                PapayaStatement assignment  = parseRighthand(getTokensTilEOL(assignmentOperator.getLine(), stream));
+                Token assignment            = parseRighthand(getTokensTilEOL(assignmentOperator.getLine(), stream));
 
                 if (assignment == null) {
                     throw new PapayaException("expected a valid after ':=' at "+assignmentOperator.getLineInfo()+".");
