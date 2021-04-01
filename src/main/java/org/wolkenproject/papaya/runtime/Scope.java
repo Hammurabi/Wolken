@@ -1,5 +1,7 @@
 package org.wolkenproject.papaya.runtime;
 
+import org.wolkenproject.core.Block;
+import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.papaya.internal.MochaAddress;
 import org.wolkenproject.papaya.internal.MochaObject;
@@ -11,6 +13,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Scope {
+    // the 'container' block
+    private BlockIndex              block;
     // the 'caller' transaction
     private Transaction             caller;
     // the contract in which the point of entry exists
@@ -24,7 +28,7 @@ public class Scope {
     // the program counter
     private ProgramCounter          programCounter;
 
-    public Scope(Transaction caller, Contract contract, MochaStack<MochaObject> stack, ProgramCounter programCounter) {
+    public Scope(Block block, Transaction caller, Contract contract, MochaStack<MochaObject> stack, ProgramCounter programCounter) {
         this.caller     = caller;
         this.contract   = contract;
         this.stack      = stack;
