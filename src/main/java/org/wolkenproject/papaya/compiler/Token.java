@@ -40,6 +40,24 @@ public class Token {
         children.add(token);
     }
 
+    public Token getChild(int index) {
+        return children.get(index);
+    }
+
+    public Token getFirstChildOfType(TokenType type) {
+        for (Token token : children) {
+            if (token.getTokenType() == type) {
+                return token;
+            }
+        }
+
+        return null;
+    }
+
+    public Token setType(TokenType tokenType) {
+        return new Token(tokenValue, tokenType, lineInfo);
+    }
+
     @Override
     public String toString() {
         return "{" +
