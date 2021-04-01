@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.json.JSONObject;
+import org.wolkenproject.core.assets.Asset;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.VarInt;
@@ -9,11 +10,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Account extends SerializableI {
+    /* used for transaction indexing */
     private long    nonce;
+    /* the current balance of this account */
     private long    balance;
+    /* true if the account has an alias */
     private boolean hasAlias;
+    /* the account alias */
     private long    alias;
 
     public Account() {
