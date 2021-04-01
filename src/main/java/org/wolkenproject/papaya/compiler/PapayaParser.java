@@ -166,12 +166,18 @@ public class PapayaParser {
                 Token assignment            = parseRighthand(getTokensTilEOL(assignmentOperator.getLine(), stream));
 
                 if (assignment == null) {
-                    throw new PapayaException("expected a valid after ':=' at "+assignmentOperator.getLineInfo()+".");
+                    throw new PapayaException("expected a value after ':=' at "+assignmentOperator.getLineInfo()+".");
                 }
 
-                PapayaField field = new PapayaField(modifier, name.getTokenValue(), "?", name.getLineInfo(), assignment);
+                Token declaration = new Token("", FieldDeclaration, name.getLineInfo());
+                Token mod = new Token(modifier.name(), ModifierKeyword, name.getLineInfo());
+                declaration.add(new Token("?", Identifier, name.getLineInfo()));
+                declaration.add(name);
+                declaration.add(mod);
+                declaration.add(assignment);
+
                 modifier = AccessModifier.None;
-                return new FieldDeclarationStatement(field, assignment);
+                return declaration;
             } else if (stream.matches(Identifier, LeftParenthesisSymbol)) { // call function
                 Token name                      = stream.next();
                 TokenStream argumentStream      = getTokensFollowing(LeftParenthesisSymbol, stream, "expected an '(' at line: " + name.getLine() + ".");
