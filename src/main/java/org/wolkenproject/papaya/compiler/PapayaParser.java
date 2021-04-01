@@ -148,12 +148,14 @@ public class PapayaParser {
                 }
 
                 Token declaration = new Token("", FieldDeclaration, type.getLineInfo());
+                Token mod = new Token(modifier.name(), ModifierKeyword, type.getLineInfo());
+                declaration.add(type);
+                declaration.add(name);
+                declaration.add(mod);
                 if (assignment != null) {
                     declaration.add(assignment);
                 }
 
-                Token mod = new Token(modifier.name(), ModifierKeyword, type.getLineInfo());
-                declaration.add(mod);
                 modifier = AccessModifier.None;
 
                 return declaration;
