@@ -53,4 +53,8 @@ public class TokenStream {
 
         return false;
     }
+
+    public boolean isEmpty() {
+        return tokenList.isEmpty();
+    }
 }
