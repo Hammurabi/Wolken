@@ -2,6 +2,7 @@ package org.wolkenproject.papaya.compiler;
 
 import org.wolkenproject.papaya.AccessModifier;
 
+import java.util.List;
 import java.util.Set;
 
 public class PapayaFunction extends PapayaMember {
@@ -11,7 +12,7 @@ public class PapayaFunction extends PapayaMember {
     private byte                        byteCode[];
     private final LineInfo              lineInfo;
 
-    public PapayaFunction(AccessModifier accessModifier, String name, Set<PapayaField> arguments, PapayaStatement statement, LineInfo lineInfo) {
+    public PapayaFunction(AccessModifier accessModifier, String name, Set<PapayaField> arguments, List<Token> statement, LineInfo lineInfo) {
         super(accessModifier, name);
         this.name = name;
         this.arguments = arguments;
