@@ -221,7 +221,7 @@ public class PapayaParser {
                     arguments.addChildren(args);
                 }
 
-                Token call = new Token("", righthand ? RightFunctionCall : LeftFunctionCall, name.getLineInfo());
+                Token call = new Token("", FunctionCall, name.getLineInfo());
                 call.add(name);
                 call.add(arguments);
 
@@ -241,16 +241,13 @@ public class PapayaParser {
                     throw new PapayaException("expected a value after ':=' at "+assignmentOperator.getLineInfo()+".");
                 }
 
-
                 Token assignmentToken = new Token("", AssignmentStatement, name.getLineInfo());
                 assignmentToken.add(name);
                 assignmentToken.addChildren(parsed);
 
                 return assignmentToken;
             } else if (stream.matches(Identifier)) { // identifier
-                Token name                  = stream.next();
-
-                return name;
+                return stream.next();
             } else if (stream.matches(LeftParenthesisSymbol)) { // (
                 Token token = new Token("", Parenthesis, stream.peek().getLineInfo());
 
