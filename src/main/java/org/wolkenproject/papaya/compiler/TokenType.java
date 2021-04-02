@@ -98,4 +98,8 @@ public enum TokenType {
 
     FieldDeclaration,
     AssignmentStatement,
+    FunctionCall,
+    FunctionArguments,
+    RootToken,
+    Structure,
 }
