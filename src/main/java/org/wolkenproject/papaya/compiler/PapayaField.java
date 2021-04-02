@@ -1,14 +1,12 @@
 package org.wolkenproject.papaya.compiler;
 
-import org.wolkenproject.papaya.AccessModifier;
-
 public class PapayaField extends PapayaMember {
     private final String name;
     private final String typeName;
     private final LineInfo lineInfo;
-    private final PapayaStatement valueAssignment;
+    private final Token valueAssignment;
 
-    public PapayaField(AccessModifier accessModifier, String name, String typeName, LineInfo lineInfo, PapayaStatement valueAssignment) {
+    public PapayaField(AccessModifier accessModifier, String name, String typeName, LineInfo lineInfo, Token valueAssignment) {
         super(accessModifier, name);
         this.name = name;
         this.typeName = typeName;
@@ -32,7 +30,7 @@ public class PapayaField extends PapayaMember {
         return typeName;
     }
 
-    public PapayaStatement getValueAssignment() {
+    public Token getValueAssignment() {
         return valueAssignment;
     }
 }
