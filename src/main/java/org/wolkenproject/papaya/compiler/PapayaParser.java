@@ -221,7 +221,7 @@ public class PapayaParser {
                     arguments.addChildren(args);
                 }
 
-                Token call = new Token("", FunctionCall, name.getLineInfo());
+                Token call = new Token("", righthand ? RightFunctionCall : LeftFunctionCall, name.getLineInfo());
                 call.add(name);
                 call.add(arguments);
 
