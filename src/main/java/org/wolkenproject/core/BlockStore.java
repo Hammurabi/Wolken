@@ -1,6 +1,6 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.core.fastnio.Buffer;
+import org.wolkenproject.fastnio.Buffer;
 
 public class BlockStore {
     private static final int MaxLength = 128_000_000;
