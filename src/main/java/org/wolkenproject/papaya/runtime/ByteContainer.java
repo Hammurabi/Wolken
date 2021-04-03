@@ -19,7 +19,12 @@ public class ByteContainer implements PapayaContainer {
     }
 
     @Override
-    public void setAtIndex(int index, PapayaHandler handler) {
+    public void setAtIndex(int index, PapayaHandler handler) throws PapayaException {
+        if (index >= bytes.length) {
+            throw new PapayaException("array index out of '" + bytes.length + "' bounds.");
+        }
+
+        bytes[index] = handler.getPapayaObject().asInt().byteValue();
     }
 
     @Override
