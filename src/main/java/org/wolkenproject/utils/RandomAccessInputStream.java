@@ -20,6 +20,14 @@ public class RandomAccessInputStream extends InputStream {
             throw new IOException("end of buffer reached.");
         }
 
-        return buffer[nextIndex];
+        return Byte.toUnsignedInt(buffer[nextIndex]);
+    }
+
+    public int readInt() throws IOException {
+        return Utils.makeInt(read(), read(), read(), read());
+    }
+
+    public int readLong() throws IOException {
+        return Utils.makeLong(read(), read(), read(), read(), read(), read(), read(), read());
     }
 }
