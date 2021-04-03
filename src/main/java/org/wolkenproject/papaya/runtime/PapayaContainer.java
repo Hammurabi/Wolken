@@ -1,6 +1,5 @@
 package org.wolkenproject.papaya.runtime;
 
-import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.AccessModifier;
 
 public interface PapayaContainer {
