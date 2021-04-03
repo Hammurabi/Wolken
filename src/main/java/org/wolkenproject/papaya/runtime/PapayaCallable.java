@@ -1,8 +1,8 @@
 package org.wolkenproject.papaya.runtime;
 
-import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.exceptions.PapayaException;
 
 public interface PapayaCallable {
     public static final PapayaCallable Default = scope -> {};
-    public void call(Scope scope) throws WolkenException;
+    public void call(Scope scope) throws PapayaException;
 }
