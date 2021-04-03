@@ -82,7 +82,7 @@ public class Scope {
 //    }
 
     public void verify() throws InvalidTransactionException, PapayaException {
-        if (!getStack().pop().isTrue()) {
+        if (!getStack().pop().asBool()) {
             throw new InvalidTransactionException();
         }
     }
