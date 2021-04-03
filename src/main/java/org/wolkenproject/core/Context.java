@@ -103,8 +103,9 @@ public class Context {
         opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, 2, scope -> scope.getStack().pop().setAtIndex(scope.getStack().pop().asInt().intValue(), scope.getStack().pop()));
         opcodeRegister.registerOp("append", "append an object to an array.", 2, scope -> scope.getStack().pop().append(scope.getStack().pop()));
 
-        opcodeRegister.registerOp("pushdata", "push an array of bytes of length (6 - 31) into the stack.", true, 1, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextVarint32(false))))));
-        opcodeRegister.registerOp("push20", "push an array of bytes of length (160) into the stack.", true, 20, 1, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(20))));
+        opcodeRegister.registerOp("pushdata", "push an array of bytes of length (6-31) into the stack.", true, 1, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextVarint32(false))))));
+        opcodeRegister.registerOp("push20", "push an array of bytes of length (160) into the stack.", true, 20, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaByteArray(scope.getProgramCounter().next(20)))));
+        opcodeRegister.registerOp("push32", "push an array of bytes of length (256) into the stack.", true, 20, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaByteArray(scope.getProgramCounter().next(32)))));
 
         opcodeRegister.registerOp("jmp", "jumps to a location in code", 1, scope -> scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()));
         opcodeRegister.registerOp("jnt", "branch operator, jumps if condition is not true.", 1, scope -> {
@@ -129,6 +130,7 @@ public class Context {
         opcodeRegister.registerOp("const14", "push an integer with value '14' (unsigned).", 1, scope -> scope.getStack().push(new MochaNumber(14, false)));
         opcodeRegister.registerOp("const15", "push an integer with value '15' (unsigned).", 1, scope -> scope.getStack().push(new MochaNumber(15, false)));
 
+        opcodeRegister.registerOp("vconst", "push a varint of size '5-61' (unsigned).", 1, 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextByte(), false)));
         opcodeRegister.registerOp("bconst", "push an integer of size '8' (unsigned).", 1, 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextByte(), false)));
         opcodeRegister.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2, 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextUnsignedShort(), false)));
         opcodeRegister.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4, 1, scope -> scope.getStack().push(new MochaNumber(Integer.toUnsignedLong(scope.getProgramCounter().nextInt()), false)));
