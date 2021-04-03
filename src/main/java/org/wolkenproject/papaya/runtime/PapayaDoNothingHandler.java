@@ -42,6 +42,11 @@ public class PapayaDoNothingHandler extends PapayaHandler {
     }
 
     @Override
+    public void append(PapayaHandler handler) throws PapayaException {
+        getPapayaObject().asContainer().append(handler);
+    }
+
+    @Override
     public AccessModifier getModifier() {
         return AccessModifier.None;
     }
