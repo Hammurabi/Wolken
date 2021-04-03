@@ -43,6 +43,8 @@ public abstract class PapayaHandler {
 
     public abstract void setAtIndex(int index, PapayaHandler handler) throws PapayaException;
 
+    public abstract void append(PapayaHandler handler) throws PapayaException;
+
     public abstract AccessModifier getModifier();
 
     public boolean isReadOnly() {
