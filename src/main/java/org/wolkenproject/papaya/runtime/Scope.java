@@ -93,10 +93,10 @@ public class Scope {
 
     public void destroyContract() throws PapayaException {
         // this is the address that we will send any remaining funds to
-        MochaObject address = getStack().pop();
-
-        if (address instanceof MochaAddress) {
-        }
+//        PapayaObject address = getStack().pop();
+//
+//        if (address instanceof MochaAddress) {
+//        }
 
         throw new PapayaException("invalid address provided.");
     }
