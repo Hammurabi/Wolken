@@ -24,7 +24,7 @@ public abstract class PapayaHandler {
     }
 
     public static final PapayaHandler doNothingHandler(PapayaObject object) {
-        return new PapayaDoNothingHandler(object);
+        return new DefaultHandler(object);
     }
 
     public static final PapayaHandler readOnlyHandler(PapayaObject object) {
