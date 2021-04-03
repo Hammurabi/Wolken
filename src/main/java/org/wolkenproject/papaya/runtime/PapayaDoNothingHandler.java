@@ -2,7 +2,6 @@ package org.wolkenproject.papaya.runtime;
 
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
-import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.papaya.compiler.PapayaStructure;
 
 import java.util.Stack;
