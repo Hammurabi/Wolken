@@ -162,11 +162,11 @@ public class ProgramCounter {
     }
 
     public void jump(int jumpLoc) throws PapayaException {
-        if (program.length()() < jumpLoc) {
+        if (program.length() < jumpLoc) {
             throw new PapayaException("invalid jump location.");
         }
 
-        program.position(jumpLoc);
+        program.setPosition(jumpLoc);
     }
 
     public String hexDump() throws PapayaException {
