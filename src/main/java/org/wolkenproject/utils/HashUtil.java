@@ -1,5 +1,6 @@
 package org.wolkenproject.utils;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.Arrays;
 
@@ -118,22 +119,54 @@ public class HashUtil {
     }
 
     // returns a hash of any string 'A-z|0-1'
-    public static long enHash(byte msg[]) {
+    // will not have any collisions
+    // finds the index of a given string in
+    // n-dimensional space.
+    public static byte[] enHash(byte msg[]) {
         final byte alphabet[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_".getBytes();
         final int blockSize = 5;
+        final int singleDim = alphabet.length;
         final int numBlocks = (msg.length / blockSize + 1) * blockSize;
+        final BigInteger secondDim = new BigInteger(Integer.toString(alphabet.length)).pow(numBlocks);
         final int paddedLen = numBlocks * blockSize;
 
         final byte padded[] = Arrays.copyOf(msg, paddedLen);
         final int blocks[]  = new int[numBlocks];
 
         for (int i = 0; i < padded.length; i += blockSize) {
-            // get the index of the current byte
+            // prepare the block
             int indexOf0 = Arrays.binarySearch(alphabet, padded[i]);
             int indexOf1 = Arrays.binarySearch(alphabet, padded[i + 1]);
             int indexOf2 = Arrays.binarySearch(alphabet, padded[i + 2]);
             int indexOf3 = Arrays.binarySearch(alphabet, padded[i + 3]);
             int indexOf4 = Arrays.binarySearch(alphabet, padded[i + 4]);
+
+            // array = a0 b0 c0 d0 e0 a1 b1 c1 d1 e1
+            // index = 0 + len * 0 1 1 0
+            // x + WIDTH * (y + DEPTH * z)
+
+            blocks[i / numBlocks] =
+                    singleDim*singleDim*singleDim*singleDim * indexOf0
+                  + singleDim*singleDim*singleDim * indexOf1
+                  + singleDim*singleDim * indexOf2
+                  + singleDim * indexOf3
+                  + indexOf4
+                    ;
         }
+
+        BigInteger result = BigInteger.ZERO;
+
+        for (int i = 0; i < numBlocks; i ++) {
+            result = result.add(secondDim.pow(numBlocks - (i + 1)).multiply(new BigInteger(1, Utils.takeApart(blocks[i]))));
+        }
+
+        byte hash[] = result.toByteArray();
+        if (hash[0] == 0) {
+            byte temp[] = new byte[hash.length - 1];
+            System.arraycopy(hash, 1, temp, 0, temp.length);
+            hash = temp;
+        }
+
+        return hash;
     }
 }
