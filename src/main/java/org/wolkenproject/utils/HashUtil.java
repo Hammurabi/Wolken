@@ -1,6 +1,7 @@
 package org.wolkenproject.utils;
 
 import java.security.MessageDigest;
+import java.util.Arrays;
 
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.macs.HMac;
@@ -113,6 +114,20 @@ public class HashUtil {
         catch (Exception e)
         {
             return null;
+        }
+    }
+
+    // returns a hash of any string 'A-z|0-1'
+    public static long enHash(byte msg[]) {
+        final byte alphabet[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_".getBytes();
+        final int blockSize = 5;
+        final int numBlocks = (msg.length / blockSize + 1) * blockSize;
+        final int paddedLen = numBlocks * blockSize;
+
+        final byte padded[] = Arrays.copyOf(msg, paddedLen);
+        final int blocks[]  = new int[numBlocks];
+
+        for (int i = 0; i < padded.length; i += blockSize) {
         }
     }
 }
