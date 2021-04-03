@@ -6,4 +6,19 @@ public class ByteContainer implements PapayaContainer {
     public ByteContainer(byte[] bytes) {
         this.bytes = bytes;
     }
+
+    @Override
+    public PapayaObject getAtIndex(int index) {
+        return null;
+    }
+
+    @Override
+    public void setAtIndex(int index, PapayaHandler handler) {
+
+    }
+
+    @Override
+    public void append(PapayaHandler object) {
+
+    }
 }
