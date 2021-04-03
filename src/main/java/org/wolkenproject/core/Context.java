@@ -108,7 +108,7 @@ public class Context {
 
         opcodeRegister.registerOp("jmp", "jumps to a location in code", 1, scope -> scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()));
         opcodeRegister.registerOp("jnt", "branch operator, jumps if condition is not true.", 1, scope -> {
-            if (!scope.getStack().pop().isTrue())
+            if (!scope.getStack().pop().asBool())
                 scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort());
         });
 
