@@ -26,6 +26,14 @@ public class ProgramCounter {
         throw new EmptyProgramCounterException();
     }
 
+    public int nextVarint256() throws EmptyProgramCounterException {
+        if (remaining() >= 1) {
+            return program.getChar();
+        }
+
+        throw new EmptyProgramCounterException();
+    }
+
     public int nextShort() throws EmptyProgramCounterException {
         if (remaining() >= 2) {
             return program.getShort();
