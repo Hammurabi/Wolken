@@ -162,7 +162,7 @@ public class ProgramCounter {
     }
 
     public void jump(int jumpLoc) throws PapayaException {
-        if (program.capacity() < jumpLoc) {
+        if (program.length()() < jumpLoc) {
             throw new PapayaException("invalid jump location.");
         }
 
