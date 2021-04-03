@@ -5,7 +5,7 @@ import org.wolkenproject.exceptions.EmptyProgramCounterException;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.papaya.RandomAccessInputStream;
+import org.wolkenproject.papaya.Program;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
@@ -13,41 +13,62 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 public class ProgramCounter {
-    private RandomAccessInputStream     program;
-    private OpcodeRegister              register;
+    private Program             program;
+    private OpcodeRegister      register;
 
-    public ProgramCounter(RandomAccessInputStream program, OpcodeRegister register) {
+    public ProgramCounter(Program program, OpcodeRegister register) {
         this.program = program;
         this.register= register;
         program.setPosition(0);
     }
 
     public int nextByte() throws EmptyProgramCounterException {
-        if (hasNext()) {
+        try {
+            return program.read();
+        } catch (IOException e) {
+            throw new EmptyProgramCounterException();
         }
+    }
 
+    public BigInteger nextVarint256(boolean preserveAllBits) throws EmptyProgramCounterException {
+        try {
+            return VarInt.readCompactUint256(preserveAllBits, program);
+        } catch (IOException | WolkenException e) {
+            throw new EmptyProgramCounterException();
+        }
+    }
+
+    public BigInteger nextVarint128(boolean preserveAllBits) throws EmptyProgramCounterException {
+        try {
+        return VarInt.readCompactUint128(preserveAllBits, program);
+    } catch (IOException | WolkenException e) {
         throw new EmptyProgramCounterException();
     }
-
-    public BigInteger nextVarint256(boolean preserveAllBits) throws EmptyProgramCounterException, WolkenException, IOException {
-        return VarInt.readCompactUint256(preserveAllBits, program);
     }
 
-    public BigInteger nextVarint128(boolean preserveAllBits) throws EmptyProgramCounterException, WolkenException, IOException {
-        return VarInt.readCompactUint128(preserveAllBits, program);
-    }
-
-    public long nextVarint64(boolean preserveAllBits) throws EmptyProgramCounterException, WolkenException, IOException {
+    public long nextVarint64(boolean preserveAllBits) throws EmptyProgramCounterException {
+        try {
         return VarInt.readCompactUInt64(preserveAllBits, program);
+    } catch (IOException e) {
+        throw new EmptyProgramCounterException();
+        }
     }
 
-    public int nextVarint32(boolean preserveAllBits) throws EmptyProgramCounterException, WolkenException, IOException {
+    public int nextVarint32(boolean preserveAllBits) throws EmptyProgramCounterException {
+        try {
         return VarInt.readCompactUInt32(preserveAllBits, program);
+        } catch (IOException e) {
+        throw new EmptyProgramCounterException();
+        }
     }
 
     public int nextShort() throws EmptyProgramCounterException {
         if (remaining() >= 2) {
-            return program.readShort();
+            try {
+                return program.readShort();
+            } catch (IOException e) {
+                throw new EmptyProgramCounterException();
+            }
         }
 
         throw new EmptyProgramCounterException();
@@ -55,7 +76,11 @@ public class ProgramCounter {
 
     public int nextUnsignedShort() throws EmptyProgramCounterException {
         if (remaining() >= 2) {
-            return program.getChar();
+            try {
+                return program.readChar();
+            } catch (IOException e) {
+                throw new EmptyProgramCounterException();
+            }
         }
 
         throw new EmptyProgramCounterException();
@@ -63,7 +88,11 @@ public class ProgramCounter {
 
     public int nextInt24() throws EmptyProgramCounterException {
         if (remaining() >= 3) {
-            return Utils.makeInt((byte) 0, program.get(), program.get(), program.get());
+            try {
+                return Utils.makeInt((byte) 0, program.read(), program.read(), program.read());
+            } catch (IOException e) {
+                throw new EmptyProgramCounterException();
+            }
         }
 
         throw new EmptyProgramCounterException();
