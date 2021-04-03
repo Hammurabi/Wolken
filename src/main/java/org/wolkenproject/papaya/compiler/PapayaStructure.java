@@ -83,7 +83,7 @@ public class PapayaStructure {
         for (PapayaFunction function : getFunctions()) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             CompilationScope compilationScope = new CompilationScope(outputStream, application);
-            function.getStatement().compile(compilationScope);
+            function.compile(compilationScope);
             function.setByteCode(outputStream.toByteArray());
         }
     }
