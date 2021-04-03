@@ -38,7 +38,7 @@ public class PapayaDoNothingHandler extends PapayaHandler {
             throw new PapayaIllegalAccessException();
         }
 
-        getPapayaObject().asContainer().setAtIndex(index, handler, AccessModifier.None);
+        getPapayaObject().asContainer().setAtIndex(index, handler);
     }
 
     @Override
