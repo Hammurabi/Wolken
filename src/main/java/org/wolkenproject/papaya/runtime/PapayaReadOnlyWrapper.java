@@ -1,5 +1,7 @@
 package org.wolkenproject.papaya.runtime;
 
+import org.wolkenproject.exceptions.PapayaException;
+import org.wolkenproject.papaya.compiler.AccessModifier;
 import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
@@ -12,17 +14,31 @@ public class PapayaReadOnlyWrapper extends PapayaHandler {
     }
 
     @Override
-    public void setMember(int memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
-        throw new PapayaIllegalAccessException();
+    public void setMember(byte[] memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+
     }
 
     @Override
-    public PapayaHandler getMember(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
-        return new PapayaReadOnlyWrapper(getPapayaObject().getMember(memberId, stackTrace).getPapayaObject());
+    public PapayaHandler getMember(byte[] memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+        return null;
     }
 
     @Override
-    public void call(Scope scope) throws WolkenException {
-        throw new WolkenException("this object is not callable.");
+    public void call(Scope scope) throws PapayaException {
+        getPapayaObject().call(scope);
+    }
+
+    @Override
+    public PapayaHandler getAtIndex(int index) throws PapayaException {
+        return null;
+    }
+
+    @Override
+    public void setAtIndex(int index, PapayaHandler handler) throws PapayaException {
+    }
+
+    @Override
+    public AccessModifier getModifier() {
+        return AccessModifier.ReadOnly;
     }
 }
