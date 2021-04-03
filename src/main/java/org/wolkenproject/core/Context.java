@@ -154,11 +154,11 @@ public class Context {
         opcodeRegister.registerOp("verify", "throws an 'InvalidTransactionException' if the top stack item is not true.", 1, Scope::verify);
         opcodeRegister.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.", 1, scope -> scope.getStack().peek().flipSign());
 
-        opcodeRegister.registerOp("add", "pop two objects from the stack and add them.", 1, scope -> scope.add(scope));
-        opcodeRegister.registerOp("sub", "pop two objects from the stack and sub them.", 1, scope -> scope.sub(scope));
-        opcodeRegister.registerOp("mul", "pop two objects from the stack and mul them.", 1, scope -> scope.mul(scope));
-        opcodeRegister.registerOp("div", "pop two objects from the stack and div them.", 1, scope -> scope.div(scope));
-        opcodeRegister.registerOp("mod", "pop two objects from the stack and mod them.", 1, scope -> scope.mod(scope));
+        opcodeRegister.registerOp("add", "pop two objects from the stack and add them.", 1, scope -> scope.add());
+        opcodeRegister.registerOp("sub", "pop two objects from the stack and sub them.", 1, scope -> scope.sub());
+        opcodeRegister.registerOp("mul", "pop two objects from the stack and mul them.", 1, scope -> scope.mul());
+        opcodeRegister.registerOp("div", "pop two objects from the stack and div them.", 1, scope -> scope.div());
+        opcodeRegister.registerOp("mod", "pop two objects from the stack and mod them.", 1, scope -> scope.mod());
         opcodeRegister.registerOp("and", "pop two objects from the stack and perform bitwise and on them.", 1, scope -> scope.getStack().and(scope));
         opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", 1, scope -> scope.getStack().or(scope));
         opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", 1, scope -> scope.getStack().xor(scope));
