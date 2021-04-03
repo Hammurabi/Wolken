@@ -29,7 +29,7 @@ public class PapayaDoNothingHandler extends PapayaHandler {
 
     @Override
     public PapayaHandler getAtIndex(int index) throws PapayaException {
-        return new PapayaDoNothingHandler(getPapayaObject().asContainer().getAtIndex(index, AccessModifier.None));
+        return new PapayaDoNothingHandler(getPapayaObject().asContainer().getAtIndex(index));
     }
 
     @Override
