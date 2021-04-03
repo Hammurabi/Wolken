@@ -14,11 +14,9 @@ public class ByteContainer implements PapayaContainer {
 
     @Override
     public void setAtIndex(int index, PapayaHandler handler) {
-
     }
 
     @Override
     public void append(PapayaHandler object) {
-
     }
 }
