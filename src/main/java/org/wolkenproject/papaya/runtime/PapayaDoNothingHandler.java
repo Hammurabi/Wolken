@@ -34,6 +34,15 @@ public class PapayaDoNothingHandler extends PapayaHandler {
 
     @Override
     public void setAtIndex(int index, PapayaHandler handler) throws PapayaException {
-        getPapayaObject().asContainer().setAtIndex(index, handler.getPapayaObject(), AccessModifier.None);
+        if (handler.isReadOnly()) {
+            throw new PapayaIllegalAccessException();
+        }
+
+        getPapayaObject().asContainer().setAtIndex(index, handler, AccessModifier.None);
+    }
+
+    @Override
+    public AccessModifier getModifier() {
+        return AccessModifier.None;
     }
 }
