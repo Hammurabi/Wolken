@@ -1,7 +1,6 @@
 package org.wolkenproject.papaya.compiler;
 
 import org.wolkenproject.papaya.runtime.PapayaObject;
-import org.wolkenproject.papaya.runtime.PapayaReadOnlyWrapper;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
