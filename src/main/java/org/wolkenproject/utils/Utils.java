@@ -52,16 +52,16 @@ public class Utils {
     }
 
     public static int makeInt(int b3, int b2, int b1, int b0) {
-        return (((b3       ) << 24) |
+        return (((b3 & 0xff) << 24) |
                 ((b2 & 0xff) << 16) |
                 ((b1 & 0xff) <<  8) |
                 ((b0 & 0xff)      ));
     }
 
-    public static long makeLong(byte b7, byte b6, byte b5, byte b4,
-                                byte b3, byte b2, byte b1, byte b0)
+    public static long makeLong(int b7, int b6, int b5, int b4,
+                                int b3, int b2, int b1, int b0)
     {
-        return ((((long)b7       ) << 56) |
+        return ((((long)b7 & 0xff) << 56) |
                 (((long)b6 & 0xff) << 48) |
                 (((long)b5 & 0xff) << 40) |
                 (((long)b4 & 0xff) << 32) |
