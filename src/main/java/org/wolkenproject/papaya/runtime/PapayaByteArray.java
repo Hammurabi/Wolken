@@ -21,4 +21,9 @@ public class PapayaByteArray extends PapayaObject {
     public BigInteger asInt() {
         return container.asInt();
     }
+
+    @Override
+    public BigInteger asSignedInt() {
+        return container.asSignedInt();
+    }
 }
