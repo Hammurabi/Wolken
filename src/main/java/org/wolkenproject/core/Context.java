@@ -92,7 +92,7 @@ public class Context {
         opcodeRegister.registerOp("pop", "pop the top element from the stack.", 1, scope -> scope.getStack().pop());
         opcodeRegister.registerOp("destroy", "destroy contract and return all funds to provided address.", 100, Scope::destroyContract);
 
-        opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, 4, scope -> scope.getStack().push(scope.getStack().pop().call(scope)));
+        opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, 4, scope -> scope.getStack().pop().call(scope));
 
         opcodeRegister.registerOp("load", "load an object from an offset.", 3, 2, scope -> scope.getStack().pop().getMember(scope.getProgramCounter().nextUnsignedShort()));
         opcodeRegister.registerOp("store", "store an object to an offset.", 2, 2, scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextUnsignedShort(), scope.getStack().pop()));
