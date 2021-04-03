@@ -99,7 +99,7 @@ public class Context {
         opcodeRegister.registerOp("store", "store an object to an offset.", 2, 2, scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextMemberId(), scope.getStack().pop(), scope.getStackTrace()));
 
         opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, 2, scope -> scope.getStack().pop().getAtIndex(scope.getStack().pop().asInt().intValue()));
-        opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, 2, scope -> scope.getStack().push(scope.getStack().pop().subscriptGet((int) scope.getStack().pop().asInt())));
+        opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, 2, scope -> scope.getStack().pop().setAtIndex(scope.getStack().pop().asInt().intValue(), scope.getStack().pop()));
         opcodeRegister.registerOp("append", "append an object to an array.", 2, scope -> scope.getStack().pop().append(scope.getStack().pop()));
 
         opcodeRegister.registerOp("pushdata", "push an array of bytes of length (8) into the stack.", true, 1, 1, scope -> scope.getStack().push(new PapayaByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextByte()))));
