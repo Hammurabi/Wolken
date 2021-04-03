@@ -1,6 +1,7 @@
 package org.wolkenproject.utils;
 
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.papaya.Program;
 import org.wolkenproject.serialization.SerializableI;
 
 import java.io.IOException;
@@ -466,5 +467,9 @@ public class VarInt {
         } else {
             return bytes.length;
         }
+    }
+
+    public static byte[] readCompactUint256Bytes(boolean preserveAllBits, Program program) {
+        return new byte[0];
     }
 }
