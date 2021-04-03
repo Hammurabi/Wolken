@@ -2,6 +2,7 @@ package org.wolkenproject.papaya.runtime;
 
 import org.wolkenproject.exceptions.PapayaException;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 public class ByteContainer implements PapayaContainer {
@@ -17,7 +18,7 @@ public class ByteContainer implements PapayaContainer {
             throw new PapayaException("array index out of '" + bytes.length + "' bounds.");
         }
 
-        return new PapayaNumber(bytes[index]);
+        return new PapayaNumber(Byte.toUnsignedInt(bytes[index]), false);
     }
 
     @Override
@@ -33,5 +34,15 @@ public class ByteContainer implements PapayaContainer {
     public void append(PapayaHandler object) {
         bytes = Arrays.copyOf(bytes, bytes.length + 1);
         bytes[bytes.length - 1] = object.asInt().byteValue();
+    }
+
+    @Override
+    public BigInteger asInt() {
+        return BigInteger.ZERO;
+    }
+
+    @Override
+    public BigInteger asSignedInt() {
+        return BigInteger.ZERO;
     }
 }
