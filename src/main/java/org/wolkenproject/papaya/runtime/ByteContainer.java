@@ -1,5 +1,7 @@
 package org.wolkenproject.papaya.runtime;
 
+import org.wolkenproject.exceptions.PapayaException;
+
 public class ByteContainer implements PapayaContainer {
     private byte bytes[];
 
@@ -8,8 +10,12 @@ public class ByteContainer implements PapayaContainer {
     }
 
     @Override
-    public PapayaObject getAtIndex(int index) {
-        return null;
+    public PapayaObject getAtIndex(int index) throws PapayaException {
+        if (index >= bytes.length) {
+            throw new PapayaException("array index out of '" + bytes.length + "' bounds.");
+        }
+
+        return new PapayaNumber(bytes[index]);
     }
 
     @Override
