@@ -40,5 +40,5 @@ public abstract class PapayaHandler {
 
     public abstract PapayaHandler getAtIndex(int index) throws PapayaException;
 
-    public abstract void setAtIndex(int index, PapayaHandler handler);
+    public abstract void setAtIndex(int index, PapayaHandler handler) throws PapayaException;
 }
