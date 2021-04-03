@@ -15,7 +15,6 @@ public class PapayaReadOnlyWrapper extends PapayaHandler {
 
     @Override
     public void setMember(byte[] memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
-
     }
 
     @Override
