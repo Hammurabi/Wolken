@@ -35,6 +35,7 @@ public class PapayaReadOnlyWrapper extends PapayaHandler {
 
     @Override
     public void setAtIndex(int index, PapayaHandler handler) throws PapayaException {
+        throw new PapayaIllegalAccessException();
     }
 
     @Override
