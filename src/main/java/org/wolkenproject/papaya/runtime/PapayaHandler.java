@@ -28,7 +28,7 @@ public abstract class PapayaHandler {
     }
 
     public static final PapayaHandler readOnlyHandler(PapayaObject object) {
-        return new PapayaReadOnlyWrapper(object);
+        return new ReadOnlyHandler(object);
     }
 
     public boolean asBool() {
