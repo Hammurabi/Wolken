@@ -14,8 +14,8 @@ public abstract class PapayaHandler {
         this.papayaObject = papayaObject;
     }
 
-    public abstract void setMember(int memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
-    public abstract PapayaHandler getMember(int memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
+    public abstract void setMember(byte memberId[], PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
+    public abstract PapayaHandler getMember(byte memberId[], Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
     public abstract void call(Scope scope) throws WolkenException;
 
     public PapayaObject getPapayaObject() {
