@@ -422,6 +422,7 @@ public class VarInt {
     }
 
     public static BigInteger readCompactUint256(boolean preserveAllBits, InputStream stream) throws WolkenException, IOException {
+        return new BigInteger(1, readCompactUint256Bytes(preserveAllBits, stream));
     }
 
     public static int sizeOfCompactUint256(BigInteger integer, boolean preserveAllBits) {
