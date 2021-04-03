@@ -110,22 +110,22 @@ public class Context {
                 scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort());
         });
 
-        opcodeRegister.registerOp("const0", "push an integer with value '0' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(0, false)));
-        opcodeRegister.registerOp("const1", "push an integer with value '1' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(1, false)));
-        opcodeRegister.registerOp("const2", "push an integer with value '2' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(2, false)));
-        opcodeRegister.registerOp("const3", "push an integer with value '3' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(3, false)));
-        opcodeRegister.registerOp("const4", "push an integer with value '4' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(4, false)));
-        opcodeRegister.registerOp("const5", "push an integer with value '5' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(5, false)));
-        opcodeRegister.registerOp("const6", "push an integer with value '6' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(6, false)));
-        opcodeRegister.registerOp("const7", "push an integer with value '7' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(7, false)));
-        opcodeRegister.registerOp("const8", "push an integer with value '8' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(8, false)));
-        opcodeRegister.registerOp("const9", "push an integer with value '9' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(9, false)));
-        opcodeRegister.registerOp("const10", "push an integer with value '10' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(10, false)));
-        opcodeRegister.registerOp("const11", "push an integer with value '11' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(11, false)));
-        opcodeRegister.registerOp("const12", "push an integer with value '12' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(12, false)));
-        opcodeRegister.registerOp("const13", "push an integer with value '13' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(13, false)));
-        opcodeRegister.registerOp("const14", "push an integer with value '14' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(14, false)));
-        opcodeRegister.registerOp("const15", "push an integer with value '15' (unsigned).", 1, scope -> scope.getStack().push(new PapayaNumber(15, false)));
+        opcodeRegister.registerOp("const0", "push an integer with value '0' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(0, false))));
+        opcodeRegister.registerOp("const1", "push an integer with value '1' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(1, false))));
+        opcodeRegister.registerOp("const2", "push an integer with value '2' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(2, false))));
+        opcodeRegister.registerOp("const3", "push an integer with value '3' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(3, false))));
+        opcodeRegister.registerOp("const4", "push an integer with value '4' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(4, false))));
+        opcodeRegister.registerOp("const5", "push an integer with value '5' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(5, false))));
+        opcodeRegister.registerOp("const6", "push an integer with value '6' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(6, false))));
+        opcodeRegister.registerOp("const7", "push an integer with value '7' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(7, false))));
+        opcodeRegister.registerOp("const8", "push an integer with value '8' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(8, false))));
+        opcodeRegister.registerOp("const9", "push an integer with value '9' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(9, false))));
+        opcodeRegister.registerOp("const10", "push an integer with value '10' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(10, false))));
+        opcodeRegister.registerOp("const11", "push an integer with value '11' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(11, false))));
+        opcodeRegister.registerOp("const12", "push an integer with value '12' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(12, false))));
+        opcodeRegister.registerOp("const13", "push an integer with value '13' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(13, false))));
+        opcodeRegister.registerOp("const14", "push an integer with value '14' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(14, false))));
+        opcodeRegister.registerOp("const15", "push an integer with value '15' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(15, false))));
 
         opcodeRegister.registerOp("vconst", "push a varint of size '5-61' (unsigned).", 1, 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextByte(), false)));
         opcodeRegister.registerOp("bconst", "push an integer of size '8' (unsigned).", 1, 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextByte(), false)));
