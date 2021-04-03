@@ -39,6 +39,11 @@ public class PapayaReadOnlyWrapper extends PapayaHandler {
     }
 
     @Override
+    public void append(PapayaHandler handler) throws PapayaException {
+        throw new PapayaIllegalAccessException();
+    }
+
+    @Override
     public AccessModifier getModifier() {
         return AccessModifier.ReadOnly;
     }
