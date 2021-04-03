@@ -128,6 +128,12 @@ public class HashUtil {
         final int blocks[]  = new int[numBlocks];
 
         for (int i = 0; i < padded.length; i += blockSize) {
+            // get the index of the current byte
+            int indexOf0 = Arrays.binarySearch(alphabet, padded[i]);
+            int indexOf1 = Arrays.binarySearch(alphabet, padded[i + 1]);
+            int indexOf2 = Arrays.binarySearch(alphabet, padded[i + 2]);
+            int indexOf3 = Arrays.binarySearch(alphabet, padded[i + 3]);
+            int indexOf4 = Arrays.binarySearch(alphabet, padded[i + 4]);
         }
     }
 }
