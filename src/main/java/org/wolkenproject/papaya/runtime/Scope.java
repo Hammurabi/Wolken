@@ -6,7 +6,9 @@ import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.PapayaException;
+import org.wolkenproject.papaya.compiler.PapayaStructure;
 
+import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -99,5 +101,9 @@ public class Scope {
 //        }
 
         throw new PapayaException("invalid address provided.");
+    }
+
+    public Stack<PapayaStructure> getStackTrace() {
+        return null;
     }
 }
