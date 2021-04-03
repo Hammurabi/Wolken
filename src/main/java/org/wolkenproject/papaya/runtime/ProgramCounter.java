@@ -4,10 +4,13 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.EmptyProgramCounterException;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
+import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.RandomAccessInputStream;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
+import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 public class ProgramCounter {
@@ -28,12 +31,8 @@ public class ProgramCounter {
         throw new EmptyProgramCounterException();
     }
 
-    public int nextVarint256(boolean preserveAllBits) throws EmptyProgramCounterException {
-        if (remaining() >= 1) {
-            VarInt.readCompactUint256(preserveAllBits, program);
-        }
-
-        throw new EmptyProgramCounterException();
+    public BigInteger nextVarint256(boolean preserveAllBits) throws EmptyProgramCounterException, WolkenException, IOException {
+        return VarInt.readCompactUint256(preserveAllBits, program);
     }
 
     public int nextShort() throws EmptyProgramCounterException {
