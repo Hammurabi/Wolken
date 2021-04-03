@@ -422,25 +422,6 @@ public class VarInt {
     }
 
     public static BigInteger readCompactUint256(boolean preserveAllBits, InputStream stream) throws WolkenException, IOException {
-        if (preserveAllBits) {
-            int length      = SerializableI.checkNotEOF(stream.read());
-            byte bytes[]    = new byte[length];
-            SerializableI.checkFullyRead(stream.read(bytes), length);
-
-            return new BigInteger(1, bytes);
-        } else {
-            int firstByte   = SerializableI.checkNotEOF(stream.read());
-            int length      = firstByte >>> 3;
-            if (length > 0) {
-                byte bytes[]    = new byte[length + 1];
-                SerializableI.checkFullyRead(stream.read(bytes, 1, length), length);
-
-                bytes[0]        = (byte) (firstByte & 0x7);
-                return new BigInteger(1, bytes);
-            } else {
-                return new BigInteger(1, new byte[] { (byte) (firstByte & 0x7) });
-            }
-        }
     }
 
     public static int sizeOfCompactUint256(BigInteger integer, boolean preserveAllBits) {
@@ -469,7 +450,25 @@ public class VarInt {
         }
     }
 
-    public static byte[] readCompactUint256Bytes(boolean preserveAllBits, Program program) {
-        return new byte[0];
+    public static byte[] readCompactUint256Bytes(boolean preserveAllBits, InputStream stream) throws WolkenException, IOException {
+        if (preserveAllBits) {
+            int length      = SerializableI.checkNotEOF(stream.read());
+            byte bytes[]    = new byte[length];
+            SerializableI.checkFullyRead(stream.read(bytes), length);
+
+            return bytes;
+        } else {
+            int firstByte   = SerializableI.checkNotEOF(stream.read());
+            int length      = firstByte >>> 3;
+            if (length > 0) {
+                byte bytes[]    = new byte[length + 1];
+                SerializableI.checkFullyRead(stream.read(bytes, 1, length), length);
+
+                bytes[0]        = (byte) (firstByte & 0x7);
+                return bytes;
+            } else {
+                return new byte[] { (byte) (firstByte & 0x7) };
+            }
+        }
     }
 }
