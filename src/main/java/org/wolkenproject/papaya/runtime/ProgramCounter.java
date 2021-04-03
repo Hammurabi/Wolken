@@ -43,6 +43,10 @@ public class ProgramCounter {
         return VarInt.readCompactUint64(preserveAllBits, program);
     }
 
+    public BigInteger nextVarint32(boolean preserveAllBits) throws EmptyProgramCounterException, WolkenException, IOException {
+        return VarInt.readCompactUInt32(preserveAllBits, program);
+    }
+
     public int nextShort() throws EmptyProgramCounterException {
         if (remaining() >= 2) {
             return program.getShort();
