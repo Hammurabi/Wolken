@@ -1,6 +1,7 @@
 package org.wolkenproject.papaya.compiler;
 
 import org.json.JSONObject;
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
 
 public class PapayaCompiler extends Compiler {
@@ -14,8 +15,10 @@ public class PapayaCompiler extends Compiler {
     }
 
     @Override
-    public CompiledScript compile(String text, JSONObject compilerArguments) throws WolkenException {
+    public PapayaApplication compile(String text, JSONObject compilerArguments) throws PapayaException, WolkenException {
         PapayaApplication application = parser.ingest(lexer.ingest(text));
-        return application.compile();
+        application.compile();
+
+        return application;
     }
 }
