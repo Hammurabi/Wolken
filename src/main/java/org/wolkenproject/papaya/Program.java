@@ -66,4 +66,8 @@ public class Program extends InputStream {
     public int remaining() {
         return buffer.length - index;
     }
+
+    public boolean hasRemaining() {
+        return remaining() > 0;
+    }
 }
