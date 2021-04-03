@@ -8,6 +8,7 @@ import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
+import org.wolkenproject.papaya.runtime.DefaultHandler;
 import org.wolkenproject.papaya.runtime.OpcodeRegister;
 import org.wolkenproject.papaya.runtime.PapayaByteArray;
 import org.wolkenproject.papaya.runtime.Scope;
@@ -102,9 +103,7 @@ public class Context {
         opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, 2, scope -> scope.getStack().pop().setAtIndex(scope.getStack().pop().asInt().intValue(), scope.getStack().pop()));
         opcodeRegister.registerOp("append", "append an object to an array.", 2, scope -> scope.getStack().pop().append(scope.getStack().pop()));
 
-        opcodeRegister.registerOp("pushdata", "push an array of bytes of length (8) into the stack.", true, 1, 1, scope -> scope.getStack().push(new PapayaByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextByte()))));
-        opcodeRegister.registerOp("pushdata2", "push an array of bytes of length (16) into the stack.", true, 2, 1, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextUnsignedShort()))));
-        opcodeRegister.registerOp("pushdata3", "push an array of bytes of length (24) into the stack.", true, 3, 1, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextInt24()))));
+        opcodeRegister.registerOp("pushdata", "push an array of bytes of length (6 - 31) into the stack.", true, 1, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaByteArray(scope.getProgramCounter().next(scope.getProgramCounter().nextVarint32(false))))));
         opcodeRegister.registerOp("push20", "push an array of bytes of length (160) into the stack.", true, 20, 1, scope -> scope.getStack().push(new ByteArray(scope.getProgramCounter().next(20))));
 
         opcodeRegister.registerOp("jmp", "jumps to a location in code", 1, scope -> scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()));
