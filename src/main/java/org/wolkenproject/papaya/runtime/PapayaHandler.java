@@ -3,7 +3,6 @@ package org.wolkenproject.papaya.runtime;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
-import org.wolkenproject.exceptions.WolkenException;
 
 import java.math.BigInteger;
 import java.util.Stack;
@@ -38,4 +37,8 @@ public abstract class PapayaHandler {
     public BigInteger asInt() {
         return papayaObject.asInt();
     }
+
+    public abstract PapayaHandler getAtIndex(int index);
+
+    public abstract void setAtIndex(int index, PapayaHandler handler);
 }
