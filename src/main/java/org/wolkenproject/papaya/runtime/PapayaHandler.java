@@ -1,5 +1,6 @@
 package org.wolkenproject.papaya.runtime;
 
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
@@ -16,7 +17,7 @@ public abstract class PapayaHandler {
 
     public abstract void setMember(byte memberId[], PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
     public abstract PapayaHandler getMember(byte memberId[], Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
-    public abstract void call(Scope scope) throws WolkenException;
+    public abstract void call(Scope scope) throws PapayaException;
 
     public PapayaObject getPapayaObject() {
         return papayaObject;
