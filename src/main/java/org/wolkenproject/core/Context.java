@@ -94,7 +94,7 @@ public class Context {
 
         opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, 4, scope -> scope.getStack().pop().call(scope));
 
-        opcodeRegister.registerOp("load", "load an object from an offset.", 3, 2, scope -> scope.getStack().pop().getMember(scope.getProgramCounter().nextMemberId()));
+        opcodeRegister.registerOp("load", "load an object from an offset.", 3, 2, scope -> scope.getStack().pop().getMember(scope.getProgramCounter().nextMemberId(), scope.getStackTrace()));
         opcodeRegister.registerOp("store", "store an object to an offset.", 2, 2, scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextMemberId(), scope.getStack().pop()));
 
         opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, 2, scope -> scope.getStack().pop().subscriptSet((int) scope.getStack().pop().asInt(), scope.getStack().pop()));
