@@ -9,6 +9,7 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
 import org.wolkenproject.papaya.runtime.OpcodeRegister;
+import org.wolkenproject.papaya.runtime.Scope;
 import org.wolkenproject.rpc.RpcServer;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
