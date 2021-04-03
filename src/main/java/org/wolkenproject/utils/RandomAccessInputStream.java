@@ -27,7 +27,7 @@ public class RandomAccessInputStream extends InputStream {
         return Utils.makeInt(read(), read(), read(), read());
     }
 
-    public int readLong() throws IOException {
+    public long readLong() throws IOException {
         return Utils.makeLong(read(), read(), read(), read(), read(), read(), read(), read());
     }
 }
