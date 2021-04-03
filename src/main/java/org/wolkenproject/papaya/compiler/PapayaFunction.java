@@ -1,14 +1,12 @@
 package org.wolkenproject.papaya.compiler;
 
-import org.wolkenproject.papaya.AccessModifier;
-
 import java.util.List;
 import java.util.Set;
 
 public class PapayaFunction extends PapayaMember {
     private final String                name;
     private final Set<PapayaField>      arguments;
-    private final PapayaStatement       statement;
+    private final List<Token>           statement;
     private byte                        byteCode[];
     private final LineInfo              lineInfo;
 
@@ -33,7 +31,7 @@ public class PapayaFunction extends PapayaMember {
         return arguments;
     }
 
-    public PapayaStatement getStatement() {
+    public List<Token> getStatement() {
         return statement;
     }
 
