@@ -65,21 +65,26 @@ public enum TokenType {
     GreaterThanSymbol,
     LessThanEqualsSymbol,
     GreaterThanEqualsSymbol,
+
     LeftParenthesisSymbol,
     RightParenthesisSymbol,
     LeftBracketSymbol,
     RightBracketSymbol,
     LeftBraceSymbol,
     RightBraceSymbol,
+
     ForKeyword,
     WhileKeyword,
+
     BreakKeyword,
     ContinueKeyword,
     PassKeyword,
     ReturnKeyword,
+
     FunctionKeyword,
     ContractKeyword,
     ModuleKeyword,
+
     ClassKeyword,
     StructKeyword,
     ExtendsKeyword,
@@ -100,6 +105,9 @@ public enum TokenType {
     AssignmentStatement,
     FunctionCall,
     FunctionArguments,
+    FunctionBody,
     RootToken,
     Structure,
+
+    Return,
 }
