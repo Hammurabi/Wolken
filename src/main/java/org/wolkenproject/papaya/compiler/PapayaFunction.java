@@ -42,4 +42,7 @@ public class PapayaFunction extends PapayaMember {
     public void setByteCode(byte[] byteArray) {
         byteCode = byteArray;
     }
+
+    public void compile(CompilationScope compilationScope) {
+    }
 }
