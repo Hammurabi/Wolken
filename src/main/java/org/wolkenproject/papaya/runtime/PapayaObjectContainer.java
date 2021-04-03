@@ -7,8 +7,8 @@ import java.util.Arrays;
 public class PapayaObjectContainer implements PapayaContainer {
     private PapayaObject objects[];
 
-    public PapayaObjectContainer(byte[] bytes) {
-        this.bytes = bytes;
+    public PapayaObjectContainer(PapayaObject[] objects) {
+        this.objects = objects;
     }
 
     @Override
