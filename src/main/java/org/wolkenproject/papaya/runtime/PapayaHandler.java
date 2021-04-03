@@ -1,6 +1,7 @@
 package org.wolkenproject.papaya.runtime;
 
 import org.wolkenproject.exceptions.PapayaException;
+import org.wolkenproject.papaya.compiler.AccessModifier;
 import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 
@@ -41,4 +42,10 @@ public abstract class PapayaHandler {
     public abstract PapayaHandler getAtIndex(int index) throws PapayaException;
 
     public abstract void setAtIndex(int index, PapayaHandler handler) throws PapayaException;
+
+    public abstract AccessModifier getModifier();
+
+    public boolean isReadOnly() {
+        return getModifier() == AccessModifier.ReadOnly;
+    }
 }
