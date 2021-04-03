@@ -38,7 +38,7 @@ public abstract class PapayaHandler {
         return papayaObject.asInt();
     }
 
-    public abstract PapayaHandler getAtIndex(int index);
+    public abstract PapayaHandler getAtIndex(int index) throws PapayaException;
 
     public abstract void setAtIndex(int index, PapayaHandler handler);
 }
