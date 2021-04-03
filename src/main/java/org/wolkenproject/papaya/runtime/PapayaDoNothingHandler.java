@@ -27,8 +27,8 @@ public class PapayaDoNothingHandler extends PapayaHandler {
     }
 
     @Override
-    public PapayaHandler getAtIndex(int index) {
-        return null;
+    public PapayaHandler getAtIndex(int index) throws PapayaException {
+        return getPapayaObject().asContainer().getAtIndex(index);
     }
 
     @Override
