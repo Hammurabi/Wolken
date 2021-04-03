@@ -18,7 +18,7 @@ public class Scope {
     // the contract in which the point of entry exists
     private Contract                contract;
     // the stack
-    private MochaStack<PapayaObject> stack;
+    private PapayaStack<PapayaObject> stack;
     // tell all subprocesses to continue running
     private AtomicBoolean           keepRunning;
     // an interrupt signal (if any)
@@ -26,7 +26,7 @@ public class Scope {
     // the program counter
     private ProgramCounter          programCounter;
 
-    public Scope(Block block, Transaction caller, Contract contract, MochaStack<PapayaObject> stack, ProgramCounter programCounter) {
+    public Scope(Block block, Transaction caller, Contract contract, PapayaStack<PapayaObject> stack, ProgramCounter programCounter) {
         this.caller     = caller;
         this.contract   = contract;
         this.stack      = stack;
@@ -58,7 +58,7 @@ public class Scope {
         return contract;
     }
 
-    public MochaStack<PapayaObject> getStack() {
+    public PapayaStack<PapayaObject> getStack() {
         return stack;
     }
 
