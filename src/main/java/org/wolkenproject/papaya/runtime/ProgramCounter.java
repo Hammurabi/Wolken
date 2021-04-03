@@ -5,13 +5,12 @@ import org.wolkenproject.exceptions.EmptyProgramCounterException;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.utils.RandomAccessInputStream;
+import org.wolkenproject.papaya.RandomAccessInputStream;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 
 public class ProgramCounter {
     private RandomAccessInputStream     program;
@@ -25,7 +24,6 @@ public class ProgramCounter {
 
     public int nextByte() throws EmptyProgramCounterException {
         if (hasNext()) {
-            return Byte.toUnsignedInt(program.get());
         }
 
         throw new EmptyProgramCounterException();
@@ -49,7 +47,7 @@ public class ProgramCounter {
 
     public int nextShort() throws EmptyProgramCounterException {
         if (remaining() >= 2) {
-            return program.getShort();
+            return program.readShort();
         }
 
         throw new EmptyProgramCounterException();
