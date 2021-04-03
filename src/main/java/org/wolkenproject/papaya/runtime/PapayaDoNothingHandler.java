@@ -34,5 +34,6 @@ public class PapayaDoNothingHandler extends PapayaHandler {
 
     @Override
     public void setAtIndex(int index, PapayaHandler handler) {
+        getPapayaObject().asContainer().setAtIndex(index, handler.getPapayaObject(), AccessModifier.None);
     }
 }
