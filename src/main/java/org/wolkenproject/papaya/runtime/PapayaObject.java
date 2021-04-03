@@ -55,4 +55,8 @@ public class PapayaObject {
     public void call(Scope scope) throws WolkenException {
         callable.call(scope);
     }
+
+    public boolean isTrue() {
+        return false;
+    }
 }
