@@ -1,4 +1,6 @@
-package org.wolkenproject.utils;
+package org.wolkenproject.papaya;
+
+import org.wolkenproject.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
