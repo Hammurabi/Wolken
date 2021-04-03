@@ -14,6 +14,12 @@ public class RandomAccessInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        return 0;
+        int nextIndex = index ++;
+
+        if (nextIndex >= buffer.length) {
+            throw new IOException("end of buffer reached.");
+        }
+
+        return buffer[nextIndex];
     }
 }
