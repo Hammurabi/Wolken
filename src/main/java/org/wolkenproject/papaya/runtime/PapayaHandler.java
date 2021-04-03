@@ -4,6 +4,7 @@ import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
 
+import java.math.BigInteger;
 import java.util.Stack;
 
 public abstract class PapayaHandler {
@@ -27,5 +28,13 @@ public abstract class PapayaHandler {
 
     public static final PapayaHandler readOnlyHandler(PapayaObject object) {
         return new PapayaReadOnlyWrapper(object);
+    }
+
+    public boolean asBool() {
+        return papayaObject.asBool();
+    }
+
+    public BigInteger asInt() {
+        return papayaObject.asInt();
     }
 }
