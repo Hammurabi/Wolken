@@ -1,10 +1,12 @@
 package org.wolkenproject.papaya.runtime;
 
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.PapayaMember;
 import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -52,11 +54,15 @@ public class PapayaObject {
         return structure.checkMemberAccess(classMember, members.get(memberId), stackTrace);
     }
 
-    public void call(Scope scope) throws WolkenException {
+    public void call(Scope scope) throws PapayaException {
         callable.call(scope);
     }
 
     public boolean asBool() {
         return false;
+    }
+
+    public BigInteger asInt() {
+        return BigInteger.ZERO;
     }
 }
