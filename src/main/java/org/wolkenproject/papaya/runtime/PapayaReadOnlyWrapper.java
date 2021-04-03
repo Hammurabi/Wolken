@@ -20,7 +20,7 @@ public class PapayaReadOnlyWrapper extends PapayaHandler {
 
     @Override
     public PapayaHandler getMember(byte[] memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
-        return null;
+        return new PapayaReadOnlyWrapper(getPapayaObject().getMember(memberId, stackTrace).getPapayaObject());
     }
 
     @Override
