@@ -43,7 +43,7 @@ public class Utils {
         System.out.println();
     }
 
-    public static short makeShort(byte b1, byte b0) {
+    public static short makeShort(int b1, int b0) {
         return (short) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
     }
 
