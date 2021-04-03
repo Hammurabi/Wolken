@@ -23,6 +23,10 @@ public class RandomAccessInputStream extends InputStream {
         return Byte.toUnsignedInt(buffer[nextIndex]);
     }
 
+    public int readShort() throws IOException {
+        return Utils.makeShort(read(), read());
+    }
+
     public int readInt() throws IOException {
         return Utils.makeInt(read(), read(), read(), read());
     }
