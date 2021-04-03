@@ -47,8 +47,8 @@ public class Utils {
         return (short) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
     }
 
-    public static short makeChar(byte b1, byte b0) {
-        return (short) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
+    public static char makeChar(int b1, int b0) {
+        return (char) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
     }
 
     public static int makeInt(int b3, int b2, int b1, int b0) {
