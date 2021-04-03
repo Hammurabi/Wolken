@@ -3,8 +3,6 @@ package org.wolkenproject.papaya.runtime;
 import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.transactions.Transaction;
-import org.wolkenproject.papaya.internal.MochaAddress;
-import org.wolkenproject.papaya.internal.MochaObject;
 import org.wolkenproject.exceptions.ContractOutOfFundsExceptions;
 import org.wolkenproject.exceptions.InvalidTransactionException;
 import org.wolkenproject.exceptions.PapayaException;
@@ -20,7 +18,7 @@ public class Scope {
     // the contract in which the point of entry exists
     private Contract                contract;
     // the stack
-    private MochaStack<MochaObject> stack;
+    private MochaStack<PapayaObject> stack;
     // tell all subprocesses to continue running
     private AtomicBoolean           keepRunning;
     // an interrupt signal (if any)
@@ -28,7 +26,7 @@ public class Scope {
     // the program counter
     private ProgramCounter          programCounter;
 
-    public Scope(Block block, Transaction caller, Contract contract, MochaStack<MochaObject> stack, ProgramCounter programCounter) {
+    public Scope(Block block, Transaction caller, Contract contract, MochaStack<PapayaObject> stack, ProgramCounter programCounter) {
         this.caller     = caller;
         this.contract   = contract;
         this.stack      = stack;
@@ -60,7 +58,7 @@ public class Scope {
         return contract;
     }
 
-    public MochaStack<MochaObject> getStack() {
+    public MochaStack<PapayaObject> getStack() {
         return stack;
     }
 
