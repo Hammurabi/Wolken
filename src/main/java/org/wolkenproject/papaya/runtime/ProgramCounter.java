@@ -5,12 +5,13 @@ import org.wolkenproject.exceptions.EmptyProgramCounterException;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.nio.ByteBuffer;
 
 public class ProgramCounter {
     private ByteBuffer      program;
-    private OpcodeRegister register;
+    private OpcodeRegister  register;
 
     public ProgramCounter(ByteBuffer program, OpcodeRegister register) {
         this.program = program;
@@ -26,9 +27,9 @@ public class ProgramCounter {
         throw new EmptyProgramCounterException();
     }
 
-    public int nextVarint256() throws EmptyProgramCounterException {
+    public int nextVarint256(boolean preserveAllBits) throws EmptyProgramCounterException {
         if (remaining() >= 1) {
-            return program.getChar();
+            VarInt.readCompactUint256(preserveAllBits, program);
         }
 
         throw new EmptyProgramCounterException();
