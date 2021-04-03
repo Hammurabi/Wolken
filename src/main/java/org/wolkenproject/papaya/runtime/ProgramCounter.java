@@ -100,7 +100,11 @@ public class ProgramCounter {
 
     public int nextInt() throws EmptyProgramCounterException {
         if (remaining() >= 4) {
-            return program.getInt();
+            try {
+                return program.readInt();
+            } catch (IOException e) {
+                throw new EmptyProgramCounterException();
+            }
         }
 
         throw new EmptyProgramCounterException();
@@ -108,7 +112,11 @@ public class ProgramCounter {
 
     public long nextLong() throws EmptyProgramCounterException {
         if (remaining() >= 8) {
-            return program.getLong();
+            try {
+                return program.readLong();
+            } catch (IOException e) {
+                throw new EmptyProgramCounterException();
+            }
         }
 
         throw new EmptyProgramCounterException();
@@ -117,7 +125,11 @@ public class ProgramCounter {
     public byte[] next(int length) throws EmptyProgramCounterException {
         if (remaining() >= length) {
             byte array[] = new byte[length];
-            program.get(array);
+            try {
+                program.read(array);
+            } catch (IOException e) {
+                throw new EmptyProgramCounterException();
+            }
 
             return array;
         }
@@ -131,7 +143,14 @@ public class ProgramCounter {
 
     public Opcode next() throws UndefOpcodeException, EmptyProgramCounterException {
         if (program.hasRemaining()) {
-            int nextOp = program.get();
+            int nextOp = 0;
+
+            try {
+                nextOp = program.read();
+            } catch (IOException e) {
+                throw new EmptyProgramCounterException();
+            }
+
             return register.getOpcode(nextOp);
         }
 
