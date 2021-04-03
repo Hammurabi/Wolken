@@ -7,10 +7,21 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 public class ChainMath {
     public static BigInteger x256 = new BigInteger("2").pow(256);
+
+    public static long coinFromRaw(String raw) throws ArithmeticException {
+        return new BigDecimal(raw).multiply(new BigDecimal(Context.getInstance().getNetworkParameters().getOneCoin()), MathContext.UNLIMITED).longValueExact();
+    }
+
+    public static String rawFromCoin(long coin) throws ArithmeticException {
+        return Long.toString(new BigDecimal(coin).divide(new BigDecimal(Context.getInstance().getNetworkParameters().getOneCoin()), RoundingMode.DOWN).longValueExact());
+    }
 
     public static boolean validSolution(byte solution[], int bits) throws WolkenException {
         return validSolution(solution, Utils.takeApart(bits));
