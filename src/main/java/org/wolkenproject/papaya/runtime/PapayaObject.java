@@ -65,4 +65,8 @@ public class PapayaObject {
     public BigInteger asInt() {
         return BigInteger.ZERO;
     }
+
+    public PapayaContainer asContainer() throws PapayaException {
+        throw new PapayaException("'"+structure.getName()+"' is not a container.");
+    }
 }
