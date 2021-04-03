@@ -56,7 +56,7 @@ public class PapayaObject {
         callable.call(scope);
     }
 
-    public boolean isTrue() {
+    public boolean asBool() {
         return false;
     }
 }
