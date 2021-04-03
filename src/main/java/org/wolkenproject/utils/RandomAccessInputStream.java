@@ -38,4 +38,26 @@ public class RandomAccessInputStream extends InputStream {
     public long readLong() throws IOException {
         return Utils.makeLong(read(), read(), read(), read(), read(), read(), read(), read());
     }
+
+    private void checkBounds(int index) throws IOException {
+        if (index >= buffer.length) {
+            throw new IOException("end of buffer reached.");
+        }
+    }
+
+    public short readShort(int index) throws IOException {
+        return Utils.makeShort(read(), read());
+    }
+
+    public char readChar(int index) throws IOException {
+        return Utils.makeChar(read(), read());
+    }
+
+    public int readInt(int index) throws IOException {
+        return Utils.makeInt(read(), read(), read(), read());
+    }
+
+    public long readLong(int index) throws IOException {
+        return Utils.makeLong(read(), read(), read(), read(), read(), read(), read(), read());
+    }
 }
