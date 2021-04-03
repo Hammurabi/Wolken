@@ -25,4 +25,14 @@ public class PapayaDoNothingHandler extends PapayaHandler {
     public void call(Scope scope) throws PapayaException {
         getPapayaObject().call(scope);
     }
+
+    @Override
+    public PapayaHandler getAtIndex(int index) {
+        return null;
+    }
+
+    @Override
+    public void setAtIndex(int index, PapayaHandler handler) {
+
+    }
 }
