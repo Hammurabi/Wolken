@@ -30,7 +30,7 @@ public class PapayaReadOnlyWrapper extends PapayaHandler {
 
     @Override
     public PapayaHandler getAtIndex(int index) throws PapayaException {
-        return new PapayaReadOnlyWrapper(getPapayaObject().asContainer().getAtIndex(index, AccessModifier.ReadOnly));
+        return new PapayaReadOnlyWrapper(getPapayaObject().asContainer().getAtIndex(index));
     }
 
     @Override
