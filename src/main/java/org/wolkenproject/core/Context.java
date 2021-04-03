@@ -98,7 +98,7 @@ public class Context {
         opcodeRegister.registerOp("load", "load an object from an offset.", 3, 2, scope -> scope.getStack().push(scope.getStack().pop().getMember(scope.getProgramCounter().nextMemberId(), scope.getStackTrace())));
         opcodeRegister.registerOp("store", "store an object to an offset.", 2, 2, scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextMemberId(), scope.getStack().pop(), scope.getStackTrace()));
 
-        opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, 2, scope -> scope.getStack().pop().asContainer());
+        opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, 2, scope -> scope.getStack().pop().getAtIndex(scope.getStack().pop().asInt().intValue()));
         opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, 2, scope -> scope.getStack().push(scope.getStack().pop().subscriptGet((int) scope.getStack().pop().asInt())));
         opcodeRegister.registerOp("append", "append an object to an array.", 2, scope -> scope.getStack().pop().append(scope.getStack().pop()));
 
