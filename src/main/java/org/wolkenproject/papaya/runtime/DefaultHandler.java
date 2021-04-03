@@ -7,8 +7,8 @@ import org.wolkenproject.papaya.compiler.PapayaStructure;
 
 import java.util.Stack;
 
-public class PapayaDoNothingHandler extends PapayaHandler {
-    public PapayaDoNothingHandler(PapayaObject object) {
+public class DefaultHandler extends PapayaHandler {
+    public DefaultHandler(PapayaObject object) {
         super(object);
     }
 
@@ -29,7 +29,7 @@ public class PapayaDoNothingHandler extends PapayaHandler {
 
     @Override
     public PapayaHandler getAtIndex(int index) throws PapayaException {
-        return new PapayaDoNothingHandler(getPapayaObject().asContainer().getAtIndex(index));
+        return new DefaultHandler(getPapayaObject().asContainer().getAtIndex(index));
     }
 
     @Override
