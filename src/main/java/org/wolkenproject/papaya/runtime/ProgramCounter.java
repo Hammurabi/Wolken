@@ -4,19 +4,20 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.EmptyProgramCounterException;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
+import org.wolkenproject.utils.RandomAccessInputStream;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.nio.ByteBuffer;
 
 public class ProgramCounter {
-    private ByteBuffer      program;
-    private OpcodeRegister  register;
+    private RandomAccessInputStream     program;
+    private OpcodeRegister              register;
 
-    public ProgramCounter(ByteBuffer program, OpcodeRegister register) {
+    public ProgramCounter(RandomAccessInputStream program, OpcodeRegister register) {
         this.program = program;
         this.register= register;
-        program.position(0);
+        program.setPosition(0);
     }
 
     public int nextByte() throws EmptyProgramCounterException {
