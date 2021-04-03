@@ -2,6 +2,7 @@ package org.wolkenproject.papaya.runtime;
 
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
+import org.wolkenproject.papaya.compiler.AccessModifier;
 import org.wolkenproject.papaya.compiler.PapayaStructure;
 
 import java.util.Stack;
@@ -28,7 +29,7 @@ public class PapayaDoNothingHandler extends PapayaHandler {
 
     @Override
     public PapayaHandler getAtIndex(int index) throws PapayaException {
-        return getPapayaObject().asContainer().getAtIndex(index);
+        return new PapayaDoNothingHandler(getPapayaObject().asContainer().getAtIndex(index, AccessModifier.None));
     }
 
     @Override
