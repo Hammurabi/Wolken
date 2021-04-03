@@ -1,6 +1,7 @@
 package org.wolkenproject.papaya.compiler;
 
 import org.json.JSONObject;
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
 
 public abstract class Compiler {
@@ -12,5 +13,5 @@ public abstract class Compiler {
         throw new WolkenException("compiler for language '" + language + "' could not be found.");
     }
 
-    public abstract CompiledScript compile(String text, JSONObject compilerArguments) throws WolkenException;
+    public abstract PapayaApplication compile(String text, JSONObject compilerArguments) throws PapayaException, WolkenException;
 }
