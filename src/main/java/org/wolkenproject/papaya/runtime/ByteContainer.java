@@ -2,6 +2,8 @@ package org.wolkenproject.papaya.runtime;
 
 import org.wolkenproject.exceptions.PapayaException;
 
+import java.util.Arrays;
+
 public class ByteContainer implements PapayaContainer {
     private byte bytes[];
 
@@ -29,5 +31,7 @@ public class ByteContainer implements PapayaContainer {
 
     @Override
     public void append(PapayaHandler object) {
+        bytes = Arrays.copyOf(bytes, bytes.length + 1);
+        bytes[bytes.length - 1] = object.asInt().byteValue();
     }
 }
