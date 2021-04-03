@@ -355,7 +355,7 @@ public class PapayaParser {
                     stream.matches(GreaterThanEqualsSymbol)
             ) {
                 return stream.next();
-            } {} else {
+            } else {
                 throw new PapayaException("cannot parse unknown pattern '" + stream + "' in function scope.");
             }
         }
