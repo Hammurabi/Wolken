@@ -16,9 +16,7 @@ public class RandomAccessInputStream extends InputStream {
     public int read() throws IOException {
         int nextIndex = index ++;
 
-        if (nextIndex >= buffer.length) {
-            throw new IOException("end of buffer reached.");
-        }
+        checkBounds(nextIndex);
 
         return Byte.toUnsignedInt(buffer[nextIndex]);
     }
