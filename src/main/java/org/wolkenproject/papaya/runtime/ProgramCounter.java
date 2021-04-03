@@ -40,7 +40,7 @@ public class ProgramCounter {
     }
 
     public BigInteger nextVarint64(boolean preserveAllBits) throws EmptyProgramCounterException, WolkenException, IOException {
-        return VarInt.readCompactUint64(preserveAllBits, program);
+        return VarInt.readCompactUInt64(preserveAllBits, program);
     }
 
     public BigInteger nextVarint32(boolean preserveAllBits) throws EmptyProgramCounterException, WolkenException, IOException {
