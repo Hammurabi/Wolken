@@ -62,7 +62,17 @@ public class PapayaObject {
         return false;
     }
 
+    /*
+        Returns an unsigned integer of size <1-256> bits
+     */
     public BigInteger asInt() {
+        return BigInteger.ZERO;
+    }
+
+    /*
+        Returns a signed integer of size <1-256> bits
+     */
+    public BigInteger asSignedInt() {
         return BigInteger.ZERO;
     }
 
