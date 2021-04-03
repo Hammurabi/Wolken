@@ -166,7 +166,44 @@ public class PapayaParser {
                 modifier = AccessModifier.valueOf(next.getTokenValue());
             }
 
-            if (lefthand && stream.matches(Identifier, Identifier)) { // field declaration
+            if (lefthand && (stream.matches(PassKeyword) || stream.matches(ContinueKeyword) || stream.matches(BreakKeyword))) {
+                return stream.next();
+            } else if (lefthand && stream.matches(ReturnKeyword)) {
+                Token keyword           = stream.next();
+                TokenStream returnTokens= getTokensTilEOL(keyword.getLine(), stream);
+                List<Token> tokens = fullParse(returnTokens, true);
+
+                if (tokens.isEmpty()) {
+                    throw new PapayaException("expected a value after 'return' keyword at "+keyword.getLineInfo()+", to return without a value use 'pass' keyword.");
+                }
+
+                keyword.addChildren(tokens);
+
+                return keyword;
+            } else if (lefthand && (stream.matches(ForKeyword) || stream.matches(WhileKeyword))) {
+                Token keyword           = stream.next();
+                String name             = keyword.getTokenValue();
+
+                TokenStream condition   = getTokensFollowing(LeftParenthesisSymbol, stream, "expected an '(' at line: " + keyword.getLine() + ".");
+                TokenStream bode        = getTokensFollowing(LeftBraceSymbol, stream, "expected an '{' at line: " + keyword.getLine() + ".");
+
+                List<Token> tokens      = fullParse(condition, false);
+                List<Token> bodetk      = fullParse(bode, false);
+
+                if (tokens.isEmpty()) {
+                    throw new PapayaException("expected a condition in parenthesis '"+name+" (..)' at "+keyword.getLineInfo()+", to return without a value use 'pass' keyword.");
+                }
+
+                Token cond = new Token("", FunctionArguments, keyword.getLineInfo());
+                Token body = new Token("", FunctionBody, keyword.getLineInfo());
+                cond.addChildren(tokens);
+                body.addChildren(bodetk);
+
+                keyword.add(cond);
+                keyword.add(body);
+
+                return keyword;
+            } else if (lefthand && stream.matches(Identifier, Identifier)) { // field declaration
                 Token type              = stream.next();
                 Token name              = stream.next();
                 Token assignment        = null;
@@ -273,7 +310,52 @@ public class PapayaParser {
                 token.addChildren(fullParse(parenthesis, righthand));
 
                 return token;
-            } else {
+            } else if (
+                    stream.matches(IncrementSymbol) ||
+                    stream.matches(DecrementSymbol) ||
+                    stream.matches(AddSymbol) ||
+                    stream.matches(SubSymbol) ||
+                    stream.matches(MulSymbol) ||
+                    stream.matches(DivSymbol) ||
+                    stream.matches(ModSymbol) ||
+                    stream.matches(PowSymbol) ||
+                    stream.matches(AndSymbol) ||
+                    stream.matches(OrSymbol) ||
+                    stream.matches(XorSymbol) ||
+
+                    stream.matches(LogicalNotEqualsSymbol) ||
+                    stream.matches(EqualsSymbol) ||
+                    stream.matches(AddEqualsSymbol) ||
+                    stream.matches(SubEqualsSymbol) ||
+                    stream.matches(MulEqualsSymbol) ||
+                    stream.matches(DivEqualsSymbol) ||
+                    stream.matches(ModEqualsSymbol) ||
+                    stream.matches(PowEqualsSymbol) ||
+                    stream.matches(XorEqualsSymbol) ||
+                    stream.matches(AndEqualsSymbol) ||
+                    stream.matches(OrEqualsSymbol) ||
+                    stream.matches(NotSymbol) ||
+                    stream.matches(LogicalAndSymbol) ||
+                    stream.matches(LogicalOrSymbol) ||
+                    stream.matches(LogicalAndEqualsSymbol) ||
+                    stream.matches(LogicalOrEqualsSymbol) ||
+                    stream.matches(UnsignedRightShiftSymbol) ||
+                    stream.matches(RightShiftSymbol) ||
+                    stream.matches(LeftShiftSymbol) ||
+                    stream.matches(MemberAccessSymbol) ||
+                    stream.matches(StaticMemberAccessSymbol) ||
+                    stream.matches(LambdaSymbol) ||
+                    stream.matches(DoubleDotSymbol) ||
+                    stream.matches(CommaSymbol) ||
+                    stream.matches(HashTagSymbol) ||
+                    stream.matches(SemiColonSymbol) ||
+                    stream.matches(LessThanSymbol) ||
+                    stream.matches(GreaterThanSymbol) ||
+                    stream.matches(LessThanEqualsSymbol) ||
+                    stream.matches(GreaterThanEqualsSymbol)
+            ) {
+                return stream.next();
+            } {} else {
                 throw new PapayaException("cannot parse unknown pattern '" + stream + "' in function scope.");
             }
         }
