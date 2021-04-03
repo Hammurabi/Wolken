@@ -42,18 +42,18 @@ public class RandomAccessInputStream extends InputStream {
     }
 
     public short readShort(int index) throws IOException {
-        return Utils.makeShort(read(), read());
+        return Utils.makeShort(checkBounds(index), checkBounds(index + 1));
     }
 
     public char readChar(int index) throws IOException {
-        return Utils.makeChar(read(), read());
+        return Utils.makeChar(checkBounds(index), checkBounds(index + 1));
     }
 
     public int readInt(int index) throws IOException {
-        return Utils.makeInt(read(), read(), read(), read());
+        return Utils.makeInt(checkBounds(index), checkBounds(index + 1), checkBounds(index + 2), checkBounds(index + 3));
     }
 
     public long readLong(int index) throws IOException {
-        return Utils.makeLong(read(), read(), read(), read(), read(), read(), read(), read());
+        return Utils.makeLong(checkBounds(index), checkBounds(index + 1), checkBounds(index + 2), checkBounds(index + 3), checkBounds(index + 4), checkBounds(index + 5), checkBounds(index + 6), checkBounds(index + 7));
     }
 }
