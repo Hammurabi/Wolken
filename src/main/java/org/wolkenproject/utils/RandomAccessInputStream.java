@@ -56,4 +56,8 @@ public class RandomAccessInputStream extends InputStream {
     public long readLong(int index) throws IOException {
         return Utils.makeLong(checkBounds(index), checkBounds(index + 1), checkBounds(index + 2), checkBounds(index + 3), checkBounds(index + 4), checkBounds(index + 5), checkBounds(index + 6), checkBounds(index + 7));
     }
+
+    public void setPosition(int index) {
+        this.index = index;
+    }
 }
