@@ -14,11 +14,7 @@ public class RandomAccessInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        int nextIndex = index ++;
-
-        checkBounds(nextIndex);
-
-        return Byte.toUnsignedInt(buffer[nextIndex]);
+        return checkBounds(index ++);
     }
 
     public short readShort() throws IOException {
@@ -37,10 +33,12 @@ public class RandomAccessInputStream extends InputStream {
         return Utils.makeLong(read(), read(), read(), read(), read(), read(), read(), read());
     }
 
-    private void checkBounds(int index) throws IOException {
+    private int checkBounds(int index) throws IOException {
         if (index >= buffer.length) {
             throw new IOException("end of buffer reached.");
         }
+
+        return Byte.toUnsignedInt(buffer[index]);
     }
 
     public short readShort(int index) throws IOException {
