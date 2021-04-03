@@ -127,13 +127,12 @@ public class Context {
         opcodeRegister.registerOp("const14", "push an integer with value '14' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(14, false))));
         opcodeRegister.registerOp("const15", "push an integer with value '15' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(15, false))));
 
-        opcodeRegister.registerOp("vconst", "push a varint of size '5-61' (unsigned).", 1, 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextByte(), false)));
-        opcodeRegister.registerOp("bconst", "push an integer of size '8' (unsigned).", 1, 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextByte(), false)));
-        opcodeRegister.registerOp("iconst16", "push an integer of size '16' (unsigned).", 2, 1, scope -> scope.getStack().push(new MochaNumber(scope.getProgramCounter().nextUnsignedShort(), false)));
-        opcodeRegister.registerOp("iconst32", "push an integer of size '32' (unsigned).", 4, 1, scope -> scope.getStack().push(new MochaNumber(Integer.toUnsignedLong(scope.getProgramCounter().nextInt()), false)));
-        opcodeRegister.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8, 1, scope -> scope.getStack().push(new MochaNumber(Long.toUnsignedString(scope.getProgramCounter().nextLong()), false)));
-        opcodeRegister.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, 1, scope -> scope.getStack().push(new MochaNumber(new BigInteger(1, scope.getProgramCounter().next(16)), false)));
-        opcodeRegister.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, 1, scope -> scope.getStack().push(new MochaNumber(new BigInteger(1, scope.getProgramCounter().next(32)), false)));
+        opcodeRegister.registerOp("vconst", "push a varint of size '5-61' (unsigned).", 1, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(scope.getProgramCounter().nextVarint64(false), false))));
+        opcodeRegister.registerOp("vconst256", "push a varint of size '3-251' (unsigned).", 1, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(scope.getProgramCounter().nextVarint256(false), false))));
+
+        opcodeRegister.registerOp("iconst64", "push an integer of size '64' (unsigned).", 8, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(scope.getProgramCounter().nextLong(), false))));
+        opcodeRegister.registerOp("iconst128", "push an integer of size '128' integer (unsigned).", 16, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(new BigInteger(1, scope.getProgramCounter().next(16)), false))));
+        opcodeRegister.registerOp("iconst256", "push an integer of size '256' (unsigned).", 32, 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(new BigInteger(1, scope.getProgramCounter().next(32)), false))));
 
         opcodeRegister.registerOp("fconst", "push a float of size '32' (unsigned).", 4, 1, scope -> {
             throw new PapayaException("float is not supported at the moment.");
