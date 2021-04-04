@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,6 +62,13 @@ public class BlockMetadata extends SerializableI {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
+        getBlockHeader().write(stream);
+        VarInt.writeCompactUInt32(getHeight(), false, stream);
+        VarInt.writeCompactUInt32(getTransactionCount(), false, stream);
+        VarInt.writeCompactUInt32(getEventCount(), false, stream);
+        VarInt.writeCompactUInt64(getTotalValue(), false, stream);
+        VarInt.writeCompactUInt64(getFees(), false, stream);
+        VarInt.writeCompactUint256(getChainWork(), true, stream);
     }
 
     @Override
