@@ -325,6 +325,7 @@ public class VarInt {
 
             if (bits < 4) {
             } else if (bits < 12) {
+            } else if (bits < 20) {
             } else if (bits < 28) {
             } else if (bits < 36) {
             } else if (bits < 44) {
