@@ -21,6 +21,9 @@ public class SerializationFactory {
         magicReferences = new HashMap<>();
     }
 
+    public static void register(SerializationFactory serializationFactory) {
+    }
+
     /*
         register an instance of serializable object.
      */
