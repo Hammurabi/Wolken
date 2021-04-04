@@ -299,4 +299,8 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     private long getTotalValue() {
         return block.getTotalValue();
     }
+
+    public BlockHeader getHeader() {
+        return block.getBlockHeader();
+    }
 }
