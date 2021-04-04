@@ -310,30 +310,35 @@ public class VarInt {
     // integer will only be 124 bits in length as 4 bits
     // will be used to encode the length of the integer.
     public static void writeCompactUint128(BigInteger integer, boolean preserveAllBits, OutputStream stream) throws WolkenException, IOException {
-        byte bytes[]    = integer.toByteArray();
-        int drop = 0;
-
-        if (bytes.length > 1 && bytes[0] == 0) {
-            drop = 1;
-        }
-
-        if (drop > 0) {
-            byte temp[] = new byte[bytes.length - drop];
-            System.arraycopy(bytes, drop, temp, 0, temp.length);
-            bytes = temp;
-        }
-
-        if (bytes.length > 16) {
+        if (integer.bitLength() > 128) {
             throw new WolkenException("writeCompactUint128 only allows up to  2^128 bits.");
         }
 
-        int length = bytes.length;
         if (preserveAllBits) {
+            byte bytes[]    = Utils.takeApart(integer);
+            int length      = bytes.length;
+
             stream.write(length);
             stream.write(bytes);
         } else {
-            bytes[0] = (byte) (bytes[0] & 0xF | (length - 1) << 4);
-            stream.write(bytes);
+            int bits = Math.max(integer.bitLength(), 1);
+
+            if (bits < 4) {
+            } else if (bits < 12) {
+            } else if (bits < 28) {
+            } else if (bits < 36) {
+            } else if (bits < 44) {
+            } else if (bits < 52) {
+            } else if (bits < 60) {
+            } else if (bits < 68) {
+            } else if (bits < 76) {
+            } else if (bits < 84) {
+            } else if (bits < 92) {
+            } else if (bits < 100) {
+            } else if (bits < 108) {
+            } else if (bits < 116) {
+            } else if (bits <= 128) {
+            }
         }
     }
 
