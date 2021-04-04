@@ -50,7 +50,17 @@ public class PapayaStack<T> {
             throw new PapayaException("EmptyStackException caught");
         }
 
-        stack.push(stack.get(stack.size() - element));
+        stack.push(stack.get(index));
+    }
+
+    public T peek(int element) throws PapayaException {
+        int index = stack.size() - element;
+
+        if (index < 0) {
+            throw new PapayaException("EmptyStackException caught");
+        }
+
+        return stack.get(index);
     }
 
     public PapayaStack<T> rot() throws PapayaException {
