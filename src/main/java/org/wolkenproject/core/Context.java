@@ -154,19 +154,19 @@ public class Context {
 //        opcodeRegister.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.", 1, scope -> scope.getStack().peek().flipSign());
 
         opcodeRegister.registerOp("add", "pop two objects from the stack and add them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Add));
-//        opcodeRegister.registerOp("sub", "pop two objects from the stack and sub them.", 1, scope -> scope.sub());
-//        opcodeRegister.registerOp("mul", "pop two objects from the stack and mul them.", 1, scope -> scope.mul());
-//        opcodeRegister.registerOp("div", "pop two objects from the stack and div them.", 1, scope -> scope.div());
-//        opcodeRegister.registerOp("mod", "pop two objects from the stack and mod them.", 1, scope -> scope.mod());
-//        opcodeRegister.registerOp("pow", "pop two objects from the stack and mod them.", 1, scope -> scope.mod());
-//        opcodeRegister.registerOp("and", "pop two objects from the stack and perform bitwise and on them.", 1, scope -> scope.getStack().and(scope));
-//        opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", 1, scope -> scope.getStack().or(scope));
-//        opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", 1, scope -> scope.getStack().xor(scope));
-//        opcodeRegister.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.", 1, scope -> scope.getStack().shift(scope));
-//        opcodeRegister.registerOp("rsh", "pop two objects from the stack right shift.", 1, scope -> scope.getStack().push(scope.getStack().getStack().rightShift(scope));
-//        opcodeRegister.registerOp("lsh", "pop two objects from the stack left shift.", 1, scope -> scope.getStack().push(scope.getStack().getStack().leftShift(scope));
-//        opcodeRegister.registerOp("not", "pop an object from the stack and perform bitwise not on it.", 1, scope -> scope.getStack().getStack().not(scope));
-//        opcodeRegister.registerOp("ngt", "pop an object from the stack and perform logical not on it.", 1, scope -> scope.getStack().getStack().negate(scope));
+        opcodeRegister.registerOp("sub", "pop two objects from the stack and sub them.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("mul", "pop two objects from the stack and mul them.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("div", "pop two objects from the stack and div them.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("mod", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("pow", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("and", "pop two objects from the stack and perform bitwise and on them.", 1, scope -> scope.getStack().callOperator(scope));
+        opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", 1, scope -> scope.getStack().callOperator(scope));
+        opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", 1, scope -> scope.getStack().callOperator(scope));
+        opcodeRegister.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.", 1, scope -> scope.getStack().callOperator(scope));
+        opcodeRegister.registerOp("rsh", "pop two objects from the stack right shift.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("lsh", "pop two objects from the stack left shift.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("not", "pop an object from the stack and perform bitwise not on it.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("ngt", "pop an object from the stack and perform logical not on it.", 1, scope -> scope.callOperator());
 
         opcodeRegister.registerOp("dup1", "duplicate the first stack element (by reference).", 1, scope -> scope.getStack().dup());
         opcodeRegister.registerOp("dup2", "duplicate the second stack element (by reference).", 1, scope -> scope.getStack().dup(2));
