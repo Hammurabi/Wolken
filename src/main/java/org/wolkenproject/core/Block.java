@@ -289,6 +289,6 @@ public class Block implements Iterable<Transaction> {
     }
 
     public int getBits() {
-        return bits;
+        return getBlockHeader().getBits();
     }
 }
