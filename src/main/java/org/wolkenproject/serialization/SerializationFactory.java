@@ -38,7 +38,6 @@ public class SerializationFactory {
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
         serializationFactory.registerClass(Block.class, new Block());
         serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
-        serializationFactory.registerClass(Ancestors.class, new Ancestors(new byte[Block.UniqueIdentifierLength]));
 
         // messages
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
@@ -63,6 +62,7 @@ public class SerializationFactory {
 
         serializationFactory.registerClass(Account.class, new Account());
         serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
+        serializationFactory.registerClass(Ancestors.class, new Ancestors(new byte[Block.UniqueIdentifierLength]));
     }
 
     /*
