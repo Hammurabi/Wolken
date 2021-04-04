@@ -260,8 +260,8 @@ public class Block implements Iterable<Transaction> {
         getBlockHeader().setMerkleRoot(merkleRoot);
     }
 
-    public void setParent(byte[] hash) {
-        getBlockHeader().setParent(hash);
+    public void setParent(byte[] parent) {
+        getBlockHeader().setParent(parent);
     }
 
     public void setBits(int bits) {
