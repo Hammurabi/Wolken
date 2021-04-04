@@ -281,7 +281,7 @@ public class Block implements Iterable<Transaction> {
     }
 
     public byte[] getMerkleRoot() {
-        return merkleRoot;
+        return getBlockHeader().getMerkleRoot();
     }
 
     public int getNonce() {
