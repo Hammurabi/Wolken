@@ -79,4 +79,8 @@ public class PapayaObject {
     public PapayaContainer asContainer() throws PapayaException {
         throw new PapayaException("'"+structure.getName()+"' is not a container.");
     }
+
+    public PapayaStructure getStructure() {
+        return structure;
+    }
 }
