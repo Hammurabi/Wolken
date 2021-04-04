@@ -52,7 +52,7 @@ public class VarInt {
                 stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 2 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
                 stream.write((Byte.toUnsignedInt(bytes[2])));
-            } else if (bits <= 30) {
+            } else if (bits <= 32) {
                 byte bytes[] = Utils.takeApart(integer);
                 stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 3 << 6);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
