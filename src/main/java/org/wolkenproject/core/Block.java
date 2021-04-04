@@ -292,4 +292,8 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     public byte[] getHeaderBytes() {
         return blockHeader.asByteArray();
     }
+
+    public boolean verifyProofOfWork() {
+        return blockHeader.verifyProofOfWork();
+    }
 }
