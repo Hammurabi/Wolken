@@ -1,10 +1,13 @@
 package org.wolkenproject.utils;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class BigMath {
-    public double log(BigInteger val) {
+    public static int numBits(BigInteger val) {
+        return (int) Math.floor(log2(val.max(BigInteger.ONE)) + 1);
+    }
+
+    public static double log2(BigInteger val) {
         // Get the minimum number of bits necessary to hold this value.
         int n = val.bitLength();
 
