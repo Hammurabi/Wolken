@@ -2,6 +2,7 @@ package org.wolkenproject.papaya.runtime;
 
 import org.wolkenproject.exceptions.PapayaException;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 public class PapayaObjectContainer implements PapayaContainer {
@@ -33,5 +34,15 @@ public class PapayaObjectContainer implements PapayaContainer {
     public void append(PapayaHandler object) {
         objects = Arrays.copyOf(objects, objects.length + 1);
         objects[objects.length - 1] = object.getPapayaObject();
+    }
+
+    @Override
+    public BigInteger asInt() {
+        return BigInteger.ZERO;
+    }
+
+    @Override
+    public BigInteger asSignedInt() {
+        return BigInteger.ZERO;
     }
 }
