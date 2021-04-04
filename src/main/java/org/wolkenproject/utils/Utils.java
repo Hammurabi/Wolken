@@ -47,7 +47,7 @@ public class Utils {
         byte bytes[] = integer.toByteArray();
 
         if (bytes.length == 0) {
-            return new byte[0];
+            return new byte[1];
         }
 
         if (bytes[0] == 0) {
