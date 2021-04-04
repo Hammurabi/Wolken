@@ -59,6 +59,15 @@ public class Utils {
         return bytes;
     }
 
+    public static byte[] takeApart(BigInteger integer, int minLength) {
+        byte bytes[] = takeApart(integer);
+        if (bytes.length < minLength) {
+            return Arrays.copyOf(bytes, minLength);
+        }
+
+        return bytes;
+    }
+
     public static short makeShort(int b1, int b0) {
         return (short) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
     }
