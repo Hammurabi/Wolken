@@ -43,6 +43,17 @@ public class Utils {
         System.out.println();
     }
 
+    public static byte[] takeApat(BigInteger integer) {
+        byte bytes[] = integer.toByteArray();
+        if (bytes[0] == 0) {
+            byte temp[] = new byte[bytes.length - 1];
+            System.arraycopy(bytes, 1, temp, 0, temp.length);
+            bytes = temp;
+        }
+
+        return bytes;
+    }
+
     public static short makeShort(int b1, int b0) {
         return (short) (((b1 & 0xff) <<  8) | ((b0 & 0xff)));
     }
