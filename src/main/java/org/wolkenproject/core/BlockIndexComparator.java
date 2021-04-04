@@ -8,7 +8,7 @@ public class BlockIndexComparator implements Comparator<BlockIndex> {
     @Override
     public int compare(BlockIndex a, BlockIndex b) {
         try {
-            int compare = a.getChainWork().compareTo(b.getChainWork());
+            int compare = a.getTotalChainWork().compareTo(b.getTotalChainWork());
 
             if (compare > 0) {
                 return -1;
