@@ -285,7 +285,7 @@ public class Block implements Iterable<Transaction> {
     }
 
     public int getNonce() {
-        return nonce;
+        return getBlockHeader().getNonce();
     }
 
     public int getBits() {
