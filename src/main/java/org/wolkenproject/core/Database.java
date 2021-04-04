@@ -149,11 +149,10 @@ public class Database {
         // get a reference of the hash since we will keep reusing it.
         byte hash[]   = block.getHash();
 
-        // 80 bytes representing the block header.
-        byte header[] = block.getBlock().getHeaderBytes();
-
         try {
+            // 80 bytes representing the block header.
             // 28 bytes representing the height, number of transactions, number of events total value, and total fees.
+            // 1 + 0-32 bytes representing the total chainwork leading up to the block.
             BlockMetadata blockMeta = block.getMetadata();
 
             // prepare a byte array output stream for quickly serializing the block structure to a byte array.
