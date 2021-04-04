@@ -283,4 +283,8 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     public BlockMetadata getMetadata() {
         return new BlockMetadata(getBlock().getBlockHeader(), getHeight(), getTotalValue(), getFees(), getPreviousChainWork());
     }
+
+    private long getTotalValue() {
+        return block.getTotalValue();
+    }
 }
