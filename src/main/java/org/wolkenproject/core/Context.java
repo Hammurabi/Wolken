@@ -157,6 +157,7 @@ public class Context {
 //        opcodeRegister.registerOp("mul", "pop two objects from the stack and mul them.", 1, scope -> scope.mul());
 //        opcodeRegister.registerOp("div", "pop two objects from the stack and div them.", 1, scope -> scope.div());
 //        opcodeRegister.registerOp("mod", "pop two objects from the stack and mod them.", 1, scope -> scope.mod());
+//        opcodeRegister.registerOp("pow", "pop two objects from the stack and mod them.", 1, scope -> scope.mod());
 //        opcodeRegister.registerOp("and", "pop two objects from the stack and perform bitwise and on them.", 1, scope -> scope.getStack().and(scope));
 //        opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", 1, scope -> scope.getStack().or(scope));
 //        opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", 1, scope -> scope.getStack().xor(scope));
