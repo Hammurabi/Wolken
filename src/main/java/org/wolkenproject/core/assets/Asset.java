@@ -20,9 +20,6 @@ public abstract class Asset extends SerializableI {
         this.uuid       = uuid;
     }
 
-    public static void register(SerializationFactory serializationFactory) {
-    }
-
     public byte[] getUUID() {
         return uuid;
     }
@@ -43,4 +40,7 @@ public abstract class Asset extends SerializableI {
 
     public abstract void writeContent(OutputStream stream) throws IOException, WolkenException;
     public abstract void readContent(InputStream stream) throws IOException, WolkenException;
+
+    public static void register(SerializationFactory serializationFactory) {
+    }
 }
