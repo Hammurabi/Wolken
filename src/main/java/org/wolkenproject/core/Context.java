@@ -159,10 +159,10 @@ public class Context {
         opcodeRegister.registerOp("div", "pop two objects from the stack and div them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Div));
         opcodeRegister.registerOp("mod", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Mod));
         opcodeRegister.registerOp("pow", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Pow));
-        opcodeRegister.registerOp("and", "pop two objects from the stack and perform bitwise and on them.", 1, scope -> scope.getStack().callOperator(scope));
-        opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", 1, scope -> scope.getStack().callOperator(scope));
-        opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", 1, scope -> scope.getStack().callOperator(scope));
-        opcodeRegister.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.", 1, scope -> scope.getStack().callOperator(scope));
+        opcodeRegister.registerOp("and", "pop two objects from the stack and perform bitwise and on them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.And));
+        opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", 1, scope -> scope.callOperator(scope));
+        opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", 1, scope -> scope.callOperator(scope));
+        opcodeRegister.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.", 1, scope -> scope.callOperator(scope));
         opcodeRegister.registerOp("rsh", "pop two objects from the stack right shift.", 1, scope -> scope.callOperator());
         opcodeRegister.registerOp("lsh", "pop two objects from the stack left shift.", 1, scope -> scope.callOperator());
         opcodeRegister.registerOp("not", "pop an object from the stack and perform bitwise not on it.", 1, scope -> scope.callOperator());
