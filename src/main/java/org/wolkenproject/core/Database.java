@@ -96,20 +96,13 @@ public class Database {
         return null;
     }
 
-    public BlockIndex findBlock(byte[] hash) {s
-        mutex.lock();
-        try {
-            InputStream inputStream = location.newFile(".chain").newFile(Base16.encode(hash)).openFileInputStream();
-            BlockIndex block = Context.getInstance().getSerialFactory().fromStream(BlockIndex.class, inputStream);
-            inputStream.close();
+    public BlockIndex findBlock(byte[] hash) {
+        BlockMetadata metadata = get(concatenate(BlockPrefix, hash), BlockMetadata.class);
+        // store the header along with the height and number of transactions and number of events.
+        put(concatenate(BlockPrefix, hash), blockMeta);
 
-            return block;
-        } catch (IOException | WolkenException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            mutex.unlock();
-        }
+        // store the actual compressed block data.
+        put(concatenate(CompressedBlockPrefix, hash), byteArrayOutputStream.toByteArray());
     }
 
     public void storePrunedBlock(int height, BlockIndex block) {
@@ -218,6 +211,23 @@ public class Database {
             remove(concatenate(BlockPrefix, hash));
             remove(concatenate(CompressedBlockPrefix, hash));
         }
+    }
+
+    public <Type extends SerializableI> Type get(byte[] k, Class<?> theClass) {
+        byte bytes[] = get(k);
+        if (bytes == null) {
+            return null;
+        }
+
+        try {
+            return Context.getInstance().getSerialFactory().fromBytes(bytes, theClass);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (WolkenException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public byte[] get(byte[] k) {
