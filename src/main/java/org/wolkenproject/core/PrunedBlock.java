@@ -17,6 +17,10 @@ public class PrunedBlock extends SerializableI {
     private final Collection<byte[]>    transactions;
     private final Collection<byte[]>    events;
 
+    public PrunedBlock() {
+        this(new BlockHeader(), new LinkedList<>(), new LinkedList<>());
+    }
+    
     public PrunedBlock(BlockHeader blockHeader, Queue<byte[]> transactions, Queue<byte[]> events) {
         this.blockHeader = blockHeader;
         this.transactions = transactions;
