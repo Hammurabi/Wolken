@@ -109,7 +109,18 @@ public class Database {
             return null;
         }
 
-        Block block = new Block().fromCompressed(compressed);
+        Block block = null;
+        try {
+            block = new Block().fromCompressed(compressed);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (WolkenException e) {
+            e.printStackTrace();
+        }
+
+        if (block == null) {
+            return null;
+        }
 
         return new BlockIndex(block, metadata);
     }
