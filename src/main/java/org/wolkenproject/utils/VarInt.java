@@ -385,28 +385,45 @@ public class VarInt {
     }
 
     public static int sizeOfCompactUint128(BigInteger integer, boolean preserveAllBits) {
-        byte bytes[]    = integer.toByteArray();
-        int drop = 0;
-        for (int i = 0; i < bytes.length; i ++) {
-            if (bytes[i] == 0) {
-                drop ++;
-            }
-        }
-
-        if (drop > 0) {
-            byte temp[] = new byte[bytes.length - drop];
-            System.arraycopy(bytes, drop, temp, 0, temp.length);
-            bytes = temp;
-        }
-
-        if (bytes.length > 16) {
-            return 0;
-        }
-
         if (preserveAllBits) {
-            return bytes.length + 1;
-        } else {
+            byte bytes[]    = Utils.takeApart(integer);
             return bytes.length;
+        } else {
+            int bits = Math.max(integer.bitLength(), 1);
+
+            if (bits <= 4) {
+                return 1;
+            } else if (bits <= 12) {
+                return 2;
+            } else if (bits <= 20) {
+                return 3;
+            } else if (bits <= 28) {
+                return 4;
+            } else if (bits <= 36) {
+                return 5;
+            } else if (bits <= 44) {
+                return 6;
+            } else if (bits <= 52) {
+                return 7;
+            } else if (bits <= 60) {
+                return 8;
+            } else if (bits <= 68) {
+                return 9;
+            } else if (bits <= 76) {
+                return 10;
+            } else if (bits <= 84) {
+                return 11;
+            } else if (bits <= 92) {
+                return 12;
+            } else if (bits <= 100) {
+                return 13;
+            } else if (bits <= 108) {
+                return 14;
+            } else if (bits <= 116) {
+                return 15;
+            } else if (bits <= 128) {
+                return 16;
+            }
         }
     }
 
