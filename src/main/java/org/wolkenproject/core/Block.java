@@ -114,7 +114,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         return true;
     }
 
-    private byte[] getHashCode() {
+    public byte[] getHashCode() {
         return blockHeader.getHashCode();
     }
 
