@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 
 public class BlockMetadata extends SerializableI {
+    private BlockHeader blockHeader;
     private int height;
     private int transactionCount;
     private int eventCount;
@@ -17,10 +18,11 @@ public class BlockMetadata extends SerializableI {
     private BigInteger chainWork;
 
     public BlockMetadata() {
-        this(0, 0, 0, 0, 0, BigInteger.ZERO);
+        this(new BlockHeader(), 0, 0, 0, 0, 0, BigInteger.ZERO);
     }
 
-    public BlockMetadata(int height, int transactionCount, int eventCount, long totalValue, long fees, BigInteger chainWork) {
+    public BlockMetadata(BlockHeader blockHeader, int height, int transactionCount, int eventCount, long totalValue, long fees, BigInteger chainWork) {
+        this.blockHeader = blockHeader;
         this.height = height;
         this.transactionCount = transactionCount;
         this.eventCount = eventCount;
