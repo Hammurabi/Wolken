@@ -160,13 +160,13 @@ public class Context {
         opcodeRegister.registerOp("mod", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Mod));
         opcodeRegister.registerOp("pow", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Pow));
         opcodeRegister.registerOp("and", "pop two objects from the stack and perform bitwise and on them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.And));
-        opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", 1, scope -> scope.callOperator(scope));
-        opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", 1, scope -> scope.callOperator(scope));
-        opcodeRegister.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.", 1, scope -> scope.callOperator(scope));
-        opcodeRegister.registerOp("rsh", "pop two objects from the stack right shift.", 1, scope -> scope.callOperator());
-        opcodeRegister.registerOp("lsh", "pop two objects from the stack left shift.", 1, scope -> scope.callOperator());
-        opcodeRegister.registerOp("not", "pop an object from the stack and perform bitwise not on it.", 1, scope -> scope.callOperator());
-        opcodeRegister.registerOp("ngt", "pop an object from the stack and perform logical not on it.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Or));
+        opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Xor));
+        opcodeRegister.registerOp("shf", "pop two objects from the stack and perform arithmetic shift on them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.UnsignedShift));
+        opcodeRegister.registerOp("rsh", "pop two objects from the stack right shift.", 1, scope -> scope.callOperator(PapayaStructure.Operator.RightShift));
+        opcodeRegister.registerOp("lsh", "pop two objects from the stack left shift.", 1, scope -> scope.callOperator(PapayaStructure.Operator.LeftShift));
+        opcodeRegister.registerOp("not", "pop an object from the stack and perform bitwise not on it.", 1, scope -> scope.callOperator(PapayaStructure.Operator.None));
+        opcodeRegister.registerOp("ngt", "pop an object from the stack and perform logical not on it.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Negate));
 
         opcodeRegister.registerOp("dup1", "duplicate the first stack element (by reference).", 1, scope -> scope.getStack().dup());
         opcodeRegister.registerOp("dup2", "duplicate the second stack element (by reference).", 1, scope -> scope.getStack().dup(2));
