@@ -6,14 +6,12 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.ContentHandler;
 import java.util.*;
 import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
 public class Block extends SerializableI implements Iterable<Transaction> {
     private static BigInteger       LargestHash             = BigInteger.ONE.shiftLeft(256);
