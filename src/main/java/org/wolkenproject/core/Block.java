@@ -277,7 +277,7 @@ public class Block implements Iterable<Transaction> {
     }
 
     public byte[] getParentHash() {
-        return previousHash;
+        return getBlockHeader().getParentHash();
     }
 
     public byte[] getMerkleRoot() {
