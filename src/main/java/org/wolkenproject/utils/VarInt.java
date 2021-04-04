@@ -184,7 +184,7 @@ public class VarInt {
 
     public static int readCompactUInt32(boolean preserveAllBits, InputStream stream) throws IOException {
         if (preserveAllBits) {
-            int numBytes = stream.read();
+            int numBytes = SerializableI.checkNotEOF(stream.read());
             byte bytes[] = new byte[numBytes + 1];
             if (stream.read(bytes) != bytes.length) {
                 throw new IOException();
@@ -192,7 +192,7 @@ public class VarInt {
 
             return Utils.makeInt(Utils.conditionalExpand(4, bytes));
         } else {
-            int test    = stream.read();
+            int test    = SerializableI.checkNotEOF(stream.read());
             int value   = test & 0x3F;
             int length  = test >>> 6;
             if (length == 0) {
@@ -210,15 +210,13 @@ public class VarInt {
 
     public static long readCompactUInt64(boolean preserveAllBits, InputStream stream) throws IOException {
         if (preserveAllBits) {
-            int numBytes = stream.read();
+            int numBytes = SerializableI.checkNotEOF(stream.read());
             byte bytes[] = new byte[numBytes + 1];
-            if (stream.read(bytes) != bytes.length) {
-                throw new IOException();
-            }
+            SerializableI.checkFullyRead(stream.read(bytes), bytes.length);
 
-            return Utils.makeInt(Utils.conditionalExpand(8, bytes));
+            return Utils.makeLong(Utils.conditionalExpand(8, bytes));
         } else {
-            int test    = stream.read();
+            int test    = SerializableI.checkNotEOF(stream.read());
             int value   = test & 0x1F;
             int length  = test >>> 5;
 
