@@ -63,7 +63,7 @@ public class BlockMetadata extends SerializableI {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return new BlockMetadata();
+        return (Type) new BlockMetadata();
     }
 
     @Override
