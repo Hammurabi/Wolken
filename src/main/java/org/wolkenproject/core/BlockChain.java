@@ -90,7 +90,7 @@ public class BlockChain implements Runnable {
                 try {
                     BlockIndex currentTip = getTip();
 
-                    if (block.getChainWork().compareTo(currentTip.getChainWork()) > 0) {
+                    if (block.getTotalChainWork().compareTo(currentTip.getTotalChainWork()) > 0) {
                         // switch to this chain
                         if (block.getHeight() == currentTip.getHeight()) {
                             // if both blocks share the same height, then orphan the current tip.
