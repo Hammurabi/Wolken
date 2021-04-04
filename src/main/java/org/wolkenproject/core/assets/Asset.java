@@ -3,6 +3,7 @@ package org.wolkenproject.core.assets;
 import org.wolkenproject.core.Address;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.serialization.SerializationFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +18,9 @@ public abstract class Asset extends SerializableI {
     // default constructor
     public Asset(byte uuid[]) {
         this.uuid       = uuid;
+    }
+
+    public static void register(SerializationFactory serializationFactory) {
     }
 
     public byte[] getUUID() {
