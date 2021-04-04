@@ -73,6 +73,13 @@ public class BlockMetadata extends SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
+        getBlockHeader().read(stream);
+        height = VarInt.readCompactUInt32(false, stream);
+        transactionCount = VarInt.readCompactUInt32(false, stream);
+        eventCount = VarInt.readCompactUInt32(false, stream);
+        totalValue = VarInt.readCompactUInt64(false, stream);
+        fees = VarInt.readCompactUInt64(false, stream);
+        chainWork = VarInt.readCompactUint256(true, stream);
     }
 
     @Override
