@@ -273,7 +273,7 @@ public class Block implements Iterable<Transaction> {
     }
 
     public int getTimestamp() {
-        return timestamp;
+        return getBlockHeader().getTimestamp();
     }
 
     public byte[] getParentHash() {
