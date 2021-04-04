@@ -312,14 +312,9 @@ public class VarInt {
     public static void writeCompactUint128(BigInteger integer, boolean preserveAllBits, OutputStream stream) throws WolkenException, IOException {
         byte bytes[]    = integer.toByteArray();
         int drop = 0;
-        for (int i = 0; i < bytes.length; i ++) {
-            if (bytes[i] == 0) {
-                drop ++;
-            }
-        }
 
-        if (drop == bytes.length) {
-            drop --;
+        if (bytes.length > 1 && bytes[0] == 0) {
+            drop = 1;
         }
 
         if (drop > 0) {
