@@ -1,9 +1,6 @@
 package org.wolkenproject.serialization;
 
-import org.wolkenproject.core.Ancestors;
-import org.wolkenproject.core.Block;
-import org.wolkenproject.core.BlockHeader;
-import org.wolkenproject.core.BlockIndex;
+import org.wolkenproject.core.*;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.InvalidSerialNumberException;
@@ -44,6 +41,7 @@ public class SerializationFactory {
         serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
         serializationFactory.registerClass(Ancestors.class, new Ancestors(new byte[Block.UniqueIdentifierLength]));
 
+        // messages
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
         serializationFactory.registerClass(VersionMessage.class, new VersionMessage());
         serializationFactory.registerClass(VerackMessage.class, new VerackMessage());
@@ -63,6 +61,8 @@ public class SerializationFactory {
         serializationFactory.registerClass(RequestTransactions.class, new RequestTransactions(0, new LinkedHashSet<>()));
         serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
+
+        serializationFactory.registerClass(Account.class, new Account());
     }
 
     /*
