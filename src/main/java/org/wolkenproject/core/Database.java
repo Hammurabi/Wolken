@@ -158,7 +158,8 @@ public class Database {
                             Utils.takeApart(block.getBlock().getTransactionCount()),
                             Utils.takeApart(block.getBlock().getEventCount()),
                             Utils.takeApartLong(block.getBlock().getTotalValue()),
-                            Utils.takeApartLong(block.getBlock().getFees())
+                            Utils.takeApartLong(block.getBlock().getFees()),
+                            Utils.takeApart(block.getTotalChainWork())
                         );
 
         try {
