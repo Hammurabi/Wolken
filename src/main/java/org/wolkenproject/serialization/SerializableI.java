@@ -1,5 +1,6 @@
 package org.wolkenproject.serialization;
 
+import org.wolkenproject.core.Block;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.HashUtil;
@@ -10,6 +11,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
 public abstract class SerializableI {
     // this function gets called when the Serializable object is serialized locally
@@ -106,5 +108,14 @@ public abstract class SerializableI {
         }
 
         return read;
+    }
+
+    public <T> T fromCompressed(byte[] compressed) throws IOException, WolkenException {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(compressed);
+        InflaterInputStream inputStream = new InflaterInputStream(byteArrayInputStream);
+        read(inputStream);
+        inputStream.close();
+
+        return (T) this;
     }
 }
