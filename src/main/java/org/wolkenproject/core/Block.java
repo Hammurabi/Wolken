@@ -257,7 +257,7 @@ public class Block implements Iterable<Transaction> {
     }
 
     protected void setMerkleRoot(byte[] merkleRoot) {
-        this.merkleRoot = merkleRoot;
+        getBlockHeader().setMerkleRoot(merkleRoot);
     }
 
     public void setParent(byte[] hash) {
