@@ -290,4 +290,8 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     public int getBits() {
         return blockHeader.getBits();
     }
+
+    public byte[] getHeaderBytes() {
+        return blockHeader.asByteArray();
+    }
 }
