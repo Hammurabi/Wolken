@@ -133,7 +133,7 @@ public class BlockChain implements Runnable {
 
     public BlockHeader findCommonAncestor(BlockIndex block) {
         // request block headers
-        Message response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), block.getHash(), 1024, block.getBlock()));
+        Message response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), block.getHash(), 1024, block.getHeader()));
 
         // we store ancestor hashes here
         Set<byte[]> ancestors = new LinkedHashSet<>();
