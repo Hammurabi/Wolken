@@ -26,9 +26,6 @@ public class OpcodeRegister {
     }
 
     public static void register(OpcodeRegister opcodeRegister) {
-        final long WeightPush   = 2;
-        final long WeightPop    = 2;
-
         opcodeRegister.registerOp("halt", "stop virtual process (and sub-processes).", 1, 1, scope -> scope.stopProcesses(scope.getProgramCounter().nextByte()));
         opcodeRegister.registerOp("pop", "pop the top element from the stack.", 1, scope -> scope.getStack().pop());
         opcodeRegister.registerOp("destroy", "destroy contract and return all funds to provided address.", 100, Scope::destroyContract);
