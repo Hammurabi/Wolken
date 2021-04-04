@@ -322,24 +322,43 @@ public class VarInt {
             stream.write(bytes);
         } else {
             int bits = Math.max(integer.bitLength(), 1);
+            byte bytes[]    = Utils.takeApart(integer);
 
-            if (bits < 4) {
-            } else if (bits < 12) {
-            } else if (bits < 20) {
-            } else if (bits < 28) {
-            } else if (bits < 36) {
-            } else if (bits < 44) {
-            } else if (bits < 52) {
-            } else if (bits < 60) {
-            } else if (bits < 68) {
-            } else if (bits < 76) {
-            } else if (bits < 84) {
-            } else if (bits < 92) {
-            } else if (bits < 100) {
-            } else if (bits < 108) {
-            } else if (bits < 116) {
+            if (bits <= 4) {
+                bytes[0] &= 0x0F;
+            } else if (bits <= 12) {
+                bytes[0] &= 0x0F | 1 << 4;
+            } else if (bits <= 20) {
+                bytes[0] &= 0x0F | 2 << 4;
+            } else if (bits <= 28) {
+                bytes[0] &= 0x0F | 3 << 4;
+            } else if (bits <= 36) {
+                bytes[0] &= 0x0F | 4 << 4;
+            } else if (bits <= 44) {
+                bytes[0] &= 0x0F | 5 << 4;
+            } else if (bits <= 52) {
+                bytes[0] &= 0x0F | 6 << 4;
+            } else if (bits <= 60) {
+                bytes[0] &= 0x0F | 7 << 4;
+            } else if (bits <= 68) {
+                bytes[0] &= 0x0F | 8 << 4;
+            } else if (bits <= 76) {
+                bytes[0] &= 0x0F | 9 << 4;
+            } else if (bits <= 84) {
+                bytes[0] &= 0x0F | 10 << 4;
+            } else if (bits <= 92) {
+                bytes[0] &= 0x0F | 11 << 4;
+            } else if (bits <= 100) {
+                bytes[0] &= 0x0F | 12 << 4;
+            } else if (bits <= 108) {
+                bytes[0] &= 0x0F | 13 << 4;
+            } else if (bits <= 116) {
+                bytes[0] &= 0x0F | 14 << 4;
             } else if (bits <= 128) {
+                bytes[0] &= 0x0F | 15 << 4;
             }
+
+            stream.write(bytes);
         }
     }
 
