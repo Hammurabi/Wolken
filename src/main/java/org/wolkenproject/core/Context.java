@@ -83,6 +83,8 @@ public class Context {
         serializationFactory.registerClass(TransactionList.class, new TransactionList(0, new LinkedHashSet<>(), new byte[Message.UniqueIdentifierLength]));
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
 
+        OpcodeRegister.register(opcodeRegister);
+
         this.blockChain = new BlockChain(this);
         this.server = new Server(forceConnections);
 
