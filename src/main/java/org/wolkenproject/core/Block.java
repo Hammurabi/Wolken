@@ -251,4 +251,44 @@ public class Block implements Iterable<Transaction> {
     public PrunedBlock getPruned() throws WolkenException {
         return new PrunedBlock(getBlockHeader(), getStateChange().getTransactionIds(), getStateChange().getTransactionEventIds());
     }
+
+    public void setNonce(int nonce) {
+        getBlockHeader().setNonce(nonce);
+    }
+
+    protected void setMerkleRoot(byte[] merkleRoot) {
+        this.merkleRoot = merkleRoot;
+    }
+
+    public void setParent(byte[] hash) {
+        this.previousHash = hash;
+    }
+
+    public void setBits(int bits) {
+        this.bits = bits;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public byte[] getParentHash() {
+        return previousHash;
+    }
+
+    public byte[] getMerkleRoot() {
+        return merkleRoot;
+    }
+
+    public int getNonce() {
+        return nonce;
+    }
+
+    public int getBits() {
+        return bits;
+    }
 }
