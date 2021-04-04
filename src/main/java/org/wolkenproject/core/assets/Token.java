@@ -9,6 +9,10 @@ public abstract class Token extends Asset {
     // 256bit unsigned integer representing the total supply of this asset.
     private final BigInteger totalSupply;
 
+    public Token() {
+        this(DefaultUUID, BigInteger.ZERO);
+    }
+
     public Token(byte[] uuid, BigInteger totalSupply) {
         super(uuid);
         this.totalSupply = totalSupply;
@@ -20,11 +24,11 @@ public abstract class Token extends Asset {
     // deposit 'amount' into 'address'.
     public abstract void deposit(byte address[], BigInteger amount);
 
-    // return true of the 'address' has at least '1' of this token.
+    // return true if the 'address' has at least '1' of this token.
     public boolean hasToken(byte address[]) {
         Account account = Context.getInstance().getDatabase().findAccount(address);
         if (account != null) {
-            return account.getBalanceForToken(getUUID()).compareTo(BigInteger.ZERO) != 0;
+            return account.getBalanceForToken(getUUID()).compareTo(BigInteger.ZERO) > 0;
         }
 
         return false;
