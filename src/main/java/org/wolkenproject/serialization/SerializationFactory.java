@@ -34,7 +34,6 @@ public class SerializationFactory {
 
     public static void register(SerializationFactory serializationFactory) throws UnknownHostException, WolkenException {
         Transaction.register(serializationFactory);
-        serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
 
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
         serializationFactory.registerClass(Block.class, new Block());
@@ -63,6 +62,7 @@ public class SerializationFactory {
         serializationFactory.registerClass(AddressList.class, new AddressList(0, new LinkedHashSet<>()));
 
         serializationFactory.registerClass(Account.class, new Account());
+        serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
     }
 
     /*
