@@ -4,10 +4,7 @@ import org.wolkenproject.core.transactions.MintTransaction;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
-import org.wolkenproject.utils.BitOutputStream;
-import org.wolkenproject.utils.ChainMath;
-import org.wolkenproject.utils.Utils;
-import org.wolkenproject.utils.VarInt;
+import org.wolkenproject.utils.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -117,9 +114,12 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         return true;
     }
 
+    private byte[] getHashCode() {
+        return blockHeader.getHashCode();
+    }
+
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
-        super.write(stream);
         Utils.writeInt(transactions.size(), stream);
         for (Transaction transaction : transactions)
         {
@@ -130,7 +130,6 @@ public class Block extends SerializableI implements Iterable<Transaction> {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
-        super.read(stream);
         byte buffer[] = new byte[4];
         stream.read(buffer);
         int length = Utils.makeInt(buffer);
