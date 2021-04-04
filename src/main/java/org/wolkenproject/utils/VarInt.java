@@ -321,7 +321,7 @@ public class VarInt {
             stream.write(length);
             stream.write(bytes);
         } else {
-            int bits = Math.max(integer.bitLength(), 1);
+            int bits        = Math.max(integer.bitLength(), 1);
             byte bytes[]    = Utils.takeApart(integer);
 
             if (bits <= 4) {
