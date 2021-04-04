@@ -469,7 +469,7 @@ public class Utils {
 
     // return the minimum number of bits required to represent this number
     public static int numBitsRequired(long x) {
-        return (int) (Math.floor(log2(x + 1)) + 1);
+        return (int) (Math.floor(log2(Math.max(x, 1))) + 1);
     }
 
     public static void skipBytes(InputStream stream, int numBytes) throws IOException {
