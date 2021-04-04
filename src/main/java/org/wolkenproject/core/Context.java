@@ -154,11 +154,11 @@ public class Context {
 //        opcodeRegister.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.", 1, scope -> scope.getStack().peek().flipSign());
 
         opcodeRegister.registerOp("add", "pop two objects from the stack and add them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Add));
-        opcodeRegister.registerOp("sub", "pop two objects from the stack and sub them.", 1, scope -> scope.callOperator());
-        opcodeRegister.registerOp("mul", "pop two objects from the stack and mul them.", 1, scope -> scope.callOperator());
-        opcodeRegister.registerOp("div", "pop two objects from the stack and div them.", 1, scope -> scope.callOperator());
-        opcodeRegister.registerOp("mod", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator());
-        opcodeRegister.registerOp("pow", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator());
+        opcodeRegister.registerOp("sub", "pop two objects from the stack and sub them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Sub));
+        opcodeRegister.registerOp("mul", "pop two objects from the stack and mul them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Mul));
+        opcodeRegister.registerOp("div", "pop two objects from the stack and div them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Div));
+        opcodeRegister.registerOp("mod", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Mod));
+        opcodeRegister.registerOp("pow", "pop two objects from the stack and mod them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Pow));
         opcodeRegister.registerOp("and", "pop two objects from the stack and perform bitwise and on them.", 1, scope -> scope.getStack().callOperator(scope));
         opcodeRegister.registerOp("or", "pop two objects from the stack and perform bitwise or on them.", 1, scope -> scope.getStack().callOperator(scope));
         opcodeRegister.registerOp("xor", "pop two objects from the stack and perform bitwise xor on them.", 1, scope -> scope.getStack().callOperator(scope));
