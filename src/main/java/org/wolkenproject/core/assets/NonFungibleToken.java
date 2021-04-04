@@ -12,6 +12,10 @@ import java.math.BigInteger;
 public class NonFungibleToken extends Asset {
     private boolean isTransferable;
 
+    public NonFungibleToken() {
+        this(DefaultUUID, false);
+    }
+
     public NonFungibleToken(byte[] uuid, boolean isTransferable) {
         super(uuid);
         this.isTransferable = isTransferable;
