@@ -6,6 +6,7 @@ import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
+import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.papaya.runtime.*;
 import org.wolkenproject.rpc.RpcServer;
 import org.wolkenproject.serialization.SerializationFactory;
@@ -152,7 +153,7 @@ public class Context {
         opcodeRegister.registerOp("verify", "throws an 'InvalidTransactionException' if the top stack item is not true.", 1, Scope::verify);
 //        opcodeRegister.registerOp("flipsign", "pop an object from the stack and reinterpret the most significant bit as a sign bit.", 1, scope -> scope.getStack().peek().flipSign());
 
-        opcodeRegister.registerOp("add", "pop two objects from the stack and add them.", 1, scope -> scope.add());
+        opcodeRegister.registerOp("add", "pop two objects from the stack and add them.", 1, scope -> scope.callOperator(PapayaStructure.Operator.Add));
 //        opcodeRegister.registerOp("sub", "pop two objects from the stack and sub them.", 1, scope -> scope.sub());
 //        opcodeRegister.registerOp("mul", "pop two objects from the stack and mul them.", 1, scope -> scope.mul());
 //        opcodeRegister.registerOp("div", "pop two objects from the stack and div them.", 1, scope -> scope.div());
