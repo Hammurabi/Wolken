@@ -269,7 +269,7 @@ public class Block implements Iterable<Transaction> {
     }
 
     public int getVersion() {
-        return version;
+        return getBlockHeader().getVersion();
     }
 
     public int getTimestamp() {
