@@ -42,8 +42,12 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         return block;
     }
 
-    public BigInteger getChainWork() throws WolkenException {
+    public BigInteger getTotalChainWork() throws WolkenException {
         return chainWork.add(block.getWork());
+    }
+
+    public BigInteger getPreviousChainWork() throws WolkenException {
+        return chainWork;
     }
 
     public int getHeight() {
@@ -52,7 +56,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
 
     public BlockIndex generateNextBlock() throws WolkenException {
         int bits                = ChainMath.calculateNewTarget(this);
-        return new BlockIndex(new Block(getHash(), bits), getChainWork(), height + 1);
+        return new BlockIndex(new Block(getHash(), bits), getTotalChainWork(), height + 1);
     }
 
     @Override
@@ -103,7 +107,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
             BigInteger newChainWork = oldChainWork;
 
             if (previous != null) {
-                newChainWork  = previous.getChainWork();
+                newChainWork  = previous.getTotalChainWork();
             } else {
                 newChainWork  = BigInteger.ZERO;
             }
@@ -147,7 +151,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     @Override
     public int compareTo(BlockIndex other) {
         try {
-            int compare = getChainWork().compareTo(other.getChainWork());
+            int compare = getTotalChainWork().compareTo(other.getTotalChainWork());
 
             if (compare > 0) {
                 return -1;
@@ -188,7 +192,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         try {
             return "{" +
                     "block=" + Base16.encode(block.getHashCode()) +
-                    ", chainWork=" + getChainWork() +
+                    ", chainWork=" + getTotalChainWork() +
                     ", height=" + height +
                     ", sequenceId=" + sequenceId +
                     '}';
