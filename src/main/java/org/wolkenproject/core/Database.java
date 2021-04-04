@@ -30,6 +30,7 @@ public class Database {
     AliasPrefix             = new byte[] { 'A' },
     ChainTipPrefix          = new byte[] { 'q' },
     BlockPrefix             = new byte[] { 'b' },
+    FullBlockPrefix         = new byte[] { 'c' },
     PrunedBlockPrefix       = new byte[] { 'p' },
     CompressedBlockPrefix   = new byte[] { 's' },
     BlockIndexPrefix        = new byte[] { 'i' },
@@ -98,11 +99,19 @@ public class Database {
 
     public BlockIndex findBlock(byte[] hash) {
         BlockMetadata metadata = get(concatenate(BlockPrefix, hash), BlockMetadata.class);
-        // store the header along with the height and number of transactions and number of events.
-        put(concatenate(BlockPrefix, hash), blockMeta);
+        if (metadata == null) {
+            return null;
+        }
 
-        // store the actual compressed block data.
-        put(concatenate(CompressedBlockPrefix, hash), byteArrayOutputStream.toByteArray());
+        byte compressed[] = get(concatenate(CompressedBlockPrefix, hash));
+
+        if (compressed == null) {
+            return null;
+        }
+
+        Block block = new Block().fromCompressed(compressed);
+
+        return new BlockIndex(block, metadata);
     }
 
     public void storePrunedBlock(int height, BlockIndex block) {
