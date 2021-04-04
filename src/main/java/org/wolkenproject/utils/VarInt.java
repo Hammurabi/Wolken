@@ -305,9 +305,9 @@ public class VarInt {
         return 0;
     }
 
-    // writes an unsigned 256 bit integer to stream
+    // writes an unsigned 128 bit integer to stream
     // when preserveAllBits is true, then the resulting
-    // integer will only be 251 bits in length as 5 bits
+    // integer will only be 124 bits in length as 4 bits
     // will be used to encode the length of the integer.
     public static void writeCompactUint128(BigInteger integer, boolean preserveAllBits, OutputStream stream) throws WolkenException, IOException {
         byte bytes[]    = integer.toByteArray();
@@ -316,6 +316,10 @@ public class VarInt {
             if (bytes[i] == 0) {
                 drop ++;
             }
+        }
+
+        if (drop == bytes.length) {
+            drop --;
         }
 
         if (drop > 0) {
