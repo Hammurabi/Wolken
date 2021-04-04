@@ -2,18 +2,15 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
-import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.network.messages.*;
-import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.papaya.runtime.*;
 import org.wolkenproject.rpc.RpcServer;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.FileService;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.LinkedHashSet;
 import java.util.Set;
