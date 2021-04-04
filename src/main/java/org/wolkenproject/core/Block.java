@@ -118,7 +118,8 @@ public class Block extends SerializableI implements Iterable<Transaction> {
 
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
-        Utils.writeInt(transactions.size(), stream);
+        blockHeader.write(stream);
+        VarInt.writeCompactUInt32(transactions.size(), false, stream);
         for (Transaction transaction : transactions)
         {
             // use serialize here to write transaction serial id
@@ -128,9 +129,8 @@ public class Block extends SerializableI implements Iterable<Transaction> {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
-        byte buffer[] = new byte[4];
-        stream.read(buffer);
-        int length = Utils.makeInt(buffer);
+        blockHeader.read(stream);
+        int length = VarInt.readCompactUInt32(false, stream);
 
         for (int i = 0; i < length; i ++)
         {
