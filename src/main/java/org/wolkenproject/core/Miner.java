@@ -12,7 +12,7 @@ public class Miner extends AbstractMiner {
 
     @Override
     public void mine(Block block) throws WolkenException {
-        BlockHeader header  = block;
+        BlockHeader header  = block.getBlockHeader();
         byte hash[]         = header.getHashCode();
         int nonce           = 0;
         byte headerBytes[]  = header.asByteArray();
