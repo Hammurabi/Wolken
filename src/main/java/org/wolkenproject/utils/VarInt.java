@@ -168,7 +168,7 @@ public class VarInt {
                 stream.write((Byte.toUnsignedInt(bytes[4])));
                 stream.write((Byte.toUnsignedInt(bytes[5])));
                 stream.write((Byte.toUnsignedInt(bytes[6])));
-            } else if (bits <= 61) {
+            } else if (bits <= 64) {
                 byte bytes[] = Utils.takeApartLong(integer);
                 stream.write((Byte.toUnsignedInt(bytes[0]) & 0x1F) | 7 << 5);
                 stream.write((Byte.toUnsignedInt(bytes[1])));
