@@ -154,7 +154,7 @@ public class Database {
 
         try {
             // 28 bytes representing the height, number of transactions, number of events total value, and total fees.
-            byte blockHeader[] = block.getMetadata();
+            BlockMetadata blockMeta = block.getMetadata();
 
             // prepare a byte array output stream for quickly serializing the block structure to a byte array.
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
