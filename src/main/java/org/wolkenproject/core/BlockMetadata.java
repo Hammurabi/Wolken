@@ -1,8 +1,10 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.serialization.SerializableI;
+
 import java.math.BigInteger;
 
-public class BlockMetadata {
+public class BlockMetadata extends SerializableI {
     private int height;
     private int transactionCount;
     private int eventCount;
