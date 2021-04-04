@@ -11,7 +11,8 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 
 public abstract class Asset extends SerializableI {
-    public final static int UniqueIdentifierLength = 20;
+    public final static int     UniqueIdentifierLength = 20;
+    public final static byte    DefaultUUID[] = new byte[UniqueIdentifierLength];
     // 20 byte unique identifier (hash160 of constructor contract/transaction).
     private final byte          uuid[];
 
@@ -42,5 +43,6 @@ public abstract class Asset extends SerializableI {
     public abstract void readContent(InputStream stream) throws IOException, WolkenException;
 
     public static void register(SerializationFactory serializationFactory) {
+        serializationFactory.registerClass(NonFungibleToken.class, new NonFungibleToken());
     }
 }
