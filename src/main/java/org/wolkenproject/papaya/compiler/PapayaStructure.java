@@ -289,4 +289,27 @@ public class PapayaStructure {
     public BigInteger getIdentifierInt() {
         return new BigInteger(1, getIdentifier());
     }
+
+    public static final class Operator {
+        public static final int
+                None = 0,
+
+                Add = 1,
+                Sub = 2,
+                Mul = 3,
+                Div = 4,
+                Mod = 5,
+                Pow = 6,
+
+                And = 7,
+                Or = 8,
+                Xor = 9,
+
+                UnsignedShift = 10,
+                RightShift = 11,
+                LeftShift = 12,
+
+                Not = 13,
+                Negate = 14;
+    }
 }
