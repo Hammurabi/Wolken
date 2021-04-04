@@ -50,7 +50,7 @@ public class Utils {
             return new byte[1];
         }
 
-        if (bytes[0] == 0) {
+        if (bytes[0] == 0 && bytes.length > 1) {
             byte temp[] = new byte[bytes.length - 1];
             System.arraycopy(bytes, 1, temp, 0, temp.length);
             bytes = temp;
