@@ -106,7 +106,7 @@ public class VarInt {
                 stream.write(bytes[5]);
             } else if (bits <= 56) {
                 stream.write(6);
-                byte bytes[] = Utils.takeApartInt48(integer);
+                byte bytes[] = Utils.takeApartInt56(integer);
                 stream.write(bytes[0]);
                 stream.write(bytes[1]);
                 stream.write(bytes[2]);
@@ -116,7 +116,7 @@ public class VarInt {
                 stream.write(bytes[6]);
             } else if (bits <= 64) {
                 stream.write(7);
-                byte bytes[] = Utils.takeApartInt48(integer);
+                byte bytes[] = Utils.takeApartLong(integer);
                 stream.write(bytes[0]);
                 stream.write(bytes[1]);
                 stream.write(bytes[2]);
@@ -216,7 +216,7 @@ public class VarInt {
                 throw new IOException();
             }
 
-            return Utils.makeInt(Utils.conditionalExpand(4, bytes));
+            return Utils.makeInt(Utils.conditionalExpand(8, bytes));
         } else {
             int test    = stream.read();
             int value   = test & 0x1F;
