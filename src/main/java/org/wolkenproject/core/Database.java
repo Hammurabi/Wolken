@@ -177,7 +177,7 @@ public class Database {
             put(concatenate(BlockIndexPrefix, Utils.takeApart(height)), hash);
 
             // store the header along with the height and number of transactions and number of events.
-            put(concatenate(BlockPrefix, hash), Utils.concatenate(header, metadt));
+            put(concatenate(BlockPrefix, hash), blockMeta);
 
             // store the actual compressed block data.
             put(concatenate(CompressedBlockPrefix, hash), byteArrayOutputStream.toByteArray());
