@@ -152,17 +152,18 @@ public class Database {
         // 80 bytes representing the block header.
         byte header[] = block.getBlock().getHeaderBytes();
 
-        // 28 bytes representing the height, number of transactions, number of events total value, and total fees.
-        byte metadt[] = Utils.concatenate(
-                            Utils.takeApart(height),
-                            Utils.takeApart(block.getBlock().getTransactionCount()),
-                            Utils.takeApart(block.getBlock().getEventCount()),
-                            Utils.takeApartLong(block.getBlock().getTotalValue()),
-                            Utils.takeApartLong(block.getBlock().getFees()),
-                            Utils.takeApart(block.getTotalChainWork())
-                        );
-
         try {
+            // 28 bytes representing the height, number of transactions, number of events total value, and total fees.
+            byte metadt[] = Utils.concatenate(
+                    Utils.takeApart(height),
+                    Utils.takeApart(block.getBlock().getTransactionCount()),
+                    Utils.takeApart(block.getBlock().getEventCount()),
+                    Utils.takeApartLong(block.getBlock().getTotalValue()),
+                    Utils.takeApartLong(block.getBlock().getFees()),
+                    Utils.takeApart(block.getTotalChainWork())
+            );
+
+            // prepare a byte array output stream for quickly serializing the block structure to a byte array.
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             // we serialize the block into a deflater output stream with BEST_COMPRESSION, which is slow
             // but according to benchmarks, it should take around 7ms per block to deflate, and around 14ms
