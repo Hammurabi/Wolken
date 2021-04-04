@@ -1,6 +1,7 @@
 package org.wolkenproject.serialization;
 
 import org.wolkenproject.core.*;
+import org.wolkenproject.core.assets.Asset;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.exceptions.InvalidSerialNumberException;
@@ -34,6 +35,7 @@ public class SerializationFactory {
 
     public static void register(SerializationFactory serializationFactory) throws UnknownHostException, WolkenException {
         Transaction.register(serializationFactory);
+        Asset.register(serializationFactory);
 
         serializationFactory.registerClass(BlockHeader.class, new BlockHeader());
         serializationFactory.registerClass(Block.class, new Block());
