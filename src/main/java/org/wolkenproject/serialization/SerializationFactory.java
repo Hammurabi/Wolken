@@ -35,7 +35,7 @@ public class SerializationFactory {
         magicReferences = new HashMap<>();
     }
 
-    public static void register(SerializationFactory serializationFactory) throws UnknownHostException {
+    public static void register(SerializationFactory serializationFactory) throws UnknownHostException, WolkenException {
         Transaction.register(serializationFactory);
         serializationFactory.registerClass(RecoverableSignature.class, new RecoverableSignature());
 
