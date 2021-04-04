@@ -261,7 +261,7 @@ public class Block implements Iterable<Transaction> {
     }
 
     public void setParent(byte[] hash) {
-        this.previousHash = hash;
+        getBlockHeader().setParent(hash);
     }
 
     public void setBits(int bits) {
