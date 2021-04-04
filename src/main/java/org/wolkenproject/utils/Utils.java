@@ -43,7 +43,7 @@ public class Utils {
         System.out.println();
     }
 
-    public static byte[] takeApat(BigInteger integer) {
+    public static byte[] takeApart(BigInteger integer) {
         byte bytes[] = integer.toByteArray();
         if (bytes[0] == 0) {
             byte temp[] = new byte[bytes.length - 1];
