@@ -31,6 +31,10 @@ public class BlockMetadata extends SerializableI {
         this.chainWork = chainWork;
     }
 
+    public BlockHeader getBlockHeader() {
+        return blockHeader;
+    }
+
     public int getHeight() {
         return height;
     }
