@@ -372,6 +372,7 @@ public class VarInt {
         } else {
             int firstByte   = SerializableI.checkNotEOF(stream.read());
             int length      = firstByte >>> 4;
+
             if (length > 0) {
                 byte bytes[]    = new byte[length + 1];
                 SerializableI.checkFullyRead(stream.read(bytes, 1, length), length);
@@ -425,6 +426,8 @@ public class VarInt {
                 return 16;
             }
         }
+
+        return 0;
     }
 
     // writes an unsigned 256 bit integer to stream
