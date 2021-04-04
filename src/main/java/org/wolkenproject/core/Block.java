@@ -265,7 +265,7 @@ public class Block implements Iterable<Transaction> {
     }
 
     public void setBits(int bits) {
-        this.bits = bits;
+        getBlockHeader().setBits(bits);
     }
 
     public int getVersion() {
