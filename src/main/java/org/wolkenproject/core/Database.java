@@ -96,7 +96,7 @@ public class Database {
         return null;
     }
 
-    public BlockIndex findBlock(byte[] hash) {
+    public BlockIndex findBlock(byte[] hash) {s
         mutex.lock();
         try {
             InputStream inputStream = location.newFile(".chain").newFile(Base16.encode(hash)).openFileInputStream();
