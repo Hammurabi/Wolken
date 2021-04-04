@@ -34,6 +34,14 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         this.sequenceId = 0;
     }
 
+    public BlockIndex(Block block, BlockMetadata metadata) {
+        this.block = block;
+        this.hash  = block.getHashCode();
+        this.chainWork = metadata.getChainWork();
+        this.height = metadata.getHeight();
+        this.sequenceId = 0;
+    }
+
     public void setSequenceId(long sequenceId) {
         this.sequenceId = sequenceId;
     }
