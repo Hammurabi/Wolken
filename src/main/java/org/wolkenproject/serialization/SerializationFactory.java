@@ -15,6 +15,7 @@ import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -108,5 +109,14 @@ public class SerializationFactory {
 
     public int getSerialNumber(Class<?> classType) {
         return classMagicReferences.get(classType);
+    }
+
+    public <Type extends SerializableI> Type fromBytes(byte[] bytes, Class<?> theClass) throws IOException, WolkenException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+        try {
+            return fromStream(theClass, inputStream);
+        } finally {
+            inputStream.close();
+        }
     }
 }
