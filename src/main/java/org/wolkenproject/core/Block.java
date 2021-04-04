@@ -18,9 +18,10 @@ import java.net.ContentHandler;
 import java.util.*;
 import java.util.zip.DeflaterOutputStream;
 
-public class Block extends BlockHeader implements Iterable<Transaction> {
+public class Block implements Iterable<Transaction> {
     private static BigInteger       LargestHash             = BigInteger.ONE.shiftLeft(256);
     public static int               UniqueIdentifierLength  = 32;
+    private BlockHeader             blockHeader;
     private Set<Transaction>        transactions;
     private BlockStateChangeResult  stateChange;
 
