@@ -50,4 +50,8 @@ public abstract class PapayaHandler {
     public boolean isReadOnly() {
         return getModifier() == AccessModifier.ReadOnly;
     }
+
+    public PapayaStructure getStructure() {
+        return getPapayaObject().getStructure();
+    }
 }
