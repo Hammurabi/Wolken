@@ -253,42 +253,42 @@ public class Block implements Iterable<Transaction> {
     }
 
     public void setNonce(int nonce) {
-        getBlockHeader().setNonce(nonce);
+        blockHeader.setNonce(nonce);
     }
 
     protected void setMerkleRoot(byte[] merkleRoot) {
-        getBlockHeader().setMerkleRoot(merkleRoot);
+        blockHeader.setMerkleRoot(merkleRoot);
     }
 
     public void setParent(byte[] parent) {
-        getBlockHeader().setParent(parent);
+        blockHeader.setParent(parent);
     }
 
     public void setBits(int bits) {
-        getBlockHeader().setBits(bits);
+        blockHeader.setBits(bits);
     }
 
     public int getVersion() {
-        return getBlockHeader().getVersion();
+        return blockHeader.getVersion();
     }
 
     public int getTimestamp() {
-        return getBlockHeader().getTimestamp();
+        return blockHeader.getTimestamp();
     }
 
     public byte[] getParentHash() {
-        return getBlockHeader().getParentHash();
+        return blockHeader.getParentHash();
     }
 
     public byte[] getMerkleRoot() {
-        return getBlockHeader().getMerkleRoot();
+        return blockHeader.getMerkleRoot();
     }
 
     public int getNonce() {
-        return getBlockHeader().getNonce();
+        return blockHeader.getNonce();
     }
 
     public int getBits() {
-        return getBlockHeader().getBits();
+        return blockHeader.getBits();
     }
 }
