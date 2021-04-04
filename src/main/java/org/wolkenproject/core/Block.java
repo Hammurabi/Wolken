@@ -31,7 +31,7 @@ public class Block implements Iterable<Transaction> {
 
     public Block(byte previousHash[], int bits)
     {
-        super(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], bits, 0);
+        this.blockHeader = new BlockHeader(Context.getInstance().getNetworkParameters().getVersion(), Utils.timestampInSeconds(), previousHash, new byte[32], bits, 0);
         transactions = new LinkedHashSet<>();
     }
 
