@@ -16,6 +16,7 @@ public class PapayaStructure {
     private final StructureType                 structureType;
     private final String                        name;
     private final Set<PapayaMember>             members;
+    private final Map<Integer, byte[]>          operators;
     private final LineInfo                      lineInfo;
     private long                                structureLength;
 
@@ -23,8 +24,17 @@ public class PapayaStructure {
         this.name           = name;
         this.structureType  = structureType;
         this.members        = new LinkedHashSet<>();
+        this.operators      = new HashMap<>();
         this.lineInfo       = lineInfo;
         this.identifier     = new byte[20];
+    }
+
+    public byte[] getOperatorId(int operator) throws PapayaException {
+        if (operators.containsKey(operator)) {
+            return operators.get(operator);
+        }
+
+        throw new PapayaException("operator '"+operator+"' is not overloaded for '"+getName()+"'.");
     }
 
     public void addField(String name, PapayaField field) throws PapayaException {
