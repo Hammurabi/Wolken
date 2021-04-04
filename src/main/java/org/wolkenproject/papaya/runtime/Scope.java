@@ -107,8 +107,8 @@ public class Scope {
         return null;
     }
 
-    public void add() throws PapayaException {
+    public void callOperator(int operator) throws PapayaException {
         PapayaHandler a = getStack().peek(2);
-        a.getMember(a.getStructure().getOperatorId(PapayaStructure.Operator.Add), getStackTrace()).call(this);
+        a.getMember(a.getStructure().getOperatorId(operator), getStackTrace()).call(this);
     }
 }
