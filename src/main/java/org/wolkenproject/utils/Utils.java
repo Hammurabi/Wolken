@@ -45,6 +45,11 @@ public class Utils {
 
     public static byte[] takeApart(BigInteger integer) {
         byte bytes[] = integer.toByteArray();
+
+        if (bytes.length == 0) {
+            return new byte[0];
+        }
+
         if (bytes[0] == 0) {
             byte temp[] = new byte[bytes.length - 1];
             System.arraycopy(bytes, 1, temp, 0, temp.length);
