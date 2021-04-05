@@ -3,6 +3,7 @@ package org.wolkenproject.core;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,7 +67,7 @@ public class Ancestors extends SerializableI {
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         stream.write(hash);
-        Utils.writeInt(hashes.size(), stream);
+        VarInt.writeCompactUInt32(hashes.size(), false, stream);
         for (byte hash[] : hashes) {
             stream.write(hash);
         }
@@ -74,10 +75,7 @@ public class Ancestors extends SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
-        stream.read(hash);
-        byte buffer[] = new byte[4];
-        stream.read(buffer, 0, 4);
-        int length = Utils.makeInt(buffer);
+        int length = VarInt.readCompactUInt32(false, stream);
 
         for (int i = 0; i < length; i ++) {
             byte hash[] = new byte[Block.UniqueIdentifierLength];
