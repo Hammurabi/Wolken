@@ -131,7 +131,7 @@ public class BasicWallet {
             OutputStream stream         = service.openFileOutputStream();
 
             // write a version number
-            Utils.writeInt(1, stream);
+            VarInt.writeCompactUInt32(1, false, stream);
             // does not need to be encrypted (65 bytes)
             stream.write(publicKey.getEncoded());
             // write the current nonce
