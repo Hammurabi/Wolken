@@ -336,6 +336,13 @@ public class Utils {
         return makeInt(buffer);
     }
 
+    public static long readLong(InputStream stream) throws IOException {
+        byte buffer[] = new byte[8];
+        SerializableI.checkFullyRead(stream.read(buffer), 8);
+
+        return makeLong(buffer);
+    }
+
     public static void writeLong(long integer, OutputStream stream) throws IOException {
         stream.write((byte) ((integer >>> 56) & 0xFF));
         stream.write((byte) ((integer >>> 48) & 0xFF));
