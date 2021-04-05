@@ -114,7 +114,7 @@ public class BasicTransaction extends Transaction {
 
     @Override
     public boolean verify(Block block, int blockHeight, long fees) {
-        return false;
+        return true;
     }
 
     @Override
