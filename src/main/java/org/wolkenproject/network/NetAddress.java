@@ -5,6 +5,7 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,7 +73,7 @@ public class NetAddress extends SerializableI implements Serializable, Comparabl
         byte[] bytes = address.getAddress();
         stream.write(bytes.length);
         stream.write(bytes);
-        Utils.writeUnsignedInt16(port, stream);
+        VarInt.writeCompactUInt32(port, false, stream);
         Utils.writeLong(services, stream);
     }
 
@@ -82,11 +83,8 @@ public class NetAddress extends SerializableI implements Serializable, Comparabl
         byte[] bytes = new byte[length];
         checkFullyRead(stream.read(bytes), length);
         address = InetAddress.getByAddress(bytes);
-        port    = Utils.makeInt((byte) 0, (byte) 0, (byte) stream.read(), (byte) stream.read());
-
-        byte[] buffer = new byte[8];
-        checkFullyRead(stream.read(buffer), 8);
-        services= Utils.makeLong(bytes);
+        port    = VarInt.readCompactUInt32(false, stream);
+        services= Utils.readLong(stream);
     }
 
     @Override
