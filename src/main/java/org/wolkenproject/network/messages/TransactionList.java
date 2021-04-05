@@ -7,6 +7,7 @@ import org.wolkenproject.network.Node;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +30,7 @@ public class TransactionList extends ResponseMessage {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
-        Utils.writeInt(transactions.size(), stream);
+        VarInt.writeCompactUInt32(transactions.size(), false, stream);
         for (Transaction transaction : transactions)
         {
             transaction.write(stream);
@@ -38,12 +39,9 @@ public class TransactionList extends ResponseMessage {
 
     @Override
     public void readContents(InputStream stream) throws IOException, WolkenException {
-        byte buffer[] = new byte[4];
-        stream.read(buffer);
-        int length = Utils.makeInt(buffer);
+        int length = VarInt.readCompactUInt32(false, stream);
 
-        for (int i = 0; i < length; i ++)
-        {
+        for (int i = 0; i < length; i++) {
             try {
                 Transaction transaction = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(Transaction.class), stream);
                 transactions.add(transaction);
