@@ -1,5 +1,7 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.encoders.Base16;
+import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 
 import java.util.Iterator;
@@ -56,11 +58,15 @@ public class BlockStateChangeResult implements Iterable<Event> {
         for (Event event : transactionEvents) {
             event.apply();;
         }
+
+        Logger.alert("state merged ${h}", Base16.encode(merkleRoot));
     }
 
     public void undo() {
         for (Event event : transactionEvents) {
             event.undo();
         }
+
+        Logger.alert("state reset ${h}", Base16.encode(merkleRoot));
     }
 }
