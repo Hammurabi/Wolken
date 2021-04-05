@@ -98,7 +98,7 @@ public class Database {
 
         Block block = null;
         try {
-            block = new Block().fromCompressed(compressed);
+            block = new Block().fromBytes(compressed);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (WolkenException e) {
