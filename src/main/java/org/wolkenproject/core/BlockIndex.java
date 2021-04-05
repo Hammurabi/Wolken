@@ -303,4 +303,10 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     public BlockHeader getHeader() {
         return block.getBlockHeader();
     }
+
+    public void applyStateChange() {
+    }
+
+    public void undoStateChange() {
+    }
 }
