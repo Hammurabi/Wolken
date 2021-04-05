@@ -289,7 +289,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public BlockMetadata getMetadata() throws WolkenException {
-        return new BlockMetadata(getBlock().getBlockHeader(), getBlock().getTransactionCount(), getBlock().getEventCount(), getHeight(), getTotalValue(), getFees(), getPreviousChainWork());
+        return new BlockMetadata(getBlock().getBlockHeader(), getHeight(), getBlock().getTransactionCount(), getBlock().getEventCount(), getTotalValue(), getFees(), getPreviousChainWork());
     }
 
     private long getFees() {
