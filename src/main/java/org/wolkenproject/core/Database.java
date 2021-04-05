@@ -156,17 +156,17 @@ public class Database {
             BlockMetadata blockMeta = block.getMetadata();
 
             // prepare a byte array output stream for quickly serializing the block structure to a byte array.
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             // we serialize the block into a deflater output stream with BEST_COMPRESSION, which is slow
             // but according to benchmarks, it should take around 7ms per block to deflate, and around 14ms
             // to inflate.
-            DeflaterOutputStream outputStream = new DeflaterOutputStream(byteArrayOutputStream, new Deflater(Deflater.BEST_COMPRESSION));
+//            DeflaterOutputStream outputStream = new DeflaterOutputStream(byteArrayOutputStream, new Deflater(Deflater.BEST_COMPRESSION));
 
             // write the block (LOCALLY) to the output stream.
             block.getBlock().write(outputStream, true);
 
-            outputStream.flush();
-            outputStream.close();
+//            outputStream.flush();
+//            outputStream.close();
 
 //            // store the actual transactions associated with this block
 //            for (Transaction transaction : block.getBlock()) {
@@ -179,12 +179,8 @@ public class Database {
             // store the header along with the height and number of transactions and number of events.
             put(concatenate(BlockPrefix, hash), blockMeta);
 
-            int lengthCompressed = byteArrayOutputStream.size();
-            int length           = block.getBlock().calculateSize();
-
-            System.out.println("compressed: " + lengthCompressed + " uncompressed: " + length + " reduction: " + (lengthCompressed / (double) length) * 100.0);
             // store the actual compressed block data.
-            put(concatenate(CompressedBlockPrefix, hash), byteArrayOutputStream.toByteArray());
+            put(concatenate(CompressedBlockPrefix, hash), outputStream.toByteArray());
         } catch (WolkenException | IOException e) {
             e.printStackTrace();
         }
