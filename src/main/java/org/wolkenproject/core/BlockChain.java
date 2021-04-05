@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BlockChain implements Runnable {
+public class BlockChain extends AbstractBlockChain {
     protected static final int                MaximumOrphanBlockQueueSize   = 250_000_000;
     protected static final int                MaximumStaleBlockQueueSize    = 500_000_000;
     protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
@@ -30,7 +30,7 @@ public class BlockChain implements Runnable {
     private ReentrantLock mutex;
 
     public BlockChain(Context context) {
-        this.context    = context;
+        super(context);
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
