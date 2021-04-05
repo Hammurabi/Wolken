@@ -67,26 +67,6 @@ public class BasicTransaction extends Transaction {
     }
 
     @Override
-    public boolean shallowVerify() {
-        // a transfer of 0 with a fee of 0 is not allowed
-        try {
-            return
-                    getTransactionValue() >= 0 &&
-                            getTransactionFee() >= 0 &&
-                            //possible vulnerability with a+b!=0 using signed integers
-                            (getTransactionValue() + getTransactionFee()) > 0 &&
-                            (signature.getR().length == 32) &&
-                            (signature.getS().length == 32) &&
-                            getSender() != null &&
-                            (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                            (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getBalance()) >= (value + fee);
-        } catch (WolkenException e) {
-        }
-
-        return false;
-    }
-
-    @Override
     public Address getSender() throws WolkenException {
         return Address.fromKey(signature.recover(asByteArray()));
     }
@@ -113,6 +93,23 @@ public class BasicTransaction extends Transaction {
                 VarInt.sizeOfCompactUin64(fee, false) +
                 VarInt.sizeOfCompactUin64(nonce, false) +
                 65;
+    }
+
+    @Override
+    public boolean shallowVerify() throws WolkenException {
+        return
+                // less than zero checks
+                getTransactionValue() >= 0 &&
+                getTransactionFee() >= 0 &&
+                //possible vulnerability with a+b!=0 using signed integers
+                (getTransactionValue() + getTransactionFee()) > 0 &&
+                // check signature data is sound
+                (signature.getR().length == 32) &&
+                (signature.getS().length == 32) &&
+                getSender() != null &&
+                // check the account account and balance of sender
+                (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getBalance()) >= (value + fee);
     }
 
     @Override
