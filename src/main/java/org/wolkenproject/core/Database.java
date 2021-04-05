@@ -179,6 +179,10 @@ public class Database {
             // store the header along with the height and number of transactions and number of events.
             put(concatenate(BlockPrefix, hash), blockMeta);
 
+            int lengthCompressed = byteArrayOutputStream.size();
+            int length           = block.getBlock().calculateSize();
+
+            System.out.println("compressed: " + lengthCompressed + " uncompressed: " + length + " reduction: " + (lengthCompressed / (double) length) * 100.0);
             // store the actual compressed block data.
             put(concatenate(CompressedBlockPrefix, hash), byteArrayOutputStream.toByteArray());
         } catch (WolkenException | IOException e) {
