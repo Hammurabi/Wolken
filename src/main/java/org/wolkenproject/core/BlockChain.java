@@ -372,7 +372,7 @@ public class BlockChain extends AbstractBlockChain {
             addStale(block);
         }
 
-        block.undo();
+        block.undoStateChange();
         getContext().getDatabase().deleteBlock(block.getHeight());
     }
 
