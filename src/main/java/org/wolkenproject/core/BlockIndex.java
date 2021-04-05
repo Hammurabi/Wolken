@@ -228,8 +228,8 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         }
     }
 
-    public BlockStateChangeResult getStateChange() {
-        return null;
+    public BlockStateChangeResult getStateChange() throws WolkenException {
+        return block.getStateChange(getHeight());
     }
 
     /**
