@@ -398,7 +398,7 @@ public class VarInt {
             }
 
             int remaining   = bytes.length - 1;
-            bytes[0]        = (byte) ((bytes[0] & 0x1F) | (remaining << 3));
+            bytes[0]        = (byte) ((bytes[0] & 0x07) | (remaining << 3));
 
             stream.write(bytes);
         }
@@ -423,10 +423,10 @@ public class VarInt {
                 byte bytes[]    = new byte[length + 1];
                 SerializableI.checkFullyRead(stream.read(bytes, 1, length), length);
 
-                bytes[0]        = (byte) (firstByte & 0x1F);
+                bytes[0]        = (byte) (firstByte & 0x07);
                 return bytes;
             } else {
-                return new byte[] { (byte) (firstByte & 0x1F) };
+                return new byte[] { (byte) (firstByte & 0x07) };
             }
         }
     }
