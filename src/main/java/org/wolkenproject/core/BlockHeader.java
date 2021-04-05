@@ -114,17 +114,12 @@ public class BlockHeader extends SerializableI {
 
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
-        byte buffer[] = new byte[4];
-        stream.read(buffer, 0, 4);
-        version = Utils.makeInt(buffer);
-        stream.read(buffer, 0, 4);
-        timestamp = Utils.makeInt(buffer);
-
-        stream.read(previousHash);
-        stream.read(merkleRoot);
-
-        stream.read(buffer, 0, 4);
-        nonce = Utils.makeInt(buffer);
+        version     = Utils.readInt(stream);
+        timestamp   = Utils.readInt(stream);
+        checkFullyRead(stream.read(previousHash), Block.UniqueIdentifierLength);
+        checkFullyRead(stream.read(merkleRoot), Block.UniqueIdentifierLength);
+        bits        = Utils.readInt(stream);
+        nonce       = Utils.readInt(stream);
     }
 
     @Override
