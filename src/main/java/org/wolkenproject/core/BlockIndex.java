@@ -309,5 +309,6 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public void undoStateChange() {
+        getStateChange().undo();
     }
 }
