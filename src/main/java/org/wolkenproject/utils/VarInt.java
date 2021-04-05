@@ -323,7 +323,7 @@ public class VarInt {
         } else {
             byte bytes[]    = Utils.takeApart(integer);
             int bits        = Utils.numBitsRequired(Byte.toUnsignedInt(bytes[0]));
-            if (bytes.length < 16 && bits >= 5) {
+            if (bytes.length < 16 && bits > 4) {
                 bytes       = Utils.conditionalExpand(bytes.length + 1, bytes);
             }
 
@@ -367,7 +367,7 @@ public class VarInt {
             int bits        = Utils.numBitsRequired(Byte.toUnsignedInt(bytes[0]));
             int length      = bytes.length;
 
-            if (bytes.length < 16 && bits >= 5) {
+            if (bytes.length < 16 && bits > 4) {
                 length++;
             }
 
@@ -393,7 +393,7 @@ public class VarInt {
         } else {
             byte bytes[]    = Utils.takeApart(integer);
             int bits        = Utils.numBitsRequired(Byte.toUnsignedInt(bytes[0]));
-            if (bytes.length < 32 && bits >= 4) {
+            if (bytes.length < 32 && bits > 3) {
                 bytes       = Utils.conditionalExpand(bytes.length + 1, bytes);
             }
 
