@@ -48,10 +48,10 @@ public class BlockChain implements Runnable {
         try {
             tip = context.getDatabase().findTip();
             if (tip != null) {
-                Logger.alert("loaded checkpoint successfully" + tip);
+                Logger.alert("loaded checkpoint successfully", tip);
             } else {
                 setTip(makeGenesisBlock());
-                Logger.alert("loaded genesis as checkpoint successfully" + tip);
+                Logger.alert("loaded genesis as checkpoint successfully", tip);
             }
         } finally {
             mutex.unlock();
