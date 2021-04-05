@@ -5,6 +5,7 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -120,6 +121,16 @@ public class BlockHeader extends SerializableI {
         checkFullyRead(stream.read(merkleRoot), Block.UniqueIdentifierLength);
         bits        = Utils.readInt(stream);
         nonce       = Utils.readInt(stream);
+    }
+
+    public int calculateSize() {
+        return
+                VarInt.sizeOfCompactUin32(version, false) +
+                VarInt.sizeOfCompactUin32(timestamp, false) +
+                previousHash.length +
+                merkleRoot.length +
+                4 +
+                4;
     }
 
     @Override
