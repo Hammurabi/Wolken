@@ -75,10 +75,8 @@ public class RequestHeadersBefore extends Message {
 
     @Override
     public void readContents(InputStream stream) throws IOException {
-        stream.read(hash);
-        byte buffer[] = new byte[4];
-        stream.read(buffer);
-        count = Utils.makeInt(buffer);
+        checkFullyRead(stream.read(hash), Block.UniqueIdentifierLength);
+        count = Utils.readInt(stream);
     }
 
     @Override
