@@ -54,4 +54,8 @@ public class BlockStateChangeResult implements Iterable<Event> {
 
     public void apply() {
     }
+
+    public void undo() {
+        
+    }
 }
