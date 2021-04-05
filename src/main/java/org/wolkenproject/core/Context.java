@@ -39,7 +39,7 @@ public class Context {
 
     public Context(FileService service, int rpcPort, boolean testNet, Address[] payList, Set<NetAddress> forceConnections) throws WolkenException, IOException {
         Context.instance = this;
-        this.database = new Database(service.newFile("db"));
+        this.database = new Database(service);
         this.networkParameters = new NetworkParameters(testNet);
         this.threadPool = Executors.newFixedThreadPool(3);
         this.isRunning = new AtomicBoolean(true);
