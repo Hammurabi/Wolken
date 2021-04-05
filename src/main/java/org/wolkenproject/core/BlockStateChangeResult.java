@@ -51,4 +51,7 @@ public class BlockStateChangeResult implements Iterable<Event> {
     public Iterator<Event> iterator() {
         return transactionEvents.iterator();
     }
+
+    public void apply() {
+    }
 }
