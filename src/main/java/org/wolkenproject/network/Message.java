@@ -1,18 +1,14 @@
 package org.wolkenproject.network;
 
-import org.wolkenproject.core.BlockIndex;
-import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.SecureRandom;
-import java.util.Collection;
 
 public abstract class Message extends SerializableI {
     public static final int UniqueIdentifierLength = 20;
@@ -52,11 +48,8 @@ public abstract class Message extends SerializableI {
     }
 
     public void readHeader(InputStream stream) throws IOException, WolkenException {
-        byte buffer[] = new byte[8];
-        stream.read(buffer, 0, 4);
-        version = Utils.makeInt(buffer);
-        stream.read(buffer, 4, 4);
-        flags = Utils.makeInt(buffer);
+        version = Utils.readInt(stream);
+        flags = Utils.readInt(stream);
     }
 
     @Override
