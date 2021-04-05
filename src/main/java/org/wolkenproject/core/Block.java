@@ -39,6 +39,15 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         return BlockHeader.Size + VarInt.sizeOfCompactUin32(transactions.size(), false) + transactionLength;
     }
 
+    public final int calculateSizeLocalStorage() {
+        int transactionLength = 0;
+        for (Transaction transaction : transactions) {
+            transactionLength += transaction.calculateSize();
+        }
+
+        return blockHeader.calculateSize() + VarInt.sizeOfCompactUin32(transactions.size(), false) + transactionLength;
+    }
+
     /*
         returns a new block header
      */
