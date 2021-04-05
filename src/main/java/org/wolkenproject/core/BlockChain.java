@@ -355,16 +355,24 @@ public class BlockChain extends AbstractBlockChain {
         getContext().getDatabase().storeBlock(height, block);
     }
 
-    private void deleteBlockIndex(int height, boolean orphan) {
-        BlockIndex block = getContext().getDatabase().findBlock(height);
-        deleteBlockIndex(block, orphan);
+    private void deleteBlockIndex(int height, boolean stale) {
+        byte hash[] = getContext().getDatabase().findBlockHash(height);
+        deleteBlockIndex(hash, stale);
     }
 
-    private void deleteBlockIndex(BlockIndex block, boolean orphan) {
-        if (orphan) {
+    private void deleteBlockIndex(byte hash[], boolean stale) {
+        if (hash == null) {
+            return;
+        }
+
+        // get the block
+        BlockIndex block = getContext().getDatabase().findBlock(hash);
+
+        if (stale) {
             addStale(block);
         }
 
+        block.undo();
         getContext().getDatabase().deleteBlock(block.getHeight());
     }
 
