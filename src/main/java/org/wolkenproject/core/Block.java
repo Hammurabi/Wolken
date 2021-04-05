@@ -8,10 +8,7 @@ import org.wolkenproject.utils.*;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.net.ContentHandler;
 import java.util.*;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.InflaterInputStream;
 
 public class Block extends SerializableI implements Iterable<Transaction> {
     private static BigInteger       LargestHash             = BigInteger.ONE.shiftLeft(256);
@@ -56,12 +53,12 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     }
 
     // executes transctions and returns an event list
-    public BlockStateChangeResult getStateChange(int blockHeight) throws WolkenException {
+    public BlockStateChangeResult getStateChange() throws WolkenException {
         if (stateChange == null) {
             BlockStateChange blockStateChange = new BlockStateChange();
 
             for (Transaction transaction : transactions) {
-                transaction.getStateChange(this, blockHeight, blockStateChange);
+                transaction.getStateChange(this, blockStateChange);
                 blockStateChange.addTransaction(transaction.getHash());
             }
 
@@ -101,7 +98,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
 
     public void build(int blockHeight) throws WolkenException {
         // set the combined merkle root
-        setMerkleRoot(getStateChange(blockHeight).getMerkleRoot());
+        setMerkleRoot(getStateChange().getMerkleRoot());
     }
 
     public boolean verify(int blockHeight) throws WolkenException {
@@ -116,7 +113,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         // deeper transaction checks
         if (!verifyTransactions(blockHeight)) return false;
         // merkle tree checks
-        if (!Utils.equals(getStateChange(blockHeight).getMerkleRoot(), getMerkleRoot())) return false;
+        if (!Utils.equals(getStateChange().getMerkleRoot(), getMerkleRoot())) return false;
 
         return true;
     }
@@ -244,14 +241,6 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     public void write(OutputStream outputStream, boolean writeLocally) throws IOException, WolkenException {
         write(outputStream);
         // start writing events
-    }
-
-    public BlockStateChangeResult getStateChange() throws WolkenException {
-        if (stateChange == null) {
-            throw new WolkenException("state change has not been built.");
-        }
-
-        return stateChange;
     }
 
     public PrunedBlock getPruned() throws WolkenException {
