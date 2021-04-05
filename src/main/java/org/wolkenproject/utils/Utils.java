@@ -3,6 +3,7 @@ package org.wolkenproject.utils;
 import org.json.JSONObject;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.encoders.Base58;
+import org.wolkenproject.serialization.SerializableI;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -326,6 +327,13 @@ public class Utils {
         stream.write((byte) ((integer >>> 16) & 0xFF));
         stream.write((byte) ((integer >>> 8) & 0xFF));
         stream.write((byte) ((integer) & 0xFF));
+    }
+
+    public static int readInt(InputStream stream) throws IOException {
+        byte buffer[] = new byte[4];
+        SerializableI.checkFullyRead(stream.read(buffer), 4);
+
+        return makeInt(buffer);
     }
 
     public static void writeLong(long integer, OutputStream stream) throws IOException {
