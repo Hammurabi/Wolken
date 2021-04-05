@@ -24,18 +24,13 @@ public class BlockChain extends AbstractBlockChain {
     private HashQueue<BlockIndex>   staleBlocks;
     // contains blocks sent from peers.
     private HashQueue<BlockIndex>   blockPool;
-    // contains rejected blocks.
-    private Context                 context;
-    // a mutex
-    private ReentrantLock mutex;
 
     public BlockChain(Context context) {
         super(context);
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
-        mutex           = new ReentrantLock();
-        tip             = context.getDatabase().findTip();
+        tip             = getContext().getDatabase().findTip();
     }
 
     @Override
@@ -44,9 +39,9 @@ public class BlockChain extends AbstractBlockChain {
         byte lastHash[]     = null;
 
         Logger.alert("attempting to reload chain from last checkpoint.");
-        mutex.lock();
+        getMutex().lock();
         try {
-            tip = context.getDatabase().findTip();
+            tip = getContext().getDatabase().findTip();
             if (tip != null) {
                 Logger.alert("loaded checkpoint successfully", tip);
             } else {
@@ -54,10 +49,10 @@ public class BlockChain extends AbstractBlockChain {
                 Logger.alert("loaded genesis as checkpoint successfully", tip);
             }
         } finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
 
-        while (context.isRunning()) {
+        while (getContext().isRunning()) {
             if (System.currentTimeMillis() - lastBroadcast > (5 * 60_000L)) {
                 Set<byte[]> hashCodes = new LinkedHashSet<>();
                 BlockIndex tip = getTip();
@@ -73,7 +68,7 @@ public class BlockChain extends AbstractBlockChain {
                 }
 
                 try {
-                    context.getServer().broadcast(new Inv(context.getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
+                    getContext().getServer().broadcast(new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
                 } catch (WolkenException e) {
                     e.printStackTrace();
                 }
@@ -123,7 +118,7 @@ public class BlockChain extends AbstractBlockChain {
                 lastHash = tipHash;
 
                 try {
-                    context.getServer().broadcast(new Inv(context.getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
+                    getContext().getServer().broadcast(new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
                 } catch (WolkenException e) {
                     e.printStackTrace();
                 }
@@ -133,7 +128,7 @@ public class BlockChain extends AbstractBlockChain {
 
     public BlockHeader findCommonAncestor(BlockIndex block) {
         // request block headers
-        Message response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), block.getHash(), 1024, block.getHeader()));
+        Message response = getContext().getServer().broadcastRequest(new RequestHeadersBefore(getContext().getNetworkParameters().getVersion(), block.getHash(), 1024, block.getHeader()));
 
         // we store ancestor hashes here
         Set<byte[]> ancestors = new LinkedHashSet<>();
@@ -172,7 +167,7 @@ public class BlockChain extends AbstractBlockChain {
                 }
 
                 // find older ancestor
-                response = context.getServer().broadcastRequest(new RequestHeadersBefore(context.getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
+                response = getContext().getServer().broadcastRequest(new RequestHeadersBefore(getContext().getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
 
                 if (response != null) {
                     headers = response.getPayload();
@@ -217,38 +212,38 @@ public class BlockChain extends AbstractBlockChain {
     }
 
     private boolean hasOrphans() {
-        mutex.lock();
+        getMutex().lock();
         try {
             return !orphanedBlocks.isEmpty();
         } finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     private BlockIndex nextOrphan() {
-        mutex.lock();
+        getMutex().lock();
         try {
             return orphanedBlocks.poll();
         } finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     private boolean hasBlocksInPool() {
-        mutex.lock();
+        getMutex().lock();
         try {
             return !blockPool.isEmpty();
         } finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     private BlockIndex nextFromPool() {
-        mutex.lock();
+        getMutex().lock();
         try {
             return blockPool.poll();
         } finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
@@ -270,7 +265,7 @@ public class BlockChain extends AbstractBlockChain {
     }
 
     private boolean isCommonAncestor(BlockHeader blockHeader) {
-        return context.getDatabase().checkBlockExists(blockHeader.getHashCode());
+        return getContext().getDatabase().checkBlockExists(blockHeader.getHashCode());
     }
 
     private void replaceTip(BlockIndex block) throws WolkenException {
@@ -302,7 +297,7 @@ public class BlockChain extends AbstractBlockChain {
 
     private boolean rollbackIntoExistingParent(byte[] parentHash, int height) throws WolkenException {
         // check that the block exists
-        if (context.getDatabase().checkBlockExists(parentHash)) {
+        if (getContext().getDatabase().checkBlockExists(parentHash)) {
             return true;
         }
 
@@ -330,7 +325,7 @@ public class BlockChain extends AbstractBlockChain {
             height      --;
             parentHash  = parent.getBlock().getParentHash();
 
-            if (context.getDatabase().checkBlockExists(parentHash) || height == -1) {
+            if (getContext().getDatabase().checkBlockExists(parentHash) || height == -1) {
                 updateIndices(parent);
                 return true;
             }
@@ -347,16 +342,16 @@ public class BlockChain extends AbstractBlockChain {
     }
 
     private void replaceBlockIndex(int height, BlockIndex block) {
-        BlockIndex previousIndex = context.getDatabase().findBlock(height);
+        BlockIndex previousIndex = getContext().getDatabase().findBlock(height);
         if (previousIndex != null) {
             addStale(previousIndex);
         }
 
-        context.getDatabase().storeBlock(height, block);
+        getContext().getDatabase().storeBlock(height, block);
     }
 
     private void deleteBlockIndex(int height, boolean orphan) {
-        BlockIndex block = context.getDatabase().findBlock(height);
+        BlockIndex block = getContext().getDatabase().findBlock(height);
         deleteBlockIndex(block, orphan);
     }
 
@@ -365,12 +360,12 @@ public class BlockChain extends AbstractBlockChain {
             addStale(block);
         }
 
-        context.getDatabase().deleteBlock(block.getHeight());
+        getContext().getDatabase().deleteBlock(block.getHeight());
     }
 
     private BlockIndex requestBlock(byte hash[]) {
-        Message request = new RequestBlocks(context.getNetworkParameters().getVersion(), hash);
-        Message response= context.getServer().broadcastRequest(request);
+        Message request = new RequestBlocks(getContext().getNetworkParameters().getVersion(), hash);
+        Message response= getContext().getServer().broadcastRequest(request);
 
         if (response instanceof BlockList) {
             Collection<BlockIndex> blocks = response.getPayload();
@@ -384,65 +379,65 @@ public class BlockChain extends AbstractBlockChain {
 
     private void setTip(BlockIndex block) {
         tip = block;
-        context.getDatabase().setTip(block);
+        getContext().getDatabase().setTip(block);
         replaceBlockIndex(block.getHeight(), block);
     }
 
     private void addOrphan(BlockIndex block) {
-        mutex.lock();
+        getMutex().lock();
         try {
             orphanedBlocks.add(block);
 
             // calculate the maximum blocks allowed in the queue.
-            int maximumBlocks   = MaximumOrphanBlockQueueSize / context.getNetworkParameters().getMaxBlockSize();
-            int Threshold       = (MaximumOrphanBlockQueueSize / 4) / context.getNetworkParameters().getMaxBlockSize();
+            int maximumBlocks   = MaximumOrphanBlockQueueSize / getContext().getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumOrphanBlockQueueSize / 4) / getContext().getNetworkParameters().getMaxBlockSize();
 
             // remove any blocks that are too far back in the queue.
             if (orphanedBlocks.size() - maximumBlocks > Threshold) {
                 trimOrphans(maximumBlocks);
             }
         } finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     private void addStale(BlockIndex block) {
-        mutex.lock();
+        getMutex().lock();
         try {
             staleBlocks.add(block);
 
             // calculate the maximum blocks allowed in the queue.
-            int maximumBlocks   = MaximumStaleBlockQueueSize / context.getNetworkParameters().getMaxBlockSize();
-            int Threshold       = (MaximumStaleBlockQueueSize / 4) / context.getNetworkParameters().getMaxBlockSize();
+            int maximumBlocks   = MaximumStaleBlockQueueSize / getContext().getNetworkParameters().getMaxBlockSize();
+            int Threshold       = (MaximumStaleBlockQueueSize / 4) / getContext().getNetworkParameters().getMaxBlockSize();
 
             // remove any blocks that are too far back in the queue.
             if (staleBlocks.size() - maximumBlocks > Threshold) {
                 trimStales(maximumBlocks);
             }
         } finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     private void markRejected(byte block[]) {
-        context.getDatabase().markRejected(block);
+        getContext().getDatabase().markRejected(block);
     }
 
     public void pool(BlockIndex block) {
-        mutex.lock();
+        getMutex().lock();
         try {
             blockPool.add(block);
 
             // calculate the maximum blocks allowed in the queue.
-            int maximumBlocks   = MaximumPoolBlockQueueSize / context.getNetworkParameters().getMaxBlockSize();
-            int threshold       = (MaximumPoolBlockQueueSize / 4) / context.getNetworkParameters().getMaxBlockSize();
+            int maximumBlocks   = MaximumPoolBlockQueueSize / getContext().getNetworkParameters().getMaxBlockSize();
+            int threshold       = (MaximumPoolBlockQueueSize / 4) / getContext().getNetworkParameters().getMaxBlockSize();
 
             // remove any blocks that are too far back in the queue.
             if (blockPool.size() - maximumBlocks > threshold) {
                 trimPool(maximumBlocks);
             }
         } finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
@@ -459,64 +454,64 @@ public class BlockChain extends AbstractBlockChain {
     }
 
     public BlockIndex makeGenesisBlock() {
-        Block genesis = new Block(new byte[Block.UniqueIdentifierLength], context.getNetworkParameters().getDefaultBits());
-        genesis.addTransaction(Transaction.newMintTransaction("", context.getNetworkParameters().getMaxReward(), context.getNetworkParameters().getFoundingAddresses()));
+        Block genesis = new Block(new byte[Block.UniqueIdentifierLength], getContext().getNetworkParameters().getDefaultBits());
+        genesis.addTransaction(Transaction.newMintTransaction("", getContext().getNetworkParameters().getMaxReward(), getContext().getNetworkParameters().getFoundingAddresses()));
         genesis.setNonce(0);
         return new BlockIndex(genesis, BigInteger.ZERO, 0);
     }
 
     public BlockIndex makeBlock() throws WolkenException {
-        mutex.lock();
+        getMutex().lock();
         try {
             return tip.generateNextBlock();
         }
         finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     public BlockIndex getTip() {
-        mutex.lock();
+        getMutex().lock();
         try {
             return tip;
         }
         finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     public boolean contains(byte[] hash) {
-        mutex.lock();
+        getMutex().lock();
         try {
             return orphanedBlocks.containsKey(hash) || staleBlocks.containsKey(hash) || blockPool.containsKey(hash);
         }
         finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     public Queue<BlockIndex> getOrphanedBlocks() {
-        mutex.lock();
+        getMutex().lock();
         try {
             return new PriorityQueue<>(orphanedBlocks);
         }
         finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     public BlockIndex getBlock(byte[] hash) {
-        mutex.lock();
+        getMutex().lock();
         try {
             return orphanedBlocks.getByHash(hash);
         }
         finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
     public Set<byte[]> getInv() {
-        mutex.lock();
+        getMutex().lock();
         try {
             Set<byte[]> hashes = new LinkedHashSet<>();
             BlockIndex index = tip;
@@ -531,7 +526,7 @@ public class BlockChain extends AbstractBlockChain {
             return hashes;
         }
         finally {
-            mutex.unlock();
+            getMutex().unlock();
         }
     }
 
@@ -548,7 +543,7 @@ public class BlockChain extends AbstractBlockChain {
     }
 
     private boolean isRejected(byte[] hash) {
-        return context.getDatabase().isRejected(hash);
+        return getContext().getDatabase().isRejected(hash);
     }
 
     public int getHeight() {
