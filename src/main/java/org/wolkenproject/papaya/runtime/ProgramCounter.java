@@ -247,7 +247,7 @@ public class ProgramCounter {
     public byte[] nextMemberId() throws EmptyProgramCounterException {
         try {
             return VarInt.readCompactUint256Bytes(false, program);
-        } catch (IOException | WolkenException e) {
+        } catch (IOException e) {
             throw new EmptyProgramCounterException();
         }
     }
