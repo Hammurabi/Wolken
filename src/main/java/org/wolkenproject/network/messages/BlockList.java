@@ -7,6 +7,7 @@ import org.wolkenproject.network.Node;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ public class BlockList extends ResponseMessage {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
-        Utils.writeInt(blocks.size(), stream);
+        VarInt.writeCompactUInt32(blocks.size(), false, stream);
         for (BlockIndex block : blocks)
         {
             block.write(stream);
@@ -34,9 +35,7 @@ public class BlockList extends ResponseMessage {
 
     @Override
     public void readContents(InputStream stream) throws IOException, WolkenException {
-        byte buffer[] = new byte[4];
-        stream.read(buffer);
-        int length = Utils.makeInt(buffer);
+        int length = VarInt.readCompactUInt32(false, stream);
 
         for (int i = 0; i < length; i ++)
         {
