@@ -432,28 +432,20 @@ public class VarInt {
     }
 
     public static int sizeOfCompactUint256(BigInteger integer, boolean preserveAllBits) {
-        byte bytes[]    = integer.toByteArray();
-        int drop = 0;
-        for (int i = 0; i < bytes.length; i ++) {
-            if (bytes[i] == 0) {
-                drop ++;
-            }
-        }
-
-        if (drop > 0) {
-            byte temp[] = new byte[bytes.length - drop];
-            System.arraycopy(bytes, drop, temp, 0, temp.length);
-            bytes = temp;
-        }
-
-        if (bytes.length > 32) {
-            return 0;
-        }
-
         if (preserveAllBits) {
-            return bytes.length + 1;
+            byte bytes[]    = Utils.takeApart(integer);
+
+            return 1 + bytes.length;
         } else {
-            return bytes.length;
+            byte bytes[]    = Utils.takeApart(integer);
+            int bits        = Utils.numBitsRequired(Byte.toUnsignedInt(bytes[0]));
+            int length      = bytes.length;
+
+            if (bytes.length < 32 && bits > 3) {
+                length++;
+            }
+
+            return length;
         }
     }
 }
