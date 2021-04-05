@@ -3,7 +3,6 @@ package org.wolkenproject.core.transactions;
 import org.json.JSONObject;
 import org.wolkenproject.core.*;
 import org.wolkenproject.core.assets.Asset;
-import org.wolkenproject.core.events.RegisterAliasEvent;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
 import org.wolkenproject.encoders.Base16;
@@ -14,7 +13,6 @@ import org.wolkenproject.utils.VarInt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigInteger;
 
 public class RegisterAsset extends Transaction {
     // nonce
@@ -113,7 +111,7 @@ public class RegisterAsset extends Transaction {
     }
 
     @Override
-    public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
+    public void getStateChange(Block block, BlockStateChange stateChange) throws WolkenException {
         Address sender = getSender();
         stateChange.createAccountIfDoesNotExist(sender.getRaw());
     }
