@@ -359,46 +359,19 @@ public class VarInt {
     public static int sizeOfCompactUint128(BigInteger integer, boolean preserveAllBits) {
         if (preserveAllBits) {
             byte bytes[]    = Utils.takeApart(integer);
-            return bytes.length;
+
+            return 1 + bytes.length;
         } else {
-            int bits = Math.max(integer.bitLength(), 1);
+            byte bytes[]    = Utils.takeApart(integer);
+            int bits        = Utils.numBitsRequired(Byte.toUnsignedInt(bytes[0]));
+            int length      = bytes.length;
 
-            if (bits <= 4) {
-                return 1;
-            } else if (bits <= 12) {
-                return 2;
-            } else if (bits <= 20) {
-                return 3;
-            } else if (bits <= 28) {
-                return 4;
-            } else if (bits <= 36) {
-                return 5;
-            } else if (bits <= 44) {
-                return 6;
-            } else if (bits <= 52) {
-                return 7;
-            } else if (bits <= 60) {
-                return 8;
-            } else if (bits <= 68) {
-                return 9;
-            } else if (bits <= 76) {
-                return 10;
-            } else if (bits <= 84) {
-                return 11;
-            } else if (bits <= 92) {
-                return 12;
-            } else if (bits <= 100) {
-                return 13;
-            } else if (bits <= 108) {
-                return 14;
-            } else if (bits <= 116) {
-                return 15;
-            } else if (bits <= 128) {
-                return 16;
+            if (bytes.length < 16 && bits >= 5) {
+                length++;
             }
-        }
 
-        return 0;
+            return length;
+        }
     }
 
     // writes an unsigned 256 bit integer to stream
