@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
@@ -398,9 +397,10 @@ public class RpcServer {
             nextBlock.getBlock().setNonce(Utils.makeInt(nonce));
 
             if (!nextBlock.getBlock().verifyProofOfWork()) {
-                System.out.println("submitted '" + Integer.toUnsignedLong(nextBlock.getBlock().getNonce()) + "'.");
-                System.out.println(Arrays.toString(nextBlock.getBlock().getBlockHeader().asByteArray()));
-                System.out.println(Base16.encode(nextBlock.getBlock().getBlockHeader().getHashCode()));
+                Logger.alert("invalid block submitted ${i}.", nextBlock.getBlock().getNonce());
+//                System.out.println("submitted '" + Integer.toUnsignedLong(nextBlock.getBlock().getNonce()) + "'.");
+//                System.out.println(Arrays.toString(nextBlock.getBlock().getBlockHeader().asByteArray()));
+//                System.out.println(Base16.encode(nextBlock.getBlock().getBlockHeader().getHashCode()));
                 throw new WolkenException("invalid proof of work.");
             }
 
