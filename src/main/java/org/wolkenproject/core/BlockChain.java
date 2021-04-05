@@ -34,6 +34,11 @@ public class BlockChain extends AbstractBlockChain {
     }
 
     @Override
+    public boolean verifyBlock(BlockIndex block) {
+        return false;
+    }
+
+    @Override
     public void run() {
         long lastBroadcast  = System.currentTimeMillis();
         byte lastHash[]     = null;
