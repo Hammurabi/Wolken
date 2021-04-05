@@ -129,7 +129,7 @@ public class BasicTransactionToAlias extends Transaction {
     }
 
     @Override
-    public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
+    public void getStateChange(Block block, BlockStateChange stateChange) throws WolkenException {
         stateChange.addEvent(new DepositFundsEvent(getRecipient().getRaw(), value));
         stateChange.addEvent(new WithdrawFundsEvent(getSender().getRaw(), value));
     }
