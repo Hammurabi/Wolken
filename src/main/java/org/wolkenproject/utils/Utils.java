@@ -60,12 +60,7 @@ public class Utils {
     }
 
     public static byte[] takeApart(BigInteger integer, int minLength) {
-        byte bytes[] = takeApart(integer);
-        if (bytes.length < minLength) {
-            return Arrays.copyOf(bytes, minLength);
-        }
-
-        return bytes;
+        return conditionalExpand(minLength, takeApart(integer));
     }
 
     public static short makeShort(int b1, int b0) {
