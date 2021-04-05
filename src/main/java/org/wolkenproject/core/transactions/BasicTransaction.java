@@ -121,7 +121,7 @@ public class BasicTransaction extends Transaction {
     }
 
     @Override
-    public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
+    public void getStateChange(Block block, BlockStateChange stateChange) throws WolkenException {
         Address sender = getSender();
         stateChange.createAccountIfDoesNotExist(recipient);
         stateChange.addEvent(new DepositFundsEvent(recipient, value));
