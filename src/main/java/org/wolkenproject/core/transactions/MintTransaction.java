@@ -98,7 +98,7 @@ public class MintTransaction extends Transaction {
     }
 
     @Override
-    public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) {
+    public void getStateChange(Block block, BlockStateChange stateChange) {
         stateChange.createAccountIfDoesNotExist(recipient);
         stateChange.addEvent(new MintRewardEvent(recipient, value));
         stateChange.addEvent(new DepositFeesEvent(recipient, block.getFees()));
