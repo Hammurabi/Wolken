@@ -2,7 +2,6 @@ package org.wolkenproject.core.transactions;
 
 import org.json.JSONObject;
 import org.wolkenproject.core.*;
-import org.wolkenproject.core.events.*;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.crypto.Signature;
 import org.wolkenproject.crypto.ec.RecoverableSignature;
@@ -161,7 +160,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return all the changes this transaction will
         cause to the global state.
      */
-    public abstract void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException;
+    public abstract void getStateChange(Block block, BlockStateChange stateChange) throws WolkenException;
 
     public JSONObject toJson() {
         return toJson(true, false);
@@ -336,7 +335,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
+        public void getStateChange(Block block, BlockStateChange stateChange) throws WolkenException {
             if (stateChangeEvents == null) {
                 stateChangeEvents = new ArrayList<>();
             }
@@ -469,7 +468,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public void getStateChange(Block block, int blockHeight, BlockStateChange stateChange) throws WolkenException {
+        public void getStateChange(Block block, BlockStateChange stateChange) throws WolkenException {
         }
 
         @Override
