@@ -329,6 +329,7 @@ public class VarInt {
 
             int remaining   = bytes.length - 1;
             bytes[0]        = (byte) ((bytes[0] & 0xF) | (remaining << 4));
+
             stream.write(bytes);
         }
     }
@@ -398,7 +399,7 @@ public class VarInt {
 
             int remaining   = bytes.length - 1;
             bytes[0]        = (byte) ((bytes[0] & 0x1F) | (remaining << 3));
-            
+
             stream.write(bytes);
         }
     }
@@ -433,7 +434,7 @@ public class VarInt {
         }
     }
 
-    public static byte[] readCompactUint256Bytes(boolean preserveAllBits, InputStream stream) throws WolkenException, IOException {
+    public static byte[] readCompactUint256Bytes(boolean preserveAllBits, InputStream stream) throws IOException {
         if (preserveAllBits) {
             int length      = SerializableI.checkNotEOF(stream.read());
             byte bytes[]    = new byte[length];
@@ -443,14 +444,15 @@ public class VarInt {
         } else {
             int firstByte   = SerializableI.checkNotEOF(stream.read());
             int length      = firstByte >>> 3;
+
             if (length > 0) {
                 byte bytes[]    = new byte[length + 1];
                 SerializableI.checkFullyRead(stream.read(bytes, 1, length), length);
 
-                bytes[0]        = (byte) (firstByte & 0x7);
+                bytes[0]        = (byte) (firstByte & 0x1F);
                 return bytes;
             } else {
-                return new byte[] { (byte) (firstByte & 0x7) };
+                return new byte[] { (byte) (firstByte & 0x1F) };
             }
         }
     }
