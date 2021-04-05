@@ -321,89 +321,15 @@ public class VarInt {
             stream.write(length);
             stream.write(bytes);
         } else {
-            int bits        = Math.max(integer.bitLength(), 1);
-
-            if (bits <= 4) {
-                byte bytes[]    = Utils.takeApart(integer);
-
-                bytes[0] &= 0x0F;
-                stream.write(bytes);
-            } else if (bits <= 12) {
-                byte bytes[]    = Utils.takeApart(integer, 2);
-
-                bytes[0] &= 0x0F | 1 << 4;
-                stream.write(bytes);
-            } else if (bits <= 20) {
-                byte bytes[]    = Utils.takeApart(integer, 3);
-
-                bytes[0] &= 0x0F | 2 << 4;
-                stream.write(bytes);
-            } else if (bits <= 28) {
-                byte bytes[]    = Utils.takeApart(integer, 4);
-
-                bytes[0] &= 0x0F | 3 << 4;
-                stream.write(bytes);
-            } else if (bits <= 36) {
-                byte bytes[]    = Utils.takeApart(integer, 5);
-
-                bytes[0] &= 0x0F | 4 << 4;
-                stream.write(bytes);
-            } else if (bits <= 44) {
-                byte bytes[]    = Utils.takeApart(integer, 6);
-
-                bytes[0] &= 0x0F | 5 << 4;
-                stream.write(bytes);
-            } else if (bits <= 52) {
-                byte bytes[]    = Utils.takeApart(integer, 7);
-
-                bytes[0] &= 0x0F | 6 << 4;
-                stream.write(bytes);
-            } else if (bits <= 60) {
-                byte bytes[]    = Utils.takeApart(integer, 8);
-
-                bytes[0] &= 0x0F | 7 << 4;
-                stream.write(bytes);
-            } else if (bits <= 68) {
-                byte bytes[]    = Utils.takeApart(integer, 9);
-
-                bytes[0] &= 0x0F | 8 << 4;
-                stream.write(bytes);
-            } else if (bits <= 76) {
-                byte bytes[]    = Utils.takeApart(integer, 10);
-
-                bytes[0] &= 0x0F | 9 << 4;
-                stream.write(bytes);
-            } else if (bits <= 84) {
-                byte bytes[]    = Utils.takeApart(integer, 11);
-
-                bytes[0] &= 0x0F | 10 << 4;
-                stream.write(bytes);
-            } else if (bits <= 92) {
-                byte bytes[]    = Utils.takeApart(integer, 12);
-
-                bytes[0] &= 0x0F | 11 << 4;
-                stream.write(bytes);
-            } else if (bits <= 100) {
-                byte bytes[]    = Utils.takeApart(integer, 13);
-
-                bytes[0] &= 0x0F | 12 << 4;
-                stream.write(bytes);
-            } else if (bits <= 108) {
-                byte bytes[]    = Utils.takeApart(integer, 14);
-
-                bytes[0] &= 0x0F | 13 << 4;
-                stream.write(bytes);
-            } else if (bits <= 116) {
-                byte bytes[]    = Utils.takeApart(integer, 15);
-
-                bytes[0] &= 0x0F | 14 << 4;
-                stream.write(bytes);
-            } else if (bits <= 128) {
-                byte bytes[]    = Utils.takeApart(integer, 16);
-
-                bytes[0] &= 0x0F | 15 << 4;
-                stream.write(bytes);
+            byte bytes[]    = Utils.takeApart(integer);
+            int bits        = Utils.numBitsRequired(Byte.toUnsignedInt(bytes[0]));
+            if (bytes.length < 16 && bits >= 5) {
+                bytes       = Utils.conditionalExpand(bytes.length + 1, bytes);
             }
+
+            int remaining   = bytes.length - 1;
+            bytes[0]        = (byte) ((bytes[0] & 0xF) | (remaining << 4));
+            stream.write(bytes);
         }
     }
 
