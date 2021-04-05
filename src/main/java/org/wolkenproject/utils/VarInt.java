@@ -379,30 +379,26 @@ public class VarInt {
     // integer will only be 251 bits in length as 5 bits
     // will be used to encode the length of the integer.
     public static void writeCompactUint256(BigInteger integer, boolean preserveAllBits, OutputStream stream) throws WolkenException, IOException {
-        byte bytes[]    = integer.toByteArray();
-        int drop = 0;
-        for (int i = 0; i < bytes.length; i ++) {
-            if (bytes[i] == 0) {
-                drop ++;
-            }
+        if (integer.bitLength() > 256) {
+            throw new WolkenException("writeCompactUint256 only allows up to  2^256 bits.");
         }
 
-        if (drop > 0) {
-            byte temp[] = new byte[bytes.length - drop];
-            System.arraycopy(bytes, drop, temp, 0, temp.length);
-            bytes = temp;
-        }
-
-        if (bytes.length > 32) {
-            throw new WolkenException("writeCompactUint32 only allows up to  2^256 bits.");
-        }
-
-        int length = bytes.length;
         if (preserveAllBits) {
+            byte bytes[]    = Utils.takeApart(integer);
+            int length      = bytes.length;
+
             stream.write(length);
             stream.write(bytes);
         } else {
-            bytes[0] = (byte) (bytes[0] & 0x7 | (length - 1) << 3);
+            byte bytes[]    = Utils.takeApart(integer);
+            int bits        = Utils.numBitsRequired(Byte.toUnsignedInt(bytes[0]));
+            if (bytes.length < 32 && bits >= 4) {
+                bytes       = Utils.conditionalExpand(bytes.length + 1, bytes);
+            }
+
+            int remaining   = bytes.length - 1;
+            bytes[0]        = (byte) ((bytes[0] & 0x1F) | (remaining << 3));
+            
             stream.write(bytes);
         }
     }
