@@ -50,7 +50,7 @@ public class BlockChain implements Runnable {
             if (tip != null) {
                 Logger.alert("loaded checkpoint successfully" + tip);
             } else {
-                tip = makeGenesisBlock();
+                setTip(makeGenesisBlock());
                 Logger.alert("loaded genesis as checkpoint successfully" + tip);
             }
         } finally {
