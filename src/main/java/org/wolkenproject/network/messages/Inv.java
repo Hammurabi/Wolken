@@ -10,6 +10,7 @@ import org.wolkenproject.network.*;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Tuple;
 import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -156,22 +157,18 @@ public class Inv extends Message {
 
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
-        Utils.writeInt(type, stream);
-        Utils.writeInt(list.size(), stream);
+        VarInt.writeCompactUInt32(type, false, stream);
+        VarInt.writeCompactUInt32(list.size(), false, stream);
 
-        for (byte[] id : list)
-        {
+        for (byte[] id : list) {
             stream.write(id);
         }
     }
 
     @Override
     public void readContents(InputStream stream) throws IOException, WolkenException {
-        byte buffer[] = new byte[4];
-        stream.read(buffer);
-        type = Utils.makeInt(buffer);
-        stream.read(buffer);
-        int length = Utils.makeInt(buffer);
+        type = VarInt.readCompactUInt32(false, stream);
+        int length = VarInt.readCompactUInt32(false, stream);
 
         int requiredLength = 0;
 
