@@ -113,4 +113,8 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
 
         return -1;
     }
+
+    public byte[] getId() {
+        return id;
+    }
 }
