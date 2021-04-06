@@ -420,4 +420,8 @@ public class Database {
     public BlockMetadata findBlockMetaData(byte[] hash) {
         return ;
     }
+
+    public void tempStoreBlock(byte[] id, Block block) {
+        put(Utils.concatenate(id, block.getHashCode()), block);
+    }
 }
