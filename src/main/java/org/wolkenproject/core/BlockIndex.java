@@ -224,8 +224,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public boolean verify() {
-        blockStateChange = new BlockStateChange();
-        return block.verify(getHeight(), blockStateChange);
+        return block.verify(getHeight());
     }
 
     public BlockStateChangeResult getStateChange() {
@@ -233,7 +232,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
             verify();
         }
 
-        return blockStateChange.getResult();
+        return getBlock().getStateChange();
     }
 
     /**
