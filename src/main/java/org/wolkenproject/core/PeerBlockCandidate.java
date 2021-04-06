@@ -41,9 +41,6 @@ public class PeerBlockCandidate extends CandidateBlock {
         return true;
     }
 
-    private void downloadAndVerifyBlocks() {
-    }
-
     @Override
     public BlockHeader getBlockHeader() {
         return header;
@@ -75,6 +72,9 @@ public class PeerBlockCandidate extends CandidateBlock {
         }
 
         return false;
+    }
+
+    private void downloadAndVerifyBlocks() {
     }
 
     @Override
@@ -175,6 +175,8 @@ public class PeerBlockCandidate extends CandidateBlock {
                         ancestors.addAll(ancestorRequests.pop());
                     }
 
+                    ancestors.add(best);
+                    
                     return ancestors;
                 }
 
