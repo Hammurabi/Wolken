@@ -117,7 +117,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         // request block headers
         Message request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), best.getHashCode(), 1024, best);
         CheckedResponse response = null;
-        
+
         try {
             response = sender.getResponse(request, context.getNetworkParameters().getMessageTimeout(1024 * BlockHeader.Size));
             if (!response.noErrors()) {
@@ -127,48 +127,71 @@ public class PeerBlockCandidate extends CandidateBlock {
             e.printStackTrace();
         }
 
+        Stack<Collection<BlockHeader>> ancestorRequests = new Stack<>();
+
         if (response != null) {
-            Collection<BlockHeader> headers = response.getMessage().getPayload();
+            Collection<BlockHeader> headerCollection = response.getMessage().getPayload();
+            List<BlockHeader> headers = new ArrayList<>(headerCollection);
 
             while (headers != null) {
-                Iterator<BlockHeader> iterator = headers.iterator();
+                int lastCommonAncestor = -1;
 
-                BlockHeader header = iterator.next();
-                if (isCommonAncestor(header)) {
-                    Logger.alert("found common ancestor" + header + " for block" + block);
-                    return header;
-                } else {
-                    if (!header.verifyProofOfWork()) {
-                        markRejected(header.getHashCode());
-                        for (byte[] hash : ancestors) {
-                            markRejected(hash);
+                for (int i = 0; i < headers.size(); i ++) {
+                    if (isCommonAncestor(headers.get(i))) {
+                        lastCommonAncestor = i;
+                    }
+
+                    if (!headers.get(i).verifyProofOfWork()) {
+                        // set the best block as rejected.
+                        context.getBlockChain().markRejected(best.getHashCode());
+                        // set the current block as rejected.
+                        context.getBlockChain().markRejected(headers.get(i).getHashCode());
+
+                        // reject all blocks that come after it.
+                        for (int j = i + 1; j < headers.size(); j ++) {
+                            context.getBlockChain().markRejected(headers.get(j).getHashCode());
                         }
-                        markRejected(block.getHash());
+
+                        // reject the rest of the blocks we collected.
+                        while (!ancestorRequests.isEmpty()) {
+                            for (BlockHeader header : ancestorRequests.pop()) {
+                                context.getBlockChain().markRejected(header.getHashCode());
+                            }
+                        }
+
                         return null;
                     }
-
-                    ancestors.add(header.getHashCode());
                 }
 
-                // loop headers to find a common ancestor
-                while (iterator.hasNext()) {
-                    header = iterator.next();
-
-                    if (isCommonAncestor(header)) {
-                        Logger.alert("found common ancestor" + header + " for block" + block);
-                        return header;
+                if (lastCommonAncestor != -1) {
+                    for (int i = lastCommonAncestor + 1; i < headers.size(); i ++) {
+                        ancestors.add(headers.get(i));
                     }
+
+                    while (!ancestorRequests.isEmpty()) {
+                        ancestors.addAll(ancestorRequests.pop());
+                    }
+
+                    return ancestors;
                 }
+
+                // push the header collection into the stack.
+                ancestorRequests.push(headers);
 
                 // find older ancestor
                 response = getContext().getServer().broadcastRequest(new RequestHeadersBefore(getContext().getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
 
                 if (response != null) {
-                    headers = response.getPayload();
+                    headerCollection = response.getMessage().getPayload();
+                    headers = new ArrayList<>(headerCollection);
                 }
             }
         }
 
         return null;
+    }
+
+    private static boolean isCommonAncestor(BlockHeader blockHeader) {
+        return getContext().getDatabase().checkBlockExists(blockHeader.getHashCode());
     }
 }
