@@ -43,4 +43,6 @@ public abstract class AbstractBlockChain implements Runnable {
     public abstract void suggest(Set<BlockIndex> blocks);
     // suggest this block and add it to the pool.
     public abstract void suggest(BlockIndex block);
+    // return the current chain height.
+    public abstract int getHeight();
 }
