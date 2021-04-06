@@ -41,11 +41,6 @@ public class PeerBlockCandidate extends CandidateBlock {
         return true;
     }
 
-    @Override
-    public BlockHeader getBlockHeader() {
-        return header;
-    }
-
     private boolean downloadAndVerifyBlocks() {
         // some block metadata.
         int height           = getContext().getDatabase().findBlockMetaData(chain.get(chain.size() - 1).getParentHash()).getHeight();
@@ -77,12 +72,16 @@ public class PeerBlockCandidate extends CandidateBlock {
                             return false;
                         }
                     }
+                } else {
+                    closeConnection();
+                    return false;
                 }
             } catch (WolkenTimeoutException e) {
+                return false;
             }
-
-            return false;
         }
+
+        return true;
     }
 
     private void invalidate(Context context, int inclusiveIndex, List<BlockHeader> chain) {
@@ -102,11 +101,6 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     @Override
-    public boolean areBlocksAvailable() {
-        return false;
-    }
-
-    @Override
     public boolean destroy() {
         for (BlockHeader header : chain) {
             getContext().getDatabase().deleteTempBlock(getId(), header.getHashCode());
@@ -120,11 +114,6 @@ public class PeerBlockCandidate extends CandidateBlock {
             sender.close();
         } catch (Exception e) {
         }
-    }
-
-    @Override
-    public BlockIndex getBlock() {
-        return block;
     }
 
     public static List<BlockHeader> findCommonAncestors(Context context, Node sender, BlockHeader best) {
