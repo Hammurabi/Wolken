@@ -73,22 +73,22 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     }
 
     public void build(int blockHeight) throws WolkenException {
-        // set the combined merkle root
+        // set the combined merkle root.
         setMerkleRoot(getStateChange().getMerkleRoot());
     }
 
     public boolean verify(int blockHeight) {
-        // PoW check
+        // PoW check.
         if (!blockHeader.verifyProofOfWork()) return false;
-        // must have at least one transaction
+        // must have at least one transaction.
         if (transactions.isEmpty()) return false;
-        // first transaction must be a minting transaction
+        // first transaction must be a minting transaction.
         if (transactions.iterator().next() instanceof MintTransaction == false) return false;
-        // shallow transaction checks
+        // shallow transaction checks.
         if (!shallowVerifyTransactions()) return false;
-        // create a state change object and verify transactions
+        // create a state change object and verify transactions.
         if (!createSateChange(blockHeight)) return false;
-        // merkle tree checks
+        // merkle tree checks.
         if (!Utils.equals(getStateChange().getMerkleRoot(), getMerkleRoot())) return false;
 
         return true;
