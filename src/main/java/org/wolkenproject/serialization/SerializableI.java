@@ -41,24 +41,32 @@ public abstract class SerializableI {
         Field fields[] = c.getFields();
         Set<Field> serializableFields = new LinkedHashSet<>();
 
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Serializable.class)) {
-                Serializable serializable = field.getAnnotation(Serializable.class);
+        try {
+            for (Field field : fields) {
+                if (field.isAnnotationPresent(Serializable.class)) {
+                    Serializable serializable = field.getAnnotation(Serializable.class);
 
-                if (serializable.policy() != SerializationPolicy.All && serializable.policy() != SerializationPolicy.NetworkOnly) {
-                    continue;
+                    if (serializable.policy() != SerializationPolicy.All && serializable.policy() != SerializationPolicy.NetworkOnly) {
+                        continue;
+                    }
+
+                    FieldType type = serializable.net() == FieldType.base ? serializable.type() : serializable.net();
+
+                    networkWrite(stream, field, type);
                 }
-
-                FieldType type = serializable.net() == FieldType.base ? serializable.type() : serializable.net();
-
-                networkWrite(stream, field, type);
             }
+        } catch (IllegalAccessException e) {
+            throw new WolkenException(e);
         }
     }
 
-    private final void networkWrite(OutputStream stream, Field field, FieldType type) {
+    private final void networkWrite(OutputStream stream, Field field, FieldType type) throws IllegalAccessException, IOException {
+        field.setAccessible(true);
+
         switch (type) {
             case int8:
+                stream.write(field.getByte(this));
+                return;
             case int16:
             case int32:
             case int64:
