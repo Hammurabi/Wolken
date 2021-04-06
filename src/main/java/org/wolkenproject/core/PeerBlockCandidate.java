@@ -9,13 +9,13 @@ import org.wolkenproject.network.messages.RequestBlocks;
 import java.util.Arrays;
 import java.util.Set;
 
-public class PeerBlockCandidate extends CandidateBlock {
+public class PeerBlockCandidate extends CandidateBlockChain {
     private BlockHeader header;
     private BlockIndex  block;
     private Node        sender;
 
-    public PeerBlockCandidate(Node sender, BlockHeader header) {
-        super(chainWork);
+    public PeerBlockCandidate(Node sender, BlockHeader header, int transactionCount) {
+        super(.getTransactionCount());
         this.header = header;
     }
 
