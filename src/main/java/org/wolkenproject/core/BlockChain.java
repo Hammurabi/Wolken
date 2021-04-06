@@ -9,7 +9,6 @@ import org.wolkenproject.utils.*;
 
 import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class BlockChain extends AbstractBlockChain {
     protected static final int                MaximumOrphanBlockQueueSize   = 250_000_000;
@@ -325,7 +324,7 @@ public class BlockChain extends AbstractBlockChain {
             }
 
             // replace the ancestor
-            replaceBlockIndex(height, parent);
+            putBlock(height, parent);
 
             height      --;
             parentHash  = parent.getBlock().getParentHash();
@@ -346,7 +345,7 @@ public class BlockChain extends AbstractBlockChain {
         index.recalculateChainWork();
     }
 
-    private void replaceBlockIndex(int height, BlockIndex block) {
+    private void putBlock(int height, BlockIndex block) {
         BlockIndex previousIndex = getContext().getDatabase().findBlock(height);
         if (previousIndex != null) {
             addStale(previousIndex);
@@ -395,10 +394,11 @@ public class BlockChain extends AbstractBlockChain {
         try {
             tip = block;
             getContext().getDatabase().setTip(block);
-            replaceBlockIndex(block.getHeight(), block);
         } finally {
             getMutex().unlock();
         }
+
+        putBlock(block.getHeight(), block);
     }
 
     private void addOrphan(BlockIndex block) {
