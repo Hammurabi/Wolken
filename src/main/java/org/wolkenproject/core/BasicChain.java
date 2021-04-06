@@ -2,8 +2,8 @@ package org.wolkenproject.core;
 
 import java.util.Set;
 
-public class ShallowChain extends AbstractBlockChain {
-    public ShallowChain(Context context) {
+public class BasicChain extends AbstractBlockChain {
+    public BasicChain(Context context) {
         super(context);
     }
 
