@@ -56,7 +56,7 @@ public class BlockMetadata extends SerializableI {
         return fees;
     }
 
-    public BigInteger getChainWork() {
+    public BigInteger getPreviousChainWork() {
         return chainWork;
     }
 
@@ -68,7 +68,7 @@ public class BlockMetadata extends SerializableI {
         VarInt.writeCompactUInt32(getEventCount(), false, stream);
         VarInt.writeCompactUInt64(getTotalValue(), false, stream);
         VarInt.writeCompactUInt64(getFees(), false, stream);
-        VarInt.writeCompactUint256(getChainWork(), true, stream);
+        VarInt.writeCompactUint256(getPreviousChainWork(), true, stream);
     }
 
     @Override
