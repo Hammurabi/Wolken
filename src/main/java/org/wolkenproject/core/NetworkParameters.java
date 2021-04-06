@@ -19,12 +19,11 @@ public class NetworkParameters {
 
         if (testNet) {
             defaultBits = Utils.makeInt(Base16.decode("1e00ffff"));
-        }
-        else {
+        } else {
             defaultBits = Utils.makeInt(Base16.decode("1d00ffff"));
         }
 
-        this.maximumTarget      = ChainMath.targetIntegerFromBits(defaultBits);
+        this.maximumTarget = ChainMath.targetIntegerFromBits(defaultBits);
     }
 
     public boolean isTestNet() {
