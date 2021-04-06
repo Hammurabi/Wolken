@@ -92,7 +92,7 @@ public class PeerBlockCandidate extends CandidateBlock {
 
     @Override
     public List<BlockHeader> getChain() {
-        return null;
+        return chain;
     }
 
     @Override
