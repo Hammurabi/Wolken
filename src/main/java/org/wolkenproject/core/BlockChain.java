@@ -542,12 +542,14 @@ public class BlockChain extends AbstractBlockChain {
         }
     }
 
+    @Override
     public void suggest(Set<BlockIndex> blocks) {
         for (BlockIndex block : blocks) {
             pool(block);
         }
     }
 
+    @Override
     public void suggest(BlockIndex block) {
         if (!isRejected(block.getHash())) {
             pool(block);
