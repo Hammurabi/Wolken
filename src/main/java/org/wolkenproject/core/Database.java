@@ -13,8 +13,6 @@ import org.wolkenproject.wallet.Wallet;
 
 import java.io.*;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
 
 import static org.wolkenproject.utils.Utils.concatenate;
 
@@ -417,5 +415,9 @@ public class Database {
 
     public void removeAlias(long alias) {
         remove(Utils.concatenate(AliasPrefix, Utils.takeApartLong(alias)));
+    }
+
+    public BlockMetadata findBlockMetaData(byte[] hash) {
+        return ;
     }
 }
