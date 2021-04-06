@@ -12,6 +12,8 @@ public abstract class AbstractBlockChain implements Runnable {
         this.mutex      = new ReentrantLock();
     }
 
+    // get the next block from the block pool.
+    protected abstract BlockIndex getCandidate();
     // must be called before starting the main loop.
     protected abstract void initialize();
     // load the last saved block, or re-generate a genesis block if this is a fresh chain.
