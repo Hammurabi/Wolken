@@ -31,5 +31,5 @@ public abstract class AbstractBlockChain implements Runnable {
     }
 
     // stales block.
-    public abstract void addStale(BlockIndex block);
+    protected abstract void addStale(BlockIndex block);
 }
