@@ -391,9 +391,14 @@ public class BlockChain extends AbstractBlockChain {
     }
 
     private void setTip(BlockIndex block) {
-        tip = block;
-        getContext().getDatabase().setTip(block);
-        replaceBlockIndex(block.getHeight(), block);
+        getMutex().lock();
+        try {
+            tip = block;
+            getContext().getDatabase().setTip(block);
+            replaceBlockIndex(block.getHeight(), block);
+        } finally {
+            getMutex().unlock();
+        }
     }
 
     private void addOrphan(BlockIndex block) {
