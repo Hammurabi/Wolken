@@ -15,11 +15,13 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     private final long          sequenceId;
     private final int           transactionCount;
     private final Context       context;
+    private BigInteger          chainWork;
 
     protected CandidateBlock(Context context, int transactionCount) {
         this.sequenceId = System.currentTimeMillis();
         this.transactionCount = transactionCount;
         this.context = context;
+        this.chainWork = null;
     }
 
     public Context getContext() {
@@ -37,7 +39,7 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     public abstract boolean isChainAvailable();
 
     public BigInteger getTotalChainWork() {
-        if (isChainAvailable()) {
+        if (chainWork == null && isChainAvailable()) {
             List<BlockHeader> chain = getChain();
             byte mostRecentCommonAncestor[] = chain.get(0).getParentHash();
             BlockMetadata metadata = getContext().getDatabase().findBlockMetaData(mostRecentCommonAncestor);
@@ -52,6 +54,8 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
 
                 return startWork;
             }
+        } else {
+            return chainWork;
         }
 
         return BigInteger.ZERO;
