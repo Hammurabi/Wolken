@@ -380,7 +380,8 @@ public class BlockChain extends AbstractBlockChain {
         return null;
     }
 
-    private void setTip(BlockIndex block) {
+    @Override
+    protected void saveCheckPoint(BlockIndex block) {
         getMutex().lock();
         try {
             tip = block;
