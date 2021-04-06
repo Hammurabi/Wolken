@@ -28,5 +28,7 @@ public enum FieldType {
     hash256,
     hash160,
 
-    bytes
+    bytes,
+
+    serializable
 }
