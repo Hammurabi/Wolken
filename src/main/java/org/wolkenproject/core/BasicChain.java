@@ -25,6 +25,10 @@ public abstract class BasicChain extends AbstractBlockChain {
     }
 
     @Override
+    protected void initialize() {
+    }
+
+    @Override
     public void run() {
         // initialize the chain.
         initialize();
