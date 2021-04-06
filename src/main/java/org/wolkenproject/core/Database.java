@@ -424,4 +424,8 @@ public class Database {
     public void tempStoreBlock(byte[] id, Block block) {
         put(Utils.concatenate(id, block.getHashCode()), block);
     }
+
+    public void deleteTempBlock(byte[] id, byte[] hashCode) {
+        remove(Utils.concatenate(id, hashCode));
+    }
 }
