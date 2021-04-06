@@ -6,6 +6,7 @@ import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.network.messages.RequestHeadersBefore;
+import org.wolkenproject.rpc.Request;
 import org.wolkenproject.utils.Logger;
 
 import java.util.*;
@@ -101,9 +102,20 @@ public class PeerBlockCandidate extends CandidateBlock {
         return block;
     }
 
-    public static BlockHeader findCommonAncestor(Context context, BlockHeader best) {
+    public static List<BlockHeader> findCommonAncestor(Context context, BlockHeader best) {
+        List<BlockHeader> ancestors = new ArrayList<>();
+
+        if (context.getDatabase().checkBlockExists(best.getParentHash())) {
+            ancestors.add(best);
+            return ancestors;
+        }
+
         // request block headers
-        Message response = getContext().getServer().broadcastRequest(new RequestHeadersBefore(getContext().getNetworkParameters().getVersion(), block.getHash(), 1024, block.getHeader()));
+        Request request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), best.getHashCode(), 1024, block.getHeader());
+        Message response =
+
+
+                context.getServer().broadcastRequest();
 
         // we store ancestor hashes here
         Set<byte[]> ancestors = new LinkedHashSet<>();
