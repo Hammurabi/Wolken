@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.List;
 
 /*
@@ -16,11 +17,14 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     private final Context       context;
     private BigInteger          chainWork;
     private boolean             valid;
+    private byte                id[];
 
     protected CandidateBlock(Context context) {
         this.sequenceId = System.currentTimeMillis();
         this.context = context;
         this.chainWork = null;
+        // we could also use block hash but this is more reliable.
+        this.id = new SecureRandom().generateSeed(20);
     }
 
     public Context getContext() {
