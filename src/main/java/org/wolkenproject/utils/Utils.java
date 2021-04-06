@@ -542,4 +542,20 @@ public class Utils {
         jsonDate.put("millisecond", ms);
         return jsonDate;
     }
+
+    public static void writeInt128(BigInteger integer, OutputStream stream) throws IOException {
+        stream.write(takeApart(integer, 16));
+    }
+
+    public static void writeInt256(BigInteger integer, OutputStream stream) throws IOException {
+        stream.write(takeApart(integer, 32));
+    }
+
+    public static void writeUInt128(BigInteger integer, OutputStream stream) throws IOException {
+        stream.write(takeApart(integer, 16));
+    }
+
+    public static void writeUInt256(BigInteger integer, OutputStream stream) throws IOException {
+        stream.write(takeApart(integer, 32));
+    }
 }
