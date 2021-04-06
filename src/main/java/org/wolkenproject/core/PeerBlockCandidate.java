@@ -1,6 +1,5 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.CheckedResponse;
 import org.wolkenproject.network.Message;
@@ -36,7 +35,7 @@ public class PeerBlockCandidate extends CandidateBlock {
 
                     if (Arrays.equals(block.getHash(), header.getHashCode())) {
                         block = received;
-                        
+
                         return true;
                     } else {
                         closeConnection();
