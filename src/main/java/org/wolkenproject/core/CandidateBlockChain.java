@@ -25,6 +25,8 @@ public abstract class CandidateBlockChain implements Comparable<CandidateBlockCh
     public abstract BlockIndex getBlock();
     // returns true if the 'getBlock' will return a value.
     public abstract boolean isFullBlockAvailable();
+    // returns true if the 'getChain' will return a value.
+    public abstract boolean isFullChainAvailable();
 
     public BigInteger getTotalChainWork() {
         return chainWork;
