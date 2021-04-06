@@ -11,17 +11,17 @@ public abstract class AbstractBlockChain implements Runnable {
         this.context    = context;
         this.mutex      = new ReentrantLock();
     }
-
+    
+    // returns true if the block is valid (full validation).
     public abstract boolean verifyBlock(BlockIndex block);
-
+    // return the context.
     public Context getContext() {
         return context;
     }
-
+    // return the mutex.
     public ReentrantLock getMutex() {
         return mutex;
     }
-
     // set the block at 'height' to 'block', if a previous block exists then it should be replaced.
     protected abstract void setBlock(int height, BlockIndex block);
     // mark block as rejected, this block or it's children will never be considered valid.
