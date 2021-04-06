@@ -41,7 +41,7 @@ public class SerializationFactory {
         serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
         serializationFactory.registerClass(PrunedBlock.class, new PrunedBlock());
         serializationFactory.registerClass(BlockMetadata.class, new BlockMetadata());
-        
+
         Event.register(serializationFactory);
 
         // messages
