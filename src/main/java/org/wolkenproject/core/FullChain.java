@@ -3,10 +3,6 @@ package org.wolkenproject.core;
 import java.util.Set;
 
 public class FullChain extends BasicChain {
-    @Override
-    protected boolean makeBest(BlockIndex candidate) {
-        return false;
-    }
 
     @Override
     protected void broadcastChain() {
