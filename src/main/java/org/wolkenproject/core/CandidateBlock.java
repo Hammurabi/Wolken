@@ -28,7 +28,7 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     }
 
     // verifies the entire chain and propagates it to the network.
-    public abstract void verify();
+    public abstract boolean verify();
     // returns the 'best block' header of the chain.
     public abstract BlockHeader getBlockHeader();
     // returns the 'best block' of the chain.
