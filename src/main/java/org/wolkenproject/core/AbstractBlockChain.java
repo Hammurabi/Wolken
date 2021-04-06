@@ -22,15 +22,8 @@ public abstract class AbstractBlockChain implements Runnable {
         return mutex;
     }
 
-    protected void setBlock(int height, BlockIndex block) {
-        BlockIndex previousIndex = getContext().getDatabase().findBlock(height);
-        if (previousIndex != null) {
-            addStale(previousIndex);
-        }
-
-        getContext().getDatabase().storeBlock(height, block);
-    }
-
+    // set the block at 'height' to 'block', if a previous block exists then it should be replaced.
+    protected abstract void setBlock(int height, BlockIndex block);
     // mark block as rejected, this block or it's children will never be considered valid.
     protected abstract void markRejected(byte block[]);
     // returns true if this block has been rejected.
