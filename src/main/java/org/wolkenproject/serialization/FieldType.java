@@ -15,6 +15,13 @@ public enum FieldType {
     uint128,
     uint256,
 
+    var8ui,
+    var16ui,
+    var32ui,
+    var64ui,
+    var128ui,
+    var256ui,
+
     hash256,
     hash160,
 
