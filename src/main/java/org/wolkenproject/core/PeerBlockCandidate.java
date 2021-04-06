@@ -76,7 +76,26 @@ public class PeerBlockCandidate extends CandidateBlock {
         return false;
     }
 
-    private void downloadAndVerifyBlocks() {
+    private boolean downloadAndVerifyBlocks() {
+        // this should give us 16 blocks per message at (4mb).
+        int blocksPerMessage = (getContext().getNetworkParameters().getMaxMessageContentSize() / getContext().getNetworkParameters().getMaxBlockSize()) / 2;
+
+        // loop all headers and download the blocks.
+        for (int i = 0; i < chain.size(); i += blocksPerMessage) {
+            List<byte[]> blocks = new ArrayList<>();
+            for (int j = 0; j < blocksPerMessage; j ++) {
+                blocks.add(chain.get(i + j).getHashCode());
+            }
+
+            Message request = new RequestBlocks(getContext().getNetworkParameters().getVersion(), blocks);
+            try {
+                CheckedResponse response = sender.getResponse(request, getContext().getNetworkParameters().getMessageTimeout(blocksPerMessage * getContext().getNetworkParameters().getMaxBlockSize()));
+            } catch (WolkenTimeoutException e) {
+                return false;
+            }
+
+            
+        }
     }
 
     @Override
