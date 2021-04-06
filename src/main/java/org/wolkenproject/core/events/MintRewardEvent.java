@@ -58,11 +58,11 @@ public class MintRewardEvent extends Event {
 
     @Override
     public <Type extends SerializableI> Type newInstance(Object... object) throws WolkenException {
-        return (Type) new DepositFeesEvent(new byte[address.length], 0);
+        return (Type) new MintRewardEvent(new byte[address.length], 0);
     }
 
     @Override
     public int getSerialNumber() {
-        return Context.getInstance().getSerialFactory().getSerialNumber(DepositFeesEvent.class);
+        return Context.getInstance().getSerialFactory().getSerialNumber(MintRewardEvent.class);
     }
 }
