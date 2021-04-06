@@ -27,7 +27,7 @@ public abstract class BasicChain extends AbstractBlockChain {
     @Override
     protected void initialize() {
         // load the last checkpoint.
-        loadCheckPoint();
+        loadBestBlock();
     }
 
     @Override
