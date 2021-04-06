@@ -567,6 +567,16 @@ public class BlockChain extends AbstractBlockChain {
         return 0;
     }
 
+    @Override
+    protected void setBlock(int height, BlockIndex block) {
+        BlockIndex previousIndex = getContext().getDatabase().findBlock(height);
+        if (previousIndex != null) {
+            addStale(previousIndex);
+        }
+
+        getContext().getDatabase().storeBlock(height, block);
+    }
+
     public BlockIndex createNextBlock() throws WolkenException {
         return getTip().generateNextBlock();
     }
