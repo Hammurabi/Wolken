@@ -187,7 +187,12 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     }
 
     public BigInteger getWork() {
-        return LargestHash.divide(getTargetInteger().add(BigInteger.ONE));
+        BigInteger pow = getTargetInteger();
+        if (pow.compareTo(BigInteger.ZERO) == 0) {
+            return LargestHash;
+        }
+
+        return LargestHash.divide(getTargetInteger());
     }
 
     public void addTransaction(Transaction transaction) {
