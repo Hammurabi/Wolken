@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.CheckedResponse;
 import org.wolkenproject.network.Message;
@@ -8,6 +9,7 @@ import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.network.messages.RequestHeadersBefore;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -43,7 +45,7 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     @Override
-    public void merge(AbstractBlockChain target) {
+    public void merge(AbstractBlockChain target) throws IOException, WolkenException {
         byte mostRecentCommonAncestor[] = chain.get(chain.size() - 1).getParentHash();
         BlockMetadata commonAncestor    = getContext().getDatabase().findBlockMetaData(mostRecentCommonAncestor);
         int height                      = commonAncestor.getHeight();
