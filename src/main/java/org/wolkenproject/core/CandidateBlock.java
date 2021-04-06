@@ -97,6 +97,10 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
             return 1;
         }
 
+        // more transactions and lower fees should be incentivised
+        // but adding this rule here seems inconsequential besides
+        // the psychological impact it would have on miners.
+
 //        // if this candidate chain has more transactions then it should be considered 'better'.
 //        if (getTransactionCount() > candidateBlock.getTransactionCount()) {
 //            return -1;
