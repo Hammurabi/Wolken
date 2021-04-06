@@ -83,7 +83,8 @@ public class Database {
     }
 
     public BlockIndex findBlock(byte[] hash) {
-        BlockMetadata metadata = get(concatenate(BlockPrefix, hash), BlockMetadata.class);
+        BlockMetadata metadata = findBlockMetaData(hash);
+
         if (metadata == null) {
             return null;
         }
@@ -418,7 +419,7 @@ public class Database {
     }
 
     public BlockMetadata findBlockMetaData(byte[] hash) {
-        return ;
+        return get(concatenate(BlockPrefix, hash), BlockMetadata.class);
     }
 
     public void tempStoreBlock(byte[] id, Block block) {
@@ -430,6 +431,6 @@ public class Database {
     }
 
     public Block findTempBlock(byte[] id, byte[] hashCode) throws IOException, WolkenException {
-        return new Block().fromBytes(get(Utils.concatenate(id, hashCode)));
+        return get(Utils.concatenate(id, hashCode), Block.class);
     }
 }
