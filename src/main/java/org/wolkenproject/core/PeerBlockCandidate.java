@@ -113,7 +113,7 @@ public class PeerBlockCandidate extends CandidateBlock {
 
         // request block headers
         Message request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), best.getHashCode(), 1024, best);
-        Message response = sender.getResponse(request, context.getNetworkParameters().getMessageTimeout());
+        Message response = sender.getResponse(request, context.getNetworkParameters().getMessageTimeout(1024 * BlockHeader.Size));
 
 
                 context.getServer().broadcastRequest();
