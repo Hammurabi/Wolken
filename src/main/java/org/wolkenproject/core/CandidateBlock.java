@@ -27,6 +27,7 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     public Context getContext() {
         return context;
     }
+
     // returns the 'best block' header of the chain.
     public abstract BlockHeader getBlockHeader();
     // returns the 'best block' of the chain.
@@ -37,6 +38,10 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     public abstract List<BlockHeader> getChain();
     // returns true if the 'getChain' will return a value.
     public abstract boolean isChainAvailable();
+    // returns true if the full blocks have been downloaded entirely.
+    public abstract boolean areBlocksAvailable();
+    // deletes all data in storage, must be called before omitting thins candidate from the block pool.
+    public abstract boolean destroy();
 
     public BigInteger getTotalChainWork() {
         if (chainWork == null && isChainAvailable()) {
