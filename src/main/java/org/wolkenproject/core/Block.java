@@ -260,7 +260,15 @@ public class Block extends SerializableI implements Iterable<Transaction> {
 
     public void write(OutputStream outputStream, boolean writeLocally) throws IOException, WolkenException {
         write(outputStream);
-        // start writing events
+        if (writeLocally) {
+            // start writing events
+            outputStream.write(stateChange.getTransactionMerkleRoot());
+            outputStream.write(stateChange.getTransactionEventMerkleRoot());
+            VarInt.writeCompactUInt32(stateChange.getTransactionEvents().size(), false, outputStream);
+            for (Event event : stateChange.getTransactionEvents()) {
+                event.write(outputStream);
+            }
+        }
     }
 
     public PrunedBlock getPruned() throws WolkenException {
