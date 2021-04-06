@@ -5,6 +5,7 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.*;
+import org.wolkenproject.serialization.Serializable;
 import org.wolkenproject.utils.*;
 
 import java.math.BigInteger;
@@ -17,7 +18,7 @@ public class BlockChain extends AbstractBlockChain {
     protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
 
     // the current higest block in the chain
-    private BlockIndex              tip;
+    @Serializable() private BlockIndex              tip;
     // contains blocks that have no parents or ancestors.
     private HashQueue<BlockIndex>   orphanedBlocks;
     // contains blocks that were valid pre-fork.
