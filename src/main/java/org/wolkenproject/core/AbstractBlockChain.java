@@ -12,6 +12,8 @@ public abstract class AbstractBlockChain implements Runnable {
         this.mutex      = new ReentrantLock();
     }
 
+    // attempt to make the 'candidate' into the best block, returns true if the operation is successful.
+    protected abstract boolean makeBest(BlockIndex candidate);
     // broadcast the chain information to all peers.
     protected abstract void broadcastChain();
     // returns the best block of this chain.
