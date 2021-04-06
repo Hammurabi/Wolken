@@ -266,7 +266,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
             outputStream.write(stateChange.getTransactionEventMerkleRoot());
             VarInt.writeCompactUInt32(stateChange.getTransactionEvents().size(), false, outputStream);
             for (Event event : stateChange.getTransactionEvents()) {
-                event.write(outputStream);
+                event.serialize(outputStream);
             }
         }
     }
