@@ -50,7 +50,7 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
             BigInteger startWork = BigInteger.ZERO;
 
             if (metadata != null) {
-                startWork = metadata.getChainWork();
+                startWork = metadata.getPreviousChainWork();
 
                 for (BlockHeader header : chain) {
                     startWork = startWork.add(header.getWork());
