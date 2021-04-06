@@ -28,6 +28,10 @@ public abstract class AbstractBlockChain implements Runnable {
     protected abstract void containsBlock(int height);
     // return true if block with hash 'hash' exists.
     protected abstract void containsBlock(byte hash[]);
+    // return the hash of block at height 'height'.
+    protected abstract byte[] getBlockHash(int height);
+    // remove the block with hash 'hash'.
+    protected abstract void removeBlock(byte hash[]);
     // mark block as rejected, this block or it's children will never be considered valid.
     protected abstract void markRejected(byte block[]);
     // returns true if this block has been rejected.
