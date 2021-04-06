@@ -68,13 +68,6 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
         return sequenceId;
     }
 
-    public int getTransactionCount() {
-        if (areBlocksAvailable()) {
-        }
-
-        return 0;
-    }
-
     @Override
     public int compareTo(CandidateBlock candidateBlock) {
         int compare = getTotalChainWork().compareTo(candidateBlock.getTotalChainWork());
