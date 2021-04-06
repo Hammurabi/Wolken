@@ -190,6 +190,7 @@ public class BlockChain extends AbstractBlockChain {
             BlockIndex currentBlock = tip;
 
             while (currentBlock.getHeight() != block.getHeight()) {
+                currentBlock.undoStateChange();
                 deleteBlockIndex(currentBlock.getHash(), true);
                 currentBlock = currentBlock.previousBlock();
             }
