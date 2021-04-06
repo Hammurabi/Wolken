@@ -111,7 +111,8 @@ public class PeerBlockCandidate extends CandidateBlock {
         for (BlockHeader header : chain) {
             getContext().getDatabase().deleteTempBlock(getId(), header.getHashCode());
         }
-        return false;
+
+        return true;
     }
 
     private void closeConnection() {
