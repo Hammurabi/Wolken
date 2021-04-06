@@ -5,11 +5,10 @@ import org.wolkenproject.network.CheckedResponse;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
 import org.wolkenproject.network.messages.RequestBlocks;
+import org.wolkenproject.network.messages.RequestHeadersBefore;
+import org.wolkenproject.utils.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PeerBlockCandidate extends CandidateBlock {
     private List<BlockHeader>   chain;
@@ -30,6 +29,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         // verify the header.
         if (!header.verifyProofOfWork()) return false;
         // get all block headers.
+        byte hashCommonAncestor[]
         // verify all headers.
         // get all blocks.
         // verify all blocks.
@@ -99,5 +99,57 @@ public class PeerBlockCandidate extends CandidateBlock {
     @Override
     public BlockIndex getBlock() {
         return block;
+    }
+
+    public static BlockHeader findCommonAncestor(Context context, BlockHeader best) {
+        // request block headers
+        Message response = getContext().getServer().broadcastRequest(new RequestHeadersBefore(getContext().getNetworkParameters().getVersion(), block.getHash(), 1024, block.getHeader()));
+
+        // we store ancestor hashes here
+        Set<byte[]> ancestors = new LinkedHashSet<>();
+
+        if (response != null) {
+            Collection<BlockHeader> headers = response.getPayload();
+
+            while (headers != null) {
+                Iterator<BlockHeader> iterator = headers.iterator();
+
+                BlockHeader header = iterator.next();
+                if (isCommonAncestor(header)) {
+                    Logger.alert("found common ancestor" + header + " for block" + block);
+                    return header;
+                } else {
+                    if (!header.verifyProofOfWork()) {
+                        markRejected(header.getHashCode());
+                        for (byte[] hash : ancestors) {
+                            markRejected(hash);
+                        }
+                        markRejected(block.getHash());
+                        return null;
+                    }
+
+                    ancestors.add(header.getHashCode());
+                }
+
+                // loop headers to find a common ancestor
+                while (iterator.hasNext()) {
+                    header = iterator.next();
+
+                    if (isCommonAncestor(header)) {
+                        Logger.alert("found common ancestor" + header + " for block" + block);
+                        return header;
+                    }
+                }
+
+                // find older ancestor
+                response = getContext().getServer().broadcastRequest(new RequestHeadersBefore(getContext().getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
+
+                if (response != null) {
+                    headers = response.getPayload();
+                }
+            }
+        }
+
+        return null;
     }
 }
