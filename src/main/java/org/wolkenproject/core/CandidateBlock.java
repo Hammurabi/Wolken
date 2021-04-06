@@ -49,6 +49,8 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
                 for (BlockHeader header : chain) {
                     startWork = startWork.add(header.getWork());
                 }
+
+                return startWork;
             }
         }
 
