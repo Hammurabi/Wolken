@@ -16,4 +16,9 @@ public class MinedBlockCandidate extends CandidateBlock {
     public BlockIndex getBlock() {
         return block;
     }
+
+    @Override
+    public boolean isFullBlockAvailable() {
+        return true;
+    }
 }
