@@ -233,7 +233,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
             verify();
         }
 
-        return blockStateChange;
+        return blockStateChange.getResult();
     }
 
     /**
