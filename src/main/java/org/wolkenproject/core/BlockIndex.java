@@ -22,9 +22,6 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     private int         height;
     private long        sequenceId;
 
-    // unserialized
-    private BlockStateChange blockStateChange;
-
     public BlockIndex() {
         this(new Block(), BigInteger.ZERO, 0);
     }
