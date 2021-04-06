@@ -70,7 +70,6 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
 
     public int getTransactionCount() {
         if (areBlocksAvailable()) {
-
         }
 
         return 0;
@@ -98,15 +97,15 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
             return 1;
         }
 
-        // if this candidate chain has more transactions then it should be considered 'better'.
-        if (getTransactionCount() > candidateBlock.getTransactionCount()) {
-            return -1;
-        }
-
-        // if this candidate chain has more transactions then it should be considered 'better'.
-        if (getTransactionCount() < candidateBlock.getTransactionCount()) {
-            return 1;
-        }
+//        // if this candidate chain has more transactions then it should be considered 'better'.
+//        if (getTransactionCount() > candidateBlock.getTransactionCount()) {
+//            return -1;
+//        }
+//
+//        // if this candidate chain has more transactions then it should be considered 'better'.
+//        if (getTransactionCount() < candidateBlock.getTransactionCount()) {
+//            return 1;
+//        }
 
         return -1;
     }
