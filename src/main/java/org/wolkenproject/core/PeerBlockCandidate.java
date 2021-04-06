@@ -77,6 +77,9 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     private boolean downloadAndVerifyBlocks() {
+        // some block metadata.
+        int height           = getContext().getDatabase().findBlockMetaData(chain.get(chain.size() - 1).getParentHash()).getHeight();
+
         // this should give us 16 blocks per message at (4mb).
         int blocksPerMessage = (getContext().getNetworkParameters().getMaxMessageContentSize() / getContext().getNetworkParameters().getMaxBlockSize()) / 2;
 
@@ -93,12 +96,25 @@ public class PeerBlockCandidate extends CandidateBlock {
             try {
                 response = sender.getResponse(request, getContext().getNetworkParameters().getMessageTimeout(blocksPerMessage * getContext().getNetworkParameters().getMaxBlockSize()));
                 if (response.noErrors()) {
-                    Collection<Block> response.getMessage().getPayload();
+                    Collection<Block> bl = response.getMessage().getPayload();
+                    int j = 0;
+                    for (Block block : bl) {
+                        if (!block.verify(height ++)) {
+                            invalidate(getContext(), i + j, chain);
+                            return false;
+                        }
+                    }
                 }
             } catch (WolkenTimeoutException e) {
             }
 
             return false;
+        }
+    }
+
+    private void invalidate(Context context, int inclusiveIndex, List<BlockHeader> chain) {
+        for (int i = inclusiveIndex; i < chain.size(); i ++) {
+            context.getDatabase().markRejected(chain.get(i).getHashCode());
         }
     }
 
