@@ -6,19 +6,33 @@ import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
 import org.wolkenproject.network.messages.RequestBlocks;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 public class PeerBlockCandidate extends CandidateBlock {
-    private List<BlockHeader> chain;
-    private BlockHeader header;
-    private BlockIndex  block;
-    private Node        sender;
+    private List<BlockHeader>   chain;
+    private BlockHeader         header;
+    private BlockIndex          block;
+    private Node                sender;
 
     public PeerBlockCandidate(Context context, Node sender, BlockHeader header) {
         super(context);
+        this.chain  = new ArrayList<>();
+        this.sender = sender;
         this.header = header;
+
+    }
+
+    @Override
+    public void verify() {
+        // veirfy the header
+        // get all block headers
+        // verify all headers
+        // get all blocks
+        // verify all blocks
+        // propagate
     }
 
     @Override
