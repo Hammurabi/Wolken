@@ -23,7 +23,7 @@ public abstract class BasicChain extends AbstractBlockChain {
 
     @Override
     protected boolean isRejected(byte[] hash) {
-        return false;
+        return getContext().getDatabase().isRejected(hash);
     }
 
     @Override
