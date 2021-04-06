@@ -49,7 +49,7 @@ public class BlockChain extends AbstractBlockChain {
             if (tip != null) {
                 Logger.alert("loaded checkpoint successfully", tip);
             } else {
-                setTip(makeGenesisBlock());
+                setBestBlock(makeGenesisBlock());
                 Logger.alert("loaded genesis as checkpoint successfully", tip);
             }
         } finally {
@@ -193,7 +193,7 @@ public class BlockChain extends AbstractBlockChain {
                 currentBlock = currentBlock.previousBlock();
             }
 
-            setTip(currentBlock.previousBlock());
+            setBestBlock(currentBlock.previousBlock());
             replaceTip(block);
         } else {
             if (isRejected(block.getHash())) {
@@ -206,7 +206,7 @@ public class BlockChain extends AbstractBlockChain {
         BlockHeader commonAncestor = findCommonAncestor(block);
 
         if (commonAncestor != null) {
-            setTip(block);
+            setBestBlock(block);
             rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
         } else {
             if (!isRejected(block.getHash())) {
@@ -255,7 +255,7 @@ public class BlockChain extends AbstractBlockChain {
         byte previousHash[] = block.getBlock().getParentHash();
 
         if (Utils.equals(previousHash, tip.getHash())) {
-            setTip(block);
+            setBestBlock(block);
             return;
         }
 
@@ -281,7 +281,7 @@ public class BlockChain extends AbstractBlockChain {
 
             byte previousHash[] = getTip().getBlock().getParentHash();
             if (Utils.equals(block.getBlock().getParentHash(), previousHash)) {
-                setTip(block);
+                setBestBlock(block);
                 return;
             }
 
@@ -381,7 +381,7 @@ public class BlockChain extends AbstractBlockChain {
     }
 
     @Override
-    protected void setTip(BlockIndex block) {
+    protected void setBestBlock(BlockIndex block) {
         getMutex().lock();
         try {
             tip = block;
