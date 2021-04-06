@@ -33,19 +33,13 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
 
     // verifies the entire chain and propagates it to the network.
     public abstract boolean verify();
-    // returns the 'best block' header of the chain.
-    public abstract BlockHeader getBlockHeader();
-    // returns the 'best block' of the chain.
-    public abstract BlockIndex getBlock();
-    // returns true if the 'getBlock' will return a value.
-    public abstract boolean isFullBlockAvailable();
+    // merges the candidate chain to the chain.
+    public abstract void merge(AbstractBlockChain chain);
     // returns a list of all blocks from and excluding the most recent common ancestor to and including the best block.
     public abstract List<BlockHeader> getChain();
     // returns true if the 'getChain' will return a value.
     public abstract boolean isChainAvailable();
-    // returns true if the full blocks have been downloaded entirely.
-    public abstract boolean areBlocksAvailable();
-    // deletes all data in storage, must be called before omitting thins candidate from the block pool.
+    // deletes all data in storage, must be called before omitting this candidate from the block pool.
     public abstract boolean destroy();
 
     public BigInteger getTotalChainWork() {
