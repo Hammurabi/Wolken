@@ -145,20 +145,10 @@ public class BlockHeader extends SerializableI {
 
     public boolean verifyProofOfWork() {
         byte hash[] = getHashCode();
-        byte bits[] = targetFromBits(Utils.takeApart(this.bits));
+        byte bits[] = getTargetBytes();
         BigInteger result = new BigInteger(1, hash);
         BigInteger target = new BigInteger(1, bits);
         return result.compareTo(target) < 0;
-    }
-
-    public static byte[] targetFromBits(byte[] bits) {
-        byte target[]   = new byte[32];
-        int offset      = 32 - Byte.toUnsignedInt(bits[0]);
-        target[offset + 0]  = bits[1];
-        target[offset + 1]  = bits[2];
-        target[offset + 2]  = bits[3];
-
-        return target;
     }
 
     public byte[] getTargetBytes() {
