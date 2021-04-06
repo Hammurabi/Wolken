@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import java.math.BigInteger;
+import java.util.List;
 
 /*
     Candidate blocks are sent by peers
@@ -25,8 +26,10 @@ public abstract class CandidateBlockChain implements Comparable<CandidateBlockCh
     public abstract BlockIndex getBlock();
     // returns true if the 'getBlock' will return a value.
     public abstract boolean isFullBlockAvailable();
+    // returns a list of all blocks from the most recent common ancestor to the best block.
+    public abstract List<BlockHeader> getChain();
     // returns true if the 'getChain' will return a value.
-    public abstract boolean isFullChainAvailable();
+    public abstract boolean isChainAvailable();
 
     public BigInteger getTotalChainWork() {
         return chainWork;
