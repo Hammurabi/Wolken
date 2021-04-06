@@ -527,7 +527,7 @@ public class BlockChain extends AbstractBlockChain {
     @Override
     public void suggest(Set<BlockIndex> blocks) {
         for (BlockIndex block : blocks) {
-            pool(block);
+            suggest(block);
         }
     }
 
