@@ -1,6 +1,6 @@
 package org.wolkenproject.core;
 
-public class MinedBlockCandidate extends CandidateBlock {
+public class MinedBlockCandidate extends CandidateBlockChain {
     private BlockIndex block;
 
     public MinedBlockCandidate(BlockIndex block) {
