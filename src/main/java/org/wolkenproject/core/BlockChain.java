@@ -49,7 +49,7 @@ public class BlockChain extends AbstractBlockChain {
             if (tip != null) {
                 Logger.alert("loaded checkpoint successfully", tip);
             } else {
-                setTip(makeGenesisBlock());
+                saveCheckPoint(makeGenesisBlock());
                 Logger.alert("loaded genesis as checkpoint successfully", tip);
             }
         } finally {
@@ -193,7 +193,7 @@ public class BlockChain extends AbstractBlockChain {
                 currentBlock = currentBlock.previousBlock();
             }
 
-            setTip(currentBlock.previousBlock());
+            saveCheckPoint(currentBlock.previousBlock());
             replaceTip(block);
         } else {
             if (isRejected(block.getHash())) {
@@ -206,7 +206,7 @@ public class BlockChain extends AbstractBlockChain {
         BlockHeader commonAncestor = findCommonAncestor(block);
 
         if (commonAncestor != null) {
-            setTip(block);
+            saveCheckPoint(block);
             rollbackIntoExistingParent(block.getBlock().getParentHash(), block.getHeight() - 1);
         } else {
             if (!isRejected(block.getHash())) {
