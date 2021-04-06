@@ -1,4 +1,4 @@
 package org.wolkenproject.core;
 
-public class FullChain {
+public class FullChain extends BasicChain {
 }
