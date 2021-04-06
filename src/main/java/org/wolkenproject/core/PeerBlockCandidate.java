@@ -41,6 +41,10 @@ public class PeerBlockCandidate extends CandidateBlock {
         return true;
     }
 
+    @Override
+    public void merge(AbstractBlockChain chain) {
+    }
+
     private boolean downloadAndVerifyBlocks() {
         // some block metadata.
         int height           = getContext().getDatabase().findBlockMetaData(chain.get(chain.size() - 1).getParentHash()).getHeight();
