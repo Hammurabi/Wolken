@@ -22,7 +22,7 @@ public abstract class AbstractBlockChain implements Runnable {
         return mutex;
     }
 
-    private void setBlock(int height, BlockIndex block) {
+    public void setBlock(int height, BlockIndex block) {
         BlockIndex previousIndex = getContext().getDatabase().findBlock(height);
         if (previousIndex != null) {
             addStale(previousIndex);
