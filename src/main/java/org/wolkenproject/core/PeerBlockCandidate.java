@@ -7,14 +7,12 @@ import org.wolkenproject.network.Node;
 import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.network.messages.RequestHeadersBefore;
-import org.wolkenproject.utils.Logger;
 
 import java.util.*;
 
 public class PeerBlockCandidate extends CandidateBlock {
     private List<BlockHeader>   chain;
     private BlockHeader         header;
-    private BlockIndex          block;
     private Node                sender;
 
     public PeerBlockCandidate(Context context, Node sender, BlockHeader header) {
@@ -101,6 +99,7 @@ public class PeerBlockCandidate extends CandidateBlock {
                     for (Block block : bl) {
                         if (!block.verify(height ++)) {
                             invalidate(getContext(), i + j, chain);
+                            closeConnection();
                             return false;
                         }
                     }
@@ -125,7 +124,7 @@ public class PeerBlockCandidate extends CandidateBlock {
 
     @Override
     public boolean isChainAvailable() {
-        return false;
+        return chain != null;
     }
 
     @Override
