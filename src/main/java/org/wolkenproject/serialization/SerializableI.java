@@ -33,6 +33,12 @@ public abstract class SerializableI {
     public abstract void write(OutputStream stream) throws IOException, WolkenException;
     public abstract void read(InputStream stream) throws IOException, WolkenException;
 
+    public void networkWrite(OutputStream stream) throws IOException, WolkenException {
+    }
+
+    public void networkRead(InputStream stream) throws IOException, WolkenException {
+    }
+
     public <T> T fromBytes(byte bytes[]) throws IOException, WolkenException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
         read(inputStream);
