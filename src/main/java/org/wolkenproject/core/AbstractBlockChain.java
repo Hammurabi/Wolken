@@ -32,6 +32,8 @@ public abstract class AbstractBlockChain implements Runnable {
 
     // mark block as rejected, this block or it's children will never be considered valid.
     protected abstract void markRejected(byte block[]);
-    // stales block.
+    // makes the block an orphan, meaning it does not have any ancestors.
+    protected abstract void addOrphan(BlockIndex block);
+    // stales block, it's previously valid, but not the best.
     protected abstract void addStale(BlockIndex block);
 }
