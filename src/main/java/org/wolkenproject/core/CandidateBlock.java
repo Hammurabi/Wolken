@@ -15,6 +15,7 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     private final long          sequenceId;
     private final Context       context;
     private BigInteger          chainWork;
+    private boolean             valid;
 
     protected CandidateBlock(Context context) {
         this.sequenceId = System.currentTimeMillis();
@@ -26,6 +27,8 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
         return context;
     }
 
+    // verifies the entire chain and propagates it to the network.
+    public abstract void verify();
     // returns the 'best block' header of the chain.
     public abstract BlockHeader getBlockHeader();
     // returns the 'best block' of the chain.
