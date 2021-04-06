@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Serializable {
     FieldType getType();
+    SerializationPolicy getPolicy();
 }
