@@ -41,6 +41,8 @@ public class SerializationFactory {
         serializationFactory.registerClass(BlockIndex.class, new BlockIndex());
         serializationFactory.registerClass(PrunedBlock.class, new PrunedBlock());
         serializationFactory.registerClass(BlockMetadata.class, new BlockMetadata());
+        
+        Event.register(serializationFactory);
 
         // messages
         serializationFactory.registerClass(NetAddress.class, new NetAddress(InetAddress.getLocalHost(), 0, 0));
