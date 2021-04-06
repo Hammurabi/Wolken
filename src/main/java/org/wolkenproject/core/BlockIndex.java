@@ -22,6 +22,9 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     private int         height;
     private long        sequenceId;
 
+    // unserialized
+    private BlockStateChange blockStateChange;
+
     public BlockIndex() {
         this(new Block(), BigInteger.ZERO, 0);
     }
@@ -221,15 +224,16 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public boolean verify() {
-        try {
-            return block.verify(getHeight());
-        } catch (Exception e) {
-            return false;
-        }
+        blockStateChange = new BlockStateChange();
+        return block.verify(getHeight(), blockStateChange);
     }
 
-    public BlockStateChangeResult getStateChange() throws WolkenException {
-        return block.getStateChange();
+    public BlockStateChangeResult getStateChange() {
+        if (blockStateChange == null) {
+            verify();
+        }
+
+        return blockStateChange;
     }
 
     /**
