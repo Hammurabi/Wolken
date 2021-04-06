@@ -48,6 +48,10 @@ public abstract class BasicChain extends AbstractBlockChain {
             if (isBetterBlock(candidate)) {
                 // fully validate the block and generate the state change.
                 if (candidate.verify()) {
+                    // make the candidate our best block.
+                    if (makeBest(candidate)) {
+                        broadcastChain();
+                    }
                 }
             }
         }
