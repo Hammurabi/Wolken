@@ -57,6 +57,32 @@ public abstract class SerializableI {
     }
 
     private final void networkWrite(OutputStream stream, Field field, FieldType type) {
+        switch (type) {
+            case int8:
+            case int16:
+            case int32:
+            case int64:
+            case int128:
+            case int256:
+
+            case uint8:
+            case uint16:
+            case uint32:
+            case uint64:
+            case uint128:
+            case uint256:
+
+            case var8ui:
+            case var16ui:
+            case var32ui:
+            case var64ui:
+            case var128ui:
+            case var256ui:
+
+            case bytes:
+            case hash160:
+            case hash256:
+        }
     }
 
     public void networkRead(InputStream stream) throws IOException, WolkenException {
