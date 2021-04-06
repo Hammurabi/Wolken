@@ -40,12 +40,12 @@ public class RequestBlocks extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        Set<BlockIndex> blocks = new LinkedHashSet<>();
+        Set<Block> blocks = new LinkedHashSet<>();
         for (byte[] hash : this.blocks) {
             BlockIndex block    = Context.getInstance().getDatabase().findBlock(hash);
 
             if (block != null) {
-                blocks.add(block);
+                blocks.add(block.getBlock());
             }
         }
 
