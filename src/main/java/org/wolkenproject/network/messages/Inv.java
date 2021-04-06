@@ -33,6 +33,10 @@ public class Inv extends Message {
         this(Context.getInstance().getNetworkParameters().getVersion(), type, list);
     }
 
+    public Inv(int version, int type, byte[] singleHash) throws WolkenException {
+        this(version, type, asList(singleHash));
+    }
+
     public Inv(int version, int type, Collection<byte[]> list) throws WolkenException {
         super(version, Flags.Notify);
         this.list = new LinkedHashSet<>(list);
@@ -209,5 +213,12 @@ public class Inv extends Message {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(Inv.class);
+    }
+
+    private static Collection<byte[]> asList(byte[] singleHash) {
+        List<byte[]> list = new ArrayList<>();
+        list.add(singleHash);
+
+        return list;
     }
 }
