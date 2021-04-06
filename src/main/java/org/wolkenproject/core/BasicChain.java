@@ -8,13 +8,13 @@ public abstract class BasicChain extends AbstractBlockChain {
     protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
 
     // the current higest block in the chain
-    private BlockIndex              tip;
+    private BlockIndex                  tip;
     // contains blocks that have no parents or ancestors.
-    private HashQueue<BlockIndex> orphanedBlocks;
+    private HashQueue<BlockIndex>       orphanedBlocks;
     // contains blocks that were valid pre-fork.
-    private HashQueue<BlockIndex>   staleBlocks;
+    private HashQueue<BlockIndex>       staleBlocks;
     // contains blocks sent from peers.
-    private HashQueue<BlockIndex>   blockPool;
+    private HashQueue<SuggestedBlock>   blockPool;
 
     public BasicChain(Context context) {
         super(context);
