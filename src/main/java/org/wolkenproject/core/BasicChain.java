@@ -50,6 +50,7 @@ public abstract class BasicChain extends AbstractBlockChain {
                 if (candidate.verify()) {
                     // make the candidate our best block.
                     if (makeBest(candidate)) {
+                        // if the operation succeeds, then we broadcast the new block to our peers.
                         broadcastChain();
                     }
                 }
