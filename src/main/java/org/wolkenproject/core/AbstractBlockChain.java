@@ -17,7 +17,7 @@ public abstract class AbstractBlockChain implements Runnable {
     // load the last saved block, or re-generate a genesis block if this is a fresh chain.
     protected abstract void loadBestBlock();
     // save a recovery checkpoint.
-    protected abstract void setTip(BlockIndex tip);
+    protected abstract void setBestBlock(BlockIndex block);
     // returns true if the block is valid (full validation).
     public abstract boolean verifyBlock(BlockIndex block);
     // return the context.
