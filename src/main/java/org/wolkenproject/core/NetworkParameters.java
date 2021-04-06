@@ -143,6 +143,11 @@ public class NetworkParameters {
         return 500;
     }
 
+    public long getMessageTimeout(long length) {
+        long seconds = length / 125_000L + 1 + getMessageTimeout();
+        return seconds * 1000L;
+    }
+
     public int getMaxNetworkErrors() {
         return 25;
     }
