@@ -32,7 +32,6 @@ public class PeerBlockCandidate extends CandidateBlock {
         // check that we received the headers.
         if (ancestors == null) return false;
         // get all blocks.
-        // verify all blocks.
         // propagate.
 
         return true;
