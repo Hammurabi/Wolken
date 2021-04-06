@@ -12,4 +12,9 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     public abstract BlockHeader getBlockHeader();
     public abstract BlockIndex getBlock();
     public abstract boolean isFullBlockAvailable();
+
+    @Override
+    public int compareTo(CandidateBlock candidateBlock) {
+        return 0;
+    }
 }
