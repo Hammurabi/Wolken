@@ -78,7 +78,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         setMerkleRoot(getStateChange().getMerkleRoot());
     }
 
-    public boolean verify(int blockHeight) {
+    public boolean verify(BlockStateChange blockStateChange, int blockHeight) {
         // PoW check
         if (!blockHeader.verifyProofOfWork()) return false;
         // must have at least one transaction
