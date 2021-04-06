@@ -13,10 +13,12 @@ import java.math.BigInteger;
 public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     private final BigInteger    chainWork;
     private final long          sequenceId;
+    private final int           transactionCount;
 
-    protected CandidateBlock(BigInteger chainWork) {
+    protected CandidateBlock(BigInteger chainWork, int transactionCount) {
         this.chainWork  = chainWork;
         this.sequenceId = System.currentTimeMillis();
+        this.transactionCount = transactionCount;
     }
 
     public abstract BlockHeader getBlockHeader();
@@ -31,9 +33,13 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
         return sequenceId;
     }
 
+    public int getTransactionCount() {
+        return transactionCount;
+    }
+
     @Override
     public int compareTo(CandidateBlock candidateBlock) {
-        int compare = getTotalChainWork().compareTo(other.getTotalChainWork());
+        int compare = getTotalChainWork().compareTo(candidateBlock.getTotalChainWork());
 
         if (compare > 0) {
             return -1;
@@ -43,19 +49,19 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
             return 1;
         }
 
-        if (getSequenceId() < other.getSequenceId()) {
+        if (getSequenceId() < candidateBlock.getSequenceId()) {
             return -1;
         }
 
-        if (getSequenceId() > other.getSequenceId()) {
+        if (getSequenceId() > candidateBlock.getSequenceId()) {
             return 1;
         }
 
-        if (getBlock().getTransactionCount() > other.getBlock().getTransactionCount()) {
+        if (getTransactionCount() > candidateBlock.getTransactionCount()) {
             return 1;
         }
 
-        if (getBlock().getTransactionCount() < other.getBlock().getTransactionCount()) {
+        if (getTransactionCount() < candidateBlock.getTransactionCount()) {
             return -1;
         }
 
