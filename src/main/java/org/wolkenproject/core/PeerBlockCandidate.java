@@ -88,13 +88,17 @@ public class PeerBlockCandidate extends CandidateBlock {
             }
 
             Message request = new RequestBlocks(getContext().getNetworkParameters().getVersion(), blocks);
+            CheckedResponse response = null;
+
             try {
-                CheckedResponse response = sender.getResponse(request, getContext().getNetworkParameters().getMessageTimeout(blocksPerMessage * getContext().getNetworkParameters().getMaxBlockSize()));
+                response = sender.getResponse(request, getContext().getNetworkParameters().getMessageTimeout(blocksPerMessage * getContext().getNetworkParameters().getMaxBlockSize()));
+                if (response.noErrors()) {
+                    Collection<Block> response.getMessage().getPayload();
+                }
             } catch (WolkenTimeoutException e) {
-                return false;
             }
 
-            
+            return false;
         }
     }
 
