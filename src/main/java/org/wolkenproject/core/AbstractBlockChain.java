@@ -30,6 +30,8 @@ public abstract class AbstractBlockChain implements Runnable {
         getContext().getDatabase().storeBlock(height, block);
     }
 
+    // mark block as rejected, this block or it's children will never be considered valid.
+    protected abstract void markRejected(byte block[]);
     // stales block.
     protected abstract void addStale(BlockIndex block);
 }
