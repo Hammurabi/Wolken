@@ -7,15 +7,17 @@ import org.wolkenproject.network.Node;
 import org.wolkenproject.network.messages.RequestBlocks;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 public class PeerBlockCandidate extends CandidateBlock {
+    private List<BlockHeader> chain;
     private BlockHeader header;
     private BlockIndex  block;
     private Node        sender;
 
-    public PeerBlockCandidate(Node sender, BlockHeader header, int transactionCount) {
-        super(.getTransactionCount());
+    public PeerBlockCandidate(Context context, Node sender, BlockHeader header) {
+        super(context);
         this.header = header;
     }
 
@@ -49,6 +51,26 @@ public class PeerBlockCandidate extends CandidateBlock {
             }
         }
 
+        return false;
+    }
+
+    @Override
+    public List<BlockHeader> getChain() {
+        return null;
+    }
+
+    @Override
+    public boolean isChainAvailable() {
+        return false;
+    }
+
+    @Override
+    public boolean areBlocksAvailable() {
+        return false;
+    }
+
+    @Override
+    public boolean destroy() {
         return false;
     }
 
