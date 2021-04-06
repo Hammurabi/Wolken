@@ -2,24 +2,18 @@ package org.wolkenproject.core;
 
 import java.util.Set;
 
-public class BasicChain extends AbstractBlockChain {
+public abstract class BasicChain extends AbstractBlockChain {
     public BasicChain(Context context) {
         super(context);
     }
 
     @Override
-    public boolean verifyBlock(BlockIndex block) {
-        return false;
-    }
-
-    @Override
-    protected void setBlock(int height, BlockIndex block) {
-
+    protected final void setBlock(int height, BlockIndex block) {
+        if ()
     }
 
     @Override
     protected void markRejected(byte[] block) {
-
     }
 
     @Override
