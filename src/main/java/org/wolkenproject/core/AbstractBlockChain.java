@@ -20,4 +20,16 @@ public abstract class AbstractBlockChain implements Runnable {
     public ReentrantLock getMutex() {
         return mutex;
     }
+
+    private void setBlock(int height, BlockIndex block) {
+        BlockIndex previousIndex = getContext().getDatabase().findBlock(height);
+        if (previousIndex != null) {
+            addStale(previousIndex);
+        }
+
+        getContext().getDatabase().storeBlock(height, block);
+    }
+
+    // stales block.
+    public abstract void addStale(BlockIndex block);
 }
