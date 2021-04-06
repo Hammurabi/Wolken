@@ -39,6 +39,8 @@ public class PeerBlockCandidate extends CandidateBlock {
         // get all blocks.
         // verify all blocks.
         // propagate.
+
+        return true;
     }
 
     @Override
