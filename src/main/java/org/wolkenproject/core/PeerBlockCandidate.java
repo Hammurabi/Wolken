@@ -137,7 +137,7 @@ public class PeerBlockCandidate extends CandidateBlock {
                 int lastCommonAncestor = -1;
 
                 for (int i = 0; i < headers.size(); i ++) {
-                    if (isCommonAncestor(headers.get(i))) {
+                    if (isCommonAncestor(context, headers.get(i))) {
                         lastCommonAncestor = i;
                     }
 
@@ -201,7 +201,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         return null;
     }
 
-    private static boolean isCommonAncestor(BlockHeader blockHeader) {
-        return getContext().getDatabase().checkBlockExists(blockHeader.getHashCode());
+    private static boolean isCommonAncestor(Context context, BlockHeader blockHeader) {
+        return context.getDatabase().checkBlockExists(blockHeader.getHashCode());
     }
 }
