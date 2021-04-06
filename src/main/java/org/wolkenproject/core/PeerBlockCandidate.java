@@ -102,7 +102,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         return block;
     }
 
-    public static List<BlockHeader> findCommonAncestor(Context context, BlockHeader best) {
+    public static List<BlockHeader> findCommonAncestors(Context context, BlockHeader best) {
         List<BlockHeader> ancestors = new ArrayList<>();
 
         if (context.getDatabase().checkBlockExists(best.getParentHash())) {
