@@ -53,44 +53,21 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     }
 
     // executes transctions and returns an event list
-    public BlockStateChangeResult getStateChange() throws WolkenException {
-        if (stateChange == null) {
-            BlockStateChange blockStateChange = new BlockStateChange();
-
-            for (Transaction transaction : transactions) {
-                transaction.getStateChange(this, blockStateChange);
-                blockStateChange.addTransaction(transaction.getHash());
-            }
-
-            stateChange = blockStateChange.getResult();
-        }
-
+    public BlockStateChangeResult getStateChange() {
         return stateChange;
     }
 
     // call transaction.verify()
     // this does not mean that transactions are VALID
-    private boolean shallowVerifyTransactions() throws WolkenException {
-        for (Transaction transaction : transactions) {
-            if (!transaction.shallowVerify()) {
-                return false;
+    private boolean shallowVerifyTransactions() {
+        try {
+            for (Transaction transaction : transactions) {
+                if (!transaction.shallowVerify()) {
+                    return false;
+                }
             }
-        }
-
-        return true;
-    }
-
-    private boolean verifyTransactions(int blockHeight) throws WolkenException {
-        long fees = 0L;
-
-        for (Transaction transaction : transactions) {
-            fees += transaction.getTransactionFee();
-        }
-
-        for (Transaction transaction : transactions) {
-            if (!transaction.verify(this, blockHeight, fees)) {
-                return false;
-            }
+        } catch (WolkenException e) {
+            return false;
         }
 
         return true;
@@ -101,20 +78,64 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         setMerkleRoot(getStateChange().getMerkleRoot());
     }
 
-    public boolean verify(int blockHeight) throws WolkenException {
+    public boolean verify(int blockHeight) {
         // PoW check
-        if (!ChainMath.validSolution(getHashCode(), getBits())) return false;
+        if (!blockHeader.verifyProofOfWork()) return false;
         // must have at least one transaction
         if (transactions.isEmpty()) return false;
         // first transaction must be a minting transaction
         if (transactions.iterator().next() instanceof MintTransaction == false) return false;
         // shallow transaction checks
         if (!shallowVerifyTransactions()) return false;
-        // deeper transaction checks
-        if (!verifyTransactions(blockHeight)) return false;
+        // create a state change object and verify transactions
+        if (!createSateChange(blockHeight)) return false;
         // merkle tree checks
         if (!Utils.equals(getStateChange().getMerkleRoot(), getMerkleRoot())) return false;
 
+        return true;
+    }
+
+    // creates a state change without verifying transactions
+    private void createSateChange() {
+        BlockStateChange blockStateChange = new BlockStateChange();
+        try {
+            for (Transaction transaction : transactions) {
+                transaction.getStateChange(this, blockStateChange);
+                blockStateChange.addTransaction(transaction.getHash());
+            }
+        } catch (WolkenException e) {
+            stateChange = new BlockStateChangeResult(new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+            return;
+        }
+
+        stateChange = blockStateChange.getResult();
+    }
+
+    // creates a state change and verifies transactions
+    private boolean createSateChange(int blockHeight) {
+        BlockStateChange blockStateChange = new BlockStateChange();
+
+        long fees = 0L;
+
+        for (Transaction transaction : transactions) {
+            fees += transaction.getTransactionFee();
+        }
+
+        for (Transaction transaction : transactions) {
+            if (!transaction.verify(blockStateChange, this, blockHeight, fees)) {
+                return false;
+            }
+
+            try {
+                transaction.getStateChange(this, blockStateChange);
+            } catch (WolkenException e) {
+                return false;
+            }
+
+            blockStateChange.addTransaction(transaction.getHash());
+        }
+
+        stateChange = blockStateChange.getResult();
         return true;
     }
 
