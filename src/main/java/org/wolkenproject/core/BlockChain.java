@@ -410,6 +410,7 @@ public class BlockChain extends AbstractBlockChain {
         }
     }
 
+    @Override
     protected void addStale(BlockIndex block) {
         getMutex().lock();
         try {
