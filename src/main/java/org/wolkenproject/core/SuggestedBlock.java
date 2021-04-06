@@ -1,4 +1,4 @@
 package org.wolkenproject.core;
 
-public class SuggestedBlock {
+public abstract class SuggestedBlock {
 }
