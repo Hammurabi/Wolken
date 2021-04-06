@@ -29,11 +29,11 @@ public class Inv extends Message {
     private Set<byte[]> list;
     private int         type;
 
-    public Inv(int type, Collection<byte[]> list) throws WolkenException {
+    public Inv(int type, Collection<byte[]> list) {
         this(Context.getInstance().getNetworkParameters().getVersion(), type, list);
     }
 
-    public Inv(int version, int type, byte[] singleHash) throws WolkenException {
+    public Inv(int version, int type, byte[] singleHash) {
         this(version, type, asList(singleHash));
     }
 
