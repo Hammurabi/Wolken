@@ -66,30 +66,25 @@ public abstract class SerializableI {
 
         switch (type) {
             case int8:
+            case uint8:
                 stream.write(field.getByte(this));
                 return;
             case int16:
+            case uint16:
                 Utils.writeShort(field.getShort(this), stream);
                 return;
             case int32:
+            case uint32:
                 Utils.writeInt(field.getInt(this), stream);
                 return;
             case int64:
+            case uint64:
                 Utils.writeLong(field.getLong(this), stream);
                 return;
             case int128:
+            case uint128:
                 Utils.writeInt128((BigInteger) field.get(this), stream);
                 return;
-            case int256:
-                Utils.writeInt256((BigInteger) field.get(this), stream);
-                return;
-
-            case uint8:
-            case uint16:
-            case uint32:
-            case uint64:
-            case uint128:
-            case uint256:
 
             case var8ui:
             case var16ui:
