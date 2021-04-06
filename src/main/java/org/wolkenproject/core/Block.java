@@ -187,7 +187,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     }
 
     public BigInteger getWork() throws WolkenException {
-        return LargestHash.divide(BlockHeader.targetFromBits(getBits()).add(BigInteger.ONE));
+        return LargestHash.divide(getTargetInteger().add(BigInteger.ONE));
     }
 
     public void addTransaction(Transaction transaction) {
@@ -306,6 +306,14 @@ public class Block extends SerializableI implements Iterable<Transaction> {
 
     public int getBits() {
         return blockHeader.getBits();
+    }
+
+    public byte[] getTargetBytes() {
+        return blockHeader.getTargetBytes();
+    }
+
+    public BigInteger getTargetInteger() {
+        return blockHeader.getTargetInteger();
     }
 
     public byte[] getHeaderBytes() {
