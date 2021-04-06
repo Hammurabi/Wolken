@@ -435,24 +435,6 @@ public class BlockChain extends AbstractBlockChain {
         getContext().getDatabase().markRejected(block);
     }
 
-    public void pool(BlockIndex block) {
-        getMutex().lock();
-        try {
-            blockPool.add(block);
-
-            // calculate the maximum blocks allowed in the queue.
-            int maximumBlocks   = MaximumPoolBlockQueueSize / getContext().getNetworkParameters().getMaxBlockSize();
-            int threshold       = (MaximumPoolBlockQueueSize / 4) / getContext().getNetworkParameters().getMaxBlockSize();
-
-            // remove any blocks that are too far back in the queue.
-            if (blockPool.size() - maximumBlocks > threshold) {
-                trimPool(maximumBlocks);
-            }
-        } finally {
-            getMutex().unlock();
-        }
-    }
-
     private void trimOrphans(int newLength) {
         orphanedBlocks.removeTails(newLength);
     }
@@ -552,7 +534,21 @@ public class BlockChain extends AbstractBlockChain {
     @Override
     public void suggest(BlockIndex block) {
         if (!isRejected(block.getHash())) {
-            pool(block);
+            getMutex().lock();
+            try {
+                blockPool.add(block);
+
+                // calculate the maximum blocks allowed in the queue.
+                int maximumBlocks   = MaximumPoolBlockQueueSize / getContext().getNetworkParameters().getMaxBlockSize();
+                int threshold       = (MaximumPoolBlockQueueSize / 4) / getContext().getNetworkParameters().getMaxBlockSize();
+
+                // remove any blocks that are too far back in the queue.
+                if (blockPool.size() - maximumBlocks > threshold) {
+                    trimPool(maximumBlocks);
+                }
+            } finally {
+                getMutex().unlock();
+            }
         }
     }
 
