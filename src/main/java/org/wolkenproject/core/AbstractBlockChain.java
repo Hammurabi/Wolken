@@ -12,6 +12,8 @@ public abstract class AbstractBlockChain implements Runnable {
         this.mutex      = new ReentrantLock();
     }
 
+    // returns true if the block is better than our current best block.
+    protected abstract boolean isBetterBlock(BlockIndex candidate);
     // get the next block from the block pool.
     protected abstract BlockIndex getCandidate();
     // must be called before starting the main loop.
