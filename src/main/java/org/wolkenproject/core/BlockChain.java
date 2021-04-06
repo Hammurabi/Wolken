@@ -18,7 +18,7 @@ public class BlockChain extends AbstractBlockChain {
     protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
 
     // the current higest block in the chain
-    @Serializable() private BlockIndex              tip;
+    private BlockIndex              tip;
     // contains blocks that have no parents or ancestors.
     private HashQueue<BlockIndex>   orphanedBlocks;
     // contains blocks that were valid pre-fork.
