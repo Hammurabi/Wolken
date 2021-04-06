@@ -561,13 +561,14 @@ public class BlockChain extends AbstractBlockChain {
         return getContext().getDatabase().isRejected(hash);
     }
 
+    @Override
     public int getHeight() {
         BlockIndex tip = getTip();
         if (tip != null) {
             return tip.getHeight();
         }
 
-        return 0;
+        return -1;
     }
 
     public BlockIndex createNextBlock() throws WolkenException {
