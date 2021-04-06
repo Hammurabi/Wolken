@@ -271,7 +271,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         }
     }
 
-    public PrunedBlock getPruned() throws WolkenException {
+    public PrunedBlock getPruned() {
         return new PrunedBlock(getBlockHeader(), getStateChange().getTransactionIds(), getStateChange().getTransactionEventIds());
     }
 
