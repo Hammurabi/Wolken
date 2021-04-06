@@ -40,8 +40,8 @@ public class BlockList extends ResponseMessage {
         for (int i = 0; i < length; i ++)
         {
             try {
-                BlockIndex block = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(BlockIndex.class), stream);
-                blocks.add(block.getBlock());
+                Block block = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(Block.class), stream);
+                blocks.add(block);
             } catch (WolkenException e) {
                 throw new IOException(e);
             }
