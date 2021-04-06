@@ -1,10 +1,14 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.CheckedResponse;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
 import org.wolkenproject.network.messages.RequestBlocks;
+
+import java.util.Arrays;
+import java.util.Set;
 
 public class PeerBlockCandidate extends CandidateBlock {
     private BlockHeader header;
@@ -21,16 +25,42 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     @Override
-    public BlockIndex getBlock() {
+    public boolean isFullBlockAvailable() {
         if (block == null) {
             Message request = new RequestBlocks(sender.getVersionInfo().getVersion(), header.getHashCode());
             try {
                 CheckedResponse response = sender.getResponse(request, Context.getInstance().getNetworkParameters().getMessageTimeout());
+                if (response.noErrors()) {
+                    Set<BlockIndex> blocks = response.getMessage().getPayload();
+                    BlockIndex received = blocks.iterator().next();
+
+                    if (Arrays.equals(block.getHash(), header.getHashCode())) {
+                        block = received;
+                        
+                        return true;
+                    } else {
+                        closeConnection();
+                    }
+                } else {
+                    closeConnection();
+                }
             } catch (WolkenTimeoutException e) {
-                return null;
+                closeConnection();
             }
         }
 
-        return null;
+        return false;
+    }
+
+    private void closeConnection() {
+        try {
+            sender.close();
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    public BlockIndex getBlock() {
+        return block;
     }
 }
