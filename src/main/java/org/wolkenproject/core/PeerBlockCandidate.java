@@ -34,7 +34,6 @@ public class PeerBlockCandidate extends CandidateBlock {
         if (ancestors == null) return false;
         // get all blocks.
         // propagate.
-
         Message notify = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, header.getHashCode());
         getContext().getServer().broadcast(notify, sender);
 
