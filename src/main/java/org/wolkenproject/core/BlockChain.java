@@ -429,7 +429,8 @@ public class BlockChain extends AbstractBlockChain {
         }
     }
 
-    private void markRejected(byte block[]) {
+    @Override
+    protected void markRejected(byte block[]) {
         getContext().getDatabase().markRejected(block);
     }
 
