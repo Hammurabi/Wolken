@@ -4,7 +4,7 @@ public class MinedBlockCandidate extends CandidateBlock {
     private BlockIndex block;
 
     public MinedBlockCandidate(BlockIndex block) {
-        super(chainWork);
+        super(block.getTotalChainWork(), block.getBlock().getTransactionCount());
         this.block = block;
     }
 
