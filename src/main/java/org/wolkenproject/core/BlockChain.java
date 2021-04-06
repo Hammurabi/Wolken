@@ -568,7 +568,7 @@ public class BlockChain extends AbstractBlockChain {
             return tip.getHeight();
         }
 
-        return -1;
+        return 0;
     }
 
     public BlockIndex createNextBlock() throws WolkenException {
