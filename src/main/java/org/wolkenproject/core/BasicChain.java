@@ -43,9 +43,12 @@ public abstract class BasicChain extends AbstractBlockChain {
         // enter the main loop.
         while ( getContext().isRunning() ) {
             // get a candidate block from the block pool.
-            BlockIndex blockIndex = getCandidate();
+            BlockIndex candidate = getCandidate();
             // check if the candidate is better than our block.
-            if (isBetterBlock(blockIndex)) {
+            if (isBetterBlock(candidate)) {
+                // fully validate the block and generate the state change.
+                if (candidate.verify()) {
+                }
             }
         }
     }
