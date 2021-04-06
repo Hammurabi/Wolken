@@ -15,6 +15,7 @@ public class PeerBlockCandidate extends CandidateBlock {
     private Node        sender;
 
     public PeerBlockCandidate(Node sender, BlockHeader header) {
+        super(chainWork);
         this.header = header;
     }
 
