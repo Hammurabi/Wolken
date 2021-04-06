@@ -161,6 +161,16 @@ public class BlockHeader extends SerializableI {
         return target;
     }
 
+    public byte[] getTargetBytes() {
+        byte target[]   = new byte[32];
+        int offset          = 32 -   ((bits >>> 0x18) & 0xFF);
+        target[offset + 0]  = (byte) ((bits >>> 0x10) & 0xFF);
+        target[offset + 1]  = (byte) ((bits >>> 0x08) & 0xFF);
+        target[offset + 2]  = (byte) ((bits) & 0xFF);
+
+        return target;
+    }
+
     public JSONObject toJson() {
         return new JSONObject()
                 .put("version", version)
