@@ -8,6 +8,7 @@ import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.network.messages.RequestHeadersBefore;
 
+import java.math.BigInteger;
 import java.util.*;
 
 public class PeerBlockCandidate extends CandidateBlock {
@@ -42,7 +43,24 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     @Override
-    public void merge(AbstractBlockChain chain) {
+    public void merge(AbstractBlockChain target) {
+        byte mostRecentCommonAncestor[] = chain.get(chain.size() - 1).getParentHash();
+        BlockMetadata commonAncestor    = getContext().getDatabase().findBlockMetaData(mostRecentCommonAncestor);
+        int height                      = commonAncestor.getHeight();
+
+        BigInteger work                 = commonAncestor.getPreviousChainWork().add(commonAncestor.getBlockHeader().getWork());
+
+        target.staleBlock(mostRecentCommonAncestor);
+        for (BlockHeader header : chain) {
+            // get the block from temp storage.
+            Block block = getContext().getDatabase().findTempBlock(getId(), header.getHashCode());
+            // delete the block from temp storage.
+            getContext().getDatabase().deleteTempBlock(getId(), header.getHashCode());
+            // set the block to the new block index.
+            target.setBlock(++ height, new BlockIndex(block, new BlockMetadata(header, height, block.getTransactionCount(), block.getEventCount(), block.getTotalValue(), block.getFees(), work)));
+            // add the block's work to the total work.
+            work = work.add(block.getWork());
+        }
     }
 
     private boolean downloadAndVerifyBlocks() {
@@ -68,7 +86,7 @@ public class PeerBlockCandidate extends CandidateBlock {
                     Collection<Block> bl = response.getMessage().getPayload();
                     int j = 0;
                     for (Block block : bl) {
-                        if (block.verify(height ++)) {
+                        if (block.verify(++height)) {
                             getContext().getDatabase().tempStoreBlock(getId(), block);
                         } else {
                             invalidate(getContext(), i + j, chain);
