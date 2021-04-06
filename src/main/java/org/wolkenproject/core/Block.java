@@ -186,7 +186,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         return null;
     }
 
-    public BigInteger getWork() throws WolkenException {
+    public BigInteger getWork() {
         return LargestHash.divide(getTargetInteger().add(BigInteger.ONE));
     }
 
