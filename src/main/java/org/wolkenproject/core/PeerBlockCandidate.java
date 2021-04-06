@@ -179,7 +179,17 @@ public class PeerBlockCandidate extends CandidateBlock {
                 ancestorRequests.push(headers);
 
                 // find older ancestor
-                response = getContext().getServer().broadcastRequest(new RequestHeadersBefore(getContext().getNetworkParameters().getVersion(), header.getHashCode(), 4096, header));
+                request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), headers.get(headers.size() - 1).getHashCode(), 4096, headers.get(headers.size() - 1));
+                response = null;
+
+                try {
+                    response = sender.getResponse(request, context.getNetworkParameters().getMessageTimeout(4096 * BlockHeader.Size));
+                    if (!response.noErrors()) {
+                        return null;
+                    }
+                } catch (WolkenTimeoutException e) {
+                    e.printStackTrace();
+                }
 
                 if (response != null) {
                     headerCollection = response.getMessage().getPayload();
