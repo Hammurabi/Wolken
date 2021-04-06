@@ -117,6 +117,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         // request block headers
         Message request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), best.getHashCode(), 1024, best);
         CheckedResponse response = null;
+        
         try {
             response = sender.getResponse(request, context.getNetworkParameters().getMessageTimeout(1024 * BlockHeader.Size));
             if (!response.noErrors()) {
@@ -127,7 +128,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         }
 
         if (response != null) {
-            Collection<BlockHeader> headers = response.getPayload();
+            Collection<BlockHeader> headers = response.getMessage().getPayload();
 
             while (headers != null) {
                 Iterator<BlockHeader> iterator = headers.iterator();
