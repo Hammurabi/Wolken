@@ -31,6 +31,11 @@ public abstract class BasicChain extends AbstractBlockChain {
     }
 
     @Override
+    protected boolean isBetterBlock(BlockIndex candidate) {
+        return getBestBlock();
+    }
+
+    @Override
     public void run() {
         // initialize the chain.
         initialize();
