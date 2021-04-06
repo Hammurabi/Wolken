@@ -8,6 +8,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Serializable {
-    FieldType getType();
-    SerializationPolicy getPolicy();
+    FieldType type();
+    // defines the serialization function over 'network'
+    FieldType net() default FieldType.base;
+    // defines the serialization function over 'local storage'
+    FieldType local() default FieldType.base;
+    // defines the serialization policy
+    SerializationPolicy policy() default SerializationPolicy.All;
 }
