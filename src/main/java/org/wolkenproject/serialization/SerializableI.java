@@ -53,7 +53,7 @@ public abstract class SerializableI {
 
                     FieldType type = serializable.net() == FieldType.base ? serializable.type() : serializable.net();
 
-                    networkWrite(stream, field, type);
+                    writeField(stream, field, type);
                 }
             }
         } catch (IllegalAccessException e) {
@@ -61,7 +61,7 @@ public abstract class SerializableI {
         }
     }
 
-    private final void networkWrite(OutputStream stream, Field field, FieldType type) throws IllegalAccessException, IOException, WolkenException {
+    private final void writeField(OutputStream stream, Field field, FieldType type) throws IllegalAccessException, IOException, WolkenException {
         field.setAccessible(true);
 
         switch (type) {
