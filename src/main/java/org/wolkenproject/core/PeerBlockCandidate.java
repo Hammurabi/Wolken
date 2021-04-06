@@ -33,11 +33,15 @@ public class PeerBlockCandidate extends CandidateBlock {
         // check that we received the headers.
         if (ancestors == null) return false;
         // get all blocks.
+        downloadAndVerifyBlocks();
         // propagate.
         Message notify = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, header.getHashCode());
         getContext().getServer().broadcast(notify, sender);
 
         return true;
+    }
+
+    private void downloadAndVerifyBlocks() {
     }
 
     @Override
