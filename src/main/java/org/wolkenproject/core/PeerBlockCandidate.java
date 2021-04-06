@@ -33,7 +33,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         chain = ancestors;
         chain.add(header);
         // get all blocks.
-        downloadAndVerifyBlocks();
+        if (!downloadAndVerifyBlocks()) return false;
         // propagate.
         Message notify = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, header.getHashCode());
         getContext().getServer().broadcast(notify, sender);
@@ -106,6 +106,7 @@ public class PeerBlockCandidate extends CandidateBlock {
             getContext().getDatabase().deleteTempBlock(getId(), header.getHashCode());
         }
 
+        chain.clear();
         return true;
     }
 
