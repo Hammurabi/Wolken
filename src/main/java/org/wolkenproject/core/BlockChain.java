@@ -28,7 +28,7 @@ public class BlockChain extends AbstractBlockChain {
         super(context);
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
-        blockPool       = new PriorityHashQueue<>(BlockIndex.class);
+        blockPool       = new PriorityHashQueue<>(SuggestedBlock.class);
         tip             = getContext().getDatabase().findTip();
     }
 
