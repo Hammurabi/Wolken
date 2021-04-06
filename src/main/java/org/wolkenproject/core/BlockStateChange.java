@@ -2,6 +2,8 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.core.events.RegisterAliasEvent;
 import org.wolkenproject.core.events.NewAccountEvent;
+import org.wolkenproject.core.transactions.Transaction;
+import org.wolkenproject.exceptions.WolkenException;
 
 import java.util.Arrays;
 import java.util.LinkedList;
