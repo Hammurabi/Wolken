@@ -102,6 +102,11 @@ public abstract class SerializableI {
                 VarInt.writeCompactUint256((BigInteger) field.get(this), true, stream);
                 return;
 
+            case hash160:
+            case hash256:
+                stream.write((byte[]) field.get(this));
+                return;
+
             case bytes:
             {
                 byte bytes[] = (byte[]) field.get(this);
@@ -109,10 +114,17 @@ public abstract class SerializableI {
 
                 stream.write(bytes);
             }
-                return;
-            case hash160:
-            case hash256:
-                stream.write((byte[]) field.get(this));
+            return;
+
+            case serializable:
+            {
+                Object object = field.get(this);
+                if (object instanceof SerializableI == false) {
+                    throw new WolkenException("field '" + field.getName() + "' is not serializable.");
+                }
+
+                ((SerializableI) object).write(stream);
+            }
                 return;
         }
     }
