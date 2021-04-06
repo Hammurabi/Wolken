@@ -9,7 +9,9 @@ public abstract class BasicChain extends AbstractBlockChain {
 
     @Override
     protected final void setBlock(int height, BlockIndex block) {
-        if ()
+        if (containsBlock(height)) {
+            removeBlock();
+        }
     }
 
     @Override
