@@ -61,7 +61,7 @@ public abstract class SerializableI {
         }
     }
 
-    private final void networkWrite(OutputStream stream, Field field, FieldType type) throws IllegalAccessException, IOException {
+    private final void networkWrite(OutputStream stream, Field field, FieldType type) throws IllegalAccessException, IOException, WolkenException {
         field.setAccessible(true);
 
         switch (type) {
@@ -88,14 +88,32 @@ public abstract class SerializableI {
 
             case var8ui:
             case var16ui:
+                throw new WolkenException("invalid serialization type.");
             case var32ui:
+                VarInt.writeCompactUInt32(field.getInt(this), true, stream);
+                return;
             case var64ui:
+                VarInt.writeCompactUInt64(field.getLong(this), true, stream);
+                return;
             case var128ui:
+                VarInt.writeCompactUint128((BigInteger) field.get(this), true, stream);
+                return;
             case var256ui:
+                VarInt.writeCompactUint256((BigInteger) field.get(this), true, stream);
+                return;
 
             case bytes:
+            {
+                byte bytes[] = (byte[]) field.get(this);
+                VarInt.writeCompactUInt32(bytes.length, false, stream);
+
+                stream.write(bytes);
+            }
+                return;
             case hash160:
             case hash256:
+                stream.write((byte[]) field.get(this));
+                return;
         }
     }
 
