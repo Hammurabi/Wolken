@@ -22,12 +22,12 @@ import static org.wolkenproject.utils.HashUtil.sha256d;
 
 public class BlockHeader extends SerializableI {
     public static int Size = 80;
-    @Serializable(type = uint32) private int version;
-    @Serializable(type = hash256) private byte previousHash[];
-    @Serializable(type = hash256) private byte merkleRoot[];
-    @Serializable(type = uint32) private int timestamp;
-    @Serializable(type = uint32) private int bits;
-    @Serializable(type = uint32) private int nonce;
+    @Serializable(type = uint32, local = var32ui)    private int version;
+    @Serializable(type = hash256)   private byte previousHash[];
+    @Serializable(type = hash256)   private byte merkleRoot[];
+    @Serializable(type = uint32)    private int timestamp;
+    @Serializable(type = uint32)    private int bits;
+    @Serializable(type = uint32)    private int nonce;
 
     public BlockHeader() {
         this(0, 0, new byte[32], new byte[32], 0, 0);
