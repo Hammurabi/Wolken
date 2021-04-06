@@ -4,6 +4,7 @@ import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.CheckedResponse;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.network.messages.RequestHeadersBefore;
 import org.wolkenproject.utils.Logger;
@@ -33,6 +34,8 @@ public class PeerBlockCandidate extends CandidateBlock {
         if (ancestors == null) return false;
         // get all blocks.
         // propagate.
+
+        Message notify = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, header.getHashCode());
 
         return true;
     }
