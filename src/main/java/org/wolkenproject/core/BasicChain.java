@@ -14,7 +14,7 @@ public abstract class BasicChain extends AbstractBlockChain {
     // contains blocks that were valid pre-fork.
     private HashQueue<BlockIndex>       staleBlocks;
     // contains blocks sent from peers.
-    private HashQueue<CandidateBlockChain>   blockPool;
+    private HashQueue<CandidateBlock>   blockPool;
 
     public BasicChain(Context context) {
         super(context);
