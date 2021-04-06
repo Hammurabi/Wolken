@@ -17,6 +17,7 @@ import java.util.Arrays;
 import static org.wolkenproject.utils.HashUtil.sha256d;
 
 public class BlockHeader extends SerializableI {
+    private static BigInteger       LargestHash             = BigInteger.ONE.shiftLeft(256);
     public static int Size = 80;
     private int version;
     private byte previousHash[];
@@ -173,5 +174,14 @@ public class BlockHeader extends SerializableI {
                 .put("timestamp", timestamp)
                 .put("bits", bits)
                 .put("nonce", nonce);
+    }
+
+    public BigInteger getWork() {
+        BigInteger pow = getTargetInteger();
+        if (pow.compareTo(BigInteger.ZERO) == 0) {
+            return LargestHash;
+        }
+
+        return LargestHash.divide(getTargetInteger());
     }
 }
