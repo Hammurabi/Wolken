@@ -556,7 +556,8 @@ public class BlockChain extends AbstractBlockChain {
         }
     }
 
-    private boolean isRejected(byte[] hash) {
+    @Override
+    protected boolean isRejected(byte[] hash) {
         return getContext().getDatabase().isRejected(hash);
     }
 
