@@ -50,11 +50,11 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         return block;
     }
 
-    public BigInteger getTotalChainWork() throws WolkenException {
+    public BigInteger getTotalChainWork() {
         return chainWork.add(block.getWork());
     }
 
-    public BigInteger getPreviousChainWork() throws WolkenException {
+    public BigInteger getPreviousChainWork() {
         return chainWork;
     }
 
