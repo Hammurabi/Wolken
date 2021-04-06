@@ -126,9 +126,6 @@ public class PeerBlockCandidate extends CandidateBlock {
             e.printStackTrace();
         }
 
-        // we store ancestor hashes here
-        Set<byte[]> ancestors = new LinkedHashSet<>();
-
         if (response != null) {
             Collection<BlockHeader> headers = response.getPayload();
 
