@@ -49,7 +49,6 @@ public class PeerBlockCandidate extends CandidateBlock {
         byte mostRecentCommonAncestor[] = chain.get(chain.size() - 1).getParentHash();
         BlockMetadata commonAncestor    = getContext().getDatabase().findBlockMetaData(mostRecentCommonAncestor);
         int height                      = commonAncestor.getHeight();
-
         BigInteger work                 = commonAncestor.getPreviousChainWork().add(commonAncestor.getBlockHeader().getWork());
 
         target.staleBlock(mostRecentCommonAncestor);
