@@ -1,6 +1,9 @@
 package org.wolkenproject.serialization;
 
 public enum FieldType {
+    none,
+    base,
+
     int8,
     int16,
     int32,
