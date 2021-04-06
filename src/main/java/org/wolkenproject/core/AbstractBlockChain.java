@@ -13,11 +13,11 @@ public abstract class AbstractBlockChain implements Runnable {
     }
 
     // must be called before starting the main loop.
-    public abstract void initialize();
+    protected abstract void initialize();
     // load the last saved block, or re-generate a genesis block if this is a fresh chain.
-    public abstract void loadCheckPoint();
+    protected abstract void loadCheckPoint();
     // save a recovery checkpoint.
-    public abstract void saveCheckPoint(BlockIndex tip);
+    protected abstract void saveCheckPoint(BlockIndex tip);
     // returns true if the block is valid (full validation).
     public abstract boolean verifyBlock(BlockIndex block);
     // return the context.
