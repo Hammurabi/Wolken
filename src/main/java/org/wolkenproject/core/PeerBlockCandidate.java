@@ -36,6 +36,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         // propagate.
 
         Message notify = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, header.getHashCode());
+        getContext().getServer().broadcast(notify, sender);
 
         return true;
     }
