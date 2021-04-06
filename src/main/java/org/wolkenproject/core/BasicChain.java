@@ -36,6 +36,11 @@ public abstract class BasicChain extends AbstractBlockChain {
     }
 
     @Override
+    public int getHeight() {
+        return getBestBlock().getHeight();
+    }
+
+    @Override
     public void run() {
         // initialize the chain.
         initialize();
