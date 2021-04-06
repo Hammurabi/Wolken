@@ -11,7 +11,7 @@ public abstract class AbstractBlockChain implements Runnable {
         this.context    = context;
         this.mutex      = new ReentrantLock();
     }
-    
+
     // returns true if the block is valid (full validation).
     public abstract boolean verifyBlock(BlockIndex block);
     // return the context.
