@@ -30,7 +30,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         // verify the header.
         if (!header.verifyProofOfWork()) return false;
         // get all block headers.
-        byte hashCommonAncestor[]
+        List<BlockHeader> ancestors = findCommonAncestors(getContext(), header);
         // verify all headers.
         // get all blocks.
         // verify all blocks.
