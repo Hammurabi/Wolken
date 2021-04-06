@@ -77,9 +77,4 @@ public class FullChain extends BasicChain {
     public void suggest(BlockIndex block) {
 
     }
-
-    @Override
-    public int getHeight() {
-        return 0;
-    }
 }
