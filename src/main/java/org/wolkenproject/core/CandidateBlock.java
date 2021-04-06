@@ -1,5 +1,8 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.exceptions.WolkenException;
+
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
@@ -34,7 +37,7 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     // verifies the entire chain and propagates it to the network.
     public abstract boolean verify();
     // merges the candidate chain to the chain.
-    public abstract void merge(AbstractBlockChain chain);
+    public abstract void merge(AbstractBlockChain chain) throws IOException, WolkenException;
     // returns a list of all blocks from and excluding the most recent common ancestor to and including the best block.
     public abstract List<BlockHeader> getChain();
     // returns true if the 'getChain' will return a value.
