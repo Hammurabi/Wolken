@@ -8,7 +8,10 @@ import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
@@ -34,6 +37,26 @@ public abstract class SerializableI {
     public abstract void read(InputStream stream) throws IOException, WolkenException;
 
     public void networkWrite(OutputStream stream) throws IOException, WolkenException {
+        Class c = getClass();
+        Field fields[] = c.getFields();
+        Set<Field> serializableFields = new LinkedHashSet<>();
+
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Serializable.class)) {
+                Serializable serializable = field.getAnnotation(Serializable.class);
+
+                if (serializable.policy() != SerializationPolicy.All && serializable.policy() != SerializationPolicy.NetworkOnly) {
+                    continue;
+                }
+
+                FieldType type = serializable.net() == FieldType.base ? serializable.type() : serializable.net();
+
+                networkWrite(stream, field, type);
+            }
+        }
+    }
+
+    private final void networkWrite(OutputStream stream, Field field, FieldType type) {
     }
 
     public void networkRead(InputStream stream) throws IOException, WolkenException {
