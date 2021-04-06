@@ -13,13 +13,11 @@ import java.util.List;
  */
 public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     private final long          sequenceId;
-    private final int           transactionCount;
     private final Context       context;
     private BigInteger          chainWork;
 
-    protected CandidateBlock(Context context, int transactionCount) {
+    protected CandidateBlock(Context context) {
         this.sequenceId = System.currentTimeMillis();
-        this.transactionCount = transactionCount;
         this.context = context;
         this.chainWork = null;
     }
@@ -71,7 +69,11 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     }
 
     public int getTransactionCount() {
-        return transactionCount;
+        if (areBlocksAvailable()) {
+
+        }
+
+        return 0;
     }
 
     @Override
