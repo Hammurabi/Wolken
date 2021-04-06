@@ -310,8 +310,14 @@ public class Server implements Runnable {
         return new LinkedHashSet<>(connectedNodes);
     }
 
-    public void broadcast(Message message) {
+    public void broadcast(Message message, Node ...except) {
         Set<Node> connectedNodes = getConnectedNodes();
+
+        if (except != null) {
+            for (Node node : except) {
+                connectedNodes.remove(node);
+            }
+        }
 
         for (Node node : connectedNodes) {
             node.sendMessage(message);
