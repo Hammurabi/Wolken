@@ -51,6 +51,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         BigInteger work                 = commonAncestor.getPreviousChainWork().add(commonAncestor.getBlockHeader().getWork());
 
         target.staleBlock(mostRecentCommonAncestor);
+
         for (BlockHeader header : chain) {
             // get the block from temp storage.
             Block block = getContext().getDatabase().findTempBlock(getId(), header.getHashCode());
