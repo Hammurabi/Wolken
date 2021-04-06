@@ -24,6 +24,10 @@ public abstract class AbstractBlockChain implements Runnable {
     }
     // set the block at 'height' to 'block', if a previous block exists then it should be replaced.
     protected abstract void setBlock(int height, BlockIndex block);
+    // return true if the chain height is larger than or equal to 'height'.
+    protected abstract void containsBlock(int height);
+    // return true if block with hash 'hash' exists.
+    protected abstract void containsBlock(byte hash[]);
     // mark block as rejected, this block or it's children will never be considered valid.
     protected abstract void markRejected(byte block[]);
     // returns true if this block has been rejected.
