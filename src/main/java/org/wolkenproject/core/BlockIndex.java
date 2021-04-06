@@ -193,16 +193,12 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
 
     @Override
     public String toString() {
-        try {
-            return "{" +
-                    "block=" + Base16.encode(block.getHashCode()) +
-                    ", chainWork=" + getTotalChainWork() +
-                    ", height=" + height +
-                    ", sequenceId=" + sequenceId +
-                    '}';
-        } catch (WolkenException e) {
-            return "";
-        }
+        return "{" +
+                "block=" + Base16.encode(block.getHashCode()) +
+                ", chainWork=" + getTotalChainWork() +
+                ", height=" + height +
+                ", sequenceId=" + sequenceId +
+                '}';
     }
 
     // always use this method when available
