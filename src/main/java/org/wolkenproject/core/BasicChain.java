@@ -26,6 +26,11 @@ public abstract class BasicChain extends AbstractBlockChain {
 
     @Override
     public void run() {
+        // initialize the chain.
         initialize();
+
+        // enter the main loop.
+        while ( getContext().isRunning() ) {
+        }
     }
 }
