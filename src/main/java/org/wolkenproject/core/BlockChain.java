@@ -324,7 +324,7 @@ public class BlockChain extends AbstractBlockChain {
             }
 
             // replace the ancestor
-            putBlock(height, parent);
+            setBlock(height, parent);
 
             height      --;
             parentHash  = parent.getBlock().getParentHash();
@@ -389,7 +389,7 @@ public class BlockChain extends AbstractBlockChain {
             getMutex().unlock();
         }
 
-        putBlock(block.getHeight(), block);
+        setBlock(block.getHeight(), block);
     }
 
     @Override
