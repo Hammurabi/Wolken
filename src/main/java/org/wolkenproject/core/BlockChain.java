@@ -345,15 +345,6 @@ public class BlockChain extends AbstractBlockChain {
         index.recalculateChainWork();
     }
 
-    private void putBlock(int height, BlockIndex block) {
-        BlockIndex previousIndex = getContext().getDatabase().findBlock(height);
-        if (previousIndex != null) {
-            addStale(previousIndex);
-        }
-
-        getContext().getDatabase().storeBlock(height, block);
-    }
-
     private void deleteBlockIndex(int height, boolean stale) {
         byte hash[] = getContext().getDatabase().findBlockHash(height);
         deleteBlockIndex(hash, stale);
