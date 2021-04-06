@@ -225,7 +225,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public BlockStateChangeResult getStateChange() {
-        if (blockStateChange == null) {
+        if (getBlock().getStateChange() == null) {
             verify();
         }
 
