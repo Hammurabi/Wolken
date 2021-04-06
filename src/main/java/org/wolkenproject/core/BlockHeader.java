@@ -3,7 +3,10 @@ package org.wolkenproject.core;
 import org.json.JSONObject;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.serialization.FieldType;
+import org.wolkenproject.serialization.Serializable;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.serialization.SerializationPolicy;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
@@ -14,16 +17,17 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import static org.wolkenproject.serialization.FieldType.*;
 import static org.wolkenproject.utils.HashUtil.sha256d;
 
 public class BlockHeader extends SerializableI {
     public static int Size = 80;
-    private int version;
-    private byte previousHash[];
-    private byte merkleRoot[];
-    private int timestamp;
-    private int bits;
-    private int nonce;
+    @Serializable(type = uint32) private int version;
+    @Serializable(type = hash256) private byte previousHash[];
+    @Serializable(type = hash256) private byte merkleRoot[];
+    @Serializable(type = uint32) private int timestamp;
+    @Serializable(type = uint32) private int bits;
+    @Serializable(type = uint32) private int nonce;
 
     public BlockHeader() {
         this(0, 0, new byte[32], new byte[32], 0, 0);
