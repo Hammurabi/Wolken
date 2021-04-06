@@ -19,8 +19,11 @@ public abstract class CandidateBlockChain implements Comparable<CandidateBlockCh
         this.transactionCount = transactionCount;
     }
 
+    // returns the 'best block' header of the chain.
     public abstract BlockHeader getBlockHeader();
+    // returns the 'best block' of the chain.
     public abstract BlockIndex getBlock();
+    // returns true if the 'getBlock' will return a value.
     public abstract boolean isFullBlockAvailable();
 
     public BigInteger getTotalChainWork() {
