@@ -3,6 +3,9 @@ package org.wolkenproject.core;
 import java.util.Set;
 
 public class FullChain extends BasicChain {
+    public FullChain(Context context) {
+        super(context);
+    }
 
     @Override
     protected void broadcastChain() {
