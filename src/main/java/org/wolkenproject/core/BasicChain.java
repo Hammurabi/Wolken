@@ -12,6 +12,8 @@ public abstract class BasicChain extends AbstractBlockChain {
         if (containsBlock(height)) {
             removeBlock(getBlockHash(height));
         }
+
+        getContext().getDatabase().storeBlock(height, block);
     }
 
     @Override
