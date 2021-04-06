@@ -28,7 +28,7 @@ public class PeerBlockCandidate extends CandidateBlock {
     @Override
     public boolean verify() {
         // verify the header.
-        if (!header.verifyProofOfWork()) return;
+        if (!header.verifyProofOfWork()) return false;
         // get all block headers.
         // verify all headers.
         // get all blocks.
