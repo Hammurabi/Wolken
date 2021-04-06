@@ -383,11 +383,11 @@ public class Database {
     }
 
     public boolean checkAccountExists(long alias) {
-        return false;
+        return get(Utils.concatenate(AliasPrefix, Utils.takeApart(alias))) != null;
     }
 
     public boolean checkAccountExists(byte[] address) {
-        return false;
+        return get(Utils.concatenate(AccountPrefix, address)) != null;
     }
 
     public void markRejected(byte[] hash) {
