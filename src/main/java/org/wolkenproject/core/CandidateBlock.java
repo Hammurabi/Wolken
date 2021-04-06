@@ -8,7 +8,7 @@ package org.wolkenproject.core;
     BlockChain as a suggestion. So a
     secondary verification is required.
  */
-public abstract class CandidateBlock {
+public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     public abstract BlockHeader getBlockHeader();
     public abstract BlockIndex getBlock();
     public abstract boolean isFullBlockAvailable();
