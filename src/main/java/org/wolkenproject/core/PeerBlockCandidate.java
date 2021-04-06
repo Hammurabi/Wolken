@@ -46,34 +46,6 @@ public class PeerBlockCandidate extends CandidateBlock {
         return header;
     }
 
-    @Override
-    public boolean isFullBlockAvailable() {
-        if (block == null) {
-            Message request = new RequestBlocks(sender.getVersionInfo().getVersion(), header.getHashCode());
-            try {
-                CheckedResponse response = sender.getResponse(request, Context.getInstance().getNetworkParameters().getMessageTimeout());
-                if (response.noErrors()) {
-                    Set<BlockIndex> blocks = response.getMessage().getPayload();
-                    BlockIndex received = blocks.iterator().next();
-
-                    if (Arrays.equals(block.getHash(), header.getHashCode())) {
-                        block = received;
-
-                        return true;
-                    } else {
-                        closeConnection();
-                    }
-                } else {
-                    closeConnection();
-                }
-            } catch (WolkenTimeoutException e) {
-                closeConnection();
-            }
-        }
-
-        return false;
-    }
-
     private boolean downloadAndVerifyBlocks() {
         // some block metadata.
         int height           = getContext().getDatabase().findBlockMetaData(chain.get(chain.size() - 1).getParentHash()).getHeight();
@@ -98,7 +70,7 @@ public class PeerBlockCandidate extends CandidateBlock {
                     int j = 0;
                     for (Block block : bl) {
                         if (block.verify(height ++)) {
-                            getContext().getDatabase().tempStoreBlock(block)
+                            getContext().getDatabase().tempStoreBlock(getId(), block);
                         } else {
                             invalidate(getContext(), i + j, chain);
                             closeConnection();
