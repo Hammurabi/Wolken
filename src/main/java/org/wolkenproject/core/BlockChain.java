@@ -392,7 +392,8 @@ public class BlockChain extends AbstractBlockChain {
         putBlock(block.getHeight(), block);
     }
 
-    private void addOrphan(BlockIndex block) {
+    @Override
+    protected void addOrphan(BlockIndex block) {
         getMutex().lock();
         try {
             orphanedBlocks.add(block);
