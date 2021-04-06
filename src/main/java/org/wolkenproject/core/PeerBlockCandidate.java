@@ -113,7 +113,6 @@ public class PeerBlockCandidate extends CandidateBlock {
         List<BlockHeader> ancestors = new ArrayList<>();
 
         if (context.getDatabase().checkBlockExists(best.getParentHash())) {
-            ancestors.add(best);
             return ancestors;
         }
 
@@ -175,8 +174,6 @@ public class PeerBlockCandidate extends CandidateBlock {
                         ancestors.addAll(ancestorRequests.pop());
                     }
 
-                    ancestors.add(best);
-                    
                     return ancestors;
                 }
 
