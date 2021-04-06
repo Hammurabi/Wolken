@@ -11,7 +11,6 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class Block extends SerializableI implements Iterable<Transaction> {
-    private static BigInteger       LargestHash             = BigInteger.ONE.shiftLeft(256);
     public static int               UniqueIdentifierLength  = 32;
     private BlockHeader             blockHeader;
     private Set<Transaction>        transactions;
@@ -187,12 +186,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     }
 
     public BigInteger getWork() {
-        BigInteger pow = getTargetInteger();
-        if (pow.compareTo(BigInteger.ZERO) == 0) {
-            return LargestHash;
-        }
-
-        return LargestHash.divide(getTargetInteger());
+        return blockHeader.getWork();
     }
 
     public void addTransaction(Transaction transaction) {
