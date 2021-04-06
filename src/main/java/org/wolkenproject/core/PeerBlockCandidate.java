@@ -29,6 +29,9 @@ public class PeerBlockCandidate extends CandidateBlock {
         if (!header.verifyProofOfWork()) return false;
         // get all block headers.
         List<BlockHeader> ancestors = findCommonAncestors(getContext(), header);
+        // check that we received the headers.
+        if (ancestors == null) return false;
+        // loop all the headers less the best block.
         for (int i = 0; i < ancestors.size() - 1; i ++) {
             if (!ancestors.get(i).verifyProofOfWork()) return false;
         }
