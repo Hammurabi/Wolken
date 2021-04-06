@@ -6,7 +6,6 @@ import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.network.messages.RequestHeadersBefore;
-import org.wolkenproject.rpc.Request;
 import org.wolkenproject.utils.Logger;
 
 import java.util.*;
@@ -113,7 +112,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         }
 
         // request block headers
-        Request request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), best.getHashCode(), 1024, block.getHeader());
+        Message request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), best.getHashCode(), 1024, best);
         Message response =
 
 
