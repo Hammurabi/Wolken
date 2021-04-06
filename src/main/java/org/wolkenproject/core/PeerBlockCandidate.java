@@ -22,7 +22,6 @@ public class PeerBlockCandidate extends CandidateBlock {
         this.chain  = new ArrayList<>();
         this.sender = sender;
         this.header = header;
-
     }
 
     @Override
@@ -31,6 +30,9 @@ public class PeerBlockCandidate extends CandidateBlock {
         if (!header.verifyProofOfWork()) return false;
         // get all block headers.
         List<BlockHeader> ancestors = findCommonAncestors(getContext(), header);
+        for (int i = 0; i < ancestors.size() - 1; i ++) {
+            if (!ancestors.get(i).verifyProofOfWork()) return false;
+        }
         // verify all headers.
         // get all blocks.
         // verify all blocks.
