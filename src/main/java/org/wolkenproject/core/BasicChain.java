@@ -1,7 +1,5 @@
 package org.wolkenproject.core;
 
-import java.util.Set;
-
 public abstract class BasicChain extends AbstractBlockChain {
     public BasicChain(Context context) {
         super(context);
@@ -27,32 +25,6 @@ public abstract class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    protected void addOrphan(BlockIndex block) {
-
-    }
-
-    @Override
-    protected void addStale(BlockIndex block) {
-
-    }
-
-    @Override
-    public void suggest(Set<BlockIndex> blocks) {
-
-    }
-
-    @Override
-    public void suggest(BlockIndex block) {
-
-    }
-
-    @Override
-    public int getHeight() {
-        return 0;
-    }
-
-    @Override
     public void run() {
-
     }
 }
