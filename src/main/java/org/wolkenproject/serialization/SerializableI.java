@@ -9,6 +9,7 @@ import org.wolkenproject.utils.VarInt;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -77,7 +78,11 @@ public abstract class SerializableI {
                 Utils.writeLong(field.getLong(this), stream);
                 return;
             case int128:
+                Utils.writeInt128((BigInteger) field.get(this), stream);
+                return;
             case int256:
+                Utils.writeInt256((BigInteger) field.get(this), stream);
+                return;
 
             case uint8:
             case uint16:
