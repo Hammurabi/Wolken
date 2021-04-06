@@ -71,7 +71,11 @@ public abstract class SerializableI {
                 Utils.writeShort(field.getShort(this), stream);
                 return;
             case int32:
+                Utils.writeInt(field.getInt(this), stream);
+                return;
             case int64:
+                Utils.writeLong(field.getLong(this), stream);
+                return;
             case int128:
             case int256:
 
