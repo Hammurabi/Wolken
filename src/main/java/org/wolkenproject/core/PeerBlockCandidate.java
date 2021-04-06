@@ -9,7 +9,7 @@ import org.wolkenproject.network.messages.RequestBlocks;
 import java.util.Arrays;
 import java.util.Set;
 
-public class PeerBlockCandidate extends CandidateBlockChain {
+public class PeerBlockCandidate extends CandidateBlock {
     private BlockHeader header;
     private BlockIndex  block;
     private Node        sender;
