@@ -103,7 +103,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         return block;
     }
 
-    public static List<BlockHeader> findCommonAncestors(Context context, BlockHeader best) {
+    public static List<BlockHeader> findCommonAncestors(Context context, Node sender, BlockHeader best) {
         List<BlockHeader> ancestors = new ArrayList<>();
 
         if (context.getDatabase().checkBlockExists(best.getParentHash())) {
@@ -113,7 +113,7 @@ public class PeerBlockCandidate extends CandidateBlock {
 
         // request block headers
         Message request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), best.getHashCode(), 1024, best);
-        Message response =
+        Message response = sender.getResponse(request, context.getNetworkParameters().getMessageTimeout());
 
 
                 context.getServer().broadcastRequest();
