@@ -37,7 +37,7 @@ public class Inv extends Message {
         this(version, type, asList(singleHash));
     }
 
-    public Inv(int version, int type, Collection<byte[]> list) throws WolkenException {
+    public Inv(int version, int type, Collection<byte[]> list) {
         super(version, Flags.Notify);
         this.list = new LinkedHashSet<>(list);
         int requiredLength = 0;
@@ -50,19 +50,6 @@ public class Inv extends Message {
             case Type.Transaction:
                 requiredLength = Transaction.UniqueIdentifierLength;
                 break;
-        }
-
-        for (byte[] uid : this.list)
-        {
-            if (uid == null)
-            {
-                throw new WolkenException("provided hash is null.");
-            }
-
-            if (uid.length != requiredLength)
-            {
-                throw new WolkenException("provided hash is incompatible.");
-            }
         }
     }
 
