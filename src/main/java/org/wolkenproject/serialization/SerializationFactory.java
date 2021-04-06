@@ -11,8 +11,6 @@ import org.wolkenproject.network.Message;
 import org.wolkenproject.network.NetAddress;
 import org.wolkenproject.network.VersionInformation;
 import org.wolkenproject.network.messages.*;
-import org.wolkenproject.utils.Logger;
-import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.ByteArrayInputStream;
