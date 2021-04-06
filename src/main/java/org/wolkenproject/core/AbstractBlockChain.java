@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractBlockChain implements Runnable {
@@ -36,4 +37,8 @@ public abstract class AbstractBlockChain implements Runnable {
     protected abstract void addOrphan(BlockIndex block);
     // stales block, it's previously valid, but not the best.
     protected abstract void addStale(BlockIndex block);
+    // suggest these blocks and add them to the pool.
+    public abstract void suggest(Set<BlockIndex> blocks);
+    // suggest this block and add it to the pool.
+    public abstract void suggest(BlockIndex block);
 }
