@@ -17,8 +17,8 @@ public abstract class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    protected void markRejected(byte[] block) {
-        getContext().getDatabase().markRejected(block);
+    protected void markRejected(byte[] hash) {
+        getContext().getDatabase().markRejected(hash);
     }
 
     @Override
