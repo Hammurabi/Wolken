@@ -428,4 +428,8 @@ public class Database {
     public void deleteTempBlock(byte[] id, byte[] hashCode) {
         remove(Utils.concatenate(id, hashCode));
     }
+
+    public Block findTempBlock(byte[] id, byte[] hashCode) throws IOException, WolkenException {
+        return new Block().fromBytes(get(Utils.concatenate(id, hashCode)));
+    }
 }
