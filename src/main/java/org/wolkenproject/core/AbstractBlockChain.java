@@ -33,7 +33,7 @@ public abstract class AbstractBlockChain implements Runnable {
     // remove the block with hash 'hash'.
     protected abstract void removeBlock(byte hash[]);
     // mark block as rejected, this block or it's children will never be considered valid.
-    protected abstract void markRejected(byte block[]);
+    protected abstract void markRejected(byte hash[]);
     // returns true if this block has been rejected.
     protected abstract boolean isRejected(byte[] hash);
     // makes the block an orphan, meaning it does not have any ancestors.
