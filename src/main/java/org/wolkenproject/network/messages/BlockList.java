@@ -1,5 +1,6 @@
 package org.wolkenproject.network.messages;
 
+import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.exceptions.WolkenException;
@@ -17,9 +18,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class BlockList extends ResponseMessage {
-    private Set<BlockIndex>      blocks;
+    private Set<Block>      blocks;
 
-    public BlockList(int version, Collection<BlockIndex> blocks, byte[] uniqueMessageIdentifier) {
+    public BlockList(int version, Collection<Block> blocks, byte[] uniqueMessageIdentifier) {
         super(version, uniqueMessageIdentifier);
         this.blocks   = new LinkedHashSet<>(blocks);
     }
@@ -27,8 +28,7 @@ public class BlockList extends ResponseMessage {
     @Override
     public void writeContents(OutputStream stream) throws IOException, WolkenException {
         VarInt.writeCompactUInt32(blocks.size(), false, stream);
-        for (BlockIndex block : blocks)
-        {
+        for (Block block : blocks) {
             block.write(stream);
         }
     }
@@ -41,7 +41,7 @@ public class BlockList extends ResponseMessage {
         {
             try {
                 BlockIndex block = Context.getInstance().getSerialFactory().fromStream(Context.getInstance().getSerialFactory().getSerialNumber(BlockIndex.class), stream);
-                blocks.add(block);
+                blocks.add(block.getBlock());
             } catch (WolkenException e) {
                 throw new IOException(e);
             }
