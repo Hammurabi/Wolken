@@ -2,6 +2,8 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.utils.HashQueue;
 
+import java.util.Set;
+
 public abstract class BasicChain extends AbstractBlockChain {
     protected static final int                MaximumOrphanBlockQueueSize   = 250_000_000;
     protected static final int                MaximumStaleBlockQueueSize    = 500_000_000;
@@ -58,6 +60,17 @@ public abstract class BasicChain extends AbstractBlockChain {
         }
 
         return best.getHeight();
+    }
+
+    @Override
+    public void suggest(Set<CandidateBlock> blocks) {
+        for (CandidateBlock block : blocks) {
+            suggest(block);
+        }
+    }
+
+    @Override
+    public void suggest(CandidateBlock block) {
     }
 
     @Override
