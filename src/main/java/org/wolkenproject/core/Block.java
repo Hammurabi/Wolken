@@ -77,7 +77,9 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         setMerkleRoot(getStateChange().getMerkleRoot());
     }
 
-    public boolean verify(int blockHeight) {
+    public boolean verify(BlockHeader parent, int blockHeight) {
+        // reject the block if the timestamp is more than 144 seconds ahead.
+        if (getTimestamp() - System.currentTimeMillis() > Context.getInstance().getNetworkParameters().getMaxFutureBlockTime())
         // PoW check.
         if (!blockHeader.verifyProofOfWork()) return false;
         // must have at least one transaction.
