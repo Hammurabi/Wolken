@@ -45,7 +45,7 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     @Override
-    public void merge(AbstractBlockChain target) throws IOException, WolkenException {
+    public void merge(AbstractBlockChain target) {
         byte mostRecentCommonAncestor[] = chain.get(chain.size() - 1).getParentHash();
         BlockMetadata commonAncestor    = getContext().getDatabase().findBlockMetaData(mostRecentCommonAncestor);
         int height                      = commonAncestor.getHeight();
@@ -66,11 +66,14 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     private boolean downloadAndVerifyBlocks() {
+        BlockMetadata metadata  = getContext().getDatabase().findBlockMetaData(chain.get(chain.size() - 1));
         // some block metadata.
-        int height           = getContext().getDatabase().findBlockMetaData(chain.get(chain.size() - 1).getParentHash()).getHeight();
+        int height              = metadata.getParentHash()).getHeight();
 
         // this should give us 16 blocks per message at (4mb).
-        int blocksPerMessage = (getContext().getNetworkParameters().getMaxMessageContentSize() / getContext().getNetworkParameters().getMaxBlockSize()) / 2;
+        int blocksPerMessage    = (getContext().getNetworkParameters().getMaxMessageContentSize() / getContext().getNetworkParameters().getMaxBlockSize()) / 2;
+
+        BlockHeader parent      = metadata.getBlockHeader();
 
         // loop all headers and download the blocks.
         for (int i = 0; i < chain.size(); i += blocksPerMessage) {
