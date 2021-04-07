@@ -59,14 +59,10 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     // call transaction.verify()
     // this does not mean that transactions are VALID
     private boolean shallowVerifyTransactions() {
-        try {
-            for (Transaction transaction : transactions) {
-                if (!transaction.shallowVerify()) {
-                    return false;
-                }
+        for (Transaction transaction : transactions) {
+            if (!transaction.shallowVerify()) {
+                return false;
             }
-        } catch (WolkenException e) {
-            return false;
         }
 
         return true;
