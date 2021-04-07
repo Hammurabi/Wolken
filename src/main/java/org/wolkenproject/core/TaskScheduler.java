@@ -3,7 +3,7 @@ package org.wolkenproject.core;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class TaskScheduler {
+public class TaskScheduler implements Runnable {
     private final Queue<Runnable> tasks;
 
     public TaskScheduler() {
