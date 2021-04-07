@@ -10,13 +10,15 @@ public class TaskScheduler implements Runnable {
         tasks = new LinkedList<>();
     }
 
-    private final class Task {
-        private long timeout;
-        private Runnable task;
-
-        private Task(Runnable task, long timeout) {
-            this.task = task;
-            this.timeout = timeout;
+    @Override
+    public void run() {
+        while (Context.getInstance().isRunning()) {
+            if (!tasks.isEmpty()) {
+                tasks.poll().run();
+            }
         }
+    }
+
+    public void runAsync(Runnable runnable) {
     }
 }
