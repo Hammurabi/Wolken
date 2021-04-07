@@ -213,7 +213,13 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public boolean verify() {
-        return block.verify(getHeight());
+        BlockIndex prev = previousBlock();
+        Block parent = null;
+        if (prev != null) {
+            parent = prev.getBlock();
+        }
+
+        return block.verify(parent.getBlockHeader(), getHeight());
     }
 
     public BlockStateChangeResult getStateChange() {
