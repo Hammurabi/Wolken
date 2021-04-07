@@ -74,10 +74,13 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     }
 
     public boolean verify(BlockHeader parent, int blockHeight) {
-        // reject the block if the timestamp is more than 144 seconds ahead.
-        if (getTimestamp() - System.currentTimeMillis() > Context.getInstance().getNetworkParameters().getMaxFutureBlockTime()) return false;
-        // reject the block if the timestamp is older than the parent's timestamp.
-        if (getTimestamp() <= parent.getTimestamp()) return false;
+        // check that this is not the genesis block.
+        if (blockHeight > 0) {
+            // reject the block if the timestamp is more than 144 seconds ahead.
+            if (getTimestamp() - System.currentTimeMillis() > Context.getInstance().getNetworkParameters().getMaxFutureBlockTime()) return false;
+            // reject the block if the timestamp is older than the parent's timestamp.
+            if (getTimestamp() <= parent.getTimestamp()) return false;
+        }
         // PoW check.
         if (!blockHeader.verifyProofOfWork()) return false;
         // must have at least one transaction.
