@@ -66,9 +66,11 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     private boolean downloadAndVerifyBlocks() {
-        BlockMetadata metadata  = getContext().getDatabase().findBlockMetaData(chain.get(chain.size() - 1));
-        // some block metadata.
-        int height              = metadata.getParentHash()).getHeight();
+        // parent metadata.
+        BlockMetadata metadata  = getContext().getDatabase().findBlockMetaData(chain.get(chain.size() - 1).getParentHash());
+
+        // get the height.
+        int height              = metadata.getHeight();
 
         // this should give us 16 blocks per message at (4mb).
         int blocksPerMessage    = (getContext().getNetworkParameters().getMaxMessageContentSize() / getContext().getNetworkParameters().getMaxBlockSize()) / 2;
