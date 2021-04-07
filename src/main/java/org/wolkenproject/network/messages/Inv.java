@@ -94,8 +94,6 @@ public class Inv extends Message {
                 }
             } catch (WolkenTimeoutException e) {
                 e.printStackTrace();
-            } catch (WolkenException e) {
-                e.printStackTrace();
             }
         }
         else if (type == Type.Transaction)
