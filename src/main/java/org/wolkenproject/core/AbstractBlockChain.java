@@ -57,9 +57,9 @@ public abstract class AbstractBlockChain implements Runnable {
     // stales block, it's previously valid, but not the best.
     protected abstract void addStale(BlockIndex block);
     // suggest these blocks and add them to the pool.
-    public abstract void suggest(Set<BlockIndex> blocks);
+    public abstract void suggest(Set<CandidateBlock> blocks);
     // suggest this block and add it to the pool.
-    public abstract void suggest(BlockIndex block);
+    public abstract void suggest(CandidateBlock block);
     // return the current chain height.
     public abstract int getHeight();
     // makes the block and all it's children 'stale'.
