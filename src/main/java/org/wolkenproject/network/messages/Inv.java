@@ -82,30 +82,28 @@ public class Inv extends Message {
             // request the blocks
             try {
                 CheckedResponse message = node.getResponse(
-                        new RequestHeaders(Context.getInstance().getNetworkParameters().getVersion(), newBlocks),
-                        Context.getInstance().getNetworkParameters().getMessageTimeout(Context.getInstance().getNetworkParameters().getMaxBlockSize()));
+                new RequestHeaders(Context.getInstance().getNetworkParameters().getVersion(), newBlocks),
+                Context.getInstance().getNetworkParameters().getMessageTimeout(Context.getInstance().getNetworkParameters().getMaxBlockSize()));
 
-                if (message != null) {
-                    if (message.noErrors()) {
-                        Set<BlockHeader> blocks = message.getMessage().getPayload();
+                Set<BlockHeader> blocks = message.getMessage().getPayload();
 
-                        if (blocks.isEmpty()) {
-                            node.increaseErrors(4);
-                        }
-
-                        CandidateBlock block = new PeerBlockCandidate(block, blocks.g)
-
-                        Context.getInstance().getBlockChain().suggest(blocks);
-
-                        Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Block, newBlocks);
-                        Set<Node> connected = Context.getInstance().getServer().getConnectedNodes();
-                        connected.remove(node);
-
-                        for (Node n : connected) {
-                            n.sendMessage(inv);
-                        }
-                    }
+                if (message == null) {
+                    node.increaseErrors(4);
+                    return;
                 }
+
+                if (!message.noErrors()) {
+                    node.increaseErrors(4);
+                    return;
+                }
+
+                if (blocks.isEmpty()) {
+                    node.increaseErrors(8);
+                    return;
+                }
+
+                CandidateBlock block = new PeerBlockCandidate(Context.getInstance(), node, blocks.iterator().next());
+                Context.getInstance().getScheduler().runAsync(() -> { if (block.verify()) { block.merge(Context.getInstance().getBlockChain()); } });
             } catch (WolkenTimeoutException e) {
                 e.printStackTrace();
                 node.increaseErrors(2);
