@@ -55,9 +55,9 @@ public class PeerBlockCandidate extends CandidateBlock {
 
         for (BlockHeader header : chain) {
             // get the block from temp storage.
-            Block block = getContext().getDatabase().findTempBlock(getId(), header.getHashCode());
+            Block block = getContext().getDatabase().findTempBlock(header.getHashCode());
             // delete the block from temp storage.
-            getContext().getDatabase().deleteTempBlock(getId(), header.getHashCode());
+            getContext().getDatabase().deleteTempBlock(header.getHashCode());
             // set the block to the new block index.
             target.setBlock(++ height, new BlockIndex(block, new BlockMetadata(header, height, block.getTransactionCount(), block.getEventCount(), block.getTotalValue(), block.getFees(), work)));
             // add the block's work to the total work.
