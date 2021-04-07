@@ -1,8 +1,6 @@
 package org.wolkenproject.network.messages;
 
-import org.wolkenproject.core.Block;
-import org.wolkenproject.core.BlockIndex;
-import org.wolkenproject.core.Context;
+import org.wolkenproject.core.*;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
@@ -69,6 +67,12 @@ public class Inv extends Message {
         {
             Set<byte[]> newBlocks = new LinkedHashSet<>();
 
+            // can only accept a single block.
+            if (newBlocks.size() != 1) {
+                node.increaseErrors(4);
+                return;
+            }
+
             for (byte[] hash : list) {
                 if (!Context.getInstance().getDatabase().checkBlockExists(hash) && !Context.getInstance().getBlockChain().contains(hash)) {
                     newBlocks.add(hash);
@@ -77,10 +81,20 @@ public class Inv extends Message {
 
             // request the blocks
             try {
-                CheckedResponse message = node.getResponse(new RequestBlocks(Context.getInstance().getNetworkParameters().getVersion(), newBlocks), Context.getInstance().getNetworkParameters().getMessageTimeout());
+                CheckedResponse message = node.getResponse(
+                        new RequestHeaders(Context.getInstance().getNetworkParameters().getVersion(), newBlocks),
+                        Context.getInstance().getNetworkParameters().getMessageTimeout());
+
                 if (message != null) {
                     if (message.noErrors()) {
-                        Set<BlockIndex> blocks = message.getMessage().getPayload();
+                        Set<BlockHeader> blocks = message.getMessage().getPayload();
+
+                        if (blocks.isEmpty()) {
+                            node.increaseErrors(4);
+                        }
+
+                        CandidateBlock block = new PeerBlockCandidate(block, blocks.g)
+
                         Context.getInstance().getBlockChain().suggest(blocks);
 
                         Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Block, newBlocks);
@@ -94,6 +108,7 @@ public class Inv extends Message {
                 }
             } catch (WolkenTimeoutException e) {
                 e.printStackTrace();
+                node.increaseErrors(2);
             }
         }
         else if (type == Type.Transaction)
@@ -108,7 +123,7 @@ public class Inv extends Message {
             // request the transactions
             try {
                 CheckedResponse message = node.getResponse(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions),
-                        Context.getInstance().getNetworkParameters().getMessageTimeout());
+                        Context.getInstance().getNetworkParameters().getMessageTimeout(newTransactions.size() * Context.getInstance().getNetworkParameters().getMaxBlockSize()));
 
                 if (message == null) {
                     node.increaseErrors(4);
@@ -131,7 +146,7 @@ public class Inv extends Message {
                     node.increaseErrors(4);
                 }
             } catch (WolkenTimeoutException e) {
-                node.increaseErrors(4);
+                node.increaseErrors(2);
                 e.printStackTrace();
             }
         }
