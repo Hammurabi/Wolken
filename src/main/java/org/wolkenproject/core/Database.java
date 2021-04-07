@@ -33,7 +33,8 @@ public class Database {
     BlockFile               = new byte[] { 'f' },
     TransactionPrefix       = new byte[] { 't' },
     RejectedBlockPrefix     = new byte[] { 'r' },
-    WalletPrefix            = new byte[] { 'w' };
+    WalletPrefix            = new byte[] { 'w' },
+    TempStorage             = new byte[] { 'l' };
 
     public Database(FileService location) throws IOException {
         database= Iq80DBFactory.factory.open(location.newFile(".db").file(), new Options());
@@ -422,15 +423,15 @@ public class Database {
         return get(concatenate(BlockPrefix, hash), BlockMetadata.class);
     }
 
-    public void tempStoreBlock(byte[] id, Block block) {
-        put(Utils.concatenate(id, block.getHashCode()), block);
+    public void tempStoreBlock(Block block) {
+        put(Utils.concatenate(TempStorage, block.getHashCode()), block);
     }
 
     public void deleteTempBlock(byte[] id, byte[] hashCode) {
-        remove(Utils.concatenate(id, hashCode));
+        remove(Utils.concatenate(TempStorage, hashCode));
     }
 
-    public Block findTempBlock(byte[] id, byte[] hashCode) throws IOException, WolkenException {
-        return get(Utils.concatenate(id, hashCode), Block.class);
+    public Block findTempBlock(byte[] id, byte[] hashCode) {
+        return get(Utils.concatenate(TempStorage, hashCode), Block.class);
     }
 }
