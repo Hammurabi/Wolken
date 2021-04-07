@@ -1,6 +1,5 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.CheckedResponse;
 import org.wolkenproject.network.Message;
@@ -9,7 +8,6 @@ import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.RequestBlocks;
 import org.wolkenproject.network.messages.RequestHeadersBefore;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
 
