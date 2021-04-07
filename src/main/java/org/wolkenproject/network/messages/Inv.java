@@ -111,6 +111,7 @@ public class Inv extends Message {
             try {
                 CheckedResponse message = node.getResponse(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions),
                         Context.getInstance().getNetworkParameters().getMessageTimeout());
+
                 if (message == null) {
                     node.increaseErrors(4);
                     return;
@@ -127,19 +128,12 @@ public class Inv extends Message {
                     }
 
                     Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Transaction, newTransactions);
-                    Set<Node> connected = Context.getInstance().getServer().getConnectedNodes();
-                    connected.remove(node);
-
-                    for (Node n : connected) {
-                        n.sendMessage(inv);
-                    }
+                    Context.getInstance().getServer().broadcast(inv, node);
                 } else {
                     node.increaseErrors(4);
                 }
             } catch (WolkenTimeoutException e) {
                 node.increaseErrors(4);
-                e.printStackTrace();
-            } catch (WolkenException e) {
                 e.printStackTrace();
             }
         }
