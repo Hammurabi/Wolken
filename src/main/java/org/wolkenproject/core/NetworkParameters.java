@@ -187,4 +187,8 @@ public class NetworkParameters {
     public Address getFoundingAddresses() {
         return Address.fromRaw(new byte[20]);
     }
+
+    public long getMaxFutureBlockTime() {
+        return 144_000L;
+    }
 }
