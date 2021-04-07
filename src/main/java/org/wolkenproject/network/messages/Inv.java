@@ -1,6 +1,7 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.*;
+import org.wolkenproject.core.transactions.MintTransaction;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
@@ -123,7 +124,7 @@ public class Inv extends Message {
                     Iterator<Transaction> iterator = transactions.iterator();
                     while (iterator.hasNext()) {
                         Transaction next = iterator.next();
-                        if (!next.shallowVerify()) {
+                        if (!next.shallowVerify() || next instanceof MintTransaction) {
                             iterator.remove();
                             node.increaseErrors(3);
                         }
