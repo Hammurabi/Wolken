@@ -16,9 +16,18 @@ public class TaskScheduler implements Runnable {
     @Override
     public void run() {
         while (Context.getInstance().isRunning()) {
-            if (!tasks.isEmpty()) {
-                tasks.poll().run();
+            if (hasTask()) {
+                getTask().run();
             }
+        }
+    }
+
+    private boolean hasTask() {
+        mutex.lock();
+        try {
+            return !tasks.isEmpty();
+        } finally {
+            mutex.unlock();
         }
     }
 
