@@ -19,6 +19,9 @@ public class TaskScheduler implements Runnable {
         }
     }
 
+    private Runnable getTask() {
+    }
+
     public void runAsync(Runnable runnable) {
     }
 }
