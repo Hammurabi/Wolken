@@ -38,16 +38,6 @@ public class Inv extends Message {
     public Inv(int version, int type, Collection<byte[]> list) {
         super(version, Flags.Notify);
         this.list = new LinkedHashSet<>(list);
-
-        switch (type)
-        {
-            case Type.Block:
-                requiredLength = Block.UniqueIdentifierLength;
-                break;
-            case Type.Transaction:
-                requiredLength = Transaction.UniqueIdentifierLength;
-                break;
-        }
     }
 
     public static Set<byte[]> convert(Collection<Transaction> transactions)
@@ -130,7 +120,15 @@ public class Inv extends Message {
 
                 if (message.noErrors()) {
                     Set<Transaction> transactions = message.getMessage().getPayload();
-                    transactions.removeIf(transaction -> !transaction.shallowVerify());
+                    Iterator<Transaction> iterator = transactions.iterator();
+                    while (iterator.hasNext()) {
+                        Transaction next = iterator.next();
+                        if (!next.shallowVerify()) {
+                            iterator.remove();
+                            node.increaseErrors(3);
+                        }
+                    }
+
                     Context.getInstance().getTransactionPool().add(transactions);
 
                     Set<byte[]> validTransactions = new LinkedHashSet<>();
