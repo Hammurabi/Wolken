@@ -36,6 +36,10 @@ public class MintTransaction extends Transaction {
         this.dump       = dump;
     }
 
+    public void addFees(long fees) {
+        this.value += fees;
+    }
+
     @Override
     public int getFlags() {
         return 0;
