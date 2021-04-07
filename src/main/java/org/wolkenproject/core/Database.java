@@ -427,11 +427,11 @@ public class Database {
         put(Utils.concatenate(TempStorage, block.getHashCode()), block);
     }
 
-    public void deleteTempBlock(byte[] id, byte[] hashCode) {
+    public void deleteTempBlock(byte[] hashCode) {
         remove(Utils.concatenate(TempStorage, hashCode));
     }
 
-    public Block findTempBlock(byte[] id, byte[] hashCode) {
+    public Block findTempBlock(byte[] hashCode) {
         return get(Utils.concatenate(TempStorage, hashCode), Block.class);
     }
 }
