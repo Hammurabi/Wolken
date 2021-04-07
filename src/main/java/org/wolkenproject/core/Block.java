@@ -84,6 +84,8 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         if (transactions.isEmpty()) return false;
         // first transaction must be a minting transaction.
         if (transactions.iterator().next() instanceof MintTransaction == false) return false;
+        // check that no other mint transactions exist.
+        if (checkOverMinting()) return false;
         // shallow transaction checks.
         if (!shallowVerifyTransactions()) return false;
         // create a state change object and verify transactions.
@@ -92,6 +94,17 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         if (!Utils.equals(getStateChange().getMerkleRoot(), getMerkleRoot())) return false;
 
         return true;
+    }
+
+    private boolean checkOverMinting() {
+        int mints = 0;
+        for (Transaction transaction : transactions) {
+            if (transaction instanceof MintTransaction) {
+                mints ++;
+            }
+        };
+
+        return mints > 1;
     }
 
     // creates a state change without verifying transactions
