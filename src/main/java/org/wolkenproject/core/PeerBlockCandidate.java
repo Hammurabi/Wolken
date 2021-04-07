@@ -89,7 +89,7 @@ public class PeerBlockCandidate extends CandidateBlock {
                     int j = 0;
                     for (Block block : bl) {
                         if (block.verify(++height)) {
-                            getContext().getDatabase().tempStoreBlock(getId(), block);
+                            getContext().getDatabase().tempStoreBlock(block);
                         } else {
                             invalidate(getContext(), i + j, chain);
                             closeConnection();
