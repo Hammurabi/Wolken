@@ -9,6 +9,7 @@ import org.wolkenproject.utils.FileService;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -29,11 +30,13 @@ public class Context {
     private OpcodeRegister          opcodeRegister;
     private ResourceManager         resourceManager;
     private RpcServer               rpcServer;
+    private TaskScheduler           scheduler;
     private FileService             fileService;
     private CompressionEngine       compressionEngine;
 
     public Context(FileService service, int rpcPort, boolean testNet, Address[] payList, Set<NetAddress> forceConnections) throws WolkenException, IOException {
         Context.instance = this;
+        this.scheduler = new TaskScheduler();
         this.database = new Database(service);
         this.networkParameters = new NetworkParameters(testNet);
         this.threadPool = Executors.newFixedThreadPool(3);
@@ -53,6 +56,7 @@ public class Context {
         this.blockChain = new BlockChain(this);
         this.server = new Server(forceConnections);
 
+        getThreadPool().execute(scheduler);
         getThreadPool().execute(server);
         getThreadPool().execute(blockChain);
 
@@ -135,5 +139,9 @@ public class Context {
 
     public CompressionEngine getCompressionEngine() {
         return compressionEngine;
+    }
+
+    public TaskScheduler getScheduler() {
+        return scheduler;
     }
 }
