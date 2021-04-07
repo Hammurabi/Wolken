@@ -83,7 +83,7 @@ public class Inv extends Message {
             try {
                 CheckedResponse message = node.getResponse(
                         new RequestHeaders(Context.getInstance().getNetworkParameters().getVersion(), newBlocks),
-                        Context.getInstance().getNetworkParameters().getMessageTimeout());
+                        Context.getInstance().getNetworkParameters().getMessageTimeout(Context.getInstance().getNetworkParameters().getMaxBlockSize()));
 
                 if (message != null) {
                     if (message.noErrors()) {
