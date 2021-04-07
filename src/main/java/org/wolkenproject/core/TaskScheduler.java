@@ -32,5 +32,11 @@ public class TaskScheduler implements Runnable {
     }
 
     public void runAsync(Runnable runnable) {
+        mutex.lock();
+        try {
+            tasks.add(runnable);
+        } finally {
+            mutex.unlock();
+        }
     }
 }
