@@ -133,7 +133,7 @@ public class PeerBlockCandidate extends CandidateBlock {
     @Override
     public boolean destroy() {
         for (BlockHeader header : chain) {
-            getContext().getDatabase().deleteTempBlock(getId(), header.getHashCode());
+            getContext().getDatabase().deleteTempBlock(header.getHashCode());
         }
 
         chain.clear();
