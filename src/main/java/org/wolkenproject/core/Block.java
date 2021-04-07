@@ -69,6 +69,10 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     }
 
     public void build(int blockHeight) throws WolkenException {
+        MintTransaction mint = (MintTransaction) getTransactions().iterator().next();
+        mint.addFees(getFees());
+        // create the state change object.
+        createSateChange(blockHeight);
         // set the combined merkle root.
         setMerkleRoot(getStateChange().getMerkleRoot());
     }
@@ -112,7 +116,12 @@ public class Block extends SerializableI implements Iterable<Transaction> {
 
     // creates a state change without verifying transactions
     private void createSateChange() {
+        // set the previous stateChange to null.
+        stateChange = null;
+
+        // create a block state transition object.
         BlockStateChange blockStateChange = new BlockStateChange();
+
         try {
             for (Transaction transaction : transactions) {
                 transaction.getStateChange(this, blockStateChange);
