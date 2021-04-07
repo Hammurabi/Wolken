@@ -40,7 +40,6 @@ public class Inv extends Message {
     public Inv(int version, int type, Collection<byte[]> list) {
         super(version, Flags.Notify);
         this.list = new LinkedHashSet<>(list);
-        int requiredLength = 0;
 
         switch (type)
         {
