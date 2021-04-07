@@ -36,7 +36,7 @@ public class MintTransaction extends Transaction {
         this.dump       = dump;
     }
 
-    public void addFees(long fees) {
+    public void setFees(long fees) {
         this.value += fees;
     }
 
