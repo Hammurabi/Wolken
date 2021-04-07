@@ -93,7 +93,7 @@ public class MintTransaction extends Transaction {
     }
 
     @Override
-    public boolean verify(Block block, int blockHeight, long fees) {
+    public boolean verify(BlockStateChange blockStateChange, Block block, int blockHeight, long fees) {
         return value == ( ChainMath.getReward(blockHeight) + block.getFees() );
     }
 
@@ -101,7 +101,6 @@ public class MintTransaction extends Transaction {
     public void getStateChange(Block block, BlockStateChange stateChange) {
         stateChange.createAccountIfDoesNotExist(recipient);
         stateChange.addEvent(new MintRewardEvent(recipient, value));
-        stateChange.addEvent(new DepositFeesEvent(recipient, block.getFees()));
     }
 
     @Override
