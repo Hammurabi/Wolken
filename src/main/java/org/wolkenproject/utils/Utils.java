@@ -439,6 +439,18 @@ public class Utils {
         return bArray;
     }
 
+    public static int[] makeInts(byte[] array) {
+        int iArray[] = new int[array.length / 4];
+
+        int j = 0;
+        for (int i = 0; i < iArray.length; i ++) {
+            iArray[i] = makeInt(array, j);
+            j += 4;
+        }
+
+        return iArray;
+    }
+
     public static byte[] takeApartInt24(long integer) {
         return new byte[] {
                 (byte) ((integer >>> 16) & 0xFF),
@@ -536,5 +548,33 @@ public class Utils {
         jsonDate.put("second", calendar.get(Calendar.SECOND));
         jsonDate.put("millisecond", ms);
         return jsonDate;
+    }
+
+    public static int[] toInts(byte[] arr, boolean bigEndian) {
+        int[] ret = new int[arr.length / 4];
+        toInts(arr, ret, bigEndian);
+        return ret;
+    }
+
+    public static void toInts(byte[] b, int[] arr, boolean bigEndian) {
+        if (!bigEndian) {
+            int off = 0;
+            for (int i = 0; i < arr.length; i++) {
+                int ii = b[off++] & 0x000000FF;
+                ii |= (b[off++] << 8) & 0x0000FF00;
+                ii |= (b[off++] << 16) & 0x00FF0000;
+                ii |= (b[off++] << 24);
+                arr[i] = ii;
+            }
+        } else {
+            int off = 0;
+            for (int i = 0; i < arr.length; i++) {
+                int ii = b[off++] << 24;
+                ii |= (b[off++] << 16) & 0x00FF0000;
+                ii |= (b[off++] << 8) & 0x0000FF00;
+                ii |= b[off++] & 0x000000FF;
+                arr[i] = ii;
+            }
+        }
     }
 }
