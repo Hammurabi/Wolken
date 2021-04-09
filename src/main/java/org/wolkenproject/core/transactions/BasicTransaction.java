@@ -96,24 +96,28 @@ public class BasicTransaction extends Transaction {
     }
 
     @Override
-    public boolean shallowVerify() throws WolkenException {
-        return
-                // less than zero checks
-                getTransactionValue() >= 0 &&
-                getTransactionFee() >= 0 &&
-                //possible vulnerability with a+b!=0 using signed integers
-                (getTransactionValue() + getTransactionFee()) > 0 &&
-                // check signature data is sound
-                (signature.getR().length == 32) &&
-                (signature.getS().length == 32) &&
-                getSender() != null &&
-                // check the account account and balance of sender
-                (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getBalance()) >= (value + fee);
+    public boolean shallowVerify() {
+        try {
+            return
+                    // less than zero checks
+                    getTransactionValue() >= 0 &&
+                            getTransactionFee() >= 0 &&
+                            //possible vulnerability with a+b!=0 using signed integers
+                            (getTransactionValue() + getTransactionFee()) > 0 &&
+                            // check signature data is sound
+                            (signature.getR().length == 32) &&
+                            (signature.getS().length == 32) &&
+                            getSender() != null &&
+                            // check the account account and balance of sender
+                            (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                            (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getBalance()) >= (value + fee);
+        } catch (WolkenException e) {
+            return false;
+        }
     }
 
     @Override
-    public boolean verify(Block block, int blockHeight, long fees) {
+    public boolean verify(BlockStateChange blockStateChange, Block block, int blockHeight, long fees) {
         return true;
     }
 
