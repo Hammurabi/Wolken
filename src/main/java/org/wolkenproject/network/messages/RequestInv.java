@@ -20,12 +20,8 @@ public class RequestInv extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        try {
-            node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, Context.getInstance().getBlockChain().getInv()));
-            node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Transaction, Context.getInstance().getTransactionPool().getInv()));
-        } catch (WolkenException e) {
-            e.printStackTrace();
-        }
+        node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, Context.getInstance().getBlockChain().getInv()));
+        node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Transaction, Context.getInstance().getTransactionPool().getInv()));
     }
 
     @Override
