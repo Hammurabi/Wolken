@@ -108,7 +108,7 @@ public class RegisterAliasTransaction extends Transaction {
     }
 
     @Override
-    public boolean verify(Block block, int blockHeight, long fees) {
+    public boolean verify(BlockStateChange blockStateChange, Block block, int blockHeight, long fees) {
         return false;
     }
 
