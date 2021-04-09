@@ -6,6 +6,7 @@ import org.wolkenproject.utils.Utils;
 import java.util.Arrays;
 
 import static java.lang.System.arraycopy;
+import static org.wolkenproject.utils.Utils.remainderUnsigned;
 
 public class Ad256 {
     private static final int FNV_PRIME = 0x01000193;
@@ -35,6 +36,7 @@ public class Ad256 {
 
         mix[0] = i ^ mix[0];
         mix = sha512(mix, false);
+
         final int dsParents = (int) params.getDATASET_PARENTS();
         final int mixLen = mix.length;
         for (int j = 0; j < dsParents; j++) {
@@ -45,6 +47,7 @@ public class Ad256 {
                 mix[k] = fnv(mix[k], cache[off + k]);
             }
         }
+
         return sha512(mix, false);
     }
 
