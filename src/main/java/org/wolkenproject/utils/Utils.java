@@ -16,6 +16,24 @@ import java.util.Queue;
 import java.util.Set;
 
 public class Utils {
+    public static int remainderUnsigned(int dividend, int divisor) {
+        if (divisor >= 0) {
+            if (dividend >= 0) {
+                return dividend % divisor;
+            }
+            // The implementation is a Java port of algorithm described in the book
+            // "Hacker's Delight" (section "Unsigned short division from signed division").
+            int q = ((dividend >>> 1) / divisor) << 1;
+            dividend -= q * divisor;
+            if (dividend < 0 || dividend >= divisor) {
+                dividend -= divisor;
+            }
+            return dividend;
+        }
+
+        return dividend >= 0 || dividend < divisor ? dividend : dividend - divisor;
+    }
+
     public static final byte[] concatenate(byte[]...arrays)
     {
         int size = 0;
