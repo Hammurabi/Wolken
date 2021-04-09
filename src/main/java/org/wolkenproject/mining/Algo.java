@@ -51,6 +51,7 @@ public class Algo {
             }
             return dividend;
         }
+
         return dividend >= 0 || dividend < divisor ? dividend : dividend - divisor;
     }
 
