@@ -9,8 +9,9 @@ import org.wolkenproject.utils.*;
 
 import java.math.BigInteger;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class BlockChain extends AbstractBlockChain {
+public class BlockChain implements Runnable {
     protected static final int                MaximumOrphanBlockQueueSize   = 250_000_000;
     protected static final int                MaximumStaleBlockQueueSize    = 500_000_000;
     protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
@@ -23,18 +24,22 @@ public class BlockChain extends AbstractBlockChain {
     private HashQueue<BlockIndex>   staleBlocks;
     // contains blocks sent from peers.
     private HashQueue<BlockIndex>   blockPool;
+    private ReentrantLock           mutex;
 
     public BlockChain(Context context) {
-        super(context);
         orphanedBlocks  = new PriorityHashQueue<>(BlockIndex.class);
         staleBlocks     = new PriorityHashQueue<>(BlockIndex.class);
         blockPool       = new PriorityHashQueue<>(BlockIndex.class);
         tip             = getContext().getDatabase().findTip();
+        mutex           = new ReentrantLock();
     }
 
-    @Override
-    public boolean verifyBlock(BlockIndex block) {
-        return false;
+    private Context getContext() {
+        return Context.getInstance();
+    }
+
+    public ReentrantLock getMutex() {
+        return mutex;
     }
 
     @Override
@@ -71,11 +76,7 @@ public class BlockChain extends AbstractBlockChain {
                     hashCodes.add(parent.getHash());
                 }
 
-                try {
-                    getContext().getServer().broadcast(new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
-                } catch (WolkenException e) {
-                    e.printStackTrace();
-                }
+                getContext().getServer().broadcast(new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
             }
 
             if (hasBlocksInPool()) {
@@ -121,11 +122,7 @@ public class BlockChain extends AbstractBlockChain {
                 hashCodes.add(tipHash);
                 lastHash = tipHash;
 
-                try {
-                    getContext().getServer().broadcast(new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
-                } catch (WolkenException e) {
-                    e.printStackTrace();
-                }
+                getContext().getServer().broadcast(new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, hashCodes));
             }
         }
     }
@@ -380,7 +377,6 @@ public class BlockChain extends AbstractBlockChain {
         return null;
     }
 
-    @Override
     protected void setBestBlock(BlockIndex block) {
         getMutex().lock();
         try {
@@ -393,7 +389,6 @@ public class BlockChain extends AbstractBlockChain {
         setBlock(block.getHeight(), block);
     }
 
-    @Override
     protected void addOrphan(BlockIndex block) {
         getMutex().lock();
         try {
@@ -412,7 +407,6 @@ public class BlockChain extends AbstractBlockChain {
         }
     }
 
-    @Override
     protected void addStale(BlockIndex block) {
         getMutex().lock();
         try {
@@ -431,7 +425,6 @@ public class BlockChain extends AbstractBlockChain {
         }
     }
 
-    @Override
     protected void markRejected(byte block[]) {
         getContext().getDatabase().markRejected(block);
     }
@@ -525,14 +518,12 @@ public class BlockChain extends AbstractBlockChain {
         }
     }
 
-    @Override
     public void suggest(Set<BlockIndex> blocks) {
         for (BlockIndex block : blocks) {
             suggest(block);
         }
     }
 
-    @Override
     public void suggest(BlockIndex block) {
         if (!isRejected(block.getHash())) {
             getMutex().lock();
@@ -553,12 +544,10 @@ public class BlockChain extends AbstractBlockChain {
         }
     }
 
-    @Override
     protected boolean isRejected(byte[] hash) {
         return getContext().getDatabase().isRejected(hash);
     }
 
-    @Override
     public int getHeight() {
         BlockIndex tip = getTip();
         if (tip != null) {
@@ -568,7 +557,6 @@ public class BlockChain extends AbstractBlockChain {
         return 0;
     }
 
-    @Override
     protected void setBlock(int height, BlockIndex block) {
         BlockIndex previousIndex = getContext().getDatabase().findBlock(height);
         if (previousIndex != null) {
@@ -580,5 +568,8 @@ public class BlockChain extends AbstractBlockChain {
 
     public BlockIndex createNextBlock() throws WolkenException {
         return getTip().generateNextBlock();
+    }
+
+    public void suggest(CandidateBlock block) {
     }
 }
