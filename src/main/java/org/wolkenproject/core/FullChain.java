@@ -68,12 +68,6 @@ public class FullChain extends BasicChain {
     }
 
     @Override
-    public void suggest(Set<BlockIndex> blocks) {
-
-    }
-
-    @Override
-    public void suggest(BlockIndex block) {
-
+    public void staleBlock(byte[] hash) {
     }
 }

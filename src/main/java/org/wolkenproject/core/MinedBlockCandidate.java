@@ -1,25 +1,49 @@
 package org.wolkenproject.core;
 
+import java.util.List;
+
 public class MinedBlockCandidate extends CandidateBlock {
     private BlockIndex block;
 
-    public MinedBlockCandidate(BlockIndex block) {
-        super(block.getTotalChainWork(), block.getBlock().getTransactionCount());
+    public MinedBlockCandidate(Context context, BlockIndex block) {
+        super(context);
         this.block = block;
     }
 
-    @Override
     public BlockHeader getBlockHeader() {
         return block.getBlock().getBlockHeader();
     }
 
-    @Override
     public BlockIndex getBlock() {
         return block;
     }
 
-    @Override
     public boolean isFullBlockAvailable() {
         return true;
+    }
+
+    @Override
+    public boolean verify() {
+        return false;
+    }
+
+    @Override
+    public void merge(AbstractBlockChain chain) {
+
+    }
+
+    @Override
+    public List<BlockHeader> getChain() {
+        return null;
+    }
+
+    @Override
+    public boolean isChainAvailable() {
+        return false;
+    }
+
+    @Override
+    public boolean destroy() {
+        return false;
     }
 }

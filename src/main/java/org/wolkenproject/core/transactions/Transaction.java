@@ -330,7 +330,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean verify(Block block, int blockHeight, long fees) {
+        public boolean verify(BlockStateChange blockStateChange, Block block, int blockHeight, long fees) {
             return false;
         }
 
@@ -463,7 +463,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean verify(Block block, int blockHeight, long fees) {
+        public boolean verify(BlockStateChange blockStateChange, Block block, int blockHeight, long fees) {
             return false;
         }
 
