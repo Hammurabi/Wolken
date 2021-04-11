@@ -1,6 +1,8 @@
 package org.wolkenproject.network.messages;
 
 import org.wolkenproject.core.*;
+import org.wolkenproject.core.consensus.CandidateBlock;
+import org.wolkenproject.core.consensus.PeerBlockCandidate;
 import org.wolkenproject.core.transactions.MintTransaction;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
@@ -8,7 +10,6 @@ import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.utils.Tuple;
-import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
