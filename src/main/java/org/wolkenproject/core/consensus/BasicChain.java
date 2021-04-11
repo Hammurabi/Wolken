@@ -1,5 +1,7 @@
-package org.wolkenproject.core;
+package org.wolkenproject.core.consensus;
 
+import org.wolkenproject.core.BlockIndex;
+import org.wolkenproject.core.Context;
 import org.wolkenproject.core.consensus.AbstractBlockChain;
 import org.wolkenproject.core.consensus.CandidateBlock;
 import org.wolkenproject.utils.HashQueue;
@@ -12,7 +14,7 @@ public abstract class BasicChain extends AbstractBlockChain {
     protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
 
     // the current higest block in the chain
-    private BlockIndex                  tip;
+    private BlockIndex tip;
     // contains blocks that have no parents or ancestors.
     private HashQueue<BlockIndex>       orphanedBlocks;
     // contains blocks that were valid pre-fork.
