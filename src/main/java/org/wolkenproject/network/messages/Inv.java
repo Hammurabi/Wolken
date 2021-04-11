@@ -66,7 +66,7 @@ public class Inv extends Message {
             }
 
             for (byte[] hash : list) {
-                if (!Context.getInstance().getDatabase().checkBlockExists(hash) && !Context.getInstance().getBlockChain().contains(hash)) {
+                if (!Context.getInstance().getDatabase().checkBlockExists(hash) && !Context.getInstance().getBlockChain().containsBlock(hash)) {
                     newBlocks.add(hash);
                 }
             }
