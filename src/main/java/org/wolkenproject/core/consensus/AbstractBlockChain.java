@@ -26,7 +26,7 @@ public abstract class AbstractBlockChain implements Runnable {
     // returns the best block of this chain.
     public abstract BlockIndex getBestBlock();
     // returns true if the block is better than our current best block.
-    protected abstract boolean isBetterBlock(BlockIndex candidate);
+    protected abstract boolean isBetterBlock(CandidateBlock candidate);
     // get the next block from the block pool.
     protected abstract CandidateBlock getCandidate();
     // must be called before starting the main loop.
