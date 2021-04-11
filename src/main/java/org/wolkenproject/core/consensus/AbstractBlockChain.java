@@ -19,6 +19,15 @@ public abstract class AbstractBlockChain implements Runnable {
         return null;
     }
 
+    // return the context.
+    public Context getContext() {
+        return context;
+    }
+    // return the mutex.
+    public ReentrantLock getMutex() {
+        return mutex;
+    }
+
     // attempt to make the 'candidate' into the best block, returns true if the operation is successful.
     protected abstract boolean makeBest(BlockIndex candidate);
     // broadcast the chain information to all peers.
@@ -37,14 +46,6 @@ public abstract class AbstractBlockChain implements Runnable {
     protected abstract void setBestBlock(BlockIndex block);
     // returns true if the block is valid (full validation).
     public abstract boolean verifyBlock(BlockIndex block);
-    // return the context.
-    public Context getContext() {
-        return context;
-    }
-    // return the mutex.
-    public ReentrantLock getMutex() {
-        return mutex;
-    }
     // set the block at 'height' to 'block', if a previous block exists then it should be replaced.
     protected abstract void setBlock(int height, BlockIndex block);
     // return true if the chain height is larger than or equal to 'height'.
@@ -61,8 +62,6 @@ public abstract class AbstractBlockChain implements Runnable {
     protected abstract boolean isRejected(byte[] hash);
     // makes the block an orphan, meaning it does not have any ancestors.
     protected abstract void addOrphan(BlockIndex block);
-    // stales block, it's previously valid, but not the best.
-    protected abstract void addStale(BlockIndex block);
     // suggest these blocks and add them to the pool.
     public abstract void suggest(Set<CandidateBlock> blocks);
     // suggest this block and add it to the pool.
