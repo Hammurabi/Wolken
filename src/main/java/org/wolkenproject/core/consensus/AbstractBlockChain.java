@@ -71,4 +71,6 @@ public abstract class AbstractBlockChain implements Runnable {
     public abstract int getHeight();
     // makes the block and all it's children 'stale'.
     public abstract void staleBlock(byte[] hash);
+    // generates a new block where height is 'bestblock.height + 1'
+    public abstract BlockIndex fork();
 }
