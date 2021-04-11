@@ -126,6 +126,6 @@ public class Start {
         Logger.alert("force connections ${l}", connectionList);
 
         int rpcPort = 12560;
-        Context context = new Context(mainDirectory, rpcPort, isTestNet, address, connectionList);
+        Context context = new Context(mainDirectory, rpcPort, isTestNet, address, connectionList, false);
     }
 }
