@@ -14,7 +14,7 @@ public abstract class BasicChain extends AbstractBlockChain {
     protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
 
     // the current higest block in the chain
-    private BlockIndex tip;
+    private BlockIndex                  bestBlock;
     // contains blocks that have no parents or ancestors.
     private HashQueue<BlockIndex>       orphanedBlocks;
     // contains blocks that were valid pre-fork.
@@ -24,6 +24,7 @@ public abstract class BasicChain extends AbstractBlockChain {
 
     public BasicChain(Context context) {
         super(context);
+
     }
 
     @Override
@@ -90,7 +91,7 @@ public abstract class BasicChain extends AbstractBlockChain {
         // enter the main loop.
         while ( getContext().isRunning() ) {
             // get a candidate block from the block pool.
-            BlockIndex candidate = getCandidate();
+            CandidateBlock candidate = getCandidate();
             // check if the candidate is better than our block.
             if (isBetterBlock(candidate)) {
                 // fully validate the block and generate the state change.
