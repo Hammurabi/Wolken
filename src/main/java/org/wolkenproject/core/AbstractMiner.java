@@ -1,5 +1,7 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.consensus.CandidateBlock;
+import org.wolkenproject.core.consensus.MinedBlockCandidate;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.messages.Inv;
@@ -22,7 +24,7 @@ public abstract class AbstractMiner implements Runnable {
         while (Context.getInstance().isRunning()) {
             try {
                 // get a reference parent block
-                BlockIndex parent = Context.getInstance().getBlockChain().getTip();
+                BlockIndex parent = Context.getInstance().getBlockChain().getBestBlock();
                 // generate a new block
                 Block block = new Block();
                 // mint coins to our address
@@ -44,8 +46,11 @@ public abstract class AbstractMiner implements Runnable {
                 // create a block index
                 BlockIndex index = new BlockIndex(block, parent.getTotalChainWork(), parent.getHeight());
 
+                // create a candidate
+                CandidateBlock candidateBlock = new MinedBlockCandidate(Context.getInstance(), index);
+
                 // submit the block
-                Context.getInstance().getBlockChain().suggest(index);
+                Context.getInstance().getBlockChain().suggest(candidateBlock);
 
                 // make a collection
                 Collection<byte[]> list = new ArrayList<>();
