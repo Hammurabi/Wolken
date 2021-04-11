@@ -420,7 +420,7 @@ public class RpcServer {
     private BlockIndex createNextBlock() throws WolkenException {
         mutex.lock();
         try {
-            nextBlock = Context.getInstance().getBlockChain().createNextBlock();
+            nextBlock = Context.getInstance().getBlockChain().fork();
             return nextBlock;
         } finally {
             mutex.unlock();
