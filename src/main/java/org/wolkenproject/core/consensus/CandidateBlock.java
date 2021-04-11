@@ -1,6 +1,5 @@
 package org.wolkenproject.core.consensus;
 
-import org.wolkenproject.core.AbstractBlockChain;
 import org.wolkenproject.core.BlockHeader;
 import org.wolkenproject.core.BlockMetadata;
 import org.wolkenproject.core.Context;
