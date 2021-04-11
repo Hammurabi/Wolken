@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.consensus.AbstractBlockChain;
 import org.wolkenproject.core.consensus.CandidateBlock;
 import org.wolkenproject.utils.HashQueue;
 
