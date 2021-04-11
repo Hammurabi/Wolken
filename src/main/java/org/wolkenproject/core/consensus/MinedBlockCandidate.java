@@ -1,10 +1,8 @@
 package org.wolkenproject.core.consensus;
 
-import org.wolkenproject.core.AbstractBlockChain;
 import org.wolkenproject.core.BlockHeader;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.consensus.CandidateBlock;
 
 import java.util.List;
 
