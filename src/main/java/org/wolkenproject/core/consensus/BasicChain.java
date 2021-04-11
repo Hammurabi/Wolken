@@ -53,7 +53,7 @@ public abstract class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    protected boolean isBetterBlock(BlockIndex candidate) {
+    protected boolean isBetterBlock(CandidateBlock candidate) {
         return candidate.getTotalChainWork().compareTo(getBestBlock().getTotalChainWork()) > 0;
     }
 
