@@ -2,8 +2,6 @@ package org.wolkenproject.core.consensus;
 
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.consensus.AbstractBlockChain;
-import org.wolkenproject.core.consensus.CandidateBlock;
 import org.wolkenproject.utils.HashQueue;
 
 import java.util.Set;
@@ -114,7 +112,6 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public void staleBlock(byte[] hash) {
-
     }
 
     @Override
@@ -134,7 +131,7 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    protected boolean makeBest(BlockIndex candidate) {
+    protected boolean makeBest(CandidateBlock candidate) {
         return false;
     }
 
@@ -163,13 +160,9 @@ public class BasicChain extends AbstractBlockChain {
             CandidateBlock candidate = getCandidate();
             // check if the candidate is better than our block.
             if (isBetterBlock(candidate)) {
-                // fully validate the block and generate the state change.
-                if (candidate.verify()) {
-                    // make the candidate our best block.
-                    if (makeBest(candidate)) {
-                        // if the operation succeeds, then we broadcast the new block to our peers.
-                        broadcastChain();
-                    }
+                // make the candidate our best block.
+                if (makeBest(candidate)) {
+                    // call listeners.
                 }
             }
         }
