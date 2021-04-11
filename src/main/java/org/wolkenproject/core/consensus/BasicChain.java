@@ -8,7 +8,7 @@ import org.wolkenproject.utils.HashQueue;
 
 import java.util.Set;
 
-public abstract class BasicChain extends AbstractBlockChain {
+public class BasicChain extends AbstractBlockChain {
     protected static final int                MaximumOrphanBlockQueueSize   = 250_000_000;
     protected static final int                MaximumStaleBlockQueueSize    = 500_000_000;
     protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
@@ -37,6 +37,26 @@ public abstract class BasicChain extends AbstractBlockChain {
     }
 
     @Override
+    protected boolean containsBlock(int height) {
+        return false;
+    }
+
+    @Override
+    public boolean containsBlock(byte[] hash) {
+        return false;
+    }
+
+    @Override
+    protected byte[] getBlockHash(int height) {
+        return new byte[0];
+    }
+
+    @Override
+    protected void removeBlock(byte[] hash) {
+
+    }
+
+    @Override
     protected void markRejected(byte[] hash) {
         getContext().getDatabase().markRejected(hash);
     }
@@ -47,14 +67,39 @@ public abstract class BasicChain extends AbstractBlockChain {
     }
 
     @Override
+    protected void addOrphan(BlockIndex block) {
+
+    }
+
+    @Override
     protected void initialize() {
         // load the last checkpoint.
         loadBestBlock();
     }
 
     @Override
+    protected void loadBestBlock() {
+
+    }
+
+    @Override
+    protected void setBestBlock(BlockIndex block) {
+
+    }
+
+    @Override
+    public boolean verifyBlock(BlockIndex block) {
+        return false;
+    }
+
+    @Override
     protected boolean isBetterBlock(CandidateBlock candidate) {
         return candidate.getTotalChainWork().compareTo(getBestBlock().getTotalChainWork()) > 0;
+    }
+
+    @Override
+    protected CandidateBlock getCandidate() {
+        return null;
     }
 
     @Override
@@ -65,6 +110,16 @@ public abstract class BasicChain extends AbstractBlockChain {
         }
 
         return best.getHeight();
+    }
+
+    @Override
+    public void staleBlock(byte[] hash) {
+
+    }
+
+    @Override
+    public BlockIndex fork() {
+        return null;
     }
 
     @Override
@@ -81,6 +136,20 @@ public abstract class BasicChain extends AbstractBlockChain {
     @Override
     protected boolean makeBest(BlockIndex candidate) {
         return false;
+    }
+
+    @Override
+    protected void broadcastChain() {
+    }
+
+    @Override
+    public BlockIndex getBestBlock() {
+        getMutex().lock();
+        try {
+            return bestBlock;
+        } finally {
+            getMutex().unlock();
+        }
     }
 
     @Override
