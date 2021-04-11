@@ -8,6 +8,8 @@ import org.wolkenproject.core.Address;
 import org.wolkenproject.core.BlockHeader;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.core.consensus.CandidateBlock;
+import org.wolkenproject.core.consensus.MinedBlockCandidate;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.Keypair;
 import org.wolkenproject.encoders.Base16;
@@ -404,8 +406,11 @@ public class RpcServer {
                 throw new WolkenException("invalid proof of work.");
             }
 
+            // create a candidate block
+            CandidateBlock candidateBlock = new MinedBlockCandidate(Context.getInstance(), nextBlock);
+
             // suggest the block
-            Context.getInstance().getBlockChain().suggest(nextBlock);
+            Context.getInstance().getBlockChain().suggest(candidateBlock);
             Logger.alert("work '"+ Base16.encode(nextBlock.calcHash()) + "' submitted");
         } finally {
             mutex.unlock();
