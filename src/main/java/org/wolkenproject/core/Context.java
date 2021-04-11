@@ -1,5 +1,6 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.consensus.AbstractBlockChain;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.papaya.runtime.*;
@@ -26,7 +27,7 @@ public class Context {
     private TransactionPool         transactionPool;
     private Server                  server;
     private Address                 payList[];
-    private BlockChain              blockChain;
+    private AbstractBlockChain      blockChain;
     private OpcodeRegister          opcodeRegister;
     private ResourceManager         resourceManager;
     private RpcServer               rpcServer;
@@ -53,7 +54,7 @@ public class Context {
         SerializationFactory.register(serializationFactory);
         OpcodeRegister.register(opcodeRegister);
 
-        this.blockChain = new BlockChain(this);
+        this.blockChain = null;
         this.server = new Server(forceConnections);
 
         getThreadPool().execute(scheduler);
@@ -121,7 +122,7 @@ public class Context {
         return server;
     }
 
-    public BlockChain getBlockChain() {
+    public AbstractBlockChain getBlockChain() {
         return blockChain;
     }
 
