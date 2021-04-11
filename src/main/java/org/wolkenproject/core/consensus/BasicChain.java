@@ -18,7 +18,7 @@ public class BasicChain extends AbstractBlockChain {
     // contains blocks that were valid pre-fork.
     private HashQueue<BlockIndex>       staleBlocks;
     // contains blocks sent from peers.
-    private HashQueue<CandidateBlock>   blockPool;
+    private HashQueue<CandidateBlock>   candidateQueue;
 
     public BasicChain(Context context) {
         super(context);
@@ -97,7 +97,16 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     protected CandidateBlock getCandidate() {
-        return null;
+        getMutex().lock();
+        try {
+            if (candidateQueue.hasElements()) {
+                return candidateQueue.poll();
+            }
+
+            return null;
+        } finally {
+            getMutex().unlock();
+        }
     }
 
     @Override
@@ -158,6 +167,12 @@ public class BasicChain extends AbstractBlockChain {
         while ( getContext().isRunning() ) {
             // get a candidate block from the block pool.
             CandidateBlock candidate = getCandidate();
+
+            // candidate could be null.
+            if (candidate == null) {
+                continue;
+            }
+
             // check if the candidate is better than our block.
             if (isBetterBlock(candidate)) {
                 // make the candidate our best block.
