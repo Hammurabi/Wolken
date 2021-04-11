@@ -35,7 +35,7 @@ public class Context {
     private FileService             fileService;
     private CompressionEngine       compressionEngine;
 
-    public Context(FileService service, int rpcPort, boolean testNet, Address[] payList, Set<NetAddress> forceConnections) throws WolkenException, IOException {
+    public Context(FileService service, int rpcPort, boolean testNet, Address[] payList, Set<NetAddress> forceConnections, boolean pruned) throws WolkenException, IOException {
         Context.instance = this;
         this.scheduler = new TaskScheduler();
         this.database = new Database(service);
@@ -54,7 +54,7 @@ public class Context {
         SerializationFactory.register(serializationFactory);
         OpcodeRegister.register(opcodeRegister);
 
-        this.blockChain = null;
+        this.blockChain = AbstractBlockChain.create(pruned);
         this.server = new Server(forceConnections);
 
         getThreadPool().execute(scheduler);
