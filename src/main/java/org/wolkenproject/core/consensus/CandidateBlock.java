@@ -1,8 +1,10 @@
-package org.wolkenproject.core;
+package org.wolkenproject.core.consensus;
 
-import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.core.AbstractBlockChain;
+import org.wolkenproject.core.BlockHeader;
+import org.wolkenproject.core.BlockMetadata;
+import org.wolkenproject.core.Context;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.List;
  */
 public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     private final long          sequenceId;
-    private final Context       context;
+    private final Context context;
     private BigInteger          chainWork;
     private boolean             valid;
     private byte                id[];
