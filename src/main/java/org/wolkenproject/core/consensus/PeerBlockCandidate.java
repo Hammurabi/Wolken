@@ -1,7 +1,6 @@
 package org.wolkenproject.core.consensus;
 
 import org.wolkenproject.core.*;
-import org.wolkenproject.core.consensus.CandidateBlock;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.CheckedResponse;
 import org.wolkenproject.network.Message;
