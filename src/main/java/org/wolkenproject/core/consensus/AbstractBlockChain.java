@@ -50,7 +50,7 @@ public abstract class AbstractBlockChain implements Runnable {
     // return true if the chain height is larger than or equal to 'height'.
     protected abstract boolean containsBlock(int height);
     // return true if block with hash 'hash' exists.
-    protected abstract boolean containsBlock(byte hash[]);
+    public abstract boolean containsBlock(byte hash[]);
     // return the hash of block at height 'height'.
     protected abstract byte[] getBlockHash(int height);
     // remove the block with hash 'hash'.
