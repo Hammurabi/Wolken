@@ -1,5 +1,7 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.consensus.CandidateBlock;
+
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
