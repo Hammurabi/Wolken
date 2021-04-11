@@ -1,7 +1,5 @@
 package org.wolkenproject.core;
 
-import java.util.Set;
-
 public class FullChain extends BasicChain {
     public FullChain(Context context) {
         super(context);
@@ -13,7 +11,7 @@ public class FullChain extends BasicChain {
     }
 
     @Override
-    protected BlockIndex getBestBlock() {
+    public BlockIndex getBestBlock() {
         return null;
     }
 
