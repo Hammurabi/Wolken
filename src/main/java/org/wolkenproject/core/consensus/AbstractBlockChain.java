@@ -2,7 +2,6 @@ package org.wolkenproject.core.consensus;
 
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.consensus.CandidateBlock;
 
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,6 +13,10 @@ public abstract class AbstractBlockChain implements Runnable {
     public AbstractBlockChain(Context context) {
         this.context    = context;
         this.mutex      = new ReentrantLock();
+    }
+
+    public static AbstractBlockChain create(boolean pruned) {
+        return null;
     }
 
     // attempt to make the 'candidate' into the best block, returns true if the operation is successful.
