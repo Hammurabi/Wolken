@@ -30,10 +30,6 @@ public class NetworkParameters {
         return isTestNet;
     }
 
-    public int getMaxTransactionList() {
-        return 50;
-    }
-
     public int getMaxBlockWeight() {
         return 1_000_000;
     }
