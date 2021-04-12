@@ -141,7 +141,10 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     protected void makeBest(CandidateBlock candidate) {
+        // merge the block candidate.
         candidate.merge(this);
+        // destroy this block candidate.
+        candidate.destroy();
     }
 
     @Override
