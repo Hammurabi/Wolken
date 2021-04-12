@@ -47,7 +47,7 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     protected byte[] getBlockHash(int height) {
-        return new byte[0];
+        return getContext().getDatabase().findBlockHash(height);
     }
 
     @Override
