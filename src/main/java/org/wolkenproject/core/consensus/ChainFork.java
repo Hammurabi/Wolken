@@ -37,4 +37,10 @@ public class ChainFork {
             target.makeStale(hash);
         }
     }
+
+    public void merge(AbstractBlockChain target, int height) {
+        for (byte[] hash : chain) {
+            target.setBlock(++ height, target.getBlock(hash));
+        }
+    }
 }
