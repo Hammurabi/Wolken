@@ -153,6 +153,7 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public void suggest(CandidateBlock block) {
+        candidateQueue.add(block, block.getHash());
     }
 
     @Override
