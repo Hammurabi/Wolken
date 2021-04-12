@@ -207,7 +207,7 @@ public class Node implements Runnable {
                     currentMessageSize = -1;
                 }
 
-                if (currentMessageSize > Context.getInstance().getNetworkParameters().getMaxMessageContentSize()) {
+                if (currentMessageSize > Context.getInstance().getNetworkParameters().getMaxMessageLength()) {
                     errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
                     stream = null;
                     currentMessageSize = -1;
