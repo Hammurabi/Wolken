@@ -215,7 +215,14 @@ public class Database {
         byte hash[] = get(key);
 
         if (hash != null) {
-            remove(key);
+            deleteBlock(hash);
+        }
+    }
+
+    public void deleteBlock(byte hash[]) {
+        BlockMetadata metadata = findBlockMetaData(hash);
+        if (metadata != null) {
+            remove(concatenate(BlockIndexPrefix, Utils.takeApart(metadata.getHeight())));
             remove(concatenate(BlockPrefix, hash));
             remove(concatenate(CompressedBlockPrefix, hash));
         }
