@@ -49,18 +49,35 @@ public class PeerBlockCandidate extends CandidateBlock {
         byte mostRecentCommonAncestor[] = chain.get(chain.size() - 1).getParentHash();
         BlockMetadata commonAncestor    = getContext().getDatabase().findBlockMetaData(mostRecentCommonAncestor);
         int height                      = commonAncestor.getHeight();
+        BlockHeader parent              = commonAncestor.getBlockHeader();
         BigInteger work                 = commonAncestor.getPreviousChainWork().add(commonAncestor.getBlockHeader().getWork());
 
         ChainFork previousChain         = target.getFork(mostRecentCommonAncestor);
         previousChain.undoChanges(target.getContext());
 
-        for (BlockHeader header : chain) {
+        for (int i = 0; i < chain.size(); i ++) {
+            BlockHeader header = chain.get(i);
             // get the block from temp storage.
             Block block = getContext().getDatabase().findTempBlock(header.getHashCode());
             // delete the block from temp storage.
             getContext().getDatabase().deleteTempBlock(header.getHashCode());
+            // verify the block is valid.
+            if (block.verify(parent, ++height)) {
+                parent = block.getBlockHeader();
+            } else {
+                invalidate(getContext(), i, chain);
+                closeConnection();
+                for (int j = i; j >= 0; j --) {
+                    target.removeBlock(chain.get(j).getHashCode());
+                }
+                previousChain.redoChanges(getContext());
+                return;
+            }
+
+            // make all the blocks 'stale'.
+            previousChain.staleBlocks(target);
             // set the block to the new block index.
-            target.setBlock(++ height, new BlockIndex(block, new BlockMetadata(header, height, block.getTransactionCount(), block.getEventCount(), block.getTotalValue(), block.getFees(), work)));
+            target.setBlock(height, new BlockIndex(block, new BlockMetadata(header, height, block.getTransactionCount(), block.getEventCount(), block.getTotalValue(), block.getFees(), work)));
             // add the block's work to the total work.
             work = work.add(block.getWork());
         }
@@ -150,6 +167,11 @@ public class PeerBlockCandidate extends CandidateBlock {
     public static List<BlockHeader> findCommonAncestors(Context context, Node sender, BlockHeader best) {
         List<BlockHeader> ancestors = new ArrayList<>();
 
+        if (context.getBlockChain().isRejected(best.getParentHash())) {
+            context.getBlockChain().markRejected(best.getHashCode());
+            return null;
+        }
+
         if (context.getDatabase().checkBlockExists(best.getParentHash())) {
             return ancestors;
         }
@@ -177,6 +199,20 @@ public class PeerBlockCandidate extends CandidateBlock {
                 int lastCommonAncestor = -1;
 
                 for (int i = 0; i < headers.size(); i ++) {
+                    // if an ancestor of this block is rejected, then we reject it and all of it's successors.
+                    if (context.getBlockChain().isRejected(headers.get(i).getHashCode())) {
+                        context.getBlockChain().markRejected(headers.get(i).getHashCode());
+
+                        // reject the rest of the blocks we collected.
+                        while (!ancestorRequests.isEmpty()) {
+                            for (BlockHeader header : ancestorRequests.pop()) {
+                                context.getBlockChain().markRejected(header.getHashCode());
+                            }
+                        }
+
+                        return null;
+                    }
+
                     if (isCommonAncestor(context, headers.get(i))) {
                         lastCommonAncestor = i;
                     }
