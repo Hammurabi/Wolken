@@ -173,6 +173,11 @@ public class PeerBlockCandidate extends CandidateBlock {
         return true;
     }
 
+    @Override
+    public byte[] getHash() {
+        return header.getHashCode();
+    }
+
     private void closeConnection() {
         try {
             sender.close();
