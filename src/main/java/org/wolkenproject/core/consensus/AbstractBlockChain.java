@@ -83,4 +83,6 @@ public abstract class AbstractBlockChain implements Runnable {
     public boolean isChainReorganizing() {
         return bIsReorg.get();
     }
+    // makes the block 'stale'
+    public abstract void makeStale(byte[] hash);
 }
