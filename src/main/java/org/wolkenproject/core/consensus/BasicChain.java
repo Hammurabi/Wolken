@@ -162,6 +162,9 @@ public class BasicChain extends AbstractBlockChain {
         // initialize the chain.
         initialize();
 
+        // to keep track of time.
+        long lastCheck = System.currentTimeMillis();
+
         // enter the main loop.
         while ( getContext().isRunning() ) {
             // get a candidate block from the block pool.
@@ -176,6 +179,11 @@ public class BasicChain extends AbstractBlockChain {
             if (isBetterBlock(candidate)) {
                 // make the candidate our best block.
                 makeBest(candidate);
+            }
+
+            if (System.currentTimeMillis() - lastCheck > 5000L) {
+                broadcastChain();
+                lastCheck = System.currentTimeMillis();
             }
         }
     }
