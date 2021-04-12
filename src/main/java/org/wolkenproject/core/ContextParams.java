@@ -123,8 +123,14 @@ public class ContextParams {
         return 16384;
     }
 
+    // this does not account for message headers.
     public int getMaxMessageContentSize() {
         return 8_000_000;
+    }
+
+    // this should account for encrypted messages and their headers.
+    public int getMaxMessageLength() {
+        return getMaxMessageContentSize() + 4096;
     }
 
     public int getMaxCacheReuse() {
@@ -136,11 +142,11 @@ public class ContextParams {
     }
 
     public long getMessageTimeout() {
-        return 500;
+        return 250L;
     }
 
     public long getMessageTimeout(long length) {
-        long seconds = length / 125_000L + 1;
+        long seconds = length / 125_000L;
         return seconds * 1000L + getMessageTimeout();
     }
 
