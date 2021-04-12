@@ -95,6 +95,7 @@ public class PeerBlockCandidate extends CandidateBlock {
                         if (block.verify(parent, ++height)) {
                             getContext().getDatabase().tempStoreBlock(block);
                             parent = block.getBlockHeader();
+                            j ++;
                         } else {
                             invalidate(getContext(), i + j, chain);
                             closeConnection();
