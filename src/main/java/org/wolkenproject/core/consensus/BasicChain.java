@@ -2,8 +2,11 @@ package org.wolkenproject.core.consensus;
 
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.network.Message;
+import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.utils.HashQueue;
 
+import java.util.Arrays;
 import java.util.Set;
 
 public class BasicChain extends AbstractBlockChain {
@@ -19,10 +22,12 @@ public class BasicChain extends AbstractBlockChain {
     private HashQueue<BlockIndex>       staleBlocks;
     // contains blocks sent from peers.
     private HashQueue<CandidateBlock>   candidateQueue;
+    // keep track of broadcasted blocks.
+    private byte                        lastBroadcast[];
 
     public BasicChain(Context context) {
         super(context);
-
+        this.lastBroadcast = new byte[32];
     }
 
     @Override
@@ -120,11 +125,22 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    public void staleBlock(byte[] hash) {
+    public ChainFork getFork(byte[] hash) {
+        return null;
     }
 
     @Override
     public BlockIndex fork() {
+        return null;
+    }
+
+    @Override
+    public void makeStale(byte[] hash) {
+
+    }
+
+    @Override
+    public BlockIndex getBlock(byte[] hash) {
         return null;
     }
 
@@ -145,6 +161,36 @@ public class BasicChain extends AbstractBlockChain {
         candidate.merge(this);
         // destroy this block candidate.
         candidate.destroy();
+    }
+
+    @Override
+    protected void broadcastChain() {
+        getMutex().lock();
+        try {
+            // retrieve the best block.
+            BlockIndex bestBlock = getBestBlock();
+
+            // nullpointer checks.
+            if (bestBlock == null) {
+                return;
+            }
+
+            // check that we did not broadcast this block before.
+            if (Arrays.equals(lastBroadcast, bestBlock.getHash())) {
+                return;
+            }
+
+            // make an inventory message.
+            Message inv = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, bestBlock.getHash());
+
+            // broadcast the inventory message.
+            getContext().getServer().broadcast(inv);
+
+            // set the last broadcast block to the newly broadcast block hash.
+            lastBroadcast = Arrays.copyOf(bestBlock.getHash(), lastBroadcast.length);
+        } finally {
+            getMutex().unlock();
+        }
     }
 
     @Override
