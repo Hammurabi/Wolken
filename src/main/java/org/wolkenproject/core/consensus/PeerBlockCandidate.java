@@ -59,15 +59,20 @@ public class PeerBlockCandidate extends CandidateBlock {
             BlockHeader header = chain.get(i);
             // get the block from temp storage.
             Block block = getContext().getDatabase().findTempBlock(header.getHashCode());
-            // delete the block from temp storage.
-            getContext().getDatabase().deleteTempBlock(header.getHashCode());
             // verify the block is valid.
             if (block.verify(parent, ++height)) {
+                for (Event event : block.getStateChange().getTransactionEvents()) {
+                    event.apply();
+                }
                 parent = block.getBlockHeader();
             } else {
                 invalidate(getContext(), i, chain);
                 closeConnection();
                 for (int j = i; j >= 0; j --) {
+                    List<Event> events = getContext().getDatabase().getBlockEvents(chain.get(j).getHashCode());
+                    for (Event event : events) {
+                        event.undo();
+                    }
                     target.removeBlock(chain.get(j).getHashCode());
                 }
                 previousChain.redoChanges(getContext());
