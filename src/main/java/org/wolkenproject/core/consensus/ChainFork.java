@@ -31,4 +31,10 @@ public class ChainFork {
             events.forEach(Event::apply);
         }
     }
+
+    public void staleBlocks(AbstractBlockChain target) {
+        for (byte[] hash : chain) {
+            target.makeStale(hash);
+        }
+    }
 }
