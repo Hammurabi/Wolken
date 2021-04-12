@@ -141,9 +141,7 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     protected void makeBest(CandidateBlock candidate) {
-        enterReorg();
         candidate.merge(this);
-        exitReorg();
     }
 
     @Override
