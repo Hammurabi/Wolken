@@ -10,7 +10,6 @@ import org.wolkenproject.utils.FileService;
 
 import java.io.IOException;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -19,7 +18,7 @@ public class Context {
     private static Context instance;
 
     private Database                database;
-    private NetworkParameters       networkParameters;
+    private ContextParams networkParameters;
     private ExecutorService         threadPool;
     private AtomicBoolean           isRunning;
     private IpAddressList           ipAddressList;
@@ -39,7 +38,7 @@ public class Context {
         Context.instance = this;
         this.scheduler = new TaskScheduler();
         this.database = new Database(service);
-        this.networkParameters = new NetworkParameters(testNet);
+        this.networkParameters = new ContextParams(testNet);
         this.threadPool = Executors.newFixedThreadPool(3);
         this.isRunning = new AtomicBoolean(true);
         this.ipAddressList = new IpAddressList(service.newFile("peers"));
@@ -86,7 +85,7 @@ public class Context {
         return database;
     }
 
-    public NetworkParameters getNetworkParameters() {
+    public ContextParams getNetworkParameters() {
         return networkParameters;
     }
 
