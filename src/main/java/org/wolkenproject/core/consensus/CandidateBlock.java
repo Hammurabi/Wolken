@@ -18,7 +18,7 @@ import java.util.List;
  */
 public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     private final long          sequenceId;
-    private final Context context;
+    private final Context       context;
     private BigInteger          chainWork;
     private boolean             valid;
     private byte                id[];
