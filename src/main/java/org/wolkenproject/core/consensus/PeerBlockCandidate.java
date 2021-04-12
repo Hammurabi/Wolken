@@ -99,17 +99,8 @@ public class PeerBlockCandidate extends CandidateBlock {
 
                 if (response.noErrors()) {
                     Collection<Block> bl = response.getMessage().getPayload();
-                    int j = 0;
                     for (Block block : bl) {
-                        if (block.verify(parent, ++height)) {
-                            getContext().getDatabase().tempStoreBlock(block);
-                            parent = block.getBlockHeader();
-                            j ++;
-                        } else {
-                            invalidate(getContext(), i + j, chain);
-                            closeConnection();
-                            return false;
-                        }
+                        getContext().getDatabase().tempStoreBlock(block);
                     }
                 } else {
                     closeConnection();
