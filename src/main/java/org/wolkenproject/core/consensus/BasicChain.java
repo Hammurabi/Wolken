@@ -140,8 +140,10 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    protected boolean makeBest(CandidateBlock candidate) {
-        return false;
+    protected void makeBest(CandidateBlock candidate) {
+        enterReorg();
+        candidate.merge(this);
+        exitReorg();
     }
 
     @Override
@@ -176,9 +178,7 @@ public class BasicChain extends AbstractBlockChain {
             // check if the candidate is better than our block.
             if (isBetterBlock(candidate)) {
                 // make the candidate our best block.
-                if (makeBest(candidate)) {
-                    // call listeners.
-                }
+                makeBest(candidate);
             }
         }
     }
