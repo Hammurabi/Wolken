@@ -35,7 +35,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         chain = ancestors;
         chain.add(header);
         // get all blocks.
-        if (!downloadAndVerifyBlocks()) return false;
+        if (!downloadBlocks()) return false;
         // propagate.
         Message notify = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, header.getHashCode());
         getContext().getServer().broadcast(notify, sender);
@@ -68,7 +68,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         target.setChainReorg(false);
     }
 
-    private boolean downloadAndVerifyBlocks() {
+    private boolean downloadBlocks() {
         // parent metadata.
         BlockMetadata metadata  = getContext().getDatabase().findBlockMetaData(chain.get(chain.size() - 1).getParentHash());
 
