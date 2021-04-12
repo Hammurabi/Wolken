@@ -115,4 +115,7 @@ public abstract class CandidateBlock implements Comparable<CandidateBlock> {
     public byte[] getId() {
         return id;
     }
+
+    // return the hash of the 'best' block of this chain.
+    public abstract byte[] getHash();
 }
