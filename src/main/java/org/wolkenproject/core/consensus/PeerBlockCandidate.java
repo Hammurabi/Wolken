@@ -61,21 +61,31 @@ public class PeerBlockCandidate extends CandidateBlock {
             Block block = getContext().getDatabase().findTempBlock(header.getHashCode());
             // verify the block is valid.
             if (block.verify(parent, ++height)) {
+                // apply the state change to the global state.
                 for (Event event : block.getStateChange().getTransactionEvents()) {
                     event.apply();
                 }
+                // update the block parent.
                 parent = block.getBlockHeader();
             } else {
+                // invalidate the entire chain starting at block of index 'i'.
                 invalidate(getContext(), i, chain);
+                // close the connection with the peer.
                 closeConnection();
+                // loop backwards and undo all block changes.
                 for (int j = i; j >= 0; j --) {
+                    // get a list of all block events.
                     List<Event> events = getContext().getDatabase().getBlockEvents(chain.get(j).getHashCode());
+                    // undo all the block state changes.
                     for (Event event : events) {
                         event.undo();
                     }
+                    // remove the block from the chain.
                     target.removeBlock(chain.get(j).getHashCode());
                 }
+                // reapply the original chain.
                 previousChain.redoChanges(getContext());
+                // merge the original chain.
                 previousChain.merge(target, commonAncestor.getHeight());
                 return;
             }
