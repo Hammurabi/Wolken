@@ -148,10 +148,6 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    protected void broadcastChain() {
-    }
-
-    @Override
     public BlockIndex getBestBlock() {
         getMutex().lock();
         try {
