@@ -36,6 +36,8 @@ public abstract class AbstractBlockChain implements Runnable {
 
     // attempt to make the 'candidate' into the best block, returns true if the operation is successful.
     protected abstract void makeBest(CandidateBlock candidate);
+    // broadcast the chain information to all peers.
+    protected abstract void broadcastChain();
     // returns the best block of this chain.
     public abstract BlockIndex getBestBlock();
     // returns true if the block is better than our current best block.
@@ -88,25 +90,4 @@ public abstract class AbstractBlockChain implements Runnable {
     public abstract void makeStale(byte[] hash);
     // return block by it's hash.
     public abstract BlockIndex getBlock(byte[] hash);
-    // broadcast the chain information to all peers.
-    protected void broadcastChain() {
-        // retrieve the best block.
-        BlockIndex bestBlock = getBestBlock();
-
-        // nullpointer checks.
-        if (bestBlock == null) {
-            return;
-        }
-
-        // check that we did not broadcast this block before.
-        if (Arrays.equals(lastBroadcast, bestBlock.getHash())) {
-            return;
-        }
-
-        // make an inventory message.
-        Message inv = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, bestBlock.getHash());
-
-        // broadcast the inventory message.
-        getContext().getServer().broadcast(inv);
-    }
 }
