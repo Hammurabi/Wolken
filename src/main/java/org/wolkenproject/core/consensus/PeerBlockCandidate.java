@@ -45,6 +45,7 @@ public class PeerBlockCandidate extends CandidateBlock {
 
     @Override
     public void merge(AbstractBlockChain target) {
+        target.setInReorg(true);
         byte mostRecentCommonAncestor[] = chain.get(chain.size() - 1).getParentHash();
         BlockMetadata commonAncestor    = getContext().getDatabase().findBlockMetaData(mostRecentCommonAncestor);
         int height                      = commonAncestor.getHeight();
@@ -62,6 +63,8 @@ public class PeerBlockCandidate extends CandidateBlock {
             // add the block's work to the total work.
             work = work.add(block.getWork());
         }
+        
+        target.setInReorg(false);
     }
 
     private boolean downloadAndVerifyBlocks() {
