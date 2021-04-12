@@ -95,7 +95,13 @@ public class Inv extends Message {
                 }
 
                 CandidateBlock block = new PeerBlockCandidate(Context.getInstance(), node, blocks.iterator().next());
-                Context.getInstance().getScheduler().runAsync(() -> { if (block.verify()) { Context.getInstance().getBlockChain().suggest(block); } });
+                Context.getInstance().getScheduler().runAsync(() -> {
+                    if (block.verify()) {
+                        Context.getInstance().getBlockChain().suggest(block);
+                    } else {
+                        block.destroy();
+                    }
+                });
             } catch (WolkenTimeoutException e) {
                 e.printStackTrace();
                 node.increaseErrors(2);
