@@ -76,7 +76,7 @@ public abstract class AbstractBlockChain implements Runnable {
     // generates a new block where height is 'bestblock.height + 1'
     public abstract BlockIndex fork();
     // sets "reorg" to true.
-    public void setInReorg(boolean isReorg) {
+    public void setChainReorg(boolean isReorg) {
         bIsReorg.set(true);
     }
     // returns true if the chain is being reorganized.
