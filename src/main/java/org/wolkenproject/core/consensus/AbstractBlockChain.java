@@ -85,4 +85,6 @@ public abstract class AbstractBlockChain implements Runnable {
     }
     // makes the block 'stale'
     public abstract void makeStale(byte[] hash);
+    // return block by it's hash.
+    public abstract BlockIndex getBlock(byte[] hash);
 }
