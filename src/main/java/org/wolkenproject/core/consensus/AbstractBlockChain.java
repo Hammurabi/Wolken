@@ -2,7 +2,10 @@ package org.wolkenproject.core.consensus;
 
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.network.Message;
+import org.wolkenproject.network.messages.Inv;
 
+import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
@@ -34,7 +37,26 @@ public abstract class AbstractBlockChain implements Runnable {
     // attempt to make the 'candidate' into the best block, returns true if the operation is successful.
     protected abstract void makeBest(CandidateBlock candidate);
     // broadcast the chain information to all peers.
-    protected abstract void broadcastChain();
+    protected abstract void broadcastChain() {
+        // retrieve the best block.
+        BlockIndex bestBlock = getBestBlock();
+
+        // nullpointer checks.
+        if (bestBlock == null) {
+            return;
+        }
+
+        // check that we did not broadcast this block before.
+        if (Arrays.equals(lastBroadcast, bestBlock.getHash())) {
+            return;
+        }
+
+        // make an inventory message.
+        Message inv = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, bestBlock.getHash());
+
+        // broadcast the inventory message.
+        getContext().getServer().broadcast(inv);
+    }
     // returns the best block of this chain.
     public abstract BlockIndex getBestBlock();
     // returns true if the block is better than our current best block.
