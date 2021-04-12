@@ -71,6 +71,7 @@ public class PeerBlockCandidate extends CandidateBlock {
                     target.removeBlock(chain.get(j).getHashCode());
                 }
                 previousChain.redoChanges(getContext());
+                previousChain.merge(target, commonAncestor.getHeight());
                 return;
             }
 
