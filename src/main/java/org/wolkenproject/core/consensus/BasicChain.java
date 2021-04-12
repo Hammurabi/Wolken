@@ -16,10 +16,6 @@ public class BasicChain extends AbstractBlockChain {
 
     // the current higest block in the chain
     private BlockIndex                  bestBlock;
-    // contains blocks that have no parents or ancestors.
-    private HashQueue<BlockIndex>       orphanedBlocks;
-    // contains blocks that were valid pre-fork.
-    private HashQueue<BlockIndex>       staleBlocks;
     // contains blocks sent from peers.
     private HashQueue<CandidateBlock>   candidateQueue;
     // keep track of broadcasted blocks.
@@ -136,7 +132,7 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public void makeStale(byte[] hash) {
-
+        removeBlock(hash);
     }
 
     @Override
