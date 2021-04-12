@@ -153,7 +153,12 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public void suggest(CandidateBlock block) {
-        candidateQueue.add(block, block.getHash());
+        getMutex().lock();
+        try {
+            candidateQueue.add(block, block.getHash());
+        } finally {
+            getMutex().unlock();
+        }
     }
 
     @Override
