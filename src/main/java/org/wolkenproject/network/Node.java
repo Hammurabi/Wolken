@@ -68,9 +68,8 @@ public class Node implements Runnable {
         byte id[] = message.getUniqueMessageIdentifier();
 
         mutex.lock();
-        try{
-            if (messageCache.shouldSend(message))
-            {
+        try {
+            if (messageCache.shouldSend(message)) {
                 messages.add(message);
                 expectedResponse.put(id, message.getResponseMetadata());
                 shouldWait = true;
