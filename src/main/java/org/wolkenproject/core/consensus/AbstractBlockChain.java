@@ -4,15 +4,18 @@ import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractBlockChain implements Runnable {
-    private final Context context;
+    private final Context       context;
     private final ReentrantLock mutex;
+    private AtomicBoolean       bIsReorg;
 
     public AbstractBlockChain(Context context) {
         this.context    = context;
         this.mutex      = new ReentrantLock();
+        this.bIsReorg   = new AtomicBoolean(false);
     }
 
     public static AbstractBlockChain create(boolean pruned) {
@@ -73,5 +76,11 @@ public abstract class AbstractBlockChain implements Runnable {
     // generates a new block where height is 'bestblock.height + 1'
     public abstract BlockIndex fork();
     // sets "reorg" to true.
-    public abstract void setInReorg(boolean isReorg);
+    public void setInReorg(boolean isReorg) {
+        bIsReorg.set(true);
+    }
+    // returns true if the chain is being reorganized.
+    public boolean isChainReorganizing() {
+        return bIsReorg.get();
+    }
 }
