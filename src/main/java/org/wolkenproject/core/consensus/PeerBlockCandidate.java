@@ -51,7 +51,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         int height                      = commonAncestor.getHeight();
         BigInteger work                 = commonAncestor.getPreviousChainWork().add(commonAncestor.getBlockHeader().getWork());
 
-        StaleBlock block                = target.staleBlock(mostRecentCommonAncestor);
+        StaleBlock previousChain        = target.staleBlock(mostRecentCommonAncestor);
 
         for (BlockHeader header : chain) {
             // get the block from temp storage.
