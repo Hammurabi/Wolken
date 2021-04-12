@@ -141,7 +141,7 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public BlockIndex getBlock(byte[] hash) {
-        return null;
+        return getContext().getDatabase().findBlock(hash);
     }
 
     @Override
