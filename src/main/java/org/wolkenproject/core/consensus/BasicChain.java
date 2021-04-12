@@ -52,7 +52,7 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     protected void removeBlock(byte[] hash) {
-
+        getContext().getDatabase().deleteBlock(hash);
     }
 
     @Override
