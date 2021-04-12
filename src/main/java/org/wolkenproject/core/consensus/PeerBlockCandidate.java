@@ -52,6 +52,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         BigInteger work                 = commonAncestor.getPreviousChainWork().add(commonAncestor.getBlockHeader().getWork());
 
         StaleBlock previousChain        = target.staleBlockChildren(mostRecentCommonAncestor);
+        previousChain.undoChanges(target.getContext());
 
         for (BlockHeader header : chain) {
             // get the block from temp storage.
@@ -74,8 +75,8 @@ public class PeerBlockCandidate extends CandidateBlock {
         // get the height.
         int height              = metadata.getHeight();
 
-        // this should give us 16 blocks per message at (4mb).
-        int blocksPerMessage    = (getContext().getNetworkParameters().getMaxMessageContentSize() / getContext().getNetworkParameters().getMaxBlockSize()) / 2;
+        // this should give us 8 blocks per message at (8mb).
+        int blocksPerMessage    = getContext().getNetworkParameters().getMaxMessageContentSize() / getContext().getNetworkParameters().getMaxBlockSize();
 
         BlockHeader parent      = metadata.getBlockHeader();
 
@@ -83,14 +84,19 @@ public class PeerBlockCandidate extends CandidateBlock {
         for (int i = 0; i < chain.size(); i += blocksPerMessage) {
             List<byte[]> blocks = new ArrayList<>();
             for (int j = 0; j < blocksPerMessage; j ++) {
-                blocks.add(chain.get(i + j).getHashCode());
+                if (j + i >= chain.size()) {
+                    break;
+                }
+
+                blocks.add(chain.get(j + i).getHashCode());
             }
 
             Message request = new RequestBlocks(getContext().getNetworkParameters().getVersion(), blocks);
             CheckedResponse response = null;
 
             try {
-                response = sender.getResponse(request, getContext().getNetworkParameters().getMessageTimeout(blocksPerMessage * getContext().getNetworkParameters().getMaxBlockSize()));
+                response = sender.getResponse(request, getContext().getNetworkParameters().getMessageTimeout(blocks.size() * getContext().getNetworkParameters().getMaxBlockSize()));
+
                 if (response.noErrors()) {
                     Collection<Block> bl = response.getMessage().getPayload();
                     int j = 0;
