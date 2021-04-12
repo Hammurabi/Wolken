@@ -12,6 +12,7 @@ import org.wolkenproject.utils.Utils;
 import org.wolkenproject.wallet.Wallet;
 
 import java.io.*;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static org.wolkenproject.utils.Utils.concatenate;
@@ -433,5 +434,8 @@ public class Database {
 
     public Block findTempBlock(byte[] hashCode) {
         return get(Utils.concatenate(TempStorage, hashCode), Block.class);
+    }
+
+    public List<Event> getBlockEvents(byte[] hash) {
     }
 }
