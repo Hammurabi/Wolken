@@ -72,4 +72,6 @@ public abstract class AbstractBlockChain implements Runnable {
     public abstract void staleBlock(byte[] hash);
     // generates a new block where height is 'bestblock.height + 1'
     public abstract BlockIndex fork();
+    // sets "reorg" to true.
+    public abstract void setInReorg(boolean isReorg);
 }
