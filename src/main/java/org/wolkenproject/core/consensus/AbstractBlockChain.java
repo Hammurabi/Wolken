@@ -29,7 +29,7 @@ public abstract class AbstractBlockChain implements Runnable {
     }
 
     // attempt to make the 'candidate' into the best block, returns true if the operation is successful.
-    protected abstract boolean makeBest(CandidateBlock candidate);
+    protected abstract void makeBest(CandidateBlock candidate);
     // broadcast the chain information to all peers.
     protected abstract void broadcastChain();
     // returns the best block of this chain.
