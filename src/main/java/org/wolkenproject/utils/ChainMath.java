@@ -123,24 +123,18 @@ public class ChainMath {
         return x256.divide(new BigInteger(1, targetFromBits(bits)));
     }
 
-    public static boolean shouldRecalcNextWork(long height) {
-        return (height + 1) % Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0;
-    }
+    public static int calculateNewTarget(BlockHeader block, int height) {
+        if (height == 0) {
+            return Context.getInstance().getNetworkParameters().getDefaultBits();
+        }
 
-    public static int calculateNewTarget(BlockIndex block) {
-        return calculateNewTarget(block.getBlock(), block.getHeight());
-    }
+        if (height % Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0) {
+            BlockHeader earliest = null;
 
-    public static int calculateNewTarget(Block block, int height) {
-        int currentBlockHeight = height;
-
-        if (shouldRecalcNextWork(currentBlockHeight)) {
-            BlockIndex earliest = null;
-
-            int previousBlockHeight = currentBlockHeight - Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
+            int previousBlockHeight = height - Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
 
             if (previousBlockHeight >= 0) {
-                earliest = Context.getInstance().getDatabase().findBlock(previousBlockHeight);
+                earliest = Context.getInstance().getDatabase().findBlockHeader(previousBlockHeight);
             }
 
             return generateTargetBits(block, earliest);
@@ -149,7 +143,7 @@ public class ChainMath {
         return block.getBits();
     }
 
-    private static int generateTargetBits(Block latest, BlockIndex earliest) {
+    public static int generateTargetBits(BlockHeader latest, BlockHeader earliest) {
         //calculate the target time for 1800 blocks.
         long timePerDiffChange  = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
         long averageNetworkTime = latest.getTimestamp() - earliest.getBlock().getTimestamp();
