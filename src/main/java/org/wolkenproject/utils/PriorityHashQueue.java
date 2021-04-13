@@ -24,7 +24,7 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
     }
 
     @Override
-    public void removeTails(int newLength) {
+    public void removeTails(int newLength, VoidCallableTY<T, byte[]> callable) {
         PriorityHashQueue<T> newQueue = new PriorityHashQueue<>(comparator);
 
         while (!isEmpty() && newQueue.size() < newLength) {
