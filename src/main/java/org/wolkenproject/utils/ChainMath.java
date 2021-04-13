@@ -171,6 +171,10 @@ public class ChainMath {
         return getCompact(target);
     }
 
+    protected static final BigInteger setCompact(BigInteger integer) {
+        return targetIntegerFromBits(getCompact(integer));
+    }
+
     protected static final int getCompact(BigInteger integer)
     {
         byte bytes[]            = integer.toByteArray();
