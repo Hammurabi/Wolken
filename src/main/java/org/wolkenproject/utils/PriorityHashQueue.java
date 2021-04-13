@@ -7,17 +7,17 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
     private Queue<Entry<T>>         queue;
     private Comparator<Entry<T>>    comparator;
     private long                    byteCount;
-    private Callable<Integer, T>    sizeManager;
+    private Callable<Long, T>       sizeManager;
 
     public PriorityHashQueue() {
-        this(new DefaultComparator<>(), a -> { return 0; });
+        this(new DefaultComparator<>(), a -> { return 0L; });
     }
 
-    public PriorityHashQueue(Callable<Integer, T> sizeManager) {
+    public PriorityHashQueue(Callable<Long, T> sizeManager) {
         this(new DefaultComparator<>(), sizeManager);
     }
 
-    public PriorityHashQueue(Comparator<Entry<T>> comparator, Callable<Integer, T> sizeManager) {
+    public PriorityHashQueue(Comparator<Entry<T>> comparator, Callable<Long, T> sizeManager) {
         queue       = new PriorityQueue<>(comparator);
         entryMap    = new HashMap<>();
         this.comparator = comparator;
