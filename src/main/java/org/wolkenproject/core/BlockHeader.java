@@ -154,7 +154,7 @@ public class BlockHeader extends SerializableI {
 
     public byte[] getTargetBytes() {
         byte target[]   = new byte[32];
-        int offset          = 32 -   ((bits >>> 0x18) & 0x1F);
+        int offset          = 32 -   ((bits >>> 0x18) & 0x1D);
         target[offset + 0]  = (byte) ((bits >>> 0x10) & 0xFF);
         target[offset + 1]  = (byte) ((bits >>> 0x08) & 0xFF);
         target[offset + 2]  = (byte) ((bits) & 0xFF);
