@@ -3,6 +3,8 @@ package org.wolkenproject.core.consensus;
 import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.core.transactions.MintTransaction;
+import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.utils.HashQueue;
@@ -194,6 +196,7 @@ public class BasicChain extends AbstractBlockChain {
     @Override
     public BlockIndex getGenesisBlock() {
         Block genesisBlock = new Block(new byte[Block.UniqueIdentifierLength], getContext().getNetworkParameters().getDefaultBits());
+        genesisBlock.addTransaction(Transaction.newMintTransaction("", 1, null));
         BlockIndex genesisBlockIndex = new BlockIndex(genesisBlock, BigInteger.ZERO, 0);
         return genesisBlockIndex;
     }
