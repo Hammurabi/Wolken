@@ -43,7 +43,12 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     protected boolean containsBlock(int height) {
-        return false;
+        BlockIndex bestBlock = getBestBlock();
+        if (bestBlock == null) {
+            return height == 0;
+        }
+
+        return bestBlock.getHeight() >= height;
     }
 
     @Override
