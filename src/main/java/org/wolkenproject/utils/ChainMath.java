@@ -23,12 +23,8 @@ public class ChainMath {
         return Long.toString(new BigDecimal(coin).divide(new BigDecimal(Context.getInstance().getNetworkParameters().getOneCoin()), RoundingMode.DOWN).longValueExact());
     }
 
-    public static boolean validSolution(byte solution[], int bits) throws WolkenException {
-        return validSolution(solution, Utils.takeApart(bits));
-    }
-
-    public static boolean validSolution(byte solution[], byte targetBits[]) throws WolkenException {
-        return new BigInteger(1, solution).compareTo(new BigInteger(1, targetBytesFromBits(targetBits))) < 0;
+    public static boolean validSolution(byte solution[], int bits) {
+        return new BigInteger(1, solution).compareTo(new BigInteger(1, targetBytesFromBits(bits))) < 0;
     }
 
     public static boolean lessThan(byte a[], byte b[]) {
@@ -99,7 +95,7 @@ public class ChainMath {
 
     public static byte[] targetBytesFromBits(int bits) {
         byte target[]       = new byte[32];
-        int offset          = 32 -   ((bits >>> 0x18) & 0x1F);
+        int offset          = 32 -   ((bits >>> 0x18) & 0x1D);
         target[offset + 0]  = (byte) ((bits >>> 0x10) & 0xFF);
         target[offset + 1]  = (byte) ((bits >>> 0x08) & 0xFF);
         target[offset + 2]  = (byte) ((bits) & 0xFF);
