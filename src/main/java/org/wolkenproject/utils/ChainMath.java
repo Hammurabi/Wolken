@@ -163,7 +163,7 @@ public class ChainMath {
             actualTimespan = (timeRequired * 4);
         }
 
-        target = target.multiply(BigInteger.valueOf(actualTimespan))
+        target = setCompact(target).multiply(BigInteger.valueOf(actualTimespan))
                 .divide(BigInteger.valueOf(timeRequired));
 
         target = target.min(Context.getInstance().getNetworkParameters().getMaxTarget());
