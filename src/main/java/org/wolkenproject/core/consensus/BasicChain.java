@@ -18,6 +18,8 @@ public class BasicChain extends AbstractBlockChain {
     private BlockIndex                  bestBlock;
     // contains blocks sent from peers.
     private HashQueue<CandidateBlock>   candidateQueue;
+    // contains blocks that are valid.
+    private HashQueue<CandidateBlock>   staleBlocks;
     // keep track of broadcasted blocks.
     private byte                        lastBroadcast[];
 
@@ -42,7 +44,7 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public boolean containsBlock(byte[] hash) {
-        return false;
+        return getContext().getDatabase().checkBlockExists(hash) || staleBlocks.containsKey(hash);
     }
 
     @Override
@@ -67,7 +69,6 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     protected void addOrphan(BlockIndex block) {
-
     }
 
     @Override
