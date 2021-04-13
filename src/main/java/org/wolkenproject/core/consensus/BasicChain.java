@@ -16,14 +16,16 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class BasicChain extends AbstractBlockChain {
-    protected static final int                MaximumOrphanBlockQueueSize   = 250_000_000;
-    protected static final int                MaximumStaleBlockQueueSize    = 500_000_000;
-    protected static final int                MaximumPoolBlockQueueSize     = 1_250_000_000;
+    protected static final int                MaximumCandidateQueueSize     = 156_250;
+    protected static final int                MaximumOrphanBlockQueueSize   = 156_250;
+    protected static final int                MaximumStaleBlockQueueSize    = 156_25;
 
     // the current higest block in the chain
     private BlockIndex                  bestBlock;
     // contains blocks sent from peers.
     private HashQueue<CandidateBlock>   candidateQueue;
+    // contains blocks that are valid.
+    private HashQueue<ChainFork>        orphanPool;
     // contains blocks that are valid.
     private HashQueue<ChainFork>        staleBlocks;
     // keep track of broadcasted blocks.
@@ -33,6 +35,7 @@ public class BasicChain extends AbstractBlockChain {
         super(context);
         this.lastBroadcast  = new byte[32];
         this.candidateQueue = new PriorityHashQueue<>();
+        this.orphanPool     = new LinkedHashQueue<>();
         this.staleBlocks    = new LinkedHashQueue<>();
     }
 
@@ -194,6 +197,8 @@ public class BasicChain extends AbstractBlockChain {
         getMutex().lock();
         try {
             staleBlocks.add(fork, fork.getHash());
+            staleBlocks.removeTails(MaximumStaleBlockQueueSize, (block, hash)->{
+            });
         } finally {
             getMutex().unlock();
         }
