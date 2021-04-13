@@ -151,7 +151,6 @@ public class ChainMath {
         return generateTargetBits(averageNetworkTime, timePerDiffChange, latest.getBits());
     }
 
-
     private static int generateTargetBits(long actualTimespan, long timeRequired, int prevTarget) {
         BigInteger target = targetIntegerFromBits(prevTarget);
 
