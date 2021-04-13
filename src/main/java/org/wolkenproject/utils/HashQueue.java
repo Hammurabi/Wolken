@@ -7,12 +7,11 @@ public interface HashQueue<T> {
     void add(T element, byte hash[]);
     T poll();
     T peek();
-    void remove(byte hash[]);
     int size();
     // should return the amount of bytes in memory this queue is taking (if available)
-    int byteCount();
+    long byteCount();
     default boolean hasElements() {
         return !isEmpty();
     }
-    boolean isEmpty();
+    default boolean isEmpty() { return size() != 0; }
 }
