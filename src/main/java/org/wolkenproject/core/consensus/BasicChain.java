@@ -88,12 +88,10 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     protected void loadBestBlock() {
-
     }
 
     @Override
     protected void setBestBlock(BlockIndex block) {
-
     }
 
     @Override
@@ -137,7 +135,12 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public BlockIndex fork() {
-        return null;
+        BlockIndex bestBlock = getBestBlock();
+        if (bestBlock == null) {
+            return null;
+        }
+
+        return bestBlock.generateNextBlock();
     }
 
     @Override
