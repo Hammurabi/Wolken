@@ -196,6 +196,11 @@ public class PeerBlockCandidate extends CandidateBlock {
         }
 
         chain.clear();
+
+        for (byte stale[] : staleChain) {
+            getContext().getBlockChain().queueStale(stale);
+        }
+        
         return true;
     }
 
