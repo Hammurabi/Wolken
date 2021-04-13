@@ -39,6 +39,8 @@ public class PeerBlockCandidate extends CandidateBlock {
         if (getContext().getBlockChain().isBlockStale(commonAncestor)) {
             staleChain = getContext().getBlockChain().getStaleChain(commonAncestor);
             if (staleChain == null) {
+                // propagate to the network so long as the block-header is valid.
+                broadcast();
                 return false;
             }
         }
@@ -46,11 +48,15 @@ public class PeerBlockCandidate extends CandidateBlock {
         chain.add(header);
         // get all blocks.
         if (!downloadBlocks()) return false;
-        // propagate.
-        Message notify = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, header.getHashCode());
-        getContext().getServer().broadcast(notify, sender);
+        // propagate to the network so long as the block is valid.
+        broadcast();
 
         return true;
+    }
+
+    private void broadcast() {
+        Message notify = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, header.getHashCode());
+        getContext().getServer().broadcast(notify, sender);
     }
 
     @Override
@@ -200,7 +206,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         for (byte stale[] : staleChain) {
             getContext().getBlockChain().queueStale(stale);
         }
-        
+
         return true;
     }
 
