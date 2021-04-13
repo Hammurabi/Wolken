@@ -55,6 +55,11 @@ public class Server implements Runnable {
         int connections = 0;
 
         for (NetAddress address : forceConnections) {
+            // prevent self connections.
+            if (address.getAddress().isAnyLocalAddress() || address.getAddress().isLoopbackAddress()) {
+                continue;
+            }
+
             int i = connectedNodes.size();
             Logger.alert("attempting to connect to ${a}", address);
 
