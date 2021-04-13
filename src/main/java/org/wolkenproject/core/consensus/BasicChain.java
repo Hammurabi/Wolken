@@ -1,9 +1,6 @@
 package org.wolkenproject.core.consensus;
 
-import org.wolkenproject.core.Block;
-import org.wolkenproject.core.BlockIndex;
-import org.wolkenproject.core.BlockMetadata;
-import org.wolkenproject.core.Context;
+import org.wolkenproject.core.*;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.Inv;
@@ -16,7 +13,7 @@ import java.util.*;
 public class BasicChain extends AbstractBlockChain {
     protected static final int                MaximumCandidateQueueSize     = 156_250;
     protected static final int                MaximumOrphanBlockQueueSize   = 156_250;
-    protected static final int                MaximumStaleBlockQueueSize    = 156_25;
+    protected static final int                MaximumStaleBlockQueueSize    = 375_000;
 
     // the current higest block in the chain
     private BlockIndex                  bestBlock;
@@ -237,9 +234,11 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public boolean isBlockStale(byte[] hash) {
-        BlockMetadata metadata = getContext().getDatabase().findBlockMetaData(hash);
-        if (metadata != null) {
-            return metadata.isStale();
+        getMutex().lock();
+        try {
+            staleBlocks.contains(ByteArray.wrap(hash));
+        } finally {
+            getMutex().unlock();
         }
 
         return false;
@@ -247,6 +246,26 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public List<byte[]> getStaleChain(byte[] hash) {
+        getMutex().lock();
+        try {
+            List<byte[]> staleChain = new ArrayList<>();
+            ByteArray currentHash = null;
+            while (staleBlocks.contains(currentHash = ByteArray.wrap(hash))) {
+                if (getContext().getDatabase().checkBlockExists(hash)) {
+                    BlockHeader header = getContext().getDatabase().findBlockHeader(hash);
+                    staleChain.add(hash);
+                    staleBlocks.remove(currentHash);
+                    hash = header.getParentHash();
+                } else {
+                    for (byte[] hash : staleChain) {
+                        getContext().getBlockChain().queueStale(hash);
+                    }
+                }
+            }
+        } finally {
+            getMutex().unlock();
+        }
+
         return null;
     }
 
