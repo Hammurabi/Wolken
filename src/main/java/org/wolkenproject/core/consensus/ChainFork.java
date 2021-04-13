@@ -47,5 +47,8 @@ public class ChainFork {
     }
 
     public void deleteBlocks() {
+        for (byte[] hash : chain) {
+            Context.getInstance().getBlockChain().removeBlock(hash);
+        }
     }
 }
