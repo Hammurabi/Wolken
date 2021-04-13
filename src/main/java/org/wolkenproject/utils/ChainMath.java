@@ -176,8 +176,8 @@ public class ChainMath {
     }
 
     protected static final int getCompact(BigInteger integer) {
-        byte bytes[] = integer.toByteArray();
-        byte bits[] = new byte[4];
+        byte bytes[]    = Utils.takeApart(integer);
+        byte bits[]     = new byte[4];
 
         bits[0] = (byte) bytes.length;
         if (bytes.length > 0)
