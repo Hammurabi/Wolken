@@ -5,6 +5,8 @@ import org.wolkenproject.core.Context;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.utils.HashQueue;
+import org.wolkenproject.utils.LinkedHashQueue;
+import org.wolkenproject.utils.PriorityHashQueue;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -25,7 +27,9 @@ public class BasicChain extends AbstractBlockChain {
 
     public BasicChain(Context context) {
         super(context);
-        this.lastBroadcast = new byte[32];
+        this.lastBroadcast  = new byte[32];
+        this.candidateQueue = new PriorityHashQueue<>();
+        this.staleBlocks    = new LinkedHashQueue<>();
     }
 
     @Override
