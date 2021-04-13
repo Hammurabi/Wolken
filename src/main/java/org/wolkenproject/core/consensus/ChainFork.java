@@ -33,9 +33,8 @@ public class ChainFork {
     }
 
     public void staleBlocks(AbstractBlockChain target) {
-        target.queueStale(this);
         for (byte hash[] : chain) {
-            target.makeStale(hash);
+            target.queueStale(hash);
         }
     }
 
