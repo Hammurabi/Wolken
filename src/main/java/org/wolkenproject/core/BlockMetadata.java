@@ -2,6 +2,7 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
+import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.math.BigInteger;
 
 public class BlockMetadata extends SerializableI {
     private BlockHeader blockHeader;
+    private int flags;
     private int height;
     private int transactionCount;
     private int eventCount;
@@ -19,11 +21,12 @@ public class BlockMetadata extends SerializableI {
     private BigInteger chainWork;
 
     public BlockMetadata() {
-        this(new BlockHeader(), 0, 0, 0, 0, 0, BigInteger.ZERO);
+        this(new BlockHeader(), 0, 0, 0, 0, 0, 0, BigInteger.ZERO);
     }
 
-    public BlockMetadata(BlockHeader blockHeader, int height, int transactionCount, int eventCount, long totalValue, long fees, BigInteger chainWork) {
+    public BlockMetadata(BlockHeader blockHeader, int flags, int height, int transactionCount, int eventCount, long totalValue, long fees, BigInteger chainWork) {
         this.blockHeader = blockHeader;
+        this.flags = flags;
         this.height = height;
         this.transactionCount = transactionCount;
         this.eventCount = eventCount;
@@ -34,6 +37,10 @@ public class BlockMetadata extends SerializableI {
 
     public BlockHeader getBlockHeader() {
         return blockHeader;
+    }
+
+    public int getFlags() {
+        return flags;
     }
 
     public int getHeight() {
@@ -63,6 +70,7 @@ public class BlockMetadata extends SerializableI {
     @Override
     public void write(OutputStream stream) throws IOException, WolkenException {
         getBlockHeader().write(stream);
+        Utils.writeInt(getFlags(), stream);
         VarInt.writeCompactUInt32(getHeight(), false, stream);
         VarInt.writeCompactUInt32(getTransactionCount(), false, stream);
         VarInt.writeCompactUInt32(getEventCount(), false, stream);
@@ -74,6 +82,7 @@ public class BlockMetadata extends SerializableI {
     @Override
     public void read(InputStream stream) throws IOException, WolkenException {
         getBlockHeader().read(stream);
+        flags = Utils.readInt(stream);
         height = VarInt.readCompactUInt32(false, stream);
         transactionCount = VarInt.readCompactUInt32(false, stream);
         eventCount = VarInt.readCompactUInt32(false, stream);
@@ -90,5 +99,24 @@ public class BlockMetadata extends SerializableI {
     @Override
     public int getSerialNumber() {
         return Context.getInstance().getSerialFactory().getSerialNumber(BlockMetadata.class);
+    }
+
+    public boolean isStale() {
+        return (flags & Flags.StaleBlock) == Flags.StaleBlock;
+    }
+
+    public void setStale(boolean stale) {
+        if (stale) {
+            flags = flags | Flags.StaleBlock;
+        } else {
+            flags = flags & ~Flags.StaleBlock;
+        }
+    }
+
+    public static final class Flags {
+        public static final int
+                MainChain  = 0,
+                StaleBlock = 1,
+                None = 0;
     }
 }
