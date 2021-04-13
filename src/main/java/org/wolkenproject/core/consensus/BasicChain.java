@@ -257,16 +257,19 @@ public class BasicChain extends AbstractBlockChain {
                     staleBlocks.remove(currentHash);
                     hash = header.getParentHash();
                 } else {
-                    for (byte[] hash : staleChain) {
-                        getContext().getBlockChain().queueStale(hash);
+                    for (byte[] staleHash : staleChain) {
+                        staleBlocks.add(ByteArray.wrap(staleHash));
                     }
+
+                    return null;
                 }
             }
+
+            Collections.reverse(staleChain);
+            return staleChain;
         } finally {
             getMutex().unlock();
         }
-
-        return null;
     }
 
     @Override
