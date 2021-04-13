@@ -7,12 +7,17 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
     private Queue<Entry<T>>         queue;
     private Comparator<Entry<T>>    comparator;
     private long                    byteCount;
+    private Callable<Integer, T>    sizeManager;
 
     public PriorityHashQueue() {
-        this(new DefaultComparator<>());
+        this(new DefaultComparator<>(), a -> { return 0; });
     }
 
-    public PriorityHashQueue(Comparator<Entry<T>> comparator) {
+    public PriorityHashQueue(Callable<Integer, T> sizeManager) {
+        this(new DefaultComparator<>(), sizeManager);
+    }
+
+    public PriorityHashQueue(Comparator<Entry<T>> comparator, Callable<Integer, T> sizeManager) {
         queue       = new PriorityQueue<>(comparator);
         entryMap    = new HashMap<>();
         this.comparator = comparator;
@@ -25,7 +30,7 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
 
     @Override
     public void removeTails(int newLength, VoidCallableTY<T, byte[]> callable) {
-        PriorityHashQueue<T> newQueue = new PriorityHashQueue<>(comparator);
+        PriorityHashQueue<T> newQueue = new PriorityHashQueue<>(comparator, sizeManager);
 
         while (!isEmpty() && newQueue.size() < newLength) {
             Entry<T> e = queue.poll();
@@ -54,6 +59,7 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
 
         entryMap.put(ByteArray.wrap(hash), entry);
         queue.add(entry);
+        byteCount += sizeManager.call(element);
     }
 
     @Override
@@ -65,6 +71,7 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
         Entry<T> entry = queue.poll();
         entryMap.remove(entry.hash);
 
+        byteCount -= sizeManager.call(entry.element);
         return entry.element;
     }
 
