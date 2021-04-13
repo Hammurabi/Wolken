@@ -7,9 +7,9 @@ import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.utils.HashQueue;
 import org.wolkenproject.utils.LinkedHashQueue;
 import org.wolkenproject.utils.PriorityHashQueue;
+import org.wolkenproject.utils.Utils;
 
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 
 public class BasicChain extends AbstractBlockChain {
     protected static final int                MaximumOrphanBlockQueueSize   = 250_000_000;
@@ -130,6 +130,29 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public ChainFork getFork(byte[] hash) {
+        if (getContext().getDatabase().checkBlockExists(hash)) {
+            // get the best block to identify the latest block in the chain.
+            BlockIndex currentblock = getBestBlock();
+
+            getMutex().lock();
+            try {
+                List<byte[]> hashes = new ArrayList<>();
+                while (!Utils.equals(currentblock.getHash(), hash)) {
+                    hashes.add(currentblock.getHash());
+                    // load the previous block of the chain.
+                    currentblock = currentblock.previousBlock();
+                }
+
+                // reverse the order of the list.
+                Collections.reverse(hashes);
+
+                // return a new chain-fork.
+                return new ChainFork(hashes);
+            } finally {
+                getMutex().unlock();
+            }
+        }
+
         return null;
     }
 
