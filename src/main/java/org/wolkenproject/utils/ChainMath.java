@@ -97,33 +97,18 @@ public class ChainMath {
         return target;
     }
 
-    public static BigInteger targetIntegerFromBits(int bits) throws WolkenException {
-        return targetIntegerFromBits(Utils.takeApart(bits));
-    }
-
-    public static byte[] targetBytesFromBits(byte[] bits) {
-        byte target[]   = new byte[32];
-        int offset      = 32 - Byte.toUnsignedInt(bits[0]);
-        target[offset + 0]  = bits[1];
-        target[offset + 1]  = bits[2];
-        target[offset + 2]  = bits[3];
+    public static byte[] targetBytesFromBits(int bits) {
+        byte target[]       = new byte[32];
+        int offset          = 32 -   ((bits >>> 0x18) & 0x1F);
+        target[offset + 0]  = (byte) ((bits >>> 0x10) & 0xFF);
+        target[offset + 1]  = (byte) ((bits >>> 0x08) & 0xFF);
+        target[offset + 2]  = (byte) ((bits) & 0xFF);
 
         return target;
     }
 
-    public static BigInteger targetIntegerFromBits(byte bits[]) throws WolkenException {
-        int length      = Byte.toUnsignedInt(bits[0]);
-
-        if (length > 32)
-            throw new WolkenException("invalid target bits '" + Base16.encode(bits) + "'.");
-
-        byte target[]   = Utils.fillArray(new byte[length], (byte) 255);
-
-        target[0]       = bits[1];
-        target[1]       = bits[2];
-        target[2]       = bits[3];
-
-        return new BigInteger(1, target);
+    public static BigInteger targetIntegerFromBits(int bits) {
+        return new BigInteger(1, targetBytesFromBits(bits));
     }
 
     public static long getReward(long height) {
@@ -168,7 +153,7 @@ public class ChainMath {
         return block.getBits();
     }
 
-    private static int generateTargetBits(Block latest, BlockIndex earliest) throws WolkenException {
+    private static int generateTargetBits(Block latest, BlockIndex earliest) {
         //calculate the target time for 1800 blocks.
         long timePerDiffChange  = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
         long averageNetworkTime = latest.getTimestamp() - earliest.getBlock().getTimestamp();
@@ -177,7 +162,7 @@ public class ChainMath {
     }
 
 
-    private static int generateTargetBits(long actualTimespan, long timeRequired, int prevTarget) throws WolkenException {
+    private static int generateTargetBits(long actualTimespan, long timeRequired, int prevTarget) {
         BigInteger target = targetIntegerFromBits(prevTarget);
 
         if (actualTimespan < (timeRequired / 4)) {
