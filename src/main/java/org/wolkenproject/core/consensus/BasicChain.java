@@ -193,7 +193,7 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    public void makeStale(ChainFork fork) {
+    public void queueStale(ChainFork fork) {
         getMutex().lock();
         try {
             staleBlocks.add(fork, fork.getHash());
@@ -202,6 +202,24 @@ public class BasicChain extends AbstractBlockChain {
             });
         } finally {
             getMutex().unlock();
+        }
+    }
+
+    @Override
+    public void makeStale(byte hash[]) {
+        BlockMetadata metadata = getContext().getDatabase().findBlockMetaData(hash);
+        if (metadata != null) {
+            metadata.setStale(true);
+            getContext().getDatabase().storeBlockMetadata(hash, metadata);
+        }
+    }
+
+    @Override
+    public void undoStale(byte hash[]) {
+        BlockMetadata metadata = getContext().getDatabase().findBlockMetaData(hash);
+        if (metadata != null) {
+            metadata.setStale(false);
+            getContext().getDatabase().storeBlockMetadata(hash, metadata);
         }
     }
 
