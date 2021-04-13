@@ -83,12 +83,8 @@ public abstract class AbstractBlockChain implements Runnable {
     public boolean isChainReorganizing() {
         return bIsReorg.get();
     }
-    // adds the fork to 'stale' queue.
-    public abstract void queueStale(ChainFork fork);
     // makes the block 'stale'.
-    public abstract void makeStale(byte hash[]);
-    // makes the block not 'stale'.
-    public abstract void undoStale(byte hash[]);
+    public abstract void queueStale(byte hash[]);
     // return block by it's hash.
     public abstract BlockIndex getBlock(byte[] hash);
     // return the genesis block of this chain.
