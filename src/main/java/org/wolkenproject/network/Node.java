@@ -6,6 +6,7 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
+import org.wolkenproject.utils.ByteArray;
 import org.wolkenproject.utils.Logger;
 import org.wolkenproject.utils.Utils;
 
@@ -22,8 +23,8 @@ public class Node implements Runnable {
     private ReentrantLock                   mutex;
     private Queue<Message>                  messages;
     private Queue<byte[]>                   messageQueue;
-    private Map<byte[], ResponseMetadata>   expectedResponse;
-    private Map<byte[], Message>            respones;
+    private Map<ByteArray, ResponseMetadata>expectedResponse;
+    private Map<ByteArray, Message>         respones;
     private MessageCache                    messageCache;
     private long                            firstConnected;
     private int                             errors;
@@ -57,7 +58,7 @@ public class Node implements Runnable {
     public void receiveResponse(Message message, byte origin[]) {
         mutex.lock();
         try{
-            respones.put(origin, message);
+            respones.put(ByteArray.wrap(origin), message);
         } finally {
             mutex.unlock();
         }
@@ -71,7 +72,7 @@ public class Node implements Runnable {
         try {
             if (messageCache.shouldSend(message)) {
                 messages.add(message);
-                expectedResponse.put(id, message.getResponseMetadata());
+                expectedResponse.put(ByteArray.wrap(id), message.getResponseMetadata());
                 shouldWait = true;
             }
         } finally {
@@ -96,7 +97,7 @@ public class Node implements Runnable {
     private boolean hasResponse(byte[] uniqueMessageIdentifier) {
         mutex.lock();
         try{
-            return respones.containsKey(uniqueMessageIdentifier);
+            return respones.containsKey(ByteArray.wrap(uniqueMessageIdentifier));
         } finally {
             mutex.unlock();
         }
@@ -105,8 +106,8 @@ public class Node implements Runnable {
     private CheckedResponse getResponse(byte[] uniqueMessageIdentifier) {
         mutex.lock();
         try{
-            Message response            = respones.get(uniqueMessageIdentifier);
-            ResponseMetadata metadata   = expectedResponse.get(uniqueMessageIdentifier);
+            Message response            = respones.get(ByteArray.wrap(uniqueMessageIdentifier));
+            ResponseMetadata metadata   = expectedResponse.get(ByteArray.wrap(uniqueMessageIdentifier));
 
             // internal error, we may return null
             if (response == null) {
@@ -135,8 +136,8 @@ public class Node implements Runnable {
 
             return new CheckedResponse(response, flags);
         } finally {
-            respones.remove(uniqueMessageIdentifier);
-            expectedResponse.remove(uniqueMessageIdentifier);
+            respones.remove(ByteArray.wrap(uniqueMessageIdentifier));
+            expectedResponse.remove(ByteArray.wrap(uniqueMessageIdentifier));
             mutex.unlock();
         }
     }
