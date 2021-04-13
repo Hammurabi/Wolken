@@ -77,13 +77,22 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         setMerkleRoot(getStateChange().getMerkleRoot());
     }
 
-    public boolean verify(BlockHeader parent, int blockHeight) {
+    public boolean verify(BlockHeader lastDifficultyChange, BlockHeader parent, int blockHeight) {
         // check that this is not the genesis block.
         if (blockHeight > 0) {
             // reject the block if the timestamp is more than 144 seconds ahead.
             if (getTimestamp() - System.currentTimeMillis() > Context.getInstance().getNetworkParameters().getMaxFutureBlockTime()) return false;
             // reject the block if the timestamp is older than the parent's timestamp.
             if (getTimestamp() <= parent.getTimestamp()) return false;
+            // check bits are set correctly.
+            if (blockHeight % Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0) {
+                if (getBits() != ChainMath.generateTargetBits(this, lastDifficultyChange)) return false;
+            } else {
+                if (getBits() != parent.getBits()) return false;
+            }
+        } else {
+            // check bits for block 0.
+            if (getBits() != Context.getInstance().getNetworkParameters().getDefaultBits()) return false;
         }
         // PoW check.
         if (!blockHeader.verifyProofOfWork()) return false;
