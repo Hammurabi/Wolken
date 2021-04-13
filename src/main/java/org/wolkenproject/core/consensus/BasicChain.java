@@ -55,8 +55,8 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    public boolean containsBlock(byte[] hash) {
-        return getContext().getDatabase().checkBlockExists(hash) || staleBlocks.containsKey(hash);
+    public boolean containsBlock(byte[] hash, boolean includeOprhans) {
+        return getContext().getDatabase().checkBlockExists(hash) || staleBlocks.containsKey(hash) || (includeOprhans && orphanPool.containsKey(hash));
     }
 
     @Override
