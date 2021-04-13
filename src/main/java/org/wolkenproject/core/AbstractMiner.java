@@ -36,20 +36,17 @@ public abstract class AbstractMiner implements Runnable {
                 block.build();
 
                 // mine the block
-                mine(block);
-
-                // create a block index
-                BlockIndex index = new BlockIndex(block, parent.getTotalChainWork(), parent.getHeight());
+                mine(block.getBlock());
 
                 // create a candidate
-                CandidateBlock candidateBlock = new MinedBlockCandidate(Context.getInstance(), index);
+                CandidateBlock candidateBlock = new MinedBlockCandidate(Context.getInstance(), block);
 
                 // submit the block
                 Context.getInstance().getBlockChain().suggest(candidateBlock);
 
                 // make a collection
                 Collection<byte[]> list = new ArrayList<>();
-                list.add(index.getHash());
+                list.add(block.getHash());
 
                 // broadcast the block
                 Context.getInstance().getServer().broadcast(new Inv(Inv.Type.Block, list));
