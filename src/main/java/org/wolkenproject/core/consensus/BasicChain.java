@@ -84,6 +84,9 @@ public class BasicChain extends AbstractBlockChain {
         getMutex().lock();
         try {
             orphanPool.add(block, block.getHash());
+            orphanPool.removeTails(MaximumOrphanBlockQueueSize, (orphan, hash)->{
+                orphan.destroy();
+            });
         } finally {
             getMutex().unlock();
         }
