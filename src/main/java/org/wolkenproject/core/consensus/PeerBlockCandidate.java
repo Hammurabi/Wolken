@@ -13,6 +13,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class PeerBlockCandidate extends CandidateBlock {
+    private List<byte[]>        staleChain;
     private List<BlockHeader>   chain;
     private BlockHeader         header;
     private Node                sender;
@@ -33,9 +34,13 @@ public class PeerBlockCandidate extends CandidateBlock {
         // check that we received the headers.
         if (ancestors == null) return false;
         // pop the most recent common ancestor.
-        byte commoonAncestor[] = ancestors.get(0).getHashCode();
-        if (getContext().getBlockChain().isBlockStale(commoonAncestor)) {
-
+        byte commonAncestor[] = ancestors.get(0).getHashCode();
+        // check if the ancestor is stale.
+        if (getContext().getBlockChain().isBlockStale(commonAncestor)) {
+            staleChain = getContext().getBlockChain().getStaleChain(commonAncestor);
+            if (staleChain == null) {
+                return false;
+            }
         }
         chain = ancestors;
         chain.add(header);
