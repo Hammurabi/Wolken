@@ -38,18 +38,20 @@ public abstract class AbstractMiner implements Runnable {
                 // mine the block
                 mine(block.getBlock());
 
-                // create a candidate
-                CandidateBlock candidateBlock = new MinedBlockCandidate(Context.getInstance(), block);
+                if (block.getBlock().verifyProofOfWork()) {
+                    // create a candidate
+                    CandidateBlock candidateBlock = new MinedBlockCandidate(Context.getInstance(), block);
 
-                // submit the block
-                Context.getInstance().getBlockChain().suggest(candidateBlock);
+                    // submit the block
+                    Context.getInstance().getBlockChain().suggest(candidateBlock);
 
-                // make a collection
-                Collection<byte[]> list = new ArrayList<>();
-                list.add(block.getHash());
+                    // make a collection
+                    Collection<byte[]> list = new ArrayList<>();
+                    list.add(block.getHash());
 
-                // broadcast the block
-                Context.getInstance().getServer().broadcast(new Inv(Inv.Type.Block, list));
+                    // broadcast the block
+                    Context.getInstance().getServer().broadcast(new Inv(Inv.Type.Block, list));
+                }
             } catch (WolkenException e) {
                 e.printStackTrace();
             }
