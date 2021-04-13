@@ -2,7 +2,7 @@ package org.wolkenproject.utils;
 
 import java.util.*;
 
-public class LinkedHashQueue<T extends Comparable<T>> implements HashQueue<T> {
+public class LinkedHashQueue<T> implements HashQueue<T> {
     private Map<byte[], Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
     private long                    byteCount;
