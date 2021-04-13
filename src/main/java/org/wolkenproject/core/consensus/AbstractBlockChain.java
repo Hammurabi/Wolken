@@ -62,7 +62,7 @@ public abstract class AbstractBlockChain implements Runnable {
     // returns true if this block has been rejected.
     protected abstract boolean isRejected(byte[] hash);
     // makes the block an orphan, meaning it does not have any ancestors.
-    protected abstract void addOrphan(BlockIndex block);
+    protected abstract void addOrphan(CandidateBlock block);
     // suggest these blocks and add them to the pool.
     public abstract void suggest(Set<CandidateBlock> blocks);
     // suggest this block and add it to the pool.
@@ -82,7 +82,7 @@ public abstract class AbstractBlockChain implements Runnable {
         return bIsReorg.get();
     }
     // makes the block 'stale'
-    public abstract void makeStale(byte[] hash);
+    public abstract void makeStale(ChainFork fork);
     // return block by it's hash.
     public abstract BlockIndex getBlock(byte[] hash);
     // return the genesis block of this chain.
