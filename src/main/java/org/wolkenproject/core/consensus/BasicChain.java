@@ -190,6 +190,11 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
+    public BlockIndex getGenesisBlock() {
+        return null;
+    }
+
+    @Override
     public void suggest(Set<CandidateBlock> blocks) {
         for (CandidateBlock block : blocks) {
             suggest(block);
