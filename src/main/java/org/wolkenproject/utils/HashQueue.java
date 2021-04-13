@@ -1,12 +1,12 @@
 package org.wolkenproject.utils;
 
 public interface HashQueue<T> {
-    boolean containsKey(byte[] hash);
+    boolean containsKey(ByteArray hash);
     default void removeTails(int newLength) {
         removeTails(newLength, (a, b)->{});
     }
     void removeTails(int newLength, VoidCallableTY<T, byte[]> callable);
-    T getByHash(byte[] hash);
+    T getByHash(ByteArray hash);
     void add(T element, byte hash[]);
     T poll();
     T peek();
