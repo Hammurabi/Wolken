@@ -18,9 +18,12 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
     }
 
     @Override
-    public void removeTails(int newLength) {
+    public void removeTails(int newLength, VoidCallableTY<T, byte[]> callable) {
         while (!isEmpty() && size() > newLength) {
+            Entry<T> entry = queue.peek();
             poll();
+
+            callable.call(entry.element, entry.hash);
         }
     }
 
