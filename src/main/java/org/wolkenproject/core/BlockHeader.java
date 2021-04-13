@@ -149,6 +149,9 @@ public class BlockHeader extends SerializableI {
         byte bits[] = getTargetBytes();
         BigInteger result = new BigInteger(1, hash);
         BigInteger target = new BigInteger(1, bits);
+        if (target.compareTo(Context.getInstance().getNetworkParameters().getMaxTarget()) > 0) {
+            return false;
+        }
         return result.compareTo(target) < 0;
     }
 
