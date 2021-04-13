@@ -113,6 +113,15 @@ public class Database {
         return new BlockIndex(block, metadata);
     }
 
+    public List<Event> getBlockEvents(byte[] hash) {
+        BlockIndex block = findBlock(hash);
+        if (block != null) {
+            return block.getStateChange().getTransactionEvents();
+        }
+
+        return null;
+    }
+
     public void storePrunedBlock(int height, BlockIndex block) {
         // get a reference of the hash since we will keep reusing it.
         byte hash[]   = block.getHash();
@@ -434,8 +443,5 @@ public class Database {
 
     public Block findTempBlock(byte[] hashCode) {
         return get(Utils.concatenate(TempStorage, hashCode), Block.class);
-    }
-
-    public List<Event> getBlockEvents(byte[] hash) {
     }
 }
