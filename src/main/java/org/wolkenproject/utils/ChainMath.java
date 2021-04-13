@@ -28,30 +28,30 @@ public class ChainMath {
     }
 
     public static boolean lessThan(byte a[], byte b[]) {
-        if (a.length<b.length) {
-            int diff = b.length-a.length;
-            for (int i = 0; i < diff; i ++) {
+        if (a.length < b.length) {
+            int diff = b.length - a.length;
+            for (int i = 0; i < diff; i++) {
                 if (Byte.toUnsignedInt(b[i]) != 0) {
                     return true;
                 }
             }
 
-            for (int i = 0; i < a.length; i ++) {
+            for (int i = 0; i < a.length; i++) {
                 if (Byte.toUnsignedInt(a[i]) >= Byte.toUnsignedInt(b[i + diff])) {
                     return false;
                 } else {
                     return true;
                 }
             }
-        } else if (b.length<a.length) {
-            int diff = a.length-b.length;
-            for (int i = 0; i < diff; i ++) {
+        } else if (b.length < a.length) {
+            int diff = a.length - b.length;
+            for (int i = 0; i < diff; i++) {
                 if (Byte.toUnsignedInt(a[i]) != 0) {
                     return false;
                 }
             }
 
-            for (int i = 0; i < b.length; i ++) {
+            for (int i = 0; i < b.length; i++) {
                 if (Byte.toUnsignedInt(a[i + diff]) >= Byte.toUnsignedInt(b[i])) {
                     return false;
                 } else {
@@ -59,7 +59,7 @@ public class ChainMath {
                 }
             }
         } else {
-            for (int i = 0; i < a.length; i ++) {
+            for (int i = 0; i < a.length; i++) {
                 if (Byte.toUnsignedInt(a[i]) >= Byte.toUnsignedInt(b[i])) {
                     return false;
                 } else return true;
@@ -70,15 +70,15 @@ public class ChainMath {
     }
 
     public static byte[] targetFromBits(byte bits[]) throws WolkenException {
-        int length      = Byte.toUnsignedInt(bits[0]);
+        int length = Byte.toUnsignedInt(bits[0]);
         if (length > 32)
             throw new WolkenException("invalid target bits '" + Base16.encode(bits) + "'.");
 
-        byte target[]   = Utils.fillArray(new byte[length], (byte) 255);
+        byte target[] = Utils.fillArray(new byte[length], (byte) 255);
 
-        target[0]       = bits[1];
-        target[1]       = bits[2];
-        target[2]       = bits[3];
+        target[0] = bits[1];
+        target[1] = bits[2];
+        target[2] = bits[3];
 
         return target;
     }
@@ -94,11 +94,11 @@ public class ChainMath {
     }
 
     public static byte[] targetBytesFromBits(int bits) {
-        byte target[]       = new byte[32];
-        int offset          = 32 -   ((bits >>> 0x18) & 0x1D);
-        target[offset + 0]  = (byte) ((bits >>> 0x10) & 0xFF);
-        target[offset + 1]  = (byte) ((bits >>> 0x08) & 0xFF);
-        target[offset + 2]  = (byte) ((bits) & 0xFF);
+        byte target[] = new byte[32];
+        int offset = 32 - ((bits >>> 0x18) & 0x1D);
+        target[offset + 0] = (byte) ((bits >>> 0x10) & 0xFF);
+        target[offset + 1] = (byte) ((bits >>> 0x08) & 0xFF);
+        target[offset + 2] = (byte) ((bits) & 0xFF);
 
         return target;
     }
@@ -145,7 +145,7 @@ public class ChainMath {
 
     public static int generateTargetBits(BlockHeader latest, BlockHeader earliest) {
         //calculate the target time for 1800 blocks.
-        long timePerDiffChange  = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
+        long timePerDiffChange = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
         long averageNetworkTime = latest.getTimestamp() - earliest.getTimestamp();
 
         return generateTargetBits(averageNetworkTime, timePerDiffChange, latest.getBits());
@@ -175,18 +175,17 @@ public class ChainMath {
         return targetIntegerFromBits(getCompact(integer));
     }
 
-    protected static final int getCompact(BigInteger integer)
-    {
-        byte bytes[]            = integer.toByteArray();
-        byte bits[]             = new byte[4];
+    protected static final int getCompact(BigInteger integer) {
+        byte bytes[] = integer.toByteArray();
+        byte bits[] = new byte[4];
 
-        bits[0]                 = (byte) bytes.length;
-        if(bytes.length > 0)
-            bits[1]             = bytes[0];
-        if(bytes.length > 1)
-            bits[2]             = bytes[1];
-        if(bytes.length > 2)
-            bits[3]             = bytes[2];
+        bits[0] = (byte) bytes.length;
+        if (bytes.length > 0)
+            bits[1] = bytes[0];
+        if (bytes.length > 1)
+            bits[2] = bytes[1];
+        if (bytes.length > 2)
+            bits[3] = bytes[2];
 
         return Utils.makeInt(bits);
     }
