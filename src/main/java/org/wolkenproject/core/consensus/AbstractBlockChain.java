@@ -50,8 +50,6 @@ public abstract class AbstractBlockChain implements Runnable {
     protected abstract void loadBestBlock();
     // save a recovery checkpoint.
     protected abstract void setBestBlock(BlockIndex block);
-    // returns true if the block is valid (full validation).
-    public abstract boolean verifyBlock(BlockIndex block);
     // set the block at 'height' to 'block', if a previous block exists then it should be replaced.
     protected abstract void setBlock(int height, BlockIndex block);
     // return true if the chain height is larger than or equal to 'height'.
