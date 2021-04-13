@@ -25,7 +25,7 @@ public class BasicChain extends AbstractBlockChain {
     // contains blocks sent from peers.
     private HashQueue<CandidateBlock>   candidateQueue;
     // contains blocks that are valid.
-    private HashQueue<ChainFork>        orphanPool;
+    private HashQueue<CandidateBlock>   orphanPool;
     // contains blocks that are valid.
     private HashQueue<ChainFork>        staleBlocks;
     // keep track of broadcasted blocks.
