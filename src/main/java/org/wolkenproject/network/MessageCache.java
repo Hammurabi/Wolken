@@ -1,11 +1,13 @@
 package org.wolkenproject.network;
 
+import org.wolkenproject.utils.ByteArray;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class MessageCache {
-    private Map<byte[], Integer>    receivedMessages;
-    private Map<byte[], Integer>    sentMessages;
+    private Map<ByteArray, Integer> receivedMessages;
+    private Map<ByteArray, Integer> sentMessages;
     private double                  spamAverage;
 
     public MessageCache() {
@@ -15,7 +17,7 @@ public class MessageCache {
     }
 
     public int cacheReceivedMessage(Message message) {
-        byte messageId[] = message.getUniqueMessageIdentifier();
+        ByteArray messageId = ByteArray.wrap(message.getUniqueMessageIdentifier());
 
         if (receivedMessages.containsKey(messageId)) {
             int timesReceived = receivedMessages.get(messageId);
@@ -29,7 +31,7 @@ public class MessageCache {
     }
 
     private int numTimesReceived(Message message) {
-        byte messageId[] = message.getUniqueMessageIdentifier();
+        ByteArray messageId = ByteArray.wrap(message.getUniqueMessageIdentifier());
 
         if (receivedMessages.containsKey(messageId)) {
             return receivedMessages.get(messageId);
@@ -39,7 +41,7 @@ public class MessageCache {
     }
 
     public boolean shouldSend(Message message) {
-        byte messageId[] = message.getUniqueMessageIdentifier();
+        ByteArray messageId = ByteArray.wrap(message.getUniqueMessageIdentifier());
         int timesSent = 0;
 
         if (sentMessages.containsKey(messageId)) {
