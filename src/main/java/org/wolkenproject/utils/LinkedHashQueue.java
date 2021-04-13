@@ -3,7 +3,7 @@ package org.wolkenproject.utils;
 import java.util.*;
 
 public class LinkedHashQueue<T> implements HashQueue<T> {
-    private Map<byte[], Entry<T>>   entryMap;
+    private Map<ByteArray, Entry<T>>   entryMap;
     private Queue<Entry<T>>         queue;
     private long                    byteCount;
 
@@ -13,7 +13,7 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
     }
 
     @Override
-    public boolean containsKey(byte[] hash) {
+    public boolean containsKey(ByteArray hash) {
         return entryMap.containsKey(hash);
     }
 
@@ -28,7 +28,7 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
     }
 
     @Override
-    public T getByHash(byte[] hash) {
+    public T getByHash(ByteArray hash) {
         if (entryMap.containsKey(hash)) {
             return entryMap.get(hash).element;
         }
@@ -42,7 +42,7 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
         entry.element   = element;
         entry.hash      = hash;
 
-        entryMap.put(hash, entry);
+        entryMap.put(ByteArray.wrap(hash), entry);
         queue.add(entry);
     }
 
@@ -53,7 +53,7 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
         }
 
         Entry<T> entry = queue.poll();
-        entryMap.remove(entry.hash);
+        entryMap.remove(ByteArray.wrap(entry.hash));
 
         return entry.element;
     }
