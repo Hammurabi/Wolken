@@ -2,6 +2,7 @@ package org.wolkenproject.core.consensus;
 
 import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
+import org.wolkenproject.core.BlockMetadata;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.transactions.MintTransaction;
 import org.wolkenproject.core.transactions.Transaction;
@@ -215,6 +216,16 @@ public class BasicChain extends AbstractBlockChain {
         genesisBlock.addTransaction(Transaction.newMintTransaction("", 1, null));
         BlockIndex genesisBlockIndex = new BlockIndex(genesisBlock, BigInteger.ZERO, 0);
         return genesisBlockIndex;
+    }
+
+    @Override
+    public boolean isBlockStale(byte[] hash) {
+        BlockMetadata metadata = getContext().getDatabase().findBlockMetaData(hash);
+        if (metadata != null) {
+            return metadata.isStale();
+        }
+
+        return false;
     }
 
     @Override
