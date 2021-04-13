@@ -127,11 +127,11 @@ public class ChainMath {
         return (height + 1) % Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0;
     }
 
-    public static int calculateNewTarget(BlockIndex block) throws WolkenException {
+    public static int calculateNewTarget(BlockIndex block) {
         return calculateNewTarget(block.getBlock(), block.getHeight());
     }
 
-    public static int calculateNewTarget(Block block, int height) throws WolkenException {
+    public static int calculateNewTarget(Block block, int height) {
         int currentBlockHeight = height;
 
         if (shouldRecalcNextWork(currentBlockHeight)) {
