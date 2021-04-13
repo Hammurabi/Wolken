@@ -1,25 +1,28 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.core.transactions.Transaction;
+import org.wolkenproject.utils.ByteArray;
+import org.wolkenproject.utils.HashQueue;
 import org.wolkenproject.utils.PriorityHashQueue;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TransactionPool {
-    private PriorityHashQueue<Transaction> transactions;
+    private HashQueue<Transaction>          pendingTransactions;
+    private HashQueue<RejectedTransaction>  rejectedTransactions;
     private ReentrantLock                   mutex;
     private static final int                MaximumTransactionQueueSize = 1_250_000_000;
 
     public TransactionPool() {
-        transactions    = new PriorityHashQueue<>(Transaction.class);
+        pendingTransactions = new PriorityHashQueue<>(Transaction::calculateSize);
         mutex           = new ReentrantLock();
     }
 
     public boolean contains(byte[] txid) {
         mutex.lock();
         try {
-            return transactions.containsKey(txid);
+            return pendingTransactions.containsKey(ByteArray.wrap(txid));
         } finally {
             mutex.unlock();
         }
@@ -40,7 +43,7 @@ public class TransactionPool {
     public Transaction getTransaction(byte[] txid) {
         mutex.lock();
         try {
-            return transactions.getByHash(txid);
+            return pendingTransactions.getByHash(ByteArray.wrap(txid));
         } finally {
             mutex.unlock();
         }
@@ -50,7 +53,19 @@ public class TransactionPool {
         mutex.lock();
         try {
             Set<byte[]> txids = new LinkedHashSet<>();
-            transactions.fillHashes(txids, 16_384);
+            int count = Math.min(1024, pendingTransactions.size());
+            List<Transaction> txs = new ArrayList<>();
+
+            for (int i = 0; i < count; i ++) {
+                Transaction transaction = pendingTransactions.poll();
+                txs.add(transaction);
+
+                txids.add(transaction.getHash());
+            }
+
+            for (Transaction transaction : txs) {
+                pendingTransactions.add(transaction, transaction.getHash());
+            }
 
             return txids;
         } finally {
@@ -61,9 +76,16 @@ public class TransactionPool {
     public void add(Transaction transaction) {
         mutex.lock();
         try {
-            transactions.add(transaction);
+            addInternally(transaction);
         } finally {
             mutex.unlock();
+        }
+    }
+
+    protected void addInternally(Transaction transaction) {
+        pendingTransactions.add(transaction, transaction.getHash());
+        if (pendingTransactions.byteCount() > MaximumTransactionQueueSize) {
+            pendingTransactions.removeTails(pendingTransactions.size() - 1);
         }
     }
 
@@ -73,18 +95,21 @@ public class TransactionPool {
         }
     }
 
-    public void queueBlock(Block block) {
-        for (Transaction transaction : block) {
-            byte txid[] = transaction.getHash();
-            if (contains(txid)) {
-                continue;
-            }
+    public void fillBlock(Block block) {
+        mutex.lock();
+        try {
+            while (block.calculateSize() < Context.getInstance().getNetworkParameters().getMaxBlockSize() && pendingTransactions.hasElements()) {
+                Transaction transaction = pendingTransactions.poll();
+                block.addTransaction(transaction);
 
-            if (Context.getInstance().getDatabase().checkTransactionExists(txid)) {
-                continue;
+                if (block.calculateSize() > Context.getInstance().getNetworkParameters().getMaxBlockSize()) {
+                    block.removeLastTransaction();
+                    addInternally(transaction);
+                    break;
+                }
             }
-
-            add(transaction);
+        } finally {
+            mutex.unlock();
         }
     }
 
@@ -92,9 +117,9 @@ public class TransactionPool {
         mutex.lock();
         try {
             // infinitely loop
-            while (!transactions.isEmpty()) {
+            while (!pendingTransactions.isEmpty()) {
                 // poll a transaction
-                Transaction transaction = transactions.poll();
+                Transaction transaction = pendingTransactions.poll();
                 byte txid[] = transaction.getHash();
 
                 // if the transaction has already been added to a block then continue
