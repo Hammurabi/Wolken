@@ -19,16 +19,9 @@ public class LinkedHashQueue<T extends Comparable<T>> implements HashQueue<T> {
 
     @Override
     public void removeTails(int newLength) {
-        LinkedHashQueue<T> newQueue = new LinkedHashQueue<>();
-
-        while (!isEmpty() && newQueue.size() < newLength) {
-            Entry<T> e = queue.poll();
-            newQueue.add(e.element, e.hash);
+        while (!isEmpty() && size() > newLength) {
+            poll();
         }
-
-        this.entryMap   = newQueue.entryMap;
-        this.queue      = newQueue.queue;
-        this.byteCount  = newQueue.byteCount;
     }
 
     @Override
