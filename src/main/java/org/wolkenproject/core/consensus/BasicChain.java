@@ -88,10 +88,23 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     protected void loadBestBlock() {
+        BlockIndex bestBlock = getContext().getDatabase().findTip();
+        setBestBlockMember(bestBlock);
+    }
+
+    private void setBestBlockMember(BlockIndex block) {
+        getMutex().lock();
+        try {
+            this.bestBlock = bestBlock;
+        } finally {
+            getMutex().unlock();
+        }
     }
 
     @Override
     protected void setBestBlock(BlockIndex block) {
+        setBestBlockMember(bestBlock);
+        getContext().getDatabase().setTip(block);
     }
 
     @Override
