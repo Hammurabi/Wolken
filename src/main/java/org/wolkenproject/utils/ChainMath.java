@@ -146,7 +146,7 @@ public class ChainMath {
     public static int generateTargetBits(BlockHeader latest, BlockHeader earliest) {
         //calculate the target time for 1800 blocks.
         long timePerDiffChange  = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
-        long averageNetworkTime = latest.getTimestamp() - earliest.getBlock().getTimestamp();
+        long averageNetworkTime = latest.getTimestamp() - earliest.getTimestamp();
 
         return generateTargetBits(averageNetworkTime, timePerDiffChange, latest.getBits());
     }
@@ -163,11 +163,10 @@ public class ChainMath {
             actualTimespan = (timeRequired * 4);
         }
 
-        target = target.multiply(new BigInteger(Long.toString(actualTimespan)))
-                .divide(new BigInteger(Long.toString(timeRequired)));
-        if (target.compareTo(Context.getInstance().getNetworkParameters().getMaxTarget()) > 0) {
-            target = Context.getInstance().getNetworkParameters().getMaxTarget();
-        }
+        target = target.multiply(BigInteger.valueOf(actualTimespan))
+                .divide(BigInteger.valueOf(timeRequired));
+
+        target = target.min(Context.getInstance().getNetworkParameters().getMaxTarget());
 
         return getCompact(target);
     }
