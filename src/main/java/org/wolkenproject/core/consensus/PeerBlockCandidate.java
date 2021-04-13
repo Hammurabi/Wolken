@@ -315,6 +315,6 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     private static boolean isCommonAncestor(Context context, BlockHeader blockHeader) {
-        return context.getDatabase().checkBlockExists(blockHeader.getHashCode());
+        return context.getBlockChain().containsBlock(blockHeader.getHashCode());
     }
 }
