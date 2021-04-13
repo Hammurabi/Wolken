@@ -296,19 +296,12 @@ public class Database {
     }
 
     public BlockHeader findBlockHeader(byte[] hash) {
-        mutex.lock();
-        try {
-            InputStream inputStream = location.newFile(".chain").newFile(Base16.encode(hash)).openFileInputStream();
-            BlockHeader header  = Context.getInstance().getSerialFactory().fromStream(BlockHeader.class, inputStream);
-            inputStream.close();
-
-            return header;
-        } catch (IOException | WolkenException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            mutex.unlock();
+        BlockMetadata metadata = findBlockMetaData(hash);
+        if (metadata != null) {
+            return metadata.getBlockHeader();
         }
+
+        return null;
     }
 
     public BlockHeader findBlockHeader(int height) {
