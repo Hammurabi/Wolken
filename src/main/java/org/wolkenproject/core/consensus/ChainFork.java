@@ -45,4 +45,7 @@ public class ChainFork {
     public byte[] getHash() {
         return chain.get(chain.size() - 1);
     }
+
+    public void deleteBlocks() {
+    }
 }
