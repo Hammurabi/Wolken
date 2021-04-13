@@ -32,6 +32,11 @@ public class PeerBlockCandidate extends CandidateBlock {
         List<BlockHeader> ancestors = findCommonAncestors(getContext(), sender, header);
         // check that we received the headers.
         if (ancestors == null) return false;
+        // pop the most recent common ancestor.
+        byte commoonAncestor[] = ancestors.get(0).getHashCode();
+        if (getContext().getBlockChain().isBlockStale(commoonAncestor)) {
+
+        }
         chain = ancestors;
         chain.add(header);
         // get all blocks.
@@ -109,7 +114,7 @@ public class PeerBlockCandidate extends CandidateBlock {
             // make all the blocks 'stale'.
             previousChain.staleBlocks(target);
             // set the block to the new block index.
-            target.setBlock(height, new BlockIndex(block, new BlockMetadata(header, height, block.getTransactionCount(), block.getEventCount(), block.getTotalValue(), block.getFees(), work)));
+            target.setBlock(height, new BlockIndex(block, new BlockMetadata(header, 0, height, block.getTransactionCount(), block.getEventCount(), block.getTotalValue(), block.getFees(), work)));
             // add the block's work to the total work.
             work = work.add(block.getWork());
         }
