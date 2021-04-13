@@ -1,8 +1,5 @@
 package org.wolkenproject.utils;
 
-import org.wolkenproject.serialization.SerializableI;
-
-import java.io.IOException;
 import java.util.*;
 
 public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> {
