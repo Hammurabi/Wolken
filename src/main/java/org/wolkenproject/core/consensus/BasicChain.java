@@ -25,7 +25,7 @@ public class BasicChain extends AbstractBlockChain {
     // contains blocks sent from peers.
     private HashQueue<CandidateBlock>   candidateQueue;
     // contains blocks that are valid.
-    private HashQueue<CandidateBlock>   staleBlocks;
+    private HashQueue<ChainFork>        staleBlocks;
     // keep track of broadcasted blocks.
     private byte                        lastBroadcast[];
 
@@ -81,7 +81,13 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    protected void addOrphan(BlockIndex block) {
+    protected void addOrphan(CandidateBlock block) {
+        getMutex().lock();
+        try {
+            orphanPool.add(block, block.getHash());
+        } finally {
+            getMutex().unlock();
+        }
     }
 
     @Override
@@ -104,7 +110,7 @@ public class BasicChain extends AbstractBlockChain {
     private void setBestBlockMember(BlockIndex block) {
         getMutex().lock();
         try {
-            this.bestBlock = bestBlock;
+            this.bestBlock = block;
         } finally {
             getMutex().unlock();
         }
@@ -184,8 +190,13 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    public void makeStale(byte[] hash) {
-        removeBlock(hash);
+    public void makeStale(ChainFork fork) {
+        getMutex().lock();
+        try {
+            staleBlocks.add(fork, fork.getHash());
+        } finally {
+            getMutex().unlock();
+        }
     }
 
     @Override
