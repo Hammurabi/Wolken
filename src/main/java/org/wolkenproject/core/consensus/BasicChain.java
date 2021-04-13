@@ -226,6 +226,9 @@ public class BasicChain extends AbstractBlockChain {
         getMutex().lock();
         try {
             candidateQueue.add(block, block.getHash());
+            candidateQueue.removeTails(MaximumStaleBlockQueueSize, (candidateBlock, hash)->{
+                candidateBlock.destroy();
+            });
         } finally {
             getMutex().unlock();
         }
