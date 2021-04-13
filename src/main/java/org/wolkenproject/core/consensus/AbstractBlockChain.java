@@ -3,6 +3,7 @@ package org.wolkenproject.core.consensus;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
@@ -85,10 +86,14 @@ public abstract class AbstractBlockChain implements Runnable {
     }
     // makes the block 'stale'.
     public abstract void queueStale(byte hash[]);
+    // makes the block not 'stale'.
+    public abstract void undoStale(byte hash[]);
     // return block by it's hash.
     public abstract BlockIndex getBlock(byte[] hash);
     // return the genesis block of this chain.
     public abstract BlockIndex getGenesisBlock();
     // return true if the block is stale.
     public abstract boolean isBlockStale(byte[] hash);
+    // returns a block and all of it's parent's hashes that are considered 'stale'.
+    public abstract List<byte[]> getStaleChain(byte[] hash);
 }
