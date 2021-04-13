@@ -62,7 +62,7 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
         return height;
     }
 
-    public BlockIndex generateNextBlock() throws WolkenException {
+    public BlockIndex generateNextBlock() {
         int bits                = ChainMath.calculateNewTarget(this);
         return new BlockIndex(new Block(getHash(), bits), getTotalChainWork(), height + 1);
     }
