@@ -86,7 +86,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
             if (getTimestamp() <= parent.getTimestamp()) return false;
             // check bits are set correctly.
             if (blockHeight % Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0) {
-                if (getBits() != ChainMath.generateTargetBits(this, lastDifficultyChange)) return false;
+                if (getBits() != ChainMath.generateTargetBits(getBlockHeader(), lastDifficultyChange)) return false;
             } else {
                 if (getBits() != parent.getBits()) return false;
             }
