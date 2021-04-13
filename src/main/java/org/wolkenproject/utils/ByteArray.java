@@ -1,8 +1,10 @@
 package org.wolkenproject.utils;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class ByteArray {
+public class ByteArray implements Serializable {
+    private static final long serialVersionUID = 4624519240501334525L;
     private final byte array[];
 
     public ByteArray(byte hash[]) {
