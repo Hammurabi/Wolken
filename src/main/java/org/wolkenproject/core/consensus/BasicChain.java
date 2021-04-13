@@ -213,6 +213,16 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
+    public void undoStale(byte[] hash) {
+        getMutex().lock();
+        try {
+            staleBlocks.remove(ByteArray.wrap(hash));
+        } finally {
+            getMutex().unlock();
+        }
+    }
+
+    @Override
     public BlockIndex getBlock(byte[] hash) {
         return getContext().getDatabase().findBlock(hash);
     }
@@ -233,6 +243,11 @@ public class BasicChain extends AbstractBlockChain {
         }
 
         return false;
+    }
+
+    @Override
+    public List<byte[]> getStaleChain(byte[] hash) {
+        return null;
     }
 
     @Override
