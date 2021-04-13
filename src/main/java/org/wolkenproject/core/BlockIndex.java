@@ -63,8 +63,9 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     }
 
     public BlockIndex generateNextBlock() {
-        int bits                = ChainMath.calculateNewTarget(this);
-        return new BlockIndex(new Block(getHash(), bits), getTotalChainWork(), height + 1);
+        Block nextBlock         = new Block(getHash(), getBlock().getBits());
+        int bits                = ChainMath.calculateNewTarget(nextBlock.getBlockHeader(), height + 1);
+        return new BlockIndex(nextBlock, getTotalChainWork(), height + 1);
     }
 
     @Override
@@ -210,16 +211,6 @@ public class BlockIndex extends SerializableI implements Comparable<BlockIndex> 
     @Override
     public byte[] checksum() {
         return HashUtil.hash160(getHash());
-    }
-
-    public boolean verify() {
-        BlockIndex prev = previousBlock();
-        Block parent = null;
-        if (prev != null) {
-            parent = prev.getBlock();
-        }
-
-        return block.verify(parent.getBlockHeader(), getHeight());
     }
 
     public BlockStateChangeResult getStateChange() {
