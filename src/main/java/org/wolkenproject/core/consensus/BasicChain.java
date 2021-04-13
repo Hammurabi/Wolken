@@ -4,16 +4,13 @@ import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.BlockMetadata;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.transactions.MintTransaction;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.network.Message;
 import org.wolkenproject.network.messages.Inv;
-import org.wolkenproject.utils.HashQueue;
-import org.wolkenproject.utils.LinkedHashQueue;
-import org.wolkenproject.utils.PriorityHashQueue;
-import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.*;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 public class BasicChain extends AbstractBlockChain {
@@ -28,7 +25,7 @@ public class BasicChain extends AbstractBlockChain {
     // contains blocks that are valid.
     private HashQueue<CandidateBlock>   orphanPool;
     // contains blocks that are valid.
-    private HashQueue<ChainFork>        staleBlocks;
+    private Set<ByteArray>              staleBlocks;
     // keep track of broadcasted blocks.
     private byte                        lastBroadcast[];
 
@@ -37,7 +34,7 @@ public class BasicChain extends AbstractBlockChain {
         this.lastBroadcast  = new byte[32];
         this.candidateQueue = new PriorityHashQueue<>();
         this.orphanPool     = new LinkedHashQueue<>();
-        this.staleBlocks    = new LinkedHashQueue<>();
+        this.staleBlocks    = new LinkedHashSet<>();
     }
 
     @Override
@@ -193,33 +190,24 @@ public class BasicChain extends AbstractBlockChain {
     }
 
     @Override
-    public void queueStale(ChainFork fork) {
+    public void queueStale(byte hash[]) {
         getMutex().lock();
         try {
-            staleBlocks.add(fork, fork.getHash());
-            staleBlocks.removeTails(MaximumStaleBlockQueueSize, (block, hash)->{
-                block.deleteBlocks();
-            });
+            staleBlocks.add(ByteArray.wrap(hash));
+            if (staleBlocks.size() > MaximumStaleBlockQueueSize) {
+                Iterator<ByteArray> iterator = staleBlocks.iterator();
+                int toRemove    = staleBlocks.size() - MaximumStaleBlockQueueSize;
+                int removed     = 0;
+
+                while (iterator.hasNext() && removed < toRemove) {
+                    ByteArray oldHash = iterator.next();
+                    iterator.remove();
+                    removed ++;
+                    getContext().getDatabase().deleteBlock(oldHash.getArray());
+                }
+            }
         } finally {
             getMutex().unlock();
-        }
-    }
-
-    @Override
-    public void makeStale(byte hash[]) {
-        BlockMetadata metadata = getContext().getDatabase().findBlockMetaData(hash);
-        if (metadata != null) {
-            metadata.setStale(true);
-            getContext().getDatabase().storeBlockMetadata(hash, metadata);
-        }
-    }
-
-    @Override
-    public void undoStale(byte hash[]) {
-        BlockMetadata metadata = getContext().getDatabase().findBlockMetaData(hash);
-        if (metadata != null) {
-            metadata.setStale(false);
-            getContext().getDatabase().storeBlockMetadata(hash, metadata);
         }
     }
 
