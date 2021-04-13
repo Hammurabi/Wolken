@@ -193,4 +193,8 @@ public class ContextParams {
     public long getMaxFutureBlockTime() {
         return 144_000L;
     }
+
+    public long getMaxTransactionRejectionTime() {
+        return 60_000L * 360;
+    }
 }
