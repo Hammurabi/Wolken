@@ -26,19 +26,14 @@ public abstract class AbstractMiner implements Runnable {
                 // get a reference parent block
                 BlockIndex parent = Context.getInstance().getBlockChain().getBestBlock();
                 // generate a new block
-                Block block = new Block();
+                BlockIndex block = Context.getInstance().getBlockChain().fork();
                 // mint coins to our address
-                block.addTransaction(Transaction.newMintTransaction("", ChainMath.getReward(parent.getHeight()), miningAddress));
-
+                block.getBlock().addTransaction(Transaction.newMintTransaction("", ChainMath.getReward(parent.getHeight()), miningAddress));
                 // add transactions
-                addTransactions(block);
-                // chain the block
-                block.setParent(parent.getHash());
-                // generate or reuse bits
-                block.setBits(ChainMath.calculateNewTarget(block, parent.getHeight() + 1));
+                addTransactions(block.getBlock());
 
                 // build the block and calculate all the remaining elements needed
-                block.build(parent.getHeight() + 1);
+                block.build();
 
                 // mine the block
                 mine(block);
