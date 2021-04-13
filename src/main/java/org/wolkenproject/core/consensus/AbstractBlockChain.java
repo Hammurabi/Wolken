@@ -2,10 +2,7 @@ package org.wolkenproject.core.consensus;
 
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.network.Message;
-import org.wolkenproject.network.messages.Inv;
 
-import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
