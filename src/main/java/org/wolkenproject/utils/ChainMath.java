@@ -1,8 +1,6 @@
 package org.wolkenproject.utils;
 
-import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockHeader;
-import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
