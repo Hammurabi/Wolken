@@ -1,5 +1,6 @@
 package org.wolkenproject.core.consensus;
 
+import org.wolkenproject.core.Block;
 import org.wolkenproject.core.BlockIndex;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.network.Message;
@@ -9,6 +10,7 @@ import org.wolkenproject.utils.LinkedHashQueue;
 import org.wolkenproject.utils.PriorityHashQueue;
 import org.wolkenproject.utils.Utils;
 
+import java.math.BigInteger;
 import java.util.*;
 
 public class BasicChain extends AbstractBlockChain {
@@ -191,7 +193,9 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public BlockIndex getGenesisBlock() {
-        return null;
+        Block genesisBlock = new Block(new byte[Block.UniqueIdentifierLength], getContext().getNetworkParameters().getDefaultBits());
+        BlockIndex genesisBlockIndex = new BlockIndex(genesisBlock, BigInteger.ZERO, 0);
+        return genesisBlockIndex;
     }
 
     @Override
