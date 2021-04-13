@@ -56,11 +56,27 @@ public class PeerBlockCandidate extends CandidateBlock {
         previousChain.undoChanges(target.getContext());
 
         for (int i = 0; i < chain.size(); i ++) {
+            // increment the height.
+            ++height;
+            // get the block header.
             BlockHeader header = chain.get(i);
             // get the block from temp storage.
             Block block = getContext().getDatabase().findTempBlock(header.getHashCode());
+            // get the ancestor of the last difficulty change.
+            BlockHeader lastDiffCalc = null;
+            // check if difficulty needs to be recalculated for this block.
+            if (height > 0 && height % getContext().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0) {
+                // determine the height of the last block that recalculated the difficulty.
+                int heightAtLastDifficultyCalc = Math.max(0, height - getContext().getNetworkParameters().getDifficultyAdjustmentThreshold());
+                // determine whether or not this block is inside the main chain.
+                if (heightAtLastDifficultyCalc <= commonAncestor.getHeight()) {
+                    lastDiffCalc = getContext().getDatabase().findBlockHeader(target.getBlockHash(heightAtLastDifficultyCalc));
+                } else {
+                    lastDiffCalc = chain.get(heightAtLastDifficultyCalc - commonAncestor.getHeight());
+                }
+            }
             // verify the block is valid.
-            if (block.verify(parent, ++height)) {
+            if (block.verify(lastDiffCalc, parent, height)) {
                 // apply the state change to the global state.
                 for (Event event : block.getStateChange().getTransactionEvents()) {
                     event.apply();
