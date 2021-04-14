@@ -3,7 +3,6 @@ package org.wolkenproject.network;
 import org.json.JSONObject;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Emitter;
-import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
@@ -12,7 +11,6 @@ import org.wolkenproject.utils.*;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
@@ -52,7 +50,7 @@ public class Node implements Runnable {
         this.currentMessageSize = -1;
         this.firstConnected = System.currentTimeMillis();
         this.respones       = Collections.synchronizedMap(new HashMap<>());
-        this.readBuffer     = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
+        this.readBuffer     = new byte[Context.getInstance().getContextParams().getBufferSize()];
         this.expectedResponse = new HashMap<>();
     }
 
@@ -130,8 +128,8 @@ public class Node implements Runnable {
 
             // check that the response is appropriate
             if ((flags & ResponseMetadata.ValidationBits.SpamfulResponse) == ResponseMetadata.ValidationBits.SpamfulResponse) {
-                errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
-                messageCache.increaseSpamAverage(Context.getInstance().getNetworkParameters().getMessageSpamThreshold());
+                errors += Context.getInstance().getContextParams().getMaxNetworkErrors();
+                messageCache.increaseSpamAverage(Context.getInstance().getContextParams().getMessageSpamThreshold());
                 return null;
             }
 
@@ -209,8 +207,8 @@ public class Node implements Runnable {
                     currentMessageSize = -1;
                 }
 
-                if (currentMessageSize > Context.getInstance().getNetworkParameters().getMaxMessageLength()) {
-                    errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+                if (currentMessageSize > Context.getInstance().getContextParams().getMaxMessageLength()) {
+                    errors += Context.getInstance().getContextParams().getMaxNetworkErrors();
                     stream = null;
                     currentMessageSize = -1;
                     throw new WolkenException("message content exceeds the maximum size allowed by the protocol.");
@@ -278,7 +276,7 @@ public class Node implements Runnable {
         Caches the message and keeps track of how many times it was received.
      */
     private CachedMessage checkSpam(Message message) {
-        return new CachedMessage(message, messageCache.cacheReceivedMessage(message) >= Context.getInstance().getNetworkParameters().getMessageSpamThreshold());
+        return new CachedMessage(message, messageCache.cacheReceivedMessage(message) >= Context.getInstance().getContextParams().getMessageSpamThreshold());
     }
 
     /*
@@ -385,7 +383,7 @@ public class Node implements Runnable {
         receivedAddresses ++;
 
         if (receivedAddresses > 1024) {
-            errors += Context.getInstance().getNetworkParameters().getMaxNetworkErrors();
+            errors += Context.getInstance().getContextParams().getMaxNetworkErrors();
         }
     }
 
