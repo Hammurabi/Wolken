@@ -1,7 +1,9 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.PendingTransaction;
+import org.wolkenproject.network.Message;
 import org.wolkenproject.network.Node;
+import org.wolkenproject.utils.Tuple;
 import org.wolkenproject.utils.VoidCallable;
 
 public class ListenerService {
@@ -48,12 +50,24 @@ public class ListenerService {
     private static void debug() {
     }
 
+    public void registerNodeDisconnectionListener(VoidCallable<Node> listener) {
+        context.getServer().registerDisconnectListener(listener);
+    }
+
+    public void registerMessageSendListener(VoidCallable<Tuple<Message, Node>> listener) {
+        context.getServer().registerMessageSendListener(listener);
+    }
+
+    public void registerMessageBroadcastListener(VoidCallable<Tuple<Message, Node[]>> listener) {
+        context.getServer().registerMessageBroadcastListener(listener);
+    }
+
     public void registerInboundConnectionListener(VoidCallable<Node> listener) {
-        context.getServer().registerInboundListener(listener);
+        context.getServer().registerInboundListenerListener(listener);
     }
 
     public void registerOutboundConnectionListener(VoidCallable<Node> listener) {
-        context.getServer().registerInboundListener(listener);
+        context.getServer().registerOutboundListenerListener(listener);
     }
 
     public void registerPendingTransactionListener(VoidCallable<PendingTransaction> listener) {
