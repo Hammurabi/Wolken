@@ -30,7 +30,7 @@ public class Inv extends Message {
     private int         type;
 
     public Inv(int type, Collection<byte[]> list) {
-        this(Context.getInstance().getNetworkParameters().getVersion(), type, list);
+        this(Context.getInstance().getContextParams().getVersion(), type, list);
     }
 
     public Inv(int version, int type, byte[] singleHash) {
@@ -74,8 +74,8 @@ public class Inv extends Message {
             // request the blocks
             try {
                 CheckedResponse message = node.getResponse(
-                new RequestHeaders(Context.getInstance().getNetworkParameters().getVersion(), newBlocks),
-                Context.getInstance().getNetworkParameters().getMessageTimeout(Context.getInstance().getNetworkParameters().getMaxBlockSize()));
+                new RequestHeaders(Context.getInstance().getContextParams().getVersion(), newBlocks),
+                Context.getInstance().getContextParams().getMessageTimeout(Context.getInstance().getContextParams().getMaxBlockSize()));
 
                 Set<BlockHeader> blocks = message.getMessage().getPayload();
 
@@ -118,8 +118,8 @@ public class Inv extends Message {
 
             // request the transactions
             try {
-                CheckedResponse message = node.getResponse(new RequestTransactions(Context.getInstance().getNetworkParameters().getVersion(), newTransactions),
-                        Context.getInstance().getNetworkParameters().getMessageTimeout(newTransactions.size() * Context.getInstance().getNetworkParameters().getMaxBlockSize()));
+                CheckedResponse message = node.getResponse(new RequestTransactions(Context.getInstance().getContextParams().getVersion(), newTransactions),
+                        Context.getInstance().getContextParams().getMessageTimeout(newTransactions.size() * Context.getInstance().getContextParams().getMaxBlockSize()));
 
                 if (message == null) {
                     node.increaseErrors(4);
@@ -144,7 +144,7 @@ public class Inv extends Message {
                         validTransactions.add(transaction.getHash());
                     }
 
-                    Inv inv = new Inv(Context.getInstance().getNetworkParameters().getVersion(), Type.Transaction, newTransactions);
+                    Inv inv = new Inv(Context.getInstance().getContextParams().getVersion(), Type.Transaction, newTransactions);
                     Context.getInstance().getServer().broadcast(inv, node);
                 } else {
                     node.increaseErrors(4);
