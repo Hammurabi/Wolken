@@ -1,6 +1,7 @@
 package org.wolkenproject;
 
 import org.apache.commons.cli.*;
+import org.fusesource.jansi.AnsiConsole;
 import org.wolkenproject.core.*;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.crypto.ec.ECKeypair;
@@ -21,6 +22,7 @@ import java.util.Set;
 public class Start {
     public static void main(String args[]) throws ParseException, WolkenException, IOException {
         CryptoLib.getInstance();
+        AnsiConsole.systemInstall();
 
         Options options = new Options();
         options.addOption("dir", true, "set the main directory for wolken, otherwise uses the default application directory of the system.");
