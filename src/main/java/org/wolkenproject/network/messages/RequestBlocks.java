@@ -9,7 +9,6 @@ import org.wolkenproject.network.Node;
 import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
-import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
@@ -50,7 +49,7 @@ public class RequestBlocks extends Message {
         }
 
         // send the blocks
-        node.sendMessage(new BlockList(Context.getInstance().getNetworkParameters().getVersion(), blocks, getUniqueMessageIdentifier()));
+        node.sendMessage(new BlockList(Context.getInstance().getContextParams().getVersion(), blocks, getUniqueMessageIdentifier()));
     }
 
     @Override
