@@ -18,7 +18,7 @@ public class Context {
     private static Context instance;
 
     private Database                database;
-    private ContextParams networkParameters;
+    private ContextParams           contextParams;
     private ExecutorService         threadPool;
     private AtomicBoolean           isRunning;
     private IpAddressList           ipAddressList;
@@ -38,7 +38,7 @@ public class Context {
         Context.instance = this;
         this.scheduler = new TaskScheduler();
         this.database = new Database(service);
-        this.networkParameters = new ContextParams(testNet, verbosity);
+        this.contextParams = new ContextParams(testNet, verbosity);
         this.threadPool = Executors.newFixedThreadPool(3);
         this.isRunning = new AtomicBoolean(true);
         this.ipAddressList = new IpAddressList(service.newFile("peers"));
@@ -86,8 +86,8 @@ public class Context {
         return database;
     }
 
-    public ContextParams getNetworkParameters() {
-        return networkParameters;
+    public ContextParams getContextParams() {
+        return contextParams;
     }
 
     public static Context getInstance() {
