@@ -16,7 +16,7 @@ public class TransactionPool {
 
     public TransactionPool() {
         pendingTransactions     = new PriorityHashQueue<>(Transaction::calculateSize);
-        rejectedTransactions    = new PriorityHashQueue<>(Transaction::calculateSize);
+        rejectedTransactions    = new PriorityHashQueue<>(RejectedTransaction::calculateSize);
         mutex           = new ReentrantLock();
     }
 
