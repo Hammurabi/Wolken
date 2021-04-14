@@ -42,7 +42,7 @@ public class RegisterAsset extends Transaction {
 
     @Override
     public long getTransactionValue() {
-        return Context.getInstance().getNetworkParameters().getAliasRegistrationCost();
+        return Context.getInstance().getContextParams().getAliasRegistrationCost();
     }
 
     @Override
