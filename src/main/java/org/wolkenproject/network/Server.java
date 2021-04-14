@@ -3,32 +3,27 @@ package org.wolkenproject.network;
 import org.wolkenproject.core.Context;
 import org.wolkenproject.core.Emitter;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
-import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.VersionMessage;
 import org.wolkenproject.utils.Logger;
-import org.wolkenproject.utils.Tuple;
 import org.wolkenproject.utils.VoidCallable;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Server implements Runnable {
-    private ServerSocket        socket;
-    private Set<Node>           connectedNodes;
-    private NetAddress          netAddress;
-    private ReentrantLock       mutex;
-    private byte                nonce[];
-    private long                upSince;
-    private Emitter<Node>       onConnectFromEmitter;
-    private Emitter<Node>       onConnectToEmitter;
-    private Emitter<Node>       onDisconnectEmitter;
-    private Emitter<Tuple<Message, Node>> onMessageSendEmitter;
+    private ServerSocket    socket;
+    private Set<Node>       connectedNodes;
+    private NetAddress      netAddress;
+    private ReentrantLock   mutex;
+    private byte            nonce[];
+    private long            upSince;
+    private Emitter<Node>   onConnectFromEmitter;
+    private Emitter<Node>   onConnectToEmitter;
+    private Emitter<Node>   onDisconnectEmitter;
 
     public Server(Set<NetAddress> forceConnections) throws IOException {
         socket  = new ServerSocket();
@@ -36,6 +31,9 @@ public class Server implements Runnable {
         upSince = System.currentTimeMillis();
         mutex   = new ReentrantLock();
         nonce   = new byte[20];
+        onConnectFromEmitter = new Emitter<>();
+        onConnectToEmitter = new Emitter<>();
+        onDisconnectEmitter = new Emitter<>();
 
         // generate a nonce to know when we self connect
         new SecureRandom().nextBytes(nonce);
@@ -344,7 +342,11 @@ public class Server implements Runnable {
         onDisconnectEmitter.add(listener);
     }
 
-    public void registerMessageSendListener(VoidCallable<Tuple<Message, Node>> listener) {
-        onMessageSendEmitter.add(listener);
+    public void registerInboundListener(VoidCallable<Node> listener) {
+        onConnectFromEmitter.add(listener);
+    }
+
+    public void registerOutboundListener(VoidCallable<Node> listener) {
+        onConnectToEmitter.add(listener);
     }
 }
