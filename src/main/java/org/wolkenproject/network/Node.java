@@ -6,9 +6,7 @@ import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
-import org.wolkenproject.utils.ByteArray;
-import org.wolkenproject.utils.Logger;
-import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.*;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -53,6 +51,9 @@ public class Node implements Runnable {
         this.respones       = Collections.synchronizedMap(new HashMap<>());
         this.readBuffer     = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
         this.expectedResponse = new HashMap<>();
+    }
+
+    public static void registerMessageSendListener(VoidCallable<Tuple<Message, Node>> listener) {
     }
 
     public void receiveResponse(Message message, byte origin[]) {
