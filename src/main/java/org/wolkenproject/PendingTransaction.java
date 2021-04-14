@@ -47,4 +47,8 @@ public class PendingTransaction implements Comparable<PendingTransaction> {
     public byte[] getHash() {
         return transaction.getHash();
     }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
 }
