@@ -14,11 +14,11 @@ public class ChainMath {
     public static BigInteger x256 = new BigInteger("2").pow(256);
 
     public static long coinFromRaw(String raw) throws ArithmeticException {
-        return new BigDecimal(raw).multiply(new BigDecimal(Context.getInstance().getNetworkParameters().getOneCoin()), MathContext.UNLIMITED).longValueExact();
+        return new BigDecimal(raw).multiply(new BigDecimal(Context.getInstance().getContextParams().getOneCoin()), MathContext.UNLIMITED).longValueExact();
     }
 
     public static String rawFromCoin(long coin) throws ArithmeticException {
-        return Long.toString(new BigDecimal(coin).divide(new BigDecimal(Context.getInstance().getNetworkParameters().getOneCoin()), RoundingMode.DOWN).longValueExact());
+        return Long.toString(new BigDecimal(coin).divide(new BigDecimal(Context.getInstance().getContextParams().getOneCoin()), RoundingMode.DOWN).longValueExact());
     }
 
     public static boolean validSolution(byte solution[], int bits) {
@@ -106,7 +106,7 @@ public class ChainMath {
     }
 
     public static long getReward(long height) {
-        long numberOfHalvings = (height + 1) / Context.getInstance().getNetworkParameters().getHalvingRate();
+        long numberOfHalvings = (height + 1) / Context.getInstance().getContextParams().getHalvingRate();
 
         if (numberOfHalvings >= 37) {
             return 0;
@@ -114,7 +114,7 @@ public class ChainMath {
 
         long d = 1 << numberOfHalvings;
 
-        return Context.getInstance().getNetworkParameters().getMaxReward() / d;
+        return Context.getInstance().getContextParams().getMaxReward() / d;
     }
 
     public static BigInteger getTotalWork(byte[] bits) throws WolkenException {
@@ -123,13 +123,13 @@ public class ChainMath {
 
     public static int calculateNewTarget(BlockHeader block, int height) {
         if (height == 0) {
-            return Context.getInstance().getNetworkParameters().getDefaultBits();
+            return Context.getInstance().getContextParams().getDefaultBits();
         }
 
-        if (height % Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0) {
+        if (height % Context.getInstance().getContextParams().getDifficultyAdjustmentThreshold() == 0) {
             BlockHeader earliest = null;
 
-            int previousBlockHeight = height - Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
+            int previousBlockHeight = height - Context.getInstance().getContextParams().getDifficultyAdjustmentThreshold();
 
             if (previousBlockHeight >= 0) {
                 earliest = Context.getInstance().getDatabase().findBlockHeader(previousBlockHeight);
@@ -143,7 +143,7 @@ public class ChainMath {
 
     public static int generateTargetBits(BlockHeader latest, BlockHeader earliest) {
         //calculate the target time for 1800 blocks.
-        long timePerDiffChange = Context.getInstance().getNetworkParameters().getAverageBlockTime() * Context.getInstance().getNetworkParameters().getDifficultyAdjustmentThreshold();
+        long timePerDiffChange = Context.getInstance().getContextParams().getAverageBlockTime() * Context.getInstance().getContextParams().getDifficultyAdjustmentThreshold();
         long averageNetworkTime = latest.getTimestamp() - earliest.getTimestamp();
 
         return generateTargetBits(averageNetworkTime, timePerDiffChange, latest.getBits());
@@ -163,7 +163,7 @@ public class ChainMath {
         target = setCompact(target).multiply(BigInteger.valueOf(actualTimespan))
                 .divide(BigInteger.valueOf(timeRequired));
 
-        target = target.min(Context.getInstance().getNetworkParameters().getMaxTarget());
+        target = target.min(Context.getInstance().getContextParams().getMaxTarget());
 
         return getCompact(target);
     }
