@@ -25,6 +25,7 @@ public class Start {
         Options options = new Options();
         options.addOption("dir", true, "set the main directory for wolken, otherwise uses the default application directory of the system.");
         options.addOption("enable_fullnode", true, "set the node to a full node.");
+        options.addOption("enable_verbose", true, "enable verbose mode to get data logged to the console.");
         options.addOption("enable_testnet", true, "set the testnet to enabled/disabled.");
         options.addOption("enable_mining", true, "set the node to a mining node.");
         options.addOption("enable_storage", true, "act as a storage node.");
@@ -125,7 +126,17 @@ public class Start {
 
         Logger.alert("force connections ${l}", connectionList);
 
+        int verbosity = 0;
+
+        if (cmd.hasOption("enable_verbose")) {
+            if (!cmd.getOptionValue("enable_verbose").matches("[1-5]")) {
+                throw new WolkenException("'enable_verbose' expected a number between '1-5'.");
+            }
+
+            verbosity = Integer.parseInt(cmd.getOptionValue("enable_verbosity"));
+        }
+
         int rpcPort = 12560;
-        Context context = new Context(mainDirectory, rpcPort, isTestNet, address, connectionList, false);
+        Context context = new Context(mainDirectory, rpcPort, isTestNet, address, connectionList, false, verbosity);
     }
 }
