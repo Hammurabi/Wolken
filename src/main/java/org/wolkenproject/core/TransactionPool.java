@@ -87,8 +87,18 @@ public class TransactionPool {
 
     protected void addInternally(PendingTransaction transaction) {
         pendingTransactions.add(transaction, transaction.getHash());
-        if (pendingTransactions.byteCount() > MaximumTransactionQueueSize) {
-            pendingTransactions.removeTails(pendingTransactions.size() - 1);
+        while (pendingTransactions.byteCount() > MaximumTransactionQueueSize) {
+            // pop the transaction from the back of the queue.
+            PendingTransaction pendingTransaction = pendingTransactions.pop();
+            rejectInternally(pendingTransaction);
+        }
+    }
+
+    private void rejectInternally(PendingTransaction pendingTransaction) {
+        rejectedTransactions.add(new RejectedTransaction(pendingTransaction, System.currentTimeMillis()), pendingTransaction.getHash());
+        while (rejectedTransactions.byteCount() > MaximumTransactionQueueSize) {
+            // pop the transaction from the back of the queue.
+            RejectedTransaction rejected = rejectedTransactions.poll();
         }
     }
 
@@ -98,11 +108,34 @@ public class TransactionPool {
         }
     }
 
+    public PendingTransaction poll() {
+        mutex.lock();
+        try {
+            return pollInternally();
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    private PendingTransaction pollInternally() {
+        if (rejectedTransactions.size() > 0) {
+            // poll a transaction, this will return the earliest (most likely valid) transaction.
+            RejectedTransaction transaction = rejectedTransactions.peek();
+            if (!transaction.isInvalid()) {
+                rejectedTransactions.poll();
+            } else {
+                return transaction.getTransaction();
+            }
+        }
+
+
+    }
+
     public void fillBlock(Block block) {
         mutex.lock();
         try {
             while (block.calculateSize() < Context.getInstance().getNetworkParameters().getMaxBlockSize() && pendingTransactions.hasElements()) {
-                Transaction transaction = pendingTransactions.poll();
+                PendingTransaction transaction = pendingTransactions.poll();
                 if (transaction.shallowVerify()) {
                     block.addTransaction(transaction);
 
