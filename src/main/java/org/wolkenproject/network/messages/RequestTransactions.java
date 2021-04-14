@@ -8,7 +8,6 @@ import org.wolkenproject.network.Node;
 import org.wolkenproject.network.ResponseMetadata;
 import org.wolkenproject.network.Server;
 import org.wolkenproject.serialization.SerializableI;
-import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
@@ -40,7 +39,7 @@ public class RequestTransactions extends Message {
         }
 
         // send the transactions
-        node.sendMessage(new TransactionList(Context.getInstance().getNetworkParameters().getVersion(), transactions, getUniqueMessageIdentifier()));
+        node.sendMessage(new TransactionList(Context.getInstance().getContextParams().getVersion(), transactions, getUniqueMessageIdentifier()));
     }
 
     @Override
