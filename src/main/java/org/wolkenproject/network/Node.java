@@ -2,6 +2,7 @@ package org.wolkenproject.network;
 
 import org.json.JSONObject;
 import org.wolkenproject.core.Context;
+import org.wolkenproject.core.Emitter;
 import org.wolkenproject.encoders.Base16;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
@@ -33,6 +34,8 @@ public class Node implements Runnable {
     private int                             receivedAddresses;
     private VersionInformation              versionMessage;
     private boolean                         isClosed;
+    private static final Emitter<Tuple<Message, Node>> OnMessageSendEmitter = new Emitter<>();
+
 
 //    public Node(String ip, int port) throws IOException {
 //        this(new Socket(ip, port));
@@ -51,9 +54,6 @@ public class Node implements Runnable {
         this.respones       = Collections.synchronizedMap(new HashMap<>());
         this.readBuffer     = new byte[Context.getInstance().getNetworkParameters().getBufferSize()];
         this.expectedResponse = new HashMap<>();
-    }
-
-    public static void registerMessageSendListener(VoidCallable<Tuple<Message, Node>> listener) {
     }
 
     public void receiveResponse(Message message, byte origin[]) {
@@ -431,5 +431,9 @@ public class Node implements Runnable {
         json.put("closed", isClosed);
 
         return json;
+    }
+
+    public static void registerMessageSendListener(VoidCallable<Tuple<Message, Node>> listener) {
+        OnMessageSendEmitter.add(listener);
     }
 }
