@@ -52,7 +52,7 @@ public class TransactionPool {
         return result;
     }
 
-    public Transaction getTransaction(byte[] txid) {
+    public PendingTransaction getTransaction(byte[] txid) {
         mutex.lock();
         try {
             return pendingTransactions.getByHash(ByteArray.wrap(txid));
@@ -69,9 +69,8 @@ public class TransactionPool {
             List<Transaction> txs = new ArrayList<>();
 
             for (int i = 0; i < count; i ++) {
-                Transaction transaction = pendingTransactions.poll();
+                PendingTransaction transaction = pendingTransactions.poll();
                 txs.add(transaction);
-
                 txids.add(transaction.getHash());
             }
 
@@ -96,18 +95,23 @@ public class TransactionPool {
 
     protected void addInternally(PendingTransaction transaction) {
         pendingTransactions.add(transaction, transaction.getHash());
+        pendingTransactionEmitter.call(transaction);
         while (pendingTransactions.byteCount() > MaximumTransactionQueueSize) {
             // pop the transaction from the back of the queue.
             PendingTransaction pendingTransaction = pendingTransactions.pop();
+            pendingTimedoutEmitter.call(pendingTransaction);
             rejectInternally(pendingTransaction);
         }
     }
 
     private void rejectInternally(PendingTransaction pendingTransaction) {
-        rejectedTransactions.add(new RejectedTransaction(pendingTransaction, System.currentTimeMillis()), pendingTransaction.getHash());
+        RejectedTransaction rejectedTransaction = new RejectedTransaction(pendingTransaction, System.currentTimeMillis());
+        rejectedTransactions.add(rejectedTransaction, pendingTransaction.getHash());
+        rejectedTransactionEmitter.call(rejectedTransaction);
         while (rejectedTransactions.byteCount() > MaximumTransactionQueueSize) {
             // pop the transaction from the back of the queue.
             RejectedTransaction rejected = rejectedTransactions.poll();
+            rejectedTimedoutEmitter.call(rejected);
         }
     }
 
@@ -168,7 +172,7 @@ public class TransactionPool {
             // infinitely loop
             while (!pendingTransactions.isEmpty()) {
                 // poll a transaction
-                Transaction transaction = pendingTransactions.poll();
+                PendingTransaction transaction = pendingTransactions.poll();
                 byte txid[] = transaction.getHash();
 
                 // if the transaction has already been added to a block then continue
