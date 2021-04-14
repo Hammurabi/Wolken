@@ -38,7 +38,7 @@ public class Context {
         Context.instance = this;
         this.scheduler = new TaskScheduler();
         this.database = new Database(service);
-        this.networkParameters = new ContextParams(testNet);
+        this.networkParameters = new ContextParams(testNet, verbosity);
         this.threadPool = Executors.newFixedThreadPool(3);
         this.isRunning = new AtomicBoolean(true);
         this.ipAddressList = new IpAddressList(service.newFile("peers"));
