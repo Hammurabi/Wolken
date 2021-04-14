@@ -55,19 +55,15 @@ public class ListenerService {
     }
 
     public void registerMessageSendListener(VoidCallable<Tuple<Message, Node>> listener) {
-        context.getServer().registerMessageSendListener(listener);
-    }
-
-    public void registerMessageBroadcastListener(VoidCallable<Tuple<Message, Node[]>> listener) {
-        context.getServer().registerMessageBroadcastListener(listener);
+        Node.registerMessageSendListener(listener);
     }
 
     public void registerInboundConnectionListener(VoidCallable<Node> listener) {
-        context.getServer().registerInboundListenerListener(listener);
+        context.getServer().registerInboundListener(listener);
     }
 
     public void registerOutboundConnectionListener(VoidCallable<Node> listener) {
-        context.getServer().registerOutboundListenerListener(listener);
+        context.getServer().registerOutboundListener(listener);
     }
 
     public void registerPendingTransactionListener(VoidCallable<PendingTransaction> listener) {
