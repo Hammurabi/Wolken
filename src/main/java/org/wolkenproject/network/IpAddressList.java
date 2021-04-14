@@ -7,7 +7,6 @@ import org.wolkenproject.utils.FileService;
 import java.io.*;
 import java.net.InetAddress;
 import java.util.*;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 public class IpAddressList {
@@ -48,7 +47,7 @@ public class IpAddressList {
                 }
             }
 
-            node.sendMessage(new AddressList(Context.getInstance().getNetworkParameters().getVersion(), list));
+            node.sendMessage(new AddressList(Context.getInstance().getContextParams().getVersion(), list));
             if (++ sent == 1024) {
                 return;
             }
