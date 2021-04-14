@@ -29,7 +29,7 @@ public class VersionMessage extends Message {
         node.setVersionInfo(versionInformation);
         Logger.alert("received version info ${i}", versionInformation);
 
-        if (!Context.getInstance().getNetworkParameters().isVersionCompatible(versionInformation.getVersion(), Context.getInstance().getNetworkParameters().getVersion())) {
+        if (!Context.getInstance().getContextParams().isVersionCompatible(versionInformation.getVersion(), Context.getInstance().getContextParams().getVersion())) {
             // send bye message.
             Logger.alert("terminating connection.. (incompatible versions)");
             node.sendMessage(new CheckoutMessage(CheckoutMessage.Reason.SelfConnect));
@@ -40,9 +40,9 @@ public class VersionMessage extends Message {
         } else {
             Logger.alert("sending verack..");
             // send verack
-            node.sendMessage(new VerackMessage(Context.getInstance().getNetworkParameters().getVersion(), new VersionInformation(
-                    Context.getInstance().getNetworkParameters().getVersion(),
-                    Context.getInstance().getNetworkParameters().getServices(),
+            node.sendMessage(new VerackMessage(Context.getInstance().getContextParams().getVersion(), new VersionInformation(
+                    Context.getInstance().getContextParams().getVersion(),
+                    Context.getInstance().getContextParams().getServices(),
                     System.currentTimeMillis(),
                     server.getNetAddress(),
                     node.getNetAddress(),
@@ -51,7 +51,7 @@ public class VersionMessage extends Message {
             )));
 
             Context.getInstance().getIpAddressList().send(node);
-            node.sendMessage(new RequestInv(Context.getInstance().getNetworkParameters().getVersion()));
+            node.sendMessage(new RequestInv(Context.getInstance().getContextParams().getVersion()));
         }
     }
 
