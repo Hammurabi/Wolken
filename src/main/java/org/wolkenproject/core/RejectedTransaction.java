@@ -1,7 +1,6 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.PendingTransaction;
-import org.wolkenproject.core.transactions.Transaction;
 
 public class RejectedTransaction implements Comparable<RejectedTransaction> {
     private final PendingTransaction    transaction;
@@ -17,7 +16,7 @@ public class RejectedTransaction implements Comparable<RejectedTransaction> {
     }
 
     public boolean shouldDelete() {
-        return System.currentTimeMillis() - when > Context.getInstance().getNetworkParameters().getMaxTransactionRejectionTime();
+        return System.currentTimeMillis() - when > Context.getInstance().getContextParams().getMaxTransactionRejectionTime();
     }
 
     @Override
