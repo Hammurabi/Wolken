@@ -7,7 +7,6 @@ import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.utils.*;
 
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.util.*;
 
 public class BasicChain extends AbstractBlockChain {
@@ -226,7 +225,7 @@ public class BasicChain extends AbstractBlockChain {
 
     @Override
     public BlockIndex getGenesisBlock() {
-        Block genesisBlock = new Block(new byte[Block.UniqueIdentifierLength], getContext().getNetworkParameters().getDefaultBits());
+        Block genesisBlock = new Block(new byte[Block.UniqueIdentifierLength], getContext().getContextParams().getDefaultBits());
         genesisBlock.addTransaction(Transaction.newMintTransaction("", 1, null));
         BlockIndex genesisBlockIndex = new BlockIndex(genesisBlock, BigInteger.ZERO, 0);
         return genesisBlockIndex;
@@ -316,7 +315,7 @@ public class BasicChain extends AbstractBlockChain {
             }
 
             // make an inventory message.
-            Message inv = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, bestBlock.getHash());
+            Message inv = new Inv(getContext().getContextParams().getVersion(), Inv.Type.Block, bestBlock.getHash());
 
             // broadcast the inventory message.
             getContext().getServer().broadcast(inv);
