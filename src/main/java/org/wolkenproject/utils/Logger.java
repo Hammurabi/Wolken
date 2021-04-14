@@ -1,7 +1,6 @@
 package org.wolkenproject.utils;
 
 import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
 import org.wolkenproject.core.Context;
 
 import java.util.regex.Matcher;
@@ -23,13 +22,13 @@ public class Logger {
     }
 
     public static void alert(String msg, int level, Object ...arguments) {
-        if (level <= Context.getInstance().getNetworkParameters().getLoggingLevel()) {
+        if (level <= Context.getInstance().getContextParams().getLoggingLevel()) {
             msg(Ansi.Color.YELLOW, msg, arguments);
         }
     }
 
     public static void error(String msg, int level, Object ...arguments) {
-        if (level <= Context.getInstance().getNetworkParameters().getLoggingLevel()) {
+        if (level <= Context.getInstance().getContextParams().getLoggingLevel()) {
             msg(Ansi.Color.YELLOW, msg, arguments);
         }
     }
