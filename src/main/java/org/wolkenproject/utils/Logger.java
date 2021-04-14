@@ -1,32 +1,31 @@
 package org.wolkenproject.utils;
 
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
+import org.wolkenproject.core.Context;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Logger {
-    public enum ChatColor {
-        Red,
-        Green,
-        Blue,
-
-        LightRed,
-        LightGreen,
-        LightBlue,
-
-        DarkRed,
-        DarkGreen,
-        DarkBlue,
-    }
-
     public static void faterr(String msg)
     {
         System.err.println(msg);
     }
 
-    public static void alert(String msg, Object ...arguments) {
+    public static void alert(String msg, int level, Object ...arguments) {
+        if (level <= Context.getInstance().getNetworkParameters().getLoggingLevel()) {
+            msg(Ansi.Color.YELLOW, msg, arguments);
+        }
     }
 
-    public static void msg(ChatColor chatColor, String msg, Object ...arguments) {
+    public static void error(String msg, int level, Object ...arguments) {
+        if (level <= Context.getInstance().getNetworkParameters().getLoggingLevel()) {
+            msg(Ansi.Color.YELLOW, msg, arguments);
+        }
+    }
+
+    public static void msg(Ansi.Color chatColor, String msg, Object ...arguments) {
         Pattern pattern = Pattern.compile("\\$\\{[A-z]\\}");
         Matcher matcher = pattern.matcher(msg);
         int index       = 0;
@@ -36,6 +35,6 @@ public class Logger {
             matcher = pattern.matcher(msg);
         }
 
-        System.out.println(msg);
+        System.out.println(Ansi.ansi().fg(chatColor).a(msg).reset());
     }
 }
