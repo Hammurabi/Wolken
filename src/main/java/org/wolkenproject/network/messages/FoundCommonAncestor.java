@@ -16,7 +16,7 @@ public class FoundCommonAncestor extends ResponseMessage {
     private byte commonAncestor[];
 
     public FoundCommonAncestor(byte commonAncestor[], byte[] uniqueMessageIdentifier) {
-        super(Context.getInstance().getNetworkParameters().getVersion(), uniqueMessageIdentifier);
+        super(Context.getInstance().getContextParams().getVersion(), uniqueMessageIdentifier);
         this.commonAncestor = commonAncestor;
     }
 
