@@ -3,13 +3,19 @@ package org.wolkenproject.utils;
 import java.util.*;
 
 public class LinkedHashQueue<T> implements HashQueue<T> {
-    private Map<ByteArray, Entry<T>>   entryMap;
-    private Queue<Entry<T>>         queue;
-    private long                    byteCount;
+    private Map<ByteArray, Entry<T>>    entryMap;
+    private Queue<Entry<T>>             queue;
+    private long                        byteCount;
+    private Callable<Long, T>           sizeManager;
 
     public LinkedHashQueue() {
+        this((t) -> { return 0L; });
+    }
+
+    public LinkedHashQueue(Callable<Long, T> sizeManager) {
         queue       = new LinkedList<>();
         entryMap    = new HashMap<>();
+        this.sizeManager = sizeManager;
     }
 
     @Override
@@ -44,6 +50,8 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
 
         entryMap.put(ByteArray.wrap(hash), entry);
         queue.add(entry);
+
+        byteCount += sizeManager.call(element);
     }
 
     @Override
@@ -55,6 +63,7 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
         Entry<T> entry = queue.poll();
         entryMap.remove(ByteArray.wrap(entry.hash));
 
+        byteCount -= sizeManager.call(entry.element);
         return entry.element;
     }
 
