@@ -13,4 +13,16 @@ public class ListenerService {
     public void registerPendingTransactionListener(VoidCallable<PendingTransaction> listener) {
         context.getTransactionPool().registerPendingTransactionListener(listener);
     }
+
+    public void registerPendingTransactionTimeoutListener(VoidCallable<PendingTransaction> listener) {
+        context.getTransactionPool().registerPendingTransactionTimeoutListener(listener);
+    }
+
+    public void registerRejectedTransactionListener(VoidCallable<RejectedTransaction> listener) {
+        context.getTransactionPool().registerRejectedTransactionListener(listener);
+    }
+
+    public void registerRejectedTransactionTimeoutListener(VoidCallable<RejectedTransaction> listener) {
+        context.getTransactionPool().registerRejectedTransactionTimeoutListener(listener);
+    }
 }
