@@ -19,8 +19,8 @@ public class RequestInv extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Block, Context.getInstance().getBlockChain().getBestBlock().getHash()));
-        node.sendMessage(new Inv(Context.getInstance().getNetworkParameters().getVersion(), Inv.Type.Transaction, Context.getInstance().getTransactionPool().getInv()));
+        node.sendMessage(new Inv(Context.getInstance().getContextParams().getVersion(), Inv.Type.Block, Context.getInstance().getBlockChain().getBestBlock().getHash()));
+        node.sendMessage(new Inv(Context.getInstance().getContextParams().getVersion(), Inv.Type.Transaction, Context.getInstance().getTransactionPool().getInv()));
     }
 
     @Override
