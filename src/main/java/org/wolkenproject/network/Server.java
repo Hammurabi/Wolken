@@ -1,10 +1,12 @@
 package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
+import org.wolkenproject.core.Emitter;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.VersionMessage;
 import org.wolkenproject.utils.Logger;
+import org.wolkenproject.utils.VoidCallable;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -22,6 +24,9 @@ public class Server implements Runnable {
     private ReentrantLock       mutex;
     private byte                nonce[];
     private long                upSince;
+    private Emitter<Node>       onConnectFromEmitter;
+    private Emitter<Node>       onConnectToEmitter;
+    private Emitter<Node>       onDisconnectEmitter;
 
     public Server(Set<NetAddress> forceConnections) throws IOException {
         socket  = new ServerSocket();
@@ -331,5 +336,9 @@ public class Server implements Runnable {
 
     public byte[] getNonce() {
         return nonce;
+    }
+
+    public void registerDisconnectListener(VoidCallable<Node> listener) {
+        onDisconnectEmitter.add(listener);
     }
 }
