@@ -4,6 +4,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Logger {
+    public enum ChatColor {
+        Red,
+        Green,
+        Blue,
+
+        LightRed,
+        LightGreen,
+        LightBlue,
+
+        DarkRed,
+        DarkGreen,
+        DarkBlue,
+    }
+
     public static void faterr(String msg)
     {
         System.err.println(msg);
