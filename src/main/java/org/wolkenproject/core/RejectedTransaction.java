@@ -38,4 +38,8 @@ public class RejectedTransaction implements Comparable<RejectedTransaction> {
 
         return -1;
     }
+
+    public Long calculateSize() {
+        return transaction.calculateSize();
+    }
 }
