@@ -15,7 +15,7 @@ public class BlockStore {
     }
 
     public BlockStore(int numberOfBlocks, int lowestHeightBlock, int highestBlock, int lowestTimestampBlock, int highestTimestampBlock, int index) {
-        int maxBlocks = MaxLength / Context.getInstance().getNetworkParameters().getMaxBlockSize();
+        int maxBlocks = MaxLength / Context.getInstance().getContextParams().getMaxBlockSize();
         this.data = Buffer.createBuffer(maxBlocks * 8 + 22);
         this.data.putInt(0, numberOfBlocks);
         this.data.putInt(4, lowestHeightBlock);
