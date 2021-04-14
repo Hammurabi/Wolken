@@ -1,18 +1,19 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.PendingTransaction;
 import org.wolkenproject.core.transactions.Transaction;
 
 public class RejectedTransaction implements Comparable<RejectedTransaction> {
-    private final Transaction   transaction;
-    private final long          when;
+    private final PendingTransaction    transaction;
+    private final long                  when;
 
-    public RejectedTransaction(Transaction transaction, long when) {
+    public RejectedTransaction(PendingTransaction transaction, long when) {
         this.transaction = transaction;
         this.when = when;
     }
 
     public boolean isInvalid() {
-        return !transaction.shallowVerify();
+        return transaction.isInvalid();
     }
 
     public boolean shouldDelete() {
@@ -41,5 +42,9 @@ public class RejectedTransaction implements Comparable<RejectedTransaction> {
 
     public Long calculateSize() {
         return transaction.calculateSize();
+    }
+
+    public PendingTransaction getTransaction() {
+        return transaction;
     }
 }
