@@ -8,6 +8,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Logger {
+    public static final class Levels {
+        public static final int
+            None = 0,
+            Important = 1,
+            AlertMessage = 2,
+            NotificationMessage = 3,
+            Journaling = 4,
+            Debugging = 5;
+    }
     public static void faterr(String msg)
     {
         System.err.println(msg);
