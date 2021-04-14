@@ -59,12 +59,6 @@ public abstract class AbstractMiner implements Runnable {
     }
 
     protected void addTransactions(Block block) {
-        while (block.calculateSize() < Context.getInstance().getNetworkParameters().getMaxBlockSize()) {
-            block.addTransaction(Context.getInstance().getTransactionPool().pollTransaction());
-        }
-
-        if (block.calculateSize() > Context.getInstance().getNetworkParameters().getMaxBlockSize()) {
-            block.removeLastTransaction();
-        }
+        Context.getInstance().getTransactionPool().fillBlock(block);
     }
 }
