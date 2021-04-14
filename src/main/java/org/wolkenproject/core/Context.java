@@ -34,7 +34,7 @@ public class Context {
     private FileService             fileService;
     private CompressionEngine       compressionEngine;
 
-    public Context(FileService service, int rpcPort, boolean testNet, Address[] payList, Set<NetAddress> forceConnections, boolean pruned) throws WolkenException, IOException {
+    public Context(FileService service, int rpcPort, boolean testNet, Address[] payList, Set<NetAddress> forceConnections, boolean pruned, int verbosity) throws WolkenException, IOException {
         Context.instance = this;
         this.scheduler = new TaskScheduler();
         this.database = new Database(service);
