@@ -147,12 +147,12 @@ public class TransactionPool {
     public void fillBlock(Block block) {
         mutex.lock();
         try {
-            while (block.calculateSize() < Context.getInstance().getNetworkParameters().getMaxBlockSize() && pendingTransactions.hasElements()) {
+            while (block.calculateSize() < Context.getInstance().getContextParams().getMaxBlockSize() && pendingTransactions.hasElements()) {
                 PendingTransaction transaction = pendingTransactions.poll();
                 if (transaction.shallowVerify()) {
                     block.addTransaction(transaction);
 
-                    if (block.calculateSize() > Context.getInstance().getNetworkParameters().getMaxBlockSize()) {
+                    if (block.calculateSize() > Context.getInstance().getContextParams().getMaxBlockSize()) {
                         block.removeLastTransaction();
                         addInternally(transaction);
                         break;
