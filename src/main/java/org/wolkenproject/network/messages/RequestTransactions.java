@@ -31,7 +31,7 @@ public class RequestTransactions extends Message {
         Set<Transaction> transactions = new LinkedHashSet<>();
         for (byte[] txid : this.transactions)
         {
-            Transaction transaction = Context.getInstance().getTransactionPool().getTransaction(txid);
+            Transaction transaction = Context.getInstance().getTransactionPool().getTransaction(txid).getTransaction();
 
             if (transaction != null)
             {
