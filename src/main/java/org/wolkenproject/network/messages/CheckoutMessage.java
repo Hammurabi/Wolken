@@ -24,7 +24,7 @@ public class CheckoutMessage extends Message {
     private int reason;
 
     public CheckoutMessage(int reason) {
-        super(Flags.Notify, Context.getInstance().getNetworkParameters().getVersion());
+        super(Flags.Notify, Context.getInstance().getContextParams().getVersion());
         this.reason = reason;
     }
 
