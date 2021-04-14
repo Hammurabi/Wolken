@@ -34,7 +34,7 @@ public class TransactionPool {
     public boolean contains(byte[] txid) {
         mutex.lock();
         try {
-            return pendingTransactions.containsKey(ByteArray.wrap(txid));
+            return pendingTransactions.containsKey(ByteArray.wrap(txid)) || rejectedTransactions.containsKey(ByteArray.wrap(txid));
         } finally {
             mutex.unlock();
         }
