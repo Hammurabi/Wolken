@@ -15,7 +15,8 @@ public class TransactionPool {
     private static final int                MaximumTransactionQueueSize = 1_250_000_000;
 
     public TransactionPool() {
-        pendingTransactions = new PriorityHashQueue<>(Transaction::calculateSize);
+        pendingTransactions     = new PriorityHashQueue<>(Transaction::calculateSize);
+        rejectedTransactions    = new PriorityHashQueue<>(Transaction::calculateSize);
         mutex           = new ReentrantLock();
     }
 
