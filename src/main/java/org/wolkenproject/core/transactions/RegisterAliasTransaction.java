@@ -47,7 +47,7 @@ public class RegisterAliasTransaction extends Transaction {
 
     @Override
     public long getTransactionFee() {
-        return fee + Context.getInstance().getNetworkParameters().getAliasRegistrationCost();
+        return fee + Context.getInstance().getContextParams().getAliasRegistrationCost();
     }
 
     @Override
