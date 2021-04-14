@@ -55,7 +55,7 @@ public class PeerBlockCandidate extends CandidateBlock {
     }
 
     private void broadcast() {
-        Message notify = new Inv(getContext().getNetworkParameters().getVersion(), Inv.Type.Block, header.getHashCode());
+        Message notify = new Inv(getContext().getContextParams().getVersion(), Inv.Type.Block, header.getHashCode());
         getContext().getServer().broadcast(notify, sender);
     }
 
@@ -81,9 +81,9 @@ public class PeerBlockCandidate extends CandidateBlock {
             // get the ancestor of the last difficulty change.
             BlockHeader lastDiffCalc = null;
             // check if difficulty needs to be recalculated for this block.
-            if (height > 0 && height % getContext().getNetworkParameters().getDifficultyAdjustmentThreshold() == 0) {
+            if (height > 0 && height % getContext().getContextParams().getDifficultyAdjustmentThreshold() == 0) {
                 // determine the height of the last block that recalculated the difficulty.
-                int heightAtLastDifficultyCalc = Math.max(0, height - getContext().getNetworkParameters().getDifficultyAdjustmentThreshold());
+                int heightAtLastDifficultyCalc = Math.max(0, height - getContext().getContextParams().getDifficultyAdjustmentThreshold());
                 // determine whether or not this block is inside the main chain.
                 if (heightAtLastDifficultyCalc <= commonAncestor.getHeight()) {
                     lastDiffCalc = getContext().getDatabase().findBlockHeader(target.getBlockHash(heightAtLastDifficultyCalc));
@@ -141,7 +141,7 @@ public class PeerBlockCandidate extends CandidateBlock {
         int height              = metadata.getHeight();
 
         // this should give us 8 blocks per message at (8mb).
-        int blocksPerMessage    = getContext().getNetworkParameters().getMaxMessageContentSize() / getContext().getNetworkParameters().getMaxBlockSize();
+        int blocksPerMessage    = getContext().getContextParams().getMaxMessageContentSize() / getContext().getContextParams().getMaxBlockSize();
 
         BlockHeader parent      = metadata.getBlockHeader();
 
@@ -156,11 +156,11 @@ public class PeerBlockCandidate extends CandidateBlock {
                 blocks.add(chain.get(j + i).getHashCode());
             }
 
-            Message request = new RequestBlocks(getContext().getNetworkParameters().getVersion(), blocks);
+            Message request = new RequestBlocks(getContext().getContextParams().getVersion(), blocks);
             CheckedResponse response = null;
 
             try {
-                response = sender.getResponse(request, getContext().getNetworkParameters().getMessageTimeout(blocks.size() * getContext().getNetworkParameters().getMaxBlockSize()));
+                response = sender.getResponse(request, getContext().getContextParams().getMessageTimeout(blocks.size() * getContext().getContextParams().getMaxBlockSize()));
 
                 if (response.noErrors()) {
                     Collection<Block> bl = response.getMessage().getPayload();
@@ -235,11 +235,11 @@ public class PeerBlockCandidate extends CandidateBlock {
         }
 
         // request block headers
-        Message request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), best.getHashCode(), 1024, best);
+        Message request = new RequestHeadersBefore(context.getContextParams().getVersion(), best.getHashCode(), 1024, best);
         CheckedResponse response = null;
 
         try {
-            response = sender.getResponse(request, context.getNetworkParameters().getMessageTimeout(1024 * BlockHeader.Size));
+            response = sender.getResponse(request, context.getContextParams().getMessageTimeout(1024 * BlockHeader.Size));
             if (!response.noErrors()) {
                 return null;
             }
@@ -313,11 +313,11 @@ public class PeerBlockCandidate extends CandidateBlock {
                 ancestorRequests.push(headers);
 
                 // find older ancestor
-                request = new RequestHeadersBefore(context.getNetworkParameters().getVersion(), headers.get(headers.size() - 1).getHashCode(), 4096, headers.get(headers.size() - 1));
+                request = new RequestHeadersBefore(context.getContextParams().getVersion(), headers.get(headers.size() - 1).getHashCode(), 4096, headers.get(headers.size() - 1));
                 response = null;
 
                 try {
-                    response = sender.getResponse(request, context.getNetworkParameters().getMessageTimeout(4096 * BlockHeader.Size));
+                    response = sender.getResponse(request, context.getContextParams().getMessageTimeout(4096 * BlockHeader.Size));
                     if (!response.noErrors()) {
                         return null;
                     }
