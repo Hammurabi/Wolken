@@ -5,8 +5,6 @@ import org.wolkenproject.encoders.Base58;
 import org.wolkenproject.utils.HashUtil;
 import org.wolkenproject.utils.Utils;
 
-import java.util.Arrays;
-
 public class Address {
     public static final int RawLength = 20;
     private int     prefix;
@@ -14,7 +12,7 @@ public class Address {
     private byte[]  checksum;
 
     private Address(byte raw[]) {
-        this(Context.getInstance().getNetworkParameters().getGenericAddressPrefix(), raw);
+        this(Context.getInstance().getContextParams().getGenericAddressPrefix(), raw);
     }
 
     private Address(byte prefix, byte raw[]) {
@@ -37,7 +35,7 @@ public class Address {
         byte encodedKey[]   = key.getEncoded();
 
         // return a hash160 of the key (with a network 'address' prefix)
-        return new Address(Context.getInstance().getNetworkParameters().getGenericAddressPrefix(), HashUtil.hash160(encodedKey));
+        return new Address(Context.getInstance().getContextParams().getGenericAddressPrefix(), HashUtil.hash160(encodedKey));
     }
 
     // return an address object from a 'raw' non-encoded 20 byte address
@@ -60,7 +58,7 @@ public class Address {
 
         byte prefixed[] = Utils.trim(address, 0, 21);
 
-        if (prefixed[0] != Context.getInstance().getNetworkParameters().getGenericMainnetAddressPrefix() && prefixed[0] != Context.getInstance().getNetworkParameters().getGenericTestnetAddressPrefix()) {
+        if (prefixed[0] != Context.getInstance().getContextParams().getGenericMainnetAddressPrefix() && prefixed[0] != Context.getInstance().getContextParams().getGenericTestnetAddressPrefix()) {
             return false;
         }
 
