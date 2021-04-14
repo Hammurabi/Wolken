@@ -1,23 +1,25 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.PendingTransaction;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.utils.ByteArray;
 import org.wolkenproject.utils.HashQueue;
-import org.wolkenproject.utils.PriorityHashQueue;
+import org.wolkenproject.utils.LinkedHashQueue;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TransactionPool {
-    private HashQueue<Transaction>          pendingTransactions;
+    private HashQueue<PendingTransaction>   pendingTransactions;
     private HashQueue<RejectedTransaction>  rejectedTransactions;
     private ReentrantLock                   mutex;
     private static final int                MaximumTransactionQueueSize = 1_250_000_000;
+    private static final int                MaximumRejectionQueueSize   =   500_000_000;
 
     public TransactionPool() {
-        pendingTransactions     = new PriorityHashQueue<>(Transaction::calculateSize);
-        rejectedTransactions    = new PriorityHashQueue<>(RejectedTransaction::calculateSize);
-        mutex           = new ReentrantLock();
+        pendingTransactions     = new LinkedHashQueue<>(PendingTransaction::calculateSize);
+        rejectedTransactions    = new LinkedHashQueue<>(RejectedTransaction::calculateSize);
+        mutex                   = new ReentrantLock();
     }
 
     public boolean contains(byte[] txid) {
@@ -77,13 +79,13 @@ public class TransactionPool {
     public void add(Transaction transaction) {
         mutex.lock();
         try {
-            addInternally(transaction);
+            addInternally(new PendingTransaction(transaction, System.currentTimeMillis()));
         } finally {
             mutex.unlock();
         }
     }
 
-    protected void addInternally(Transaction transaction) {
+    protected void addInternally(PendingTransaction transaction) {
         pendingTransactions.add(transaction, transaction.getHash());
         if (pendingTransactions.byteCount() > MaximumTransactionQueueSize) {
             pendingTransactions.removeTails(pendingTransactions.size() - 1);
@@ -101,12 +103,16 @@ public class TransactionPool {
         try {
             while (block.calculateSize() < Context.getInstance().getNetworkParameters().getMaxBlockSize() && pendingTransactions.hasElements()) {
                 Transaction transaction = pendingTransactions.poll();
-                block.addTransaction(transaction);
+                if (transaction.shallowVerify()) {
+                    block.addTransaction(transaction);
 
-                if (block.calculateSize() > Context.getInstance().getNetworkParameters().getMaxBlockSize()) {
-                    block.removeLastTransaction();
-                    addInternally(transaction);
-                    break;
+                    if (block.calculateSize() > Context.getInstance().getNetworkParameters().getMaxBlockSize()) {
+                        block.removeLastTransaction();
+                        addInternally(transaction);
+                        break;
+                    }
+                } else {
+                    rejectedTransactions.add(new RejectedTransaction(transaction, System.currentTimeMillis()), transaction.getHash());
                 }
             }
         } finally {
