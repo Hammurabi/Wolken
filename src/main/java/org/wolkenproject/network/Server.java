@@ -6,6 +6,7 @@ import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.Inv;
 import org.wolkenproject.network.messages.VersionMessage;
 import org.wolkenproject.utils.Logger;
+import org.wolkenproject.utils.Tuple;
 import org.wolkenproject.utils.VoidCallable;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class Server implements Runnable {
     private Emitter<Node>       onConnectFromEmitter;
     private Emitter<Node>       onConnectToEmitter;
     private Emitter<Node>       onDisconnectEmitter;
+    private Emitter<Tuple<Message, Node>> onMessageSendEmitter;
 
     public Server(Set<NetAddress> forceConnections) throws IOException {
         socket  = new ServerSocket();
@@ -340,5 +342,9 @@ public class Server implements Runnable {
 
     public void registerDisconnectListener(VoidCallable<Node> listener) {
         onDisconnectEmitter.add(listener);
+    }
+
+    public void registerMessageSendListener(VoidCallable<Tuple<Message, Node>> listener) {
+        onMessageSendEmitter.add(listener);
     }
 }
