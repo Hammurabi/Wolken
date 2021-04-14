@@ -17,7 +17,7 @@ public class PendingTransaction implements Comparable<PendingTransaction> {
     }
 
     public boolean shouldDelete() {
-        return System.currentTimeMillis() - when > Context.getInstance().getNetworkParameters().getMaxTransactionRejectionTime();
+        return System.currentTimeMillis() - when > Context.getInstance().getContextParams().getMaxTransactionRejectionTime();
     }
 
     @Override
