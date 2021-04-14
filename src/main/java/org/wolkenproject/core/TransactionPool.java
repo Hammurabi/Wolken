@@ -5,21 +5,30 @@ import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.utils.ByteArray;
 import org.wolkenproject.utils.HashQueue;
 import org.wolkenproject.utils.LinkedHashQueue;
+import org.wolkenproject.utils.VoidCallable;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TransactionPool {
-    private HashQueue<PendingTransaction>   pendingTransactions;
-    private HashQueue<RejectedTransaction>  rejectedTransactions;
-    private ReentrantLock                   mutex;
-    private static final int                MaximumTransactionQueueSize = 1_250_000_000;
-    private static final int                MaximumRejectionQueueSize   =   500_000_000;
+    private HashQueue<PendingTransaction>       pendingTransactions;
+    private HashQueue<RejectedTransaction>      rejectedTransactions;
+    private ReentrantLock                       mutex;
+    private static final int                    MaximumTransactionQueueSize = 1_250_000_000;
+    private static final int                    MaximumRejectionQueueSize   =   500_000_000;
+    private final Emitter<PendingTransaction>   pendingTransactionEmitter;
+    private final Emitter<RejectedTransaction>  rejectedTransactionEmitter;
+    private final Emitter<PendingTransaction>   pendingTimedoutEmitter;
+    private final Emitter<RejectedTransaction>  rejectedTimedoutEmitter;
 
     public TransactionPool() {
         pendingTransactions     = new LinkedHashQueue<>(PendingTransaction::calculateSize);
         rejectedTransactions    = new LinkedHashQueue<>(RejectedTransaction::calculateSize);
         mutex                   = new ReentrantLock();
+        pendingTransactionEmitter = new Emitter<>();
+        rejectedTransactionEmitter = new Emitter<>();
+        pendingTimedoutEmitter = new Emitter<>();
+        rejectedTimedoutEmitter = new Emitter<>();
     }
 
     public boolean contains(byte[] txid) {
@@ -175,5 +184,21 @@ public class TransactionPool {
         } finally {
             mutex.unlock();
         }
+    }
+
+    public void registerPendingTransactionListener(VoidCallable<PendingTransaction> listener) {
+        this.pendingTransactionEmitter.add(listener);
+    }
+
+    public void registerRejectedTransactionListener(VoidCallable<RejectedTransaction> listener) {
+        this.rejectedTransactionEmitter.add(listener);
+    }
+
+    public void registerPendingTransactionTimeoutListener(VoidCallable<PendingTransaction> listener) {
+        this.pendingTimedoutEmitter.add(listener);
+    }
+
+    public void registerRejectedTransactionTimeoutListener(VoidCallable<RejectedTransaction> listener) {
+        this.rejectedTimedoutEmitter.add(listener);
     }
 }
