@@ -47,7 +47,7 @@ public class RequestHeadersBefore extends Message {
 
         // if it doesn't exist then respond with an error
         if (index == null) {
-            node.sendMessage(new FailedToRespondMessage(Context.getInstance().getNetworkParameters().getVersion(), FailedToRespondMessage.ReasonFlags.CouldNotFindRequestedData, getUniqueMessageIdentifier()));
+            node.sendMessage(new FailedToRespondMessage(Context.getInstance().getContextParams().getVersion(), FailedToRespondMessage.ReasonFlags.CouldNotFindRequestedData, getUniqueMessageIdentifier()));
             return;
         }
 
@@ -58,13 +58,13 @@ public class RequestHeadersBefore extends Message {
             // database internal error
             // this should not happen
             if (header == null) {
-                node.sendMessage(new FailedToRespondMessage(Context.getInstance().getNetworkParameters().getVersion(), FailedToRespondMessage.ReasonFlags.CouldNotFindRequestedData, getUniqueMessageIdentifier()));
+                node.sendMessage(new FailedToRespondMessage(Context.getInstance().getContextParams().getVersion(), FailedToRespondMessage.ReasonFlags.CouldNotFindRequestedData, getUniqueMessageIdentifier()));
                 return;
             }
         }
 
         // send the headers
-        node.sendMessage(new HeaderList(Context.getInstance().getNetworkParameters().getVersion(), headers, getUniqueMessageIdentifier()));
+        node.sendMessage(new HeaderList(Context.getInstance().getContextParams().getVersion(), headers, getUniqueMessageIdentifier()));
     }
 
     @Override
