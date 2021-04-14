@@ -11,10 +11,11 @@ import java.math.BigInteger;
 public class ContextParams {
     private boolean isTestNet;
     private int     defaultBits;
+    private int     loggingLevel;
 
     private BigInteger maximumTarget;
 
-    public ContextParams(boolean testNet) throws WolkenException {
+    public ContextParams(boolean testNet, int loggingLevel) throws WolkenException {
         this.isTestNet = testNet;
 
         if (testNet) {
@@ -23,7 +24,8 @@ public class ContextParams {
             defaultBits = Utils.makeInt(Base16.decode("1d00ffff"));
         }
 
-        this.maximumTarget = ChainMath.targetIntegerFromBits(defaultBits);
+        this.maximumTarget  = ChainMath.targetIntegerFromBits(defaultBits);
+        this.loggingLevel   = loggingLevel;
     }
 
     public boolean isTestNet() {
@@ -196,5 +198,9 @@ public class ContextParams {
 
     public long getMaxTransactionRejectionTime() {
         return 60_000L * 360;
+    }
+
+    public int getLoggingLevel() {
+        return loggingLevel;
     }
 }
