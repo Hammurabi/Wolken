@@ -24,6 +24,9 @@ public class Logger {
     }
 
     public static void alert(String msg, Object ...arguments) {
+    }
+
+    public static void msg(ChatColor chatColor, String msg, Object ...arguments) {
         Pattern pattern = Pattern.compile("\\$\\{[A-z]\\}");
         Matcher matcher = pattern.matcher(msg);
         int index       = 0;
