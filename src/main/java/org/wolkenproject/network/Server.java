@@ -54,32 +54,29 @@ public class Server implements Runnable {
         connectToNodes(forceConnections, Context.getInstance().getIpAddressList().getAddresses());
     }
 
-    public boolean connectToNodes(Set<NetAddress> forceConnections, Queue<NetAddress> addresses)
-    {
+    public boolean connectToNodes(Set<NetAddress> forceConnections, Queue<NetAddress> addresses) {
         Logger.alert("establishing outbound connections.");
         int connections = 0;
 
         for (NetAddress address : forceConnections) {
-            // prevent self connections.
-            if (address.getAddress().isAnyLocalAddress() || address.getAddress().isLoopbackAddress()) {
-                continue;
-            }
-
             int i = connectedNodes.size();
             Logger.alert("attempting to connect to ${a}", address);
 
-//            forceConnect(address);
+            forceConnect(address);
             if (connectedNodes.size() == i) {
                 Logger.alert("failed to connect to ${a}", address);
             }
         }
 
-        for (NetAddress address : addresses)
-        {
+        for (NetAddress address : addresses) {
+            // prevent self connections.
+            if (address.getAddress().isAnyLocalAddress() || address.getAddress().isLoopbackAddress()) {
+                continue;
+            }
+
             forceConnect(address);
 
-            if (++ connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections())
-            {
+            if (++connections == Context.getInstance().getNetworkParameters().getMaxAllowedOutboundConnections()) {
                 return true;
             }
         }
