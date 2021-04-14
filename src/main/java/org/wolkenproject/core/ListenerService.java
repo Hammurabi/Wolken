@@ -1,6 +1,7 @@
 package org.wolkenproject.core;
 
 import org.wolkenproject.PendingTransaction;
+import org.wolkenproject.network.Node;
 import org.wolkenproject.utils.VoidCallable;
 
 public class ListenerService {
@@ -24,19 +25,35 @@ public class ListenerService {
         }
 
         if (verbosity > 3) {
+            journal();
         }
 
-        if (verbosity > 5) {
+        if (verbosity > 4) {
+            debug();
         }
     }
 
-    private static void listenForNotificationMessages() {
+    private static void listenForImportantMessages() {
     }
 
     private static void listenForAlertMessages() {
     }
 
-    private static void listenForImportantMessages() {
+    private static void listenForNotificationMessages() {
+    }
+
+    private static void journal() {
+    }
+
+    private static void debug() {
+    }
+
+    public void registerInboundConnectionListener(VoidCallable<Node> listener) {
+        context.getServer().registerInboundListener(listener);
+    }
+
+    public void registerOutboundConnectionListener(VoidCallable<Node> listener) {
+        context.getServer().registerInboundListener(listener);
     }
 
     public void registerPendingTransactionListener(VoidCallable<PendingTransaction> listener) {
