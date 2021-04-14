@@ -10,6 +10,35 @@ public class ListenerService {
         this.context = context;
     }
 
+    public static void register(int verbosity) {
+        if (verbosity > 0) {
+            listenForImportantMessages();
+        }
+
+        if (verbosity > 1) {
+            listenForAlertMessages();
+        }
+
+        if (verbosity > 2) {
+            listenForNotificationMessages();
+        }
+
+        if (verbosity > 3) {
+        }
+
+        if (verbosity > 5) {
+        }
+    }
+
+    private static void listenForNotificationMessages() {
+    }
+
+    private static void listenForAlertMessages() {
+    }
+
+    private static void listenForImportantMessages() {
+    }
+
     public void registerPendingTransactionListener(VoidCallable<PendingTransaction> listener) {
         context.getTransactionPool().registerPendingTransactionListener(listener);
     }
