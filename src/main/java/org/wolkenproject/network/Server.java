@@ -14,6 +14,8 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.wolkenproject.utils.Logger.Levels.*;
+
 public class Server implements Runnable {
     private ServerSocket    socket;
     private Set<Node>       connectedNodes;
@@ -48,23 +50,24 @@ public class Server implements Runnable {
             Context.getInstance().getIpAddressList().addAddress(netAddress);
         }
 
-        Logger.alert("opened port '" + Context.getInstance().getContextParams().getPort() + "' on " + netAddress.getAddress().toString());
+        Logger.alert("opened port '${port}' on '${address}'", AlertMessage, Context.getInstance().getContextParams().getPort(), netAddress.getAddress());
 
         connectedNodes = Collections.synchronizedSet(new LinkedHashSet<>());
         connectToNodes(forceConnections, Context.getInstance().getIpAddressList().getAddresses());
     }
 
     public boolean connectToNodes(Set<NetAddress> forceConnections, Queue<NetAddress> addresses) {
-        Logger.alert("establishing outbound connections.");
+        Logger.alert("establishing outbound connections.", AlertMessage);
         int connections = 0;
 
         for (NetAddress address : forceConnections) {
             int i = connectedNodes.size();
-            Logger.alert("attempting to connect to ${a}", address);
 
             forceConnect(address);
             if (connectedNodes.size() == i) {
-                Logger.alert("failed to connect to ${a}", address);
+                Logger.error("failed to connect to ${address}", AlertMessage, address);
+            } else {
+                Logger.alert("connected to ${address}", AlertMessage, address);
             }
         }
 
@@ -97,7 +100,6 @@ public class Server implements Runnable {
             mutex.lock();
             try {
                 connectedNodes.add(node);
-                Logger.alert("connected to ${s}", address);
             } finally {
                 mutex.unlock();
             }
@@ -118,19 +120,19 @@ public class Server implements Runnable {
 
     private void listenForIncomingConnections()
     {
-        Logger.alert("listening for inbound connections.");
+        Logger.notify("listening for inbound connections.", NotificationMessage);
         Socket incoming = null;
 
         while (Context.getInstance().isRunning())
         {
             try {
                 incoming = socket.accept();
-                Logger.alert("received connection request from ${n}", incoming.getSocketAddress());
+                Logger.notify("received connection request from ${n}", AlertMessage, incoming.getSocketAddress());
 
                 if (incoming != null) {
                     if (connectedNodes.size() < (Context.getInstance().getContextParams().getMaxAllowedInboundConnections() + Context.getInstance().getContextParams().getMaxAllowedOutboundConnections()))
                     {
-                        Logger.alert("accepted connection request from ${n}", incoming.getSocketAddress());
+                        Logger.alert("accepted connection request from ${n}", AlertMessage, incoming.getSocketAddress());
                         mutex.lock();
                         try {
                             connectedNodes.add(new Node(incoming));
@@ -160,8 +162,8 @@ public class Server implements Runnable {
             Set<Node> connectedNodes = getConnectedNodes();
 
             if (currentTime - lastNotif >= 24_000) {
-                Logger.alert("server uptime: ${m}ms", System.currentTimeMillis() - upSince);
-                Logger.alert("connected: ${d}", connectedNodes.size());
+                Logger.alert("server uptime: ${m}ms", Journaling,System.currentTimeMillis() - upSince);
+                Logger.alert("connected: ${d}", Journaling, connectedNodes.size());
 //                Logger.alert("list: ${s}", connectedNodes);
 
                 lastNotif = System.currentTimeMillis();
@@ -262,7 +264,7 @@ public class Server implements Runnable {
     }
 
     public void shutdown() {
-        Logger.alert("closing connections.");
+        Logger.notify("closing connections.", AlertMessage);
 
         Iterator<Node> nodeIterator = connectedNodes.iterator();
         while (nodeIterator.hasNext()) {
@@ -274,7 +276,7 @@ public class Server implements Runnable {
             }
         }
 
-        Logger.alert("closed connections.");
+        Logger.notify("closed connections.", AlertMessage);
     }
 
     public NetAddress getNetAddress() {
