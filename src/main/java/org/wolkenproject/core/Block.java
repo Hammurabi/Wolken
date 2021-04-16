@@ -123,30 +123,9 @@ public class Block extends SerializableI implements Iterable<Transaction> {
         return mints > 1;
     }
 
-    // creates a state change without verifying transactions
-    private void createSateChange() {
-        // set the previous stateChange to null.
-        stateChange = null;
-
-        // create a block state transition object.
-        BlockStateChange blockStateChange = new BlockStateChange();
-
-        try {
-            for (Transaction transaction : transactions) {
-                transaction.getStateChange(this, blockStateChange);
-                blockStateChange.addTransaction(transaction.getHash());
-            }
-        } catch (WolkenException e) {
-            stateChange = new BlockStateChangeResult(new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
-            return;
-        }
-
-        stateChange = blockStateChange.getResult();
-    }
-
     // creates a state change and verifies transactions
     private boolean createSateChange(int blockHeight) {
-        BlockStateChange blockStateChange = new BlockStateChange();
+        BlockStateChange blockStateChange = new BlockStateChange(blockHeight);
 
         long fees = 0L;
 
