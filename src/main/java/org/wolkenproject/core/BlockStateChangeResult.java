@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
+import static org.wolkenproject.utils.Logger.Levels.AlertMessage;
+
 public class BlockStateChangeResult implements Iterable<Event> {
     private final Queue<byte[]> transactionIds;
     private final Queue<byte[]> transactionEventIds;
@@ -59,7 +61,7 @@ public class BlockStateChangeResult implements Iterable<Event> {
             event.apply();;
         }
 
-        Logger.alert("state merged ${h}", Base16.encode(merkleRoot));
+        Logger.alert("state merged ${h}", AlertMessage, Base16.encode(merkleRoot));
     }
 
     public void undo() {
@@ -67,6 +69,6 @@ public class BlockStateChangeResult implements Iterable<Event> {
             event.undo();
         }
 
-        Logger.alert("state reset ${h}", Base16.encode(merkleRoot));
+        Logger.alert("state reset ${h}", AlertMessage, Base16.encode(merkleRoot));
     }
 }
