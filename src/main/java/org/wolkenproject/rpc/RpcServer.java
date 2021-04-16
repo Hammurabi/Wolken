@@ -35,6 +35,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.wolkenproject.utils.Logger.Levels.*;
+
 public class RpcServer {
     private HttpServer          server;
     private Context             context;
@@ -49,9 +51,9 @@ public class RpcServer {
     private BlockIndex          nextBlock;
 
     public RpcServer(Context context, int port) throws IOException {
-        Logger.alert("=============================================");
-        Logger.alert("Starting HTTP server");
-        Logger.alert("=============================================");
+        Logger.alert("=============================================", AlertMessage);
+        Logger.alert("Starting HTTP server", AlertMessage);
+        Logger.alert("=============================================", AlertMessage);
 
         server      = HttpServer.create(new InetSocketAddress(port), 12);
         handlers    = new LinkedHashSet<>();
@@ -142,7 +144,7 @@ public class RpcServer {
             msg.send("application/json", response.toString().getBytes());
             Context.getInstance().shutDown();
             return;
-        }else if (requestType.equals("createwallet")) {
+        } else if (requestType.equals("createwallet")) {
             if (!request.has("name")) {
                 response.put("response", "failed");
                 response.put("reason", "'createwallet' command requires an argument 'name'.");
@@ -411,7 +413,7 @@ public class RpcServer {
 
             // suggest the block
             Context.getInstance().getBlockChain().suggest(candidateBlock);
-            Logger.alert("work '"+ Base16.encode(nextBlock.calcHash()) + "' submitted");
+            Logger.alert("work '${work}' submitted", AlertMessage, Base16.encode(nextBlock.calcHash()));
         } finally {
             mutex.unlock();
         }
@@ -497,10 +499,10 @@ public class RpcServer {
     }
 
     public void stop() {
-        Logger.alert("stopping rpc server.");
+        Logger.alert("stopping rpc server.", AlertMessage);
         server.stop(0);
         executor.shutdownNow();
-        Logger.alert("rpc server stopped.");
+        Logger.alert("rpc server stopped.", AlertMessage);
     }
 
     private static void traversePath(String url) {
