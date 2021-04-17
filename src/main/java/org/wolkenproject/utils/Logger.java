@@ -23,6 +23,12 @@ public class Logger {
 
     public static void alert(String msg, int level, Object ...arguments) {
         if (level <= Context.getInstance().getContextParams().getLoggingLevel()) {
+            msg(Ansi.Color.GREEN, msg, arguments);
+        }
+    }
+
+    public static void notify(String msg, int level, Object ...arguments) {
+        if (level <= Context.getInstance().getContextParams().getLoggingLevel()) {
             msg(Ansi.Color.YELLOW, msg, arguments);
         }
     }
@@ -34,7 +40,7 @@ public class Logger {
     }
 
     public static void msg(Ansi.Color chatColor, String msg, Object ...arguments) {
-        Pattern pattern = Pattern.compile("\\$\\{[A-z]\\}");
+        Pattern pattern = Pattern.compile("\\$\\{[A-z]+\\}");
         Matcher matcher = pattern.matcher(msg);
         int index       = 0;
 
