@@ -7,17 +7,17 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
     private Queue<Entry<T>>         queue;
     private Comparator<Entry<T>>    comparator;
     private long                    byteCount;
-    private Callable<Long, T>       sizeManager;
+    private Callable<Integer, T>    sizeManager;
 
     public PriorityHashQueue() {
-        this(new DefaultComparator<>(), a -> { return 0L; });
+        this(new DefaultComparator<>(), a -> { return 0; });
     }
 
-    public PriorityHashQueue(Callable<Long, T> sizeManager) {
+    public PriorityHashQueue(Callable<Integer, T> sizeManager) {
         this(new DefaultComparator<>(), sizeManager);
     }
 
-    public PriorityHashQueue(Comparator<Entry<T>> comparator, Callable<Long, T> sizeManager) {
+    public PriorityHashQueue(Comparator<Entry<T>> comparator, Callable<Integer, T> sizeManager) {
         queue       = new PriorityQueue<>(comparator);
         entryMap    = new HashMap<>();
         this.comparator = comparator;
@@ -76,6 +76,11 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
     }
 
     @Override
+    public T pop() {
+        return null;
+    }
+
+    @Override
     public T peek() {
         if (queue.isEmpty()) {
             return null;
@@ -92,6 +97,11 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
     @Override
     public long byteCount() {
         return byteCount;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return null;
     }
 
     private static class DefaultComparator<T extends Comparable<T>> implements Comparator<Entry<T>> {
