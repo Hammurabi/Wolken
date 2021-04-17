@@ -2,13 +2,12 @@ package org.wolkenproject.core;
 
 import org.wolkenproject.PendingTransaction;
 import org.wolkenproject.core.transactions.Transaction;
-import org.wolkenproject.utils.ByteArray;
-import org.wolkenproject.utils.HashQueue;
-import org.wolkenproject.utils.LinkedHashQueue;
-import org.wolkenproject.utils.VoidCallable;
+import org.wolkenproject.utils.*;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static org.wolkenproject.utils.Logger.Levels.Journaling;
 
 public class TransactionPool {
     private HashQueue<PendingTransaction>       pendingTransactions;
@@ -16,19 +15,10 @@ public class TransactionPool {
     private ReentrantLock                       mutex;
     private static final int                    MaximumTransactionQueueSize = 1_250_000_000;
     private static final int                    MaximumRejectionQueueSize   =   500_000_000;
-    private final Emitter<PendingTransaction>   pendingTransactionEmitter;
-    private final Emitter<RejectedTransaction>  rejectedTransactionEmitter;
-    private final Emitter<PendingTransaction>   pendingTimedoutEmitter;
-    private final Emitter<RejectedTransaction>  rejectedTimedoutEmitter;
 
     public TransactionPool() {
-        pendingTransactions     = new LinkedHashQueue<>(PendingTransaction::calculateSize);
-        rejectedTransactions    = new LinkedHashQueue<>(RejectedTransaction::calculateSize);
-        mutex                   = new ReentrantLock();
-        pendingTransactionEmitter = new Emitter<>();
-        rejectedTransactionEmitter = new Emitter<>();
-        pendingTimedoutEmitter = new Emitter<>();
-        rejectedTimedoutEmitter = new Emitter<>();
+        pendingTransactions     = new PriorityHashQueue<>(PendingTransaction::calculateSize);
+        rejectedTransactions    = new PriorityHashQueue<>(RejectedTransaction::calculateSize);
     }
 
     public boolean contains(byte[] txid) {
@@ -61,12 +51,12 @@ public class TransactionPool {
         }
     }
 
-    public Set<byte[]> getInv() {
+    public Set<byte[]> getHeadOfQueue() {
         mutex.lock();
         try {
             Set<byte[]> txids = new LinkedHashSet<>();
             int count = Math.min(1024, pendingTransactions.size());
-            List<Transaction> txs = new ArrayList<>();
+            List<PendingTransaction> txs = new ArrayList<>();
 
             for (int i = 0; i < count; i ++) {
                 PendingTransaction transaction = pendingTransactions.poll();
@@ -74,7 +64,7 @@ public class TransactionPool {
                 txids.add(transaction.getHash());
             }
 
-            for (Transaction transaction : txs) {
+            for (PendingTransaction transaction : txs) {
                 pendingTransactions.add(transaction, transaction.getHash());
             }
 
@@ -85,9 +75,13 @@ public class TransactionPool {
     }
 
     public void add(Transaction transaction) {
+        add(new PendingTransaction(transaction, System.currentTimeMillis()));
+    }
+
+    public void add(PendingTransaction transaction) {
         mutex.lock();
         try {
-            addInternally(new PendingTransaction(transaction, System.currentTimeMillis()));
+            addInternally(transaction);
         } finally {
             mutex.unlock();
         }
@@ -95,11 +89,10 @@ public class TransactionPool {
 
     protected void addInternally(PendingTransaction transaction) {
         pendingTransactions.add(transaction, transaction.getHash());
-        pendingTransactionEmitter.call(transaction);
+        Logger.notify("added transaction '${transaction}'", Journaling, transaction);
         while (pendingTransactions.byteCount() > MaximumTransactionQueueSize) {
             // pop the transaction from the back of the queue.
             PendingTransaction pendingTransaction = pendingTransactions.pop();
-            pendingTimedoutEmitter.call(pendingTransaction);
             rejectInternally(pendingTransaction);
         }
     }
@@ -107,11 +100,16 @@ public class TransactionPool {
     private void rejectInternally(PendingTransaction pendingTransaction) {
         RejectedTransaction rejectedTransaction = new RejectedTransaction(pendingTransaction, System.currentTimeMillis());
         rejectedTransactions.add(rejectedTransaction, pendingTransaction.getHash());
-        rejectedTransactionEmitter.call(rejectedTransaction);
+        Logger.notify("added transaction '${transaction}'", Journaling, rejectedTransaction);
         while (rejectedTransactions.byteCount() > MaximumTransactionQueueSize) {
-            // pop the transaction from the back of the queue.
+            // pop the earliest transaction from the top of the queue.
             RejectedTransaction rejected = rejectedTransactions.poll();
-            rejectedTimedoutEmitter.call(rejected);
+            // if the transaction is valid again then put it back into the queue.
+            if (!rejected.isInvalid()) {
+                addInternally(rejectedTransaction.getTransaction());
+            }
+            
+            Logger.notify("timed out transaction '${transaction}'", Journaling, rejected);
         }
     }
 
@@ -134,39 +132,55 @@ public class TransactionPool {
         if (rejectedTransactions.size() > 0) {
             // poll a transaction, this will return the earliest (most likely valid) transaction.
             RejectedTransaction transaction = rejectedTransactions.peek();
-            if (!transaction.isInvalid()) {
+            if (transaction.isInvalid() && transaction.shouldDelete()) {
+                // permanently remove transaction.
                 rejectedTransactions.poll();
-            } else {
-                return transaction.getTransaction();
+            }
+
+            if (!transaction.isInvalid()) {
+                return rejectedTransactions.poll().getTransaction();
             }
         }
 
+        while (pendingTransactions.size() > 0) {
+            // poll a transaction from the top.
+            PendingTransaction pendingTransaction = pendingTransactions.poll();
 
+            // if the transaction is now invalid due to it being included in a block, then reject it.
+            if (pendingTransaction.isInvalid()) {
+                rejectInternally(pendingTransaction);
+                continue;
+            }
+
+            return pendingTransaction;
+        }
+
+        return null;
     }
 
     public void fillBlock(Block block) {
+        while (block.calculateSize() < Context.getInstance().getContextParams().getMaxBlockSize() && hasPending()) {
+            PendingTransaction transaction = pollTransaction();
+            block.addTransaction(transaction.getTransaction());
+
+            if (block.calculateSize() > Context.getInstance().getContextParams().getMaxBlockSize()) {
+                block.removeLastTransaction();
+                add(transaction);
+                break;
+            }
+        }
+    }
+
+    private boolean hasPending() {
         mutex.lock();
         try {
-            while (block.calculateSize() < Context.getInstance().getContextParams().getMaxBlockSize() && pendingTransactions.hasElements()) {
-                PendingTransaction transaction = pendingTransactions.poll();
-                if (transaction.shallowVerify()) {
-                    block.addTransaction(transaction);
-
-                    if (block.calculateSize() > Context.getInstance().getContextParams().getMaxBlockSize()) {
-                        block.removeLastTransaction();
-                        addInternally(transaction);
-                        break;
-                    }
-                } else {
-                    rejectedTransactions.add(new RejectedTransaction(transaction, System.currentTimeMillis()), transaction.getHash());
-                }
-            }
+            return pendingTransactions.hasElements() || rejectedTransactions.hasElements();
         } finally {
             mutex.unlock();
         }
     }
 
-    public Transaction pollTransaction() {
+    public PendingTransaction pollTransaction() {
         mutex.lock();
         try {
             // infinitely loop
@@ -188,21 +202,5 @@ public class TransactionPool {
         } finally {
             mutex.unlock();
         }
-    }
-
-    public void registerPendingTransactionListener(VoidCallable<PendingTransaction> listener) {
-        this.pendingTransactionEmitter.add(listener);
-    }
-
-    public void registerRejectedTransactionListener(VoidCallable<RejectedTransaction> listener) {
-        this.rejectedTransactionEmitter.add(listener);
-    }
-
-    public void registerPendingTransactionTimeoutListener(VoidCallable<PendingTransaction> listener) {
-        this.pendingTimedoutEmitter.add(listener);
-    }
-
-    public void registerRejectedTransactionTimeoutListener(VoidCallable<RejectedTransaction> listener) {
-        this.rejectedTimedoutEmitter.add(listener);
     }
 }
