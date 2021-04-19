@@ -1,7 +1,9 @@
 package org.wolkenproject.core;
 
+import org.wolkenproject.core.events.DepositFundsEvent;
 import org.wolkenproject.core.events.RegisterAliasEvent;
 import org.wolkenproject.core.events.NewAccountEvent;
+import org.wolkenproject.core.events.WithdrawFundsEvent;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.exceptions.WolkenException;
 
@@ -14,11 +16,13 @@ public class BlockStateChange {
     private Queue<byte[]>   transactionIds;
     private Queue<byte[]>   transactionEventIds;
     private List<Event>     transactionEvents;
+    private int             blockHeight;
 
-    public BlockStateChange() {
+    public BlockStateChange(int blockHeight) {
         this.transactionIds         = new LinkedList<>();
         this.transactionEventIds    = new LinkedList<>();
         this.transactionEvents      = new LinkedList<>();
+        this.blockHeight            = blockHeight;
     }
 
     public boolean checkAliasExists(long alias) {
@@ -79,5 +83,30 @@ public class BlockStateChange {
         }
 
         addEvent(new NewAccountEvent(address));
+    }
+
+    // returns the balance for the account associated with 'address'
+    // if 'afterDeposit' is true then DepositEvents from this state change are summed.
+    // if 'afterWithdraw' is true then WithdrawEvents from this state change are summed.
+    public long getAccountBalance(byte[] address, boolean afterDeposit, boolean afterWithdraw) {
+        long balance = 0L;
+
+        if (Context.getInstance().getDatabase().checkAccountExists(address)) {
+            balance = Context.getInstance().getDatabase().findAccount(address).getBalance();
+        }
+
+        for (Event event : transactionEvents) {
+            if (event instanceof DepositFundsEvent && afterWithdraw) {
+                balance += ((DepositFundsEvent) event).getAmount();
+            } else if (event instanceof WithdrawFundsEvent && afterWithdraw) {
+                balance -= ((WithdrawFundsEvent) event).getAmount();
+            }
+        }
+
+        return balance;
+    }
+
+    public int getBlockHeight() {
+        return blockHeight;
     }
 }
