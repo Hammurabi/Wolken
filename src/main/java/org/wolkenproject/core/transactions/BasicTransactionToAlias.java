@@ -1,10 +1,7 @@
 package org.wolkenproject.core.transactions;
 
 import org.json.JSONObject;
-import org.wolkenproject.core.Address;
-import org.wolkenproject.core.Block;
-import org.wolkenproject.core.BlockStateChange;
-import org.wolkenproject.core.Context;
+import org.wolkenproject.core.*;
 import org.wolkenproject.core.events.DepositFundsEvent;
 import org.wolkenproject.core.events.WithdrawFundsEvent;
 import org.wolkenproject.crypto.Signature;
@@ -73,19 +70,26 @@ public class BasicTransactionToAlias extends Transaction {
     }
 
     @Override
-    public boolean checkTransaction() {
-        // a transfer of 0 with a fee of 0 is not allowed
+    public TransactionCode checkTransaction() {
         try {
-            return
-                    getTransactionValue() >= 0 &&
-                            getTransactionFee() >= 0 &&
-                            //possible vulnerability with a+b!=0 using signed integers
-                            (getTransactionValue() + getTransactionFee()) > 0 &&
+            Account account = Context.getInstance().getDatabase().findAccount(getSender().getRaw());
+            if (account == null) {
+                return TransactionCode.InvalidTransaction;
+            }
+
+            boolean valid =
+                            commonTransactionChecks(value, fee) &&
                             (signature.getR().length == 32) &&
                             (signature.getS().length == 32) &&
                             getSender() != null &&
-                            (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                            (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getBalance()) >= (value + fee);
+                            account.getNonce() < nonce &&
+                            account.getBalance() >= (value + fee);
+
+            if (isFutureNonce(account.getNonce(), nonce)) {
+                return TransactionCode.FutureTransaction;
+            }
+
+            return TransactionCode.ValidTransaction;
         } catch (WolkenException e) {
             e.printStackTrace();
         }
