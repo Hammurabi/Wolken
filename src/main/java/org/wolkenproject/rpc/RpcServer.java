@@ -302,7 +302,7 @@ public class RpcServer {
 
             try {
                 Transaction tx          = Transaction.fromJson(transaction);
-                if (tx.shallowVerify() == Transaction.TransactionCode.InvalidTransaction) {
+                if (tx.checkTransaction() == Transaction.TransactionCode.InvalidTransaction) {
                     response.put("response", "failed");
                     response.put("reason", "invalid transaction.");
                 } else {
