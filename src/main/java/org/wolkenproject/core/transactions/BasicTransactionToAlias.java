@@ -73,7 +73,7 @@ public class BasicTransactionToAlias extends Transaction {
     }
 
     @Override
-    public boolean shallowVerify() {
+    public boolean checkTransaction() {
         // a transfer of 0 with a fee of 0 is not allowed
         try {
             return
