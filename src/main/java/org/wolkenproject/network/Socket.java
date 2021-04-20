@@ -58,9 +58,10 @@ public class Socket {
         socket.getOutputStream().write(buffer, offset, length);
     }
 
-    public void close() {
+    public void close() throws IOException {
         isClosed    = true;
         isOpen      = false;
+        socket.close();
     }
 
     public SocketAddress getSocketAddress() {
