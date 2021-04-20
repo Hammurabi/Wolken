@@ -27,18 +27,18 @@ public class VersionMessage extends Message {
     @Override
     public void executePayload(Server server, Node node) {
         node.setVersionInfo(versionInformation);
-        Logger.alert("received version info ${i}", versionInformation);
+        Logger.notify("received version info ${i}", Logger.Levels.NotificationMessage, versionInformation);
 
         if (!Context.getInstance().getContextParams().isVersionCompatible(versionInformation.getVersion(), Context.getInstance().getContextParams().getVersion())) {
             // send bye message.
-            Logger.alert("terminating connection.. (incompatible versions)");
+            Logger.notify("terminating connection.. (incompatible versions)", Logger.Levels.NotificationMessage);
             node.sendMessage(new CheckoutMessage(CheckoutMessage.Reason.SelfConnect));
         } else if (versionInformation.isSelfConnection(server.getNonce())) {
             // this is a self connection, we must terminate it
-            Logger.alert("terminating self connection..");
+            Logger.notify("terminating self connection..", Logger.Levels.NotificationMessage);
             node.sendMessage(new CheckoutMessage(CheckoutMessage.Reason.SelfConnect));
         } else {
-            Logger.alert("sending verack..");
+            Logger.notify("sending verack..", Logger.Levels.NotificationMessage);
             // send verack
             node.sendMessage(new VerackMessage(Context.getInstance().getContextParams().getVersion(), new VersionInformation(
                     Context.getInstance().getContextParams().getVersion(),
