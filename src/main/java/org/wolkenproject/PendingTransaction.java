@@ -17,30 +17,15 @@ public class PendingTransaction implements Comparable<PendingTransaction> {
     }
 
     public boolean shouldDelete() {
-        return System.currentTimeMillis() - when > Context.getInstance().getContextParams().getMaxTransactionRejectionTime();
+        return System.currentTimeMillis() - when > Context.getInstance().getContextParams().getMaxTransactionUnconfirmedTime();
     }
 
     @Override
     public int compareTo(PendingTransaction o) {
-        boolean isInvalid = isInvalid();
-        boolean oIsInvalid = o.isInvalid();
-
-        if (isInvalid && oIsInvalid) {
-            return when < o.when ? -1 : 1;
-        }
-
-        if (isInvalid) {
-            return 1;
-        }
-
-        if (oIsInvalid) {
-            return -1;
-        }
-
-        return -1;
+        return transaction.getTransactionFee() > o.transaction.getTransactionFee() ? -1 : 1;
     }
 
-    public Long calculateSize() {
+    public int calculateSize() {
         return transaction.calculateSize();
     }
 
@@ -50,5 +35,10 @@ public class PendingTransaction implements Comparable<PendingTransaction> {
 
     public Transaction getTransaction() {
         return transaction;
+    }
+
+    @Override
+    public String toString() {
+        return transaction.toString();
     }
 }
