@@ -10,21 +10,26 @@ import java.util.concurrent.locks.ReentrantLock;
 import static org.wolkenproject.utils.Logger.Levels.Journaling;
 
 public class TransactionPool {
+    /* keeps track of valid transactions with a "future" nonce */
+    private HashQueue<PendingTransaction>       futureTransactions;
+    private HashQueue<UnconfirmedTransaction>   unconfirmedTransactions;
     private HashQueue<PendingTransaction>       pendingTransactions;
-    private HashQueue<RejectedTransaction>      rejectedTransactions;
     private ReentrantLock                       mutex;
-    private static final int                    MaximumTransactionQueueSize = 1_250_000_000;
-    private static final int                    MaximumRejectionQueueSize   =   500_000_000;
+    private static final int                    MaximumPendingQueueSize     =   125_000_000;
+    private static final int                    MaximumUnconfirmedQueueSize =    75_000_000;
+    private static final int                    MaximumFuturePoolQueueSize  =    37_500_000;
 
     public TransactionPool() {
+        futureTransactions      = new PriorityHashQueue<>(PendingTransaction::calculateSize);
         pendingTransactions     = new PriorityHashQueue<>(PendingTransaction::calculateSize);
-        rejectedTransactions    = new PriorityHashQueue<>(RejectedTransaction::calculateSize);
+        unconfirmedTransactions = new PriorityHashQueue<>(UnconfirmedTransaction::calculateSize);
+        mutex                   = new ReentrantLock();
     }
 
     public boolean contains(byte[] txid) {
         mutex.lock();
         try {
-            return pendingTransactions.containsKey(ByteArray.wrap(txid)) || rejectedTransactions.containsKey(ByteArray.wrap(txid));
+            return pendingTransactions.containsKey(ByteArray.wrap(txid)) || unconfirmedTransactions.containsKey(ByteArray.wrap(txid));
         } finally {
             mutex.unlock();
         }
@@ -52,26 +57,22 @@ public class TransactionPool {
     }
 
     public Set<byte[]> getHeadOfQueue() {
-        mutex.lock();
-        try {
-            Set<byte[]> txids = new LinkedHashSet<>();
-            int count = Math.min(1024, pendingTransactions.size());
-            List<PendingTransaction> txs = new ArrayList<>();
+        Set<byte[]> txids = new LinkedHashSet<>();
+        Set<PendingTransaction> transactions = new LinkedHashSet<>();
+        int count = 1024;
 
-            for (int i = 0; i < count; i ++) {
-                PendingTransaction transaction = pendingTransactions.poll();
-                txs.add(transaction);
-                txids.add(transaction.getHash());
+        for (int i = 0; i < count; i ++) {
+            PendingTransaction transaction = pollTransaction();
+            if (transaction == null) {
+                return txids;
             }
 
-            for (PendingTransaction transaction : txs) {
-                pendingTransactions.add(transaction, transaction.getHash());
-            }
-
-            return txids;
-        } finally {
-            mutex.unlock();
+            txids.add(transaction.getHash());
+            transactions.add(transaction);
         }
+
+        addPending(transactions);
+        return txids;
     }
 
     public void add(Transaction transaction) {
@@ -90,36 +91,38 @@ public class TransactionPool {
     protected void addInternally(PendingTransaction transaction) {
         pendingTransactions.add(transaction, transaction.getHash());
         Logger.notify("added transaction '${transaction}'", Journaling, transaction);
-        while (pendingTransactions.byteCount() > MaximumTransactionQueueSize) {
-            // pop the transaction from the back of the queue.
-            PendingTransaction pendingTransaction = pendingTransactions.pop();
-            rejectInternally(pendingTransaction);
-        }
     }
 
     private void rejectInternally(PendingTransaction pendingTransaction) {
-        RejectedTransaction rejectedTransaction = new RejectedTransaction(pendingTransaction, System.currentTimeMillis());
-        rejectedTransactions.add(rejectedTransaction, pendingTransaction.getHash());
-        Logger.notify("added transaction '${transaction}'", Journaling, rejectedTransaction);
-        while (rejectedTransactions.byteCount() > MaximumTransactionQueueSize) {
-            // pop the earliest transaction from the top of the queue.
-            RejectedTransaction rejected = rejectedTransactions.poll();
+        UnconfirmedTransaction unconfirmedTransaction = new UnconfirmedTransaction(pendingTransaction, System.currentTimeMillis());
+        unconfirmedTransactions.add(unconfirmedTransaction, pendingTransaction.getHash());
+        Logger.notify("added transaction '${transaction}'", Journaling, unconfirmedTransaction);
+        while (unconfirmedTransactions.byteCount() > MaximumUnconfirmedQueueSize) {
+            // get the earliest transaction from the top of the queue.
+            UnconfirmedTransaction unconfirmed = unconfirmedTransactions.poll();
             // if the transaction is valid again then put it back into the queue.
-            if (!rejected.isInvalid()) {
-                addInternally(rejectedTransaction.getTransaction());
+            if (!unconfirmed.isInvalid()) {
+                addInternally(unconfirmedTransaction.getTransaction());
+                continue;
             }
-            
-            Logger.notify("timed out transaction '${transaction}'", Journaling, rejected);
+
+            Logger.notify("timed out transaction '${transaction}'", Journaling, unconfirmed);
         }
     }
 
-    public void add(Set<Transaction> transactions) {
+    public void addPending(Collection<PendingTransaction> transactions) {
+        for (PendingTransaction transaction : transactions) {
+            add(transaction);
+        }
+    }
+
+    public void add(Collection<Transaction> transactions) {
         for (Transaction transaction : transactions) {
             add(transaction);
         }
     }
 
-    public PendingTransaction poll() {
+    public PendingTransaction pollTransaction() {
         mutex.lock();
         try {
             return pollInternally();
@@ -128,21 +131,44 @@ public class TransactionPool {
         }
     }
 
-    private PendingTransaction pollInternally() {
-        if (rejectedTransactions.size() > 0) {
-            // poll a transaction, this will return the earliest (most likely valid) transaction.
-            RejectedTransaction transaction = rejectedTransactions.peek();
-            if (transaction.isInvalid() && transaction.shouldDelete()) {
-                // permanently remove transaction.
-                rejectedTransactions.poll();
+    private PendingTransaction pollFuture() {
+        while (futureTransactions.hasElements()) {
+            PendingTransaction pendingTransaction = futureTransactions.poll();
+
+            if (pendingTransaction.isInvalid()) {
+                continue;
             }
 
-            if (!transaction.isInvalid()) {
-                return rejectedTransactions.poll().getTransaction();
-            }
+            return pendingTransaction;
         }
 
-        while (pendingTransactions.size() > 0) {
+        return null;
+    }
+
+    private PendingTransaction pollUnconfirmed() {
+        while (unconfirmedTransactions.hasElements()) {
+            // poll a transaction from the priority queue.
+            UnconfirmedTransaction rejectedTransaction = unconfirmedTransactions.poll();
+
+            // if the transaction is both invalid and has been timed out then we remove it.
+            if (rejectedTransaction.isInvalid() && rejectedTransaction.shouldDelete()) {
+                continue;
+            }
+
+            // if the transaction is not invalid then we return it.
+            if (!rejectedTransaction.isInvalid()) {
+                return rejectedTransaction.getTransaction();
+            }
+
+            // if this is reached then we return null.
+            return null;
+        }
+
+        return null;
+    }
+
+    private PendingTransaction pollPending() {
+        while (pendingTransactions.hasElements()) {
             // poll a transaction from the top.
             PendingTransaction pendingTransaction = pendingTransactions.poll();
 
@@ -158,11 +184,33 @@ public class TransactionPool {
         return null;
     }
 
+    private PendingTransaction pollInternally() {
+        PendingTransaction transaction = pollFuture();
+
+        if (transaction == null) {
+            transaction = pollUnconfirmed();
+        }
+
+        if (transaction == null) {
+            return pollPending();
+        }
+
+        return transaction;
+    }
+
     public void fillBlock(Block block) {
-        while (block.calculateSize() < Context.getInstance().getContextParams().getMaxBlockSize() && hasPending()) {
+        while (block.calculateSize() < Context.getInstance().getContextParams().getMaxBlockSize()) {
             PendingTransaction transaction = pollTransaction();
+
+            // if 'poll' is returning null then there are no transactions that we can return.
+            if (transaction == null) {
+                return;
+            }
+
+            // add the transaction to the block.
             block.addTransaction(transaction.getTransaction());
 
+            // check that the block size is still under the limit.
             if (block.calculateSize() > Context.getInstance().getContextParams().getMaxBlockSize()) {
                 block.removeLastTransaction();
                 add(transaction);
@@ -174,31 +222,7 @@ public class TransactionPool {
     private boolean hasPending() {
         mutex.lock();
         try {
-            return pendingTransactions.hasElements() || rejectedTransactions.hasElements();
-        } finally {
-            mutex.unlock();
-        }
-    }
-
-    public PendingTransaction pollTransaction() {
-        mutex.lock();
-        try {
-            // infinitely loop
-            while (!pendingTransactions.isEmpty()) {
-                // poll a transaction
-                PendingTransaction transaction = pendingTransactions.poll();
-                byte txid[] = transaction.getHash();
-
-                // if the transaction has already been added to a block then continue
-                if (Context.getInstance().getDatabase().checkTransactionExists(txid)) {
-                    continue;
-                }
-
-                // otherwise return the transaction
-                return transaction;
-            }
-
-            return null;
+            return pendingTransactions.hasElements() || unconfirmedTransactions.hasElements();
         } finally {
             mutex.unlock();
         }
