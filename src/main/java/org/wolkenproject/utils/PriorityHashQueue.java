@@ -3,7 +3,7 @@ package org.wolkenproject.utils;
 import java.util.*;
 
 public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> {
-    private Map<ByteArray, Entry<T>>   entryMap;
+    private Map<ByteArray, Entry<T>>entryMap;
     private Queue<Entry<T>>         queue;
     private Comparator<Entry<T>>    comparator;
     private long                    byteCount;
@@ -97,11 +97,6 @@ public class PriorityHashQueue<T extends Comparable<T>> implements HashQueue<T> 
     @Override
     public long byteCount() {
         return byteCount;
-    }
-
-    @Override
-    public Iterator<T> iterator() {
-        return null;
     }
 
     private static class DefaultComparator<T extends Comparable<T>> implements Comparator<Entry<T>> {
