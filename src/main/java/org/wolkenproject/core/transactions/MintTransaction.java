@@ -92,7 +92,7 @@ public class MintTransaction extends Transaction {
     }
 
     @Override
-    public long calculateSize() {
+    public int calculateSize() {
         return VarInt.sizeOfCompactUin32(getVersion(), false) + 20 + VarInt.sizeOfCompactUin32(dump.length, false) + dump.length;
     }
 
