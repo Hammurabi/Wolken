@@ -150,7 +150,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         check the signature is valid
         check the sender has funds
      */
-    public abstract TransactionCode shallowVerify();
+    public abstract TransactionCode checkTransaction();
     public abstract Address getSender() throws WolkenException;
     public abstract Address getRecipient();
     public abstract boolean hasMultipleSenders();
@@ -303,7 +303,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public TransactionCode shallowVerify() {
+        public TransactionCode checkTransaction() {
             return TransactionCode.InvalidTransaction;
         }
 
@@ -447,7 +447,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public TransactionCode shallowVerify() {
+        public TransactionCode checkTransaction() {
             return TransactionCode.InvalidTransaction;
         }
 
