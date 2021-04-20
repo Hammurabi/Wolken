@@ -52,7 +52,6 @@ public class Context {
 
         SerializationFactory.register(serializationFactory);
         OpcodeRegister.register(opcodeRegister);
-        ListenerService.register(verbosity);
 
         this.blockChain = AbstractBlockChain.create(pruned);
         this.server = new Server(forceConnections);
