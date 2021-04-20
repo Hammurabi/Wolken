@@ -1,4 +1,4 @@
 package org.wolkenproject.exceptions;
 
-public class ContractOutOfFundsExceptions extends Exception {
+public class ContractOutOfFundsExceptions extends ContractException {
 }
