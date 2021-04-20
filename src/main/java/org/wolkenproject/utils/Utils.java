@@ -280,7 +280,9 @@ public class Utils {
         buffer.flip();
 
         return buffer.array();
-    }public static byte[] fillArray(byte[] chars, byte c) {
+    }
+
+    public static byte[] fillArray(byte[] chars, byte c) {
         Arrays.fill(chars, c);
         return chars;
     }
