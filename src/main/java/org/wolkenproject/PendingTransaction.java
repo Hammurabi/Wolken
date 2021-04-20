@@ -13,7 +13,7 @@ public class PendingTransaction implements Comparable<PendingTransaction> {
     }
 
     public boolean isInvalid() {
-        return !transaction.shallowVerify();
+        return transaction.shallowVerify() == Transaction.TransactionCode.InvalidTransaction;
     }
 
     public boolean shouldDelete() {
