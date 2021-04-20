@@ -10,6 +10,8 @@ import java.io.*;
 import java.math.BigInteger;
 import java.util.*;
 
+import static org.wolkenproject.core.transactions.Transaction.TransactionCode.InvalidTransaction;
+
 public class Block extends SerializableI implements Iterable<Transaction> {
     public static int               UniqueIdentifierLength  = 32;
     private BlockHeader             blockHeader;
@@ -60,7 +62,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     // this does not mean that transactions are VALID
     private boolean shallowVerifyTransactions() {
         for (Transaction transaction : transactions) {
-            if (!transaction.shallowVerify()) {
+            if (transaction.shallowVerify() == InvalidTransaction) {
                 return false;
             }
         }

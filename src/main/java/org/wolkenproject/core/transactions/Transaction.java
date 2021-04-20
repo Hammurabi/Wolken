@@ -11,6 +11,7 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.HashUtil;
+import org.wolkenproject.utils.Tuple;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
@@ -19,9 +20,16 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
+
+    public enum TransactionCode {
+        InvalidTransaction,
+        FutureTransaction,
+        ValidTransaction,
+    }
 
     public static Transaction fromJson(JSONObject transaction) throws WolkenException {
         if (transaction != null) {
@@ -142,19 +150,20 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         check the signature is valid
         check the sender has funds
      */
-    public abstract boolean shallowVerify();
+    public abstract TransactionCode shallowVerify();
     public abstract Address getSender() throws WolkenException;
     public abstract Address getRecipient();
     public abstract boolean hasMultipleSenders();
     public abstract boolean hasMultipleRecipients();
-    public abstract long calculateSize();
+    public abstract int calculateSize();
+
     /*
-        deep checks of the validity of a transactions
-        if the transaction contains a payload, the pa
-        -yload would be executed and if errors are th
-        -rown without being caught then the transacti
-        -on is deemed invalid.
-     */
+            deep checks of the validity of a transactions
+            if the transaction contains a payload, the pa
+            -yload would be executed and if errors are th
+            -rown without being caught then the transacti
+            -on is deemed invalid.
+         */
     public abstract boolean verify(BlockStateChange blockStateChange, Block block, int blockHeight, long fees);
     /*
         return all the changes this transaction will
@@ -176,6 +185,11 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         transaction.setSignature(signature);
 
         return transaction;
+    }
+
+    @Override
+    public String toString() {
+        return Base16.encode(getHash());
     }
 
     protected abstract void setSignature(Signature signature) throws WolkenException;
@@ -203,7 +217,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         return (getMaxUnitCost() > transaction.getMaxUnitCost() ? 1 : -1);
     }
 
-    // a transaction that creates a contract
+    // a transaction that creates a contract.
     public static Transaction newPayload(long amount, long fee, long nonce, byte payLoad[]) {
         return new PayloadTransaction(amount, fee, nonce, payLoad);
     }
@@ -289,8 +303,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean shallowVerify() {
-            return false;
+        public TransactionCode shallowVerify() {
+            return TransactionCode.InvalidTransaction;
         }
 
         @Override
@@ -318,7 +332,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public long calculateSize() {
+        public int calculateSize() {
             return VarInt.sizeOfCompactUin32(getVersion(), false) +
                     VarInt.sizeOfCompactUin64(value, false) +
                     VarInt.sizeOfCompactUin64(unitCost, false) +
@@ -433,8 +447,8 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public boolean shallowVerify() {
-            return false;
+        public TransactionCode shallowVerify() {
+            return TransactionCode.InvalidTransaction;
         }
 
         @Override
@@ -458,7 +472,7 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
         }
 
         @Override
-        public long calculateSize() {
+        public int calculateSize() {
             return 0;
         }
 
