@@ -19,6 +19,8 @@ import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.wolkenproject.utils.Logger.Levels.NotificationMessage;
+
 public class Start {
     public static void main(String args[]) throws ParseException, WolkenException, IOException {
         CryptoLib.getInstance();
@@ -84,7 +86,7 @@ public class Start {
             Transaction transaction = Transaction.newTransfer(recipient, amount, fee, wallet.getNonce() + 1);
             transaction = transaction.sign(new ECKeypair(wallet.getPrivateKey(qsArgs[4].toCharArray())));
 
-            Logger.alert("transaction signed successfully ${t}", Base16.encode(transaction.asSerializedArray()));
+            Logger.alert("transaction signed successfully ${t}", NotificationMessage, Base16.encode(transaction.asSerializedArray()));
             System.exit(0);
         }
 
@@ -124,9 +126,9 @@ public class Start {
                 String ip[] = ipInfo.split(":");
                 connectionList.add(new NetAddress(InetAddress.getByName(ip[0]), Integer.parseInt(ip[1]), 0));
             }
-        }
 
-        Logger.alert("force connections ${l}", connectionList);
+            Logger.alert("force connections ${list}", NotificationMessage, connectionList);
+        }
 
         int verbosity = 0;
 
