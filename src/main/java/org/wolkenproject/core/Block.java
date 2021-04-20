@@ -62,7 +62,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
     // this does not mean that transactions are VALID
     private boolean shallowVerifyTransactions() {
         for (Transaction transaction : transactions) {
-            if (transaction.shallowVerify() == InvalidTransaction) {
+            if (transaction.checkTransaction() == InvalidTransaction) {
                 return false;
             }
         }
