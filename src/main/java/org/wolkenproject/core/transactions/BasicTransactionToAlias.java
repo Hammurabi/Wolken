@@ -122,7 +122,7 @@ public class BasicTransactionToAlias extends Transaction {
     }
 
     @Override
-    public long calculateSize() {
+    public int calculateSize() {
         return VarInt.sizeOfCompactUin32(getVersion(), false) +
                 VarInt.sizeOfCompactUin64(alias, false) +
                 VarInt.sizeOfCompactUin64(value, false) +
