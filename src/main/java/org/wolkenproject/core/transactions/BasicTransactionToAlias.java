@@ -85,6 +85,10 @@ public class BasicTransactionToAlias extends Transaction {
                             account.getNonce() < nonce &&
                             account.getBalance() >= (value + fee);
 
+            if (!valid) {
+                return TransactionCode.InvalidTransaction;
+            }
+
             if (isFutureNonce(account.getNonce(), nonce)) {
                 return TransactionCode.FutureTransaction;
             }
