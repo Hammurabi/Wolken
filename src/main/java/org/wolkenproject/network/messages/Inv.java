@@ -133,7 +133,7 @@ public class Inv extends Message {
                     Iterator<Transaction> iterator = transactions.iterator();
                     while (iterator.hasNext()) {
                         Transaction next = iterator.next();
-                        if (next.shallowVerify() == InvalidTransaction || next instanceof MintTransaction) {
+                        if (next.checkTransaction() == InvalidTransaction || next instanceof MintTransaction) {
                             iterator.remove();
                             node.increaseErrors(2);
                         }
