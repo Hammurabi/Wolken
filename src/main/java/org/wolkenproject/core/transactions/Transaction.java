@@ -157,6 +157,19 @@ public abstract class Transaction extends SerializableI implements Comparable<Tr
     public abstract boolean hasMultipleRecipients();
     public abstract int calculateSize();
 
+    public static final boolean commonTransactionChecks(long transferAmount, long transferFee) {
+        if (transferAmount <= 0) return false;
+        if (transferFee <= 0) return false;
+//        //possible vulnerability with a+b!=0 using signed integers
+//        if (getTransactionValue() + getTransactionFee()) > 0
+
+        return true;
+    }
+
+    public static final boolean isFutureNonce(long accountNonce, long transactionNonce) {
+        return (accountNonce + 1) < transactionNonce;
+    }
+
     /*
             deep checks of the validity of a transactions
             if the transaction contains a payload, the pa
