@@ -50,4 +50,9 @@ public class MinedBlockCandidate extends CandidateBlock {
     public boolean destroy() {
         return false;
     }
+
+    @Override
+    public byte[] getHash() {
+        return block.getHash();
+    }
 }
