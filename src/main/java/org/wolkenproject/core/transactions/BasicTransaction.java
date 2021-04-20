@@ -101,11 +101,7 @@ public class BasicTransaction extends Transaction {
             Account account = Context.getInstance().getDatabase().findAccount(getSender().getRaw());
 
             boolean valid =
-                            // less than zero checks.
-                            getTransactionValue() >= 0 &&
-                            getTransactionFee() >= 0 &&
-                            //possible vulnerability with a+b!=0 using signed integers.
-                            (getTransactionValue() + getTransactionFee()) > 0 &&
+                            commonTransactionChecks(value, fee) &&
                             // check signature data is sound.
                             (signature.getR().length == 32) &&
                             (signature.getS().length == 32) &&
@@ -118,9 +114,7 @@ public class BasicTransaction extends Transaction {
                 return TransactionCode.InvalidTransaction;
             }
 
-            boolean isFuture = (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) < nonce;
-
-            if (isFuture) {
+            if (isFutureNonce(account.getNonce(), nonce)) {
                 return TransactionCode.FutureTransaction;
             }
 
