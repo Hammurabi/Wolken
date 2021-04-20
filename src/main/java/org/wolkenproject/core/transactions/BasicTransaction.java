@@ -87,7 +87,7 @@ public class BasicTransaction extends Transaction {
     }
 
     @Override
-    public long calculateSize() {
+    public int calculateSize() {
         return VarInt.sizeOfCompactUin32(getVersion(), false) + 20 +
                 VarInt.sizeOfCompactUin64(value, false) +
                 VarInt.sizeOfCompactUin64(fee, false) +
@@ -96,23 +96,37 @@ public class BasicTransaction extends Transaction {
     }
 
     @Override
-    public boolean shallowVerify() {
+    public TransactionCode shallowVerify() {
         try {
-            return
-                    // less than zero checks
-                    getTransactionValue() >= 0 &&
+            Account account = Context.getInstance().getDatabase().findAccount(getSender().getRaw());
+
+            boolean valid =
+                            // less than zero checks.
+                            getTransactionValue() >= 0 &&
                             getTransactionFee() >= 0 &&
-                            //possible vulnerability with a+b!=0 using signed integers
+                            //possible vulnerability with a+b!=0 using signed integers.
                             (getTransactionValue() + getTransactionFee()) > 0 &&
-                            // check signature data is sound
+                            // check signature data is sound.
                             (signature.getR().length == 32) &&
                             (signature.getS().length == 32) &&
                             getSender() != null &&
-                            // check the account account and balance of sender
-                            (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
-                            (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getBalance()) >= (value + fee);
+                            // check the account account and balance of sender.
+                            (account.getNonce()) < nonce &&
+                            (account.getBalance()) >= (value + fee);
+
+            if (!valid) {
+                return TransactionCode.InvalidTransaction;
+            }
+
+            boolean isFuture = (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) < nonce;
+
+            if (isFuture) {
+                return TransactionCode.FutureTransaction;
+            }
+
+            return TransactionCode.ValidTransaction;
         } catch (WolkenException e) {
-            return false;
+            return TransactionCode.InvalidTransaction;
         }
     }
 
