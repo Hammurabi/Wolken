@@ -1,8 +1,6 @@
 package org.wolkenproject.utils;
 
-import java.util.Iterator;
-
-public interface HashQueue<T> extends Iterable<T> {
+public interface HashQueue<T> {
     boolean containsKey(ByteArray hash);
     default void removeTails(int newLength) {
         removeTails(newLength, (a, b)->{});
@@ -14,7 +12,7 @@ public interface HashQueue<T> extends Iterable<T> {
     T pop();
     T peek();
     int size();
-    // should return the amount of bytes in memory this queue is taking (if available)
+    // should return the amount of bytes in memory this queue is taking (if available).
     long byteCount();
     default boolean hasElements() {
         return !isEmpty();
