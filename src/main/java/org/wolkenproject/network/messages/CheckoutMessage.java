@@ -30,12 +30,12 @@ public class CheckoutMessage extends Message {
 
     @Override
     public void executePayload(Server server, Node node) {
-        Logger.alert("node ${n} requested to disconnect for reason ${r}", node.getInetAddress(), reason);
+        Logger.alert("node ${n} requested to disconnect for reason ${r}", Logger.Levels.AlertMessage, node.getInetAddress(), reason);
 
         try {
             node.close();
         } catch (IOException e) {
-            Logger.alert("could not disconnect from node properly.");
+            Logger.alert("could not disconnect from node properly.", Logger.Levels.AlertMessage);
             e.printStackTrace();
         }
 
