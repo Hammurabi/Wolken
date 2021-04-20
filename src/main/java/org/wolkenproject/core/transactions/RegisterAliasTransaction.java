@@ -61,22 +61,37 @@ public class RegisterAliasTransaction extends Transaction {
     }
 
     @Override
-    public boolean checkTransaction() {
+    public TransactionCode checkTransaction() {
         // this is not 100% necessary
         // a transfer of 0 with a fee of 0 is not allowed
         try {
-            return
+            Account account = Context.getInstance().getDatabase().findAccount(getSender().getRaw());
+            if (account == null) {
+                return TransactionCode.InvalidTransaction;
+            }
+
+            boolean valid =
                     fee > 0 &&
-                    (Context.getInstance().getDatabase().findAccount(getSender().getRaw()).getNonce() + 1) == nonce &&
+                    account.getNonce() < nonce &&
+                    !account.hasAlias() &&
                     !Context.getInstance().getDatabase().checkAccountExists(alias) &&
                     (signature.getR().length == 32) &&
                     (signature.getS().length == 32) &&
-                    getSender() != null &&
-                    !Context.getInstance().getDatabase().findAccount(getSender().getRaw()).hasAlias();
+                    getSender() != null;
+
+            if (!valid) {
+                return TransactionCode.InvalidTransaction;
+            }
+
+            if (isFutureNonce(account.getNonce(), nonce)) {
+                return TransactionCode.FutureTransaction;
+            }
+
+            return TransactionCode.ValidTransaction;
         } catch (WolkenException e) {
         }
 
-        return false;
+        return TransactionCode.InvalidTransaction;
     }
 
     @Override
