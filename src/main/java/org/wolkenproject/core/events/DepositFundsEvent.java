@@ -22,6 +22,14 @@ public class DepositFundsEvent extends Event {
         this.amount     = amount;
     }
 
+    public byte[] getAddress() {
+        return address;
+    }
+
+    public long getAmount() {
+        return amount;
+    }
+
     @Override
     public void apply() {
         Context.getInstance().getDatabase().storeAccount(address,
