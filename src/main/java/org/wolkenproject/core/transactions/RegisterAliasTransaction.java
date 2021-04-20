@@ -61,7 +61,7 @@ public class RegisterAliasTransaction extends Transaction {
     }
 
     @Override
-    public boolean shallowVerify() {
+    public boolean checkTransaction() {
         // this is not 100% necessary
         // a transfer of 0 with a fee of 0 is not allowed
         try {
