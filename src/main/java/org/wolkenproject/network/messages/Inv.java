@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
+import static org.wolkenproject.core.transactions.Transaction.TransactionCode.InvalidTransaction;
+
 public class Inv extends Message {
     public static class Type
     {
@@ -131,9 +133,9 @@ public class Inv extends Message {
                     Iterator<Transaction> iterator = transactions.iterator();
                     while (iterator.hasNext()) {
                         Transaction next = iterator.next();
-                        if (!next.shallowVerify() || next instanceof MintTransaction) {
+                        if (next.shallowVerify() == InvalidTransaction || next instanceof MintTransaction) {
                             iterator.remove();
-                            node.increaseErrors(3);
+                            node.increaseErrors(2);
                         }
                     }
 
