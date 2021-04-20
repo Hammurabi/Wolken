@@ -66,9 +66,9 @@ public class MintTransaction extends Transaction {
     }
 
     @Override
-    public boolean checkTransaction() {
+    public TransactionCode checkTransaction() {
         // this is not 100% necessary
-        return dump.length <= 8192;
+        return dump.length <= 1024 ? TransactionCode.ValidTransaction : TransactionCode.InvalidTransaction;
     }
 
     @Override
