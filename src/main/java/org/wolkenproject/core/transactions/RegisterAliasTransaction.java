@@ -115,7 +115,7 @@ public class RegisterAliasTransaction extends Transaction {
     }
 
     @Override
-    public long calculateSize() {
+    public int calculateSize() {
         return
                 VarInt.sizeOfCompactUin32(getVersion(), false) +
                 VarInt.sizeOfCompactUin64(nonce, false) +
