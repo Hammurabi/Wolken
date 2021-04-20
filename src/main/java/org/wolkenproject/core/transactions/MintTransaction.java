@@ -66,7 +66,7 @@ public class MintTransaction extends Transaction {
     }
 
     @Override
-    public boolean shallowVerify() {
+    public boolean checkTransaction() {
         // this is not 100% necessary
         return dump.length <= 8192;
     }
