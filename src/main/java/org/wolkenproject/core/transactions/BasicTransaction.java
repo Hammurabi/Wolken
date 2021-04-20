@@ -99,6 +99,9 @@ public class BasicTransaction extends Transaction {
     public TransactionCode checkTransaction() {
         try {
             Account account = Context.getInstance().getDatabase().findAccount(getSender().getRaw());
+            if (account == null) {
+                return TransactionCode.InvalidTransaction;
+            }
 
             boolean valid =
                             commonTransactionChecks(value, fee) &&
