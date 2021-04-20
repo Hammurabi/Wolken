@@ -4,7 +4,7 @@ import java.util.*;
 
 public class LinkedHashQueue<T> implements HashQueue<T> {
     private Map<ByteArray, Entry<T>>    entryMap;
-    private Queue<Entry<T>>             queue;
+    private List<Entry<T>>              queue;
     private long                        byteCount;
     private Callable<Long, T>           sizeManager;
 
@@ -26,7 +26,7 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
     @Override
     public void removeTails(int newLength, VoidCallableTY<T, byte[]> callable) {
         while (!isEmpty() && size() > newLength) {
-            Entry<T> entry = queue.peek();
+            Entry<T> entry = queue.get(0);
             poll();
 
             callable.call(entry.element, entry.hash);
@@ -60,7 +60,22 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
             return null;
         }
 
-        Entry<T> entry = queue.poll();
+        Entry<T> entry = queue.get(0);
+        queue.remove(0);
+        entryMap.remove(ByteArray.wrap(entry.hash));
+
+        byteCount -= sizeManager.call(entry.element);
+        return entry.element;
+    }
+
+    @Override
+    public T pop() {
+        if (queue.isEmpty()) {
+            return null;
+        }
+
+        Entry<T> entry = queue.get(queue.size() - 1);
+        queue.remove(queue.size() - 1);
         entryMap.remove(ByteArray.wrap(entry.hash));
 
         byteCount -= sizeManager.call(entry.element);
@@ -73,7 +88,7 @@ public class LinkedHashQueue<T> implements HashQueue<T> {
             return null;
         }
 
-        return queue.peek().element;
+        return queue.get(0).element;
     }
 
     @Override
