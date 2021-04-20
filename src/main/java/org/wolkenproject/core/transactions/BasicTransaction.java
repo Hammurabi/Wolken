@@ -96,7 +96,7 @@ public class BasicTransaction extends Transaction {
     }
 
     @Override
-    public TransactionCode shallowVerify() {
+    public TransactionCode checkTransaction() {
         try {
             Account account = Context.getInstance().getDatabase().findAccount(getSender().getRaw());
 
