@@ -94,7 +94,7 @@ public class BasicTransactionToAlias extends Transaction {
             e.printStackTrace();
         }
 
-        return false;
+        return TransactionCode.InvalidTransaction;
     }
 
     @Override
