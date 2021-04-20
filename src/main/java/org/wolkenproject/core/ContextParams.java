@@ -12,6 +12,9 @@ public class ContextParams {
     private boolean isTestNet;
     private int     defaultBits;
     private int     loggingLevel;
+    private int     maximumBytesTxInPendingState;
+    private int     maximumBytesTxInRejectedState;
+    private int     maximumBytesTxInFutureState;
 
     private BigInteger maximumTarget;
 
@@ -196,7 +199,7 @@ public class ContextParams {
         return 144_000L;
     }
 
-    public long getMaxTransactionRejectionTime() {
+    public long getMaxTransactionUnconfirmedTime() {
         return 60_000L * 360;
     }
 
