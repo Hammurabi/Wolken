@@ -4,6 +4,7 @@ import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.AccessModifier;
 import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
+import org.wolkenproject.utils.ByteArray;
 
 import java.math.BigInteger;
 import java.util.Stack;
@@ -15,8 +16,8 @@ public abstract class PapayaHandler {
         this.papayaObject = papayaObject;
     }
 
-    public abstract void setMember(byte memberId[], PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
-    public abstract PapayaHandler getMember(byte memberId[], Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
+    public abstract void setMember(ByteArray memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
+    public abstract PapayaHandler getMember(ByteArray memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
     public abstract void call(Scope scope) throws PapayaException;
 
     public PapayaObject getPapayaObject() {
