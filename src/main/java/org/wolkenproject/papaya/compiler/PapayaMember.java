@@ -1,46 +1,57 @@
 package org.wolkenproject.papaya.compiler;
 
-import org.wolkenproject.utils.Utils;
+import org.wolkenproject.utils.ByteArray;
 
 import java.math.BigInteger;
-import java.util.Arrays;
+import java.util.List;
 
 public class PapayaMember {
-    private final AccessModifier    accessModifier;
-    private final String            name;
-    private byte[]                  identifier;
+    private final AccessModifier        accessModifier;
+    private final ByteArray             identifier;
+    private final ByteArray             enforcedType;
+    private final LineInfo              lineInfo;
+    private final List<PapayaStatement> statementList;
 
-    public PapayaMember(AccessModifier accessModifier, String name) {
+//    public PapayaMember(AccessModifier accessModifier, String name, List<PapayaStatement> statementList, LineInfo lineInfo) {
+//        this(accessModifier, ByteArray.wrap(name.getBytes(StandardCharsets.UTF_8)), statementList, lineInfo);
+//    }
+
+    public PapayaMember(AccessModifier accessModifier, ByteArray identifier, ByteArray enforcedType, List<PapayaStatement> statementList, LineInfo lineInfo) {
         this.accessModifier = accessModifier;
-        this.name = name;
-        this.identifier = new byte[16];
+        this.enforcedType = enforcedType;
+        this.identifier = identifier;
+        this.statementList = statementList;
+        this.lineInfo = lineInfo;
     }
 
     public AccessModifier getAccessModifier() {
         return accessModifier;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setIdentifier(int identifier) {
-        this.identifier = Utils.takeApart(identifier);
-    }
-
-    public void setIdentifier(long identifier) {
-        this.identifier = Utils.takeApartLong(identifier);
-    }
-
-    public void setIdentifier(byte identifier[]) {
-        this.identifier = Arrays.copyOf(identifier, 16);
-    }
-
-    public byte[] getIdentifier() {
+    public ByteArray getIdentifier() {
         return identifier;
     }
 
     public BigInteger getIdentifierInt() {
-        return new BigInteger(1, getIdentifier());
+        return new BigInteger(1, getIdentifier().getArray());
+    }
+
+    public List<PapayaStatement> getStatementList() {
+        return statementList;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("\tmember (").append(new String(getIdentifier().getArray())).append(") ").append(" access (").append(getAccessModifier()).append(")\n");
+        for (PapayaStatement papayaStatement : statementList) {
+            builder.append("\t\t").append(papayaStatement).append("\n");
+        }
+
+        return builder.toString();
+    }
+
+    public LineInfo getLineInfo() {
+        return lineInfo;
     }
 }
