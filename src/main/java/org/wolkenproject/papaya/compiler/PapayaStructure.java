@@ -5,31 +5,31 @@ import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.papaya.runtime.PapayaHandler;
+import org.wolkenproject.utils.ByteArray;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class PapayaStructure {
     public static final int                     Alignment = 32;
-    private final byte                          identifier[];
+    private final ByteArray                     identifier;
     private final StructureType                 structureType;
-    private final String                        name;
     private final Set<PapayaMember>             members;
-    private final Map<Integer, byte[]>          operators;
+    private final Map<Integer, ByteArray>       operators;
     private final LineInfo                      lineInfo;
     private long                                structureLength;
 
     public PapayaStructure(String name, StructureType structureType, LineInfo lineInfo) {
-        this.name           = name;
         this.structureType  = structureType;
         this.members        = new LinkedHashSet<>();
         this.operators      = new HashMap<>();
         this.lineInfo       = lineInfo;
-        this.identifier     = new byte[20];
+        this.identifier     = ByteArray.wrap(name.getBytes(StandardCharsets.UTF_8));
     }
 
-    public byte[] getOperatorId(int operator) throws PapayaException {
+    public ByteArray getOperatorId(int operator) throws PapayaException {
         if (operators.containsKey(operator)) {
             return operators.get(operator);
         }
@@ -42,7 +42,6 @@ public class PapayaStructure {
             throw new PapayaException("redeclaration of field '" + name + "' "+field.getLineInfo()+".");
         }
 
-        field.setIdentifier(members.size());
         members.add(field);
     }
 
@@ -51,7 +50,6 @@ public class PapayaStructure {
             throw new PapayaException("redeclaration of function '" + name + "' "+function.getLineInfo()+".");
         }
 
-        function.setIdentifier(members.size());
         members.add(function);
     }
 
@@ -60,13 +58,12 @@ public class PapayaStructure {
             throw new PapayaException("redeclaration of member '" + name + "'.");
         }
 
-        member.setIdentifier(members.size());
         members.add(member);
     }
 
     public boolean containsMember(String name) {
         for (PapayaMember member : members) {
-            if (member.getName().equals(name)) {
+            if (member.getIdentifier().equals(ByteArray.wrap(name.getBytes(StandardCharsets.UTF_8)))) {
                 return true;
             }
         }
@@ -74,9 +71,9 @@ public class PapayaStructure {
         return false;
     }
 
-    public boolean containsMemberId(byte id[]) {
+    public boolean containsMemberId(ByteArray identifier) {
         for (PapayaMember member : members) {
-            if (Arrays.equals(member.getIdentifier(), id)) {
+            if (member.getIdentifier().equals(identifier)) {
                 return true;
             }
         }
@@ -125,7 +122,7 @@ public class PapayaStructure {
             throw new PapayaIllegalAccessException();
         }
 
-        if (!Arrays.equals(stackTrace.peek().getIdentifier(), getIdentifier())) {
+        if (!stackTrace.peek().getIdentifier().equals(getIdentifier())) {
             switch (modifier) {
                 case PrivateAccess:
                     throw new PapayaIllegalAccessException();
@@ -147,7 +144,7 @@ public class PapayaStructure {
             return PapayaHandler.readOnlyHandler(member);
         }
 
-        if (!Arrays.equals(stackTrace.peek().getIdentifier(), getIdentifier())) {
+        if (!stackTrace.peek().getIdentifier().equals(getIdentifier())) {
             switch (modifier) {
                 case PrivateAccess:
                     throw new PapayaIllegalAccessException();
@@ -168,7 +165,7 @@ public class PapayaStructure {
             return;
         }
 
-        if (!Arrays.equals(stackTrace.peek().getIdentifier(), getIdentifier())) {
+        if (!stackTrace.peek().getIdentifier().equals(getIdentifier())) {
             switch (modifier) {
                 case PrivateAccess:
                     throw new PapayaIllegalAccessException();
@@ -183,7 +180,7 @@ public class PapayaStructure {
 
     public boolean isChildOf(PapayaStructure parent) {
         if (parent != null) {
-            if (Arrays.equals(parent.getIdentifier(), getIdentifier())) {
+            if (parent.getIdentifier().equals(getIdentifier())) {
                 return true;
             }
 
@@ -193,9 +190,9 @@ public class PapayaStructure {
         return false;
     }
 
-    public PapayaMember getMember(byte memberId[]) {
+    public PapayaMember getMember(ByteArray identifier) {
         for (PapayaMember member : members) {
-            if (Arrays.equals(member.getIdentifier(), memberId)) {
+            if (member.getIdentifier().equals(identifier)) {
                 return member;
             }
         }
@@ -203,75 +200,8 @@ public class PapayaStructure {
         return null;
     }
 
-    public final byte[] getIdentifier() {
+    public final ByteArray getIdentifier() {
         return identifier;
-    }
-
-    public int getLength(PapayaApplication application) throws WolkenException {
-        int length = 0;
-
-        for (PapayaField field : getFields()) {
-            int paddedLength = length;
-
-            if (length % Alignment != 0) {
-                paddedLength = (length / Alignment + 1) * Alignment;
-            }
-
-            int add = 0;
-
-            switch (field.getTypeName()) {
-                case "ud256":
-                case "dec":
-                case "dec256":
-                case "int":
-                case "uint":
-                    add = 32;
-                    break;
-                case "int8":
-                case "uint8":
-                case "ud8":
-                case "dec8":
-                    add = 1;
-                    break;
-                case "int16":
-                case "uint16":
-                case "ud16":
-                case "dec16":
-                    add = 2;
-                    break;
-                case "int24":
-                case "uint24":
-                case "ud24":
-                case "dec24":
-                    add = 3;
-                    break;
-                case "int32":
-                case "uint32":
-                case "ud32":
-                case "dec32":
-                    add = 4;
-                    break;
-                case "int64":
-                case "uint64":
-                case "ud64":
-                case "dec64":
-                    add = 8;
-                    break;
-                case "int128":
-                case "uint128":
-                case "ud128":
-                case "dec128":
-                    add = 16;
-                    break;
-                default:
-                    add = application.getStructureLength(field.getTypeName(), field.getLineInfo());
-                    break;
-            }
-
-            length += add;
-        }
-
-        return length;
     }
 
     public StructureType getStructureType() {
@@ -279,7 +209,7 @@ public class PapayaStructure {
     }
 
     public String getName() {
-        return name;
+        return new String(identifier.getArray());
     }
 
     public Set<PapayaMember> getMembers() {
@@ -287,7 +217,7 @@ public class PapayaStructure {
     }
 
     public BigInteger getIdentifierInt() {
-        return new BigInteger(1, getIdentifier());
+        return new BigInteger(1, getIdentifier().getArray());
     }
 
     public static final class Operator {
@@ -311,5 +241,16 @@ public class PapayaStructure {
 
                 Not = 13,
                 Negate = 14;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getName()).append("\n");
+        for (PapayaMember member : members) {
+            builder.append(member.toString());
+        }
+
+        return builder.toString();
     }
 }
