@@ -49,10 +49,10 @@ public class TokenStream {
         return tokenList.get(index - 1);
     }
 
-    public boolean matches(TokenType ...pattern) {
+    public boolean matches(String ...pattern) {
         if (index + pattern.length <= tokenList.size()) {
             for (int i = 0; i < pattern.length; i ++) {
-                if (tokenList.get(i + index).getTokenType() != pattern[i]) {
+                if (!tokenList.get(i + index).getTokenType().equals(pattern[i])) {
                     return false;
                 }
             }
@@ -120,14 +120,16 @@ public class TokenStream {
     }
 
     private boolean checkBasicRule(String ruleName, Token token) throws PapayaException {
-        return ruleName.toLowerCase().equals(token.getTokenType().getString().toLowerCase());
+        return ruleName.toLowerCase().equals(token.getTokenType());
     }
 
     public ParseToken match(JSONObject grammar) {
         for (String ruleName : grammar.keySet()) {
             JSONArray rule = grammar.getJSONArray(ruleName);
 
-            if (matchesRule(rule, grammar, index)) {
+            int match = matchesRule(rule, grammar, index);
+
+            if (match >= 0) {
             }
         }
 
