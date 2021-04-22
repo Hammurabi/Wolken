@@ -6,6 +6,7 @@ import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.papaya.Program;
+import org.wolkenproject.utils.ByteArray;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
 
@@ -244,9 +245,9 @@ public class ProgramCounter {
         return builder.toString();
     }
 
-    public byte[] nextMemberId() throws EmptyProgramCounterException {
+    public ByteArray nextMemberId() throws EmptyProgramCounterException {
         try {
-            return VarInt.readCompactUint256Bytes(false, program);
+            return ByteArray.wrap(VarInt.readCompactUint256Bytes(false, program));
         } catch (IOException e) {
             throw new EmptyProgramCounterException();
         }
