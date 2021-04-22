@@ -25,6 +25,10 @@ public class BlockStateChange {
         this.blockHeight            = blockHeight;
     }
 
+    public TransactionStateChange push() {
+        return new TransactionStateChange(this);
+    }
+
     public boolean checkAliasExists(long alias) {
         if (Context.getInstance().getDatabase().checkAccountExists(alias)) {
             return true;
