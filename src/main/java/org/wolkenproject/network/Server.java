@@ -1,7 +1,6 @@
 package org.wolkenproject.network;
 
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.Emitter;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.VersionMessage;
 import org.wolkenproject.utils.Logger;
