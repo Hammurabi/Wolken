@@ -1,18 +1,18 @@
 package org.wolkenproject.papaya.compiler;
 
 public enum TokenType {
-    None,
-    IntegerNumber,
-    BinaryString,
-    Base16String,
-    AsciiChar,
-    DecimalNumber,
-    AsciiString,
-    ByteString,
-    GenericAddress,
-    ContractAddress,
-    Identifier,
-    ModifierKeyword,
+    None("None"),
+    IntegerNumber("Int"),
+    BinaryString("Bin"),
+    Base16String("Base16"),
+    AsciiChar("AsciiChar"),
+    DecimalNumber("Decimal"),
+    AsciiString("Ascii"),
+    ByteString(""),
+    GenericAddress(""),
+    ContractAddress(""),
+    Identifier("Ident"),
+    ModifierKeyword("AccessModifier"),
 
     LogicalNotSymbol,
     AssignmentSymbol,
@@ -110,4 +110,15 @@ public enum TokenType {
     Structure,
 
     Return,
+    ;
+
+    private final String string;
+
+    public TokenType(String string) {
+        this.string = string;
+    }
+
+    public String getString() {
+        return string;
+    }
 }
