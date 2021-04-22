@@ -22,9 +22,6 @@ public class Server implements Runnable {
     private ReentrantLock   mutex;
     private byte            nonce[];
     private long            upSince;
-    private Emitter<Node>   onConnectFromEmitter;
-    private Emitter<Node>   onConnectToEmitter;
-    private Emitter<Node>   onDisconnectEmitter;
 
     public Server(Set<NetAddress> forceConnections) throws IOException {
         socket  = new ServerSocket();
@@ -32,9 +29,6 @@ public class Server implements Runnable {
         upSince = System.currentTimeMillis();
         mutex   = new ReentrantLock();
         nonce   = new byte[20];
-        onConnectFromEmitter = new Emitter<>();
-        onConnectToEmitter = new Emitter<>();
-        onDisconnectEmitter = new Emitter<>();
 
         // generate a nonce to know when we self connect
         new SecureRandom().nextBytes(nonce);
@@ -334,17 +328,5 @@ public class Server implements Runnable {
 
     public byte[] getNonce() {
         return nonce;
-    }
-
-    public void registerDisconnectListener(VoidCallable<Node> listener) {
-        onDisconnectEmitter.add(listener);
-    }
-
-    public void registerInboundListener(VoidCallable<Node> listener) {
-        onConnectFromEmitter.add(listener);
-    }
-
-    public void registerOutboundListener(VoidCallable<Node> listener) {
-        onConnectToEmitter.add(listener);
     }
 }
