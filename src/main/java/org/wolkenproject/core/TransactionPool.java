@@ -1,6 +1,5 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.PendingTransaction;
 import org.wolkenproject.core.transactions.Transaction;
 import org.wolkenproject.utils.*;
 
