@@ -1,7 +1,5 @@
 package org.wolkenproject.core;
 
-import org.wolkenproject.PendingTransaction;
-
 public class UnconfirmedTransaction implements Comparable<UnconfirmedTransaction> {
     private final PendingTransaction    transaction;
     private final long                  when;
