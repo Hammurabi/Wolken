@@ -63,10 +63,8 @@ public class PapayaLexer {
         int whitespace = 0;
 
         TokenBuilder token = null;
-        TokenBuilder prevs = null;
 
         for (int i = 0; i < program.length(); i ++) {
-
             char current = program.charAt(i);
             char last = i > 0 ? program.charAt(i - 1) : '\0';
             char next = i < program.length() - 1 ? program.charAt(i + 1) : '\0';
@@ -75,7 +73,6 @@ public class PapayaLexer {
             {
                 builderList.add(token);
                 builderList.add(new TokenBuilder());
-                prevs = token;
                 token = null;
                 offset = 0;
                 whitespace = 0;
@@ -86,7 +83,6 @@ public class PapayaLexer {
                 whitespace++;
                 builderList.add(token);
                 offset ++;
-                prevs = token;
                 token = null;
                 continue;
             } else if (current == TAB && !(token != null && (token.toString().startsWith("\"") || token.toString().startsWith("\'"))))
@@ -94,7 +90,6 @@ public class PapayaLexer {
                 whitespace += 4;
                 offset += 4;
                 builderList.add(token);
-                prevs = token;
                 token = null;
                 continue;
             }
@@ -117,7 +112,6 @@ public class PapayaLexer {
                     {
                         token.append(current);
                         builderList.add(token);
-                        prevs = token;
                         token = null;
                     } else token.append(current);
                 } else token.append(current);
@@ -129,7 +123,6 @@ public class PapayaLexer {
                 builderList.add(token);
                 token = new TokenBuilder("" + current, line, offset, whitespace);
                 builderList.add(token);
-                prevs = token;
                 token = null;
             } else token.append(current);
 
@@ -148,6 +141,7 @@ public class PapayaLexer {
                     TokenBuilder toke = nextBuilder(iterator);
                     if (toke != null) {
                         if (!toke.isSymbol(stackableSymbolSet)) {
+                            tokenStream.add(getToken(toke.toString(), toke.getLine(), toke.getOffset(), typeMap));
                             break;
                         }
 
@@ -247,6 +241,7 @@ public class PapayaLexer {
         tokenType.put("private", TokenType.ModifierKeyword);
         tokenType.put("protected", TokenType.ModifierKeyword);
         tokenType.put("readonly", TokenType.ModifierKeyword);
+        tokenType.put("const", TokenType.ModifierKeyword);
 
         // other
         tokenType.put("\\d+", TokenType.IntegerNumber);
