@@ -1,0 +1,11 @@
+class TestBanker {
+    public Map map
+
+    fn addAccount(uuid accountId, BankAccount account) {
+        map(accountId).set(account)
+    }
+
+    fn rmvAccount(BankAccount account) {
+        map(1).remove
+    }
+}
