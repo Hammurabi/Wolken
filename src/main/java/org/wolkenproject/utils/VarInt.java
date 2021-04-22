@@ -1,14 +1,12 @@
 package org.wolkenproject.utils;
 
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.papaya.Program;
 import org.wolkenproject.serialization.SerializableI;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
-import java.util.Arrays;
 
 // this class represents an UNSIGNED variable integer
 // that has a range of 1 - 8 bytes
@@ -447,5 +445,14 @@ public class VarInt {
 
             return length;
         }
+    }
+
+    public static void writeCompactFlags(BigInteger flags, OutputStream stream) throws IOException {
+        byte bits[] = Utils.takeApart(flags);
+        stream.write(bits);
+    }
+
+    public static void readCompactFlags(BigInteger flags, InputStream stream) throws IOException {
+        int bits = stream.read();
     }
 }
