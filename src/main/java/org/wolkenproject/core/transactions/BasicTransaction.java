@@ -128,8 +128,23 @@ public class BasicTransaction extends Transaction {
     }
 
     @Override
-    public boolean verify(BlockStateChange blockStateChange, Block block, int blockHeight, long fees) {
-        return true;
+    public boolean verify(BlockStateChange stateChange, Block block, int blockHeight, long fees) {
+        Address sender = null;
+        try {
+            sender = getSender();
+
+            long balance = stateChange.getAccountBalance(sender.getRaw(), true, true);
+
+            if (balance >= value + fees) {
+                stateChange.createAccountIfDoesNotExist(recipient);
+                stateChange.addEvent(new DepositFundsEvent(recipient, value));
+                stateChange.addEvent(new WithdrawFundsEvent(sender.getRaw(), value + fee));
+                return true;
+            }
+        } catch (WolkenException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
