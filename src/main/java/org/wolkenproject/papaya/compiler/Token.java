@@ -9,7 +9,7 @@ public class Token {
     private final LineInfo  lineInfo;
     private final List<Token> children;
 
-    public Token(String value, TokenType type, int line, int offset) {
+    public Token(String value, String type, int line, int offset) {
         this(value, type, new LineInfo(line, offset));
     }
 
@@ -44,9 +44,9 @@ public class Token {
         return children.get(index);
     }
 
-    public Token getFirstChildOfType(TokenType type) {
+    public Token getFirstChildOfType(String type) {
         for (Token token : children) {
-            if (token.getTokenType() == type) {
+            if (token.getTokenType().equals(type)) {
                 return token;
             }
         }
@@ -54,7 +54,7 @@ public class Token {
         return null;
     }
 
-    public Token setType(TokenType tokenType) {
+    public Token setType(String tokenType) {
         return new Token(tokenValue, tokenType, lineInfo);
     }
 
