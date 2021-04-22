@@ -140,6 +140,7 @@ public class Block extends SerializableI implements Iterable<Transaction> {
                 return false;
             }
 
+            //TODO:
             try {
                 transaction.getStateChange(this, blockStateChange);
             } catch (WolkenException e) {
