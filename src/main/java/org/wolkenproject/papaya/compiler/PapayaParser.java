@@ -34,9 +34,9 @@ public class PapayaParser {
         return result;
     }
 
-    private TokenStream getTokensFollowing(TokenType opener, TokenStream stream, String error) throws PapayaException {
+    private TokenStream getTokensFollowing(String opener, TokenStream stream, String error) throws PapayaException {
         TokenStream result  = new TokenStream();
-        TokenType closer    = None;
+        String closer    = "";
 
         if (!stream.matches(opener)) {
             throw new PapayaException(error);
@@ -46,14 +46,14 @@ public class PapayaParser {
         stream.next();
 
         switch (opener) {
-            case LeftParenthesisSymbol:
-                closer = RightParenthesisSymbol;
+            case "(":
+                closer = ")";
                 break;
-            case LeftBraceSymbol:
-                closer = RightBraceSymbol;
+            case "{":
+                closer = "}";
                 break;
-            case LeftBracketSymbol:
-                closer = RightBracketSymbol;
+            case "[":
+                closer = "]";
                 break;
             default:
                 throw new PapayaException("invalid usage of token '" + opener + "' is never closed.");
@@ -64,9 +64,9 @@ public class PapayaParser {
 
         while (stream.hasNext()) {
             Token next = stream.next();
-            if (next.getTokenType() == opener) {
+            if (next.getTokenType().equals(opener)) {
                 numOpened ++;
-            } else if (next.getTokenType() == closer) {
+            } else if (next.getTokenType().equals(closer)) {
                 numClosed ++;
             }
 
