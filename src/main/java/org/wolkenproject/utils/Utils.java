@@ -46,7 +46,7 @@ public class Utils {
 
     public static byte[] takeApart(BigInteger integer) {
         byte bytes[] = integer.toByteArray();
-
+        
         if (bytes.length == 0) {
             return new byte[1];
         }
