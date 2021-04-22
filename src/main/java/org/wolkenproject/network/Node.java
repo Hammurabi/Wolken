@@ -2,7 +2,6 @@ package org.wolkenproject.network;
 
 import org.json.JSONObject;
 import org.wolkenproject.core.Context;
-import org.wolkenproject.core.Emitter;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.messages.FailedToRespondMessage;
