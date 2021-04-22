@@ -5,6 +5,7 @@ import org.wolkenproject.papaya.compiler.PapayaMember;
 import org.wolkenproject.papaya.compiler.PapayaStructure;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.utils.ByteArray;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class PapayaObject {
         ie: object.member = .. ===> object.map(hash('member')) = ..
         this allows us to DYNAMICALLY add members to an object.
      */
-    private Map<byte[], PapayaObject> members;
+    private Map<ByteArray, PapayaObject> members;
 
     public PapayaObject() {
         this(PapayaCallable.Default);
@@ -43,13 +44,13 @@ public class PapayaObject {
         this.members = new HashMap<>();
     }
 
-    public void setMember(byte memberId[], PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+    public void setMember(ByteArray memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
         PapayaMember classMember = structure.getMember(memberId);
         structure.checkWriteAccess(classMember, stackTrace);
         members.put(memberId, member.getPapayaObject());
     }
 
-    public PapayaHandler getMember(byte memberId[], Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+    public PapayaHandler getMember(ByteArray memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
         PapayaMember classMember = structure.getMember(memberId);
         return structure.checkMemberAccess(classMember, members.get(memberId), stackTrace);
     }
