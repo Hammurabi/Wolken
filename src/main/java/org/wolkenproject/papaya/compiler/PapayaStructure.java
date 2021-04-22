@@ -37,7 +37,7 @@ public class PapayaStructure {
         throw new PapayaException("operator '"+operator+"' is not overloaded for '"+getName()+"'.");
     }
 
-    public void addField(String name, PapayaField field) throws PapayaException {
+    public void addField(String name, PapayaMember field) throws PapayaException {
         if (containsMember(name)) {
             throw new PapayaException("redeclaration of field '" + name + "' "+field.getLineInfo()+".");
         }
