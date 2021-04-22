@@ -6,6 +6,10 @@ import org.wolkenproject.exceptions.WolkenException;
 
 public abstract class Compiler {
     public static Compiler getFor(String language) throws WolkenException {
+        if (language.toLowerCase().equals("papaya")) {
+            language = "papaya+v0.01a";
+        }
+
         if (language.toLowerCase().equals("papaya+v0.01a")) {
             return new PapayaCompiler(new PapayaLexer(PapayaLexer.getTokenTypes()), new PapayaParser());
         }
