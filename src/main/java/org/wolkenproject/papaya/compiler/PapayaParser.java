@@ -12,7 +12,7 @@ import java.util.List;
 import static org.wolkenproject.papaya.compiler.TokenType.*;
 
 public class PapayaParser {
-    public AbstractSyntaxTree ingest(JSONObject grammar, TokenStream stream) throws PapayaException {
+    public AbstractSyntaxTree ingest(TokenStream stream, JSONObject grammar) throws PapayaException {
         AbstractSyntaxTree ast = new AbstractSyntaxTree();
         while (stream.hasNext()) {
             ParseToken token = stream.match(grammar);
