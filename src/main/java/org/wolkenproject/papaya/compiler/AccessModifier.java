@@ -8,12 +8,23 @@ import java.io.OutputStream;
 
 public enum AccessModifier {
     None,
+
     PublicAccess,
     ProtectedAccess,
     PrivateAccess,
-
     ReadOnly,
     ;
+
+    public static AccessModifier byName(String name) {
+        switch (name) {
+            case "public": return PublicAccess;
+            case "protected": return ProtectedAccess;
+            case "private": return PrivateAccess;
+            case "const": return ReadOnly;
+        }
+
+        return None;
+    }
 
     public static void write(AccessModifier accessModifier, OutputStream stream) throws IOException {
         switch (accessModifier) {
