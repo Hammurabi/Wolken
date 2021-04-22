@@ -31,7 +31,6 @@ public class Node implements Runnable {
     private int                             receivedAddresses;
     private VersionInformation              versionMessage;
     private boolean                         isClosed;
-    private static final Emitter<Tuple<Message, Node>> OnMessageSendEmitter = new Emitter<>();
 
 
 //    public Node(String ip, int port) throws IOException {
@@ -428,9 +427,5 @@ public class Node implements Runnable {
         json.put("closed", isClosed);
 
         return json;
-    }
-
-    public static void registerMessageSendListener(VoidCallable<Tuple<Message, Node>> listener) {
-        OnMessageSendEmitter.add(listener);
     }
 }
