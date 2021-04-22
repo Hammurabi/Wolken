@@ -71,7 +71,7 @@ public class TokenStream {
         return rule.startsWith("'") && rule.endsWith("'");
     }
 
-    public int matchesRule(JSONArray rule, JSONObject rules, int index) {
+    public int matchesRule(JSONArray rule, JSONObject rules, int index) throws PapayaException {
         for (int i = 0; i < rule.length(); i ++) {
             int isMatching = -1;
             JSONArray option = rule.getJSONArray(i);
@@ -123,7 +123,7 @@ public class TokenStream {
         return ruleName.toLowerCase().equals(token.getTokenType());
     }
 
-    public ParseToken match(JSONObject grammar) {
+    public ParseToken match(JSONObject grammar) throws PapayaException {
         for (String ruleName : grammar.keySet()) {
             JSONArray rule = grammar.getJSONArray(ruleName);
 
