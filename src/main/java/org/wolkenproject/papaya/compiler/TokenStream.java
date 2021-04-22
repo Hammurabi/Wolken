@@ -1,5 +1,8 @@
 package org.wolkenproject.papaya.compiler;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +12,11 @@ public class TokenStream {
 
     public TokenStream() {
         this.tokenList = new ArrayList<>();
+    }
+
+    public TokenStream(List<Token> tokens, int index) {
+        this.tokenList = tokens;
+        this.index = index;
     }
 
     public void add(Token token) {
@@ -41,7 +49,7 @@ public class TokenStream {
     }
 
     public boolean matches(TokenType ...pattern) {
-        if (index + pattern.length < tokenList.size()) {
+        if (index + pattern.length <= tokenList.size()) {
             for (int i = 0; i < pattern.length; i ++) {
                 if (tokenList.get(i + index).getTokenType() != pattern[i]) {
                     return false;
@@ -56,5 +64,24 @@ public class TokenStream {
 
     public boolean isEmpty() {
         return tokenList.isEmpty();
+    }
+
+    private static boolean isLiteral(String rule) {
+        return rule.startsWith("'") && rule.endsWith("'");
+    }
+
+    public ParseToken match(JSONObject grammar) {
+        for (String ruleName : grammar.keySet()) {
+            JSONArray rule = grammar.getJSONArray(ruleName);
+            int match = matches(grammar, rule);
+
+            if (match >= 0) {
+                ParseToken token = new ParseToken(ruleName, peek().getLineInfo());
+
+                return token;
+            }
+        }
+
+        return null;
     }
 }
