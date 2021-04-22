@@ -22,9 +22,9 @@ public class ContextParams {
         this.isTestNet = testNet;
 
         if (testNet) {
-            defaultBits = Utils.makeInt(Base16.decode("1e00ffff"));
+            defaultBits = 0x1e00ffff;
         } else {
-            defaultBits = Utils.makeInt(Base16.decode("1d00ffff"));
+            defaultBits = 0x1d00ffff;
         }
 
         this.maximumTarget  = ChainMath.targetIntegerFromBits(defaultBits);
