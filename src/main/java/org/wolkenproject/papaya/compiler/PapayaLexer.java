@@ -1,5 +1,7 @@
 package org.wolkenproject.papaya.compiler;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.wolkenproject.exceptions.WolkenException;
 
 import java.util.*;
@@ -10,13 +12,11 @@ public class PapayaLexer {
     private static final char WTS = ' ';
     private static final char TAB = '\t';
 
-    private final Map<String, TokenType>    typeMap;
     private final Set<Character>            symbolSet;
     private final Set<Character>            stackableSymbolSet;
 
 
-    public PapayaLexer(Map<String, TokenType> typeMap) {
-        this.typeMap = typeMap;
+    public PapayaLexer() {
         this.symbolSet = new HashSet<>();
         this.stackableSymbolSet = new HashSet<>();
         symbolSet.add('+');
@@ -50,7 +50,7 @@ public class PapayaLexer {
         symbolSet.add('}');
     }
 
-    public TokenStream ingest(String program) throws WolkenException {
+    public TokenStream ingest(String program, JSONObject tokens) throws WolkenException {
         List<TokenBuilder> builderList = new ArrayList<>();
         TokenStream tokenStream = new TokenStream();
 
@@ -141,7 +141,7 @@ public class PapayaLexer {
                     TokenBuilder toke = nextBuilder(iterator);
                     if (toke != null) {
                         if (!toke.isSymbol(stackableSymbolSet)) {
-                            tokenStream.add(getToken(toke.toString(), toke.getLine(), toke.getOffset(), typeMap));
+                            tokenStream.add(getToken(toke.toString(), toke.getLine(), toke.getOffset(), tokens));
                             break;
                         }
 
@@ -150,7 +150,7 @@ public class PapayaLexer {
                 }
             }
 
-            tokenStream.add(getToken(tokenBuilder.toString(), tokenBuilder.getLine(), tokenBuilder.getOffset(), typeMap));
+            tokenStream.add(getToken(tokenBuilder.toString(), tokenBuilder.getLine(), tokenBuilder.getOffset(), tokens));
         }
 
         return tokenStream;
@@ -198,25 +198,31 @@ public class PapayaLexer {
         return string.startsWith("'") || string.startsWith("\"");
     }
 
-    private static Token getToken(String string, int line, int offset, Map<String, TokenType> typeMap) throws WolkenException {
+    private static Token getToken(String string, int line, int offset, JSONObject typeMap) throws WolkenException {
         if ((string.startsWith("'") && string.endsWith("'")) || (string.startsWith("\"") && string.endsWith("\""))) {
             String str = "";
             if (string.length() > 2) {
                 str = string.substring(1, string.length() - 1);
             }
 
-            return new Token(str, TokenType.AsciiString, line, offset);
+            return new Token(str, "string", line, offset);
         }
 
-        for (String regex : typeMap.keySet()) {
-            if (string.matches(regex)) {
-                return new Token(string, typeMap.get(regex), line, offset);
+        for (String typeName : typeMap.keySet()) {
+            JSONArray options = typeMap.getJSONArray(typeName);
+            for (int i = 0; i < options.length(); i ++) {
+                String regex = options.getString(i);
+
+                if (string.matches(regex)) {
+                    return new Token(string, typeName, line, offset);
+                }
             }
         }
 
         throw new WolkenException("could not create token for string '" + string + "'" + "at line: " + line + " offset: " + offset + ".");
     }
 
+    @Deprecated
     public static Map<String, TokenType> getTokenTypes() {
         Map<String, TokenType> tokenType = new LinkedHashMap<>();
 
