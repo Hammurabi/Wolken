@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Token {
     private final String    tokenValue;
-    private final TokenType tokenType;
+    private final String    tokenType;
     private final LineInfo  lineInfo;
     private final List<Token> children;
 
@@ -13,7 +13,7 @@ public class Token {
         this(value, type, new LineInfo(line, offset));
     }
 
-    public Token(String value, TokenType type, LineInfo lineInfo) {
+    public Token(String value, String type, LineInfo lineInfo) {
         this.tokenValue = value;
         this.tokenType  = type;
         this.lineInfo = lineInfo;
@@ -24,7 +24,7 @@ public class Token {
         return tokenValue;
     }
 
-    public TokenType getTokenType() {
+    public String getTokenType() {
         return tokenType;
     }
 
