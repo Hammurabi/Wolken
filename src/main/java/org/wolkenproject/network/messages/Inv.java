@@ -9,7 +9,7 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.exceptions.WolkenTimeoutException;
 import org.wolkenproject.network.*;
 import org.wolkenproject.serialization.SerializableI;
-import org.wolkenproject.utils.Tuple;
+import org.wolkenproject.utils.Pair;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
@@ -196,7 +196,7 @@ public class Inv extends Message {
 
     @Override
     public <Type> Type getPayload() {
-        return (Type) new Tuple(list, type);
+        return (Type) new Pair(list, type);
     }
 
     @Override
