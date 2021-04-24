@@ -1,6 +1,7 @@
 package org.wolkenproject.utils;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class ByteArray implements Serializable {
@@ -34,5 +35,9 @@ public class ByteArray implements Serializable {
 
     public static final ByteArray wrap(byte array[]) {
         return new ByteArray(array);
+    }
+
+    public static final ByteArray wrap(String string) {
+        return wrap(string.getBytes(StandardCharsets.UTF_8));
     }
 }
