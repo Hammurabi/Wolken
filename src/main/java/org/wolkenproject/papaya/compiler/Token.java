@@ -74,4 +74,8 @@ public class Token {
     public void addChildren(List<Token> tokens) {
         children.addAll(tokens);
     }
+
+    public boolean isEmpty() {
+        return tokenValue.isEmpty() && tokenValue.isEmpty();
+    }
 }
