@@ -1,7 +1,7 @@
 struct name {
-    public Map map
+    public Field field
     fn testFun() {
-        map1()
+        fun()
         fn lambda_test => () {
         }
     }
