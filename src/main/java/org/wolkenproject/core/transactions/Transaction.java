@@ -11,7 +11,6 @@ import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 import org.wolkenproject.serialization.SerializationFactory;
 import org.wolkenproject.utils.HashUtil;
-import org.wolkenproject.utils.Tuple;
 import org.wolkenproject.utils.VarInt;
 
 import java.io.IOException;
@@ -20,7 +19,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public abstract class Transaction extends SerializableI implements Comparable<Transaction> {
     public static int UniqueIdentifierLength = 32;
