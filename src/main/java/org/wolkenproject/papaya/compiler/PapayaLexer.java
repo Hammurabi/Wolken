@@ -50,7 +50,7 @@ public class PapayaLexer {
         symbolSet.add('}');
     }
 
-    public TokenStream ingest(String program, JSONObject tokens) throws WolkenException {
+    public TokenStream ingest(String program, JSONArray tokens) throws WolkenException {
         List<TokenBuilder> builderList = new ArrayList<>();
         TokenStream tokenStream = new TokenStream();
 
@@ -198,7 +198,7 @@ public class PapayaLexer {
         return string.startsWith("'") || string.startsWith("\"");
     }
 
-    private static Token getToken(String string, int line, int offset, JSONObject typeMap) throws WolkenException {
+    private static Token getToken(String string, int line, int offset, JSONArray typeMap) throws WolkenException {
         if ((string.startsWith("'") && string.endsWith("'")) || (string.startsWith("\"") && string.endsWith("\""))) {
             String str = "";
             if (string.length() > 2) {
@@ -208,10 +208,14 @@ public class PapayaLexer {
             return new Token(str, "string", line, offset);
         }
 
-        for (String typeName : typeMap.keySet()) {
-            JSONArray options = typeMap.getJSONArray(typeName);
-            for (int i = 0; i < options.length(); i ++) {
-                String regex = options.getString(i);
+        for (int i = 0; i < typeMap.length(); i ++) {
+            JSONObject onlyObject = typeMap.getJSONObject(i);
+
+            String typeName = onlyObject.keys().next();
+
+            JSONArray options = onlyObject.getJSONArray(typeName);
+            for (int x = 0; x < options.length(); x ++) {
+                String regex = options.getString(x);
 
                 if (string.matches(regex)) {
                     return new Token(string, typeName, line, offset);
@@ -220,110 +224,5 @@ public class PapayaLexer {
         }
 
         throw new WolkenException("could not create token for string '" + string + "'" + "at line: " + line + " offset: " + offset + ".");
-    }
-
-    @Deprecated
-    public static Map<String, TokenType> getTokenTypes() {
-        Map<String, TokenType> tokenType = new LinkedHashMap<>();
-
-        // keywords
-        tokenType.put("for", TokenType.ForKeyword);
-        tokenType.put("while", TokenType.WhileKeyword);
-        tokenType.put("break", TokenType.BreakKeyword);
-        tokenType.put("continue", TokenType.ContinueKeyword);
-        tokenType.put("pass", TokenType.PassKeyword);
-        tokenType.put("return", TokenType.ReturnKeyword);
-        tokenType.put("fn", TokenType.FunctionKeyword);
-        tokenType.put("module", TokenType.ModuleKeyword);
-        tokenType.put("contract", TokenType.ContractKeyword);
-        tokenType.put("class", TokenType.ClassKeyword);
-        tokenType.put("struct", TokenType.StructKeyword);
-        tokenType.put("extends", TokenType.ExtendsKeyword);
-        tokenType.put("implements", TokenType.ImplementsKeyword);
-        tokenType.put("and", TokenType.LogicalAndSymbol);
-        tokenType.put("or", TokenType.LogicalOrSymbol);
-
-        tokenType.put("public", TokenType.ModifierKeyword);
-        tokenType.put("private", TokenType.ModifierKeyword);
-        tokenType.put("protected", TokenType.ModifierKeyword);
-        tokenType.put("readonly", TokenType.ModifierKeyword);
-        tokenType.put("const", TokenType.ModifierKeyword);
-
-        // other
-        tokenType.put("\\d+", TokenType.IntegerNumber);
-        tokenType.put("[0][b][0-1]+", TokenType.IntegerNumber);
-        tokenType.put("0x[\\d|(a|b|c|d|e|f|A|B|C|D|E|F)]+", TokenType.Base16String);
-        tokenType.put("\\\\w", TokenType.AsciiChar);
-        tokenType.put("\\d+\\.\\d+", TokenType.DecimalNumber);
-        tokenType.put("\\d+\\.", TokenType.DecimalNumber);
-        tokenType.put("\\.\\d+", TokenType.DecimalNumber);
-
-        tokenType.put("\\+\\+", TokenType.IncrementSymbol);
-        tokenType.put("\\-\\-", TokenType.DecrementSymbol);
-
-        tokenType.put("\\!", TokenType.LogicalNotSymbol);
-        tokenType.put("\\=", TokenType.AssignmentSymbol);
-        tokenType.put("\\+", TokenType.AddSymbol);
-        tokenType.put("\\-", TokenType.SubSymbol);
-        tokenType.put("\\*", TokenType.MulSymbol);
-        tokenType.put("\\/", TokenType.DivSymbol);
-        tokenType.put("\\%", TokenType.ModSymbol);
-        tokenType.put("\\*\\*", TokenType.PowSymbol);
-        tokenType.put("^", TokenType.XorSymbol);
-        tokenType.put("&", TokenType.AndSymbol);
-        tokenType.put("|", TokenType.OrSymbol);
-
-        tokenType.put("\\!\\=", TokenType.LogicalNotEqualsSymbol);
-        tokenType.put("\\=\\=", TokenType.EqualsSymbol);
-        tokenType.put("\\+\\=", TokenType.AddEqualsSymbol);
-        tokenType.put("\\-\\=", TokenType.SubEqualsSymbol);
-        tokenType.put("\\*\\=", TokenType.MulEqualsSymbol);
-        tokenType.put("\\/\\=", TokenType.DivEqualsSymbol);
-        tokenType.put("\\%\\=", TokenType.ModEqualsSymbol);
-        tokenType.put("\\*\\*\\=", TokenType.PowEqualsSymbol);
-        tokenType.put("^\\=", TokenType.XorEqualsSymbol);
-        tokenType.put("&\\=", TokenType.AndEqualsSymbol);
-        tokenType.put("|\\=", TokenType.OrEqualsSymbol);
-
-        tokenType.put("~", TokenType.NotSymbol);
-        tokenType.put("\\&\\&", TokenType.LogicalAndSymbol);
-        tokenType.put("\\&\\&\\=", TokenType.LogicalAndEqualsSymbol);
-        tokenType.put("\\|\\|", TokenType.LogicalOrSymbol);
-        tokenType.put("\\|\\|\\=", TokenType.LogicalOrEqualsSymbol);
-        tokenType.put("\\>\\>\\>", TokenType.UnsignedRightShiftSymbol);
-        tokenType.put("\\>\\>", TokenType.RightShiftSymbol);
-        tokenType.put("\\<\\<", TokenType.LeftShiftSymbol);
-
-        tokenType.put("\\.", TokenType.MemberAccessSymbol);
-        tokenType.put("\\.\\.", TokenType.DoubleDotSymbol);
-        tokenType.put("\\,", TokenType.CommaSymbol);
-        tokenType.put("\\#", TokenType.HashTagSymbol);
-        tokenType.put("\\;", TokenType.SemiColonSymbol);
-        tokenType.put("\\:\\:", TokenType.StaticMemberAccessSymbol);
-        tokenType.put("\\:\\=", TokenType.ColonEqualsSymbol);
-        tokenType.put("\\=\\>", TokenType.LambdaSymbol);
-
-        tokenType.put("\\<", TokenType.LessThanSymbol);
-        tokenType.put("\\>", TokenType.GreaterThanSymbol);
-
-        tokenType.put("\\<\\=", TokenType.LessThanEqualsSymbol);
-        tokenType.put("\\>\\=", TokenType.GreaterThanEqualsSymbol);
-
-        tokenType.put("\\(", TokenType.LeftParenthesisSymbol);
-        tokenType.put("\\)", TokenType.RightParenthesisSymbol);
-
-        tokenType.put("\\[", TokenType.LeftBracketSymbol);
-        tokenType.put("\\]", TokenType.RightBracketSymbol);
-
-        tokenType.put("\\{", TokenType.LeftBraceSymbol);
-        tokenType.put("\\}", TokenType.RightBraceSymbol);
-
-        // we leave the identifier regex for the end.
-        tokenType.put("([A-z]|\\_)+\\d*", TokenType.Identifier);
-
-
-//        tokenType.put("N([A-z]|[1|2|3|4|5|6|7|8|9])+", TokenType.Base58String);
-
-        return tokenType;
     }
 }
