@@ -4,7 +4,7 @@ struct name {
         fun()
         Field genericDeclaration = 0
         let generic = someValue
-        Function lambda_test = ()=>{
+        Function lambda_test = (type a, type b)=>{
         }
     }
 }
