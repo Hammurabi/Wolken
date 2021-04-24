@@ -10,7 +10,6 @@ import org.wolkenproject.papaya.compiler.AbstractSyntaxTree;
 import org.wolkenproject.papaya.compiler.PapayaLexer;
 import org.wolkenproject.papaya.compiler.TokenStream;
 import org.wolkenproject.papaya.parser.DynamicParser;
-import org.wolkenproject.papaya.parser.ParserGenerator;
 import org.wolkenproject.papaya.compiler.Compiler;
 
 import java.io.IOException;
