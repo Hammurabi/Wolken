@@ -1,121 +1,58 @@
 {
-  "struct_keyword": [["class", "struct", "module", "contract"]],
-  "structure": [["struct_keyword", "ident", "{", "members", "}"]],
-  "member": [
-    ["ident", "ident", "assignment"],
-    ["fn", "ident", "(", "fn_args", ")", "{", "statements", "}"]
+  "parse": [
+    {"struct": [["struct_ident","ident","{","member*","}"]]},
+    {"method": [["access_mod*","fn","ident","(",")","{","statement*","}"]]},
+    {"field": [["access_mod*","ident","ident", "=", "expression"], ["access_mod*","ident","ident"]]}
   ],
-  "members": [
-    ["member", "members"], []
-  ],
-  "assignment": [
-    [], ["=", "expression"]
-  ],
-  "fn_arg": [
-    [], ["expression"]
-  ],
-  "fn_arg_tail": [
-    [],
-    [",", "fn_args"]
-  ],
-  "fn_args": [
-    [],
-    ["fn_arg", "fn_arg_tail"]
-  ],
-  "exp": [
-    ["number"],
-    ["ident"],
-    ["ident", "(", "fn_call_args", ")"],
-    ["(", "exp", ")"]
-  ],
-  "expression*": [
-    [],
-    ["expression"]
-  ],
-  "expression": [
-    ["operator"]
-  ],
+  "rule": [
+    {"fun_field": []},
+    {"fun_accmd*": [["fun_accmd", "fun_accmd*"]]},
 
+    {"funarg*": [["funarg", "funarg*"], []]},
+    {"funarg": [["field"]]},
+    {"funcall": [["ident", "(","funarg*",")"]]},
 
-  "operator": [
-    ["lor"]
-  ],
-  "lor": [
-    ["land", "||", "lor"],
-    ["exp"]
-  ],
-  "land": [
-    ["or", "&&", "land"],
-    ["exp"]
-  ],
-  "or": [
-    ["xor", "|", "or"],
-    ["exp"]
-  ],
-  "xor": [
-    ["and", "^", "xor"],
-    ["exp"]
-  ],
-  "and": [
-    ["equality_operator", "&", "and"],
-    ["exp"]
-  ],
-  "equality_operator": [
-    ["comparison", "==", "equality_operator"],
-    ["comparison", "!=", "equality_operator"],
-    ["exp"]
-  ],
-  "comparison": [
-    ["shift", "<", "comparison"],
-    ["shift", ">", "comparison"],
-    ["shift", ">=", "comparison"],
-    ["shift", "<=", "comparison"],
-    ["exp"]
-  ],
-  "shift": [
-    ["addition", ">>>", "shift"],
-    ["addition", ">>", "shift"],
-    ["addition", "<<", "shift"],
-    ["exp"]
-  ],
-  "addition": [
-    ["pow", "+", "addition"],
-    ["pow", "-", "addition"],
-    ["exp"]
-  ],
-  "pow": [
-    ["multiply", "+", "pow"],
-    ["multiply", "-", "pow"],
-    ["exp"]
-  ],
-  "multiply": [
-    ["exp", "*", "multiply"],
-    ["exp", "/", "multiply"],
-    ["exp", "%", "multiply"],
-    ["exp"]
-  ],
-  "prefix": [
-    ["--" ,"exp"],
-    ["++" ,"exp"],
-    ["-" ,"exp"],
-    ["!" ,"exp"],
-    ["~" ,"exp"],
-    ["exp"]
-  ],
-  "suffix": [
-    ["exp", ".", "member_access"],
-    ["exp", "->", "member_access"],
-    ["exp", "++"],
-    ["exp", "--"],
-    ["exp", "[", "expression", "]"],
-    ["exp"]
-  ],
+    {"member": [["method", "member"], ["field", "member"], []]},
+    {"struct_ident": [["class"],["struct"],["module"],["contract"]]},
 
-  "statements": [
-    [],
-    ["statement", "statements"]
-  ],
-  "statement": [
-    []
+    {"lexp": [
+      ["field"],
+      ["funcall"]
+    ]},
+    {"rexp": [["rop"]]},
+    {"lexp*": [
+      ["lexp", "lexp*"],
+      []
+    ]},
+    {"rexp*": [["rexp", "rexp*"],[]]},
+    {"member*": [["member"], []]},
+    {"access_mod*": [["access_mod"],[]]},
+
+    {"statement": [["field"],["exp"]]},
+    {"statement*": [["statement", "statement*"], []]},
+
+    {"exp": [["funcall"], ["ident"]]},
+    {"expression": []},
+
+    {"rop": [
+      ["ident"], ["funcall"]
+    ]},
+
+    {"lor": [["land", "||", "lor"],["rexp"]]},
+    {"land": [["or", "&&", "land"], ["rexp"]]},
+    {"or": [["xor", "|", "or"], ["rexp"]]},
+    {"xor": [["and", "^", "or"], ["rexp"]]},
+    {"and": [["equality_operator", "&", "and"], ["rexp"]]},
+    {"equality_operator": [["comparison", "==", "equality_operator"], ["comparison", "!=", "equality_operator"], ["rexp"]]},
+    {"comparison": [["shift", "<", "equality_operator"], ["shift", ">", "equality_operator"], ["shift", "<=", "equality_operator"], ["shift", ">=", "equality_operator"], ["rexp"]]},
+    {"shift":[["addition",">>>","shift"],["addition",">>","shift"],["addition","<<","shift"],["rexp"]]},
+    {"addition":[["pow","+","addition"],["pow","-","addition"],["rexp"]]},
+    {"pow":[["multiply","**","pow"],["rexp"]]},
+    {"multiply":[["prefix","*","pow"],["prefix","/","pow"],["prefix","%","pow"],["rexp"]]},
+    {"prefix":[["--","rexp"],["++","rexp"],["-","rexp"],["!","rexp"],["~","rexp"],["rexp"]]},
+    {"suffix":[["rexp",".","member_access"],["rexp","->","member_access"],["rexp","++"],["rexp","--"],["rexp","[","rop","]"],["rexp"]]},
+
+    {"lop": [
+    ]}
   ]
 }
