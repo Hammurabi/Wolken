@@ -2,7 +2,9 @@ struct name {
     public Field field
     fn testFun() {
         fun()
-        fn lambda_test => () {
+        Field genericDeclaration = 0
+        let generic = someValue
+        Function lambda_test = ()=>{
         }
     }
 }
