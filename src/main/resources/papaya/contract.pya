@@ -11,5 +11,6 @@ struct name {
         let lambda_test = (type a, type b)=>{
         }
         let x, y, z = x(x, y, z)
+        return x, y, z
     }
 }
