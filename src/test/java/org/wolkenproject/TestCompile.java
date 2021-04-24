@@ -2,28 +2,28 @@ package org.wolkenproject;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.wolkenproject.core.ResourceManager;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.WolkenException;
+import org.wolkenproject.papaya.ParseRule;
+import org.wolkenproject.papaya.compiler.AbstractSyntaxTree;
+import org.wolkenproject.papaya.compiler.PapayaLexer;
+import org.wolkenproject.papaya.compiler.TokenStream;
+import org.wolkenproject.papaya.parser.DynamicParser;
+import org.wolkenproject.papaya.parser.ParserGenerator;
 import org.wolkenproject.papaya.compiler.Compiler;
-import org.wolkenproject.papaya.compiler.PapayaApplication;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class TestCompile {
     @Test
     public void testCompile() throws WolkenException, IOException, PapayaException {
-        Compiler compiler = Compiler.getFor("papaya");
-        StringBuilder program = new StringBuilder();
-        String line = "";
-        BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/papaya/contract.pya")));
-        while ((line = reader.readLine()) != null) {
-            program.append(line).append("\n");
-        }
-        reader.close();
+        JSONObject papaya = ResourceManager.getJson("/papaya/papaya.json");
+        PapayaLexer lexer = new PapayaLexer();
+        DynamicParser dynamicParser = new DynamicParser(ResourceManager.getJson("/papaya/grammar.json"), papaya.getJSONArray("tokens"));
 
-        PapayaApplication application = compiler.compile(program.toString(), new JSONObject());
-        System.out.println(application);
+        String program = ResourceManager.getString("/papaya/contract.pya");
+        TokenStream stream = lexer.ingest(program, papaya.getJSONArray("tokens"));
+        AbstractSyntaxTree ast = dynamicParser.parse(stream);
     }
 }
