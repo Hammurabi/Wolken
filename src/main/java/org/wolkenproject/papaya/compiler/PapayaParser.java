@@ -1,18 +1,11 @@
 package org.wolkenproject.papaya.compiler;
 
-import org.json.JSONObject;
 import org.wolkenproject.exceptions.PapayaException;
-import org.wolkenproject.utils.ByteArray;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-
-import static org.wolkenproject.papaya.compiler.TokenType.*;
+import java.util.*;
 
 public class PapayaParser {
-    public AbstractSyntaxTree ingest(TokenStream stream, JSONObject grammar) throws PapayaException {
+    public AbstractSyntaxTree ingest(TokenStream stream, Map<String, List<List<String>>> grammar) throws PapayaException {
         AbstractSyntaxTree ast = new AbstractSyntaxTree();
         while (stream.hasNext()) {
             ParseToken token = stream.match(grammar);
