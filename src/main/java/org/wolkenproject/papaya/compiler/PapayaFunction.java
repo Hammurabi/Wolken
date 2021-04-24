@@ -1,18 +1,22 @@
 package org.wolkenproject.papaya.compiler;
 
+import org.wolkenproject.utils.ByteArray;
+
 import java.util.List;
 import java.util.Set;
 
 public class PapayaFunction extends PapayaMember {
-    private final String                name;
     private final Set<PapayaField>      arguments;
     private final List<Token>           statement;
     private byte                        byteCode[];
     private final LineInfo              lineInfo;
 
     public PapayaFunction(AccessModifier accessModifier, String name, Set<PapayaField> arguments, List<Token> statement, LineInfo lineInfo) {
-        super(accessModifier, name);
-        this.name = name;
+        this(accessModifier, ByteArray.wrap(name), arguments, statement, lineInfo);
+    }
+
+    public PapayaFunction(AccessModifier accessModifier, ByteArray name, Set<PapayaField> arguments, List<Token> statement, LineInfo lineInfo) {
+        super(accessModifier, name, null, null, lineInfo);
         this.arguments = arguments;
         this.statement = statement;
         this.lineInfo = lineInfo;
@@ -21,10 +25,6 @@ public class PapayaFunction extends PapayaMember {
 
     public LineInfo getLineInfo() {
         return lineInfo;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Set<PapayaField> getArguments() {
