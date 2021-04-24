@@ -132,25 +132,32 @@ public class PapayaLexer {
         Iterator<TokenBuilder> iterator = builderList.iterator();
         while (iterator.hasNext()) {
             TokenBuilder tokenBuilder = nextBuilder(iterator);
+
             if (tokenBuilder == null) {
                 continue;
             }
 
             if (tokenBuilder.isSymbol(stackableSymbolSet)) {
+                TokenBuilder exitToken = null;
                 while (iterator.hasNext()) {
                     TokenBuilder toke = nextBuilder(iterator);
                     if (toke != null) {
                         if (!toke.isSymbol(stackableSymbolSet)) {
-                            tokenStream.add(getToken(toke.toString(), toke.getLine(), toke.getOffset(), tokens));
+                            exitToken = toke;
                             break;
                         }
 
                         tokenBuilder.append(toke.toString());
                     }
                 }
-            }
 
-            tokenStream.add(getToken(tokenBuilder.toString(), tokenBuilder.getLine(), tokenBuilder.getOffset(), tokens));
+                tokenStream.add(getToken(tokenBuilder.toString(), tokenBuilder.getLine(), tokenBuilder.getOffset(), tokens));
+                if (exitToken != null) {
+                    tokenStream.add(getToken(exitToken.toString(), exitToken.getLine(), exitToken.getOffset(), tokens));
+                }
+            } else {
+                tokenStream.add(getToken(tokenBuilder.toString(), tokenBuilder.getLine(), tokenBuilder.getOffset(), tokens));
+            }
         }
 
         return tokenStream;
