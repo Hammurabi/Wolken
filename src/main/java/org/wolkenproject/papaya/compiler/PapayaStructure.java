@@ -94,12 +94,10 @@ public class PapayaStructure {
         }
     }
 
-    public Set<PapayaField> getFields() {
-        Set<PapayaField> functions = new LinkedHashSet<>();
+    public Set<PapayaMember> getFields() {
+        Set<PapayaMember> functions = new LinkedHashSet<>();
         for (PapayaMember member : getMembers()) {
-            if (member instanceof PapayaField) {
-                functions.add((PapayaField) member);
-            }
+                functions.add(member);
         }
 
         return functions;
