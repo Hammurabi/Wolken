@@ -1,11 +1,8 @@
-class TestBanker {
+struct name {
     public Map map
-
-    fn addAccount(uuid accountId, BankAccount account) {
-        map(accountId).set(account)
-    }
-
-    fn rmvAccount(BankAccount account) {
-        map(1).remove
+    fn testFun() {
+        map1()
+        fn lambda_test => () {
+        }
     }
 }
