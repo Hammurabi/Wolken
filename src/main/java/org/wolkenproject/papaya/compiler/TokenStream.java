@@ -1,11 +1,11 @@
 package org.wolkenproject.papaya.compiler;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.wolkenproject.exceptions.PapayaException;
+import org.wolkenproject.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TokenStream {
     private List<Token> tokenList;
@@ -67,72 +67,11 @@ public class TokenStream {
         return tokenList.isEmpty();
     }
 
-    private static boolean isLiteral(String rule) {
-        return rule.startsWith("'") && rule.endsWith("'");
+    public void jump(int mark) {
+        this.index = mark;
     }
 
-    public int matchesRule(JSONArray rule, JSONObject rules, int index) throws PapayaException {
-        for (int i = 0; i < rule.length(); i ++) {
-            int isMatching = -1;
-            JSONArray option = rule.getJSONArray(i);
-            for (int x = 0; x < option.length(); x ++) {
-                if (index + x >= tokenList.size()) {
-                    isMatching = -1;
-                    break;
-                }
-
-                int tokenIndex = index + x;
-
-                String value = option.getString(x);
-                if (isLiteral(value)) {
-                    if (!tokenList.get(tokenIndex).getTokenValue().equals(value.substring(1, value.length() - 1))) {
-                        isMatching = -1;
-                        break;
-                    }
-
-                    isMatching ++;
-                } else {
-                    if (rules.has(value)) {
-                        int match = matchesRule(rules.getJSONArray(value), rules, tokenIndex);
-                        if (match < 0) {
-                            isMatching = -1;
-                            break;
-                        }
-
-                        isMatching = match;
-                    } else {
-                        if (!checkBasicRule(value, tokenList.get(tokenIndex))) {
-                            isMatching = -1;
-                            break;
-                        }
-
-                        isMatching ++;
-                    }
-                }
-            }
-
-            if (isMatching >= 0) {
-                return isMatching;
-            }
-        }
-
-        return -1;
-    }
-
-    private boolean checkBasicRule(String ruleName, Token token) throws PapayaException {
-        return ruleName.toLowerCase().equals(token.getTokenType());
-    }
-
-    public ParseToken match(JSONObject grammar) throws PapayaException {
-        for (String ruleName : grammar.keySet()) {
-            JSONArray rule = grammar.getJSONArray(ruleName);
-
-            int match = matchesRule(rule, grammar, index);
-
-            if (match >= 0) {
-            }
-        }
-
-        return null;
+    public int mark() {
+        return index;
     }
 }
