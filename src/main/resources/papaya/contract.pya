@@ -6,7 +6,7 @@ struct name {
         fun()
         Field genericDeclaration = 0
         let generic = someValue
-        let sum_func = (int a, int b)=>{
+        sum_func = (int a, int b)=>{
         }
         let lambda_test = (type a, type b)=>{
         }
