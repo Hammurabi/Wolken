@@ -5,7 +5,7 @@ import org.wolkenproject.exceptions.EmptyProgramCounterException;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.UndefOpcodeException;
 import org.wolkenproject.exceptions.WolkenException;
-import org.wolkenproject.papaya.Program;
+import org.wolkenproject.papaya.parser.Program;
 import org.wolkenproject.utils.ByteArray;
 import org.wolkenproject.utils.Utils;
 import org.wolkenproject.utils.VarInt;
