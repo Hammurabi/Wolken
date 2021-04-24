@@ -7,9 +7,6 @@ import java.util.*;
 public class PapayaParser {
     public AbstractSyntaxTree ingest(TokenStream stream, Map<String, List<List<String>>> grammar) throws PapayaException {
         AbstractSyntaxTree ast = new AbstractSyntaxTree();
-        while (stream.hasNext()) {
-            ParseToken token = stream.match(grammar);
-        }
         return ast;
     }
 
