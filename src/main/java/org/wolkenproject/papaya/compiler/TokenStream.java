@@ -4,10 +4,11 @@ import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.utils.Pair;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class TokenStream {
+public class TokenStream implements Iterable<Token> {
     private List<Token> tokenList;
     private int index;
 
@@ -73,5 +74,10 @@ public class TokenStream {
 
     public int mark() {
         return index;
+    }
+
+    @Override
+    public Iterator<Token> iterator() {
+        return tokenList.iterator();
     }
 }
