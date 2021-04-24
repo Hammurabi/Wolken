@@ -8,8 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class ResourceManager {
-    public InputStream get(String path) throws IOException {
-        InputStream inputStream = getClass().getResourceAsStream(path);
+    public static InputStream get(String path) throws IOException {
+        InputStream inputStream = ResourceManager.class.getResourceAsStream(path);
         if (inputStream == null) {
             throw new IOException("'" + path + "' could no be reached.");
         }
@@ -17,7 +17,7 @@ public class ResourceManager {
         return inputStream;
     }
 
-    public JSONObject getJson(String path) throws IOException {
+    public static JSONObject getJson(String path) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(get(path)));
         StringBuilder builder = new StringBuilder();
         String line = "";
@@ -27,5 +27,17 @@ public class ResourceManager {
         }
 
         return new JSONObject(builder.toString());
+    }
+
+    public static String getString(String path) throws IOException {
+        StringBuilder string = new StringBuilder();
+        String line = "";
+        BufferedReader reader = new BufferedReader(new InputStreamReader(ResourceManager.class.getResourceAsStream(path)));
+        while ((line = reader.readLine()) != null) {
+            string.append(line).append("\n");
+        }
+        reader.close();
+
+        return string.toString();
     }
 }
