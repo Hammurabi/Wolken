@@ -1,9 +1,13 @@
 struct name {
     public Field field
+    public int(int, int) sum_func
+
     fn testFun() {
         fun()
         Field genericDeclaration = 0
         let generic = someValue
+        let sum_func = (int a, int b)=>{
+        }
         let lambda_test = (type a, type b)=>{
         }
         let x, y, z = x(x, y, z)
