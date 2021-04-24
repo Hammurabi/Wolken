@@ -74,12 +74,12 @@ public class EncryptionUtil {
         return new SecretKeySpec(tmp.getEncoded(), "AES");
     }
 
-    public static Tuple<byte[], byte[]> aesEncrypt(byte[] bytes, SecretKey secret) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, InvalidParameterSpecException, BadPaddingException, IllegalBlockSizeException {
+    public static Pair<byte[], byte[]> aesEncrypt(byte[] bytes, SecretKey secret) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, InvalidParameterSpecException, BadPaddingException, IllegalBlockSizeException {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, secret);
         AlgorithmParameters params = cipher.getParameters();
         byte[] iv = params.getParameterSpec(IvParameterSpec.class).getIV();
-        return new Tuple<>(cipher.doFinal(bytes), iv);
+        return new Pair<>(cipher.doFinal(bytes), iv);
     }
 
     public static byte[] aesDecrypt(byte[] bytes, SecretKey secret, byte iv[]) throws NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException, InvalidAlgorithmParameterException {
