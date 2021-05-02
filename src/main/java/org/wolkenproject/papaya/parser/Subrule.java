@@ -2,11 +2,9 @@ package org.wolkenproject.papaya.parser;
 
 import org.json.JSONArray;
 import org.wolkenproject.exceptions.PapayaException;
-import org.wolkenproject.papaya.ParseRule;
 import org.wolkenproject.papaya.compiler.TokenStream;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Subrule implements Rule, Comparable<Subrule> {
@@ -33,15 +31,27 @@ public class Subrule implements Rule, Comparable<Subrule> {
         }
     }
 
+    public Subrule(String name, String rext, List<Rule> option) {
+        this.ruleName = name;
+        this.ruleExt = rext;
+        this.rules = option;
+    }
+
     @Override
-    public ParseToken parse(TokenStream stream, DynamicParser rules) throws PapayaException {
-        ParseToken option = new ParseToken(ruleName, ruleExt);
+    public String toString() {
+        return "sub:" + rules.toString();
+    }
+
+    @Override
+    public Node parse(TokenStream stream, DynamicParser rules, ParseResult result) throws PapayaException {
+        Node option = new Node(ruleName, ruleExt);
         if (this.rules.isEmpty()) {
+            result.add(1);
             return option;
         }
 
         for (Rule rule : this.rules) {
-            ParseToken token = rule.parse(stream, rules);
+            Node token = rule.parse(stream, rules, result);
             if (token == null) {
                 return null;
             }
@@ -53,11 +63,6 @@ public class Subrule implements Rule, Comparable<Subrule> {
     }
 
     @Override
-    public String toString() {
-        return "sub:" + rules.toString();
-    }
-
-    @Override
     public int length(DynamicParser parser) throws PapayaException {
         int length = 0;
         for (Rule rule : rules) {
@@ -66,6 +71,15 @@ public class Subrule implements Rule, Comparable<Subrule> {
 
         this.length = length;
         return length;
+    }
+
+    @Override
+    public String toSimpleString(DynamicParser parser) {
+        try {
+            return parser.getRule(ruleName).toSimpleString(parser);
+        } catch (Exception e) {
+            return ruleName;
+        }
     }
 
     @Override
