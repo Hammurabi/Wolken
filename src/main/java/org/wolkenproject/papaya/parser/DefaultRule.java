@@ -11,7 +11,7 @@ public class DefaultRule extends ParseRule {
     }
 
     @Override
-    public Node parse(TokenStream stream, DynamicParser rules, ParseResult result) throws PapayaException {
+    public Node parse(TokenStream stream, DynamicParser rules) throws PapayaException {
         int mark = stream.mark();
         if (!stream.hasNext()) {
             return null;
@@ -19,12 +19,9 @@ public class DefaultRule extends ParseRule {
 
         Token token = stream.next();
         if (token.getTokenType().equals(getName())) {
-            result.add(1);
             return new Node(getName(), "default", token);
         }
 
-        result.setInvalidToken(token);
-        result.expectRule(this);
         stream.jump(mark);
         return null;
     }
