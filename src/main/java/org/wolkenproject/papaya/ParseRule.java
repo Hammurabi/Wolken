@@ -54,13 +54,19 @@ public class ParseRule {
         return null;
     }
 
-    public Node parse(TokenStream stream, DynamicParser rules, ParseResult result) throws PapayaException {
-        Queue<ParseResult> results = new LinkedList<>();
-        ParseResult pRes = parse(stream, rules, results);
-        result.add(results.poll());
+    public Node parse(TokenStream stream, DynamicParser rules) throws PapayaException {
+        for (Subrule option : options) {
+            int mark = stream.mark();
+            ParseResult res = new ParseResult(this);
+            Node node = option.parse(stream, rules, res);
+            res.setResult(node);
+            res.jump(stream, mark);
 
-        if (pRes != null) {
-            return pRes.getParseResult();
+            if (node == null) {
+                stream.jump(mark);
+            } else {
+                return node;
+            }
         }
 
         return null;
