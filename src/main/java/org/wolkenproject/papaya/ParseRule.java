@@ -4,15 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.TokenStream;
-import org.wolkenproject.papaya.parser.DynamicParser;
-import org.wolkenproject.papaya.parser.Rule;
-import org.wolkenproject.papaya.parser.Subrule;
-import org.wolkenproject.papaya.parser.ParseToken;
+import org.wolkenproject.papaya.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class ParseRule {
     private final String        ruleName;
@@ -21,6 +15,14 @@ public class ParseRule {
     protected ParseRule(String name) {
         this.ruleName = name;
         this.options = null;
+    }
+
+    public ParseRule(String name, List<List<Rule>> options) {
+        this.ruleName = name;
+        this.options = new ArrayList<>();
+        for (List<Rule> option : options) {
+            this.options.add(new Subrule(name, "", option));
+        }
     }
 
     public ParseRule(JSONObject rule) {
@@ -33,16 +35,32 @@ public class ParseRule {
         }
     }
 
-    public ParseToken parse(TokenStream stream, DynamicParser rules) throws PapayaException {
+    public ParseResult parse(TokenStream stream, DynamicParser rules, Queue<ParseResult> results) throws PapayaException {
         for (Subrule option : options) {
             int mark = stream.mark();
-            ParseToken token = option.parse(stream, rules);
+            ParseResult res = new ParseResult(this);
+            Node token = option.parse(stream, rules, res);
+            res.setResult(token);
+            res.jump(stream, mark);
+            results.add(res);
 
             if (token != null) {
-                return token;
+                return res;
             }
 
             stream.jump(mark);
+        }
+
+        return null;
+    }
+
+    public Node parse(TokenStream stream, DynamicParser rules, ParseResult result) throws PapayaException {
+        Queue<ParseResult> results = new LinkedList<>();
+        ParseResult pRes = parse(stream, rules, results);
+        result.add(results.poll());
+
+        if (pRes != null) {
+            return pRes.getParseResult();
         }
 
         return null;
@@ -73,5 +91,9 @@ public class ParseRule {
 
     public void sort() {
         Collections.sort(options);
+    }
+
+    public String toSimpleString(DynamicParser parser) {
+        return toString();
     }
 }
