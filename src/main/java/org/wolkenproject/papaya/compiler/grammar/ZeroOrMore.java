@@ -18,12 +18,12 @@ public class ZeroOrMore implements Rule {
     }
 
     @Override
-    public Node parse(TokenStream stream, DynamicParser rules, ParseResult result) throws PapayaException {
+    public Node parse(TokenStream stream, DynamicParser rules) throws PapayaException {
         List<Node> list = new ArrayList<>();
         Node node = null;
 
         do {
-            node = rule.parse(stream, rules, result);
+            node = rule.parse(stream, rules);
             if (node != null) {
                 list.add(node);
             }
