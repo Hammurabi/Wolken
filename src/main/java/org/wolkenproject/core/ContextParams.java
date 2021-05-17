@@ -101,7 +101,7 @@ public class ContextParams {
     }
 
     public byte getGenericMainnetAddressPrefix() {
-        return 53;
+        return 24;
     }
 
     public byte getGenericTestnetAddressPrefix() {
