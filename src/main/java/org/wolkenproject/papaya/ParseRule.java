@@ -4,25 +4,48 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.TokenStream;
+import org.wolkenproject.papaya.compiler.grammar.GrammarRule;
 import org.wolkenproject.papaya.parser.*;
 
 import java.util.*;
 
-public class ParseRule {
+public class ParseRule implements Rule {
     private final String        ruleName;
-    private final List<Subrule> options;
+    private final List<Rule>    options;
 
-    protected ParseRule(String name) {
-        this.ruleName = name;
-        this.options = null;
-    }
-
-    public ParseRule(String name, List<List<Rule>> options) {
+    public ParseRule(String name) {
         this.ruleName = name;
         this.options = new ArrayList<>();
-        for (List<Rule> option : options) {
-            this.options.add(new Subrule(name, "", option));
+    }
+
+    public ParseRule(String name, List<Object> options) {
+        this.ruleName = name;
+        this.options = new ArrayList<>();
+        for (Object option : options) {
+            if (option instanceof List) {
+                this.options.add(new Subrule(name, "", (List<Rule>) option));
+            } else if (option instanceof GrammarRule) {
+                ParseRule parseRule = ((GrammarRule) option).asParseRule();
+                this.options.add(parseRule);
+            } else {
+                throw new RuntimeException("invalid object '" + option + "' provided.");
+            }
         }
+    }
+
+    public void clearOptions() {
+        this.options.clear();
+    }
+
+    public void addOptions(Subrule... options) {
+        for (Subrule option : options) {
+            this.options.add(option);
+        }
+    }
+
+    public void addOptions(List<Subrule> options) {
+        this.options.clear();;
+        this.options.addAll(options);
     }
 
     public ParseRule(JSONObject rule) {
@@ -35,35 +58,39 @@ public class ParseRule {
         }
     }
 
-    public ParseResult parse(TokenStream stream, DynamicParser rules, Queue<ParseResult> results) throws PapayaException {
-        for (Subrule option : options) {
-            int mark = stream.mark();
-            ParseResult res = new ParseResult(this);
-            Node token = option.parse(stream, rules, res);
-            res.setResult(token);
-            res.jump(stream, mark);
-            results.add(res);
+//    public ParseResult parse(TokenStream stream, DynamicParser rules, Queue<ParseResult> results) throws PapayaException {
+//        for (Subrule option : options) {
+//            int mark = stream.mark();
+//            ParseResult res = new ParseResult(this);
+//            Node token = option.parse(stream, rules);
+//            res.setResult(token);
+//            res.jump(stream, mark);
+//            results.add(res);
+//
+//            if (token != null) {
+//                return res;
+//            }
+//
+//            stream.jump(mark, getName());
+//        }
+//
+//        return null;
+//    }
 
-            if (token != null) {
-                return res;
-            }
-
-            stream.jump(mark);
-        }
-
-        return null;
-    }
-
+    @Override
     public Node parse(TokenStream stream, DynamicParser rules) throws PapayaException {
-        for (Subrule option : options) {
+        int highestJump = 0;
+        for (Rule option : options) {
             int mark = stream.mark();
-            ParseResult res = new ParseResult(this);
-            Node node = option.parse(stream, rules, res);
-            res.setResult(node);
-            res.jump(stream, mark);
+            highestJump = Math.max(mark, highestJump);
+            Node node = option.parse(stream, rules);
 
             if (node == null) {
-                stream.jump(mark);
+                String name = getName();
+                if (name.isEmpty()) {
+                    name = option.toString();
+                }
+                stream.jump(mark, name);
             } else {
                 return node;
             }
@@ -88,7 +115,7 @@ public class ParseRule {
         int length = 0;
         if (options == null) return 0;
 
-        for (Subrule rule : options) {
+        for (Rule rule : options) {
             length += rule.length(parser);
         }
 
@@ -96,7 +123,7 @@ public class ParseRule {
     }
 
     public void sort() {
-        Collections.sort(options);
+//        Collections.sort(options);
     }
 
     public String toSimpleString(DynamicParser parser) {
