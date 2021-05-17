@@ -32,8 +32,13 @@ public class OpcodeRegister {
 
         opcodeRegister.registerOp("call", "pop the top stack element and call it.", 2, 4, scope -> scope.getStack().pop().call(scope));
 
-        opcodeRegister.registerOp("load", "load an object from an offset.", 3, 2, scope -> scope.getStack().push(scope.getStack().pop().getMember(scope.getProgramCounter().nextMemberId(), scope.getStackTrace())));
-        opcodeRegister.registerOp("store", "store an object to an offset.", 2, 2, scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextMemberId(), scope.getStack().pop(), scope.getStackTrace()));
+        opcodeRegister.registerOp("load", "load a member from an offset.", 3, 2, scope -> scope.getStack().push(scope.getStack().pop().getMember(scope.getProgramCounter().nextMemberId(), scope.getStackTrace())));
+        opcodeRegister.registerOp("store", "store a member to an offset.", 2, 2, scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextMemberId(), scope.getStack().pop(), scope.getStackTrace()));
+
+        opcodeRegister.registerOp("loadstatic", "load a static member from an offset.", 3, 2,
+                scope -> scope.getStack().push(scope.getStack().pop().getMember(scope.getProgramCounter().nextMemberId(), scope.getStackTrace())));
+        opcodeRegister.registerOp("storestatic", "store a static member to an offset.", 2, 2,
+                scope -> scope.getStack().pop().setMember(scope.getProgramCounter().nextMemberId(), scope.getStack().pop(), scope.getStackTrace()));
 
         opcodeRegister.registerOp("getfield", "load an object from an offset in array.", 2, 2, scope -> scope.getStack().pop().getAtIndex(scope.getStack().pop().asInt().intValue()));
         opcodeRegister.registerOp("setfield", "store an object to an offset in array.", 2, 2, scope -> scope.getStack().pop().setAtIndex(scope.getStack().pop().asInt().intValue(), scope.getStack().pop()));
@@ -45,8 +50,9 @@ public class OpcodeRegister {
 
         opcodeRegister.registerOp("jmp", "jumps to a location in code", 1, scope -> scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort()));
         opcodeRegister.registerOp("jnt", "branch operator, jumps if condition is not true.", 1, scope -> {
-            if (!scope.getStack().pop().asBool())
-                scope.getProgramCounter().jump(scope.getProgramCounter().nextUnsignedShort());
+            if (!scope.getStack().pop().asBool()) {
+                scope.getProgramCounter().skip(scope.getProgramCounter().nextProgramPointer());
+            }
         });
 
         opcodeRegister.registerOp("const0", "push an integer with value '0' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(0, false))));
@@ -66,6 +72,8 @@ public class OpcodeRegister {
         opcodeRegister.registerOp("const14", "push an integer with value '14' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(14, false))));
         opcodeRegister.registerOp("const15", "push an integer with value '15' (unsigned).", 1, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(15, false))));
 
+        opcodeRegister.registerOp("sconst", "push a signed varint of size '5-61'.", 1, 2, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(scope.getProgramCounter().nextVarint64(false), false))));
+        opcodeRegister.registerOp("sconst256", "push a signed varint of size '3-251'.", 1, 12, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(scope.getProgramCounter().nextVarint256(false), false))));
         opcodeRegister.registerOp("vconst", "push a varint of size '5-61' (unsigned).", 1, 2, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(scope.getProgramCounter().nextVarint64(false), false))));
         opcodeRegister.registerOp("vconst256", "push a varint of size '3-251' (unsigned).", 1, 12, scope -> scope.getStack().push(new DefaultHandler(new PapayaNumber(scope.getProgramCounter().nextVarint256(false), false))));
 
@@ -301,5 +309,9 @@ public class OpcodeRegister {
 
     public int opCount() {
         return opcodeSet.size();
+    }
+
+    public int forName(String op) {
+        return opcodeNameMap.get(op).getIdentifier();
     }
 }
