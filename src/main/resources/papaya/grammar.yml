@@ -1,16 +1,24 @@
 struct_type:
-  module
   struct
   class
   contract
+module_declaration:
+  module ident '{' (structure | class_member | module_declaration)* '}'
 structure:
   struct_type ident '{' class_member* '}'
 method:
-  access_mod* fn ident '(' method_arguments* ')' '{' statement* '}'
+  static* access_mod* fn ident '(' method_arguments* ')' '{' statement* '}'
+  access_mod* static* fn ident '(' method_arguments* ')' '{' statement* '}'
+function_pointer:
+  static* access_mod* path '(' paths* ')' ident ';'
+  access_mod* static* path '(' paths* ')' ident ';'
 field:
-  access_mod* ident '(' function_arguments* ')' ident
-  access_mod* ident ident '=' expression
-  access_mod* ident ident
+  function_pointer
+  static* access_mod* path ident '=' expression ';'
+  access_mod* static* path ident ';'
+paths:
+  path ',' paths
+  path
 identifiers:
   ident ',' identifiers
   ident
@@ -18,9 +26,11 @@ variable:
   'let' identifiers '=' expression
   ident ident '=' expression
   ident ident
+method_argument:
+  path ident
 method_arguments:
-  ident ident ',' method_arguments
-  ident ident
+  method_argument ',' method_arguments
+  method_argument
 function_arguments:
   expression ',' function_arguments
   expression
@@ -39,30 +49,33 @@ lambda_expression:
 assignment:
   member_access '=' expression
 basic_expression:
-  member_access '[' basic_expression ']'
   member_access
   logical_not
   bitwise_not
+  string
   int
   dec
   cast basic_expression
 expression:
-  mul_exp
-  add_exp
-  shift_exp
-  comparison_exp
-  equality_exp
-  bitwise_and
   bitwise_or
-  logical_and
-  logical_or
+  bitwise_and
+  equality_exp
+  comparison_exp
+  shift_exp
+  add_exp
+  mul_exp
   basic_expression
   lambda_expression
   tuple
   '(' expression ')'
-member:
-  function_call
+subscribt:
+  '[' expression ']'
+path:
+  ident '.' path
   ident
+member:
+  function_call subscribt*
+  ident subscribt*
 member_access:
   member '.' member_access
   member
@@ -70,71 +83,39 @@ function_call:
   ident '(' function_arguments* ')'
 ternary_statement:
   '?' expression ':' function_call
-statement:
+prefix:
   '++' member_access
   '--' member_access
+postfix:
   member_access '++'
   member_access '--'
-  assignment
-  variable
-  ternary_statement
-  return tuple_expressions
+statement:
+  using member_access ';'
+  prefix ';'
+  postfix ';'
+  assignment ';'
+  variable ';'
+  ternary_statement ';'
+  return tuple_expressions ';'
 logical_not:
   '!' basic_expression
 bitwise_not:
   '~' basic_expression
-mul_atm:
-  '*' basic_expression
-  '/' basic_expression
-  '%' basic_expression
 mul_exp:
-  basic_expression '*' basic_expression mul_atm*
-  basic_expression '/' basic_expression mul_atm*
-  basic_expression '%' basic_expression mul_atm*
-  basic_expression
-add_atm:
-  '+' mul_exp
-  '-' mul_exp
+  basic_expression ('*' | '/' | '%') basic_expression (('*' | '/' | '%') basic_expression)*
 add_exp:
-  mul_exp '+' mul_exp add_atm*
-  mul_exp '-' mul_exp add_atm*
-shift_atm:
-  '>>' add_exp
-  '>>>' add_exp
-  '<<' add_exp
+  (mul_exp | basic_expression) ('+' | '-') (mul_exp | basic_expression) (('+' | '-') (mul_exp | basic_expression))*
 shift_exp:
-  add_exp '>>' add_exp shift_atm*
-  add_exp '>>>' add_exp shift_atm*
-  add_exp '<<' add_exp shift_atm*
-comparison_atm:
-  '>=' shift_exp
-  '<=' shift_exp
-  '>' shift_exp
-  '<' shift_exp
+  (add_exp | mul_exp | basic_expression) ('>>>' | '>>' | '<<') (add_exp | mul_exp | basic_expression) (('>>>' | '>>' | '<<') (add_exp | mul_exp | basic_expression))*
 comparison_exp:
-  shift_exp '>=' shift_exp comparison_atm*
-  shift_exp '<=' shift_exp comparison_atm*
-  shift_exp '>' shift_exp comparison_atm*
-  shift_exp '<' shift_exp comparison_atm*
-equality_atm:
-  '==' comparison_exp
-  '!=' comparison_exp
+  (shift_exp | add_exp | mul_exp | basic_expression) ('>=' | '<=' | '>' | '<') (shift_exp | add_exp | mul_exp | basic_expression) (('>=' | '<=' | '>' | '<') (shift_exp | add_exp | mul_exp | basic_expression))*
 equality_exp:
-  comparison_exp '==' comparison_exp equality_atm*
-  comparison_exp '!=' comparison_exp equality_atm*
-bitwise_and_atm:
-  '&' equality_exp
+  (comparison_exp | shift_exp | add_exp  | mul_exp | basic_expression) ('==' | '!=') (comparison_exp | shift_exp | add_exp  | mul_exp | basic_expression) (('==' | '!=') (comparison_exp | shift_exp | add_exp  | mul_exp | basic_expression))*
 bitwise_and:
-  equality_exp '&' equality_exp bitwise_and_atm*
-bitwise_or_atm:
-  '|' bitwise_and
+  (equality_exp | comparison_exp | shift_exp | add_exp  | mul_exp | basic_expression) '&' (equality_exp | comparison_exp | shift_exp | add_exp  | mul_exp | basic_expression) ('&' (equality_exp | comparison_exp | shift_exp | add_exp  | mul_exp | basic_expression))*
 bitwise_or:
-  bitwise_and '|' bitwise_and bitwise_or_atm*
-logical_and_atm:
-  '&&' bitwise_or
+  (bitwise_and | equality_exp | comparison_exp | shift_exp | add_exp  | mul_exp | basic_expression) '|' (bitwise_and | equality_exp | comparison_exp | shift_exp | add_exp  | mul_exp | basic_expression) ('|' (bitwise_and | equality_exp | comparison_exp | shift_exp | add_exp  | mul_exp | basic_expression))*
 logical_and:
   bitwise_or '&&' bitwise_or logical_and_atm*
-logical_or_atm:
-  '||' logical_and
 logical_or:
   logical_and '||' logical_and logical_or_atm*
