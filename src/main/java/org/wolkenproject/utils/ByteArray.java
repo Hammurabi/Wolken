@@ -40,4 +40,8 @@ public class ByteArray implements Serializable {
     public static final ByteArray wrap(String string) {
         return wrap(string.getBytes(StandardCharsets.UTF_8));
     }
+
+    public boolean isNull() {
+        return array == null || array.length == 0;
+    }
 }
