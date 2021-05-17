@@ -37,20 +37,6 @@ public class PapayaApplication extends Payload {
         structureMap.put(name, structure);
     }
 
-    public void compile() throws WolkenException {
-        for (PapayaStructure structure : structureMap.values()) {
-            structure.compile(this);
-        }
-    }
-
-//    public int getStructureLength(String name, LineInfo lineInfo) throws WolkenException {
-//        if (!structureMap.containsKey(name)) {
-//            throw new WolkenException("reference to undefined type '" + name + "' at " + lineInfo + ".");
-//        }
-//
-//        return structureMap.get(name).getLength(this);
-//    }
-
     @Override
     public void entryPoint(Invoker invoker) throws ContractException {
     }
