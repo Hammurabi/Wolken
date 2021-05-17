@@ -11,12 +11,8 @@ public class PapayaFunction extends PapayaMember {
     private byte                        byteCode[];
     private final LineInfo              lineInfo;
 
-    public PapayaFunction(AccessModifier accessModifier, String name, Set<PapayaField> arguments, List<Token> statement, LineInfo lineInfo) {
-        this(accessModifier, ByteArray.wrap(name), arguments, statement, lineInfo);
-    }
-
-    public PapayaFunction(AccessModifier accessModifier, ByteArray name, Set<PapayaField> arguments, List<Token> statement, LineInfo lineInfo) {
-        super(accessModifier, name, null, null, lineInfo);
+    public PapayaFunction(AccessModifier accessModifier, boolean isStatic, ByteArray name, Set<PapayaField> arguments, List<Token> statement, LineInfo lineInfo) {
+        super(accessModifier, isStatic, name, null, lineInfo);
         this.arguments = arguments;
         this.statement = statement;
         this.lineInfo = lineInfo;
