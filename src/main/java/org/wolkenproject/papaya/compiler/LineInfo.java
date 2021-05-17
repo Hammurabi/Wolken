@@ -24,4 +24,8 @@ public class LineInfo {
                 ", offset=" + offset +
                 '}';
     }
+
+    public boolean isNull() {
+        return line < 0;
+    }
 }
