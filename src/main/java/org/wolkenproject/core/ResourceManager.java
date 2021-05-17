@@ -1,6 +1,8 @@
 package org.wolkenproject.core;
 
 import org.json.JSONObject;
+import org.wolkenproject.exceptions.PapayaException;
+import org.wolkenproject.papaya.compiler.grammar.Grammar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,5 +41,9 @@ public class ResourceManager {
         reader.close();
 
         return string.toString();
+    }
+
+    public static Grammar getGrammar(String path) throws IOException, PapayaException {
+        return new Grammar(getString(path));
     }
 }
