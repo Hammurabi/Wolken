@@ -74,4 +74,8 @@ public class Program extends InputStream {
     public int length() {
         return buffer.length;
     }
+
+    public int getPosition() {
+        return index;
+    }
 }
