@@ -19,6 +19,7 @@ public class PapayaLexer {
     public PapayaLexer() {
         this.symbolSet = new HashSet<>();
         this.stackableSymbolSet = new HashSet<>();
+
         symbolSet.add('+');
         symbolSet.add('-');
         symbolSet.add('*');
@@ -33,7 +34,9 @@ public class PapayaLexer {
         symbolSet.add('|');
         symbolSet.add('.');
         symbolSet.add(':');
+        symbolSet.add(';');
         symbolSet.add('\\');
+
         stackableSymbolSet.addAll(symbolSet);
 
         symbolSet.add('~');
@@ -48,6 +51,7 @@ public class PapayaLexer {
         symbolSet.add(']');
         symbolSet.add('{');
         symbolSet.add('}');
+        symbolSet.add('?');
     }
 
     public TokenStream ingest(String program, JSONArray tokens) throws WolkenException {
@@ -145,6 +149,8 @@ public class PapayaLexer {
                         if (!toke.isSymbol(stackableSymbolSet)) {
                             exitToken = toke;
                             break;
+                        } else if (toke.getOffset() > (tokenBuilder.getOffset() + 1)) {
+                            break;
                         }
 
                         tokenBuilder.append(toke.toString());
@@ -230,6 +236,6 @@ public class PapayaLexer {
             }
         }
 
-        throw new WolkenException("could not create token for string '" + string + "'" + "at line: " + line + " offset: " + offset + ".");
+        throw new WolkenException("could not create token for string '" + string + "'" + " at line: " + line + " offset: " + offset + ".");
     }
 }
