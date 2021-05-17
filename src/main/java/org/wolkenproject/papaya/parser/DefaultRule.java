@@ -22,7 +22,7 @@ public class DefaultRule extends ParseRule {
             return new Node(getName(), "default", token);
         }
 
-        stream.jump(mark);
+        stream.jump(mark, getName());
         return null;
     }
 
