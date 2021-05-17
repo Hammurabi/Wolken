@@ -11,13 +11,22 @@ public class ParseRuleReference implements Rule {
     }
 
     @Override
-    public ParseToken parse(TokenStream stream, DynamicParser rules) throws PapayaException {
+    public Node parse(TokenStream stream, DynamicParser rules) throws PapayaException {
         return rules.getRule(ruleName).parse(stream, rules);
     }
 
     @Override
     public int length(DynamicParser parser) throws PapayaException {
         return parser.getRule(ruleName).length(parser);
+    }
+
+    @Override
+    public String toSimpleString(DynamicParser parser) {
+        try {
+            return parser.getRule(ruleName).toSimpleString(parser);
+        } catch (PapayaException e) {
+            return ruleName;
+        }
     }
 
     @Override
