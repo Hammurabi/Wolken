@@ -3,6 +3,7 @@ package org.wolkenproject.utils;
 import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.serialization.SerializableI;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,6 +13,72 @@ import java.math.BigInteger;
 // that has a range of 1 - 8 bytes
 public class VarInt {
     // write a uint32 to stream, or uint30 if !fullBitsNeeded
+    public static byte[] writeCompactUInt32(long integer, boolean preserveAllBits) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            writeCompactUInt32(integer, preserveAllBits, outputStream);
+        } catch (IOException e) {
+            // this should never be returned.
+            return null;
+        }
+        return outputStream.toByteArray();
+    }
+
+    // write a int32 to stream, or uint29 if !fullBitsNeeded
+    public static void writeCompactSignedInt32(long integer, boolean preserveAllBits, OutputStream stream) throws IOException {
+        boolean isNegative = integer < 0;
+        if (isNegative) {
+            integer = ~integer;
+        }
+
+        long bits = Utils.numBitsRequired(integer);
+
+        if (preserveAllBits) {
+            int signInfo = isNegative ? 4 : 8;
+            if (bits <= 8) {
+                stream.write(0|signInfo);
+                stream.write((int) integer);
+            } else if (bits <= 16) {
+                stream.write(1|signInfo);
+                byte bytes[] = Utils.takeApartShort(integer);
+                stream.write(((bytes[0])));
+                stream.write(((bytes[1])));
+            } else if (bits <= 24) {
+                stream.write(2|signInfo);
+                byte bytes[] = Utils.takeApartInt24(integer);
+                stream.write(((bytes[0])));
+                stream.write(((bytes[1])));
+                stream.write(((bytes[2])));
+            } else if (bits <= 32) {
+                stream.write(3|signInfo);
+                byte bytes[] = Utils.takeApart(integer);
+                stream.write(bytes[0]);
+                stream.write(bytes[1]);
+                stream.write(bytes[2]);
+                stream.write(bytes[3]);
+            }
+        } else {
+            if (bits <= 6) {
+                stream.write((int) (integer & 0x3F));
+            } else if (bits <= 14) {
+                byte bytes[] = Utils.takeApartShort(integer);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 1 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[1])));
+            } else if (bits <= 22) {
+                byte bytes[] = Utils.takeApartInt24(integer);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 2 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[1])));
+                stream.write((Byte.toUnsignedInt(bytes[2])));
+            } else if (bits <= 32) {
+                byte bytes[] = Utils.takeApart(integer);
+                stream.write((Byte.toUnsignedInt(bytes[0]) & 0x3F) | 3 << 6);
+                stream.write((Byte.toUnsignedInt(bytes[1])));
+                stream.write((Byte.toUnsignedInt(bytes[2])));
+                stream.write((Byte.toUnsignedInt(bytes[3])));
+            }
+        }
+    }
+
     public static void writeCompactUInt32(long integer, boolean preserveAllBits, OutputStream stream) throws IOException {
         long bits = Utils.numBitsRequired(integer);
 
@@ -60,6 +127,11 @@ public class VarInt {
         }
     }
 
+    public static byte[] writeCompactUInt64(long integer, boolean preserveAllBits) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        writeCompactUInt64(integer, preserveAllBits, outputStream);
+        return outputStream.toByteArray();
+    }
     public static void writeCompactUInt64(long integer, boolean preserveAllBits, OutputStream stream) throws IOException {
         long bits = Utils.numBitsRequired(integer);
 
@@ -377,6 +449,12 @@ public class VarInt {
     // when preserveAllBits is true, then the resulting
     // integer will only be 251 bits in length as 5 bits
     // will be used to encode the length of the integer.
+    public static byte[] writeCompactUint256(BigInteger integer, boolean preserveAllBits) throws IOException, WolkenException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        writeCompactUint256(integer, preserveAllBits, outputStream);
+        return outputStream.toByteArray();
+    }
+
     public static void writeCompactUint256(BigInteger integer, boolean preserveAllBits, OutputStream stream) throws WolkenException, IOException {
         if (integer.bitLength() > 256) {
             throw new WolkenException("writeCompactUint256 only allows up to  2^256 bits.");
