@@ -43,15 +43,14 @@ public class Subrule implements Rule, Comparable<Subrule> {
     }
 
     @Override
-    public Node parse(TokenStream stream, DynamicParser rules, ParseResult result) throws PapayaException {
+    public Node parse(TokenStream stream, DynamicParser rules) throws PapayaException {
         Node option = new Node(ruleName, ruleExt);
         if (this.rules.isEmpty()) {
-            result.add(1);
             return option;
         }
 
         for (Rule rule : this.rules) {
-            Node token = rule.parse(stream, rules, result);
+            Node token = rule.parse(stream, rules);
             if (token == null) {
                 return null;
             }
