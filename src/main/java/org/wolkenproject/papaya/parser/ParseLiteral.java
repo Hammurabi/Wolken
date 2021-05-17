@@ -11,10 +11,10 @@ public class ParseLiteral implements Rule {
     }
 
     @Override
-    public ParseToken parse(TokenStream stream, DynamicParser rules) {
+    public Node parse(TokenStream stream, DynamicParser rules) {
         Token check = stream.next();
         if (check.getTokenValue().equals(string)) {
-            return new ParseToken(string, "default", check);
+            return new Node(string, "default", check);
         }
 
         return null;
@@ -23,6 +23,11 @@ public class ParseLiteral implements Rule {
     @Override
     public int length(DynamicParser parser) {
         return 1;
+    }
+
+    @Override
+    public String toSimpleString(DynamicParser parser) {
+        return string;
     }
 
     @Override
