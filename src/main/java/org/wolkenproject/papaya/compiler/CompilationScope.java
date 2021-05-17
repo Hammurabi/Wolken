@@ -1,21 +1,56 @@
 package org.wolkenproject.papaya.compiler;
 
-import java.io.OutputStream;
+import org.wolkenproject.papaya.archive.ArchivedMethod;
+import org.wolkenproject.papaya.archive.ArchivedStructureI;
+import org.wolkenproject.papaya.archive.PapayaArchive;
+import org.wolkenproject.papaya.runtime.OpcodeRegister;
+
+import java.util.Map;
+import java.util.Stack;
 
 public class CompilationScope {
-    private final OutputStream        stream;
-    private final PapayaApplication   application;
+    private final Stack<ArchivedStructureI> classTrace;
+    private final Stack<FunctionScope>      functionTrace;
+    private final PapayaArchive             archive;
+    private final OpcodeRegister            opcodeRegister;
+    private final Map<String, Traverser>    traverserMap;
 
-    public CompilationScope(OutputStream stream, PapayaApplication application) {
-        this.stream = stream;
-        this.application = application;
+    public CompilationScope(PapayaArchive archive, OpcodeRegister opcodeRegister, Map<String, Traverser> traverserMap) {
+        classTrace = new Stack<>();
+        functionTrace = new Stack<>();
+        this.archive = archive;
+        this.opcodeRegister = opcodeRegister;
+        this.traverserMap = traverserMap;
     }
 
-    public OutputStream getStream() {
-        return stream;
+    public void enterClass(ArchivedStructureI structure) {
+        classTrace.push(structure);
     }
 
-    public PapayaApplication getApplication() {
-        return application;
+    public FunctionScope enterFunction(ArchivedMethod method) {
+        FunctionScope scope = null;
+        functionTrace.push(scope = new FunctionScope(method, classTrace.peek(), this));
+
+        return scope;
+    }
+
+    public void exitClass() {
+        classTrace.pop();
+    }
+
+    public byte[] exitFunction() {
+        return functionTrace.pop().getOutputStream().toByteArray();
+    }
+
+    public OpcodeRegister getOpcodeRegister() {
+        return opcodeRegister;
+    }
+
+    public PapayaArchive getArchive() {
+        return archive;
+    }
+
+    public Map<String, Traverser> getTraverserMap() {
+        return traverserMap;
     }
 }
