@@ -26,6 +26,7 @@ public class Grammar {
                 for (int i = 0; i < dif; i ++) {
                     stack.pop();
                 }
+
                 ws = whiteSpace;
             }
 
@@ -41,34 +42,104 @@ public class Grammar {
                 continue;
             }
 
-            String words[] = line.trim().split(" ");
-            List<Rule> list = new ArrayList<>();
+            String words[] = split(line.trim());
+            rule.add(parseRules(words, line, whiteSpace));
+        }
+    }
 
-            for (int i = 0; i < words.length; i ++) {
-                String string = words[i];
+    private String[] split(String trim) {
+        List<String> strings = new ArrayList<>();
+        strings.add("");
+        for (int i = 0; i < trim.length(); i ++) {
+            if (trim.charAt(i) == ' ') {
+                strings.add("");
+            } else if (trim.charAt(i) == '(' && !strings.get(strings.size() - 1).endsWith("'")) {
+                int open    = 1;
+                int close   = 0;
+                for (int x = i + 1; x < trim.length(); x ++) {
+                    i = x;
+                    if (trim.charAt(x) == '(') open ++;
+                    else if (trim.charAt(x) == ')') close ++;
 
-                if (whiteSpace == 0) {
-                    throw new PapayaException("invalid grammar file indentation: " + line);
+                    if (open == close) {
+                        break;
+                    }
+
+                    strings.set(strings.size() - 1, strings.get(strings.size() - 1) + trim.charAt(x));
                 }
 
-                boolean one_or_more = string.endsWith("+");
-                boolean zero_or_more = string.endsWith("*");
-                if (one_or_more || zero_or_more) {
-                    string = string.substring(0, string.length() - 1);
-                }
+                strings.set(strings.size() - 1, "(" + strings.get(strings.size() - 1) + ")");
+            } else {
+                strings.set(strings.size() - 1, strings.get(strings.size() - 1) + trim.charAt(i));
+            }
+        }
 
-                if (string.startsWith(":0")) {
-                    break;
-                } else if (string.startsWith("'") && string.endsWith("'")) {
-                    String actual_string = string.substring(1, string.length() - 1);
-                    list.add(string(actual_string, one_or_more, zero_or_more));
-                } else {
-                    list.add(rule(string, one_or_more, zero_or_more));
-                }
+        String[] split = new String[strings.size()];
+        return strings.toArray(split);
+    }
+
+    private Rule wrap(Rule rule, boolean one_or_more, boolean zero_or_more) {
+        if (one_or_more) {
+            return new OneOrMore(rule);
+        }
+
+        if (zero_or_more) {
+            return new ZeroOrMore(rule);
+        }
+
+        return rule;
+    }
+
+    private Rule subRule(String rule, boolean one_or_more, boolean zero_or_more, String line, int whiteSpace) throws PapayaException {
+        String ruleString = rule.substring(1, rule.lastIndexOf(")"));
+        return wrap(new Subrule("", "", parseRules(split(ruleString), line, whiteSpace)), one_or_more, zero_or_more);
+    }
+
+    private List<Rule> parseRules(String[] words, String line, int whiteSpace) throws PapayaException {
+        List<List<Rule>> list = new ArrayList<>();
+        list.add(new ArrayList<>());
+        for (int i = 0; i < words.length; i ++) {
+            String string = words[i];
+
+            if (whiteSpace == 0) {
+                throw new PapayaException("invalid grammar file indentation: " + line);
             }
 
-            rule.add(list);
+            if (string.isEmpty()) continue;
+
+            boolean one_or_more = string.endsWith("+");
+            boolean zero_or_more = string.endsWith("*");
+            if (one_or_more || zero_or_more) {
+                string = string.substring(0, string.length() - 1);
+            }
+
+            if (string.startsWith(":0")) {
+                break;
+            } else if (string.equals("|")) {
+                list.add(new ArrayList<>());
+            } else if (string.startsWith("(") && string.endsWith(")")) {
+                list.get(list.size() - 1).add(subRule(string, one_or_more, zero_or_more, line, whiteSpace));
+            } else if (string.startsWith("'") && string.endsWith("'")) {
+                String actual_string = string.substring(1, string.length() - 1);
+                list.get(list.size() - 1).add(string(actual_string, one_or_more, zero_or_more));
+            } else {
+                list.get(list.size() - 1).add(rule(string, one_or_more, zero_or_more));
+            }
         }
+
+        List<Rule> options = new ArrayList<>();
+        if (list.size() == 1) {
+            return list.get(0);
+        }
+
+        ParseRule rule = new ParseRule("");
+        rule.clearOptions();
+        for (List<Rule> option : list) {
+            rule.addOptions(new Subrule("", "", option));
+        }
+        options.add(rule);
+
+        return options;
     }
 
     private Rule rule(String string, boolean one_or_more, boolean zero_or_more) {
