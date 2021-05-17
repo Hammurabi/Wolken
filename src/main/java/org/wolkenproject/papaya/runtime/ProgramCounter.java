@@ -75,6 +75,14 @@ public class ProgramCounter {
         throw new EmptyProgramCounterException();
     }
 
+    public int nextProgramPointer() throws EmptyProgramCounterException {
+        try {
+            return VarInt.readCompactUInt32(false, program);
+        } catch (IOException e) {
+            throw new EmptyProgramCounterException();
+        }
+    }
+
     public int nextUnsignedShort() throws EmptyProgramCounterException {
         if (remaining() >= 2) {
             try {
@@ -168,6 +176,14 @@ public class ProgramCounter {
         }
 
         program.setPosition(jumpLoc);
+    }
+
+    public void skip(int skip) throws PapayaException {
+        if (program.length() < program.getPosition() + skip) {
+            throw new PapayaException("invalid jump location.");
+        }
+
+        program.setPosition(program.getPosition() + skip);
     }
 
     public String hexDump() throws PapayaException {
