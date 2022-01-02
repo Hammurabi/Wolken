@@ -57,9 +57,9 @@ public class ProgramCounter {
 
     public int nextVarint32(boolean preserveAllBits) throws EmptyProgramCounterException {
         try {
-        return VarInt.readCompactUInt32(preserveAllBits, program);
+            return VarInt.readCompactUInt32(preserveAllBits, program);
         } catch (IOException e) {
-        throw new EmptyProgramCounterException();
+            throw new EmptyProgramCounterException();
         }
     }
 
@@ -150,7 +150,7 @@ public class ProgramCounter {
         return program.remaining();
     }
 
-    public Opcode next() throws UndefOpcodeException, EmptyProgramCounterException {
+    public OpcodeDefinition next() throws UndefOpcodeException, EmptyProgramCounterException {
         if (program.hasRemaining()) {
             int nextOp = 0;
 
@@ -201,7 +201,7 @@ public class ProgramCounter {
         builder.append("\n ");
 
         while (hasNext()) {
-            Opcode next = next();
+            OpcodeDefinition next = next();
             String hexCode = Base16.encode(new byte[] {(byte) next.getIdentifier()});
             lineLength += hexCode.length() + 1;
             builder.append(hexCode).append(" ");
