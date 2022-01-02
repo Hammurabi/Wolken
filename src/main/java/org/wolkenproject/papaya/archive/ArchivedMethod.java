@@ -4,6 +4,7 @@ import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.*;
 import org.wolkenproject.papaya.parser.Node;
 import org.wolkenproject.utils.ByteArray;
+import org.wolkenproject.utils.Pair;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class ArchivedMethod {
         this.methodBody = methodBody;
     }
 
-    public PapayaMember compile(CompilationScope compilationScope) throws PapayaException {
+    public Pair<Member, String> compile(CompilationScope compilationScope) throws PapayaException {
         ByteArray functionIdentifier = null;
         ByteArray typeIdentifier = null;
 
@@ -40,7 +41,9 @@ public class ArchivedMethod {
             scope.traverse(node, scope, compilationScope);
         }
 
-        return new PapayaMember(accessModifier, isStatic, functionIdentifier, typeIdentifier, lineInfo, compilationScope.exitFunction());
+        ProgramWriter writer = compilationScope.exitFunction();
+
+        return new Pair<>(new Member(accessModifier, isStatic, functionIdentifier, typeIdentifier, lineInfo, writer.getOpcodes()), writer.getOpcodeString());
     }
 
     public String getName() {
