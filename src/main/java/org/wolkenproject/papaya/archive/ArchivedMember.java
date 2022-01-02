@@ -23,7 +23,7 @@ public class ArchivedMember {
         this.expression = expression;
     }
 
-    public PapayaMember compile(PapayaApplication parent, CompilationScope compiler) throws PapayaException {
+    public Member compile(PapayaApplication parent, CompilationScope compiler) throws PapayaException {
 //        Expression expression = null;
 //
 //        if (expression != null) {
