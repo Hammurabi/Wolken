@@ -3,7 +3,7 @@ package org.wolkenproject.papaya.runtime;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.papaya.compiler.AccessModifier;
-import org.wolkenproject.papaya.compiler.PapayaStructure;
+import org.wolkenproject.papaya.compiler.Struct;
 import org.wolkenproject.utils.ByteArray;
 
 import java.util.Stack;
@@ -14,12 +14,12 @@ public class DefaultHandler extends PapayaHandler {
     }
 
     @Override
-    public void setMember(ByteArray memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+    public void setMember(ByteArray memberId, PapayaHandler member, Stack<Struct> stackTrace) throws PapayaIllegalAccessException {
         getPapayaObject().setMember(memberId, member, stackTrace);
     }
 
     @Override
-    public PapayaHandler getMember(ByteArray memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
+    public PapayaHandler getMember(ByteArray memberId, Stack<Struct> stackTrace) throws PapayaIllegalAccessException {
         return getPapayaObject().getMember(memberId, stackTrace);
     }
 
