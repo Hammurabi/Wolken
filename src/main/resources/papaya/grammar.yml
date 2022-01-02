@@ -24,8 +24,8 @@ identifiers:
   ident
 variable:
   'let' identifiers '=' expression
-  ident ident '=' expression
-  ident ident
+  identifiers ident '=' expression
+  identifiers ident
 method_argument:
   path ident
 method_arguments:
@@ -38,7 +38,7 @@ class_member:
   field
   method
 cast:
-  '(' ident ')'
+  '(' identifiers ')'
 tuple:
   '(' tuple_expressions ')'
 tuple_expressions:
@@ -89,20 +89,25 @@ prefix:
 postfix:
   member_access '++'
   member_access '--'
+return_statement:
+  return tuple_expressions
+  return
+using:
+  using member_access
 statement:
-  using member_access ';'
+  using ';'
   prefix ';'
   postfix ';'
   assignment ';'
   variable ';'
   ternary_statement ';'
-  return tuple_expressions ';'
+  return_statement ';'
 logical_not:
   '!' basic_expression
 bitwise_not:
   '~' basic_expression
 mul_exp:
-  basic_expression ('*' | '/' | '%') basic_expression (('*' | '/' | '%') basic_expression)*
+  basic_expression ('*' | '/' | '%' | '**') basic_expression (('*' | '/' | '%' | '**') basic_expression)*
 add_exp:
   (mul_exp | basic_expression) ('+' | '-') (mul_exp | basic_expression) (('+' | '-') (mul_exp | basic_expression))*
 shift_exp:
