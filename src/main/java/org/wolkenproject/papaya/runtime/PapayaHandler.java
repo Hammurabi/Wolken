@@ -2,7 +2,7 @@ package org.wolkenproject.papaya.runtime;
 
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.AccessModifier;
-import org.wolkenproject.papaya.compiler.PapayaStructure;
+import org.wolkenproject.papaya.compiler.Struct;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
 import org.wolkenproject.utils.ByteArray;
 
@@ -10,14 +10,14 @@ import java.math.BigInteger;
 import java.util.Stack;
 
 public abstract class PapayaHandler {
-    private final PapayaObject papayaObject;
+    private PapayaObject papayaObject;
 
     public PapayaHandler(PapayaObject papayaObject) {
         this.papayaObject = papayaObject;
     }
 
-    public abstract void setMember(ByteArray memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
-    public abstract PapayaHandler getMember(ByteArray memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException;
+    public abstract void setMember(ByteArray memberId, PapayaHandler member, Stack<Struct> stackTrace) throws PapayaIllegalAccessException;
+    public abstract PapayaHandler getMember(ByteArray memberId, Stack<Struct> stackTrace) throws PapayaIllegalAccessException;
     public abstract void call(Scope scope) throws PapayaException;
 
     public PapayaObject getPapayaObject() {
@@ -52,7 +52,11 @@ public abstract class PapayaHandler {
         return getModifier() == AccessModifier.ReadOnly;
     }
 
-    public PapayaStructure getStructure() {
+    public Struct getStructure() {
         return getPapayaObject().getStructure();
+    }
+
+    public void set(PapayaHandler object) {
+        papayaObject = object.papayaObject;
     }
 }
