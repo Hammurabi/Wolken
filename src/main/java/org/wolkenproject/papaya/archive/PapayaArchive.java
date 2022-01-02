@@ -1,10 +1,7 @@
 package org.wolkenproject.papaya.archive;
 
 import org.wolkenproject.exceptions.PapayaException;
-import org.wolkenproject.papaya.compiler.CompilationScope;
-import org.wolkenproject.papaya.compiler.LineInfo;
-import org.wolkenproject.papaya.compiler.PapayaApplication;
-import org.wolkenproject.papaya.compiler.PapayaStructure;
+import org.wolkenproject.papaya.compiler.*;
 
 import java.util.List;
 
@@ -82,11 +79,21 @@ public class PapayaArchive implements ArchivedStructureI {
         return globalModule.getMember(ident);
     }
 
+    @Override
+    public ArchivedMethod getMethod(String ident) {
+        return globalModule.getMethod(ident);
+    }
+
+    @Override
+    public StructureType getStructureType() {
+        return globalModule.getStructureType();
+    }
+
     public String formattedString() {
         return globalModule.formattedString();
     }
 
-    public List<PapayaStructure> getStructures() {
+    public List<Struct> getStructures() {
         return globalModule.getStructures();
     }
 
@@ -99,5 +106,10 @@ public class PapayaArchive implements ArchivedStructureI {
         globalModule.compile(application, compilationScope);
 
         return application;
+    }
+
+    public PapayaArchive insert(PapayaArchive libraries) throws PapayaException {
+        globalModule.insert(libraries.globalModule);
+        return this;
     }
 }
