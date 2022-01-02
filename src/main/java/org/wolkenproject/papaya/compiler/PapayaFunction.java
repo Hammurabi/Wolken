@@ -5,7 +5,7 @@ import org.wolkenproject.utils.ByteArray;
 import java.util.List;
 import java.util.Set;
 
-public class PapayaFunction extends PapayaMember {
+public class PapayaFunction extends Member {
     private final Set<PapayaField>      arguments;
     private final List<Token>           statement;
     private byte                        byteCode[];
