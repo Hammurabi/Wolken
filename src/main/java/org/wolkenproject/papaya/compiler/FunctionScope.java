@@ -6,26 +6,28 @@ import org.wolkenproject.papaya.archive.ArchivedMethod;
 import org.wolkenproject.papaya.archive.ArchivedStructureI;
 import org.wolkenproject.papaya.parser.Node;
 
-import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 public class FunctionScope {
     private final ArchivedMethod        method;
     private final ArchivedStructureI    parent;
-    private final Stack<ArchivedMember> stack;
+    private int                         stack;
     private final Map<String, Integer>  tracker;
+    private final Map<String, String[]> typeTracker;
     private final CompilationScope      compilationScope;
-    private final ByteArrayOutputStream outputStream;
+    private final ProgramWriter         writer;
+    private String                      topOfStack[];
 
     public FunctionScope(ArchivedMethod method, ArchivedStructureI parent, CompilationScope scope) {
         this.method = method;
         this.parent = parent;
-        stack = new Stack<>();
+        this.stack  = 0;
         tracker = new HashMap<>();
+        typeTracker = new HashMap<>();
         compilationScope = scope;
-        outputStream = new ByteArrayOutputStream();
+        writer = new ProgramWriter(scope.getOpcodeRegister());
+        this.topOfStack = new String[0];
     }
 
     public void declare(ArchivedMember member) throws PapayaException {
@@ -33,8 +35,17 @@ public class FunctionScope {
             throw new PapayaException("redeclaration of symbol '" + member.getName() + "' at " + member.getLineInfo());
         }
 
-        tracker.put(member.getName(), stack.size());
-        stack.push(member);
+        declare(member.getName(), member.getTypePath(), member.getLineInfo());
+    }
+
+    public void declare(String name, String[] type, LineInfo lineInfo) throws PapayaException {
+        if (tracker.containsKey(name)) {
+            throw new PapayaException("redeclaration of symbol '" + name + "' at " + lineInfo);
+        }
+
+        tracker.put(name, stack ++);
+        typeTracker.put(name, type);
+        topOfStack = type;
     }
 
     public boolean isTopOfStack(String name, LineInfo info) throws PapayaException {
@@ -42,15 +53,11 @@ public class FunctionScope {
             throw new PapayaException("reference to undeclared symbol '" + name + "' at " + info);
         }
 
-        return tracker.get(name).equals(stack.size() - 1);
+        return tracker.get(name).equals(stack - 1);
     }
 
     public ArchivedStructureI getParent() {
         return parent;
-    }
-
-    public Stack<ArchivedMember> getStack() {
-        return stack;
     }
 
     public Map<String, Integer> getTracker() {
@@ -61,12 +68,11 @@ public class FunctionScope {
         return compilationScope;
     }
 
-    public ByteArrayOutputStream getOutputStream() {
-        return outputStream;
+    public ProgramWriter getWriter() {
+        return writer;
     }
 
     public void traverse(Node node, FunctionScope scope, CompilationScope compilationScope) throws PapayaException {
-        System.out.println(node.getTokenRule() + " " + node.getLineInfo());
         if (compilationScope.getTraverserMap().containsKey(node.getTokenRule())) {
             compilationScope.getTraverserMap().get(node.getTokenRule()).onEnter(node, scope, compilationScope);
         } else if (node.getChildren().size() > 0) {
@@ -88,32 +94,97 @@ public class FunctionScope {
 
     public void makeTop(String ident, LineInfo info) throws PapayaException {
         if (tracker.containsKey(ident)) {
-            if (!isTopOfStack(ident, info)) {
-                int distance = stack.size() - tracker.get(ident);
-                if (distance <= 16) {
-                    outputStream.write(compilationScope.getOpcodeRegister().forName("dup" + distance));
-                } else {
-                    throw new PapayaException("'" + ident + "' is too far back in the stack.");
-                }
-            }
-        } else if (parent.containsMember(ident)) {
-            ArchivedMember member = parent.getMember(ident);
+            int distance = stack - tracker.get(ident);
 
-            if (method.isStatic() && !member.isStatic()) {
-                throw new PapayaException("reference to '" + ident + "' from a static function at " + info);
-            }
-
-            if (member.isStatic()) {
-                outputStream.write(compilationScope.getOpcodeRegister().forName("loadstatic"));
-                outputStream.write(0);
+            if (distance <= 16) {
+                writer.write("dup" + distance);
             } else {
-                outputStream.write(compilationScope.getOpcodeRegister().forName("load"));
-                outputStream.write(0);
+                writer.writeDup(distance);
             }
+
+            topOfStack = typeTracker.get(ident);
+        } else if (parent.containsMember(ident)) {
+            ArchivedMember test = parent.getMember(ident);
+            if (test != null) {
+                ArchivedMember member = test;
+                if (method.isStatic() && !member.isStatic()) {
+                    throw new PapayaException("reference to '" + ident + "' from a static function at " + info);
+                }
+
+                if (member.isStatic()) {
+                    writer.write("loadstatic", getCompilationScope().getMember(getCompilationScope().getTypeName(getCompilationScope().getPath()), ident).getArray());
+                } else {
+                    writer.write("load", getCompilationScope().getMember(getCompilationScope().getTypeName(getCompilationScope().getPath()), ident).getArray());
+                }
+
+                topOfStack = member.getTypePath();
+            } else {
+                ArchivedMethod member = parent.getMethod(ident);
+
+                if (method.isStatic() && !member.isStatic()) {
+                    throw new PapayaException("reference to '" + ident + "' from a static function at " + info);
+                }
+
+                if (member.isStatic()) {
+                    writer.write("loadstatic", getCompilationScope().getMember(getCompilationScope().getTypeName(getCompilationScope().getPath()), ident).getArray());
+                } else {
+                    writer.write("load", getCompilationScope().getMember(getCompilationScope().getTypeName(getCompilationScope().getPath()), ident).getArray());
+                }
+
+                topOfStack = new String[] {"fun**"};
+            }
+        } else {
+            throw new PapayaException("reference to undeclared symbol '" + ident + "' at " + info);
         }
     }
 
     public ArchivedMethod getMethod() {
         return method;
+    }
+
+    public void memberAccess(String ident, LineInfo lineInfo) throws PapayaException {
+        if (topOfStack.length > 0) {
+            ArchivedStructureI parent = compilationScope.getArchive().getStructure(topOfStack, lineInfo);
+
+            if (parent.containsMember(ident)) {
+                ArchivedMember test = parent.getMember(ident);
+                if (test != null) {
+                    ArchivedMember member = test;
+                    if (member.isStatic()) {
+                        writer.write("pop");
+                        writer.write("loadstatic", getCompilationScope().getMember(getCompilationScope().getTypeName(topOfStack), ident).getArray());
+                    } else {
+                        writer.write("load", getCompilationScope().getMember(getCompilationScope().getTypeName(topOfStack), ident).getArray());
+                    }
+
+                    topOfStack = member.getTypePath();
+                } else {
+                    ArchivedMethod member = parent.getMethod(ident);
+
+                    if (method.isStatic() && !member.isStatic()) {
+                        throw new PapayaException("reference to '" + ident + "' from a static function at " + lineInfo);
+                    }
+
+                    if (member.isStatic()) {
+                        writer.write("pop");
+                        writer.write("loadstatic", getCompilationScope().getMember(getCompilationScope().getTypeName(topOfStack), ident).getArray());
+                    } else {
+                        writer.write("load", getCompilationScope().getMember(getCompilationScope().getTypeName(topOfStack), ident).getArray());
+                    }
+
+                    topOfStack = new String[] {"fun**"};
+                }
+            } else {
+                throw new PapayaException("reference to undeclared symbol '" + ident + "' at " + lineInfo);
+            }
+
+            return;
+        }
+
+        throw new PapayaException("invalid type (top of stack).");
+    }
+
+    public int getStack() {
+        return stack;
     }
 }
