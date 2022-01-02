@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class PapayaApplication extends Payload {
     // this contains structures in order of declaration
-    private Map<ByteArray, PapayaStructure> structureMap;
+    private Map<ByteArray, Struct> structureMap;
     private int                             version;
     private BigInteger                      flags;
 
@@ -29,7 +29,7 @@ public class PapayaApplication extends Payload {
         this.version        = version;
     }
 
-    public void addStructure(ByteArray name, PapayaStructure structure) throws PapayaException {
+    public void addStructure(ByteArray name, Struct structure) throws PapayaException {
         if (structureMap.containsKey(name)) {
             throw new PapayaException("redeclaration of structure '" + name + "' {"+structure.getLineInfo()+"}.");
         }
@@ -57,14 +57,14 @@ public class PapayaApplication extends Payload {
         VarInt.writeCompactUInt32(structureMap.size(), false, stream);
 
         // write all the structures into the stream.
-        for (PapayaStructure structure : structureMap.values()) {
+        for (Struct structure : structureMap.values()) {
             // write the structure identifier.
             VarInt.writeCompactUint128(structure.getIdentifierInt(), false, stream);
 
             // write the structure type.
             StructureType.write(structure.getStructureType(), stream);
 
-            Set<PapayaMember> members       = structure.getMembers();
+            Set<Member> members       = structure.getMembers();
             Set<PapayaFunction> functions   = structure.getFunctions();
 
             //write the number of members to expect.
@@ -73,7 +73,7 @@ public class PapayaApplication extends Payload {
             VarInt.writeCompactUInt32(functions.size(), false, stream);
 
             // write all the structure fields.
-            for (PapayaMember member : members) {
+            for (Member member : members) {
                 // write the identifier to the stream.
                 VarInt.writeCompactUint128(member.getIdentifierInt(), false, stream);
                 // write the access modifier to the stream.
@@ -113,7 +113,7 @@ public class PapayaApplication extends Payload {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        for (PapayaStructure structure : structureMap.values()) {
+        for (Struct structure : structureMap.values()) {
             builder.append(structure).append("\n------------------------------------------------\n");
         }
 
