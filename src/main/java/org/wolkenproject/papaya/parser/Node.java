@@ -3,10 +3,7 @@ package org.wolkenproject.papaya.parser;
 import org.wolkenproject.papaya.compiler.LineInfo;
 import org.wolkenproject.papaya.compiler.Token;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Node implements Iterable<Node> {
     private String tokenRule;
@@ -166,5 +163,9 @@ public class Node implements Iterable<Node> {
         }
 
         return last;
+    }
+
+    public boolean isEmpty() {
+        return tokenRule.equals("empty*");
     }
 }
