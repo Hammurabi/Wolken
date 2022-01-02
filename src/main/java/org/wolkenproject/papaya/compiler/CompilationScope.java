@@ -1,29 +1,44 @@
 package org.wolkenproject.papaya.compiler;
 
+import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.archive.ArchivedMethod;
 import org.wolkenproject.papaya.archive.ArchivedStructureI;
 import org.wolkenproject.papaya.archive.PapayaArchive;
 import org.wolkenproject.papaya.runtime.OpcodeRegister;
+import org.wolkenproject.utils.ByteArray;
+import org.wolkenproject.utils.VarInt;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
 public class CompilationScope {
+    private final Map<String, ByteArray>    typenames;
     private final Stack<ArchivedStructureI> classTrace;
     private final Stack<FunctionScope>      functionTrace;
+    private final Stack<String>             path;
     private final PapayaArchive             archive;
     private final OpcodeRegister            opcodeRegister;
     private final Map<String, Traverser>    traverserMap;
+    private final Map<ByteArray, Map<String, ByteArray>> typeMembers;
 
-    public CompilationScope(PapayaArchive archive, OpcodeRegister opcodeRegister, Map<String, Traverser> traverserMap) {
+    public CompilationScope(PapayaArchive archive, PapayaArchive libraries, OpcodeRegister opcodeRegister, Map<String, Traverser> traverserMap) throws PapayaException {
         classTrace = new Stack<>();
         functionTrace = new Stack<>();
-        this.archive = archive;
+        path = new Stack<>();
+        this.archive = archive.insert(libraries);
         this.opcodeRegister = opcodeRegister;
         this.traverserMap = traverserMap;
+        this.typenames = new HashMap<>();
+        this.typeMembers = new HashMap<>();
+        prebuild(libraries);
     }
 
-    public void enterClass(ArchivedStructureI structure) {
+    private void prebuild(PapayaArchive libraries) {
+    }
+
+    public void enterClass(ArchivedStructureI structure, String name) {
+        path.push(name);
         classTrace.push(structure);
     }
 
@@ -38,8 +53,8 @@ public class CompilationScope {
         classTrace.pop();
     }
 
-    public byte[] exitFunction() {
-        return functionTrace.pop().getOutputStream().toByteArray();
+    public ProgramWriter exitFunction() {
+        return functionTrace.pop().getWriter();
     }
 
     public OpcodeRegister getOpcodeRegister() {
@@ -52,5 +67,44 @@ public class CompilationScope {
 
     public Map<String, Traverser> getTraverserMap() {
         return traverserMap;
+    }
+
+    public ByteArray getTypeName(String name[]) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < name.length; i ++) {
+            builder.append(name[i]);
+            if (i < name.length - 1) {
+                builder.append("::");
+            }
+        }
+
+        return getTypeName(builder.toString());
+    }
+
+    public ByteArray getTypeName(String name) {
+        if (typenames.containsKey(name)) {
+            return typenames.get(name);
+        }
+
+        typenames.put(name, ByteArray.wrap(VarInt.writeCompactUInt32(typenames.size(), false)));
+        return typenames.get(name);
+    }
+
+    public ByteArray getMember(ByteArray type, String memberName) {
+        if (!typeMembers.containsKey(type)) {
+            typeMembers.put(type, new HashMap<>());
+        }
+
+        if (typeMembers.get(type).containsKey(memberName)) {
+            return typeMembers.get(type).get(memberName);
+        }
+
+        typeMembers.get(type).put(memberName, ByteArray.wrap(VarInt.writeCompactUInt32(typeMembers.get(type).size(), false)));
+        return typeMembers.get(type).get(memberName);
+    }
+
+    public String[] getPath() {
+        String[] path = new String[this.path.size()];
+        return this.path.toArray(path);
     }
 }
