@@ -5,7 +5,9 @@ import org.json.JSONObject;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.ParseRule;
 import org.wolkenproject.papaya.compiler.AbstractSyntaxTree;
+import org.wolkenproject.papaya.compiler.Token;
 import org.wolkenproject.papaya.compiler.TokenStream;
+import org.wolkenproject.papaya.compiler.grammar.Grammar;
 
 import java.util.*;
 
@@ -35,6 +37,27 @@ public class DynamicParser implements Parser {
             String nameType = tokens.getJSONObject(i).keys().next();
             references.put(nameType, new DefaultRule(nameType));
         }
+
+        references.put("string", new DefaultRule("string"));
+    }
+
+    public DynamicParser(Grammar grammar, JSONArray tokens) {
+        this.parseRules = new ArrayList<>();
+        this.references = new HashMap<>();
+
+        grammar.getRules(references);
+
+        for (int i = 0; i < tokens.length(); i ++) {
+            String nameType = tokens.getJSONObject(i).keys().next();
+            references.put(nameType, new DefaultRule(nameType));
+        }
+
+        parseRules.add(references.get("module_declaration"));
+        parseRules.add(references.get("structure"));
+        parseRules.add(references.get("field"));
+        parseRules.add(references.get("method"));
+
+        references.put("string", new DefaultRule("string"));
     }
 
     public ParseRule getRule(String name) throws PapayaException {
@@ -49,22 +72,45 @@ public class DynamicParser implements Parser {
     public AbstractSyntaxTree parse(TokenStream stream) throws PapayaException {
         AbstractSyntaxTree abstractSyntaxTree = new AbstractSyntaxTree();
         while (stream.hasNext()) {
-            ParseToken token = null;
+            Node node = null;
+
             for (ParseRule rule : parseRules) {
-                token = rule.parse(stream, this);
-                if (token != null) {
+                node = rule.parse(stream, this);
+                if (node != null) {
                     break;
                 }
             }
 
-            if (token == null) {
-                throw new PapayaException("could not parse unidentified string: " + stream);
+            if (node == null) {
+                throwException(node, stream);
             }
 
-            abstractSyntaxTree.add(token);
+            node.cleanUp();
+            abstractSyntaxTree.add(node);
         }
 
         return abstractSyntaxTree;
+    }
+
+    public void throwException(Node node, TokenStream stream) throws PapayaException {
+        TokenStream.TokenPath unexpected = stream.getLongestPath();
+        String msg = "unexpected token '" + unexpected.getToken().getTokenValue() + "' expected "+goodGrammar(unexpected.getRule())+" '" + unexpected.getRule() + "' " + unexpected.getToken().getLineInfo();
+
+        throw new PapayaException(msg);
+    }
+
+    private String goodGrammar(String word) {
+        if (word.isEmpty()) return "a";
+        switch (word.toLowerCase().charAt(0)) {
+            case 'a':
+            case 'o':
+            case 'u':
+            case 'i':
+            case 'e':
+                return "an";
+            default:
+                return "a";
+        }
     }
 
     public Collection<ParseRule> getRules() {
