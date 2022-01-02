@@ -1,30 +1,91 @@
 package org.wolkenproject.papaya.parser;
 
-public class ParseResult implements Comparable<ParseResult> {
-    private final float percentParsed;
-    private final Subrule subrule;
-    private final ParseToken token;
+import org.wolkenproject.papaya.ParseRule;
+import org.wolkenproject.papaya.compiler.Token;
+import org.wolkenproject.papaya.compiler.TokenStream;
 
-    public ParseResult(float percentParsed, Subrule subrule, ParseToken token) {
-        this.percentParsed = percentParsed;
+public class ParseResult implements Comparable<ParseResult> {
+    private final ParseRule subrule;
+    private int parsedRules;
+    private Rule expected;
+    private ParseRule expected2;
+    private Token invalidToken;
+    private Node parseResult;
+    private TokenStream stream;
+    private int mark;
+
+    public ParseResult(ParseRule subrule) {
         this.subrule = subrule;
-        this.token = token;
+        this.parsedRules = 0;
+        this.expected = null;
     }
 
     @Override
     public int compareTo(ParseResult o) {
-        return percentParsed > o.percentParsed ? -1 : 1;
+        return parsedRules > o.parsedRules ? -1 : 1;
     }
 
-    public Subrule getSubrule() {
+    public ParseRule getRule() {
         return subrule;
     }
 
-    public ParseToken getToken() {
-        return token;
+    public void add(int i) {
+        parsedRules += i;
     }
 
-    public boolean isParsed() {
-        return token != null;
+    public void setInvalidToken(Token token) {
+        this.invalidToken = token;
+    }
+
+    public Token getInvalidToken() {
+        return invalidToken;
+    }
+
+    public void expect(Rule expected) {
+        this.expected = expected;
+    }
+
+    public void expectRule(ParseRule expected) {
+        this.expected2 = expected;
+    }
+
+    public String getExpected(DynamicParser parser) {
+        if (expected != null) {
+            return expected.toSimpleString(parser);
+        }
+
+        if (expected2 != null) {
+            return expected2.toSimpleString(parser);
+        }
+
+        return "null{}";
+    }
+
+    public int getValidCount() {
+        return parsedRules;
+    }
+
+    public void add(ParseResult result) {
+        this.parsedRules += result.parsedRules;
+        this.invalidToken = result.invalidToken;
+        this.expected = result.expected;
+        this.expected2 = result.expected2;
+    }
+
+    public void setResult(Node token) {
+        this.parseResult = token;
+    }
+
+    public Node getParseResult() {
+        return parseResult;
+    }
+
+    public void jump(TokenStream stream, int mark) {
+        this.stream = stream;
+        this.mark = mark;
+    }
+
+    public void jump() {
+        stream.jump(mark, "");
     }
 }
