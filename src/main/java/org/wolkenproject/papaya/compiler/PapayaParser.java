@@ -1,10 +1,12 @@
 package org.wolkenproject.papaya.compiler;
 
 import org.wolkenproject.exceptions.PapayaException;
+import org.wolkenproject.papaya.parser.Node;
+import org.wolkenproject.papaya.parser.Parser;
 
 import java.util.*;
 
-public class PapayaParser {
+public class PapayaParser implements Parser {
     public AbstractSyntaxTree ingest(TokenStream stream, Map<String, List<List<String>>> grammar) throws PapayaException {
         AbstractSyntaxTree ast = new AbstractSyntaxTree();
         return ast;
@@ -68,5 +70,70 @@ public class PapayaParser {
         }
 
         throw new PapayaException("token '" + opener + "' is never closed.");
+    }
+
+    @Override
+    public AbstractSyntaxTree parse(TokenStream stream) throws PapayaException {
+        AbstractSyntaxTree tree = new AbstractSyntaxTree();
+        while (stream.hasNext()) {
+            parseStructure(stream, tree.root);
+        }
+
+        return tree;
+    }
+
+    private void parseStructure(TokenStream stream, Node parentNode) throws PapayaException {
+        boolean is_module = stream.matches("module", "ident");
+        boolean is_struct = stream.matches("struct", "ident");
+        boolean is_class = stream.matches("class", "ident");
+        boolean is_contract = stream.matches("contract", "ident");
+
+        if (is_module) {
+        } else if (is_struct) {
+        } else if (is_class) {
+        } else if (is_contract) {
+        }
+    }
+
+    private Node parseStruct(TokenStream stream) throws PapayaException {
+        Node node   = new Node("struct", "struct", stream.next());
+        Node name   = new Node("name", stream.peek().getTokenValue(), stream.next());
+
+        if (!stream.matches("{")) {
+            throw new PapayaException("expected a '{' at " + node.getLineInfo());
+        }
+
+        Node members= parseMemebers(true, false, false, getTokensFollowing("{", stream, "expected a '{' at " + node.getLineInfo()));
+
+        node.add(node);
+        node.add(name);
+        node.add(members);
+
+        return node;
+    }
+
+    private Node parseMemebers(boolean fields, boolean functions, boolean modifiers, TokenStream stream) {
+        while (stream.hasNext()) {
+            if (stream.matches("access_modifier", "ident", "ident"));
+        }
+
+        return null;
+    }
+
+    private Node parseClassMember(TokenStream stream) {
+        Node member = parseField(stream);
+        if (member == null) {
+            member = parseFunction(stream);
+        }
+
+        return member;
+    }
+
+    private Node parseFunction(TokenStream stream) {
+        return null;
+    }
+
+    private Node parseField(TokenStream stream) {
+        return null;
     }
 }
