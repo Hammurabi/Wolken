@@ -1,10 +1,9 @@
 package org.wolkenproject.papaya.runtime;
 
 import org.wolkenproject.exceptions.PapayaException;
-import org.wolkenproject.papaya.compiler.PapayaMember;
-import org.wolkenproject.papaya.compiler.PapayaStructure;
+import org.wolkenproject.papaya.compiler.Member;
+import org.wolkenproject.papaya.compiler.Struct;
 import org.wolkenproject.exceptions.PapayaIllegalAccessException;
-import org.wolkenproject.exceptions.WolkenException;
 import org.wolkenproject.utils.ByteArray;
 
 import java.math.BigInteger;
@@ -23,7 +22,7 @@ public class PapayaObject {
         A pointer to a structure object which holds information
         about the object, number of fields and functions, etc.
      */
-    private PapayaStructure structure;
+    private Struct structure;
     /*
         A callable object.
      */
@@ -44,14 +43,14 @@ public class PapayaObject {
         this.members = new HashMap<>();
     }
 
-    public void setMember(ByteArray memberId, PapayaHandler member, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
-        PapayaMember classMember = structure.getMember(memberId);
+    public void setMember(ByteArray memberId, PapayaHandler member, Stack<Struct> stackTrace) throws PapayaIllegalAccessException {
+        Member classMember = structure.getMember(memberId);
         structure.checkWriteAccess(classMember, stackTrace);
         members.put(memberId, member.getPapayaObject());
     }
 
-    public PapayaHandler getMember(ByteArray memberId, Stack<PapayaStructure> stackTrace) throws PapayaIllegalAccessException {
-        PapayaMember classMember = structure.getMember(memberId);
+    public PapayaHandler getMember(ByteArray memberId, Stack<Struct> stackTrace) throws PapayaIllegalAccessException {
+        Member classMember = structure.getMember(memberId);
         return structure.checkMemberAccess(classMember, members.get(memberId), stackTrace);
     }
 
@@ -81,7 +80,7 @@ public class PapayaObject {
         throw new PapayaException("'"+structure.getName()+"' is not a container.");
     }
 
-    public PapayaStructure getStructure() {
+    public Struct getStructure() {
         return structure;
     }
 }
