@@ -3,6 +3,7 @@ package org.wolkenproject.papaya.archive;
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.*;
 import org.wolkenproject.utils.ByteArray;
+import org.wolkenproject.utils.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,6 +98,16 @@ public class ArchivedStruct implements ArchivedStructureI {
         return memberMap.get(ident);
     }
 
+    @Override
+    public ArchivedMethod getMethod(String ident) {
+        return methodMap.get(ident);
+    }
+
+    @Override
+    public StructureType getStructureType() {
+        return getType();
+    }
+
     public ByteArray uniqueName(String name, ArchivedStruct parent) {
         return null;
     }
@@ -126,15 +137,26 @@ public class ArchivedStruct implements ArchivedStructureI {
     }
 
     public void compile(PapayaApplication application, CompilationScope compilationScope) throws PapayaException {
-        compilationScope.enterClass(this);
-        PapayaStructure structure = new PapayaStructure(name, type, lineInfo);
+        compilationScope.enterClass(this, name);
+        Struct structure = new Struct(name, type, lineInfo);
 
         for (ArchivedMember member : memberMap.values()) {
             member.compile(application, compilationScope);
         }
 
         for (ArchivedMethod method : methodMap.values()) {
-            method.compile(compilationScope);
+            Pair<Member, String> pair = method.compile(compilationScope);
+            System.out.println(pair.getSecond());
+        }
+    }
+
+    public void insert(ArchivedStruct other) throws PapayaException {
+        for (String member : other.memberMap.keySet()) {
+            declare(member, other.memberMap.get(member));
+        }
+
+        for (String method : other.methodMap.keySet()) {
+            declare(method, other.methodMap.get(method));
         }
     }
 }
