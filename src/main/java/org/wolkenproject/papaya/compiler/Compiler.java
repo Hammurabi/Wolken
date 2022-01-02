@@ -28,7 +28,7 @@ public abstract class Compiler {
     }
 
     public abstract PapayaArchive createArchive(String text, String compilerArguments) throws PapayaException, WolkenException, IOException;
-    public abstract PapayaApplication compile(PapayaArchive archive, String compilerArguments) throws PapayaException, WolkenException, IOException;
+    public abstract PapayaApplication compile(PapayaArchive archive, PapayaArchive libraries, String compilerArguments) throws PapayaException, WolkenException, IOException;
 
     public ByteArray uniqueTypename(String type) {
         return typeNames.get(type);
