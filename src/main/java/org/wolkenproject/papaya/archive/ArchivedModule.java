@@ -2,6 +2,7 @@ package org.wolkenproject.papaya.archive;
 
 import org.wolkenproject.exceptions.PapayaException;
 import org.wolkenproject.papaya.compiler.*;
+import org.wolkenproject.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,10 +121,10 @@ public class ArchivedModule implements ArchivedStructureI {
         return formattedString(0);
     }
 
-    public List<PapayaStructure> getStructures() {
-        List<PapayaStructure> structureList = new ArrayList<>();
+    public List<Struct> getStructures() {
+        List<Struct> structureList = new ArrayList<>();
         for (ArchivedStruct struct : structs.values()) {
-            PapayaStructure structure = new PapayaStructure(
+            Struct structure = new Struct(
                     struct.getName(),
                     struct.getType(),
                     struct.getLineInfo()
@@ -156,9 +157,19 @@ public class ArchivedModule implements ArchivedStructureI {
         return members.get(ident);
     }
 
+    @Override
+    public ArchivedMethod getMethod(String ident) {
+        return methods.get(ident);
+    }
+
+    @Override
+    public StructureType getStructureType() {
+        return StructureType.ModuleType;
+    }
+
     public void compile(PapayaApplication application, CompilationScope compilationScope) throws PapayaException {
-        PapayaStructure structure = new PapayaStructure(name, StructureType.ModuleType, lineInfo);
-        compilationScope.enterClass(this);
+        Struct structure = new Struct(name, StructureType.ModuleType, lineInfo);
+        compilationScope.enterClass(this, name);
 
         for (ArchivedModule module : modules.values()) {
             module.compile(application, compilationScope);
@@ -173,7 +184,34 @@ public class ArchivedModule implements ArchivedStructureI {
         }
 
         for (ArchivedMethod method : methods.values()) {
-            method.compile(compilationScope);
+            Pair<Member, String> pair = method.compile(compilationScope);
+            System.out.println(pair.getSecond());
+        }
+    }
+
+    public void insert(ArchivedModule other) throws PapayaException {
+        for (String module : other.modules.keySet()) {
+            if (modules.containsKey(module)) {
+                modules.get(module).insert(other.modules.get(module));
+            } else {
+                declare(module, other.modules.get(module));
+            }
+        }
+
+        for (String struct : other.structs.keySet()) {
+            if (structs.containsKey(struct)) {
+                structs.get(struct).insert(other.structs.get(struct));
+            } else {
+                declare(struct, other.structs.get(struct));
+            }
+        }
+
+        for (String member : other.members.keySet()) {
+            declare(member, other.members.get(member));
+        }
+
+        for (String method : other.methods.keySet()) {
+            declare(method, other.methods.get(method));
         }
     }
 }
